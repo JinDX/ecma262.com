@@ -1,2 +1,2 @@
 # ecma262.com
-ECMA-262 中文翻译
+ECMA-262 中文
