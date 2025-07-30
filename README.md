@@ -1,2 +1,2 @@
 # ecma262.com
-ECMA-262 中文
+ECMA-262 CJK....
