@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-hans">
 <meta charset="utf-8">
-<link rel="icon" href="img/favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -159,7 +159,7 @@
   location: https://tc39.es/ecma262/
   markEffects: true
 </pre>
-<p><img src="img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 标志"></p>
+<p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 标志"></p>
 <div id="metadata-block">
   <h1>关于本规范</h1>
   <p>位于 <a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> 的文档是最准确且最新的 ECMAScript 规范。它包含了最近年度快照的内容，以及自该快照以来所有已完成的 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">提案</a>（即已在 <a href="https://tc39.es/process-document/">提案流程</a>中达到第 4 阶段，并且已在多个实现中落地、将在下一次实际修订中包含的提案）。</p>
@@ -337,7 +337,7 @@
       <p>尽管 ECMAScript 包含类定义语法，但 ECMAScript 对象本质上不是 C++、Smalltalk 或 Java 那样的类基础对象。对象可以通过多种方式创建，包括字面量方式或通过<em>构造函数</em>创建对象并执行初始化代码为属性赋初值。每个构造函数都是一个函数，拥有名为 *"prototype"* 的属性，用于实现<em>基于原型的继承</em>和<em>共享属性</em>。对象可通过 <b>new</b> 表达式使用构造函数创建，例如 `new Date(2009, 11)` 创建一个新的 Date 对象。直接调用构造函数而不使用 <b>new</b> 的行为取决于构造函数，例如 `Date()` 返回当前日期和时间的字符串而不是对象。</p>
       <p>每个由构造函数创建的对象都隐式引用（称为对象的<em>原型</em>）其构造函数的 *"prototype"* 属性。此外，原型还可以非 *null* 地隐式引用其原型，依此类推；这被称为<em>原型链</em>。访问对象属性时，查找的是原型链中第一个包含该属性的对象。即，首先检查直接引用的对象是否有该属性，若有则访问该属性，若无则检查该对象的原型，依此类推。</p>
       <emu-figure id="figure-1" caption="对象/原型关系">
-        <img alt="一个包含许多方框和箭头的图示。" height="354" src="img/figure-1.svg" width="719">
+        <img alt="一个包含许多方框和箭头的图示。" height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </emu-figure>
       <p>在基于类的面向对象语言中，状态通常由实例承载，方法由类承载，继承仅限结构和行为。而在 ECMAScript 中，状态和方法都由对象承载，结构、行为和状态都可继承。</p>
       <p>所有未直接拥有其原型属性的对象共享该属性及其值。图1对此进行了说明：</p>
@@ -27098,7 +27098,7 @@
           <p>先看一个简单模块图：</p>
 
           <emu-figure id="figure-module-graph-simple" caption="简单模块图 (A simple module graph)">
-            <img alt="模块 A 依赖模块 B，模块 B 依赖模块 C 的模块图" width="60" height="198" src="img/module-graph-simple.svg">
+            <img alt="模块 A 依赖模块 B，模块 B 依赖模块 C 的模块图" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </emu-figure>
 
           <p>假设无错误：宿主首先调用 _A_.LoadRequestedModules()（递归加载 _B_ 与 _C_ 的依赖），然后将 _A_、_B_、_C_ 的 [[Status]] 设为 ~unlinked~。接着调用 _A_.Link()，三者转为 ~linked~。稍后宿主在需要触发副作用时调用 _A_.Evaluate()，按顺序先求值 _C_ 再 _B_，最终三者 [[Status]] 为 ~evaluated~，Promise resolve 为 *undefined*。</p>
@@ -27110,7 +27110,7 @@
           <p>接着看一个无法解析模块的情形：</p>
 
           <emu-figure id="figure-module-graph-missing" caption="含缺失模块的模块图 (A module graph with an unresolvable module)">
-            <img alt="模块 A 依赖一个缺失模块 ??? 的模块图" width="60" height="121" src="img/module-graph-missing.svg">
+            <img alt="模块 A 依赖一个缺失模块 ??? 的模块图" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </emu-figure>
 
           <p>此时 _A_ 依赖的模块不存在（HostLoadImportedModule 最终以异常完成 FinishLoadingImportedModule）。可能原因包括资源不存在或解析返回错误。宿主可选择暴露失败原因。该异常导致加载失败，_A_.[[Status]] 保持 ~new~。</p>
@@ -27125,7 +27125,7 @@
           <p>现在看一个包含环的模块图：</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="循环模块图 (A cyclic module graph)">
-            <img alt="模块 A 依赖 B 和 C，且 B 依赖 A 的模块图" width="181" height="121" src="img/module-graph-cycle.svg">
+            <img alt="模块 A 依赖 B 和 C，且 B 依赖 A 的模块图" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </emu-figure>
 
           <p>以 _A_ 为入口，LoadRequestedModules 触发对 _B_ 与 _C_ 的加载；因循环再次访问 _A_ 时不再重复。成功后所有模块状态同时从 ~new~ 转为 ~unlinked~。</p>
@@ -27138,7 +27138,7 @@
 
           <p>最后看一个所有模块异步完成的循环图：</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="异步循环模块图 (An asynchronous cyclic module graph)">
-            <img alt="模块 A 依赖 B 与 C，B 依赖 D，C 依赖 D 与 E，D 依赖 A 的模块图" width="241" height="211" src="img/module-graph-cycle-async.svg">
+            <img alt="模块 A 依赖 B 与 C，B 依赖 D，C 依赖 D 与 E，D 依赖 A 的模块图" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </emu-figure>
           <p>加载与链接后全部为 ~linked~。</p>
 
@@ -48588,7 +48588,7 @@ THH:mm:ss.sss
     <h1>GeneratorFunction 对象</h1>
     <p>GeneratorFunction 是通常通过求值 |GeneratorDeclaration|、|GeneratorExpression| 和 |GeneratorMethod| 产生的函数。也可通过调用内在对象 %GeneratorFunction% 创建。</p>
     <emu-figure id="figure-2" caption="Generator 对象关系" informative>
-      <img alt="大量框与箭头的示意图。" height="700" src="img/figure-2.svg" width="900">
+      <img alt="大量框与箭头的示意图。" height="700" src="https://tc39.es/ecma262/img/figure-2.svg" width="900">
     </emu-figure>
 
     <emu-clause id="sec-generatorfunction-constructor">

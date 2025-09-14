@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <meta charset="utf-8">
-<link rel="icon" href="img/favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -159,7 +159,7 @@
   location: https://tc39.es/ecma262/
   markEffects: true
 </pre>
-<p><img src="img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 로고"></p>
+<p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 로고"></p>
 <div id="metadata-block">
   <h1>이 명세서에 대하여</h1>
   <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a>에 있는 문서는 가장 정확하고 최신의 ECMAScript 명세서입니다. 이 문서에는 가장 최근 연간 스냅샷의 내용과, 그 스냅샷 이후의 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">완료된 제안</a>(<a href="https://tc39.es/process-document/">제안 절차</a>에서 Stage&nbsp;4에 도달하여 여러 구현에 적용되었고 다음 실질적인 개정에 포함될 제안)이 함께 담겨 있습니다.</p>
@@ -337,7 +337,7 @@
       <p>ECMAScript는 클래스 정의 문법을 포함하지만, ECMAScript 객체는 C++, Smalltalk, Java와 같은 클래스 기반 언어처럼 근본적으로 클래스 기반이 아닙니다. 객체는 리터럴 표기 또는 객체를 생성하고 프로퍼티의 초기값을 할당하는 <em>생성자</em>를 통해 여러 방식으로 생성될 수 있습니다. 각 생성자는 *"prototype"*이라는 프로퍼티를 가진 함수로, <em>프로토타입 기반 상속</em>과 <em>공유 프로퍼티</em>를 구현하는 데 사용됩니다. <b>new</b> 표현식으로 생성자를 사용하면 객체가 생성됩니다. 예를 들어, `new Date(2009, 11)`은 새로운 Date 객체를 만듭니다. 생성자를 <b>new</b> 없이 호출하면 생성자마다 다른 결과가 발생합니다. 예를 들어, `Date()`는 객체가 아닌 현재 날짜와 시간의 문자열 표현을 반환합니다.</p>
       <p>생성자로 생성된 모든 객체는 암시적으로 자신이 속한 생성자의 *"prototype"* 프로퍼티 값에 대한 참조(객체의 <em>프로토타입</em>이라 부름)를 갖습니다. 또한 프로토타입은 자신만의 non-*null* 암시적 참조를 가질 수 있으며, 이를 <em>프로토타입 체인</em>이라 부릅니다. 객체에서 프로퍼티에 대한 참조가 발생하면, 해당 이름의 프로퍼티를 가진 프로토타입 체인에서 첫 번째 객체의 프로퍼티가 참조됩니다. 즉, 먼저 직접 지정된 객체에서 해당 프로퍼티가 있는지 확인하고, 있으면 그 프로퍼티가 참조 대상이 됩니다. 없으면 해당 객체의 프로토타입을 다음으로 검사하고, 계속 반복합니다.</p>
       <emu-figure id="figure-1" caption="객체/프로토타입 관계">
-        <img alt="박스와 화살표가 많은 이미지." height="354" src="img/figure-1.svg" width="719">
+        <img alt="박스와 화살표가 많은 이미지." height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </emu-figure>
       <p>클래스 기반 객체 지향 언어에서는 일반적으로 상태는 인스턴스가, 메서드는 클래스가 담당하며, 상속은 구조와 동작에만 적용됩니다. ECMAScript에서는 상태와 메서드가 객체에 담기며, 구조, 동작, 상태 모두가 상속됩니다.</p>
       <p>프로토타입에 특정 프로퍼티가 있고, 객체에 직접 해당 프로퍼티가 포함되지 않은 모든 객체는 그 프로퍼티와 값을 공유합니다. 그림 1은 이를 보여줍니다:</p>
@@ -26718,7 +26718,7 @@
           <p>먼저 다음 단순 모듈 그래프를 보자:</p>
 
           <emu-figure id="figure-module-graph-simple" caption="단순 모듈 그래프">
-            <img alt="모듈 A 가 모듈 B 에 의존하고, 모듈 B 가 모듈 C 에 의존하는 그래프" width="60" height="198" src="img/module-graph-simple.svg">
+            <img alt="모듈 A 가 모듈 B 에 의존하고, 모듈 B 가 모듈 C 에 의존하는 그래프" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </emu-figure>
 
           <p>우선 오류 조건이 없다고 가정. 호스트가 처음 _A_.LoadRequestedModules() 를 호출하면 (가정에 따라) 성공적으로 완료하면서 _B_, _C_ 의 의존성도 재귀적으로 로드(각각 _C_ 와 없음)하고 _A_.[[Status]] = _B_.[[Status]] = _C_.[[Status]] = ~unlinked~ 로 설정. 이후 _A_.Link() 호출도 성공(가정)하여 세 모듈 모두 ~linked~. 이러한 준비 단계는 언제든 수행 가능. 나중에 호스트가 모듈의 부작용 실행 시점이 되면 _A_.Evaluate() 호출 → 성공적으로 완료, *undefined* 로 resolve 되는 Promise 반환(가정), 먼저 _C_ 그다음 _B_ 를 평가. 이 시점에 각 모듈 [[Status]] 는 ~evaluated~.</p>
@@ -26730,7 +26730,7 @@
           <p>이제 다른 오류 조건 유형:</p>
 
           <emu-figure id="figure-module-graph-missing" caption="해결 불가 모듈을 가진 그래프">
-            <img alt="모듈 A 가 ??? 로 표시된 존재하지 않는 모듈에 의존" width="60" height="121" src="img/module-graph-missing.svg">
+            <img alt="모듈 A 가 ??? 로 표시된 존재하지 않는 모듈에 의존" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </emu-figure>
 
           <p>이 시나리오에서 _A_ 는 다른 모듈을 선언적 의존하지만 해당 Module Record 가 없음 (HostLoadImportedModule 가 FinishLoadingImportedModule 호출 시 예외 전달). 리소스 부재, 혹은 존재하지만 ParseModule 이 오류 반환 등 다양한 이유. 호스트는 실패 원인을 FinishLoadingImportedModule 에 전달하는 completion 을 통해 노출 선택 가능. 이 예외로 로딩 실패 → _A_.[[Status]] 는 ~new~ 유지.</p>
@@ -26745,7 +26745,7 @@
           <p>이제 순환이 있는 그래프:</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="순환 모듈 그래프">
-            <img alt="모듈 A 가 B, C 에 의존하고 B 가 A 에도 의존" width="181" height="121" src="img/module-graph-cycle.svg">
+            <img alt="모듈 A 가 B, C 에 의존하고 B 가 A 에도 의존" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </emu-figure>
 
           <p>엔트리 포인트가 _A_ 라 가정하고 호스트가 _A_.LoadRequestedModules() 호출 → _A_ 에 대해 InnerModuleLoading 수행. 이는 _B_, _C_ 에 대해 InnerModuleLoading 호출. 순환 때문에 다시 _A_ 에 대해 InnerModuleLoading 트리거되지만 이미 로딩 트리거 되었으므로 no-op. 그래프 모든 모듈 로딩 성공 시 [[Status]] 는 동시에 ~new~ → ~unlinked~.</p>
@@ -26760,7 +26760,7 @@
 
           <p>마지막으로 모든 모듈이 비동기 완료하는 순환 그래프:</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="비동기 순환 모듈 그래프">
-            <img alt="모듈 A 가 B, C 에 의존, B 는 D, C 는 D, E 에 의존, D 는 A 에 의존" width="241" height="211" src="img/module-graph-cycle-async.svg">
+            <img alt="모듈 A 가 B, C 에 의존, B 는 D, C 는 D, E 에 의존, D 는 A 에 의존" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </emu-figure>
           <p>로딩과 링크는 이전과 같고 모두 [[Status]] = ~linked~.</p>
 
@@ -48702,7 +48702,7 @@ THH:mm:ss.sss
     <h1>GeneratorFunction 객체 (GeneratorFunction Objects)</h1>
     <p>GeneratorFunction 들은 보통 |GeneratorDeclaration|, |GeneratorExpression|, |GeneratorMethod| 를 평가하여 생성되는 함수들이다. 또한 %GeneratorFunction% 내재(intrinsic)를 호출하여 생성될 수도 있다.</p>
     <emu-figure id="figure-2" caption="Generator 객체 간의 관계 (Generator Objects Relationships)" informative>
-      <img alt="수많은 상자와 화살표의 구조도." height="700" src="img/figure-2.svg" width="900">
+      <img alt="수많은 상자와 화살표의 구조도." height="700" src="https://tc39.es/ecma262/img/figure-2.svg" width="900">
     </emu-figure>
 
     <emu-clause id="sec-generatorfunction-constructor">
