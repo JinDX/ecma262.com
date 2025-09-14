@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 语言规范"><meta property="og:description" content="简介
   本 Ecma 标准定义了 ECMAScript 2026 语言，这是 ECMAScript 语言规范的第十七版。自1997年第一版发布以来，ECMAScript已发展为全球使用最广泛的通用编程语言之一。它最著名的应用是在网页浏览器中嵌入的语言，但也在服务器和嵌入式应用中被广泛采用。
   ECMAScript 基于多种起源技术，其中最知名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。随后，Netscape 的所有浏览器">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -1395,7 +1395,7 @@
           <p>先看一个简单模块图：</p>
 
           <emu-figure id="figure-module-graph-simple" caption="简单模块图 (A simple module graph)"><figure><figcaption>Figure 2: 简单模块图 (A simple module graph)</figcaption>
-            <img alt="模块 A 依赖模块 B，模块 B 依赖模块 C 的模块图" width="60" height="198" src="..\img\module-graph-simple.svg">
+            <img alt="模块 A 依赖模块 B，模块 B 依赖模块 C 的模块图" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </figure></emu-figure>
 
           <p>假设无错误：<emu-xref href="#host" id="_ref_5239"><a href="overview.html#host">宿主</a></emu-xref>首先调用 <var>A</var>.LoadRequestedModules()（递归加载 <var>B</var> 与 <var>C</var> 的依赖），然后将 <var>A</var>、<var>B</var>、<var>C</var> 的 <var class="field">[[Status]]</var> 设为 <emu-const>unlinked</emu-const>。接着调用 <var>A</var>.Link()，三者转为 <emu-const>linked</emu-const>。稍后<emu-xref href="#host" id="_ref_5240"><a href="overview.html#host">宿主</a></emu-xref>在需要触发副作用时调用 <var>A</var>.Evaluate()，按顺序先求值 <var>C</var> 再 <var>B</var>，最终三者 <var class="field">[[Status]]</var> 为 <emu-const>evaluated</emu-const>，Promise resolve 为 <emu-val>undefined</emu-val>。</p>
@@ -1407,7 +1407,7 @@
           <p>接着看一个无法解析模块的情形：</p>
 
           <emu-figure id="figure-module-graph-missing" caption="含缺失模块的模块图 (A module graph with an unresolvable module)"><figure><figcaption>Figure 3: 含缺失模块的模块图 (A module graph with an unresolvable module)</figcaption>
-            <img alt="模块 A 依赖一个缺失模块 ??? 的模块图" width="60" height="121" src="..\img\module-graph-missing.svg">
+            <img alt="模块 A 依赖一个缺失模块 ??? 的模块图" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </figure></emu-figure>
 
           <p>此时 <var>A</var> 依赖的模块不存在（<emu-xref aoid="HostLoadImportedModule" id="_ref_5242"><a href="ecmascript-language-scripts-and-modules.html#sec-HostLoadImportedModule">HostLoadImportedModule</a></emu-xref> 最终以<emu-xref href="#sec-completion-record-specification-type" id="_ref_5243"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">异常完成</a></emu-xref> <emu-xref aoid="FinishLoadingImportedModule" id="_ref_5244"><a href="ecmascript-language-scripts-and-modules.html#sec-FinishLoadingImportedModule">FinishLoadingImportedModule</a></emu-xref>）。可能原因包括资源不存在或解析返回错误。<emu-xref href="#host" id="_ref_5245"><a href="overview.html#host">宿主</a></emu-xref>可选择暴露失败原因。该异常导致加载失败，<var>A</var>.<var class="field">[[Status]]</var> 保持 <emu-const>new</emu-const>。</p>
@@ -1422,7 +1422,7 @@
           <p>现在看一个包含环的模块图：</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="循环模块图 (A cyclic module graph)"><figure><figcaption>Figure 4: 循环模块图 (A cyclic module graph)</figcaption>
-            <img alt="模块 A 依赖 B 和 C，且 B 依赖 A 的模块图" width="181" height="121" src="..\img\module-graph-cycle.svg">
+            <img alt="模块 A 依赖 B 和 C，且 B 依赖 A 的模块图" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </figure></emu-figure>
 
           <p>以 <var>A</var> 为入口，LoadRequestedModules 触发对 <var>B</var> 与 <var>C</var> 的加载；因循环再次访问 <var>A</var> 时不再重复。成功后所有模块状态同时从 <emu-const>new</emu-const> 转为 <emu-const>unlinked</emu-const>。</p>
@@ -1435,7 +1435,7 @@
 
           <p>最后看一个所有模块异步完成的循环图：</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="异步循环模块图 (An asynchronous cyclic module graph)"><figure><figcaption>Figure 5: 异步循环模块图 (An asynchronous cyclic module graph)</figcaption>
-            <img alt="模块 A 依赖 B 与 C，B 依赖 D，C 依赖 D 与 E，D 依赖 A 的模块图" width="241" height="211" src="..\img\module-graph-cycle-async.svg">
+            <img alt="模块 A 依赖 B 与 C，B 依赖 D，C 依赖 D 与 E，D 依赖 A 的模块图" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </figure></emu-figure>
           <p>加载与链接后全部为 <emu-const>linked</emu-const>。</p>
 

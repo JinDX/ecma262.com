@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 언어&nbsp;명세서"><meta property="og:description" content="소개
   이 Ecma 표준은 ECMAScript 2026 언어를 정의합니다. 이는 ECMAScript 언어 명세서의 열일곱 번째 판입니다. 1997년 첫 판이 발표된 이후 ECMAScript는 세계에서 가장 널리 사용되는 범용 프로그래밍 언어 중 하나로 성장했습니다. 웹 브라우저에 내장된 언어로 가장 잘 알려져 있지만, 서버 및 임베디드 애플리케이션에서도 널리 채택되었습니다.
   ECMAScript는 여러 기술에서 유래했으며, 그 중 가장 잘 알려진 것은 JavaScript(Netscape)와 JScript(Microsoft)">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -416,7 +416,7 @@
       <p>ECMAScript는 클래스 정의 문법을 포함하지만, ECMAScript 객체는 C++, Smalltalk, Java와 같은 클래스 기반 언어처럼 근본적으로 클래스 기반이 아닙니다. 객체는 리터럴 표기 또는 객체를 생성하고 프로퍼티의 초기값을 할당하는 <em><emu-xref href="#constructor" id="_ref_1019"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref></em>를 통해 여러 방식으로 생성될 수 있습니다. 각 <emu-xref href="#constructor" id="_ref_1020"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>는 <emu-val>"prototype"</emu-val>이라는 프로퍼티를 가진 함수로, <em>프로토타입 기반 상속</em>과 <em>공유 프로퍼티</em>를 구현하는 데 사용됩니다. <b>new</b> 표현식으로 <emu-xref href="#constructor" id="_ref_1021"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>를 사용하면 객체가 생성됩니다. 예를 들어, <code>new Date(2009, 11)</code>은 새로운 Date 객체를 만듭니다. <emu-xref href="#constructor" id="_ref_1022"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>를 <b>new</b> 없이 호출하면 <emu-xref href="#constructor" id="_ref_1023"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>마다 다른 결과가 발생합니다. 예를 들어, <code>Date()</code>는 객체가 아닌 현재 날짜와 시간의 문자열 표현을 반환합니다.</p>
       <p><emu-xref href="#constructor" id="_ref_1024"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>로 생성된 모든 객체는 암시적으로 자신이 속한 <emu-xref href="#constructor" id="_ref_1025"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>의 <emu-val>"prototype"</emu-val> 프로퍼티 값에 대한 참조(객체의 <em>프로토타입</em>이라 부름)를 갖습니다. 또한 프로토타입은 자신만의 non-<emu-val>null</emu-val> 암시적 참조를 가질 수 있으며, 이를 <em>프로토타입 체인</em>이라 부릅니다. 객체에서 프로퍼티에 대한 참조가 발생하면, 해당 이름의 프로퍼티를 가진 프로토타입 체인에서 첫 번째 객체의 프로퍼티가 참조됩니다. 즉, 먼저 직접 지정된 객체에서 해당 프로퍼티가 있는지 확인하고, 있으면 그 프로퍼티가 참조 대상이 됩니다. 없으면 해당 객체의 프로토타입을 다음으로 검사하고, 계속 반복합니다.</p>
       <emu-figure id="figure-1" caption="객체/프로토타입 관계"><figure><figcaption>Figure 1: 객체/프로토타입 관계</figcaption>
-        <img alt="박스와 화살표가 많은 이미지." height="354" src="..\img\figure-1.svg" width="719">
+        <img alt="박스와 화살표가 많은 이미지." height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </figure></emu-figure>
       <p>클래스 기반 객체 지향 언어에서는 일반적으로 상태는 인스턴스가, 메서드는 클래스가 담당하며, 상속은 구조와 동작에만 적용됩니다. ECMAScript에서는 상태와 메서드가 객체에 담기며, 구조, 동작, 상태 모두가 상속됩니다.</p>
       <p>프로토타입에 특정 프로퍼티가 있고, 객체에 직접 해당 프로퍼티가 포함되지 않은 모든 객체는 그 프로퍼티와 값을 공유합니다. 그림 1은 이를 보여줍니다:</p>

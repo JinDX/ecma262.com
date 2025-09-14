@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja-JP">
 <meta charset="utf-8">
-<link rel="icon" href="img/favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -159,7 +159,7 @@
   location: https://tc39.es/ecma262/
   markEffects: true
 </pre>
-<p><img src="img/ecma-logo.svg" id="ecma-logo" alt="Ecma International ロゴ"></p>
+<p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International ロゴ"></p>
 <div id="metadata-block">
   <h1>この仕様書について</h1>
   <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> にある文書は、最も正確かつ最新の ECMAScript 仕様です。ここには、最新の年次スナップショットの内容と、スナップショット以降に <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">完了した提案</a>（<a href="https://tc39.es/process-document/">提案プロセス</a>にて Stage&nbsp;4 に到達し、複数の実装に導入され、次回の実用的な改訂に含まれる予定のもの）が含まれています。</p>
@@ -337,7 +337,7 @@
       <p>ECMAScriptにはクラス定義の構文が含まれていますが、ECMAScriptのオブジェクトはC++・Smalltalk・Javaのようなクラスベースではありません。代わりに、リテラル記法や、オブジェクトを生成しプロパティに初期値を割り当てる<em>コンストラクター</em>など、様々な方法でオブジェクトが作成されます。各コンストラクターは*"prototype"*というプロパティを持ち、<em>プロトタイプベースの継承</em>や<em>共有プロパティ</em>を実現します。オブジェクトは<b>new</b>式でコンストラクターを使うことで作成されます。例えば、`new Date(2009, 11)`は新しいDateオブジェクトを生成します。コンストラクターを<b>new</b>なしで呼び出すと、その挙動はコンストラクターごとに異なります。例えば、`Date()`は現在の日付と時刻の文字列表現を返し、オブジェクトは生成しません。</p>
       <p>コンストラクターで作成されたすべてのオブジェクトは、コンストラクターの*"prototype"*プロパティ値への暗黙的な参照（そのオブジェクトの<em>プロトタイプ</em>と呼ばれる）を持ちます。さらに、プロトタイプは非*null*なプロトタイプへの暗黙参照を持つ場合があり、これを<em>プロトタイプチェーン</em>と呼びます。オブジェクトのプロパティ参照は、その名前のプロパティを持つプロトタイプチェーンの最初のオブジェクトのプロパティへの参照です。つまり、まず参照されるオブジェクト自身にそのプロパティがあるかを調べ、あればそのプロパティが参照されます。なければ、そのオブジェクトのプロトタイプを次に調べ、以降同様です。</p>
       <emu-figure id="figure-1" caption="オブジェクト／プロトタイプ関係">
-        <img alt="たくさんの箱と矢印の図。" height="354" src="img/figure-1.svg" width="719">
+        <img alt="たくさんの箱と矢印の図。" height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </emu-figure>
       <p>クラスベースのオブジェクト指向言語では、一般にインスタンスが状態を持ち、メソッドはクラスに属し、継承は構造と振る舞いのみです。ECMAScriptでは、状態とメソッドの両方がオブジェクトに属し、構造・振る舞い・状態すべてが継承されます。</p>
       <p>プロトタイプが直接持つプロパティを持たないすべてのオブジェクトは、そのプロパティと値を共有します。図1はこれを示します：</p>
@@ -27186,7 +27186,7 @@
           <p>まず次の単純なモジュールグラフを考える:</p>
 
           <emu-figure id="figure-module-graph-simple" caption="単純なモジュールグラフ">
-            <img alt="モジュール A が B に依存し、B が C に依存するモジュールグラフ" width="60" height="198" src="img/module-graph-simple.svg">
+            <img alt="モジュール A が B に依存し、B が C に依存するモジュールグラフ" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </emu-figure>
 
           <p>先にエラー条件が無いと仮定する。ホストが最初に _A_.LoadRequestedModules() を呼ぶと、仮定により成功裏に完了し、再帰的に _B_ と _C_ の依存（それぞれ _C_ となし）をロードし、その後 _A_.[[Status]] = _B_.[[Status]] = _C_.[[Status]] = ~unlinked~ に設定する。続いてホストが _A_.Link() を呼ぶと、再度成功し、_A_.[[Status]] = _B_.[[Status]] = _C_.[[Status]] = ~linked~ となる。これら準備ステップは任意の時点で行える。その後、モジュール副作用を許容するタイミングで _A_.Evaluate() を呼ぶと、仮定により成功し *undefined* に解決される Promise を返し、内部的には _C_、次に _B_ を評価する。各モジュールの [[Status]] は ~evaluated~。</p>
@@ -27198,7 +27198,7 @@
           <p>次に別種のエラー条件を考える:</p>
 
           <emu-figure id="figure-module-graph-missing" caption="解決不能モジュールを含むモジュールグラフ">
-            <img alt="モジュール A が ??? という未解決モジュールに依存するモジュールグラフ" width="60" height="121" src="img/module-graph-missing.svg">
+            <img alt="モジュール A が ??? という未解決モジュールに依存するモジュールグラフ" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </emu-figure>
 
           <p>このシナリオではモジュール _A_ が他モジュールへの依存を宣言するが、その Module Record が存在しない（HostLoadImportedModule が FinishLoadingImportedModule へ例外で返す）。リソース不存在や ParseModule がエラーを返した場合などが要因。ホストは FinishLoadingImportedModule へ渡す completion を通じて失敗原因を公開できる。いずれにせよ例外は読み込み失敗を引き起こし、_A_ の [[Status]] は ~new~ のまま。</p>
@@ -27213,7 +27213,7 @@
           <p>次にサイクルを持つモジュールグラフ:</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="循環モジュールグラフ">
-            <img alt="モジュール A が B と C に依存し、B が A に依存するグラフ" width="181" height="121" src="img/module-graph-cycle.svg">
+            <img alt="モジュール A が B と C に依存し、B が A に依存するグラフ" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </emu-figure>
 
           <p>エントリポイントを _A_ と仮定し、ホストは _A_.LoadRequestedModules() を呼ぶ。これは _A_ 上で InnerModuleLoading を行い、さらに _B_, _C_ 上でも呼ぶ。サイクルにより再び _A_ に対する InnerModuleLoading がトリガーされるが、その依存読み込みは既に開始済みなので無操作。グラフ中すべてが正常にロードされると、全ての [[Status]] が同時に ~new~ から ~unlinked~ に。</p>
@@ -27228,7 +27228,7 @@
 
           <p>最後に、全モジュールが非同期に完了するサイクル付きグラフ:</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="非同期循環モジュールグラフ">
-            <img alt="モジュール A が B と C に依存、B が D に、C が D と E に、D が A に依存" width="241" height="211" src="img/module-graph-cycle-async.svg">
+            <img alt="モジュール A が B と C に依存、B が D に、C が D と E に、D が A に依存" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </emu-figure>
           <p>読み込みとリンクは同様で全て [[Status]] ~linked~。</p>
 
@@ -49173,7 +49173,7 @@ THH:mm:ss.sss
     <h1>GeneratorFunction オブジェクト</h1>
     <p>GeneratorFunction は、通常 |GeneratorDeclaration|、|GeneratorExpression|、|GeneratorMethod| を評価することで生成される関数である。また %GeneratorFunction% 組込みを呼び出すことでも生成され得る。</p>
     <emu-figure id="figure-2" caption="Generator オブジェクトの関係" informative>
-      <img alt="無数のボックスと矢印。" height="700" src="img/figure-2.svg" width="900">
+      <img alt="無数のボックスと矢印。" height="700" src="https://tc39.es/ecma262/img/figure-2.svg" width="900">
     </emu-figure>
 
     <emu-clause id="sec-generatorfunction-constructor">

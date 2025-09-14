@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 言語仕様"><meta property="og:description" content="はじめに
   このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第17版です。1997年の第1版公開以来、ECMAScriptは世界で最も広く使われている汎用プログラミング言語の一つに成長しました。主にウェブブラウザに組み込まれている言語として知られていますが、サーバーや組み込み用途にも広く採用されています。
   ECMAScriptはいくつかの技術をもとにしており、最もよく知られているのはJavaScript（Netscape）とJScript（Microsoft）です。この言語はNetscapeのBrendan Eichによって発">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -1471,7 +1471,7 @@
           <p>まず次の単純なモジュールグラフを考える:</p>
 
           <emu-figure id="figure-module-graph-simple" caption="単純なモジュールグラフ"><figure><figcaption>Figure 2: 単純なモジュールグラフ</figcaption>
-            <img alt="モジュール A が B に依存し、B が C に依存するモジュールグラフ" width="60" height="198" src="..\img\module-graph-simple.svg">
+            <img alt="モジュール A が B に依存し、B が C に依存するモジュールグラフ" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </figure></emu-figure>
 
           <p>先にエラー条件が無いと仮定する。<emu-xref href="#host" id="_ref_5438"><a href="overview.html#host">ホスト</a></emu-xref>が最初に <var>A</var>.LoadRequestedModules() を呼ぶと、仮定により成功裏に完了し、再帰的に <var>B</var> と <var>C</var> の依存（それぞれ <var>C</var> となし）をロードし、その後 <var>A</var>.<var class="field">[[Status]]</var> = <var>B</var>.<var class="field">[[Status]]</var> = <var>C</var>.<var class="field">[[Status]]</var> = <emu-const>unlinked</emu-const> に設定する。続いて<emu-xref href="#host" id="_ref_5439"><a href="overview.html#host">ホスト</a></emu-xref>が <var>A</var>.Link() を呼ぶと、再度成功し、<var>A</var>.<var class="field">[[Status]]</var> = <var>B</var>.<var class="field">[[Status]]</var> = <var>C</var>.<var class="field">[[Status]]</var> = <emu-const>linked</emu-const> となる。これら準備ステップは任意の時点で行える。その後、モジュール副作用を許容するタイミングで <var>A</var>.Evaluate() を呼ぶと、仮定により成功し <emu-val>undefined</emu-val> に解決される Promise を返し、内部的には <var>C</var>、次に <var>B</var> を評価する。各モジュールの <var class="field">[[Status]]</var> は <emu-const>evaluated</emu-const>。</p>
@@ -1483,7 +1483,7 @@
           <p>次に別種のエラー条件を考える:</p>
 
           <emu-figure id="figure-module-graph-missing" caption="解決不能モジュールを含むモジュールグラフ"><figure><figcaption>Figure 3: 解決不能モジュールを含むモジュールグラフ</figcaption>
-            <img alt="モジュール A が ??? という未解決モジュールに依存するモジュールグラフ" width="60" height="121" src="..\img\module-graph-missing.svg">
+            <img alt="モジュール A が ??? という未解決モジュールに依存するモジュールグラフ" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </figure></emu-figure>
 
           <p>このシナリオではモジュール <var>A</var> が他モジュールへの依存を宣言するが、その <emu-xref href="#sec-abstract-module-records" id="_ref_5444"><a href="ecmascript-language-scripts-and-modules.html#sec-abstract-module-records">Module Record</a></emu-xref> が存在しない（<emu-xref aoid="HostLoadImportedModule" id="_ref_5445"><a href="ecmascript-language-scripts-and-modules.html#sec-HostLoadImportedModule">HostLoadImportedModule</a></emu-xref> が <emu-xref aoid="FinishLoadingImportedModule" id="_ref_5446"><a href="ecmascript-language-scripts-and-modules.html#sec-FinishLoadingImportedModule">FinishLoadingImportedModule</a></emu-xref> へ例外で返す）。リソース不存在や <emu-xref aoid="ParseModule" id="_ref_5447"><a href="ecmascript-language-scripts-and-modules.html#sec-parsemodule">ParseModule</a></emu-xref> がエラーを返した場合などが要因。<emu-xref href="#host" id="_ref_5448"><a href="overview.html#host">ホスト</a></emu-xref>は <emu-xref aoid="FinishLoadingImportedModule" id="_ref_5449"><a href="ecmascript-language-scripts-and-modules.html#sec-FinishLoadingImportedModule">FinishLoadingImportedModule</a></emu-xref> へ渡す completion を通じて失敗原因を公開できる。いずれにせよ例外は読み込み失敗を引き起こし、<var>A</var> の <var class="field">[[Status]]</var> は <emu-const>new</emu-const> のまま。</p>
@@ -1498,7 +1498,7 @@
           <p>次にサイクルを持つモジュールグラフ:</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="循環モジュールグラフ"><figure><figcaption>Figure 4: 循環モジュールグラフ</figcaption>
-            <img alt="モジュール A が B と C に依存し、B が A に依存するグラフ" width="181" height="121" src="..\img\module-graph-cycle.svg">
+            <img alt="モジュール A が B と C に依存し、B が A に依存するグラフ" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </figure></emu-figure>
 
           <p>エントリポイントを <var>A</var> と仮定し、<emu-xref href="#host" id="_ref_5451"><a href="overview.html#host">ホスト</a></emu-xref>は <var>A</var>.LoadRequestedModules() を呼ぶ。これは <var>A</var> 上で <emu-xref aoid="InnerModuleLoading" id="_ref_5452"><a href="ecmascript-language-scripts-and-modules.html#sec-InnerModuleLoading">InnerModuleLoading</a></emu-xref> を行い、さらに <var>B</var>, <var>C</var> 上でも呼ぶ。サイクルにより再び <var>A</var> に対する <emu-xref aoid="InnerModuleLoading" id="_ref_5453"><a href="ecmascript-language-scripts-and-modules.html#sec-InnerModuleLoading">InnerModuleLoading</a></emu-xref> がトリガーされるが、その依存読み込みは既に開始済みなので無操作。グラフ中すべてが正常にロードされると、全ての <var class="field">[[Status]]</var> が同時に <emu-const>new</emu-const> から <emu-const>unlinked</emu-const> に。</p>
@@ -1513,7 +1513,7 @@
 
           <p>最後に、全モジュールが非同期に完了するサイクル付きグラフ:</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="非同期循環モジュールグラフ"><figure><figcaption>Figure 5: 非同期循環モジュールグラフ</figcaption>
-            <img alt="モジュール A が B と C に依存、B が D に、C が D と E に、D が A に依存" width="241" height="211" src="..\img\module-graph-cycle-async.svg">
+            <img alt="モジュール A が B と C に依存、B が D に、C が D と E に、D が A に依存" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </figure></emu-figure>
           <p>読み込みとリンクは同様で全て <var class="field">[[Status]]</var> <emu-const>linked</emu-const>。</p>
 

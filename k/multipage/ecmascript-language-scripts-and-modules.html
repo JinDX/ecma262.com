@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 언어&nbsp;명세서"><meta property="og:description" content="소개
   이 Ecma 표준은 ECMAScript 2026 언어를 정의합니다. 이는 ECMAScript 언어 명세서의 열일곱 번째 판입니다. 1997년 첫 판이 발표된 이후 ECMAScript는 세계에서 가장 널리 사용되는 범용 프로그래밍 언어 중 하나로 성장했습니다. 웹 브라우저에 내장된 언어로 가장 잘 알려져 있지만, 서버 및 임베디드 애플리케이션에서도 널리 채택되었습니다.
   ECMAScript는 여러 기술에서 유래했으며, 그 중 가장 잘 알려진 것은 JavaScript(Netscape)와 JScript(Microsoft)">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -1398,7 +1398,7 @@
           <p>먼저 다음 단순 모듈 그래프를 보자:</p>
 
           <emu-figure id="figure-module-graph-simple" caption="단순 모듈 그래프"><figure><figcaption>Figure 2: 단순 모듈 그래프</figcaption>
-            <img alt="모듈 A 가 모듈 B 에 의존하고, 모듈 B 가 모듈 C 에 의존하는 그래프" width="60" height="198" src="..\img\module-graph-simple.svg">
+            <img alt="모듈 A 가 모듈 B 에 의존하고, 모듈 B 가 모듈 C 에 의존하는 그래프" width="60" height="198" src="https://tc39.es/ecma262/img/module-graph-simple.svg">
           </figure></emu-figure>
 
           <p>우선 오류 조건이 없다고 가정. <emu-xref href="#host" id="_ref_5490"><a href="overview.html#host">호스트</a></emu-xref>가 처음 <var>A</var>.LoadRequestedModules() 를 호출하면 (가정에 따라) 성공적으로 완료하면서 <var>B</var>, <var>C</var> 의 의존성도 재귀적으로 로드(각각 <var>C</var> 와 없음)하고 <var>A</var>.<var class="field">[[Status]]</var> = <var>B</var>.<var class="field">[[Status]]</var> = <var>C</var>.<var class="field">[[Status]]</var> = <emu-const>unlinked</emu-const> 로 설정. 이후 <var>A</var>.Link() 호출도 성공(가정)하여 세 모듈 모두 <emu-const>linked</emu-const>. 이러한 준비 단계는 언제든 수행 가능. 나중에 <emu-xref href="#host" id="_ref_5491"><a href="overview.html#host">호스트</a></emu-xref>가 모듈의 부작용 실행 시점이 되면 <var>A</var>.Evaluate() 호출 → 성공적으로 완료, <emu-val>undefined</emu-val> 로 resolve 되는 Promise 반환(가정), 먼저 <var>C</var> 그다음 <var>B</var> 를 평가. 이 시점에 각 모듈 <var class="field">[[Status]]</var> 는 <emu-const>evaluated</emu-const>.</p>
@@ -1410,7 +1410,7 @@
           <p>이제 다른 오류 조건 유형:</p>
 
           <emu-figure id="figure-module-graph-missing" caption="해결 불가 모듈을 가진 그래프"><figure><figcaption>Figure 3: 해결 불가 모듈을 가진 그래프</figcaption>
-            <img alt="모듈 A 가 ??? 로 표시된 존재하지 않는 모듈에 의존" width="60" height="121" src="..\img\module-graph-missing.svg">
+            <img alt="모듈 A 가 ??? 로 표시된 존재하지 않는 모듈에 의존" width="60" height="121" src="https://tc39.es/ecma262/img/module-graph-missing.svg">
           </figure></emu-figure>
 
           <p>이 시나리오에서 <var>A</var> 는 다른 모듈을 선언적 의존하지만 해당 Module <emu-xref href="#sec-list-and-record-specification-type" id="_ref_5496"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> 가 없음 (<emu-xref aoid="HostLoadImportedModule" id="_ref_5497"><a href="ecmascript-language-scripts-and-modules.html#sec-HostLoadImportedModule">HostLoadImportedModule</a></emu-xref> 가 <emu-xref aoid="FinishLoadingImportedModule" id="_ref_5498"><a href="ecmascript-language-scripts-and-modules.html#sec-FinishLoadingImportedModule">FinishLoadingImportedModule</a></emu-xref> 호출 시 예외 전달). 리소스 부재, 혹은 존재하지만 <emu-xref aoid="ParseModule" id="_ref_5499"><a href="ecmascript-language-scripts-and-modules.html#sec-parsemodule">ParseModule</a></emu-xref> 이 오류 반환 등 다양한 이유. <emu-xref href="#host" id="_ref_5500"><a href="overview.html#host">호스트</a></emu-xref>는 실패 원인을 <emu-xref aoid="FinishLoadingImportedModule" id="_ref_5501"><a href="ecmascript-language-scripts-and-modules.html#sec-FinishLoadingImportedModule">FinishLoadingImportedModule</a></emu-xref> 에 전달하는 completion 을 통해 노출 선택 가능. 이 예외로 로딩 실패 → <var>A</var>.<var class="field">[[Status]]</var> 는 <emu-const>new</emu-const> 유지.</p>
@@ -1425,7 +1425,7 @@
           <p>이제 순환이 있는 그래프:</p>
 
           <emu-figure id="figure-module-graph-cycle" caption="순환 모듈 그래프"><figure><figcaption>Figure 4: 순환 모듈 그래프</figcaption>
-            <img alt="모듈 A 가 B, C 에 의존하고 B 가 A 에도 의존" width="181" height="121" src="..\img\module-graph-cycle.svg">
+            <img alt="모듈 A 가 B, C 에 의존하고 B 가 A 에도 의존" width="181" height="121" src="https://tc39.es/ecma262/img/module-graph-cycle.svg">
           </figure></emu-figure>
 
           <p>엔트리 포인트가 <var>A</var> 라 가정하고 <emu-xref href="#host" id="_ref_5504"><a href="overview.html#host">호스트</a></emu-xref>가 <var>A</var>.LoadRequestedModules() 호출 → <var>A</var> 에 대해 <emu-xref aoid="InnerModuleLoading" id="_ref_5505"><a href="ecmascript-language-scripts-and-modules.html#sec-InnerModuleLoading">InnerModuleLoading</a></emu-xref> 수행. 이는 <var>B</var>, <var>C</var> 에 대해 <emu-xref aoid="InnerModuleLoading" id="_ref_5506"><a href="ecmascript-language-scripts-and-modules.html#sec-InnerModuleLoading">InnerModuleLoading</a></emu-xref> 호출. 순환 때문에 다시 <var>A</var> 에 대해 <emu-xref aoid="InnerModuleLoading" id="_ref_5507"><a href="ecmascript-language-scripts-and-modules.html#sec-InnerModuleLoading">InnerModuleLoading</a></emu-xref> 트리거되지만 이미 로딩 트리거 되었으므로 no-op. 그래프 모든 모듈 로딩 성공 시 <var class="field">[[Status]]</var> 는 동시에 <emu-const>new</emu-const> → <emu-const>unlinked</emu-const>.</p>
@@ -1440,7 +1440,7 @@
 
           <p>마지막으로 모든 모듈이 비동기 완료하는 순환 그래프:</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="비동기 순환 모듈 그래프"><figure><figcaption>Figure 5: 비동기 순환 모듈 그래프</figcaption>
-            <img alt="모듈 A 가 B, C 에 의존, B 는 D, C 는 D, E 에 의존, D 는 A 에 의존" width="241" height="211" src="..\img\module-graph-cycle-async.svg">
+            <img alt="모듈 A 가 B, C 에 의존, B 는 D, C 는 D, E 에 의존, D 는 A 에 의존" width="241" height="211" src="https://tc39.es/ecma262/img/module-graph-cycle-async.svg">
           </figure></emu-figure>
           <p>로딩과 링크는 이전과 같고 모두 <var class="field">[[Status]]</var> = <emu-const>linked</emu-const>.</p>
 

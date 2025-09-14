@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 语言规范"><meta property="og:description" content="简介
   本 Ecma 标准定义了 ECMAScript 2026 语言，这是 ECMAScript 语言规范的第十七版。自1997年第一版发布以来，ECMAScript已发展为全球使用最广泛的通用编程语言之一。它最著名的应用是在网页浏览器中嵌入的语言，但也在服务器和嵌入式应用中被广泛采用。
   ECMAScript 基于多种起源技术，其中最知名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。随后，Netscape 的所有浏览器">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -418,7 +418,7 @@
       <p>尽管 ECMAScript 包含类定义语法，但 ECMAScript 对象本质上不是 C++、Smalltalk 或 Java 那样的类基础对象。对象可以通过多种方式创建，包括字面量方式或通过<em><emu-xref href="#constructor" id="_ref_1024"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref></em>创建对象并执行初始化代码为属性赋初值。每个<emu-xref href="#constructor" id="_ref_1025"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>都是一个函数，拥有名为 <emu-val>"prototype"</emu-val> 的属性，用于实现<em>基于原型的继承</em>和<em>共享属性</em>。对象可通过 <b>new</b> 表达式使用<emu-xref href="#constructor" id="_ref_1026"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>创建，例如 <code>new Date(2009, 11)</code> 创建一个新的 Date 对象。直接调用<emu-xref href="#constructor" id="_ref_1027"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>而不使用 <b>new</b> 的行为取决于<emu-xref href="#constructor" id="_ref_1028"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>，例如 <code>Date()</code> 返回当前日期和时间的字符串而不是对象。</p>
       <p>每个由<emu-xref href="#constructor" id="_ref_1029"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>创建的对象都隐式引用（称为对象的<em>原型</em>）其<emu-xref href="#constructor" id="_ref_1030"><a href="ecmascript-data-types-and-values.html#constructor">构造函数</a></emu-xref>的 <emu-val>"prototype"</emu-val> 属性。此外，原型还可以非 <emu-val>null</emu-val> 地隐式引用其原型，依此类推；这被称为<em>原型链</em>。访问对象属性时，查找的是原型链中第一个包含该属性的对象。即，首先检查直接引用的对象是否有该属性，若有则访问该属性，若无则检查该对象的原型，依此类推。</p>
       <emu-figure id="figure-1" caption="对象/原型关系"><figure><figcaption>Figure 1: 对象/原型关系</figcaption>
-        <img alt="一个包含许多方框和箭头的图示。" height="354" src="..\img\figure-1.svg" width="719">
+        <img alt="一个包含许多方框和箭头的图示。" height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </figure></emu-figure>
       <p>在基于类的面向对象语言中，状态通常由实例承载，方法由类承载，继承仅限结构和行为。而在 ECMAScript 中，状态和方法都由对象承载，结构、行为和状态都可继承。</p>
       <p>所有未直接拥有其原型属性的对象共享该属性及其值。图1对此进行了说明：</p>

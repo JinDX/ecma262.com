@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 言語仕様"><meta property="og:description" content="はじめに
   このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第17版です。1997年の第1版公開以来、ECMAScriptは世界で最も広く使われている汎用プログラミング言語の一つに成長しました。主にウェブブラウザに組み込まれている言語として知られていますが、サーバーや組み込み用途にも広く採用されています。
   ECMAScriptはいくつかの技術をもとにしており、最もよく知られているのはJavaScript（Netscape）とJScript（Microsoft）です。この言語はNetscapeのBrendan Eichによって発">
-<link rel="icon" href="..\img\favicon.ico">
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -490,7 +490,7 @@
       <p>ECMAScriptにはクラス定義の構文が含まれていますが、ECMAScriptのオブジェクトはC++・Smalltalk・Javaのようなクラスベースではありません。代わりに、リテラル記法や、オブジェクトを生成しプロパティに初期値を割り当てる<em><emu-xref href="#constructor" id="_ref_981"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ー</em>など、様々な方法でオブジェクトが作成されます。各<emu-xref href="#constructor" id="_ref_982"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーは<emu-val>"prototype"</emu-val>というプロパティを持ち、<em>プロトタイプベースの継承</em>や<em>共有プロパティ</em>を実現します。オブジェクトは<b>new</b>式で<emu-xref href="#constructor" id="_ref_983"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーを使うことで作成されます。例えば、<code>new Date(2009, 11)</code>は新しいDateオブジェクトを生成します。<emu-xref href="#constructor" id="_ref_984"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーを<b>new</b>なしで呼び出すと、その挙動は<emu-xref href="#constructor" id="_ref_985"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーごとに異なります。例えば、<code>Date()</code>は現在の日付と時刻の文字列表現を返し、オブジェクトは生成しません。</p>
       <p><emu-xref href="#constructor" id="_ref_986"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーで作成されたすべてのオブジェクトは、<emu-xref href="#constructor" id="_ref_987"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>ーの<emu-val>"prototype"</emu-val>プロパティ値への暗黙的な参照（そのオブジェクトの<em>プロトタイプ</em>と呼ばれる）を持ちます。さらに、プロトタイプは非<emu-val>null</emu-val>なプロトタイプへの暗黙参照を持つ場合があり、これを<em>プロトタイプチェーン</em>と呼びます。オブジェクトのプロパティ参照は、その名前のプロパティを持つプロトタイプチェーンの最初のオブジェクトのプロパティへの参照です。つまり、まず参照されるオブジェクト自身にそのプロパティがあるかを調べ、あればそのプロパティが参照されます。なければ、そのオブジェクトのプロトタイプを次に調べ、以降同様です。</p>
       <emu-figure id="figure-1" caption="オブジェクト／プロトタイプ関係"><figure><figcaption>Figure 1: オブジェクト／プロトタイプ関係</figcaption>
-        <img alt="たくさんの箱と矢印の図。" height="354" src="..\img\figure-1.svg" width="719">
+        <img alt="たくさんの箱と矢印の図。" height="354" src="https://tc39.es/ecma262/img/figure-1.svg" width="719">
       </figure></emu-figure>
       <p>クラスベースのオブジェクト指向言語では、一般にインスタンスが状態を持ち、メソッドはクラスに属し、継承は構造と振る舞いのみです。ECMAScriptでは、状態とメソッドの両方がオブジェクトに属し、構造・振る舞い・状態すべてが継承されます。</p>
       <p>プロトタイプが直接持つプロパティを持たないすべてのオブジェクトは、そのプロパティと値を共有します。図1はこれを示します：</p>
