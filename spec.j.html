@@ -6853,6 +6853,23 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-getoptionsobject" type="abstract operation">
+      <h1>
+        GetOptionsObject (
+          _options_: ECMAScript 言語値,
+        ): オブジェクトを含む正常完了または throw 完了のいずれか
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _options_ が *undefined* の場合、
+          1. OrdinaryObjectCreate(*null*) を返す。
+        1. _options_ がオブジェクトの場合、
+          1. _options_ を返す。
+        1. *TypeError* 例外をスローする。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-SetterThatIgnoresPrototypeProperties" type="abstract operation">
       <h1>
         SetterThatIgnoresPrototypeProperties (
@@ -30173,7 +30190,7 @@
       <p><emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref> を参照。</p>
     </emu-clause>
 
-    <emu-clause id="sec-uint8array">
+    <emu-clause id="sec-constructor-properties-of-the-global-object-uint8array">
       <h1>Uint8Array ( . . . )</h1>
       <p><emu-xref href="#sec-typedarray-constructors"></emu-xref> を参照。</p>
     </emu-clause>
@@ -35404,18 +35421,19 @@ THH:mm:ss.sss
         </emu-note>
         <p>手順:</p>
         <emu-alg>
-          1. _O_ を *this*。
-          1. ? RequireObjectCoercible(_O_)。
-          1. _S_ を ? ToString(_O_)。
-          1. _searchStr_ を ? ToString(_searchString_)。
-          1. _numPos_ を ? ToNumber(_position_)。
-          1. アサート: _position_ が *undefined* なら _numPos_ は *NaN*。
-          1. _numPos_ が *NaN* なら _pos_ を +∞ とし、そうでなければ _pos_ を ! ToIntegerOrInfinity(_numPos_)。
-          1. _len_ を _S_ の長さ。
-          1. _searchLen_ を _searchStr_ の長さ。
-          1. _start_ を _pos_ を 0 と _len_ - _searchLen_ の間にクランプ。
-          1. _result_ を StringLastIndexOf(_S_, _searchStr_, _start_)。
-          1. _result_ が ~not-found~ なら *-1*<sub>𝔽</sub>。
+          1. _O_ に *this* の値を設定する。
+          1. ? RequireObjectCoercible(_O_) を実行する。
+          1. _S_ に ? ToString(_O_) を設定する。
+          1. _searchStr_ に ? ToString(_searchString_) を設定する。
+          1. _numPos_ に ? ToNumber(_position_) を設定する。
+          1. アサート: _position_ が *undefined* の場合、_numPos_ は *NaN* である。
+          1. _numPos_ が *NaN* なら _pos_ に +∞ を、そうでなければ _pos_ に ! ToIntegerOrInfinity(_numPos_) を設定する。
+          1. _len_ に _S_ の長さを設定する。
+          1. _searchLen_ に _searchStr_ の長さを設定する。
+          1. _len_ &lt; _searchLen_ の場合、*-1*<sub>𝔽</sub> を返す。
+          1. _start_ に _pos_ を 0 以上 _len_ - _searchLen_ 以下に制限した結果を設定する。
+          1. _result_ に StringLastIndexOf(_S_, _searchStr_, _start_) を設定する。
+          1. _result_ が ~not-found~ なら、*-1*<sub>𝔽</sub> を返す。
           1. 𝔽(_result_) を返す。
         </emu-alg>
         <emu-note>
@@ -42314,7 +42332,7 @@ THH:mm:ss.sss
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_exemplar_ から派生したコンストラクターと _length_ を用いて新しい TypedArray を生成する。TypedArraySpeciesCreate が %Symbol.species% によりカスタムサブクラスを構築できるのに対し常に組込み TypedArray コンストラクターを用いる。</dd>
+          <dd>これは、_exemplar_ から派生したコンストラクター関数を使って新しい TypedArray を作成するために使用されます。%Symbol.species% を利用してカスタム TypedArray サブクラスを構築できる TypedArraySpeciesCreate とは異なり、この操作は常に組み込みの TypedArray コンストラクターのいずれかを使用します。</dd>
         </dl>
         <emu-alg>
           1. _constructor_ を _exemplar_.[[TypedArrayName]] に対応する <emu-xref href="#table-the-typedarray-constructors"></emu-xref> の組込みオブジェクトとする。
@@ -42424,10 +42442,10 @@ THH:mm:ss.sss
       <h1>_TypedArray_ コンストラクター</h1>
       <p>各 _TypedArray_ コンストラクターは:</p>
       <ul>
-        <li><emu-xref href="#table-the-typedarray-constructors"></emu-xref> にて _TypedArray_ の代わりに用いられる名称が異なるだけで、以下に記述する構造を持つ組込みオブジェクトである。</li>
-        <li>引数の数と型により挙動が変わる関数であり、呼び出し時の実際の挙動は渡された引数の数と種類に依存する。</li>
-        <li>関数として呼び出すことを意図しておらず、その形で呼べば例外を投げる。</li>
-        <li>クラス定義の `extends` 句に利用できる。指定された _TypedArray_ の挙動を継承するサブクラスコンストラクターは、%TypedArray%`.prototype` 組込みメソッドを支える内部状態でインスタンスを初期化するため _TypedArray_ コンストラクターへの `super` 呼び出しを含めねばならない。</li>
+        <li><emu-xref href="#table-the-typedarray-constructors"></emu-xref> で _TypedArray_ の代わりに使用されるコンストラクター名を除き、以下に記述された構造を持つ組み込みオブジェクトである（特に記載がない限り）。</li>
+        <li>引数の数や型によって動作が異なる関数である。_TypedArray_ の呼び出し時の実際の動作は、渡された引数の数や種類に依存する。</li>
+        <li>関数として呼び出すことを意図しておらず、そのように呼び出すと例外をスローする。</li>
+        <li>クラス定義の `extends` 節の値として使用できる。指定された _TypedArray_ の動作を継承したいサブクラスのコンストラクターは、サブクラスインスタンスを作成し、%TypedArray%`.prototype` の組み込みメソッドをサポートするために必要な内部状態で初期化するため、_TypedArray_ コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object">
@@ -42697,6 +42715,391 @@ THH:mm:ss.sss
     <emu-clause id="sec-properties-of-typedarray-instances">
       <h1>_TypedArray_ インスタンスのプロパティ</h1>
       <p>_TypedArray_ インスタンスは TypedArray である。各 _TypedArray_ インスタンスは対応する _TypedArray_ プロトタイプオブジェクトからプロパティを継承し、[[ViewedArrayBuffer]], [[TypedArrayName]], [[ContentType]], [[ByteLength]], [[ByteOffset]], [[ArrayLength]] の内部スロットを持つ。</p>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-uint8array">
+    <h1>Uint8Array オブジェクト</h1>
+    <p>Uint8Array は上述の _TypedArray_ の一種である。加えて、Uint8Array コンストラクターには追加のメソッド（<emu-xref href="#sec-additional-properties-of-the-uint8array-constructor"></emu-xref>）、Uint8Array プロトタイプオブジェクトにも追加のメソッド（<emu-xref href="#sec-additional-properties-of-the-uint8array-prototype-object"></emu-xref>）が存在する。</p>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-constructor">
+      <h1>Uint8Array コンストラクターの追加のプロパティ</h1>
+
+      <emu-clause id="sec-uint8array.frombase64">
+        <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. _string_ が文字列でなければ、*TypeError* 例外をスローする。
+          1. _opts_ に ? GetOptionsObject(_options_) を設定する。
+          1. _alphabet_ に ? Get(_opts_, *"alphabet"*) を設定する。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ に *"base64"* を設定する。
+          1. _alphabet_ が *"base64"* または *"base64url"* でなければ、*TypeError* 例外をスローする。
+          1. _lastChunkHandling_ に ? Get(_opts_, *"lastChunkHandling"*) を設定する。
+          1. _lastChunkHandling_ が *undefined* の場合、_lastChunkHandling_ に *"loose"* を設定する。
+          1. _lastChunkHandling_ が *"loose"*、*"strict"*、*"stop-before-partial"* のいずれでもなければ、*TypeError* 例外をスローする。
+          1. _result_ に FromBase64(_string_, _alphabet_, _lastChunkHandling_) を設定する。
+          1. _result_.[[Error]] が ~none~ でなければ、
+            1. ThrowCompletion(_result_.[[Error]]) を返す。
+          1. _resultLength_ に _result_.[[Bytes]] の要素数を設定する。
+          1. _ta_ に ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> を設定する。
+          1. アサート: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] は _result_.[[Bytes]] の要素数である。
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] の各インデックスの値に、対応する _result_.[[Bytes]] の値を設定する。
+          1. _ta_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.fromhex">
+        <h1>Uint8Array.fromHex ( _string_ )</h1>
+        <emu-alg>
+          1. _string_ が文字列でなければ、*TypeError* 例外をスローする。
+          1. _result_ に FromHex(_string_) を設定する。
+          1. _result_.[[Error]] が ~none~ でなければ、
+            1. ThrowCompletion(_result_.[[Error]]) を返す。
+          1. _resultLength_ に _result_.[[Bytes]] の要素数を設定する。
+          1. _ta_ に ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> を設定する。
+          1. アサート: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] は _result_.[[Bytes]] の要素数である。
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] の各インデックスの値に、対応する _result_.[[Bytes]] の値を設定する。
+          1. _ta_ を返す。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-prototype-object">
+      <h1>Uint8Array プロトタイプオブジェクトの追加のプロパティ</h1>
+
+      <emu-clause id="sec-uint8array.prototype.setfrombase64">
+        <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. _into_ に *this* 値を設定する。
+          1. ? ValidateUint8Array(_into_) を実行する。
+          1. _string_ が文字列でなければ、*TypeError* 例外をスローする。
+          1. _opts_ に ? GetOptionsObject(_options_) を設定する。
+          1. _alphabet_ に ? Get(_opts_, *"alphabet"*) を設定する。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ に *"base64"* を設定する。
+          1. _alphabet_ が *"base64"* または *"base64url"* でなければ、*TypeError* 例外をスローする。
+          1. _lastChunkHandling_ に ? Get(_opts_, *"lastChunkHandling"*) を設定する。
+          1. _lastChunkHandling_ が *undefined* の場合、_lastChunkHandling_ に *"loose"* を設定する。
+          1. _lastChunkHandling_ が *"loose"*、*"strict"*、*"stop-before-partial"* のいずれでもなければ、*TypeError* 例外をスローする。
+          1. _taRecord_ に MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~) を設定する。
+          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* なら、*TypeError* 例外をスローする。
+          1. _byteLength_ に TypedArrayLength(_taRecord_) を設定する。
+          1. _result_ に FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_) を設定する。
+          1. _bytes_ に _result_.[[Bytes]] を設定する。
+          1. _written_ に _bytes_ の要素数を設定する。
+          1. 注: FromBase64 はユーザーコードを実行しないため、_into_ を裏付ける ArrayBuffer はデタッチまたは縮小されていない。
+          1. アサート: _written_ ≤ _byteLength_。
+          1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
+          1. _result_.[[Error]] が ~none~ でなければ、
+            1. ThrowCompletion(_result_.[[Error]]) を返す。
+          1. _resultObject_ に OrdinaryObjectCreate(%Object.prototype%) を設定する。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)) を実行する。
+          1. _resultObject_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.setfromhex">
+        <h1>Uint8Array.prototype.setFromHex ( _string_ )</h1>
+        <emu-alg>
+          1. _into_ に *this* 値を設定する。
+          1. ? ValidateUint8Array(_into_) を実行する。
+          1. _string_ が文字列でなければ、*TypeError* 例外をスローする。
+          1. _taRecord_ に MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~) を設定する。
+          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* なら、*TypeError* 例外をスローする。
+          1. _byteLength_ に TypedArrayLength(_taRecord_) を設定する。
+          1. _result_ に FromHex(_string_, _byteLength_) を設定する。
+          1. _bytes_ に _result_.[[Bytes]] を設定する。
+          1. _written_ に _bytes_ の要素数を設定する。
+          1. 注: FromHex はユーザーコードを実行しないため、_into_ を裏付ける ArrayBuffer はデタッチまたは縮小されていない。
+          1. アサート: _written_ ≤ _byteLength_。
+          1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
+          1. _result_.[[Error]] が ~none~ でなければ、
+            1. ThrowCompletion(_result_.[[Error]]) を返す。
+          1. _resultObject_ に OrdinaryObjectCreate(%Object.prototype%) を設定する。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)) を実行する。
+          1. _resultObject_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tobase64">
+        <h1>Uint8Array.prototype.toBase64 ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. _O_ に *this* 値を設定する。
+          1. ? ValidateUint8Array(_O_) を実行する。
+          1. _opts_ に ? GetOptionsObject(_options_) を設定する。
+          1. _alphabet_ に ? Get(_opts_, *"alphabet"*) を設定する。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ に *"base64"* を設定する。
+          1. _alphabet_ が *"base64"* または *"base64url"* でなければ、*TypeError* 例外をスローする。
+          1. _omitPadding_ に ToBoolean(? Get(_opts_, *"omitPadding"*)) を設定する。
+          1. _toEncode_ に ? GetUint8ArrayBytes(_O_) を設定する。
+          1. _alphabet_ が *"base64"* の場合、
+            1. _outAscii_ に <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> のセクション4で指定されたbase64エンコードで _toEncode_ をエンコードした結果のコードポイント列を設定する。パディングは _omitPadding_ が *false* の場合のみ付加される。
+          1. それ以外の場合、
+            1. アサート: _alphabet_ は *"base64url"* である。
+            1. _outAscii_ に <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> のセクション5で指定されたbase64urlエンコードで _toEncode_ をエンコードした結果のコードポイント列を設定する。パディングは _omitPadding_ が *false* の場合のみ付加される。
+          1. CodePointsToString(_outAscii_) を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tohex">
+        <h1>Uint8Array.prototype.toHex ( )</h1>
+        <emu-alg>
+          1. _O_ に *this* 値を設定する。
+          1. ? ValidateUint8Array(_O_) を実行する。
+          1. _toEncode_ に ? GetUint8ArrayBytes(_O_) を設定する。
+          1. _out_ に空文字列を設定する。
+          1. _toEncode_ の各バイト _byte_ について、次を行う
+            1. _hex_ に Number::toString(𝔽(_byte_), 16) を設定する。
+            1. _hex_ に StringPad(_hex_, 2, *"0"*, ~start~) を設定する。
+            1. _out_ に _out_ と _hex_ の文字列連結結果を設定する。
+          1. _out_ を返す。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-abstract-operations-for-uint8array-objects">
+      <h1>Uint8Array オブジェクトの抽象操作</h1>
+
+      <emu-clause id="sec-validateuint8array" type="abstract operation">
+        <h1>
+          ValidateUint8Array (
+            _ta_: ECMAScript 言語値,
+          ): ~unused~ を含む正常完了または throw 完了のいずれか
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. ? RequireInternalSlot(_ta_, [[TypedArrayName]]) を実行する。
+          1. _ta_.[[TypedArrayName]] が *"Uint8Array"* でなければ、*TypeError* 例外をスローする。
+          1. ~unused~ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-getuint8arraybytes" type="abstract operation">
+        <h1>
+          GetUint8ArrayBytes (
+            _ta_: Uint8Array,
+          ): バイト値のリストを含む正常完了または throw 完了のいずれか
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. _buffer_ に _ta_.[[ViewedArrayBuffer]] を設定する。
+          1. _taRecord_ に MakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~) を設定する。
+          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* なら、*TypeError* 例外をスローする。
+          1. _len_ に TypedArrayLength(_taRecord_) を設定する。
+          1. _byteOffset_ に _ta_.[[ByteOffset]] を設定する。
+          1. _bytes_ に新しい空リストを設定する。
+          1. _index_ に 0 を設定する。
+          1. _index_ &lt; _len_ の間、繰り返す
+            1. _byteIndex_ に _byteOffset_ + _index_ を設定する。
+            1. _byte_ に ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~)) を設定する。
+            1. _byte_ を _bytes_ に追加する。
+            1. _index_ を _index_ + 1 に設定する。
+          1. _bytes_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-setuint8arraybytes" type="abstract operation">
+        <h1>
+          SetUint8ArrayBytes (
+            _into_: Uint8Array,
+            _bytes_: バイト値のリスト,
+          ): ~unused~
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. _offset_ に _into_.[[ByteOffset]] を設定する。
+          1. _len_ に _bytes_ の要素数を設定する。
+          1. _index_ に 0 を設定する。
+          1. _index_ &lt; _len_ の間、繰り返す
+            1. _byte_ に _bytes_[_index_] を設定する。
+            1. _byteIndexInBuffer_ に _index_ + _offset_ を設定する。
+            1. SetValueInBuffer(_into_.[[ViewedArrayBuffer]], _byteIndexInBuffer_, ~uint8~, 𝔽(_byte_), *true*, ~unordered~) を実行する。
+            1. _index_ を _index_ + 1 に設定する。
+          1. ~unused~ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-skipasciiwhitespace" type="abstract operation">
+        <h1>
+          SkipAsciiWhitespace (
+            _string_: 文字列,
+            _index_: 非負整数,
+          ): 非負整数
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _length_ に _string_ の長さを設定する。
+          1. _index_ &lt; _length_ の間、繰り返す
+            1. _char_ に _string_ の _index_ 番目のコードユニットを設定する。
+            1. _char_ が 0x0009 (TAB), 0x000A (LF), 0x000C (FF), 0x000D (CR), 0x0020 (SPACE) のいずれでもない場合、
+              1. _index_ を返す。
+            1. _index_ を _index_ + 1 に設定する。
+          1. _index_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefinalbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFinalBase64Chunk (
+            _chunk_: 長さ 2 または 3 の文字列,
+            _throwOnExtraBits_: ブール値,
+          ): バイト値のリストを含む正常完了または throw 完了のいずれか
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _chunkLength_ に _chunk_ の長さを設定する。
+          1. _chunkLength_ = 2 の場合、
+            1. _chunk_ に _chunk_ と *"AA"* を連結する。
+          1. それ以外の場合、
+            1. アサート: _chunkLength_ は 3 である。
+            1. _chunk_ に _chunk_ と *"A"* を連結する。
+          1. _bytes_ に DecodeFullLengthBase64Chunk(_chunk_) を設定する。
+          1. _chunkLength_ = 2 の場合、
+            1. _throwOnExtraBits_ が *true* かつ _bytes_[1] ≠ 0 なら、
+              1. *SyntaxError* 例外をスローする。
+            1. « _bytes_[0] » を返す。
+          1. それ以外の場合、
+            1. _throwOnExtraBits_ が *true* かつ _bytes_[2] ≠ 0 なら、
+              1. *SyntaxError* 例外をスローする。
+            1. « _bytes_[0], _bytes_[1] » を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefulllengthbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFullLengthBase64Chunk (
+            _chunk_: 長さ 4 の文字列,
+          ): 長さ 3 のバイト値のリスト
+        </h1>
+        <dl class="header">
+        </dl>
+        <p><dfn id="standard-base64-alphabet">標準 base64 アルファベット</dfn>は *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"* である。すなわち、Unicode Basic Latin ブロックのすべての英字と数字、さらに *"+"* と *"/"* を含む文字列である。</p>
+        <emu-alg>
+          1. _byteSequence_ に、_chunk_ を base64 としてデコードした結果得られる一意な 3 バイトのシーケンスを設定する（すなわち、<a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> のセクション4で指定されたbase64エンコードを _byteSequence_ に適用すると _chunk_ になるようなシーケンス）。
+          1. _byteSequence_ の要素を順に含むリストを返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-frombase64" type="abstract operation">
+        <h1>
+          FromBase64 (
+            _string_: 文字列,
+            _alphabet_: *"base64"* または *"base64url"*,
+            _lastChunkHandling_: *"loose"*、*"strict"*、または *"stop-before-partial"*,
+            optional _maxLength_: 非負整数,
+          ): フィールド [[Read]]（整数）、[[Bytes]]（バイト値のリスト）、[[Error]]（*SyntaxError* オブジェクトまたは ~none~）を持つ Record
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _maxLength_ が指定されていなければ、_maxLength_ に 2<sup>53</sup> - 1 を設定する。
+            1. 注: 入力が文字列であるため、文字列の長さは 2<sup>53</sup> - 1 に制限されており、出力は常に入力の文字数以下のバイト数となるため、この上限に達することはない。ただし編集上の都合で有限値を使用している。
+          1. 注: 以下のアルゴリズムにおける検証とデコードの順序は観測できない。実装は効率的な順序で（検証とデコードを組み合わせて）処理してよい。
+          1. _maxLength_ = 0 の場合、
+            1. Record { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ } を返す。
+          1. _read_ に 0 を設定する。
+          1. _bytes_ に新しい空リストを設定する。
+          1. _chunk_ に空文字列を設定する。
+          1. _chunkLength_ に 0 を設定する。
+          1. _index_ に 0 を設定する。
+          1. _length_ に _string_ の長さを設定する。
+          1. 繰り返す:
+            1. _index_ に SkipAsciiWhitespace(_string_, _index_) を設定する。
+            1. _index_ = _length_ の場合、
+              1. _chunkLength_ > 0 の場合、
+                1. _lastChunkHandling_ が *"stop-before-partial"* なら
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+                1. それ以外で _lastChunkHandling_ が *"loose"* なら
+                  1. _chunkLength_ = 1 の場合
+                    1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+                  1. _bytes_ に _bytes_ と ! DecodeFinalBase64Chunk(_chunk_, *false*) を連結したリストを設定する。
+                1. それ以外の場合（_lastChunkHandling_ が *"strict"* であることをアサート）
+                  1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _char_ に _string_ の _index_ から _index_ + 1 までの部分文字列を設定する。
+            1. _index_ を _index_ + 1 に設定する。
+            1. _char_ が *"="* の場合
+              1. _chunkLength_ &lt; 2 の場合
+                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _index_ に SkipAsciiWhitespace(_string_, _index_) を設定する。
+              1. _chunkLength_ = 2 の場合
+                1. _index_ = _length_ の場合
+                  1. _lastChunkHandling_ が *"stop-before-partial"* なら
+                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+                  1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+                1. _char_ に _string_ の _index_ から _index_ + 1 までの部分文字列を設定する。
+                1. _char_ が *"="* の場合
+                  1. _index_ に SkipAsciiWhitespace(_string_, _index_ + 1) を設定する。
+              1. _index_ &lt; _length_ の場合
+                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _lastChunkHandling_ が *"strict"* の場合は _throwOnExtraBits_ に *true* を、そうでなければ *false* を設定する。
+              1. _decodeResult_ に Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_)) を設定する。
+              1. _decodeResult_ がアブストラクト完了であれば
+                1. _error_ に _decodeResult_.[[Value]] を設定する。
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _bytes_ に _bytes_ と ! _decodeResult_ を連結したリストを設定する。
+              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _alphabet_ が *"base64url"* の場合
+              1. _char_ が *"+"* または *"/"* のいずれかの場合
+                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. それ以外で _char_ が *"-"* の場合
+                1. _char_ に *"+"* を設定する。
+              1. それ以外で _char_ が *"_"* の場合
+                1. _char_ に *"/"* を設定する。
+            1. _char_ の唯一のコードユニットが標準 base64 アルファベットの要素でなければ
+              1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+            1. _remaining_ に _maxLength_ から _bytes_ の要素数を引いた値を設定する。
+            1. _remaining_ = 1 かつ _chunkLength_ = 2 または _remaining_ = 2 かつ _chunkLength_ = 3 の場合
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _chunk_ に _chunk_ と _char_ を連結する。
+            1. _chunkLength_ に _chunk_ の長さを設定する。
+            1. _chunkLength_ = 4 の場合
+              1. _bytes_ に _bytes_ と DecodeFullLengthBase64Chunk(_chunk_) を連結したリストを設定する。
+              1. _chunk_ に空文字列を設定する。
+              1. _chunkLength_ に 0 を設定する。
+              1. _read_ に _index_ を設定する。
+              1. _bytes_ の要素数が _maxLength_ と等しい場合
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-fromhex" type="abstract operation">
+        <h1>
+          FromHex (
+            _string_: 文字列,
+            optional _maxLength_: 非負整数,
+          ): フィールド [[Read]]（整数）、[[Bytes]]（バイト値のリスト）、[[Error]]（*SyntaxError* オブジェクトまたは ~none~）を持つ Record
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _maxLength_ が指定されていなければ、_maxLength_ に 2<sup>53</sup> - 1 を設定する。
+          1. _length_ に _string_ の長さを設定する。
+          1. _bytes_ に新しい空リストを設定する。
+          1. _read_ に 0 を設定する。
+          1. _length_ を 2 で割った余りが 0 でなければ、
+            1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+            1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+          1. _read_ &lt; _length_ かつ _bytes_ の要素数 &lt; _maxLength_ の間、繰り返す
+            1. _hexits_ に _string_ の _read_ から _read_ + 2 までの部分文字列を設定する。
+            1. _hexits_ に *"0123456789abcdefABCDEF"* に含まれないコードユニットが含まれていれば、
+              1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+            1. _read_ を _read_ + 2 に設定する。
+            1. _byte_ に _hexits_ を基数16表記で表す整数値を設定する。A～Fとa～fは値10～15として扱う。
+            1. _byte_ を _bytes_ に追加する。
+          1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -52811,4 +53214,3 @@ THH:mm:ss.sss
   <p>この仕様は <a href="https://github.com/tc39/ecma262">GitHub</a> 上で <a href="https://github.com/bterlson/ecmarkup">Ecmarkup</a> と呼ばれるプレーンテキストソース形式で作成される。Ecmarkup はこの文書の編集上の慣習に従う完全な HTML レンダリングへ仕様を処理するためのフレームワークおよびツールセットを提供する HTML と Markdown の方言である。Ecmarkup は構文定義に <a href="https://github.com/rbuckton/grammarkdown">Grammarkdown</a>、アルゴリズム手順記述に <a href="https://github.com/domenic/ecmarkdown">Ecmarkdown</a> など複数のフォーマットおよび技術を統合している。この仕様の PDF レンダリングは CSS Paged Media 仕様を利用する印刷スタイルシートを用いて生成され <a href="https://www.princexml.com/">PrinceXML</a> で変換される。</p>
   <p>以前の版は Word を用いて作成されており、本版の基盤となった Ecmarkup ソーステキストは ECMAScript 2015 の Word ドキュメントを自動変換ツールで Ecmarkup へ変換して得られた。</p>
 </emu-annex>
-

@@ -6855,6 +6855,23 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-getoptionsobject" type="abstract operation">
+      <h1>
+        GetOptionsObject (
+          _options_: ECMAScript 언어 값,
+        ): Object를 포함하는 normal completion 또는 throw completion 중 하나
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _options_가 *undefined*이면,
+          1. OrdinaryObjectCreate(*null*)을 반환한다.
+        1. _options_가 Object이면,
+          1. _options_를 반환한다.
+        1. *TypeError* 예외를 throw한다.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-SetterThatIgnoresPrototypeProperties" type="abstract operation">
       <h1>
         SetterThatIgnoresPrototypeProperties (
@@ -29711,7 +29728,7 @@
       <p><emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref> 참조.</p>
     </emu-clause>
 
-    <emu-clause id="sec-uint8array">
+    <emu-clause id="sec-constructor-properties-of-the-global-object-uint8array">
       <h1>Uint8Array ( . . . )</h1>
       <p><emu-xref href="#sec-typedarray-constructors"></emu-xref> 참조.</p>
     </emu-clause>
@@ -34945,16 +34962,17 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _S_를 ? ToString(_O_)로 둔다.
-          1. _searchStr_를 ? ToString(_searchString_)로 둔다.
-          1. _numPos_를 ? ToNumber(_position_)로 둔다.
-          1. 단언: _position_이 *undefined*이면 _numPos_는 *NaN*이다.
+          1. _S_를 ? ToString(_O_)으로 둔다.
+          1. _searchStr_을 ? ToString(_searchString_)으로 둔다.
+          1. _numPos_를 ? ToNumber(_position_)으로 둔다.
+          1. Assert: _position_이 *undefined*이면, _numPos_는 *NaN*이다.
           1. _numPos_가 *NaN*이면 _pos_를 +∞로, 아니면 _pos_를 ! ToIntegerOrInfinity(_numPos_)로 둔다.
           1. _len_을 _S_의 길이로 둔다.
           1. _searchLen_을 _searchStr_의 길이로 둔다.
+          1. _len_ &lt; _searchLen_이면, *-1*<sub>𝔽</sub>을 반환한다.
           1. _start_를 _pos_를 0과 _len_ - _searchLen_ 사이로 클램프한 결과로 둔다.
           1. _result_를 StringLastIndexOf(_S_, _searchStr_, _start_)로 둔다.
-          1. _result_가 ~not-found~이면 *-1*<sub>𝔽</sub>을 반환한다.
+          1. _result_가 ~not-found~이면, *-1*<sub>𝔽</sub>을 반환한다.
           1. 𝔽(_result_)를 반환한다.
         </emu-alg>
         <emu-note>
@@ -41851,7 +41869,7 @@ THH:mm:ss.sss
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_exemplar_ 에서 파생된 생성자와 _length_ 를 사용해 새로운 TypedArray 를 생성한다. %Symbol.species% 를 사용하는 커스텀 서브클래스를 만들 수 있는 TypedArraySpeciesCreate 와 달리, 이 연산은 항상 내장 TypedArray 생성자 중 하나를 사용한다.</dd>
+          <dd>이 연산은 _exemplar_에서 파생된 생성자 함수를 사용하여 새로운 TypedArray를 생성하도록 지정하는 데 사용됩니다. %Symbol.species%를 통해 커스텀 TypedArray 하위 클래스를 생성할 수 있는 TypedArraySpeciesCreate와 달리, 이 연산은 항상 내장 TypedArray 생성자 중 하나만을 사용합니다.</dd>
         </dl>
         <emu-alg>
           1. _constructor_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 _exemplar_.[[TypedArrayName]] 생성자 이름에 연관된 내재 객체.
@@ -41961,10 +41979,10 @@ THH:mm:ss.sss
       <h1>_TypedArray_ 생성자</h1>
       <p>각 _TypedArray_ 생성자는 다음을 만족한다:</p>
       <ul>
-        <li><emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 _TypedArray_ 대신 생성자 이름만 다른, 아래에서 설명된 구조를 갖는 내재 객체이다.</li>
-        <li>인자의 개수와 타입에 따라 동작이 달라지는 함수이다. _TypedArray_ 호출의 실제 동작은 전달된 인자의 개수와 종류에 의존한다.</li>
-        <li>함수로 호출하도록 의도되지 않았으며 그러한 방식으로 호출되면 예외를 던진다.</li>
-        <li>클래스 정의의 `extends` 절 값으로 사용될 수 있다. 지정된 _TypedArray_ 동작을 상속하려는 서브클래스 생성자는 %TypedArray%`.prototype` 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성·초기화하기 위해 _TypedArray_ 생성자에 대한 `super` 호출을 포함해야 한다.</li>
+        <li>내재 객체로, 아래에 설명된 구조를 가지며, <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 별도로 명시하지 않는 한, 생성자 이름에 _TypedArray_ 대신 다른 이름이 사용된다는 점만 다릅니다.</li>
+        <li>인자의 개수와 유형에 따라 동작이 달라지는 함수입니다. _TypedArray_를 호출할 때 실제 동작은 전달된 인자의 개수와 종류에 따라 결정됩니다.</li>
+        <li>함수로 호출하는 용도가 아니며, 그렇게 호출할 경우 예외가 발생합니다.</li>
+        <li>클래스 정의의 `extends` 절 값으로 사용할 수 있습니다. 지정된 _TypedArray_ 동작을 상속받으려는 서브클래스 생성자는, %TypedArray%`.prototype` 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성 및 초기화하기 위해 _TypedArray_ 생성자에 대한 `super` 호출을 포함해야 합니다.</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object">
@@ -42234,6 +42252,393 @@ THH:mm:ss.sss
     <emu-clause id="sec-properties-of-typedarray-instances">
       <h1>_TypedArray_ 인스턴스의 프로퍼티</h1>
       <p>_TypedArray_ 인스턴스는 TypedArray 이다. 각 _TypedArray_ 인스턴스는 해당 _TypedArray_ 프로토타입 객체로부터 프로퍼티를 상속한다. 각 _TypedArray_ 인스턴스는 내부 슬롯 [[ViewedArrayBuffer]], [[TypedArrayName]], [[ContentType]], [[ByteLength]], [[ByteOffset]], [[ArrayLength]] 를 가진다.</p>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-uint8array">
+    <h1>Uint8Array 객체</h1>
+    <p>Uint8Array는 위에서 설명한 _TypedArray_의 한 종류입니다. 추가적으로, Uint8Array 생성자(<emu-xref href="#sec-additional-properties-of-the-uint8array-constructor"></emu-xref>)와 Uint8Array 프로토타입 객체(<emu-xref href="#sec-additional-properties-of-the-uint8array-prototype-object"></emu-xref>)에는 추가 메서드들이 있습니다.</p>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-constructor">
+      <h1>Uint8Array 생성자의 추가 속성</h1>
+
+      <emu-clause id="sec-uint8array.frombase64">
+        <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. _string_이 String이 아니면, *TypeError* 예외를 throw한다.
+          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
+          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)로 둔다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
+          1. _alphabet_이 *"base64"* 또는 *"base64url"*이 아니면, *TypeError* 예외를 throw한다.
+          1. _lastChunkHandling_을 ? Get(_opts_, *"lastChunkHandling"*)로 둔다.
+          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정한다.
+          1. _lastChunkHandling_이 *"loose"*, *"strict"*, *"stop-before-partial"* 중 하나가 아니면, *TypeError* 예외를 throw한다.
+          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_)로 둔다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. Return ThrowCompletion(_result_.[[Error]]).
+          1. _resultLength_을 _result_.[[Bytes]]의 요소 개수로 둔다.
+          1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 둔다.
+          1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]]의 요소 개수와 같다.
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]]의 각 인덱스 값을 _result_.[[Bytes]]의 해당 인덱스 값으로 설정한다.
+          1. _ta_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.fromhex">
+        <h1>Uint8Array.fromHex ( _string_ )</h1>
+        <emu-alg>
+          1. _string_이 String이 아니면, *TypeError* 예외를 throw한다.
+          1. _result_를 FromHex(_string_)로 둔다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. Return ThrowCompletion(_result_.[[Error]]).
+          1. _resultLength_을 _result_.[[Bytes]]의 요소 개수로 둔다.
+          1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 둔다.
+          1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]]의 요소 개수와 같다.
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]]의 각 인덱스 값을 _result_.[[Bytes]]의 해당 인덱스 값으로 설정한다.
+          1. _ta_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-prototype-object">
+      <h1>Uint8Array 프로토타입 객체의 추가 속성</h1>
+
+      <emu-clause id="sec-uint8array.prototype.setfrombase64">
+        <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. _into_를 *this* 값으로 둔다.
+          1. ? ValidateUint8Array(_into_)를 수행한다.
+          1. _string_이 String이 아니면, *TypeError* 예외를 throw한다.
+          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
+          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)로 둔다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
+          1. _alphabet_이 *"base64"* 또는 *"base64url"*이 아니면, *TypeError* 예외를 throw한다.
+          1. _lastChunkHandling_을 ? Get(_opts_, *"lastChunkHandling"*)로 둔다.
+          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정한다.
+          1. _lastChunkHandling_이 *"loose"*, *"strict"*, *"stop-before-partial"* 중 하나가 아니면, *TypeError* 예외를 throw한다.
+          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)로 둔다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 throw한다.
+          1. _byteLength_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)로 둔다.
+          1. _bytes_를 _result_.[[Bytes]]로 둔다.
+          1. _written_을 _bytes_의 요소 개수로 둔다.
+          1. 참고: FromBase64는 사용자 코드를 실행하지 않으므로, _into_의 ArrayBuffer는 분리되거나 크기가 줄어들 수 없다.
+          1. Assert: _written_ ≤ _byteLength_.
+          1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. Return ThrowCompletion(_result_.[[Error]]).
+          1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))를 수행한다.
+          1. _resultObject_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.setfromhex">
+        <h1>Uint8Array.prototype.setFromHex ( _string_ )</h1>
+        <emu-alg>
+          1. _into_를 *this* 값으로 둔다.
+          1. ? ValidateUint8Array(_into_)를 수행한다.
+          1. _string_이 String이 아니면, *TypeError* 예외를 throw한다.
+          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)로 둔다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 throw한다.
+          1. _byteLength_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _result_를 FromHex(_string_, _byteLength_)로 둔다.
+          1. _bytes_를 _result_.[[Bytes]]로 둔다.
+          1. _written_을 _bytes_의 요소 개수로 둔다.
+          1. 참고: FromHex는 사용자 코드를 실행하지 않으므로, _into_의 ArrayBuffer는 분리되거나 크기가 줄어들 수 없다.
+          1. Assert: _written_ ≤ _byteLength_.
+          1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. Return ThrowCompletion(_result_.[[Error]]).
+          1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))를 수행한다.
+          1. _resultObject_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tobase64">
+        <h1>Uint8Array.prototype.toBase64 ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. _O_를 *this* 값으로 둔다.
+          1. ? ValidateUint8Array(_O_)를 수행한다.
+          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
+          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)로 둔다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
+          1. _alphabet_이 *"base64"* 또는 *"base64url"*이 아니면, *TypeError* 예외를 throw한다.
+          1. _omitPadding_을 ToBoolean(? Get(_opts_, *"omitPadding"*)))로 둔다.
+          1. _toEncode_를 ? GetUint8ArrayBytes(_O_)로 둔다.
+          1. _alphabet_이 *"base64"*라면,
+            1. _outAscii_를 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 4절에 명시된 base64 인코딩에 따라 _toEncode_를 인코딩한 결과의 코드 포인트 시퀀스로 둔다. 패딩은 _omitPadding_이 *false*일 때만 포함된다.
+          1. 그렇지 않으면,
+            1. Assert: _alphabet_이 *"base64url"*임.
+            1. _outAscii_를 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 5절에 명시된 base64url 인코딩에 따라 _toEncode_를 인코딩한 결과의 코드 포인트 시퀀스로 둔다. 패딩은 _omitPadding_이 *false*일 때만 포함된다.
+          1. CodePointsToString(_outAscii_)를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tohex">
+        <h1>Uint8Array.prototype.toHex ( )</h1>
+        <emu-alg>
+          1. _O_를 *this* 값으로 둔다.
+          1. ? ValidateUint8Array(_O_)를 수행한다.
+          1. _toEncode_를 ? GetUint8ArrayBytes(_O_)로 둔다.
+          1. _out_을 빈 문자열로 둔다.
+          1. _toEncode_의 각 바이트 _byte_에 대해,
+            1. _hex_를 Number::toString(𝔽(_byte_), 16)으로 둔다.
+            1. _hex_를 StringPad(_hex_, 2, *"0"*, ~start~)로 설정한다.
+            1. _out_을 _out_과 _hex_의 문자열 연결 결과로 설정한다.
+          1. _out_을 반환한다.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-abstract-operations-for-uint8array-objects">
+      <h1>Uint8Array 객체를 위한 추상 연산</h1>
+
+      <emu-clause id="sec-validateuint8array" type="abstract operation">
+        <h1>
+          ValidateUint8Array (
+            _ta_: ECMAScript 언어 값,
+          ): ~unused~를 포함하는 normal completion 또는 throw completion 중 하나
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. ? RequireInternalSlot(_ta_, [[TypedArrayName]])를 수행한다.
+          1. _ta_.[[TypedArrayName]]이 *"Uint8Array"*가 아니면, *TypeError* 예외를 throw한다.
+          1. ~unused~를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-getuint8arraybytes" type="abstract operation">
+        <h1>
+          GetUint8ArrayBytes (
+            _ta_: Uint8Array,
+          ): 바이트 값의 List를 포함하는 normal completion 또는 throw completion 중 하나
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 둔다.
+          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~)로 둔다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 throw한다.
+          1. _len_을 TypedArrayLength(_taRecord_)로 둔다.
+          1. _byteOffset_을 _ta_.[[ByteOffset]]로 둔다.
+          1. _bytes_를 새 빈 List로 둔다.
+          1. _index_를 0으로 둔다.
+          1. _index_ &lt; _len_인 동안 반복한다,
+            1. _byteIndex_를 _byteOffset_ + _index_로 둔다.
+            1. _byte_를 ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~))로 둔다.
+            1. _bytes_에 _byte_를 추가한다.
+            1. _index_를 _index_ + 1로 설정한다.
+          1. _bytes_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-setuint8arraybytes" type="abstract operation">
+        <h1>
+          SetUint8ArrayBytes (
+            _into_: Uint8Array,
+            _bytes_: 바이트 값의 List,
+          ): ~unused~
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. _offset_을 _into_.[[ByteOffset]]로 둔다.
+          1. _len_을 _bytes_의 요소 개수로 둔다.
+          1. _index_를 0으로 둔다.
+          1. _index_ &lt; _len_인 동안 반복한다,
+            1. _byte_를 _bytes_[_index_]로 둔다.
+            1. _byteIndexInBuffer_를 _index_ + _offset_으로 둔다.
+            1. SetValueInBuffer(_into_.[[ViewedArrayBuffer]], _byteIndexInBuffer_, ~uint8~, 𝔽(_byte_), *true*, ~unordered~)를 수행한다.
+            1. _index_를 _index_ + 1로 설정한다.
+          1. ~unused~를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-skipasciiwhitespace" type="abstract operation">
+        <h1>
+          SkipAsciiWhitespace (
+            _string_: String,
+            _index_: 음이 아닌 정수,
+          ): 음이 아닌 정수
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _length_를 _string_의 길이로 둔다.
+          1. _index_ &lt; _length_인 동안 반복한다,
+            1. _char_를 _string_ 내 인덱스 _index_의 코드 유닛으로 둔다.
+            1. _char_가 0x0009 (TAB), 0x000A (LF), 0x000C (FF), 0x000D (CR), 0x0020 (SPACE) 중 하나가 아니면
+              1. _index_를 반환한다.
+            1. _index_를 _index_ + 1로 설정한다.
+          1. _index_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefinalbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFinalBase64Chunk (
+            _chunk_: 길이 2 또는 3의 String,
+            _throwOnExtraBits_: Boolean,
+          ): 바이트 값의 List를 포함하는 normal completion 또는 throw completion 중 하나
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _chunkLength_를 _chunk_의 길이로 둔다.
+          1. _chunkLength_ = 2이면,
+            1. _chunk_를 _chunk_와 *"AA"*의 문자열 결합 결과로 설정한다.
+          1. 그렇지 않으면,
+            1. Assert: _chunkLength_는 3이다.
+            1. _chunk_를 _chunk_와 *"A"*의 문자열 결합 결과로 설정한다.
+          1. _bytes_를 DecodeFullLengthBase64Chunk(_chunk_)로 둔다.
+          1. _chunkLength_ = 2이면,
+            1. _throwOnExtraBits_이 *true*이고 _bytes_[1] ≠ 0이면,
+              1. *SyntaxError* 예외를 throw한다.
+            1. « _bytes_[0] »을 반환한다.
+          1. 그렇지 않으면,
+            1. _throwOnExtraBits_이 *true*이고 _bytes_[2] ≠ 0이면,
+              1. *SyntaxError* 예외를 throw한다.
+            1. « _bytes_[0], _bytes_[1] »을 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefulllengthbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFullLengthBase64Chunk (
+            _chunk_: 길이 4의 String,
+          ): 길이 3의 바이트 값 List
+        </h1>
+        <dl class="header">
+        </dl>
+        <p><dfn id="standard-base64-alphabet">표준 base64 알파벳</dfn>은 *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"*입니다. 즉, 이 문자열의 각 요소는 Unicode Basic Latin 블록 내의 모든 문자 및 숫자, 그리고 *"+"*와 *"/"*에 해당하는 코드 유닛입니다.</p>
+        <emu-alg>
+          1. _byteSequence_를 _chunk_를 base64로 디코드한 결과의 유일한 3바이트 시퀀스로 둔다(즉, <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 4절에 명시된 base64 인코딩을 _byteSequence_에 적용하면 _chunk_가 된다).
+          1. _byteSequence_의 요소를 순서대로 포함하는 List를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-frombase64" type="abstract operation">
+        <h1>
+          FromBase64 (
+            _string_: String,
+            _alphabet_: *"base64"* 또는 *"base64url"*,
+            _lastChunkHandling_: *"loose"*, *"strict"*, *"stop-before-partial"*,
+            optional _maxLength_: 음이 아닌 정수,
+          ): [[Read]](정수), [[Bytes]](바이트 값 List), [[Error]](*SyntaxError* 객체 또는 ~none~) 필드를 가지는 Record
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _maxLength_가 없으면,
+            1. _maxLength_를 2<sup>53</sup> - 1로 설정한다.
+            1. 참고: 입력이 String이므로, String의 길이는 2<sup>53</sup> - 1로 제한되고, 출력은 입력 문자 개수보다 더 많은 바이트가 필요하지 않으므로, 이 한계에 도달할 수 없다. 하지만 편집상 유한 값으로 사용한다.
+          1. 참고: 아래 알고리즘에서 검증과 디코드의 순서는 관찰 불가능하다. 구현체는 효율적인 순서로, 혹은 검증과 디코드를 섞어서 수행할 수 있다.
+          1. _maxLength_ = 0이면,
+            1. Record { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ }를 반환한다.
+          1. _read_를 0으로 둔다.
+          1. _bytes_를 새 빈 List로 둔다.
+          1. _chunk_를 빈 문자열로 둔다.
+          1. _chunkLength_를 0으로 둔다.
+          1. _index_를 0으로 둔다.
+          1. _length_를 _string_의 길이로 둔다.
+          1. 반복한다,
+            1. _index_를 SkipAsciiWhitespace(_string_, _index_)로 설정한다.
+            1. _index_ = _length_이면,
+              1. _chunkLength_ > 0이면,
+                1. _lastChunkHandling_이 *"stop-before-partial"*이면,
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+                1. 그렇지 않고 _lastChunkHandling_이 *"loose"*이면,
+                  1. _chunkLength_ = 1이면,
+                    1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+                  1. _bytes_를 _bytes_와 ! DecodeFinalBase64Chunk(_chunk_, *false*)의 리스트 결합 결과로 설정한다.
+                1. 그렇지 않으면,
+                  1. Assert: _lastChunkHandling_이 *"strict"*임.
+                  1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+            1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분 문자열로 둔다.
+            1. _index_를 _index_ + 1로 설정한다.
+            1. _char_가 *"="*이면,
+              1. _chunkLength_ &lt; 2이면,
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+              1. _index_를 SkipAsciiWhitespace(_string_, _index_)로 설정한다.
+              1. _chunkLength_ = 2이면,
+                1. _index_ = _length_이면,
+                  1. _lastChunkHandling_이 *"stop-before-partial"*이면,
+                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+                  1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+                1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분 문자열로 둔다.
+                1. _char_가 *"="*이면,
+                  1. _index_를 SkipAsciiWhitespace(_string_, _index_ + 1)로 설정한다.
+              1. _index_ &lt; _length_이면,
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+              1. _lastChunkHandling_이 *"strict"*이면 _throwOnExtraBits_를 *true*, 아니면 *false*로 둔다.
+              1. _decodeResult_를 Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_))로 둔다.
+              1. _decodeResult_가 abrupt completion이면,
+                1. _error_를 _decodeResult_.[[Value]]로 둔다.
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+              1. _bytes_를 _bytes_와 ! _decodeResult_의 리스트 결합 결과로 설정한다.
+              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+            1. _alphabet_이 *"base64url"*이면,
+              1. _char_가 *"+"* 또는 *"/"*이면,
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+              1. 아니고 _char_가 *"-"*이면,
+                1. _char_를 *"+"*로 설정한다.
+              1. 아니고 _char_가 *"_"*이면,
+                1. _char_를 *"/"*로 설정한다.
+            1. _char_의 유일한 코드 유닛이 표준 base64 알파벳에 포함되어 있지 않으면,
+              1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+            1. _remaining_을 _maxLength_ - _bytes_의 요소 개수로 둔다.
+            1. _remaining_ = 1이고 _chunkLength_ = 2이거나, _remaining_ = 2이고 _chunkLength_ = 3이면,
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+            1. _chunk_를 _chunk_와 _char_의 문자열 결합 결과로 설정한다.
+            1. _chunkLength_를 _chunk_의 길이로 설정한다.
+            1. _chunkLength_ = 4이면,
+              1. _bytes_를 _bytes_와 DecodeFullLengthBase64Chunk(_chunk_)의 리스트 결합 결과로 설정한다.
+              1. _chunk_를 빈 문자열로 설정한다.
+              1. _chunkLength_를 0으로 설정한다.
+              1. _read_를 _index_로 설정한다.
+              1. _bytes_의 요소 개수 = _maxLength_이면,
+                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-fromhex" type="abstract operation">
+        <h1>
+          FromHex (
+            _string_: String,
+            optional _maxLength_: 음이 아닌 정수,
+          ): [[Read]](정수), [[Bytes]](바이트 값 List), [[Error]](*SyntaxError* 객체 또는 ~none~) 필드를 가지는 Record
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. _maxLength_가 없으면, _maxLength_를 2<sup>53</sup> - 1로 설정한다.
+          1. _length_를 _string_의 길이로 둔다.
+          1. _bytes_를 새 빈 List로 둔다.
+          1. _read_를 0으로 둔다.
+          1. _length_를 2로 나눈 나머지가 0이 아니면,
+            1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+            1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+          1. _read_ &lt; _length_이고 _bytes_의 요소 개수 &lt; _maxLength_인 동안 반복한다,
+            1. _hexits_를 _string_의 _read_부터 _read_ + 2까지의 부분 문자열로 둔다.
+            1. _hexits_에 *"0123456789abcdefABCDEF"*에 포함되지 않은 코드 유닛이 있으면,
+              1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+            1. _read_를 _read_ + 2로 설정한다.
+            1. _byte_를 _hexits_가 16진수 표기법으로 나타내는 정수 값으로 둔다. (A~F, a~f는 10~15 값)
+            1. _bytes_에 _byte_를 추가한다.
+          1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -52334,4 +52739,3 @@ THH:mm:ss.sss
   <p>이 명세는 <a href="https://github.com/tc39/ecma262">GitHub</a> 에서 <a href="https://github.com/bterlson/ecmarkup">Ecmarkup</a> 라는 플레인텍스트 소스 포맷으로 작성된다. Ecmarkup 은 HTML 과 Markdown 방언으로, 플레인텍스트로 Ecma 명세를 작성하고 이를 본 문서의 편집 관례를 따르는 기능 완비 HTML 렌더링으로 처리하기 위한 프레임워크 및 도구 세트를 제공한다. Ecmarkup 은 구문 정의를 위한 <a href="https://github.com/rbuckton/grammarkdown">Grammarkdown</a>, 알고리즘 단계를 작성하기 위한 <a href="https://github.com/domenic/ecmarkdown">Ecmarkdown</a> 등 여러 형식과 기술을 통합한다. 이 명세의 PDF 렌더링은 CSS Paged Media 명세를 활용하는 인쇄 스타일시트를 사용하여 생성되며 <a href="https://www.princexml.com/">PrinceXML</a> 을 사용해 변환된다.</p>
   <p>이전 판은 Word 를 사용해 작성되었으며—이 판의 기반이 된 Ecmarkup 소스 텍스트는 ECMAScript 2015 Word 문서를 자동 변환 도구로 Ecmarkup 으로 변환하여 생성되었다.</p>
 </emu-annex>
-

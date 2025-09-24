@@ -6829,6 +6829,23 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-getoptionsobject" type="abstract operation">
+      <h1>
+        GetOptionsObject（
+        _options_：一个 ECMAScript 语言值，
+        ）：返回一个包含 Object 的正常完成或抛出完成
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 如果 _options_ 是 *undefined*，那么
+          1. 返回 OrdinaryObjectCreate(*null*)。
+        1. 如果 _options_ 是一个对象，那么
+          1. 返回 _options_。
+        1. 抛出一个 *TypeError* 异常。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-SetterThatIgnoresPrototypeProperties" type="abstract operation">
       <h1>
         SetterThatIgnoresPrototypeProperties (
@@ -29861,7 +29878,7 @@
       <p>见 <emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>。</p>
     </emu-clause>
 
-    <emu-clause id="sec-uint8array">
+    <emu-clause id="sec-constructor-properties-of-the-global-object-uint8array">
       <h1>Uint8Array ( . . . )</h1>
       <p>见 <emu-xref href="#sec-typedarray-constructors"></emu-xref>。</p>
     </emu-clause>
@@ -35100,13 +35117,14 @@ THH:mm:ss.sss
           1. 令 _S_ 为 ? ToString(_O_)。
           1. 令 _searchStr_ 为 ? ToString(_searchString_)。
           1. 令 _numPos_ 为 ? ToNumber(_position_)。
-          1. 断言：若 _position_ 为 *undefined*，则 _numPos_ 为 *NaN*。
-          1. 若 _numPos_ 为 *NaN*，令 _pos_ 为 +∞；否则令 _pos_ 为 ! ToIntegerOrInfinity(_numPos_)。
+          1. 断言：如果 _position_ 是 *undefined*，则 _numPos_ 为 *NaN*。
+          1. 如果 _numPos_ 为 *NaN*，则令 _pos_ 为 +∞；否则令 _pos_ 为 ! ToIntegerOrInfinity(_numPos_)。
           1. 令 _len_ 为 _S_ 的长度。
           1. 令 _searchLen_ 为 _searchStr_ 的长度。
-          1. 令 _start_ 为将 _pos_ 钳制在 0 和 _len_ - _searchLen_ 之间的结果。
+          1. 如果 _len_ &lt; _searchLen_，则返回 *-1*<sub>𝔽</sub>。
+          1. 令 _start_ 为将 _pos_ 限定在 0 和 _len_ - _searchLen_ 之间的结果。
           1. 令 _result_ 为 StringLastIndexOf(_S_, _searchStr_, _start_)。
-          1. 若 _result_ 为 ~not-found~，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _result_ 为 ~not-found~，则返回 *-1*<sub>𝔽</sub>。
           1. 返回 𝔽(_result_)。
         </emu-alg>
         <emu-note>
@@ -40206,9 +40224,9 @@ THH:mm:ss.sss
         <emu-clause id="sec-comparearrayelements" type="abstract operation">
           <h1>
             CompareArrayElements (
-              _x_: an ECMAScript language value,
-              _y_: an ECMAScript language value,
-              _comparator_: a function object or *undefined*,
+            _x_: an ECMAScript language value,
+            _y_: an ECMAScript language value,
+            _comparator_: a function object or *undefined*,
             ): either a normal completion containing a Number or an abrupt completion
           </h1>
           <emu-alg>
@@ -41759,7 +41777,7 @@ THH:mm:ss.sss
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>用于使用从 _exemplar_ 派生的构造函数及一个 _length_ 创建新的 TypedArray。不同于可通过 %Symbol.species% 构造自定义子类的 TypedArraySpeciesCreate，本操作始终使用内置的 TypedArray 构造函数之一。</dd>
+          <dd>用于使用从 _exemplar_ 派生的构造函数创建一个新的 TypedArray。与 TypedArraySpeciesCreate 不同，后者可以通过 %Symbol.species% 构造自定义 TypedArray 子类，此操作始终使用内置的 TypedArray 构造函数之一。</dd>
         </dl>
         <emu-alg>
           1. 令 _constructor_ 为与 _exemplar_.[[TypedArrayName]] 的构造函数名称关联的内在对象，见 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>。
@@ -41869,10 +41887,10 @@ THH:mm:ss.sss
       <h1>_TypedArray_ 构造函数</h1>
       <p>每个 _TypedArray_ 构造函数：</p>
       <ul>
-        <li>是具有下文所述结构的内在对象，区别仅在于在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中用作构造函数名的名称不同于 _TypedArray_。</li>
-        <li>是其行为根据参数数量与类型而不同的函数。一次 _TypedArray_ 调用的实际行为取决于传入的参数数量与种类。</li>
-        <li>不应作为函数被调用，若以此方式调用将抛出异常。</li>
-        <li>可作为类定义 `extends` 子句的值。意在继承所规定 _TypedArray_ 行为的子类构造函数必须包含对 _TypedArray_ 构造函数的 `super` 调用，以使用支持 %TypedArray%`.prototype` 内置方法所需的内部状态创建并初始化子类实例。</li>
+        <li>是一个具有下述结构的内在对象，除了构造函数名使用不同于 _TypedArray_ 的名称外，与 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中描述的一致，除非另有说明。</li>
+        <li>是一个函数，其行为会根据参数的数量和类型而有所不同。对 _TypedArray_ 的调用实际行为取决于传递的参数数量和类型。</li>
+        <li>不应作为函数调用，否则会抛出异常。</li>
+        <li>可以用作类定义中 `extends` 子句的值。打算继承指定 _TypedArray_ 行为的子类构造函数必须在构造中包含对 _TypedArray_ 构造函数的 `super` 调用，以使用必要的内部状态创建并初始化子类实例，从而支持 %TypedArray%`.prototype` 内置方法。</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object">
@@ -42142,6 +42160,393 @@ THH:mm:ss.sss
     <emu-clause id="sec-properties-of-typedarray-instances">
       <h1>_TypedArray_ 实例的属性</h1>
       <p>_TypedArray_ 实例是 TypedArrays。每个 _TypedArray_ 实例从对应的 _TypedArray_ 原型对象继承属性。每个 _TypedArray_ 实例具有以下内部槽：[[ViewedArrayBuffer]]、[[TypedArrayName]]、[[ContentType]]、[[ByteLength]]、[[ByteOffset]] 和 [[ArrayLength]]。</p>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-uint8array">
+    <h1>Uint8Array 对象</h1>
+    <p>Uint8Array 是前文所述的一种特殊的 _TypedArray_。此外，Uint8Array 构造函数上有额外的方法（<emu-xref href="#sec-additional-properties-of-the-uint8array-constructor"></emu-xref>），Uint8Array 原型对象上也有额外的方法（<emu-xref href="#sec-additional-properties-of-the-uint8array-prototype-object"></emu-xref>）。</p>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-constructor">
+      <h1>Uint8Array 构造函数的附加属性</h1>
+
+      <emu-clause id="sec-uint8array.frombase64">
+        <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. 如果 _string_ 不是一个字符串，则抛出 *TypeError* 异常。
+          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
+          1. 如果 _alphabet_ 为 *undefined*，则将 _alphabet_ 设为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
+          1. 令 _lastChunkHandling_ 为 ? Get(_opts_, *"lastChunkHandling"*)。
+          1. 如果 _lastChunkHandling_ 为 *undefined*，则将 _lastChunkHandling_ 设为 *"loose"*。
+          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_)。
+          1. 如果 _result_.[[Error]] 不为 ~none~，则
+            1. 返回 ThrowCompletion(_result_.[[Error]])。
+          1. 令 _resultLength_ 为 _result_.[[Bytes]] 的元素数量。
+          1. 令 _ta_ 为 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>。
+          1. 断言：_ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] 等于 _result_.[[Bytes]] 的元素数量。
+          1. 将 _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] 每个索引处的值设为 _result_.[[Bytes]] 对应索引的值。
+          1. 返回 _ta_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.fromhex">
+        <h1>Uint8Array.fromHex ( _string_ )</h1>
+        <emu-alg>
+          1. 如果 _string_ 不是一个字符串，则抛出 *TypeError* 异常。
+          1. 令 _result_ 为 FromHex(_string_)。
+          1. 如果 _result_.[[Error]] 不为 ~none~，则
+            1. 返回 ThrowCompletion(_result_.[[Error]])。
+          1. 令 _resultLength_ 为 _result_.[[Bytes]] 的元素数量。
+          1. 令 _ta_ 为 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>。
+          1. 断言：_ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] 等于 _result_.[[Bytes]] 的元素数量。
+          1. 将 _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] 每个索引处的值设为 _result_.[[Bytes]] 对应索引的值。
+          1. 返回 _ta_。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-additional-properties-of-the-uint8array-prototype-object">
+      <h1>Uint8Array 原型对象的附加属性</h1>
+
+      <emu-clause id="sec-uint8array.prototype.setfrombase64">
+        <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. 令 _into_ 为 *this* 值。
+          1. 执行 ? ValidateUint8Array(_into_)。
+          1. 如果 _string_ 不是一个字符串，则抛出 *TypeError* 异常。
+          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
+          1. 如果 _alphabet_ 为 *undefined*，则将 _alphabet_ 设为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
+          1. 令 _lastChunkHandling_ 为 ? Get(_opts_, *"lastChunkHandling"*)。
+          1. 如果 _lastChunkHandling_ 为 *undefined*，则将 _lastChunkHandling_ 设为 *"loose"*。
+          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)。
+          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
+          1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)。
+          1. 令 _bytes_ 为 _result_.[[Bytes]]。
+          1. 令 _written_ 为 _bytes_ 的元素数量。
+          1. 注：FromBase64 不会调用任何用户代码，因此 _into_ 所关联的 ArrayBuffer 不会被分离或缩小。
+          1. 断言：_written_ ≤ _byteLength_。
+          1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
+          1. 如果 _result_.[[Error]] 不为 ~none~，则
+            1. 返回 ThrowCompletion(_result_.[[Error]])。
+          1. 令 _resultObject_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+          1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))。
+          1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))。
+          1. 返回 _resultObject_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.setfromhex">
+        <h1>Uint8Array.prototype.setFromHex ( _string_ )</h1>
+        <emu-alg>
+          1. 令 _into_ 为 *this* 值。
+          1. 执行 ? ValidateUint8Array(_into_)。
+          1. 如果 _string_ 不是一个字符串，则抛出 *TypeError* 异常。
+          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)。
+          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
+          1. 令 _result_ 为 FromHex(_string_, _byteLength_)。
+          1. 令 _bytes_ 为 _result_.[[Bytes]]。
+          1. 令 _written_ 为 _bytes_ 的元素数量。
+          1. 注：FromHex 不会调用任何用户代码，因此 _into_ 所关联的 ArrayBuffer 不会被分离或缩小。
+          1. 断言：_written_ ≤ _byteLength_。
+          1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
+          1. 如果 _result_.[[Error]] 不为 ~none~，则
+            1. 返回 ThrowCompletion(_result_.[[Error]])。
+          1. 令 _resultObject_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+          1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))。
+          1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))。
+          1. 返回 _resultObject_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tobase64">
+        <h1>Uint8Array.prototype.toBase64 ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. 令 _O_ 为 *this* 值。
+          1. 执行 ? ValidateUint8Array(_O_)。
+          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
+          1. 如果 _alphabet_ 为 *undefined*，则将 _alphabet_ 设为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
+          1. 令 _omitPadding_ 为 ToBoolean(? Get(_opts_, *"omitPadding"*))。
+          1. 令 _toEncode_ 为 ? GetUint8ArrayBytes(_O_)。
+          1. 如果 _alphabet_ 为 *"base64"*，则
+            1. 令 _outAscii_ 为将 _toEncode_ 按 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 4 节中 base64 编码方式编码得到的码点序列。仅当 _omitPadding_ 为 *false* 时才包含填充。
+          1. 否则，
+            1. 断言：_alphabet_ 为 *"base64url"*。
+            1. 令 _outAscii_ 为将 _toEncode_ 按 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 5 节中 base64url 编码方式编码得到的码点序列。仅当 _omitPadding_ 为 *false* 时才包含填充。
+          1. 返回 CodePointsToString(_outAscii_)。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-uint8array.prototype.tohex">
+        <h1>Uint8Array.prototype.toHex ( )</h1>
+        <emu-alg>
+          1. 令 _O_ 为 *this* 值。
+          1. 执行 ? ValidateUint8Array(_O_)。
+          1. 令 _toEncode_ 为 ? GetUint8ArrayBytes(_O_)。
+          1. 令 _out_ 为空字符串。
+          1. 对于 _toEncode_ 中的每个字节 _byte_，执行
+            1. 令 _hex_ 为 Number::toString(𝔽(_byte_), 16)。
+            1. 将 _hex_ 设为 StringPad(_hex_, 2, *"0"*, ~start~)。
+            1. 将 _out_ 设为 _out_ 与 _hex_ 的字符串拼接。
+          1. 返回 _out_。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-abstract-operations-for-uint8array-objects">
+      <h1>Uint8Array 对象的抽象操作</h1>
+
+      <emu-clause id="sec-validateuint8array" type="abstract operation">
+        <h1>
+          ValidateUint8Array (
+          _ta_: 一个 ECMAScript 语言值，
+          )：返回包含 ~unused~ 的正常完成或抛出完成
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. 执行 ? RequireInternalSlot(_ta_, [[TypedArrayName]])。
+          1. 如果 _ta_.[[TypedArrayName]] 不是 *"Uint8Array"*，则抛出 *TypeError* 异常。
+          1. 返回 ~unused~。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-getuint8arraybytes" type="abstract operation">
+        <h1>
+          GetUint8ArrayBytes (
+          _ta_: 一个 Uint8Array，
+          )：返回包含字节值列表的正常完成或抛出完成
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. 令 _buffer_ 为 _ta_.[[ViewedArrayBuffer]]。
+          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~)。
+          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 令 _len_ 为 TypedArrayLength(_taRecord_)。
+          1. 令 _byteOffset_ 为 _ta_.[[ByteOffset]]。
+          1. 令 _bytes_ 为一个新的空列表。
+          1. 令 _index_ 为 0。
+          1. 当 _index_ &lt; _len_ 时，重复
+            1. 令 _byteIndex_ 为 _byteOffset_ + _index_。
+            1. 令 _byte_ 为 ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~))。
+            1. 将 _byte_ 加入 _bytes_。
+            1. 将 _index_ 设为 _index_ + 1。
+          1. 返回 _bytes_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-setuint8arraybytes" type="abstract operation">
+        <h1>
+          SetUint8ArrayBytes (
+          _into_: 一个 Uint8Array，
+          _bytes_: 一个字节值列表，
+          )：~unused~
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. 令 _offset_ 为 _into_.[[ByteOffset]]。
+          1. 令 _len_ 为 _bytes_ 的元素数量。
+          1. 令 _index_ 为 0。
+          1. 当 _index_ &lt; _len_ 时，重复
+            1. 令 _byte_ 为 _bytes_[_index_]。
+            1. 令 _byteIndexInBuffer_ 为 _index_ + _offset_。
+            1. 执行 SetValueInBuffer(_into_.[[ViewedArrayBuffer]], _byteIndexInBuffer_, ~uint8~, 𝔽(_byte_), *true*, ~unordered~)。
+            1. 将 _index_ 设为 _index_ + 1。
+          1. 返回 ~unused~。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-skipasciiwhitespace" type="abstract operation">
+        <h1>
+          SkipAsciiWhitespace (
+          _string_: 一个字符串，
+          _index_: 一个非负整数，
+          )：一个非负整数
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. 令 _length_ 为 _string_ 的长度。
+          1. 当 _index_ &lt; _length_ 时，重复
+            1. 令 _char_ 为 _string_ 中索引 _index_ 处的码元。
+            1. 如果 _char_ 不是 0x0009 (TAB)、0x000A (LF)、0x000C (FF)、0x000D (CR) 或 0x0020 (SPACE) 之一，则
+              1. 返回 _index_。
+            1. 将 _index_ 设为 _index_ + 1。
+          1. 返回 _index_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefinalbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFinalBase64Chunk (
+          _chunk_: 长度为 2 或 3 的字符串，
+          _throwOnExtraBits_: 一个布尔值，
+          )：返回包含字节值列表的正常完成或抛出完成
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. 令 _chunkLength_ 为 _chunk_ 的长度。
+          1. 如果 _chunkLength_ = 2，则
+            1. 将 _chunk_ 设为 _chunk_ 与 *"AA"* 的字符串拼接。
+          1. 否则，
+            1. 断言：_chunkLength_ 为 3。
+            1. 将 _chunk_ 设为 _chunk_ 与 *"A"* 的字符串拼接。
+          1. 令 _bytes_ 为 DecodeFullLengthBase64Chunk(_chunk_)。
+          1. 如果 _chunkLength_ = 2，则
+            1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[1] ≠ 0，则
+              1. 抛出 *SyntaxError* 异常。
+            1. 返回 « _bytes_[0] »。
+          1. 否则，
+            1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[2] ≠ 0，则
+              1. 抛出 *SyntaxError* 异常。
+            1. 返回 « _bytes_[0], _bytes_[1] »。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decodefulllengthbase64chunk" type="abstract operation">
+        <h1>
+          DecodeFullLengthBase64Chunk (
+          _chunk_: 长度为 4 的字符串，
+          )：长度为 3 的字节值列表
+        </h1>
+        <dl class="header">
+        </dl>
+        <p><dfn id="standard-base64-alphabet">标准 base64 字母表</dfn>为 *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"*，即其元素为 Unicode 基本拉丁块中每个字母和数字，以及 *"+"* 和 *"/"* 的码元的字符串。</p>
+        <emu-alg>
+          1. 令 _byteSequence_ 为将 _chunk_ 作为 base64 解码后唯一得到的 3 字节序列（即，将 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 4 节中 base64 编码应用于 _byteSequence_ 时会得到 _chunk_）。
+          1. 返回一个列表，其元素按顺序为 _byteSequence_ 的元素。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-frombase64" type="abstract operation">
+        <h1>
+          FromBase64 (
+          _string_: 一个字符串，
+          _alphabet_: *"base64"* 或 *"base64url"*，
+          _lastChunkHandling_: *"loose"*、*"strict"* 或 *"stop-before-partial"*，
+          可选 _maxLength_: 一个非负整数，
+          )：一个具有字段 [[Read]]（整数）、[[Bytes]]（字节值列表）和 [[Error]]（*SyntaxError* 对象或 ~none~）的记录
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. 如果 _maxLength_ 未传入，则
+            1. 将 _maxLength_ 设为 2<sup>53</sup> - 1。
+            1. 注：由于输入是字符串，字符串长度被限制为 2<sup>53</sup> - 1 个字符，且输出所需字节数不会超过输入字符数，因此此限制实际无法达到。但编辑上便于使用有限值。
+          1. 注：下述算法中的校验和解码顺序是不可观测的。实现可以按最高效的顺序执行校验和解码，甚至可以交错进行。
+          1. 如果 _maxLength_ = 0，则
+            1. 返回记录 { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ }。
+          1. 令 _read_ 为 0。
+          1. 令 _bytes_ 为一个新的空列表。
+          1. 令 _chunk_ 为空字符串。
+          1. 令 _chunkLength_ 为 0。
+          1. 令 _index_ 为 0。
+          1. 令 _length_ 为 _string_ 的长度。
+          1. 重复，
+            1. 将 _index_ 设为 SkipAsciiWhitespace(_string_, _index_)。
+            1. 如果 _index_ = _length_，则
+              1. 如果 _chunkLength_ > 0，则
+                1. 如果 _lastChunkHandling_ 为 *"stop-before-partial"*，则
+                  1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+                1. 否则如果 _lastChunkHandling_ 为 *"loose"*，则
+                  1. 如果 _chunkLength_ = 1，则
+                    1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                    1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+                  1. 将 _bytes_ 设为 _bytes_ 与 ! DecodeFinalBase64Chunk(_chunk_, *false*) 的列表拼接。
+                1. 否则，
+                  1. 断言：_lastChunkHandling_ 为 *"strict"*。
+                  1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                  1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+              1. 返回记录 { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+            1. 令 _char_ 为 _string_ 从 _index_ 到 _index_ + 1 的子串。
+            1. 将 _index_ 设为 _index_ + 1。
+            1. 如果 _char_ 为 *"="*，则
+              1. 如果 _chunkLength_ &lt; 2，则
+                1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+              1. 将 _index_ 设为 SkipAsciiWhitespace(_string_, _index_)。
+              1. 如果 _chunkLength_ = 2，则
+                1. 如果 _index_ = _length_，则
+                  1. 如果 _lastChunkHandling_ 为 *"stop-before-partial"*，则
+                    1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+                  1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                  1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+                1. 令 _char_ 为 _string_ 从 _index_ 到 _index_ + 1 的子串。
+                1. 如果 _char_ 为 *"="*，则
+                  1. 将 _index_ 设为 SkipAsciiWhitespace(_string_, _index_ + 1)。
+              1. 如果 _index_ &lt; _length_，则
+                1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+              1. 如果 _lastChunkHandling_ 为 *"strict"*，令 _throwOnExtraBits_ 为 *true*；否则令 _throwOnExtraBits_ 为 *false*。
+              1. 令 _decodeResult_ 为 Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_))。
+              1. 如果 _decodeResult_ 是异常完成，则
+                1. 令 _error_ 为 _decodeResult_.[[Value]]。
+                1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+              1. 将 _bytes_ 设为 _bytes_ 与 ! _decodeResult_ 的列表拼接。
+              1. 返回记录 { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+            1. 如果 _alphabet_ 为 *"base64url"*，则
+              1. 如果 _char_ 是 *"+"* 或 *"/"*，则
+                1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+              1. 否则如果 _char_ 为 *"-"*，则
+                1. 将 _char_ 设为 *"+"*。
+              1. 否则如果 _char_ 为 *"_"*，则
+                1. 将 _char_ 设为 *"/"*。
+            1. 如果 _char_ 的唯一码元不是标准 base64 字母表的元素，则
+              1. 令 _error_ 为新建的 *SyntaxError* 对象。
+              1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+            1. 令 _remaining_ 为 _maxLength_ - _bytes_ 的元素数量。
+            1. 如果 _remaining_ = 1 且 _chunkLength_ = 2，或 _remaining_ = 2 且 _chunkLength_ = 3，则
+              1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+            1. 将 _chunk_ 设为 _chunk_ 与 _char_ 的字符串拼接。
+            1. 将 _chunkLength_ 设为 _chunk_ 的长度。
+            1. 如果 _chunkLength_ = 4，则
+              1. 将 _bytes_ 设为 _bytes_ 与 DecodeFullLengthBase64Chunk(_chunk_) 的列表拼接。
+              1. 将 _chunk_ 设为空字符串。
+              1. 将 _chunkLength_ 设为 0。
+              1. 将 _read_ 设为 _index_。
+              1. 如果 _bytes_ 的元素数量 = _maxLength_，则
+                1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-fromhex" type="abstract operation">
+        <h1>
+          FromHex (
+          _string_: 一个字符串，
+          可选 _maxLength_: 一个非负整数，
+          )：一个具有字段 [[Read]]（整数）、[[Bytes]]（字节值列表）和 [[Error]]（*SyntaxError* 对象或 ~none~）的记录
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. 如果 _maxLength_ 未传入，则将 _maxLength_ 设为 2<sup>53</sup> - 1。
+          1. 令 _length_ 为 _string_ 的长度。
+          1. 令 _bytes_ 为一个新的空列表。
+          1. 令 _read_ 为 0。
+          1. 如果 _length_ 模 2 ≠ 0，则
+            1. 令 _error_ 为新建的 *SyntaxError* 对象。
+            1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+          1. 当 _read_ &lt; _length_ 且 _bytes_ 的元素数量 &lt; _maxLength_ 时，重复
+            1. 令 _hexits_ 为 _string_ 从 _read_ 到 _read_ + 2 的子串。
+            1. 如果 _hexits_ 包含任何不是 *"0123456789abcdefABCDEF"* 的码元，则
+              1. 令 _error_ 为新建的 *SyntaxError* 对象。
+              1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+            1. 将 _read_ 设为 _read_ + 2。
+            1. 令 _byte_ 为 _hexits_ 以 16 进制表示的整数值，使用字母 *A* 到 *F* 和 *a* 到 *f* 表示值为 10 到 15 的数字。
+            1. 将 _byte_ 加入 _bytes_。
+          1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
 </emu-clause>
