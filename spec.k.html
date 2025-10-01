@@ -2841,7 +2841,7 @@
           <dfn variants="accessor properties">접근자 프로퍼티</dfn>는 키 값과 하나 또는 두 개의 접근자 함수, 그리고 불리언 속성 집합을 연관시킵니다. 접근자 함수는 해당 프로퍼티에 연관된 ECMAScript 언어 값을 저장하거나 가져오는 데 사용됩니다.
         </li>
       </ul>
-      <p>객체의 프로퍼티는 프로퍼티 키를 사용하여 고유하게 식별됩니다. <dfn id="property-key" variants="property keys" oldids="sec-ispropertykey">프로퍼티 키</dfn>는 문자열 또는 심볼입니다. 모든 문자열과 심볼(빈 문자열 포함)은 프로퍼티 키로 유효합니다. <dfn id="property-name">프로퍼티 이름</dfn>은 문자열인 프로퍼티 키입니다.</p>
+      <p>객체의 프로퍼티는 프로퍼티 키를 사용하여 고유하게 식별됩니다. <dfn id="property-key" variants="property keys" oldids="sec-ispropertykey">프로퍼티 키</dfn>는 문자열 또는 심볼입니다. 모든 문자열과 심볼(빈 문자열 포함)은 프로퍼티 키로 유효합니다. <dfn id="property-name" variants="property names">프로퍼티 이름</dfn>은 문자열인 프로퍼티 키입니다.</p>
       <p><dfn id="integer-index" variants="integer indices,integer-indexed">정수 인덱스</dfn>는 CanonicalNumericIndexString(_n_)이 *+0*<sub>𝔽</sub>에서 𝔽(2<sup>53</sup> - 1)까지(포함)의 정수 Number를 반환하는 프로퍼티 이름 _n_입니다. <dfn id="array-index" variants="array indices">배열 인덱스</dfn>는 CanonicalNumericIndexString(_n_)이 *+0*<sub>𝔽</sub>에서 𝔽(2<sup>32</sup> - 2)까지(포함)의 정수 Number를 반환하는 정수 인덱스 _n_입니다.</p>
       <emu-note>
         <p>모든 음수가 아닌 안전한 정수는 해당하는 정수 인덱스를 가집니다. 32비트 부호 없는 정수 중 <emu-eqn>2<sup>32</sup> - 1</emu-eqn>을 제외한 모든 값은 해당하는 배열 인덱스를 가집니다. *"-0"*은 정수 인덱스도 배열 인덱스도 아닙니다.</p>
@@ -6779,9 +6779,9 @@
     <emu-clause id="sec-initializeinstanceelements" type="abstract operation">
       <h1>
         InitializeInstanceElements (
-          _O_: Object,
-          _constructor_: ECMAScript 함수 객체,
-        ): ~unused~을 담는 normal completion 또는 throw completion
+          _O_: 객체,
+          _constructor_: ECMAScript 함수 객체 또는 내장 함수 객체,
+        ): ~unused~를 포함하는 정상적 완료 또는 throw 완료
       </h1>
       <dl class="header">
       </dl>
@@ -21843,60 +21843,67 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_ 가 없으면 ~sync~ 로 설정.
-          1. _oldEnv_ = 실행 컨텍스트 LexicalEnvironment
-          1. _V_ = *undefined*
-          1. _destructuring_ = IsDestructuring(_lhs_)
-          1. _destructuring_ *true* 그리고 _lhsKind_ = ~assignment~ 이면
-            1. 단언: _lhs_ 는 |LeftHandSideExpression|
-            1. _assignmentPattern_ = _lhs_ 가 커버하는 |AssignmentPattern|
-          1. 반복,
-            1. _nextResult_ = ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])
-            1. _iteratorKind_ = ~async~ 이면 _nextResult_ = ? Await(_nextResult_)
-            1. _nextResult_ 가 Object 아니면 *TypeError* throw
-            1. _done_ = ? IteratorComplete(_nextResult_)
-            1. _done_ *true* 이면 _V_ 반환
-            1. _nextValue_ = ? IteratorValue(_nextResult_)
-            1. _lhsKind_ ∈ {~assignment~, ~var-binding~} 이면
-              1. _destructuring_ *true* 이면
-                1. _lhsKind_ = ~assignment~ 이면
-                  1. _status_ = Completion(DestructuringAssignmentEvaluation(_assignmentPattern_, _nextValue_))
-                1. 아니면 (var-binding)
-                  1. 단언: _lhs_ 는 |ForBinding|
-                  1. _status_ = Completion(BindingInitialization(_lhs_, _nextValue_, *undefined*))
-              1. _destructuring_ *false* 이면
-                1. _lhsRef_ = Completion(Evaluation(_lhs_))
-                1. _lhsKind_ = ~assignment~ 이고 AssignmentTargetType(_lhs_) = ~web-compat~ 이면 *ReferenceError* throw
-                1. _lhsRef_ 가 abrupt 이면 _status_ = _lhsRef_
-                1. 아니면 _status_ = Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))
-            1. 그렇지 않으면
-              1. 단언: _lhsKind_ = ~lexical-binding~
-              1. 단언: _lhs_ 는 |ForDeclaration|
-              1. _iterationEnv_ = NewDeclarativeEnvironment(_oldEnv_)
-              1. ForDeclarationBindingInstantiation(_lhs_, _iterationEnv_) 수행
-              1. LexicalEnvironment = _iterationEnv_
-              1. _destructuring_ *true* 이면
-                1. _status_ = Completion(ForDeclarationBindingInitialization(_lhs_, _nextValue_, _iterationEnv_))
-              1. 아니면
-                1. 단언: 단일 이름 바인딩
-                1. _lhsName_ = BoundNames(_lhs_) 의 유일 요소
-                1. _lhsRef_ = ! ResolveBinding(_lhsName_)
-                1. _status_ = Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))
-            1. _status_ abrupt 이면
-              1. LexicalEnvironment = _oldEnv_
-              1. _iteratorKind_ = ~async~ 이면 ? AsyncIteratorClose(_iteratorRecord_, _status_) 반환
-              1. _iterationKind_ = ~enumerate~ 이면 ? _status_ 반환
-              1. 아니면 (iterate)
-                1. ? IteratorClose(_iteratorRecord_, _status_) 반환
-            1. _result_ = Completion(Evaluation(_stmt_))
-            1. LexicalEnvironment = _oldEnv_
-            1. LoopContinues(_result_, _labelSet_) *false* 이면
-              1. _iterationKind_ = ~enumerate~ 이면 ? UpdateEmpty(_result_, _V_) 반환
-              1. 아니면 (iterate)
-                1. _status_ = Completion(UpdateEmpty(_result_, _V_))
-                1. _iteratorKind_ = ~async~ 이면 ? AsyncIteratorClose(_iteratorRecord_, _status_) 반환
-                1. ? IteratorClose(_iteratorRecord_, _status_) 반환
-            1. _result_.[[Value]] 가 ~empty~ 아니면 _V_ 갱신
+          1. _iteratorKind_가 존재하지 않으면, _iteratorKind_에 ~sync~를 설정한다.
+          1. _oldEnv_에 현재 실행 컨텍스트의 LexicalEnvironment를 할당한다.
+          1. _V_에 *undefined*를 할당한다.
+          1. _destructuring_에 _lhs_의 IsDestructuring 결과를 할당한다.
+          1. _destructuring_이 *true*이고 _lhsKind_가 ~assignment~이면,
+            1. 단언: _lhs_는 |LeftHandSideExpression|이다.
+            1. _assignmentPattern_에 _lhs_가 포함하는 |AssignmentPattern|을 할당한다.
+          1. 반복한다,
+            1. _nextResult_에 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])를 할당한다.
+            1. _iteratorKind_가 ~async~이면, _nextResult_에 ? Await(_nextResult_)를 할당한다.
+            1. _nextResult_가 Object가 아니면, *TypeError* 예외를 throw한다.
+            1. _done_에 ? IteratorComplete(_nextResult_)를 할당한다.
+            1. _done_이 *true*라면, _V_를 반환한다.
+            1. _nextValue_에 ? IteratorValue(_nextResult_)를 할당한다.
+            1. _lhsKind_가 ~assignment~ 또는 ~var-binding~이면,
+              1. _destructuring_이 *true*라면,
+                1. _lhsKind_가 ~assignment~이면,
+                  1. _status_에 Completion(DestructuringAssignmentEvaluation of _assignmentPattern_ with argument _nextValue_)를 할당한다.
+                1. 아니면,
+                  1. 단언: _lhsKind_는 ~var-binding~이다.
+                  1. 단언: _lhs_는 |ForBinding|이다.
+                  1. _status_에 Completion(BindingInitialization of _lhs_ with arguments _nextValue_ and *undefined*)를 할당한다.
+              1. 아니면,
+                1. _lhsRef_에 Completion(Evaluation of _lhs_)를 할당한다. (반복적으로 평가될 수 있다.)
+                1. _lhsKind_가 ~assignment~이고 AssignmentTargetType of _lhs_가 ~web-compat~이면, *ReferenceError* 예외를 throw한다.
+                1. _lhsRef_가 abrupt completion이면,
+                  1. _status_에 _lhsRef_를 할당한다.
+                1. 아니면,
+                  1. _status_에 Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))를 할당한다.
+            1. 아니면,
+              1. 단언: _lhsKind_는 ~lexical-binding~이다.
+              1. 단언: _lhs_는 |ForDeclaration|이다.
+              1. _iterationEnv_에 NewDeclarativeEnvironment(_oldEnv_)를 할당한다.
+              1. ForDeclarationBindingInstantiation of _lhs_ with argument _iterationEnv_를 수행한다.
+              1. 현재 실행 컨텍스트의 LexicalEnvironment를 _iterationEnv_로 설정한다.
+              1. _destructuring_이 *true*라면,
+                1. _status_에 Completion(ForDeclarationBindingInitialization of _lhs_ with arguments _nextValue_ and _iterationEnv_)를 할당한다.
+              1. 아니면,
+                1. 단언: _lhs_는 단일 이름만을 바인딩한다.
+                1. _lhsName_에 _lhs_의 BoundNames의 유일한 요소를 할당한다.
+                1. _lhsRef_에 ! ResolveBinding(_lhsName_)을 할당한다.
+                1. _status_에 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))를 할당한다.
+            1. _status_가 abrupt completion이면,
+              1. 현재 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+              1. _iterationKind_가 ~enumerate~라면,
+                1. ? _status_를 반환한다.
+              1. 아니면,
+                1. 단언: _iterationKind_는 ~iterate~이다.
+                1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
+                1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
+            1. _result_에 Completion(Evaluation of _stmt_)을 할당한다.
+            1. 현재 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+            1. LoopContinues(_result_, _labelSet_)가 *false*라면,
+              1. _status_에 Completion(UpdateEmpty(_result_, _V_))를 할당한다.
+              1. _iterationKind_가 ~enumerate~라면,
+                1. ? _status_를 반환한다.
+              1. 아니면,
+                1. 단언: _iterationKind_는 ~iterate~이다.
+                1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
+                1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
+            1. _result_.[[Value]]가 ~empty~가 아니면, _V_에 _result_.[[Value]]를 설정한다.
         </emu-alg>
       </emu-clause>
 
@@ -23663,58 +23670,59 @@
       </emu-alg>
       <emu-grammar>YieldExpression : `yield` `*` AssignmentExpression</emu-grammar>
       <emu-alg>
-        1. _generatorKind_ 를 GetGeneratorKind() 로 둔다.
-        1. 단언: _generatorKind_ 는 ~sync~ 또는 ~async~ 이어야 한다.
-        1. _exprRef_ 를 |AssignmentExpression| 평가 결과 (?) 로 둔다.
-        1. _value_ 를 ? GetValue(_exprRef_) 로 둔다.
-        1. _iteratorRecord_ 를 ? GetIterator(_value_, _generatorKind_) 로 둔다.
-        1. _iterator_ 를 _iteratorRecord_.[[Iterator]] 로 둔다.
-        1. _received_ 를 NormalCompletion(*undefined*) 로 둔다.
-        1. 반복,
-          1. _received_ 가 normal completion 이라면
-            1. _innerResult_ 를 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]], « _received_.[[Value]] ») 로 둔다.
-            1. _generatorKind_ 가 ~async~ 이면 _innerResult_ 를 ? Await(_innerResult_) 로 둔다.
-            1. _innerResult_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _done_ 을 ? IteratorComplete(_innerResult_) 로 둔다.
-            1. _done_ 이 *true* 이면
-              1. ? IteratorValue(_innerResult_) 반환.
-            1. _generatorKind_ 가 ~async~ 이면 _received_ = Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))).
-            1. 아니면 _received_ = Completion(GeneratorYield(_innerResult_)).
-          1. 아니고 _received_ 가 throw completion 이라면
-            1. _throw_ 를 ? GetMethod(_iterator_, *"throw"*) 로 둔다.
-            1. _throw_ 가 *undefined* 가 아니면
-              1. _innerResult_ 를 ? Call(_throw_, _iterator_, « _received_.[[Value]] ») 로 둔다.
-              1. _generatorKind_ 가 ~async~ 이면 _innerResult_ 를 ? Await(_innerResult_) 로 둔다.
-              1. NOTE: 내부 iterator `throw` 메서드에서 발생한 예외는 전파되고, 정상 completion 은 내부 `next` 와 유사하게 처리된다.
-              1. _innerResult_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-              1. _done_ = ? IteratorComplete(_innerResult_).
-              1. _done_ 이 *true* 이면
-                1. ? IteratorValue(_innerResult_) 반환.
-              1. _generatorKind_ 가 ~async~ 이면 _received_ = Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))).
-              1. 아니면 _received_ = Completion(GeneratorYield(_innerResult_)).
-            1. 그렇지 않으면
-              1. NOTE: _iterator_ 에 `throw` 메서드가 없으면 본 throw 로 `yield*` 루프가 종료되며, 먼저 정리 기회를 준다.
-              1. _closeCompletion_ = NormalCompletion(~empty~) 로 둔다.
-              1. _generatorKind_ 가 ~async~ 이면 ? AsyncIteratorClose(_iteratorRecord_, _closeCompletion_) 수행.
-              1. 아니면 ? IteratorClose(_iteratorRecord_, _closeCompletion_) 수행.
-              1. NOTE: 다음 단계에서 *TypeError* 는 `yield*` 프로토콜 위반(throw 메서드 부재)을 나타낸다.
-              1. *TypeError* 예외를 던진다.
-          1. 그 밖의 경우
-            1. 단언: _received_ 는 return completion 이다.
-            1. _return_ 을 ? GetMethod(_iterator_, *"return"*) 로 둔다.
-            1. _return_ 이 *undefined* 이면
-              1. _value_ = _received_.[[Value]].
-              1. _generatorKind_ 가 ~async~ 이면 _value_ = ? Await(_value_).
-              1. ReturnCompletion(_value_) 반환.
-            1. _innerReturnResult_ = ? Call(_return_, _iterator_, « _received_.[[Value]] »).
-            1. _generatorKind_ 가 ~async~ 이면 _innerReturnResult_ = ? Await(_innerReturnResult_).
-            1. _innerReturnResult_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _done_ = ? IteratorComplete(_innerReturnResult_).
-            1. _done_ 이 *true* 이면
-              1. _value_ = ? IteratorValue(_innerReturnResult_).
-              1. ReturnCompletion(_value_) 반환.
-            1. _generatorKind_ 가 ~async~ 이면 _received_ = Completion(AsyncGeneratorYield(? IteratorValue(_innerReturnResult_))).
-            1. 아니면 _received_ = Completion(GeneratorYield(_innerReturnResult_)).
+        1. _generatorKind_에 GetGeneratorKind()의 결과를 할당한다.
+        1. 단언: _generatorKind_는 ~sync~ 또는 ~async~이다.
+        1. _exprRef_에 ? |AssignmentExpression|의 평가 결과를 할당한다.
+        1. _value_에 ? GetValue(_exprRef_)를 할당한다.
+        1. _iteratorRecord_에 ? GetIterator(_value_, _generatorKind_)를 할당한다.
+        1. _iterator_에 _iteratorRecord_.[[Iterator]]를 할당한다.
+        1. _received_에 NormalCompletion(*undefined*)를 할당한다.
+        1. 반복한다,
+          1. _received_가 normal completion이면,
+            1. _innerResult_에 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]], « _received_.[[Value]] »)를 할당한다.
+            1. _generatorKind_가 ~async~이면, _innerResult_에 ? Await(_innerResult_)를 할당한다.
+            1. _innerResult_가 Object가 아니면, *TypeError* 예외를 throw한다.
+            1. _done_에 ? IteratorComplete(_innerResult_)를 할당한다.
+            1. _done_이 *true*이면,
+              1. ? IteratorValue(_innerResult_)를 반환한다.
+            1. _generatorKind_가 ~async~이면, _received_에 Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_)))를 할당한다.
+            1. 아니면, _received_에 Completion(GeneratorYield(_innerResult_))를 할당한다.
+          1. 아니고 _received_가 throw completion이면,
+            1. _throw_에 ? GetMethod(_iterator_, *"throw"*)를 할당한다.
+            1. _throw_가 *undefined*가 아니면,
+              1. _innerResult_에 ? Call(_throw_, _iterator_, « _received_.[[Value]] »)를 할당한다.
+              1. _generatorKind_가 ~async~이면, _innerResult_에 ? Await(_innerResult_)를 할당한다.
+              1. 참고: 내부 반복자의 `throw` 메서드에서 발생한 예외는 전파된다. 내부 `throw` 메서드의 normal completion은 내부 `next`와 유사하게 처리된다.
+              1. _innerResult_가 Object가 아니면, *TypeError* 예외를 throw한다.
+              1. _done_에 ? IteratorComplete(_innerResult_)를 할당한다.
+              1. _done_이 *true*이면,
+                1. ? IteratorValue(_innerResult_)를 반환한다.
+              1. _generatorKind_가 ~async~이면, _received_에 Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_)))를 할당한다.
+              1. 아니면, _received_에 Completion(GeneratorYield(_innerResult_))를 할당한다.
+            1. 아니면,
+              1. 참고: _iterator_에 `throw` 메서드가 없는 경우, 이 throw는 `yield*` 루프를 종료시킨다. 다만 먼저 _iterator_에 정리(clean-up)할 기회를 준다.
+              1. _closeCompletion_에 NormalCompletion(~empty~)을 할당한다.
+              1. _generatorKind_가 ~async~면, ? AsyncIteratorClose(_iteratorRecord_, _closeCompletion_)을 수행한다.
+              1. 아니면, ? IteratorClose(_iteratorRecord_, _closeCompletion_)을 수행한다.
+              1. 참고: 다음 단계는 *TypeError*를 throw하여 `yield*` 프로토콜 위반: _iterator_에 `throw` 메서드가 없음을 나타낸다.
+              1. *TypeError* 예외를 throw한다.
+          1. 아니면,
+            1. 단언: _received_는 return completion이다.
+            1. _return_에 ? GetMethod(_iterator_, *"return"*)을 할당한다.
+            1. _return_이 *undefined*이면,
+              1. _receivedValue_에 _received_.[[Value]]를 할당한다.
+              1. _generatorKind_가 ~async~이면,
+                1. _receivedValue_에 ? Await(_receivedValue_)를 할당한다.
+              1. ReturnCompletion(_receivedValue_)를 반환한다.
+            1. _innerReturnResult_에 ? Call(_return_, _iterator_, « _received_.[[Value]] »)를 할당한다.
+            1. _generatorKind_가 ~async~이면, _innerReturnResult_에 ? Await(_innerReturnResult_)를 할당한다.
+            1. _innerReturnResult_가 Object가 아니면, *TypeError* 예외를 throw한다.
+            1. _done_에 ? IteratorComplete(_innerReturnResult_)를 할당한다.
+            1. _done_이 *true*이면,
+              1. _returnedValue_에 ? IteratorValue(_innerReturnResult_)를 할당한다.
+              1. ReturnCompletion(_returnedValue_)를 반환한다.
+            1. _generatorKind_가 ~async~이면, _received_에 Completion(AsyncGeneratorYield(? IteratorValue(_innerReturnResult_)))를 할당한다.
+            1. 아니면, _received_에 Completion(GeneratorYield(_innerReturnResult_))를 할당한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -24493,7 +24501,7 @@
               1. _result_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)로 둔다.
             1. ? InitializeInstanceElements(_result_, _F_)를 수행한다.
             1. NormalCompletion(_result_)를 반환한다.
-          1. _F_를 CreateBuiltinFunction(_defaultConstructor_, 0, _className_, « [[ConstructorKind]], [[SourceText]] », the current Realm Record, _constructorParent_)로 둔다.
+          1. _F_를 CreateBuiltinFunction(_defaultConstructor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _constructorParent_)로 둔다.
         1. 그렇지 않으면,
           1. _constructorInfo_를 ! DefineMethod of _constructor_ with arguments _proto_ and _constructorParent_로 둔다.
           1. _F_를 _constructorInfo_.[[Closure]]로 둔다.
@@ -26499,33 +26507,33 @@
             </dl>
 
             <emu-alg>
-              1. 단언: 이 Evaluate 호출은 동일 agent 내 다른 Evaluate 호출과 동시에 일어나지 않음.
-              1. 단언: _module_.[[Status]] 는 ~linked~, ~evaluating-async~, ~evaluated~ 중 하나.
-              1. _module_.[[Status]] 가 ~evaluating-async~ 또는 ~evaluated~ 이면 _module_ = _module_.[[CycleRoot]].
-              1. _module_.[[TopLevelCapability]] 가 ~empty~ 가 아니면
-                1. _module_.[[TopLevelCapability]].[[Promise]] 반환.
-              1. _stack_ 을 새 빈 리스트로 둔다.
-              1. _capability_ 를 ! NewPromiseCapability(%Promise%) 로 둔다.
-              1. _module_.[[TopLevelCapability]] 를 _capability_ 로 둔다.
-              1. _result_ 를 Completion(InnerModuleEvaluation(_module_, _stack_, 0)) 로 둔다.
-              1. _result_ 가 abrupt completion 이면
-                1. _stack_ 의 각 Cyclic Module Record _m_ 에 대해
-                  1. 단언: _m_.[[Status]] 는 ~evaluating~.
-                  1. 단언: _m_.[[AsyncEvaluationOrder]] 는 ~unset~.
-                  1. _m_.[[Status]] 를 ~evaluated~ 로.
-                  1. _m_.[[EvaluationError]] 를 _result_ 로.
-                1. 단언: _module_.[[Status]] 는 ~evaluated~.
-                1. 단언: _module_.[[EvaluationError]] 와 _result_ 는 동일 Completion Record.
-                1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] ») 수행.
-              1. Else,
-                1. 단언: _module_.[[Status]] 는 ~evaluating-async~ 또는 ~evaluated~.
-                1. 단언: _module_.[[EvaluationError]] 는 ~empty~.
-                1. _module_.[[Status]] 가 ~evaluated~ 이면
-                  1. 참고: _module_ 평가가 동기적으로 완료되었음을 의미.
-                  1. 단언: _module_.[[AsyncEvaluationOrder]] 는 ~unset~.
-                  1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* ») 수행.
-                1. 단언: _stack_ 은 비어 있음.
-              1. _capability_.[[Promise]] 반환.
+              1. 단언: 이번 Evaluate 호출은 주변 에이전트 내에서 다른 Evaluate 호출과 동시에 발생하지 않는다.
+              1. 단언: _module_.[[Status]]는 ~linked~, ~evaluating-async~, ~evaluated~ 중 하나이다.
+              1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~인 경우, _module_에 _module_.[[CycleRoot]]를 할당한다.
+              1. _module_.[[TopLevelCapability]]가 ~empty~가 아니면,
+                1. _module_.[[TopLevelCapability]].[[Promise]]를 반환한다.
+              1. _stack_에 새로운 빈 리스트를 할당한다.
+              1. _capability_에 ! NewPromiseCapability(%Promise%)를 할당한다.
+              1. _module_.[[TopLevelCapability]]에 _capability_를 설정한다.
+              1. _result_에 Completion(InnerModuleEvaluation(_module_, _stack_, 0))을 할당한다.
+              1. _result_가 abrupt completion이면,
+                1. _stack_의 각 Cyclic Module Record _m_에 대해,
+                  1. 단언: _m_.[[Status]]는 ~evaluating~이다.
+                  1. 단언: _m_.[[AsyncEvaluationOrder]]는 ~unset~이다.
+                  1. _m_.[[Status]]를 ~evaluated~로 설정한다.
+                  1. _m_.[[EvaluationError]]에 _result_를 설정한다.
+                1. 단언: _module_.[[Status]]는 ~evaluated~이다.
+                1. 단언: _module_.[[EvaluationError]]와 _result_는 동일한 Completion Record이다.
+                1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] »)를 수행한다.
+              1. 그렇지 않으면,
+                1. 단언: _module_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~이다.
+                1. 단언: _module_.[[EvaluationError]]는 ~empty~이다.
+                1. _module_.[[Status]]가 ~evaluated~이면,
+                  1. 단언: _module_.[[AsyncEvaluationOrder]]는 ~unset~ 또는 ~done~이다.
+                  1. 참고: _module_.[[AsyncEvaluationOrder]]가 ~done~인 경우는 오직 _module_이 이미 평가되었고 그 평가가 비동기였을 때뿐이다.
+                  1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
+                1. 단언: _stack_은 비어 있다.
+              1. _capability_.[[Promise]]를 반환한다.
             </emu-alg>
 
             <emu-clause id="sec-innermoduleevaluation" type="abstract operation">
@@ -31632,7 +31640,7 @@
         <emu-note>
           <p>위 규칙이 요구하는 것보다 더 정확한 변환을 제공하는 구현은 step <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> 의 다음 대안 버전을 지침으로 사용하는 것이 권장된다:</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. _f_ ≥ 0, 10<sup>_f_</sup> ≤ _n_ &lt; 10<sup>_f_ + 1</sup>, 𝔽(_n_ × 10<sup>_e_ - _f_</sup>) 가 𝔽(_x_), 그리고 _f_ 가 가능한 한 작은 정수인 _e_, _n_, _f_ 를 둔다. _n_ 의 후보가 여러 개면 𝔽(_n_ × 10<sup>_e_ - _f_</sup>) 가 𝔽(_x_) 에 가장 가까운 값을 선택한다. 그런 후보가 두 개면 짝수인 것을 선택한다.
+            1. _e_, _n_, _ff_를 다음 조건을 만족하는 정수로 둔다: _ff_ ≥ 0, 10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>, 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>)가 𝔽(_x_)와 같으며, _ff_는 가능한 한 작아야 한다. _n_에 여러 가능한 값이 있다면, 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>)가 𝔽(_x_)와 가장 가까운 값을 선택한다. 만약 가능한 _n_이 두 개이며 모두 조건을 만족한다면, 짝수인 _n_을 선택한다.
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -36129,19 +36137,19 @@ THH:mm:ss.sss
         <emu-grammar>UnicodePropertyValueExpression :: UnicodePropertyName `=` UnicodePropertyValue</emu-grammar>
         <ul>
           <li>
-            |UnicodePropertyName| 이 매치한 소스 텍스트가 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 의 “Property name and aliases” 열에 열거된 유니코드 속성 이름 또는 속성 별칭이 아니면 구문 오류이다.
+            |UnicodePropertyName|에 의해 매치된 소스 텍스트가 <emu-not-ref>Unicode property name</emu-not-ref> 또는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 속성 별칭이 아닌 경우, 이는 구문 오류입니다.
           </li>
           <li>
-            |UnicodePropertyValue| 가 매치한 소스 텍스트가 |UnicodePropertyName| 이 매치한 소스 텍스트로 주어진 유니코드 속성 또는 속성 별칭에 대해 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> 에 열거된 속성 값 또는 속성 값 별칭이 아니면 구문 오류이다.
+            |UnicodePropertyValue|에 의해 매치된 소스 텍스트가 |UnicodePropertyName|에 의해 제공된 유니코드 속성 또는 속성 별칭에 대한 속성 값이나 속성 값 별칭이 아니고, <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열되어 있지 않은 경우, 이는 구문 오류입니다.
           </li>
         </ul>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <ul>
           <li>
-            |LoneUnicodePropertyNameOrValue| 가 매치한 소스 텍스트가 General_Category (gc) 속성에 대한 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> 에 열거된 속성 값 또는 그 별칭도 아니고, <emu-xref href="#table-binary-unicode-properties"></emu-xref> 의 “Property name and aliases” 열에 열거된 바이너리 속성 또는 그 별칭도 아니며, <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> 의 “Property name” 열에 열거된 문자열의 바이너리 속성도 아니면 구문 오류이다.
+            |LoneUnicodePropertyNameOrValue|에 의해 매치된 소스 텍스트가 General_Category (gc) 속성의 유니코드 속성 값 또는 속성 값 별칭이 아니거나 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열되어 있지 않고, “<emu-not-ref>Property name and aliases</emu-not-ref>” 열의 <emu-xref href="#table-binary-unicode-properties"></emu-xref>에 나열된 바이너리 속성 또는 바이너리 속성 별칭도 아니며, “<emu-not-ref>Property name</emu-not-ref>” 열의 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>에 나열된 문자열의 바이너리 속성도 아닌 경우, 이는 구문 오류입니다.
           </li>
           <li>
-            둘러싼 |Pattern| 이 <sub>[UnicodeSetsMode]</sub> 매개변수를 가지지 않고 |LoneUnicodePropertyNameOrValue| 가 매치한 소스 텍스트가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> 의 “Property name” 열에 열거된 문자열의 바이너리 속성이라면 구문 오류이다.
+            포함하는 |Pattern|에 <sub>[UnicodeSetsMode]</sub> 매개변수가 없고, |LoneUnicodePropertyNameOrValue|에 의해 매치된 소스 텍스트가 “<emu-not-ref>Property name</emu-not-ref>” 열의 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>에 나열된 문자열의 바이너리 속성인 경우, 이는 구문 오류입니다.
           </li>
         </ul>
         <emu-grammar>CharacterClassEscape :: `P{` UnicodePropertyValueExpression `}`</emu-grammar>
@@ -36511,8 +36519,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <emu-alg>
-          1. |LoneUnicodePropertyNameOrValue| 가 매치한 소스 텍스트가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> 의 “Property name” 열에 열거된 문자열의 바이너리 속성이면 *true* 를 반환한다.
-          1. *false* 를 반환한다.
+          1. |LoneUnicodePropertyNameOrValue|에 의해 매치된 소스 텍스트가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>의 “<emu-not-ref>Property name</emu-not-ref>” 열에 나열된 문자열의 바이너리 속성인 경우, *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
         <emu-grammar>ClassUnion :: ClassSetRange ClassUnion?</emu-grammar>
         <emu-alg>
@@ -37615,23 +37623,23 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: UnicodePropertyName `=` UnicodePropertyValue</emu-grammar>
         <emu-alg>
-          1. _ps_ 를 |UnicodePropertyName| 이 매치한 소스 텍스트로 둔다.
-          1. _p_ 를 UnicodeMatchProperty(_rer_, _ps_) 로 둔다.
-          1. Assert: _p_ 는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 의 “Property name and aliases” 열에 열거된 유니코드 속성 이름 또는 별칭.
-          1. _vs_ 를 |UnicodePropertyValue| 가 매치한 소스 텍스트로 둔다.
-          1. _v_ 를 UnicodeMatchPropertyValue(_p_, _vs_) 로 둔다.
-          1. _A_ 를 속성 _p_ 값 _v_ 를 포함하는 모든 유니코드 코드 포인트를 담는 CharSet 으로 둔다.
-          1. MaybeSimpleCaseFolding(_rer_, _A_) 반환.
+          1. _ps_에 |UnicodePropertyName|에 의해 매치된 소스 텍스트를 할당한다.
+          1. _p_에 UnicodeMatchProperty(_rer_, _ps_)의 결과를 할당한다.
+          1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref> 또는 속성 별칭이다.
+          1. _vs_에 |UnicodePropertyValue|에 의해 매치된 소스 텍스트를 할당한다.
+          1. _v_에 UnicodeMatchPropertyValue(_p_, _vs_)의 결과를 할당한다.
+          1. _A_에 속성 데이터베이스 정의에 속성 _p_와 값 _v_가 포함된 모든 유니코드 코드 포인트를 포함하는 CharSet을 할당한다.
+          1. MaybeSimpleCaseFolding(_rer_, _A_)를 반환한다.
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <emu-alg>
-          1. _s_ 를 |LoneUnicodePropertyNameOrValue| 가 매치한 소스 텍스트로 둔다.
-          1. UnicodeMatchPropertyValue(`General_Category`, _s_) 가 General_Category (gc) 속성의 유효한 속성 값(또는 별칭)이면
-            1. 속성 “General_Category” 값 _s_ 를 포함하는 모든 유니코드 코드 포인트의 CharSet 반환.
-          1. _p_ 를 UnicodeMatchProperty(_rer_, _s_) 로 둔다.
-          1. Assert: _p_ 는 <emu-xref href="#table-binary-unicode-properties"></emu-xref> 의 “Property name and aliases” 열에 열거된 바이너리 유니코드 속성(또는 별칭) 혹은 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> “Property name” 열에 열거된 문자열 바이너리 속성.
-          1. _A_ 를 속성 _p_ 값 “True” 를 가지는 모든 CharSetElement 를 담는 CharSet 으로 둔다.
-          1. MaybeSimpleCaseFolding(_rer_, _A_) 반환.
+          1. _s_에 |LoneUnicodePropertyNameOrValue|에 의해 매치된 소스 텍스트를 할당한다.
+          1. UnicodeMatchPropertyValue(`General_Category`, _s_)가 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열된 General_Category (gc) 속성에 대한 유니코드 속성 값 또는 속성 값 별칭인 경우,
+            1. 속성 데이터베이스 정의에 속성 “General_Category”와 값 _s_가 포함된 모든 유니코드 코드 포인트를 포함하는 CharSet을 반환한다.
+          1. _p_에 UnicodeMatchProperty(_rer_, _s_)의 결과를 할당한다.
+          1. 단언: _p_는 <emu-xref href="#table-binary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 바이너리 유니코드 속성 또는 속성 별칭이거나, <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>의 “<emu-not-ref>Property name</emu-not-ref>” 열에 나열된 문자열의 바이너리 유니코드 속성이다.
+          1. _A_에 속성 데이터베이스 정의에 속성 _p_와 값 “True”가 포함된 모든 CharSetElement를 포함하는 CharSet을 할당한다.
+          1. MaybeSimpleCaseFolding(_rer_, _A_)를 반환한다.
         </emu-alg>
 
         <!-- ClassUnion -->
@@ -37873,28 +37881,28 @@ THH:mm:ss.sss
         <emu-clause id="sec-runtime-semantics-unicodematchproperty-p" type="abstract operation">
           <h1>
             UnicodeMatchProperty (
-              _rer_: RegExp Record,
+              _rer_: 정규식 레코드,
               _p_: ECMAScript 소스 텍스트,
-            ): 유니코드 속성 이름
+            ): <emu-not-ref>Unicode property name</emu-not-ref>
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _rer_.[[UnicodeSets]] 가 *true* 이고 _p_ 가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> 의 “Property name” 열에 열거된 유니코드 <emu-not-ref>property name</emu-not-ref> 이면
-              1. 유니코드 코드 포인트 _p_ 의 리스트 반환.
-            1. Assert: _p_ 는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 또는 <emu-xref href="#table-binary-unicode-properties"></emu-xref> 의 “Property name and aliases” 열에 열거된 유니코드 <emu-not-ref>property name</emu-not-ref> 또는 별칭.
-            1. _c_ 를 해당 행의 “Canonical property name” 열에 주어진 _p_ 의 canonical <emu-not-ref>property name</emu-not-ref> 리스트로 둔다.
-            1. 유니코드 코드 포인트 _c_ 리스트 반환.
+            1. _rer_.[[UnicodeSets]]가 *true*이고 _p_가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>의 “<emu-not-ref>Property name</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref>인 경우,
+              1. 유니코드 코드 포인트 _p_의 리스트를 반환한다.
+            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 또는 <emu-xref href="#table-binary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref> 또는 속성 별칭이다.
+            1. _c_에 해당 행의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 주어진 _p_의 표준 <emu-not-ref>property name</emu-not-ref>을 할당한다.
+            1. 유니코드 코드 포인트 _c_의 리스트를 반환한다.
           </emu-alg>
-          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> 에 열거된 유니코드 속성 이름 및 별칭을 지원해야 한다. 상호 운용성을 위해 다른 이름이나 별칭은 지원하면 안 된다.</p>
+          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>에 나열된 <emu-not-ref>Unicode property names</emu-not-ref>와 별칭을 지원해야 한다. 상호 운용성을 보장하기 위해, 구현체는 다른 <emu-not-ref>property names</emu-not-ref>나 별칭을 지원해서는 안 된다.</p>
           <emu-note>
-            <p>예: `Script_Extensions` (속성 이름) 과 `scx` (별칭)는 유효하지만 `script_extensions`, `Scx` 는 유효하지 않다.</p>
+            <p>예를 들어, `Script_Extensions`(<emu-not-ref>property name</emu-not-ref>)와 `scx`(속성 별칭)는 유효하지만, `script_extensions`나 `Scx`는 유효하지 않다.</p>
           </emu-note>
           <emu-note>
-            <p>열거된 속성은 <a href="https://unicode.org/reports/tr18/#RL1.2">UTS18 RL1.2</a> 요구 사항의 상위 집합이다.</p>
+            <p>나열된 속성들은 <a href="https://unicode.org/reports/tr18/#RL1.2">UTS18 RL1.2</a>가 요구하는 것보다 더 넓은 집합을 이룬다.</p>
           </emu-note>
           <emu-note>
-            <p>이 표의 항목 철자(대소문자 포함)는 Unicode Character Database 의 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt"><code>PropertyAliases.txt</code></a> 파일에 사용된 철자와 일치하며, 그 철자는 <a href="https://www.unicode.org/policies/stability_policy.html#Alias_Stability">안정성 정책</a>에 따라 안정적으로 유지된다.</p>
+            <p>이 표의 항목 표기(대소문자 포함)는 유니코드 문자 데이터베이스의 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt"><code>PropertyAliases.txt</code></a> 파일에서 사용된 표기와 일치한다. 해당 파일의 정확한 표기는 <a href="https://www.unicode.org/policies/stability_policy.html#Alias_Stability">안정적으로 보장</a>된다.</p>
           </emu-note>
           <emu-import href="table-nonbinary-unicode-properties.html"></emu-import>
           <emu-import href="table-binary-unicode-properties.html"></emu-import>
@@ -37911,17 +37919,17 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. Assert: _p_ 는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 의 “Canonical property name” 열에 열거된 canonical, 비별칭 유니코드 속성 이름.
-            1. Assert: _v_ 는 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> 에 해당 속성 _p_ 의 속성 값 또는 속성 값 별칭으로 열거됨.
-            1. _value_ 를 해당 행 “Canonical property value” 열의 _v_ 의 canonical 속성 값 리스트로 둔다.
-            1. 유니코드 코드 포인트 _value_ 리스트 반환.
+            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 나열된 표준, 별칭이 아닌 <emu-not-ref>Unicode property name</emu-not-ref>이다.
+            1. 단언: _v_는 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열된 유니코드 속성 _p_에 대한 속성 값 또는 속성 값 별칭이다.
+            1. _value_에 해당 행의 “Canonical property value” 열에 주어진 _v_의 표준 속성 값을 할당한다.
+            1. 유니코드 코드 포인트 _value_의 리스트를 반환한다.
           </emu-alg>
-          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 에 열거된 속성에 대해 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> 에 열거된 속성 값 및 별칭을 지원해야 한다. 상호 운용성을 위해 다른 속성 값 또는 별칭은 지원하면 안 된다.</p>
+          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>에 나열된 속성에 대해 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열된 유니코드 속성 값 및 속성 값 별칭을 지원해야 한다. 상호 운용성을 보장하기 위해, 구현체는 다른 속성 값이나 속성 값 별칭을 지원해서는 안 된다.</p>
           <emu-note>
-            <p>예: `Xpeo`, `Old_Persian` 은 `Script_Extensions` 값으로 유효하지만 `xpeo`, `Old Persian` 은 유효하지 않다.</p>
+            <p>예를 들어, `Xpeo`와 `Old_Persian`은 `Script_Extensions`의 유효한 값이지만, `xpeo`와 `Old Persian`은 유효하지 않다.</p>
           </emu-note>
           <emu-note>
-            <p>이 알고리즘은 <a href="https://unicode.org/reports/tr44/#Matching_Symbolic">UAX44 의 심볼릭 값 매칭 규칙</a>과 다르다: 대소문자, <emu-xref href="#sec-white-space">공백</emu-xref>, U+002D (HYPHEN-MINUS), U+005F (LOW LINE)이 무시되지 않고 `Is` 접두사도 지원되지 않는다.</p>
+            <p>이 알고리즘은 <a href="https://unicode.org/reports/tr44/#Matching_Symbolic">UAX44에 나열된 심볼릭 값 일치 규칙</a>과 다르다: 대소문자, <emu-xref href="#sec-white-space">공백</emu-xref>, U+002D(하이픈-마이너스), U+005F(로우 라인)은 무시되지 않으며, `Is` 접두사는 지원되지 않는다.</p>
           </emu-note>
         </emu-clause>
       </emu-clause>
@@ -41038,50 +41046,48 @@ THH:mm:ss.sss
         <p>이 메서드의 인자 해석과 사용은 <emu-xref href="#sec-array.prototype.copywithin"></emu-xref>에 정의된 `Array.prototype.copyWithin` 과 동일하다.</p>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _O_ = *this* 값.
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~).
-          1. _len_ = TypedArrayLength(_taRecord_).
-          1. _relativeTarget_ = ? ToIntegerOrInfinity(_target_).
-          1. _relativeTarget_ = -∞ 이면 _targetIndex_ = 0.
-          1. Else if _relativeTarget_ &lt; 0 이면 _targetIndex_ = max(_len_ + _relativeTarget_, 0).
-          1. Else _targetIndex_ = min(_relativeTarget_, _len_).
-          1. _relativeStart_ = ? ToIntegerOrInfinity(_start_).
-          1. _relativeStart_ = -∞ 이면 _startIndex_ = 0.
-          1. Else if _relativeStart_ &lt; 0 이면 _startIndex_ = max(_len_ + _relativeStart_, 0).
-          1. Else _startIndex_ = min(_relativeStart_, _len_).
-          1. _end_ 이 *undefined* 이면 _relativeEnd_ = _len_; else _relativeEnd_ = ? ToIntegerOrInfinity(_end_).
-          1. _relativeEnd_ = -∞ 이면 _endIndex_ = 0.
-          1. Else if _relativeEnd_ &lt; 0 이면 _endIndex_ = max(_len_ + _relativeEnd_, 0).
-          1. Else _endIndex_ = min(_relativeEnd_, _len_).
-          1. _count_ = min(_endIndex_ - _startIndex_, _len_ - _targetIndex_).
-          1. _count_ > 0 이면
-            1. NOTE: 복사는 소스 데이터의 비트 수준 인코딩이 유지되도록 수행되어야 한다.
-            1. _buffer_ = _O_.[[ViewedArrayBuffer]].
-            1. _taRecord_ = MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~).
-            1. IsTypedArrayOutOfBounds(_taRecord_) *true* 이면 *TypeError* 예외.
-            1. _len_ = TypedArrayLength(_taRecord_).
-            1. _elementSize_ = TypedArrayElementSize(_O_).
-            1. _byteOffset_ = _O_.[[ByteOffset]].
-            1. _bufferByteLimit_ = (_len_ × _elementSize_) + _byteOffset_.
-            1. _toByteIndex_ = (_targetIndex_ × _elementSize_) + _byteOffset_.
-            1. _fromByteIndex_ = (_startIndex_ × _elementSize_) + _byteOffset_.
-            1. _countBytes_ = _count_ × _elementSize_.
-            1. _fromByteIndex_ &lt; _toByteIndex_ 그리고 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_ 이면
-              1. _direction_ = -1.
-              1. _fromByteIndex_ = _fromByteIndex_ + _countBytes_ - 1.
-              1. _toByteIndex_ = _toByteIndex_ + _countBytes_ - 1.
-            1. Else,
-              1. _direction_ = 1.
-            1. _countBytes_ > 0 동안 반복
-              1. _fromByteIndex_ &lt; _bufferByteLimit_ 그리고 _toByteIndex_ &lt; _bufferByteLimit_ 이면
-                1. _value_ = GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~).
-                1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~) 수행.
-                1. _fromByteIndex_ = _fromByteIndex_ + _direction_.
-                1. _toByteIndex_ = _toByteIndex_ + _direction_.
-                1. _countBytes_ = _countBytes_ - 1.
-              1. Else
-                1. _countBytes_ = 0.
-          1. _O_ 반환.
+          1. _O_에 *this* 값을 할당한다.
+          1. _taRecord_에 ? ValidateTypedArray(_O_, ~seq-cst~)를 할당한다.
+          1. _len_에 TypedArrayLength(_taRecord_)를 할당한다.
+          1. _relativeTarget_에 ? ToIntegerOrInfinity(_target_)를 할당한다.
+          1. _relativeTarget_ = -∞이면, _targetIndex_에 0을 할당한다.
+          1. 그렇지 않고 _relativeTarget_ &lt; 0이면, _targetIndex_에 max(_len_ + _relativeTarget_, 0)을 할당한다.
+          1. 그렇지 않으면, _targetIndex_에 min(_relativeTarget_, _len_)을 할당한다.
+          1. _relativeStart_에 ? ToIntegerOrInfinity(_start_)를 할당한다.
+          1. _relativeStart_ = -∞이면, _startIndex_에 0을 할당한다.
+          1. 그렇지 않고 _relativeStart_ &lt; 0이면, _startIndex_에 max(_len_ + _relativeStart_, 0)을 할당한다.
+          1. 그렇지 않으면, _startIndex_에 min(_relativeStart_, _len_)을 할당한다.
+          1. _end_가 *undefined*이면, _relativeEnd_에 _len_을 할당한다; 아니면 _relativeEnd_에 ? ToIntegerOrInfinity(_end_)를 할당한다.
+          1. _relativeEnd_ = -∞이면, _endIndex_에 0을 할당한다.
+          1. 그렇지 않고 _relativeEnd_ &lt; 0이면, _endIndex_에 max(_len_ + _relativeEnd_, 0)을 할당한다.
+          1. 그렇지 않으면, _endIndex_에 min(_relativeEnd_, _len_)을 할당한다.
+          1. _count_에 min(_endIndex_ - _startIndex_, _len_ - _targetIndex_)를 할당한다.
+          1. _count_ > 0이면,
+            1. 참고: 복사는 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
+            1. _buffer_에 _O_.[[ViewedArrayBuffer]]를 할당한다.
+            1. _taRecord_에 MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~)를 할당한다.
+            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 throw한다.
+            1. _len_에 TypedArrayLength(_taRecord_)를 할당한다.
+            1. 참고: 위 단계의 부작용으로 _O_의 크기가 줄어들 수 있으며, 이 경우 복사는 여전히 적용 가능한 가장 긴 접두사(prefix)로 진행해야 한다.
+            1. _count_에 min(_count_, _len_ - _startIndex_, _len_ - _targetIndex_)를 다시 할당한다.
+            1. _elementSize_에 TypedArrayElementSize(_O_)를 할당한다.
+            1. _byteOffset_에 _O_.[[ByteOffset]]을 할당한다.
+            1. _toByteIndex_에 (_targetIndex_ × _elementSize_) + _byteOffset_을 할당한다.
+            1. _fromByteIndex_에 (_startIndex_ × _elementSize_) + _byteOffset_을 할당한다.
+            1. _countBytes_에 _count_ × _elementSize_를 할당한다.
+            1. _fromByteIndex_ &lt; _toByteIndex_ 이고 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_이면,
+              1. _direction_에 -1을 할당한다.
+              1. _fromByteIndex_에 _fromByteIndex_ + _countBytes_ - 1을 할당한다.
+              1. _toByteIndex_에 _toByteIndex_ + _countBytes_ - 1을 할당한다.
+            1. 그렇지 않으면,
+              1. _direction_에 1을 할당한다.
+            1. _countBytes_ > 0인 동안 반복한다,
+              1. _value_에 GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)를 할당한다.
+              1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
+              1. _fromByteIndex_에 _fromByteIndex_ + _direction_을 할당한다.
+              1. _toByteIndex_에 _toByteIndex_ + _direction_을 할당한다.
+              1. _countBytes_에 _countBytes_ - 1을 할당한다.
+          1. _O_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -47395,374 +47401,374 @@ THH:mm:ss.sss
           <p>이 프로퍼티는 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } 특성을 가진다.</p>
         </emu-clause>
       </emu-clause>
-    </emu-clause>
 
-    <emu-clause oldids="sec-%iteratorprototype%-object" id="sec-%iterator.prototype%-object">
-      <h1>Iterator 프로토타입 객체의 프로퍼티 (Properties of the Iterator Prototype Object)</h1>
-      <p><dfn>Iterator 프로토타입 객체</dfn>:</p>
-      <ul>
-        <li><dfn>%Iterator.prototype%</dfn> 이다.</li>
-        <li>[[Prototype]] 내부 슬롯 값이 %Object.prototype%이다.</li>
-        <li>일반 객체이다.</li>
-      </ul>
-      <emu-note>
-        <p>이 명세에서 iterator 인터페이스를 구현하는 모든 객체는 %Iterator.prototype%을 상속한다. ECMAScript 코드는 또한 %Iterator.prototype%을 상속하는 객체를 정의할 수 있다. %Iterator.prototype%은 모든 iterator 객체에 적용 가능한 추가 메서드를 추가할 수 있는 장소를 제공한다.</p>
-        <p>다음 식은 ECMAScript 코드가 %Iterator.prototype% 객체에 접근할 수 있는 한 가지 방법이다:</p>
-        <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
-      </emu-note>
-
-      <emu-clause id="sec-iterator.prototype.constructor">
-        <h1>Iterator.prototype.constructor</h1>
-        <p>`Iterator.prototype.constructor` 는 { [[Enumerable]]: *false*, [[Configurable]]: *true* } 특성을 가진 접근자 프로퍼티이다. [[Get]] 과 [[Set]] 특성은 다음과 같이 정의된다:</p>
-
-        <emu-clause id="sec-get-iterator.prototype.constructor">
-          <h1>get Iterator.prototype.constructor</h1>
-          <p>[[Get]] 특성의 값은 인수가 필요 없는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. %Iterator% 를 반환한다.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-set-iterator.prototype.constructor">
-          <h1>set Iterator.prototype.constructor</h1>
-          <p>[[Set]] 특성의 값은 인수 _v_ 를 받는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, *"constructor"*, _v_)를 수행한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-        </emu-clause>
-
+      <emu-clause oldids="sec-%iteratorprototype%-object" id="sec-%iterator.prototype%-object">
+        <h1>Iterator 프로토타입 객체의 프로퍼티 (Properties of the Iterator Prototype Object)</h1>
+        <p><dfn>Iterator 프로토타입 객체</dfn>:</p>
+        <ul>
+          <li><dfn>%Iterator.prototype%</dfn> 이다.</li>
+          <li>[[Prototype]] 내부 슬롯 값이 %Object.prototype%이다.</li>
+          <li>일반 객체이다.</li>
+        </ul>
         <emu-note>
-          <p>대부분의 내장 프로토타입에 있는 *"constructor"* 프로퍼티와 달리, 웹 호환성 이유로 이 프로퍼티는 접근자여야 한다.</p>
+          <p>이 명세에서 iterator 인터페이스를 구현하는 모든 객체는 %Iterator.prototype%을 상속한다. ECMAScript 코드는 또한 %Iterator.prototype%을 상속하는 객체를 정의할 수 있다. %Iterator.prototype%은 모든 iterator 객체에 적용 가능한 추가 메서드를 추가할 수 있는 장소를 제공한다.</p>
+          <p>다음 식은 ECMAScript 코드가 %Iterator.prototype% 객체에 접근할 수 있는 한 가지 방법이다:</p>
+          <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
         </emu-note>
-      </emu-clause>
 
-      <emu-clause id="sec-iterator.prototype.drop">
-        <h1>Iterator.prototype.drop ( _limit_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
-          1. IfAbruptCloseIterator(_numLimit_, _iterated_).
-          1. _numLimit_ 이 *NaN* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
-          1. _integerLimit_ &lt; 0 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획(capture)하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-            1. _remaining_ 을 _integerLimit_ 로 둔다.
-            1. _remaining_ > 0 인 동안 반복,
-              1. _remaining_ ≠ +∞ 이면,
-                1. _remaining_ 을 _remaining_ - 1 로 설정한다.
-              1. _next_ 를 ? IteratorStep(_iterated_)로 둔다.
-              1. _next_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
-            1. 반복,
-              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-              1. _value_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
-              1. _completion_ 을 Completion(Yield(_value_))로 둔다.
-              1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-          1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-          1. _result_ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
+        <emu-clause id="sec-iterator.prototype.constructor">
+          <h1>Iterator.prototype.constructor</h1>
+          <p>`Iterator.prototype.constructor` 는 { [[Enumerable]]: *false*, [[Configurable]]: *true* } 특성을 가진 접근자 프로퍼티이다. [[Get]] 과 [[Set]] 특성은 다음과 같이 정의된다:</p>
 
-      <emu-clause id="sec-iterator.prototype.every">
-        <h1>Iterator.prototype.every ( _predicate_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_predicate_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _counter_ 를 0 으로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 *true* 를 반환한다.
-            1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-            1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. ToBoolean(_result_) 가 *false* 이면, ? IteratorClose(_iterated_, NormalCompletion(*false*))를 반환한다.
-            1. _counter_ 를 _counter_ + 1 로 설정한다.
-        </emu-alg>
-      </emu-clause>
+          <emu-clause id="sec-get-iterator.prototype.constructor">
+            <h1>get Iterator.prototype.constructor</h1>
+            <p>[[Get]] 특성의 값은 인수가 필요 없는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
+            <emu-alg>
+              1. %Iterator% 를 반환한다.
+            </emu-alg>
+          </emu-clause>
 
-      <emu-clause id="sec-iterator.prototype.filter">
-        <h1>Iterator.prototype.filter ( _predicate_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_predicate_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _closure_ 를 _iterated_ 와 _predicate_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-            1. _counter_ 를 0 으로 둔다.
-            1. 반복,
-              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-              1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-              1. _selected_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-              1. IfAbruptCloseIterator(_selected_, _iterated_).
-              1. ToBoolean(_selected_) 가 *true* 이면,
+          <emu-clause id="sec-set-iterator.prototype.constructor">
+            <h1>set Iterator.prototype.constructor</h1>
+            <p>[[Set]] 특성의 값은 인수 _v_ 를 받는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
+            <emu-alg>
+              1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, *"constructor"*, _v_)를 수행한다.
+              1. *undefined* 를 반환한다.
+            </emu-alg>
+          </emu-clause>
+
+          <emu-note>
+            <p>대부분의 내장 프로토타입에 있는 *"constructor"* 프로퍼티와 달리, 웹 호환성 이유로 이 프로퍼티는 접근자여야 한다.</p>
+          </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.drop">
+          <h1>Iterator.prototype.drop ( _limit_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_).
+            1. _numLimit_ 이 *NaN* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
+            1. _integerLimit_ &lt; 0 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획(capture)하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
+              1. _remaining_ 을 _integerLimit_ 로 둔다.
+              1. _remaining_ > 0 인 동안 반복,
+                1. _remaining_ ≠ +∞ 이면,
+                  1. _remaining_ 을 _remaining_ - 1 로 설정한다.
+                1. _next_ 를 ? IteratorStep(_iterated_)로 둔다.
+                1. _next_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
+              1. 반복,
+                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
                 1. _completion_ 을 Completion(Yield(_value_))로 둔다.
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-              1. _counter_ 를 _counter_ + 1 로 설정한다.
-          1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-          1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-          1. _result_ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.find">
-        <h1>Iterator.prototype.find ( _predicate_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_predicate_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _counter_ 를 0 으로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 *undefined* 를 반환한다.
-            1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-            1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. ToBoolean(_result_) 가 *true* 이면, ? IteratorClose(_iterated_, NormalCompletion(_value_))를 반환한다.
-            1. _counter_ 를 _counter_ + 1 로 설정한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.flatmap">
-        <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_mapper_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-            1. _counter_ 를 0 으로 둔다.
-            1. 반복,
-              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-              1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-              1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-              1. IfAbruptCloseIterator(_mapped_, _iterated_).
-              1. _innerIterator_ 를 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))로 둔다.
-              1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
-              1. _innerAlive_ 를 *true* 로 둔다.
-              1. _innerAlive_ 가 *true* 인 동안 반복,
-                1. _innerValue_ 를 Completion(IteratorStepValue(_innerIterator_))로 둔다.
-                1. IfAbruptCloseIterator(_innerValue_, _iterated_).
-                1. _innerValue_ 가 ~done~ 이면,
-                  1. _innerAlive_ 를 *false* 로 설정한다.
-                1. 그렇지 않으면,
-                  1. _completion_ 을 Completion(Yield(_innerValue_))로 둔다.
-                  1. _completion_ 이 abrupt completion 이면,
-                    1. _backupCompletion_ 을 Completion(IteratorClose(_innerIterator_, _completion_))로 둔다.
-                    1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
-                    1. ? IteratorClose(_iterated_, _completion_)를 반환한다.
-              1. _counter_ 를 _counter_ + 1 로 설정한다.
-          1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-          1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-          1. _result_ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.foreach">
-        <h1>Iterator.prototype.forEach ( _procedure_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_procedure_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _counter_ 를 0 으로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 *undefined* 를 반환한다.
-            1. _result_ 를 Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-            1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. _counter_ 를 _counter_ + 1 로 설정한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.map">
-        <h1>Iterator.prototype.map ( _mapper_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_mapper_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-            1. _counter_ 를 0 으로 둔다.
-            1. 반복,
-              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-              1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-              1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-              1. IfAbruptCloseIterator(_mapped_, _iterated_).
-              1. _completion_ 을 Completion(Yield(_mapped_))로 둔다.
-              1. IfAbruptCloseIterator(_completion_, _iterated_).
-              1. _counter_ 를 _counter_ + 1 로 설정한다.
-          1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-          1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-          1. _result_ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.reduce">
-        <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_reducer_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _initialValue_ 가 존재하지 않으면,
-            1. _accumulator_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _accumulator_ 가 ~done~ 이면 *TypeError* 예외를 던진다.
-            1. _counter_ 를 1 로 둔다.
-          1. 그렇지 않으면,
-            1. _accumulator_ 를 _initialValue_ 로 둔다.
-            1. _counter_ 를 0 으로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 _accumulator_ 를 반환한다.
-            1. _result_ 를 Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »))로 둔다.
-            1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. _accumulator_ 를 _result_ 로 설정한다.
-            1. _counter_ 를 _counter_ + 1 로 설정한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.some">
-        <h1>Iterator.prototype.some ( _predicate_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. IsCallable(_predicate_) 가 *false* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _counter_ 를 0 으로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 *false* 를 반환한다.
-            1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-            1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. ToBoolean(_result_) 가 *true* 이면, ? IteratorClose(_iterated_, NormalCompletion(*true*))를 반환한다.
-            1. _counter_ 를 _counter_ + 1 로 설정한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.take">
-        <h1>Iterator.prototype.take ( _limit_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-          1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
-          1. IfAbruptCloseIterator(_numLimit_, _iterated_).
-          1. _numLimit_ 이 *NaN* 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
-          1. _integerLimit_ &lt; 0 이면,
-            1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
-            1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-          1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-            1. _remaining_ 을 _integerLimit_ 로 둔다.
-            1. 반복,
-              1. _remaining_ = 0 이면,
-                1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))를 반환한다.
-              1. _remaining_ ≠ +∞ 이면,
-                1. _remaining_ 을 _remaining_ - 1 로 설정한다.
-              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-              1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-              1. _completion_ 을 Completion(Yield(_value_))로 둔다.
-              1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-          1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-          1. _result_ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.toarray">
-        <h1>Iterator.prototype.toArray ( )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. _O_ 를 *this* 값으로 둔다.
-          1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-          1. _iterated_ 를 ? GetIteratorDirect(_O_)로 둔다.
-          1. _items_ 를 새로운 빈 List 로 둔다.
-          1. 반복,
-            1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-            1. _value_ 가 ~done~ 이면 CreateArrayFromList(_items_)를 반환한다.
-            1. _value_ 를 _items_ 에 추가한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%">
-        <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
-        <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
-        <emu-alg>
-          1. *this* 값을 반환한다.
-        </emu-alg>
-        <p>이 함수의 *"name"* 프로퍼티 값은 *"[Symbol.iterator]"* 이다.</p>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype-%symbol.tostringtag%">
-        <h1>Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-        <p>`Iterator.prototype[%Symbol.toStringTag%]` 는 { [[Enumerable]]: *false*, [[Configurable]]: *true* } 특성을 가진 접근자 프로퍼티이다. [[Get]] 과 [[Set]] 특성은 다음과 같이 정의된다:</p>
-
-        <emu-clause id="sec-get-iterator.prototype-%symbol.tostringtag%">
-          <h1>get Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-          <p>[[Get]] 특성의 값은 인수가 필요 없는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. *"Iterator"* 를 반환한다.
+            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
+            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
+            1. _result_ 를 반환한다.
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-set-iterator.prototype-%symbol.tostringtag%">
-          <h1>set Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-          <p>[[Set]] 특성의 값은 인수 _v_ 를 받는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
+        <emu-clause id="sec-iterator.prototype.every">
+          <h1>Iterator.prototype.every ( _predicate_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, %Symbol.toStringTag%, _v_)를 수행한다.
-            1. *undefined* 를 반환한다.
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_predicate_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _counter_ 를 0 으로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 *true* 를 반환한다.
+              1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. ToBoolean(_result_) 가 *false* 이면, ? IteratorClose(_iterated_, NormalCompletion(*false*))를 반환한다.
+              1. _counter_ 를 _counter_ + 1 로 설정한다.
           </emu-alg>
         </emu-clause>
 
-        <emu-note>
-          <p>대부분의 내장 프로토타입에 있는 %Symbol.toStringTag% 프로퍼티와 달리, 웹 호환성 이유로 이 프로퍼티는 접근자여야 한다.</p>
-        </emu-note>
+        <emu-clause id="sec-iterator.prototype.filter">
+          <h1>Iterator.prototype.filter ( _predicate_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_predicate_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_ 를 _iterated_ 와 _predicate_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
+              1. _counter_ 를 0 으로 둔다.
+              1. 반복,
+                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
+                1. _selected_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_selected_, _iterated_).
+                1. ToBoolean(_selected_) 가 *true* 이면,
+                  1. _completion_ 을 Completion(Yield(_value_))로 둔다.
+                  1. IfAbruptCloseIterator(_completion_, _iterated_).
+                1. _counter_ 를 _counter_ + 1 로 설정한다.
+            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
+            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
+            1. _result_ 를 반환한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.find">
+          <h1>Iterator.prototype.find ( _predicate_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_predicate_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _counter_ 를 0 으로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 *undefined* 를 반환한다.
+              1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. ToBoolean(_result_) 가 *true* 이면, ? IteratorClose(_iterated_, NormalCompletion(_value_))를 반환한다.
+              1. _counter_ 를 _counter_ + 1 로 설정한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.flatmap">
+          <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_mapper_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
+              1. _counter_ 를 0 으로 둔다.
+              1. 반복,
+                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
+                1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_mapped_, _iterated_).
+                1. _innerIterator_ 를 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))로 둔다.
+                1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
+                1. _innerAlive_ 를 *true* 로 둔다.
+                1. _innerAlive_ 가 *true* 인 동안 반복,
+                  1. _innerValue_ 를 Completion(IteratorStepValue(_innerIterator_))로 둔다.
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_).
+                  1. _innerValue_ 가 ~done~ 이면,
+                    1. _innerAlive_ 를 *false* 로 설정한다.
+                  1. 그렇지 않으면,
+                    1. _completion_ 을 Completion(Yield(_innerValue_))로 둔다.
+                    1. _completion_ 이 abrupt completion 이면,
+                      1. _backupCompletion_ 을 Completion(IteratorClose(_innerIterator_, _completion_))로 둔다.
+                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
+                      1. ? IteratorClose(_iterated_, _completion_)를 반환한다.
+                1. _counter_ 를 _counter_ + 1 로 설정한다.
+            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
+            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
+            1. _result_ 를 반환한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.foreach">
+          <h1>Iterator.prototype.forEach ( _procedure_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_procedure_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _counter_ 를 0 으로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 *undefined* 를 반환한다.
+              1. _result_ 를 Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. _counter_ 를 _counter_ + 1 로 설정한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.map">
+          <h1>Iterator.prototype.map ( _mapper_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_mapper_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
+              1. _counter_ 를 0 으로 둔다.
+              1. 반복,
+                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
+                1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_mapped_, _iterated_).
+                1. _completion_ 을 Completion(Yield(_mapped_))로 둔다.
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
+                1. _counter_ 를 _counter_ + 1 로 설정한다.
+            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
+            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
+            1. _result_ 를 반환한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.reduce">
+          <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_reducer_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _initialValue_ 가 존재하지 않으면,
+              1. _accumulator_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _accumulator_ 가 ~done~ 이면 *TypeError* 예외를 던진다.
+              1. _counter_ 를 1 로 둔다.
+            1. 그렇지 않으면,
+              1. _accumulator_ 를 _initialValue_ 로 둔다.
+              1. _counter_ 를 0 으로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 _accumulator_ 를 반환한다.
+              1. _result_ 를 Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »))로 둔다.
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. _accumulator_ 를 _result_ 로 설정한다.
+              1. _counter_ 를 _counter_ + 1 로 설정한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.some">
+          <h1>Iterator.prototype.some ( _predicate_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. IsCallable(_predicate_) 가 *false* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _counter_ 를 0 으로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 *false* 를 반환한다.
+              1. _result_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. ToBoolean(_result_) 가 *true* 이면, ? IteratorClose(_iterated_, NormalCompletion(*true*))를 반환한다.
+              1. _counter_ 를 _counter_ + 1 로 설정한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.take">
+          <h1>Iterator.prototype.take ( _limit_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
+            1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_).
+            1. _numLimit_ 이 *NaN* 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
+            1. _integerLimit_ &lt; 0 이면,
+              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환한다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
+              1. _remaining_ 을 _integerLimit_ 로 둔다.
+              1. 반복,
+                1. _remaining_ = 0 이면,
+                  1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))를 반환한다.
+                1. _remaining_ ≠ +∞ 이면,
+                  1. _remaining_ 을 _remaining_ - 1 로 설정한다.
+                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
+                1. _completion_ 을 Completion(Yield(_value_))로 둔다.
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
+            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
+            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
+            1. _result_ 를 반환한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.toarray">
+          <h1>Iterator.prototype.toArray ( )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _O_ 를 *this* 값으로 둔다.
+            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 둔다.
+            1. _items_ 를 새로운 빈 List 로 둔다.
+            1. 반복,
+              1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_ 가 ~done~ 이면 CreateArrayFromList(_items_)를 반환한다.
+              1. _value_ 를 _items_ 에 추가한다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%">
+          <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
+          <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. *this* 값을 반환한다.
+          </emu-alg>
+          <p>이 함수의 *"name"* 프로퍼티 값은 *"[Symbol.iterator]"* 이다.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype-%symbol.tostringtag%">
+          <h1>Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+          <p>`Iterator.prototype[%Symbol.toStringTag%]` 는 { [[Enumerable]]: *false*, [[Configurable]]: *true* } 특성을 가진 접근자 프로퍼티이다. [[Get]] 과 [[Set]] 특성은 다음과 같이 정의된다:</p>
+
+          <emu-clause id="sec-get-iterator.prototype-%symbol.tostringtag%">
+            <h1>get Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+            <p>[[Get]] 특성의 값은 인수가 필요 없는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
+            <emu-alg>
+              1. *"Iterator"* 를 반환한다.
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-set-iterator.prototype-%symbol.tostringtag%">
+            <h1>set Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+            <p>[[Set]] 특성의 값은 인수 _v_ 를 받는 내장 함수이다. 호출 시 다음 단계를 수행한다:</p>
+            <emu-alg>
+              1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, %Symbol.toStringTag%, _v_)를 수행한다.
+              1. *undefined* 를 반환한다.
+            </emu-alg>
+          </emu-clause>
+
+          <emu-note>
+            <p>대부분의 내장 프로토타입에 있는 %Symbol.toStringTag% 프로퍼티와 달리, 웹 호환성 이유로 이 프로퍼티는 접근자여야 한다.</p>
+          </emu-note>
+        </emu-clause>
       </emu-clause>
     </emu-clause>
 

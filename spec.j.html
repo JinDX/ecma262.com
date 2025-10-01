@@ -2839,7 +2839,7 @@
           <dfn variants="accessor properties">アクセサプロパティ</dfn>は、キー値を1つまたは2つのアクセサ関数と一連の真偽値属性に関連付けます。アクセサ関数はそのプロパティに関連付けられたECMAScript言語値の保存または取得に使用されます。
         </li>
       </ul>
-      <p>オブジェクトのプロパティはプロパティキーによって一意に識別されます。<dfn id="property-key" variants="property keys" oldids="sec-ispropertykey">プロパティキー</dfn>はStringまたはSymbolです。空文字列を含むすべてのStringとSymbolはプロパティキーとして有効です。<dfn id="property-name">プロパティ名</dfn>は、プロパティキーのうちStringであるものです。</p>
+      <p>オブジェクトのプロパティはプロパティキーによって一意に識別されます。<dfn id="property-key" variants="property keys" oldids="sec-ispropertykey">プロパティキー</dfn>はStringまたはSymbolです。空文字列を含むすべてのStringとSymbolはプロパティキーとして有効です。<dfn id="property-name" variants="property names">プロパティ名</dfn>は、プロパティキーのうちStringであるものです。</p>
       <p><dfn id="integer-index" variants="integer indices,integer-indexed">整数インデックス</dfn>は、CanonicalNumericIndexString(_n_)が*+0*<sub>𝔽</sub>から𝔽(2<sup>53</sup> - 1)までの範囲の整数Numberを返すプロパティ名_n_です。<dfn id="array-index" variants="array indices">配列インデックス</dfn>は、CanonicalNumericIndexString(_n_)が*+0*<sub>𝔽</sub>から𝔽(2<sup>32</sup> - 2)までの範囲の整数Numberを返す整数インデックス_n_です。</p>
       <emu-note>
         <p>全ての非負の安全な整数には対応する整数インデックスがあります。<emu-eqn>2<sup>32</sup> - 1</emu-eqn>を除く全ての32ビット符号なし整数には対応する配列インデックスがあります。*"-0"*は整数インデックスでも配列インデックスでもありません。</p>
@@ -6777,9 +6777,9 @@
     <emu-clause id="sec-initializeinstanceelements" type="abstract operation">
       <h1>
         InitializeInstanceElements (
-          _O_: Object,
-          _constructor_: ECMAScript 関数オブジェクト,
-        ): ~unused~ を含む normal completion あるいは throw completion
+          _O_: オブジェクト,
+          _constructor_: ECMAScript 関数オブジェクトまたは組み込み関数オブジェクト,
+        ): ~unused~ を含む正常完了または throw 完了のいずれか
       </h1>
       <dl class="header">
       </dl>
@@ -22227,67 +22227,67 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_ が与えられていなければ ~sync~ とする。
-          1. _oldEnv_ を現在実行中コンテキストの LexicalEnvironment とする。
-          1. _V_ を *undefined* とする。
-          1. _destructuring_ を IsDestructuring of _lhs_ とする。
-          1. _destructuring_ が *true* かつ _lhsKind_ が ~assignment~ なら:
-            1. Assert: _lhs_ は |LeftHandSideExpression|。
-            1. _assignmentPattern_ を _lhs_ が覆う |AssignmentPattern| とする。
-          1. 繰り返し:
+          1. _iteratorKind_ が存在しない場合、_iteratorKind_ に ~sync~ を設定する。
+          1. _oldEnv_ を現在実行中の実行コンテキストの LexicalEnvironment とする。
+          1. _V_ に *undefined* を設定する。
+          1. _destructuring_ を _lhs_ の IsDestructuring の結果とする。
+          1. _destructuring_ が *true* かつ _lhsKind_ が ~assignment~ の場合、
+            1. 断言: _lhs_ は |LeftHandSideExpression| である。
+            1. _assignmentPattern_ を _lhs_ によってカバーされる |AssignmentPattern| とする。
+          1. 次を繰り返す：
             1. _nextResult_ を ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]]) とする。
-            1. _iteratorKind_ が ~async~ なら _nextResult_ を ? Await(_nextResult_) とする。
-            1. _nextResult_ が Object でなければ *TypeError* を throw。
+            1. _iteratorKind_ が ~async~ の場合、_nextResult_ を ? Await(_nextResult_) に設定する。
+            1. _nextResult_ がオブジェクトでない場合、*TypeError* 例外をスローする。
             1. _done_ を ? IteratorComplete(_nextResult_) とする。
-            1. _done_ が *true* なら _V_ を返す。
+            1. _done_ が *true* なら、_V_ を返す。
             1. _nextValue_ を ? IteratorValue(_nextResult_) とする。
-            1. _lhsKind_ が ~assignment~ または ~var-binding~ の場合:
-              1. _destructuring_ が *true* なら:
-                1. _lhsKind_ が ~assignment~ なら:
-                  1. _status_ を DestructuringAssignmentEvaluation of _assignmentPattern_ (_nextValue_ 引数) の Completion。
-                1. それ以外:
-                  1. Assert: _lhsKind_ は ~var-binding~。
-                  1. Assert: _lhs_ は |ForBinding|。
-                  1. _status_ を |ForBinding| の BindingInitialization(_nextValue_, *undefined*) の Completion。
-              1. それ以外:
-                1. _lhsRef_ を _lhs_ の Evaluation の Completion（繰り返し行われ得る）とする。
-                1. _lhsKind_ が ~assignment~ かつ _lhs_ の AssignmentTargetType が ~web-compat~ なら *ReferenceError* を throw。
-                1. _lhsRef_ が abrupt completion なら:
+            1. _lhsKind_ が ~assignment~ または ~var-binding~ のいずれかの場合、
+              1. _destructuring_ が *true* なら、
+                1. _lhsKind_ が ~assignment~ の場合、
+                  1. _status_ を Completion(DestructuringAssignmentEvaluation of _assignmentPattern_ with argument _nextValue_) とする。
+                1. それ以外の場合、
+                  1. 断言: _lhsKind_ は ~var-binding~ である。
+                  1. 断言: _lhs_ は |ForBinding| である。
+                  1. _status_ を Completion(BindingInitialization of _lhs_ with arguments _nextValue_ and *undefined*) とする。
+              1. それ以外の場合、
+                1. _lhsRef_ を Completion(Evaluation of _lhs_) とする（繰り返し評価される場合がある）。
+                1. _lhsKind_ が ~assignment~ かつ AssignmentTargetType of _lhs_ が ~web-compat~ なら、*ReferenceError* 例外をスローする。
+                1. _lhsRef_ がアブストラクトコンプリーションの場合、
                   1. _status_ を _lhsRef_ とする。
-                1. それ以外:
+                1. それ以外の場合、
                   1. _status_ を Completion(PutValue(_lhsRef_.[[Value]], _nextValue_)) とする。
-            1. それ以外:
-              1. Assert: _lhsKind_ は ~lexical-binding~。
-              1. Assert: _lhs_ は |ForDeclaration|。
+            1. それ以外の場合、
+              1. 断言: _lhsKind_ は ~lexical-binding~ である。
+              1. 断言: _lhs_ は |ForDeclaration| である。
               1. _iterationEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
-              1. ForDeclarationBindingInstantiation of _lhs_ (_iterationEnv_) を実行。
-              1. 実行中コンテキストの LexicalEnvironment を _iterationEnv_ に設定。
-              1. _destructuring_ が *true* なら:
-                1. _status_ を ForDeclarationBindingInitialization of _lhs_ (_nextValue_, _iterationEnv_) の Completion。
-              1. それ以外:
-                1. Assert: _lhs_ は単一名を束縛する。
-                1. _lhsName_ を _lhs_ の BoundNames の唯一の要素とする。
+              1. ForDeclarationBindingInstantiation of _lhs_ with argument _iterationEnv_ を実行する。
+              1. 実行中の実行コンテキストの LexicalEnvironment を _iterationEnv_ に設定する。
+              1. _destructuring_ が *true* なら、
+                1. _status_ を Completion(ForDeclarationBindingInitialization of _lhs_ with arguments _nextValue_ and _iterationEnv_) とする。
+              1. それ以外の場合、
+                1. 断言: _lhs_ は単一の名前を束縛する。
+                1. _lhsName_ を BoundNames of _lhs_ の唯一の要素とする。
                 1. _lhsRef_ を ! ResolveBinding(_lhsName_) とする。
                 1. _status_ を Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_)) とする。
-            1. _status_ が abrupt completion なら:
-              1. 実行中コンテキストの LexicalEnvironment を _oldEnv_ に戻す。
-              1. _iteratorKind_ が ~async~ なら ? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
-              1. _iterationKind_ が ~enumerate~ なら:
+            1. _status_ がアブストラクトコンプリーションの場合、
+              1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+              1. _iterationKind_ が ~enumerate~ の場合、
                 1. ? _status_ を返す。
-              1. それ以外:
-                1. Assert: _iterationKind_ は ~iterate~。
+              1. それ以外の場合、
+                1. 断言: _iterationKind_ は ~iterate~ である。
+                1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
                 1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
-            1. _result_ を |Statement| の Evaluation の Completion とする。
-            1. 実行中コンテキストの LexicalEnvironment を _oldEnv_ に戻す。
-            1. LoopContinues(_result_, _labelSet_) が *false* なら:
-              1. _iterationKind_ が ~enumerate~ なら:
-                1. ? UpdateEmpty(_result_, _V_) を返す。
-              1. それ以外:
-                1. Assert: _iterationKind_ は ~iterate~。
-                1. _status_ を Completion(UpdateEmpty(_result_, _V_)) とする。
-                1. _iteratorKind_ が ~async~ なら ? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
+            1. _result_ を Completion(Evaluation of _stmt_) とする。
+            1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+            1. LoopContinues(_result_, _labelSet_) が *false* の場合、
+              1. _status_ を Completion(UpdateEmpty(_result_, _V_)) に設定する。
+              1. _iterationKind_ が ~enumerate~ の場合、
+                1. ? _status_ を返す。
+              1. それ以外の場合、
+                1. 断言: _iterationKind_ は ~iterate~ である。
+                1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
                 1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
-            1. _result_.[[Value]] が ~empty~ でなければ _V_ を _result_.[[Value]] に設定。
+            1. _result_.[[Value]] が ~empty~ でない場合、_V_ を _result_.[[Value]] に設定する。
         </emu-alg>
       </emu-clause>
 
@@ -24103,58 +24103,58 @@
       <emu-grammar>YieldExpression : `yield` `*` AssignmentExpression</emu-grammar>
       <emu-alg>
         1. _generatorKind_ を GetGeneratorKind() とする。
-        1. Assert: _generatorKind_ は ~sync~ か ~async~ のいずれか。
-        1. _exprRef_ を |AssignmentExpression| の Evaluation を ? 付きで行った結果とする。
+        1. 断言: _generatorKind_ は ~sync~ または ~async~ のいずれかである。
+        1. _exprRef_ を ? |AssignmentExpression| の評価結果とする。
         1. _value_ を ? GetValue(_exprRef_) とする。
         1. _iteratorRecord_ を ? GetIterator(_value_, _generatorKind_) とする。
         1. _iterator_ を _iteratorRecord_.[[Iterator]] とする。
         1. _received_ を NormalCompletion(*undefined*) とする。
-        1. 繰り返し:
-          1. _received_ が normal completion なら
+        1. 次を繰り返す：
+          1. _received_ が normal completion の場合、
             1. _innerResult_ を ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]], « _received_.[[Value]] ») とする。
-            1. _generatorKind_ が ~async~ なら _innerResult_ を ? Await(_innerResult_) に設定。
-            1. _innerResult_ が Object でなければ *TypeError* を throw。
+            1. _generatorKind_ が ~async~ の場合、_innerResult_ を ? Await(_innerResult_) に設定する。
+            1. _innerResult_ がオブジェクトでない場合、*TypeError* 例外をスローする。
             1. _done_ を ? IteratorComplete(_innerResult_) とする。
-            1. _done_ が *true* なら
+            1. _done_ が *true* の場合、
               1. ? IteratorValue(_innerResult_) を返す。
-            1. _generatorKind_ が ~async~ なら _received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))) に設定。
-            1. それ以外は _received_ を Completion(GeneratorYield(_innerResult_)) に設定。
-          1. それ以外で _received_ が throw completion なら
+            1. _generatorKind_ が ~async~ の場合、_received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))) に設定する。
+            1. それ以外の場合、_received_ を Completion(GeneratorYield(_innerResult_)) に設定する。
+          1. それ以外で _received_ が throw completion の場合、
             1. _throw_ を ? GetMethod(_iterator_, *"throw"*) とする。
-            1. _throw_ が *undefined* でなければ
+            1. _throw_ が *undefined* でない場合、
               1. _innerResult_ を ? Call(_throw_, _iterator_, « _received_.[[Value]] ») とする。
-              1. _generatorKind_ が ~async~ なら _innerResult_ を ? Await(_innerResult_) に設定。
-              1. 注: 内部イテレータ `throw` メソッドの例外は伝播し、正常完了は内部 `next` と同様に処理される。
-              1. _innerResult_ が Object でなければ *TypeError* を throw。
+              1. _generatorKind_ が ~async~ の場合、_innerResult_ を ? Await(_innerResult_) に設定する。
+              1. 注: 内部イテレータの `throw` メソッドからの例外は伝播される。内部 `throw` メソッドからの normal completion は内部 `next` と同様に処理される。
+              1. _innerResult_ がオブジェクトでない場合、*TypeError* 例外をスローする。
               1. _done_ を ? IteratorComplete(_innerResult_) とする。
-              1. _done_ が *true* なら
+              1. _done_ が *true* の場合、
                 1. ? IteratorValue(_innerResult_) を返す。
-              1. _generatorKind_ が ~async~ なら _received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))) に設定。
-              1. それ以外は _received_ を Completion(GeneratorYield(_innerResult_)) に設定。
-            1. それ以外:
-              1. 注: _iterator_ に `throw` メソッドがない場合、この throw は `yield*` ループを終了させる。まずクリーンアップを与える。
+              1. _generatorKind_ が ~async~ の場合、_received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerResult_))) に設定する。
+              1. それ以外の場合、_received_ を Completion(GeneratorYield(_innerResult_)) に設定する。
+            1. それ以外の場合、
+              1. 注: _iterator_ が `throw` メソッドを持たない場合、この throw は `yield*` ループを終了させる。ただし、その前に _iterator_ にクリーンアップの機会を与える必要がある。
               1. _closeCompletion_ を NormalCompletion(~empty~) とする。
-              1. _generatorKind_ が ~async~ なら ? AsyncIteratorClose(_iteratorRecord_, _closeCompletion_) を実行。
-              1. それ以外は ? IteratorClose(_iteratorRecord_, _closeCompletion_) を実行。
-              1. 注: 次のステップで `throw` メソッド欠如による `yield*` プロトコル違反として *TypeError* を投げる。
-              1. *TypeError* を throw。
-          1. それ以外:
-            1. Assert: _received_ は return completion。
+              1. _generatorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _closeCompletion_) を実行する。
+              1. それ以外の場合、? IteratorClose(_iteratorRecord_, _closeCompletion_) を実行する。
+              1. 注: 次のステップは *TypeError* をスローし、`yield*` プロトコル違反（_iterator_ に `throw` メソッドがない）を示す。
+              1. *TypeError* 例外をスローする。
+          1. それ以外の場合、
+            1. 断言: _received_ は return completion である。
             1. _return_ を ? GetMethod(_iterator_, *"return"*) とする。
-            1. _return_ が *undefined* なら
-              1. _value_ を _received_.[[Value]] に設定。
-              1. _generatorKind_ が ~async~ なら
-                1. _value_ を ? Await(_value_) に設定。
-              1. ReturnCompletion(_value_) を返す。
+            1. _return_ が *undefined* の場合、
+              1. _receivedValue_ を _received_.[[Value]] とする。
+              1. _generatorKind_ が ~async~ の場合、
+                1. _receivedValue_ を ? Await(_receivedValue_) に設定する。
+              1. ReturnCompletion(_receivedValue_) を返す。
             1. _innerReturnResult_ を ? Call(_return_, _iterator_, « _received_.[[Value]] ») とする。
-            1. _generatorKind_ が ~async~ なら _innerReturnResult_ を ? Await(_innerReturnResult_) に設定。
-            1. _innerReturnResult_ が Object でなければ *TypeError* を throw。
+            1. _generatorKind_ が ~async~ の場合、_innerReturnResult_ を ? Await(_innerReturnResult_) に設定する。
+            1. _innerReturnResult_ がオブジェクトでない場合、*TypeError* 例外をスローする。
             1. _done_ を ? IteratorComplete(_innerReturnResult_) とする。
-            1. _done_ が *true* なら
-              1. _value_ を ? IteratorValue(_innerReturnResult_) に設定。
-              1. ReturnCompletion(_value_) を返す。
-            1. _generatorKind_ が ~async~ なら _received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerReturnResult_))) に設定。
-            1. それ以外は _received_ を Completion(GeneratorYield(_innerReturnResult_)) に設定。
+            1. _done_ が *true* の場合、
+              1. _returnedValue_ を ? IteratorValue(_innerReturnResult_) とする。
+              1. ReturnCompletion(_returnedValue_) を返す。
+            1. _generatorKind_ が ~async~ の場合、_received_ を Completion(AsyncGeneratorYield(? IteratorValue(_innerReturnResult_))) に設定する。
+            1. それ以外の場合、_received_ を Completion(GeneratorYield(_innerReturnResult_)) に設定する。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -24963,7 +24963,7 @@
               1. _result_ を ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*) とする。
             1. ? InitializeInstanceElements(_result_, _F_) を実行する。
             1. NormalCompletion(_result_) を返す。
-          1. _F_ を CreateBuiltinFunction(_defaultConstructor_, 0, _className_, « [[ConstructorKind]], [[SourceText]] », the current Realm Record, _constructorParent_) とする。
+          1. _F_ を CreateBuiltinFunction(_defaultConstructor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _constructorParent_) とする。
         1. そうでなければ、
           1. _constructorInfo_ を ! DefineMethod of _constructor_ (引数 _proto_ と _constructorParent_) とする。
           1. _F_ を _constructorInfo_.[[Closure]] とする。
@@ -26967,32 +26967,32 @@
             </dl>
 
             <emu-alg>
-              1. Assert: この Evaluate 呼び出しと同時並行で同エージェント内の別の Evaluate 呼び出しは起こっていない。
-              1. Assert: _module_.[[Status]] は ~linked~, ~evaluating-async~, ~evaluated~ のいずれか。
-              1. もし _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ なら _module_ を _module_.[[CycleRoot]] に置き換える。
-              1. もし _module_.[[TopLevelCapability]] が ~empty~ でないなら
+              1. 断言: この Evaluate の呼び出しは、同じエージェント内で他の Evaluate の呼び出しと同時に発生していない。
+              1. 断言: _module_.[[Status]] は ~linked~、~evaluating-async~、または ~evaluated~ のいずれかである。
+              1. _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ の場合、_module_ を _module_.[[CycleRoot]] に設定する。
+              1. _module_.[[TopLevelCapability]] が ~empty~ でない場合、
                 1. _module_.[[TopLevelCapability]].[[Promise]] を返す。
-              1. _stack_ を新しい空リストとする。
+              1. _stack_ を新しい空のリストとする。
               1. _capability_ を ! NewPromiseCapability(%Promise%) とする。
-              1. _module_.[[TopLevelCapability]] を _capability_ に設定。
+              1. _module_.[[TopLevelCapability]] に _capability_ を設定する。
               1. _result_ を Completion(InnerModuleEvaluation(_module_, _stack_, 0)) とする。
-              1. もし _result_ が abrupt completion なら
-                1. _stack_ の各 Cyclic Module Record _m_ について
-                  1. Assert: _m_.[[Status]] は ~evaluating~。
-                  1. Assert: _m_.[[AsyncEvaluationOrder]] は ~unset~。
-                  1. _m_.[[Status]] を ~evaluated~ に設定。
-                  1. _m_.[[EvaluationError]] を _result_ に設定。
-                1. Assert: _module_.[[Status]] は ~evaluated~。
-                1. Assert: _module_.[[EvaluationError]] と _result_ は同じ Completion Record。
-                1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] ») を実行。
-              1. それ以外
-                1. Assert: _module_.[[Status]] は ~evaluating-async~ または ~evaluated~。
-                1. Assert: _module_.[[EvaluationError]] は ~empty~。
-                1. もし _module_.[[Status]] が ~evaluated~ なら
-                  1. 注: 評価が同期的に完了したことを意味する。
-                  1. Assert: _module_.[[AsyncEvaluationOrder]] は ~unset~。
-                  1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* ») を実行。
-                1. Assert: _stack_ は空。
+              1. _result_ がアブストラクトコンプリーションの場合、
+                1. _stack_ の各 Cyclic Module Record _m_ について、次を行う
+                  1. 断言: _m_.[[Status]] は ~evaluating~ である。
+                  1. 断言: _m_.[[AsyncEvaluationOrder]] は ~unset~ である。
+                  1. _m_.[[Status]] を ~evaluated~ に設定する。
+                  1. _m_.[[EvaluationError]] に _result_ を設定する。
+                1. 断言: _module_.[[Status]] は ~evaluated~ である。
+                1. 断言: _module_.[[EvaluationError]] と _result_ は同じ Completion Record である。
+                1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] ») を実行する。
+              1. それ以外の場合、
+                1. 断言: _module_.[[Status]] は ~evaluating-async~ または ~evaluated~ のいずれかである。
+                1. 断言: _module_.[[EvaluationError]] は ~empty~ である。
+                1. _module_.[[Status]] が ~evaluated~ の場合、
+                  1. 断言: _module_.[[AsyncEvaluationOrder]] は ~unset~ または ~done~ である。
+                  1. 注: _module_.[[AsyncEvaluationOrder]] が ~done~ となるのは、_module_ がすでに評価され、その評価が非同期であった場合のみである。
+                  1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* ») を実行する。
+                1. 断言: _stack_ は空である。
               1. _capability_.[[Promise]] を返す。
             </emu-alg>
 
@@ -29826,7 +29826,7 @@
         1. それ以外
           1. _R_ を 10 に設定。
         1. もし _stripPrefix_ が *true* なら
-          1. もし _S_ の長さが少なくとも 2 で先頭 2 コード単位が *"0x"* または *"0X"* なら
+          1. もし _S_ の長さ ≥ 2 で先頭 2 コード単位が *"0x"* または *"0X"* なら
             1. _S_ をインデックス 2 以降の部分文字列に設定。
             1. _R_ を 16 に設定。
         1. もし _S_ が radix-_R_ の数字でないコード単位を含むなら _end_ をその最初の位置、そうでなければ _end_ を _S_ の長さとする。
@@ -32094,7 +32094,7 @@
         <emu-note>
           <p>上記規則より高精度な変換を提供する実装では、手順 <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> の代替指針として以下を推奨する:</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. _f_ ≥ 0, 10<sup>_f_</sup> ≤ _n_ &lt; 10<sup>_f_ + 1</sup>, 𝔽(_n_ × 10<sup>_e_ - _f_</sup>) が 𝔽(_x_) に等しく、_f_ が最小となる整数 _e_, _n_, _f_ をとる。_n_ の候補が複数ある場合、𝔽(_n_ × 10<sup>_e_ - _f_</sup>) が 𝔽(_x_) に最も近いものを選び、2 つあるなら偶数を選ぶ。
+            1. _e_、_n_、_ff_ を整数とし、_ff_ ≥ 0、10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) に等しく、かつ _ff_ ができるだけ小さいようにする。_n_ の候補が複数ある場合は、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) に最も近い値となる _n_ を選ぶ。そのような _n_ が 2 つある場合は、偶数の方を選ぶ。
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -36591,19 +36591,19 @@ THH:mm:ss.sss
         <emu-grammar>UnicodePropertyValueExpression :: UnicodePropertyName `=` UnicodePropertyValue</emu-grammar>
         <ul>
           <li>
-            |UnicodePropertyName| が <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の「Property name and aliases」欄に列挙される Unicode プロパティ名またはエイリアスでなければ構文エラー。
+            |UnicodePropertyName| にマッチしたソーステキストが <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の「<emu-not-ref>Property name and aliases</emu-not-ref>」列に記載されている <emu-not-ref>Unicode property name</emu-not-ref> またはプロパティエイリアスでない場合、これは構文エラーとなる。
           </li>
           <li>
-            |UnicodePropertyValue| が |UnicodePropertyName| が示す Unicode プロパティの値またはエイリアス（<code>PropertyValueAliases.txt</code> 参照）でない場合構文エラー。
+            |UnicodePropertyValue| にマッチしたソーステキストが、|UnicodePropertyName| にマッチしたソーステキストで指定された Unicode プロパティまたはプロパティエイリアスのプロパティ値またはプロパティ値エイリアスとして <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> に記載されていない場合、これは構文エラーとなる。
           </li>
         </ul>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <ul>
           <li>
-            |LoneUnicodePropertyNameOrValue| が General_Category (gc) の値あるいは値エイリアス（<code>PropertyValueAliases.txt</code>）にも、「Property name and aliases」欄（<emu-xref href="#table-binary-unicode-properties"></emu-xref>）に列挙されるバイナリプロパティ／エイリアスにも、文字列のバイナリプロパティ（<emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「Property name」列）にも該当しない場合構文エラー。
+            |LoneUnicodePropertyNameOrValue| にマッチしたソーステキストが <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> に記載されている General_Category (gc) プロパティの Unicode プロパティ値またはプロパティ値エイリアスでもなく、「<emu-not-ref>Property name and aliases</emu-not-ref>」列の <emu-xref href="#table-binary-unicode-properties"></emu-xref> に記載されたバイナリプロパティまたはバイナリプロパティエイリアスでもなく、また <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref>」列に記載されている文字列のバイナリプロパティでもない場合、これは構文エラーとなる。
           </li>
           <li>
-            外側の |Pattern| に <sub>[UnicodeSetsMode]</sub> パラメータがなく、かつ |LoneUnicodePropertyNameOrValue| が文字列のバイナリプロパティ（同表）である場合構文エラー。
+            包含する |Pattern| が <sub>[UnicodeSetsMode]</sub> パラメータを持たず、|LoneUnicodePropertyNameOrValue| にマッチしたソーステキストが <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref>」列に記載されている文字列のバイナリプロパティである場合、これは構文エラーとなる。
           </li>
         </ul>
         <emu-grammar>CharacterClassEscape :: `P{` UnicodePropertyValueExpression `}`</emu-grammar>
@@ -36973,7 +36973,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <emu-alg>
-          1. |LoneUnicodePropertyNameOrValue| が <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「Property name」欄にある文字列のバイナリプロパティであれば *true* を返す。
+          1. |LoneUnicodePropertyNameOrValue| にマッチしたソーステキストが <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref>」列に記載されている文字列のバイナリプロパティである場合、*true* を返す。
           1. *false* を返す。
         </emu-alg>
         <emu-grammar>ClassUnion :: ClassSetRange ClassUnion?</emu-grammar>
@@ -38075,22 +38075,22 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: UnicodePropertyName `=` UnicodePropertyValue</emu-grammar>
         <emu-alg>
-          1. _ps_ を |UnicodePropertyName| にマッチしたソーステキスト。
-          1. _p_ を UnicodeMatchProperty(_rer_, _ps_)。
-          1. アサート: _p_ は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の「Property name and aliases」に列挙される Unicode プロパティ名またはエイリアス。
-          1. _vs_ を |UnicodePropertyValue| にマッチしたソーステキスト。
-          1. _v_ を UnicodeMatchPropertyValue(_p_, _vs_)。
-          1. _A_ をプロパティ _p_ が値 _v_ を持つ全 Unicode コードポイントを含む CharSet。
+          1. _ps_ を |UnicodePropertyName| にマッチしたソーステキストとする。
+          1. _p_ を UnicodeMatchProperty(_rer_, _ps_) とする。
+          1. ただし、_p_ は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の「<emu-not-ref>Property name and aliases</emu-not-ref>」列に記載された <emu-not-ref>Unicode property name</emu-not-ref> またはプロパティエイリアスであることを保証する。
+          1. _vs_ を |UnicodePropertyValue| にマッチしたソーステキストとする。
+          1. _v_ を UnicodeMatchPropertyValue(_p_, _vs_) とする。
+          1. _A_ を、プロパティ _p_ が値 _v_ を持つという文字データベース定義を含むすべての Unicode コードポイントからなる CharSet とする。
           1. MaybeSimpleCaseFolding(_rer_, _A_) を返す。
         </emu-alg>
         <emu-grammar>UnicodePropertyValueExpression :: LoneUnicodePropertyNameOrValue</emu-grammar>
         <emu-alg>
-          1. _s_ を |LoneUnicodePropertyNameOrValue| にマッチしたソーステキスト。
-          1. UnicodeMatchPropertyValue(`General_Category`, _s_) が General_Category (gc) のプロパティ値または値エイリアス（<code>PropertyValueAliases.txt</code>）なら
-            1. プロパティ “General_Category” が値 _s_ を持つ全 Unicode コードポイントを含む CharSet を返す。
-          1. _p_ を UnicodeMatchProperty(_rer_, _s_)。
-          1. アサート: _p_ は <emu-xref href="#table-binary-unicode-properties"></emu-xref> の「Property name and aliases」列、または <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「Property name」列に列挙されるバイナリ Unicode プロパティ / そのエイリアス / 文字列のバイナリプロパティ。
-          1. _A_ をプロパティ _p_ が値 “True” を持つ全 CharSetElement を含む CharSet。
+          1. _s_ を |LoneUnicodePropertyNameOrValue| にマッチしたソーステキストとする。
+          1. UnicodeMatchPropertyValue(`General_Category`, _s_) が <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> に記載された General_Category (gc) プロパティの Unicode プロパティ値またはプロパティ値エイリアスである場合、
+            1. プロパティ “General_Category” が値 _s_ を持つという文字データベース定義を含むすべての Unicode コードポイントからなる CharSet を返す。
+          1. _p_ を UnicodeMatchProperty(_rer_, _s_) とする。
+          1. ただし、_p_ は <emu-xref href="#table-binary-unicode-properties"></emu-xref> の「<emu-not-ref>Property name and aliases</emu-not-ref>」列に記載されたバイナリ Unicode プロパティまたはバイナリプロパティエイリアス、または <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref>」列に記載された文字列のバイナリ Unicode プロパティであることを保証する。
+          1. _A_ を、プロパティ _p_ が値 “True” を持つという文字データベース定義を含むすべての CharSetElement からなる CharSet とする。
           1. MaybeSimpleCaseFolding(_rer_, _A_) を返す。
         </emu-alg>
 
@@ -38333,28 +38333,28 @@ THH:mm:ss.sss
         <emu-clause id="sec-runtime-semantics-unicodematchproperty-p" type="abstract operation">
           <h1>
             UnicodeMatchProperty (
-              _rer_: a RegExp Record,
-              _p_: ECMAScript source text,
-            ): Unicode プロパティ名
+              _rer_: RegExp レコード,
+              _p_: ECMAScript ソーステキスト,
+            ): <emu-not-ref>Unicode property name</emu-not-ref>
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _rer_.[[UnicodeSets]] が *true* かつ _p_ が <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「Property name」列にある Unicode <emu-not-ref>property name</emu-not-ref> なら
-              1. Unicode コードポイント列 _p_ の List を返す。
-            1. アサート: _p_ は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> または <emu-xref href="#table-binary-unicode-properties"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref> and aliases」列に列挙される Unicode <emu-not-ref>property name</emu-not-ref> またはエイリアス。
-            1. _c_ を対応行の “Canonical <emu-not-ref>property name</emu-not-ref>” 列にある正規 <emu-not-ref>property name</emu-not-ref>。
-            1. Unicode コードポイント列 _c_ の List を返す。
+            1. _rer_.[[UnicodeSets]] が *true* であり、かつ _p_ が <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> の「<emu-not-ref>Property name</emu-not-ref>」列に記載されている <emu-not-ref>Unicode property name</emu-not-ref> である場合、
+              1. Unicode コードポイント _p_ のリストを返す。
+            1. _p_ は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> または <emu-xref href="#table-binary-unicode-properties"></emu-xref> の「<emu-not-ref>Property name and aliases</emu-not-ref>」列に記載されている <emu-not-ref>Unicode property name</emu-not-ref> またはプロパティエイリアスであることを保証する。
+            1. _c_ を該当する行の「<emu-not-ref>Canonical property name</emu-not-ref>」列に記載されている _p_ の正規 <emu-not-ref>property name</emu-not-ref> とする。
+            1. Unicode コードポイント _c_ のリストを返す。
           </emu-alg>
-          <p>実装は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>、<emu-xref href="#table-binary-unicode-properties"></emu-xref>、<emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> に列挙される Unicode プロパティ名とエイリアスをサポートしなければならない。相互運用性確保のため、それ以外をサポートしてはならない。</p>
+          <p>実装は、<emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>、<emu-xref href="#table-binary-unicode-properties"></emu-xref>、および <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref> に記載されている <emu-not-ref>Unicode property names</emu-not-ref> およびエイリアスをサポートしなければならない。相互運用性を確保するため、他の<emu-not-ref>property names</emu-not-ref>やエイリアスはサポートしてはならない。</p>
           <emu-note>
-            <p>例: `Script_Extensions` (プロパティ名) と `scx` (エイリアス) は有効だが `script_extensions` や `Scx` は無効。</p>
+            <p>例えば、`Script_Extensions`（<emu-not-ref>property name</emu-not-ref>）や `scx`（プロパティエイリアス）は有効だが、`script_extensions` や `Scx` は無効である。</p>
           </emu-note>
           <emu-note>
-            <p>列挙プロパティは <a href="https://unicode.org/reports/tr18/#RL1.2">UTS18 RL1.2</a> 要求のスーパーセット。</p>
+            <p>掲載されているプロパティは <a href="https://unicode.org/reports/tr18/#RL1.2">UTS18 RL1.2</a> の要件の上位集合である。</p>
           </emu-note>
           <emu-note>
-            <p>表中の綴り (大小含む) は Unicode Character Database の <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt"><code>PropertyAliases.txt</code></a> の綴りと一致し、その正確な綴りは <a href="https://www.unicode.org/policies/stability_policy.html#Alias_Stability">安定性が保証</a> されている。</p>
+            <p>これらの表のエントリのスペル（大文字小文字を含む）は、Unicode Character Database の <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt"><code>PropertyAliases.txt</code></a> ファイルで使われているスペルと一致する。そのファイル内の正確なスペルは <a href="https://www.unicode.org/policies/stability_policy.html#Alias_Stability">安定性が保証されている</a>。</p>
           </emu-note>
           <emu-import href="table-nonbinary-unicode-properties.html"></emu-import>
           <emu-import href="table-binary-unicode-properties.html"></emu-import>
@@ -38364,24 +38364,24 @@ THH:mm:ss.sss
         <emu-clause id="sec-runtime-semantics-unicodematchpropertyvalue-p-v" type="abstract operation">
           <h1>
             UnicodeMatchPropertyValue (
-              _p_: ECMAScript source text,
-              _v_: ECMAScript source text,
+              _p_: ECMAScript ソーステキスト,
+              _v_: ECMAScript ソーステキスト,
             ): Unicode プロパティ値
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. アサート: _p_ は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の “Canonical property name” 列に列挙される正規・非エイリアス Unicode プロパティ名。
-            1. アサート: _v_ は <code>PropertyValueAliases.txt</code> に列挙される Unicode プロパティ _p_ のプロパティ値または値エイリアス。
-            1. _value_ を対応行の “Canonical property value” 列にある正規プロパティ値。
-            1. Unicode コードポイント列 _value_ の List を返す。
+            1. _p_ が <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> の「<emu-not-ref>Canonical property name</emu-not-ref>」列に記載されている正規・非エイリアスの <emu-not-ref>Unicode property name</emu-not-ref> であることを保証する。
+            1. _v_ が <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> に記載されている Unicode プロパティ _p_ のプロパティ値またはプロパティ値エイリアスであることを保証する。
+            1. _value_ を該当する行の「Canonical property value」列に記載されている _v_ の正規プロパティ値とする。
+            1. Unicode コードポイント _value_ のリストを返す。
           </emu-alg>
-          <p>実装は <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> に列挙されるプロパティについて、<code>PropertyValueAliases.txt</code> に列挙される Unicode プロパティ値および値エイリアスをサポートしなければならない。相互運用性確保のため、それ以外の値・エイリアスをサポートしてはならない。</p>
+          <p>実装は、<emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> に記載されたプロパティについて、<a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a> に記載されている Unicode プロパティ値およびプロパティ値エイリアスをサポートしなければならない。相互運用性を確保するため、他のプロパティ値やプロパティ値エイリアスはサポートしてはならない。</p>
           <emu-note>
-            <p>例: `Xpeo` と `Old_Persian` は有効な `Script_Extensions` 値だが `xpeo` や `Old Persian` は無効。</p>
+            <p>例えば、`Xpeo` や `Old_Persian` は `Script_Extensions` の有効な値だが、`xpeo` や `Old Persian` は無効である。</p>
           </emu-note>
           <emu-note>
-            <p>このアルゴリズムは <a href="https://unicode.org/reports/tr44/#Matching_Symbolic">UAX44 の symbolic 値マッチ規則</a> と異なり、大小・<emu-xref href="#sec-white-space">空白</emu-xref>・U+002D (HYPHEN-MINUS)・U+005F (LOW LINE) を無視せず、`Is` 接頭辞をサポートしない。</p>
+            <p>このアルゴリズムは <a href="https://unicode.org/reports/tr44/#Matching_Symbolic">UAX44 で記載されている記号値のマッチングルール</a> とは異なる：大文字・小文字、<emu-xref href="#sec-white-space">空白</emu-xref>、U+002D（ハイフンマイナス）、および U+005F（アンダースコア）は無視されず、`Is` プレフィックスもサポートされない。</p>
           </emu-note>
         </emu-clause>
       </emu-clause>
@@ -41504,49 +41504,47 @@ THH:mm:ss.sss
         <p>引数の意味と使用法は <emu-xref href="#sec-array.prototype.copywithin"></emu-xref> に定義された `Array.prototype.copyWithin` と同じ。</p>
         <p>このメソッドは呼び出し時に次を行う:</p>
         <emu-alg>
-          1. _O_ を *this* 値。
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~)。
-          1. _len_ = TypedArrayLength(_taRecord_)。
-          1. _relativeTarget_ = ? ToIntegerOrInfinity(_target_)。
-          1. _relativeTarget_ = -∞ なら _targetIndex_ = 0。
-          1. そうでなく _relativeTarget_ &lt; 0 なら _targetIndex_ = max(_len_ + _relativeTarget_, 0)。
-          1. それ以外は _targetIndex_ = min(_relativeTarget_, _len_)。
-          1. _relativeStart_ = ? ToIntegerOrInfinity(_start_)。
-          1. _relativeStart_ = -∞ なら _startIndex_ = 0。
-          1. そうでなく _relativeStart_ &lt; 0 なら _startIndex_ = max(_len_ + _relativeStart_, 0)。
-          1. それ以外は _startIndex_ = min(_relativeStart_, _len_)。
-          1. _end_ が *undefined* なら _relativeEnd_ = _len_; そうでなければ _relativeEnd_ = ? ToIntegerOrInfinity(_end_)。
-          1. _relativeEnd_ = -∞ なら _endIndex_ = 0。
-          1. そうでなく _relativeEnd_ &lt; 0 なら _endIndex_ = max(_len_ + _relativeEnd_, 0)。
-          1. それ以外は _endIndex_ = min(_relativeEnd_, _len_)。
-          1. _count_ = min(_endIndex_ - _startIndex_, _len_ - _targetIndex_)。
-          1. _count_ > 0 なら
-            1. 注: コピーはソースのビットレベルエンコーディングを保持する方法で行わねばならない。
-            1. _buffer_ = _O_.[[ViewedArrayBuffer]]。
-            1. _taRecord_ = MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~)。
-            1. IsTypedArrayOutOfBounds(_taRecord_) が *true* なら *TypeError*。
-            1. _len_ = TypedArrayLength(_taRecord_)。
-            1. _elementSize_ = TypedArrayElementSize(_O_)。
-            1. _byteOffset_ = _O_.[[ByteOffset]]。
-            1. _bufferByteLimit_ = (_len_ × _elementSize_) + _byteOffset_。
-            1. _toByteIndex_ = (_targetIndex_ × _elementSize_) + _byteOffset_。
-            1. _fromByteIndex_ = (_startIndex_ × _elementSize_) + _byteOffset_。
-            1. _countBytes_ = _count_ × _elementSize_。
-            1. もし _fromByteIndex_ &lt; _toByteIndex_ かつ _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_ なら
-              1. _direction_ = -1。
-              1. _fromByteIndex_ = _fromByteIndex_ + _countBytes_ - 1。
-              1. _toByteIndex_ = _toByteIndex_ + _countBytes_ - 1。
-            1. そうでなければ
-              1. _direction_ = 1。
-            1. _countBytes_ > 0 の間繰り返し、
-              1. もし _fromByteIndex_ &lt; _bufferByteLimit_ かつ _toByteIndex_ &lt; _bufferByteLimit_ なら
-                1. _value_ = GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)。
-                1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~) を実行。
-                1. _fromByteIndex_ += _direction_。
-                1. _toByteIndex_ += _direction_。
-                1. _countBytes_ = _countBytes_ - 1。
-              1. そうでなければ
-                1. _countBytes_ = 0。
+          1. _O_ を *this* 値とする。
+          1. _taRecord_ を ? ValidateTypedArray(_O_, ~seq-cst~) とする。
+          1. _len_ を TypedArrayLength(_taRecord_) とする。
+          1. _relativeTarget_ を ? ToIntegerOrInfinity(_target_) とする。
+          1. _relativeTarget_ = -∞ の場合、_targetIndex_ に 0 を設定する。
+          1. それ以外で _relativeTarget_ &lt; 0 の場合、_targetIndex_ に max(_len_ + _relativeTarget_, 0) を設定する。
+          1. それ以外の場合、_targetIndex_ に min(_relativeTarget_, _len_) を設定する。
+          1. _relativeStart_ を ? ToIntegerOrInfinity(_start_) とする。
+          1. _relativeStart_ = -∞ の場合、_startIndex_ に 0 を設定する。
+          1. それ以外で _relativeStart_ &lt; 0 の場合、_startIndex_ に max(_len_ + _relativeStart_, 0) を設定する。
+          1. それ以外の場合、_startIndex_ に min(_relativeStart_, _len_) を設定する。
+          1. _end_ が *undefined* であれば、_relativeEnd_ に _len_ を設定する。それ以外の場合、_relativeEnd_ を ? ToIntegerOrInfinity(_end_) とする。
+          1. _relativeEnd_ = -∞ の場合、_endIndex_ に 0 を設定する。
+          1. それ以外で _relativeEnd_ &lt; 0 の場合、_endIndex_ に max(_len_ + _relativeEnd_, 0) を設定する。
+          1. それ以外の場合、_endIndex_ に min(_relativeEnd_, _len_) を設定する。
+          1. _count_ に min(_endIndex_ - _startIndex_, _len_ - _targetIndex_) を設定する。
+          1. _count_ > 0 の場合、
+            1. 注: コピー処理はソースデータのビットレベルのエンコーディングを保持する方法で実行しなければならない。
+            1. _buffer_ を _O_.[[ViewedArrayBuffer]] とする。
+            1. _taRecord_ を MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~) に設定する。
+            1. IsTypedArrayOutOfBounds(_taRecord_) が *true* の場合、*TypeError* 例外をスローする。
+            1. _len_ を TypedArrayLength(_taRecord_) に設定する。
+            1. 注: 上記の手順による副作用で _O_ のサイズが縮小されている場合、コピーは依然として適用可能な最長のプレフィックスで進めるべきである。
+            1. _count_ を min(_count_, _len_ - _startIndex_, _len_ - _targetIndex_) に設定する。
+            1. _elementSize_ を TypedArrayElementSize(_O_) とする。
+            1. _byteOffset_ を _O_.[[ByteOffset]] とする。
+            1. _toByteIndex_ を (_targetIndex_ × _elementSize_) + _byteOffset_ とする。
+            1. _fromByteIndex_ を (_startIndex_ × _elementSize_) + _byteOffset_ とする。
+            1. _countBytes_ を _count_ × _elementSize_ とする。
+            1. _fromByteIndex_ &lt; _toByteIndex_ かつ _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_ の場合、
+              1. _direction_ に -1 を設定する。
+              1. _fromByteIndex_ を _fromByteIndex_ + _countBytes_ - 1 に設定する。
+              1. _toByteIndex_ を _toByteIndex_ + _countBytes_ - 1 に設定する。
+            1. それ以外の場合、
+              1. _direction_ に 1 を設定する。
+            1. _countBytes_ > 0 の間、繰り返す：
+              1. _value_ を GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~) とする。
+              1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~) を実行する。
+              1. _fromByteIndex_ を _fromByteIndex_ + _direction_ に設定する。
+              1. _toByteIndex_ を _toByteIndex_ + _direction_ に設定する。
+              1. _countBytes_ を _countBytes_ - 1 に設定する。
           1. _O_ を返す。
         </emu-alg>
       </emu-clause>
@@ -47868,374 +47866,374 @@ THH:mm:ss.sss
           <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
         </emu-clause>
       </emu-clause>
-    </emu-clause>
 
-    <emu-clause oldids="sec-%iteratorprototype%-object" id="sec-%iterator.prototype%-object">
-      <h1>Iterator プロトタイプオブジェクトのプロパティ (Properties of the Iterator Prototype Object)</h1>
-      <p><dfn>Iterator プロトタイプオブジェクト</dfn>:</p>
-      <ul>
-        <li><dfn>%Iterator.prototype%</dfn> である。</li>
-        <li>[[Prototype]] 内部スロットの値は %Object.prototype% である。</li>
-        <li>通常のオブジェクトである。</li>
-      </ul>
-      <emu-note>
-        <p>この仕様で iterator インタフェースを実装するすべてのオブジェクトは %Iterator.prototype% を継承する。ECMAScript コードは %Iterator.prototype% を継承するオブジェクトを定義することもできる。%Iterator.prototype% はすべてのイテレータオブジェクトに適用可能な追加メソッドを追加できる場所を提供する。</p>
-        <p>次の式は ECMAScript コードが %Iterator.prototype% オブジェクトにアクセスする一つの方法である:</p>
-        <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
-      </emu-note>
-
-      <emu-clause id="sec-iterator.prototype.constructor">
-        <h1>Iterator.prototype.constructor</h1>
-        <p>`Iterator.prototype.constructor` は属性 { [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つアクセスプロパティである。[[Get]] および [[Set]] 属性は次のように定義される:</p>
-
-        <emu-clause id="sec-get-iterator.prototype.constructor">
-          <h1>get Iterator.prototype.constructor</h1>
-          <p>[[Get]] 属性の値は引数を必要としない組み込み関数であり、呼び出されると次を実行する:</p>
-          <emu-alg>
-            1. %Iterator% を返す。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-set-iterator.prototype.constructor">
-          <h1>set Iterator.prototype.constructor</h1>
-          <p>[[Set]] 属性の値は引数 _v_ を取る組み込み関数であり、呼び出されると次を実行する:</p>
-          <emu-alg>
-            1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, *"constructor"*, _v_) を実行する。
-            1. *undefined* を返す。
-          </emu-alg>
-        </emu-clause>
-
+      <emu-clause oldids="sec-%iteratorprototype%-object" id="sec-%iterator.prototype%-object">
+        <h1>Iterator プロトタイプオブジェクトのプロパティ (Properties of the Iterator Prototype Object)</h1>
+        <p><dfn>Iterator プロトタイプオブジェクト</dfn>:</p>
+        <ul>
+          <li><dfn>%Iterator.prototype%</dfn> である。</li>
+          <li>[[Prototype]] 内部スロットの値は %Object.prototype% である。</li>
+          <li>通常のオブジェクトである。</li>
+        </ul>
         <emu-note>
-          <p>ほとんどの組み込みプロトタイプ上の *"constructor"* プロパティと異なり、Web 互換性の理由からこのプロパティはアクセサでなければならない。</p>
+          <p>この仕様で iterator インタフェースを実装するすべてのオブジェクトは %Iterator.prototype% を継承する。ECMAScript コードは %Iterator.prototype% を継承するオブジェクトを定義することもできる。%Iterator.prototype% はすべてのイテレータオブジェクトに適用可能な追加メソッドを追加できる場所を提供する。</p>
+          <p>次の式は ECMAScript コードが %Iterator.prototype% オブジェクトにアクセスする一つの方法である:</p>
+          <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
         </emu-note>
-      </emu-clause>
 
-      <emu-clause id="sec-iterator.prototype.drop">
-        <h1>Iterator.prototype.drop ( _limit_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
-          1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-          1. もし _numLimit_ が *NaN* なら
-            1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
-          1. もし _integerLimit_ &lt; 0 なら
-            1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し、呼び出されると次を実行する新たな Abstract Closure とする:
-            1. _remaining_ を _integerLimit_ とする。
-            1. _remaining_ > 0 の間繰り返す,
-              1. もし _remaining_ ≠ +∞ なら
-                1. _remaining_ を _remaining_ - 1 にする。
-              1. _next_ を ? IteratorStep(_iterated_) とする。
-              1. もし _next_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-            1. 繰り返す,
-              1. _value_ を ? IteratorStepValue(_iterated_) とする。
-              1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. _completion_ を Completion(Yield(_value_)) とする。
-              1. IfAbruptCloseIterator(_completion_, _iterated_)。
-          1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-          1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
-          1. _result_ を返す。
-        </emu-alg>
-      </emu-clause>
+        <emu-clause id="sec-iterator.prototype.constructor">
+          <h1>Iterator.prototype.constructor</h1>
+          <p>`Iterator.prototype.constructor` は属性 { [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つアクセスプロパティである。[[Get]] および [[Set]] 属性は次のように定義される:</p>
 
-      <emu-clause id="sec-iterator.prototype.every">
-        <h1>Iterator.prototype.every ( _predicate_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_predicate_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _counter_ を 0 とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら *true* を返す。
-            1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-            1. IfAbruptCloseIterator(_result_, _iterated_)。
-            1. もし ToBoolean(_result_) が *false* なら ? IteratorClose(_iterated_, NormalCompletion(*false*)) を返す。
-            1. _counter_ を _counter_ + 1 にする。
-        </emu-alg>
-      </emu-clause>
+          <emu-clause id="sec-get-iterator.prototype.constructor">
+            <h1>get Iterator.prototype.constructor</h1>
+            <p>[[Get]] 属性の値は引数を必要としない組み込み関数であり、呼び出されると次を実行する:</p>
+            <emu-alg>
+              1. %Iterator% を返す。
+            </emu-alg>
+          </emu-clause>
 
-      <emu-clause id="sec-iterator.prototype.filter">
-        <h1>Iterator.prototype.filter ( _predicate_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_predicate_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _closure_ を、引数なしで _iterated_ と _predicate_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
-            1. _counter_ を 0 とする。
-            1. 繰り返す,
-              1. _value_ を ? IteratorStepValue(_iterated_) とする。
-              1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. _selected_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-              1. IfAbruptCloseIterator(_selected_, _iterated_)。
-              1. もし ToBoolean(_selected_) が *true* なら
+          <emu-clause id="sec-set-iterator.prototype.constructor">
+            <h1>set Iterator.prototype.constructor</h1>
+            <p>[[Set]] 属性の値は引数 _v_ を取る組み込み関数であり、呼び出されると次を実行する:</p>
+            <emu-alg>
+              1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, *"constructor"*, _v_) を実行する。
+              1. *undefined* を返す。
+            </emu-alg>
+          </emu-clause>
+
+          <emu-note>
+            <p>ほとんどの組み込みプロトタイプ上の *"constructor"* プロパティと異なり、Web 互換性の理由からこのプロパティはアクセサでなければならない。</p>
+          </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.drop">
+          <h1>Iterator.prototype.drop ( _limit_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
+            1. もし _numLimit_ が *NaN* なら
+              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
+            1. もし _integerLimit_ &lt; 0 なら
+              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し、呼び出されると次を実行する新たな Abstract Closure とする:
+              1. _remaining_ を _integerLimit_ とする。
+              1. _remaining_ > 0 の間繰り返す,
+                1. もし _remaining_ ≠ +∞ なら
+                  1. _remaining_ を _remaining_ - 1 にする。
+                1. _next_ を ? IteratorStep(_iterated_) とする。
+                1. もし _next_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+              1. 繰り返す,
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
                 1. _completion_ を Completion(Yield(_value_)) とする。
                 1. IfAbruptCloseIterator(_completion_, _iterated_)。
-              1. _counter_ を _counter_ + 1 にする。
-          1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-          1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
-          1. _result_ を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.find">
-        <h1>Iterator.prototype.find ( _predicate_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_predicate_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _counter_ を 0 とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら *undefined* を返す。
-            1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-            1. IfAbruptCloseIterator(_result_, _iterated_)。
-            1. もし ToBoolean(_result_) が *true* なら ? IteratorClose(_iterated_, NormalCompletion(_value_)) を返す。
-            1. _counter_ を _counter_ + 1 にする。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.flatmap">
-        <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_mapper_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
-            1. _counter_ を 0 とする。
-            1. 繰り返す,
-              1. _value_ を ? IteratorStepValue(_iterated_) とする。
-              1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-              1. IfAbruptCloseIterator(_mapped_, _iterated_)。
-              1. _innerIterator_ を Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~)) とする。
-              1. IfAbruptCloseIterator(_innerIterator_, _iterated_)。
-              1. _innerAlive_ を *true* とする。
-              1. _innerAlive_ が *true* の間繰り返す,
-                1. _innerValue_ を Completion(IteratorStepValue(_innerIterator_)) とする。
-                1. IfAbruptCloseIterator(_innerValue_, _iterated_)。
-                1. もし _innerValue_ が ~done~ なら
-                  1. _innerAlive_ を *false* に設定する。
-                1. それ以外
-                  1. _completion_ を Completion(Yield(_innerValue_)) とする。
-                  1. もし _completion_ が abrupt completion なら
-                    1. _backupCompletion_ を Completion(IteratorClose(_innerIterator_, _completion_)) とする。
-                    1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
-                    1. ? IteratorClose(_iterated_, _completion_) を返す。
-              1. _counter_ を _counter_ + 1 にする。
-          1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-          1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
-          1. _result_ を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.foreach">
-        <h1>Iterator.prototype.forEach ( _procedure_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_procedure_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _counter_ を 0 とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら *undefined* を返す。
-            1. _result_ を Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-            1. IfAbruptCloseIterator(_result_, _iterated_)。
-            1. _counter_ を _counter_ + 1 にする。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.map">
-        <h1>Iterator.prototype.map ( _mapper_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_mapper_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
-            1. _counter_ を 0 とする。
-            1. 繰り返す,
-              1. _value_ を ? IteratorStepValue(_iterated_) とする。
-              1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-              1. IfAbruptCloseIterator(_mapped_, _iterated_)。
-              1. _completion_ を Completion(Yield(_mapped_)) とする。
-              1. IfAbruptCloseIterator(_completion_, _iterated_)。
-              1. _counter_ を _counter_ + 1 にする。
-          1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-          1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
-          1. _result_ を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.reduce">
-        <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_reducer_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. もし _initialValue_ が存在しなければ
-            1. _accumulator_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _accumulator_ が ~done~ なら *TypeError* 例外を投げる。
-            1. _counter_ を 1 とする。
-          1. それ以外
-            1. _accumulator_ を _initialValue_ とする。
-            1. _counter_ を 0 とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら _accumulator_ を返す。
-            1. _result_ を Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)) とする。
-            1. IfAbruptCloseIterator(_result_, _iterated_)。
-            1. _accumulator_ を _result_ に設定する。
-            1. _counter_ を _counter_ + 1 にする。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.some">
-        <h1>Iterator.prototype.some ( _predicate_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. もし IsCallable(_predicate_) が *false* なら
-            1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _counter_ を 0 とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら *false* を返す。
-            1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-            1. IfAbruptCloseIterator(_result_, _iterated_)。
-            1. もし ToBoolean(_result_) が *true* なら ? IteratorClose(_iterated_, NormalCompletion(*true*)) を返す。
-            1. _counter_ を _counter_ + 1 にする。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.take">
-        <h1>Iterator.prototype.take ( _limit_ )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-          1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
-          1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-          1. もし _numLimit_ が *NaN* なら
-            1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
-          1. もし _integerLimit_ &lt; 0 なら
-            1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
-            1. ? IteratorClose(_iterated_, _error_) を返す。
-          1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-          1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
-            1. _remaining_ を _integerLimit_ とする。
-            1. 繰り返す,
-              1. もし _remaining_ = 0 なら
-                1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*)) を返す。
-              1. もし _remaining_ ≠ +∞ なら
-                1. _remaining_ を _remaining_ - 1 にする。
-              1. _value_ を ? IteratorStepValue(_iterated_) とする。
-              1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. _completion_ を Completion(Yield(_value_)) とする。
-              1. IfAbruptCloseIterator(_completion_, _iterated_)。
-          1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-          1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
-          1. _result_ を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype.toarray">
-        <h1>Iterator.prototype.toArray ( )</h1>
-        <p>このメソッドは呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. _O_ を *this* 値とする。
-          1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-          1. _iterated_ を ? GetIteratorDirect(_O_) とする。
-          1. _items_ を新しい空の List とする。
-          1. 繰り返す,
-            1. _value_ を ? IteratorStepValue(_iterated_) とする。
-            1. もし _value_ が ~done~ なら CreateArrayFromList(_items_) を返す。
-            1. _value_ を _items_ に追加する。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%">
-        <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
-        <p>この関数は呼び出されると次を実行する:</p>
-        <emu-alg>
-          1. *this* 値を返す。
-        </emu-alg>
-        <p>この関数の *"name"* プロパティの値は *"[Symbol.iterator]"* である。</p>
-      </emu-clause>
-
-      <emu-clause id="sec-iterator.prototype-%symbol.tostringtag%">
-        <h1>Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-        <p>`Iterator.prototype[%Symbol.toStringTag%]` は属性 { [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つアクセスプロパティである。[[Get]] および [[Set]] 属性は次のように定義される:</p>
-
-        <emu-clause id="sec-get-iterator.prototype-%symbol.tostringtag%">
-          <h1>get Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-          <p>[[Get]] 属性の値は引数を必要としない組み込み関数であり、呼び出されると次を実行する:</p>
-          <emu-alg>
-            1. *"Iterator"* を返す。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
+            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-set-iterator.prototype-%symbol.tostringtag%">
-          <h1>set Iterator.prototype [ %Symbol.toStringTag% ]</h1>
-          <p>[[Set]] 属性の値は引数 _v_ を取る組み込み関数であり、呼び出されると次を実行する:</p>
+        <emu-clause id="sec-iterator.prototype.every">
+          <h1>Iterator.prototype.every ( _predicate_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
           <emu-alg>
-            1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, %Symbol.toStringTag%, _v_) を実行する。
-            1. *undefined* を返す。
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_predicate_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _counter_ を 0 とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら *true* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. もし ToBoolean(_result_) が *false* なら ? IteratorClose(_iterated_, NormalCompletion(*false*)) を返す。
+              1. _counter_ を _counter_ + 1 にする。
           </emu-alg>
         </emu-clause>
 
-        <emu-note>
-          <p>ほとんどの組み込みプロトタイプ上の %Symbol.toStringTag% プロパティと異なり、Web 互換性の理由からこのプロパティはアクセサでなければならない。</p>
-        </emu-note>
+        <emu-clause id="sec-iterator.prototype.filter">
+          <h1>Iterator.prototype.filter ( _predicate_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_predicate_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _closure_ を、引数なしで _iterated_ と _predicate_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+              1. _counter_ を 0 とする。
+              1. 繰り返す,
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _selected_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+                1. IfAbruptCloseIterator(_selected_, _iterated_)。
+                1. もし ToBoolean(_selected_) が *true* なら
+                  1. _completion_ を Completion(Yield(_value_)) とする。
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. _counter_ を _counter_ + 1 にする。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
+            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+            1. _result_ を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.find">
+          <h1>Iterator.prototype.find ( _predicate_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_predicate_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _counter_ を 0 とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら *undefined* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. もし ToBoolean(_result_) が *true* なら ? IteratorClose(_iterated_, NormalCompletion(_value_)) を返す。
+              1. _counter_ を _counter_ + 1 にする。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.flatmap">
+          <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_mapper_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+              1. _counter_ を 0 とする。
+              1. 繰り返す,
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. _innerIterator_ を Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~)) とする。
+                1. IfAbruptCloseIterator(_innerIterator_, _iterated_)。
+                1. _innerAlive_ を *true* とする。
+                1. _innerAlive_ が *true* の間繰り返す,
+                  1. _innerValue_ を Completion(IteratorStepValue(_innerIterator_)) とする。
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_)。
+                  1. もし _innerValue_ が ~done~ なら
+                    1. _innerAlive_ を *false* に設定する。
+                  1. それ以外
+                    1. _completion_ を Completion(Yield(_innerValue_)) とする。
+                    1. もし _completion_ が abrupt completion なら
+                      1. _backupCompletion_ を Completion(IteratorClose(_innerIterator_, _completion_)) とする。
+                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
+                      1. ? IteratorClose(_iterated_, _completion_) を返す。
+                1. _counter_ を _counter_ + 1 にする。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
+            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+            1. _result_ を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.foreach">
+          <h1>Iterator.prototype.forEach ( _procedure_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_procedure_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _counter_ を 0 とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら *undefined* を返す。
+              1. _result_ を Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. _counter_ を _counter_ + 1 にする。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.map">
+          <h1>Iterator.prototype.map ( _mapper_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_mapper_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+              1. _counter_ を 0 とする。
+              1. 繰り返す,
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. _completion_ を Completion(Yield(_mapped_)) とする。
+                1. IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. _counter_ を _counter_ + 1 にする。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
+            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+            1. _result_ を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.reduce">
+          <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_reducer_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. もし _initialValue_ が存在しなければ
+              1. _accumulator_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _accumulator_ が ~done~ なら *TypeError* 例外を投げる。
+              1. _counter_ を 1 とする。
+            1. それ以外
+              1. _accumulator_ を _initialValue_ とする。
+              1. _counter_ を 0 とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら _accumulator_ を返す。
+              1. _result_ を Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)) とする。
+              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. _accumulator_ を _result_ に設定する。
+              1. _counter_ を _counter_ + 1 にする。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.some">
+          <h1>Iterator.prototype.some ( _predicate_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. もし IsCallable(_predicate_) が *false* なら
+              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _counter_ を 0 とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら *false* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
+              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. もし ToBoolean(_result_) が *true* なら ? IteratorClose(_iterated_, NormalCompletion(*true*)) を返す。
+              1. _counter_ を _counter_ + 1 にする。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.take">
+          <h1>Iterator.prototype.take ( _limit_ )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
+            1. もし _numLimit_ が *NaN* なら
+              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
+            1. もし _integerLimit_ &lt; 0 なら
+              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
+            1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+              1. _remaining_ を _integerLimit_ とする。
+              1. 繰り返す,
+                1. もし _remaining_ = 0 なら
+                  1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*)) を返す。
+                1. もし _remaining_ ≠ +∞ なら
+                  1. _remaining_ を _remaining_ - 1 にする。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _completion_ を Completion(Yield(_value_)) とする。
+                1. IfAbruptCloseIterator(_completion_, _iterated_)。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
+            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+            1. _result_ を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.toarray">
+          <h1>Iterator.prototype.toArray ( )</h1>
+          <p>このメソッドは呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. _O_ を *this* 値とする。
+            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
+            1. _iterated_ を ? GetIteratorDirect(_O_) とする。
+            1. _items_ を新しい空の List とする。
+            1. 繰り返す,
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. もし _value_ が ~done~ なら CreateArrayFromList(_items_) を返す。
+              1. _value_ を _items_ に追加する。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%">
+          <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
+          <p>この関数は呼び出されると次を実行する:</p>
+          <emu-alg>
+            1. *this* 値を返す。
+          </emu-alg>
+          <p>この関数の *"name"* プロパティの値は *"[Symbol.iterator]"* である。</p>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype-%symbol.tostringtag%">
+          <h1>Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+          <p>`Iterator.prototype[%Symbol.toStringTag%]` は属性 { [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つアクセスプロパティである。[[Get]] および [[Set]] 属性は次のように定義される:</p>
+
+          <emu-clause id="sec-get-iterator.prototype-%symbol.tostringtag%">
+            <h1>get Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+            <p>[[Get]] 属性の値は引数を必要としない組み込み関数であり、呼び出されると次を実行する:</p>
+            <emu-alg>
+              1. *"Iterator"* を返す。
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-set-iterator.prototype-%symbol.tostringtag%">
+            <h1>set Iterator.prototype [ %Symbol.toStringTag% ]</h1>
+            <p>[[Set]] 属性の値は引数 _v_ を取る組み込み関数であり、呼び出されると次を実行する:</p>
+            <emu-alg>
+              1. ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, %Symbol.toStringTag%, _v_) を実行する。
+              1. *undefined* を返す。
+            </emu-alg>
+          </emu-clause>
+
+          <emu-note>
+            <p>ほとんどの組み込みプロトタイプ上の %Symbol.toStringTag% プロパティと異なり、Web 互換性の理由からこのプロパティはアクセサでなければならない。</p>
+          </emu-note>
+        </emu-clause>
       </emu-clause>
     </emu-clause>
 
