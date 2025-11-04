@@ -159,6 +159,8 @@
   status: draft
   location: https://tc39.es/ecma262/
   markEffects: true
+  boilerplate:
+    copyright: alternative
 </pre>
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International ロゴ"></p>
 <div id="metadata-block">
@@ -995,6 +997,25 @@
     <p>アルゴリズム手順では、「Let _x_ be _someValue_」の形式で任意の値に名前付きエイリアスを宣言できます。これらのエイリアスは参照のようなもので、_x_と_someValue_は同じデータを参照し、どちらかを変更すると両方に反映されます。参照的挙動を避けたい場合は、「Let _x_ be a copy of _someValue_」と明示的にコピーを作成することもできます。</p>
     <p>エイリアスは宣言後の任意の手順で参照できますが、宣言より前の手順では参照できません。エイリアスは「Set _x_ to _someOtherValue_」の形式で変更できます。</p>
 
+    <emu-clause id="sec-evaluation-order">
+      <h1>評価順序</h1>
+      <p>複雑な式がアルゴリズムの段階で現れる場合、それらは左から右へ、かつ内側から外側へという順で評価されるものと理解する。例えば、次のステップ</p>
+      <emu-alg example>
+        1. Return A(B(), C.[[D]]) + E(F()).
+      </emu-alg>
+      <p>は次と同等である：</p>
+      <emu-alg example>
+        1. _tmp1_ を B() とする。
+        1. _tmp2_ を C.[[D]] とする。
+        1. _tmp3_ を A(_tmp1_, _tmp2_) とする。
+        1. _tmp4_ を F() とする。
+        1. _tmp5_ を E(_tmp4_) とする。
+        1. _tmp6_ を _tmp3_ + _tmp5_ とする。
+        1. _tmp6_ を返す。
+      </emu-alg>
+      <p>ここで、さまざまな _tmpN_ のエイリアスは一時的なもので、これらのステップ内でのみ可視である。</p>
+    </emu-clause>
+
     <emu-clause id="sec-algorithm-conventions-abstract-operations">
       <h1>抽象操作</h1>
       <p>この仕様の複数箇所で利用しやすくするために、あるアルゴリズム（<dfn>抽象操作</dfn>）は名前付き・パラメータ化された関数形式で記述され、他のアルゴリズムから名前で参照できるようになっています。抽象操作は通常、OperationName(_arg1_, _arg2_)のような関数呼び出し形式で参照されます。一部の抽象操作は、クラスライクな仕様抽象のメソッドとして多態的に呼び出されます。メソッドライク抽象操作は、_someValue_.OperationName(_arg1_, _arg2_)のようなメソッド呼び出し形式で参照されます。</p>
@@ -1058,74 +1079,44 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-returnifabrupt" aoid="ReturnIfAbrupt">
-        <h1>ReturnIfAbrupt</h1>
-        <p>次のような記載やそれに相当するアルゴリズム手順:</p>
+      <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt">
+        <h1>Completion Record のアンラップに関する省略記法</h1>
+        <p>`?` および `!` のプレフィックスは、Completion Record をアンラップするための省略記法として使用される。`?` は、異常な完了（abrupt completion）を呼び出し元に伝播させるか、通常の完了（normal completion）の場合はその値をアンラップするのに使われる。`!` は、Completion Record が通常であることをアサートし、その値をアンラップするのに使われる。正式には、次のステップ</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(_argument_)。
+          1. _result_ を ? _record_ とする。
         </emu-alg>
-        <p>は、次の意味と同じです:</p>
+        <p>は次と同等である：</p>
         <emu-alg example>
-          1. Assert: _argument_はCompletion Recordである。
-          1. _argument_がabrupt completionなら、Completion(_argument_)を返す。
-          1. それ以外の場合、_argument_を_argument_.[[Value]]にセットする。
+          1. アサート: _record_ は Completion Record である。
+          1. _record_ が異常な完了であれば、_record_ を返す。
+          1. _result_ を _record_.[[Value]] とする。
         </emu-alg>
-        <p>次のような記載やそれに相当するアルゴリズム手順:</p>
+        <p>同様に、次のステップ</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(AbstractOperation())。
+          1. _result_ を ! _record_ とする。
         </emu-alg>
-        <p>は、次の意味と同じです:</p>
+        <p>は次と同等である：</p>
         <emu-alg example>
-          1. Let _hygienicTemp_ be AbstractOperation()。
-          1. Assert: _hygienicTemp_はCompletion Recordである。
-          1. _hygienicTemp_がabrupt completionなら、Completion(_hygienicTemp_)を返す。
-          1. それ以外の場合、_hygienicTemp_を_hygienicTemp_.[[Value]]にセットする。
+          1. アサート: _record_ は通常の完了である。
+          1. _result_ を _record_.[[Value]] とする。
         </emu-alg>
-        <p>ここで、_hygienicTemp_はReturnIfAbruptに関する手順でのみ一時的に可視です。</p>
-        <p>次のような記載やそれに相当するアルゴリズム手順:</p>
+        <p>`?` または `!` が他の状況で使われる場合、まず <emu-xref href="#sec-evaluation-order" title></emu-xref> で与えられる書き換えを適用し、この規則が適用できるようにしてから、本規則を適用する。例えば、次のステップ</p>
         <emu-alg example>
-          1. Let _result_ be AbstractOperation(ReturnIfAbrupt(_argument_))。
+          1. AO(? Other()) を実行する。
         </emu-alg>
-        <p>は、次の意味と同じです:</p>
+        <p>は次のように書き換えられる：</p>
         <emu-alg example>
-          1. Assert: _argument_はCompletion Recordである。
-          1. _argument_がabrupt completionなら、Completion(_argument_)を返す。
-          1. それ以外の場合、_argument_を_argument_.[[Value]]にセットする。
-          1. Let _result_ be AbstractOperation(_argument_)。
+          1. _tmp1_ を Other() とする。
+          1. _tmp2_ を ? _tmp1_ とする。
+          1. AO(_tmp2_) を実行する。
         </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-returnifabrupt-shorthands">
-        <h1>ReturnIfAbruptの省略記法</h1>
-        <p>抽象操作や構文指示操作の呼び出しの前に`?`が付く場合、ReturnIfAbruptをそのCompletion Recordに適用することを示します。例えば、この手順:</p>
+        <p>これはさらに次のように展開される：</p>
         <emu-alg example>
-          1. ? OperationName()。
-        </emu-alg>
-        <p>は次の手順と同義です:</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(OperationName())。
-        </emu-alg>
-        <p>同様に、メソッド呼び出し形式の場合は:</p>
-        <emu-alg example>
-          1. ? _someValue_.OperationName()。
-        </emu-alg>
-        <p>は次の手順と同義です:</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(_someValue_.OperationName())。
-        </emu-alg>
-        <p>また、`!`のプレフィックスは、後続の抽象操作や構文指示操作の呼び出しがabrupt completionを返さないことを示し、Completion Recordの[[Value]]フィールドを操作の戻り値として使うことを意味します。例えば、この手順:</p>
-        <emu-alg example>
-          1. Let _val_ be ! OperationName()。
-        </emu-alg>
-        <p>は、次の手順と同義です:</p>
-        <emu-alg example>
-          1. Let _val_ be OperationName()。
-          1. Assert: _val_はnormal completionである。
-          1. _val_を_val_.[[Value]]にセットする。
-        </emu-alg>
-        <p>実行時意味論の構文指示操作では、操作呼び出しの前に`!`または`?`を付けてこの省略記法を利用します:</p>
-        <emu-alg example>
-          1. ! SyntaxDirectedOperation of |NonTerminal|を実行する。
+          1. _tmp1_ を Other() とする。
+          1. アサート: _tmp1_ は Completion Record である。
+          1. _tmp1_ が異常な完了であれば、_tmp1_ を返す。
+          1. _tmp2_ を _tmp1_.[[Value]] とする。
+          1. AO(_tmp2_) を実行する。
         </emu-alg>
       </emu-clause>
 
@@ -4191,7 +4182,7 @@
     <emu-clause id="sec-set-and-relation-specification-type">
       <h1>SetおよびRelation仕様型</h1>
       <p><em>Set</em>型は、メモリモデルで使用するための順序なし要素の集合を説明するために使われます。これはECMAScriptの同名コレクション型とは異なります。区別のため、ECMAScriptコレクションのインスタンスは常に「Setオブジェクト」と呼ばれます。Set型の値は単純な要素集合であり、同じ要素が複数回現れることはありません。Setには要素の追加・削除ができます。Set同士の和集合、積集合、差集合も可能です。</p>
-      <p><dfn variants="Relations">Relation</dfn>型は、Setに対する制約を説明するために使われます。Relation型の値は、その値域からの順序付きペアのSetです。例えば、イベントに対するRelationは、イベントの順序付きペアの集合です。Relation_R_と値域内の2つの値_a_、_b_について、_a_ _R_ _b_は順序付きペア(_a_, _b_)が_R_に含まれることの略記です。Relationがある条件に関して<dfn id="least-relation">最小Relation</dfn>であるとは、その条件を満たす最小のRelationであることを意味します。</p>
+      <p><dfn variants="Relations">Relation</dfn> 型は、集合に対する制約を説明するために使用されます。Relation 型の値は、その値のドメインからなる順序対の集合（Set）です。例えば、Memory イベントに関する Relation は、Memory イベントの順序対の集合です。Relation _R_ と、その値ドメイン内の2つの値 _a_ および _b_ について、_a_ _R_ _b_ は、順序対(_a_, _b_)が _R_ の要素であることの省略表現です。Relation がある条件に関して<dfn id="least-relation">最小の Relation</dfn>であるというのは、その条件を満たす Relation の中で最も小さいものである場合を指します。</p>
       <p><dfn variants="strict partial orders">狭義半順序</dfn>は、Relation値_R_が以下を満たす場合です。</p>
       <ul>
         <li>
@@ -11596,26 +11587,26 @@
       </dl>
       <emu-alg>
         1. _realm_ を新しい Realm Record とする。
-        1. CreateIntrinsics(_realm_) を実行。
-        1. _realm_.[[AgentSignifier]] を AgentSignifier() に設定。
-        1. _realm_.[[TemplateMap]] を新しい空の List に設定。
+        1. CreateIntrinsics(_realm_) を実行する。
+        1. _realm_.[[AgentSignifier]] に AgentSignifier() を設定する。
+        1. _realm_.[[TemplateMap]] に新しい空のリストを設定する。
         1. _newContext_ を新しい実行コンテキストとする。
-        1. _newContext_ の Function を *null* に設定。
-        1. _newContext_ の Realm を _realm_ に設定。
-        1. _newContext_ の ScriptOrModule を *null* に設定。
-        1. 実行コンテキストスタックに _newContext_ を push する; _newContext_ が現在の実行コンテキストとなる。
-        1. ホストが _realm_ の global object として奇異 (exotic) オブジェクトを要求する場合、
-          1. _global_ をホスト定義の方法で作成されたそのようなオブジェクトとする。
-        1. それ以外、
+        1. _newContext_ の Function を *null* に設定する。
+        1. _newContext_ の Realm を _realm_ に設定する。
+        1. _newContext_ の ScriptOrModule を *null* に設定する。
+        1. _newContext_ を実行コンテキストスタックにプッシュする。_newContext_ が現在の実行中の実行コンテキストとなる。
+        1. ホストが _realm_ のグローバルオブジェクトとして利用する特定のオブジェクトを要求する場合、
+          1. _global_ をホスト定義の方法で作成したそのようなオブジェクトとする。
+        1. それ以外の場合、
           1. _global_ を OrdinaryObjectCreate(_realm_.[[Intrinsics]].[[%Object.prototype%]]) とする。
-        1. ホストが _realm_ のグローバルスコープにおける `this` 束縛が global object とは異なるオブジェクトを返すことを要求する場合、
-          1. _thisValue_ をホスト定義の方法で作成されたそのようなオブジェクトとする。
-        1. それ以外、
+        1. ホストが _realm_ のグローバルスコープの `this` バインディングがグローバルオブジェクト以外のオブジェクトを返すことを要求する場合、
+          1. _thisValue_ をホスト定義の方法で作成したそのようなオブジェクトとする。
+        1. それ以外の場合、
           1. _thisValue_ を _global_ とする。
-        1. _realm_.[[GlobalObject]] を _global_ に設定。
-        1. _realm_.[[GlobalEnv]] を NewGlobalEnvironment(_global_, _thisValue_) に設定。
-        1. ? SetDefaultGlobalBindings(_realm_) を実行。
-        1. ホスト定義のグローバルオブジェクトプロパティを _global_ 上に作成する。
+        1. _realm_.[[GlobalObject]] に _global_ を設定する。
+        1. _realm_.[[GlobalEnv]] に NewGlobalEnvironment(_global_, _thisValue_) を設定する。
+        1. ? SetDefaultGlobalBindings(_realm_) を実行する。
+        1. _global_ にホスト定義のグローバルオブジェクトプロパティを作成する。
         1. ~unused~ を返す。
       </emu-alg>
     </emu-clause>
@@ -12069,73 +12060,77 @@
     </emu-note>
     <p>agent の executing thread がアルゴリズムステップを実行している間、その agent はそれらのステップにとっての <dfn id="surrounding-agent" variants="surrounding agents">surrounding agent</dfn> である。ステップは surrounding agent を用いて、agent 内に保持された仕様レベルの実行オブジェクト（実行中実行コンテキスト、実行コンテキストスタック、Agent Record のフィールド）へアクセスする。</p>
     <p><dfn variants="agent signifiers">agent signifier</dfn> は Agent を識別するために用いられるグローバル一意の不透明値である。</p>
-    <emu-table id="table-agent-record" caption="Agent Record のフィールド (Agent Record Fields)">
+    <emu-table id="table-agent-record" caption="エージェントレコードのフィールド">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>フィールド名</th>
+            <th>値</th>
+            <th>意味</th>
           </tr>
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>a Boolean</td>
-          <td>アルゴリズム GetValueFromBuffer と SetValueInBuffer で必要なときに <em>isLittleEndian</em> 引数の既定値として計算される値。選択は実装定義であり、実装にとって最も効率的な方を選ぶべき。この値が一度観測された後は変更できない。</td>
+          <td>ブール値</td>
+          <td>GetValueFromBuffer および SetValueInBuffer のアルゴリズムが必要とするときに <em>isLittleEndian</em> パラメータに対して計算される既定値。選択は実装依存であり、実装にとって最も効率的な選択肢であるべきです。</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>a Boolean</td>
-          <td>その agent がブロック可能かどうかを決定する。</td>
+          <td>ブール値</td>
+          <td>このエージェントがブロック可能かどうかを決定します。</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>an agent signifier</td>
-          <td>agent クラスタ内で agent を一意に識別する。</td>
+          <td>エージェント識別子</td>
+          <td>自身のエージェントクラスタ内でエージェントを一意に識別します。</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>a Boolean</td>
-          <td>*true* の場合 1 <emu-not-ref>byte 値</emu-not-ref> 上のアトミック操作は lock-free、そうでなければ *false*。</td>
+          <td>ブール値</td>
+          <td>1<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであるなら *true*、それ以外は *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>a Boolean</td>
-          <td>*true* の場合 2 <emu-not-ref>byte 値</emu-not-ref> 上のアトミック操作は lock-free、そうでなければ *false*。</td>
+          <td>ブール値</td>
+          <td>2<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであるなら *true*、それ以外は *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>a Boolean</td>
-          <td>*true* の場合 8 <emu-not-ref>byte 値</emu-not-ref> 上のアトミック操作は lock-free、そうでなければ *false*。</td>
+          <td>ブール値</td>
+          <td>8<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであるなら *true*、それ以外は *false*。</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>a candidate execution Record</td>
-          <td>メモリモデル参照。</td>
+          <td>候補実行レコード</td>
+          <td>メモリモデルを参照してください。</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>a List of either Objects or Symbols</td>
-          <td>初期状態は空の新しい List。現在の Job の終了まで生存させるオブジェクトやシンボルのリスト。</td>
+          <td>オブジェクトまたはシンボルのリスト</td>
+          <td>最初は新しい空のリストであり、現在のジョブの終了まで維持されるべきオブジェクトやシンボルのリストを表します。</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
-          <td>an integer</td>
-          <td>初期値 0。非同期または非同期依存を持つモジュールの [[AsyncEvaluationOrder]] フィールドに一意の増加値を割り当てるために用いられる。</td>
+          <td>整数</td>
+          <td>初期値は0。非同期または非同期依存を持つモジュールの [[AsyncEvaluationOrder]] フィールドに一意のインクリメント値を割り当てるのに使われます。</td>
         </tr>
       </table>
     </emu-table>
 
-    <p>[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]] の値は、一度クラスタ内のいずれかの agent により観測された後は変更できない。</p>
+    <p>[[LittleEndian]]、[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]]、[[IsLockFree8]] の値は変更できません。</p>
 
     <emu-note>
-      <p>[[IsLockFree1]] と [[IsLockFree2]] の値は必ずしもハードウェアだけで決定されるわけではなく、時間経過や ECMAScript 実装間で異なりうる実装上の選択を反映することがある。</p>
+      <p>[[IsLockFree1]]、[[IsLockFree2]]、[[IsLockFree8]] の値は必ずしもハードウェアによって決定されるわけではなく、実装ごとや時期によって異なる実装選択を反映している場合もあります。</p>
 
-      <p>[[IsLockFree4]] フィールドは存在しない: 4 バイトのアトミック操作は常に lock-free である。</p>
+      <p>[[IsLockFree4]] フィールドは存在しません。4バイトのアトミック操作は常にロックフリーです。</p>
 
-      <p>実際には、アトミック操作が何らかのロックを用いて実装されているなら、その操作は lock-free ではない。lock-free は wait-free を意味しない: lock-free なアトミック操作を完了するのに必要なマシンステップ数に上限はない。</p>
+      <p>実際には、アトミック操作がいかなる種類のロックで実装されている場合も、その操作はロックフリーではありません。ロックフリーであることはウェイトフリーであることを意味しません: ロックフリーアトミック操作の完了に必要な機械命令数に上限はありません。</p>
 
-      <p>サイズ <em>n</em> のアトミックアクセスが lock-free であることは、同サイズの非アトミックアクセスの（知覚される）アトミシティについて何も意味しない。具体的には、非アトミックアクセスは複数のメモリアクセス列として実行され得る。詳細は ReadSharedMemory および WriteSharedMemory を参照。</p>
+      <p>サイズ <em>n</em> のアトミックアクセスがロックフリーであることは、同じサイズ <em>n</em> の非アトミックアクセスの（見かけ上の）アトミック性については何も意味するものではありません。特に、非アトミックアクセスは複数の個別メモリアクセスとして実行される可能性があります。詳細は ReadSharedMemory および WriteSharedMemory を参照してください。</p>
+    </emu-note>
+
+    <emu-note>
+      <p>エージェントは仕様上の機構であり、ECMAScript 実装における特定の何らかの構成要素を意味する必要はありません。</p>
     </emu-note>
 
     <emu-note>
@@ -12204,7 +12199,7 @@
       <p>クラスタ内で異なる [[LittleEndian]] 値を持つ agent があると、マルチバイトデータに対し共有メモリを使うのが困難になる。</p>
     </emu-note>
 
-    <p>クラスタ内のすべての agent は、それぞれの Agent Record の [[IsLockFree1]] フィールドについて同じ値を持たなければならない; [[IsLockFree2]] フィールドについても同様。</p>
+    <p>クラスタ内のすべてのエージェントは、それぞれのエージェントレコード内の [[IsLockFree1]] フィールドの値が同じでなければなりません。同様に、[[IsLockFree2]] および [[IsLockFree8]] フィールドについても同じです。</p>
 
     <p>クラスタ内のすべての agent は、それぞれの Agent Record の [[Signifier]] フィールドについて互いに異なる値を持たなければならない。</p>
 
@@ -14718,7 +14713,7 @@
 
       <emu-clause id="sec-typedarray-with-buffer-witness-records" oldids="sec-integer-indexed-object-with-buffer-witness-records">
         <h1>バッファ監視付き TypedArray レコード (TypedArray With Buffer Witness Records)</h1>
-        <p><dfn variants="TypedArray With Buffer Witness Records">TypedArray With Buffer Witness Record</dfn> は、TypedArray と、ビュー対象バッファのキャッシュされたバイト長をカプセル化する Record 値である。Growable SharedArrayBuffer をビューしている場合に、そのバイト長データブロックの単一の共有メモリ読取イベントがあることを保証する助けとなる。</p>
+        <p><dfn variants="TypedArray With Buffer Witness Records">TypedArray With Buffer Witness Record</dfn> は、TypedArray と、その参照しているバッファのキャッシュされたバイト長をまとめてカプセル化するための Record 値です。これは、参照しているバッファが拡張可能な SharedArrayBuffer である場合に、そのバイト長データブロックの ReadSharedMemory イベントが一度だけ発生することを保証するために使用されます。</p>
         <p>TypedArray With Buffer Witness Record は <emu-xref href="#table-typedarray-with-buffer-witness-record-fields"></emu-xref> に列挙されるフィールドを持つ。</p>
         <emu-table id="table-typedarray-with-buffer-witness-record-fields" oldids="table-integer-indexed-object-with-buffer-witness-record-fields" caption="TypedArray With Buffer Witness Record Fields">
           <table>
@@ -14815,12 +14810,12 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* なら 0 を返す。
-          1. _length_ を TypedArrayLength(_taRecord_) とする。
-          1. _length_ = 0 なら 0 を返す。
+          1. アサート: IsTypedArrayOutOfBounds(_taRecord_) は *false* である。
           1. _O_ を _taRecord_.[[Object]] とする。
-          1. _O_.[[ByteLength]] が ~auto~ でないなら _O_.[[ByteLength]] を返す。
+          1. もし _O_.[[ByteLength]] が ~auto~ でなければ、_O_.[[ByteLength]] を返す。
+          1. _length_ を TypedArrayLength(_taRecord_) とする。
           1. _elementSize_ を TypedArrayElementSize(_O_) とする。
+          1. 注記: 返されるバイト長さは、基となるバッファが整数倍でない長さにリサイズされた場合でも、常に _elementSize_ の整数倍となる。
           1. _length_ × _elementSize_ を返す。
         </emu-alg>
       </emu-clause>
@@ -14859,16 +14854,19 @@
         <emu-alg>
           1. _O_ を _taRecord_.[[Object]] とする。
           1. _bufferByteLength_ を _taRecord_.[[CachedBufferByteLength]] とする。
-          1. アサート: IsDetachedBuffer(_O_.[[ViewedArrayBuffer]]) は _bufferByteLength_ が ~detached~ の場合かつその場合に限り *true*。
-          1. _bufferByteLength_ が ~detached~ なら *true* を返す。
+          1. IsDetachedBuffer(_O_.[[ViewedArrayBuffer]]) が *true* の場合、
+            1. アサート: _bufferByteLength_ は ~detached~ である。
+            1. *true* を返す。
+          1. アサート: _bufferByteLength_ は 0 以上の整数である。
           1. _byteOffsetStart_ を _O_.[[ByteOffset]] とする。
-          1. _O_.[[ArrayLength]] が ~auto~ なら
+          1. _O_.[[ArrayLength]] が ~auto~ の場合、
             1. _byteOffsetEnd_ を _bufferByteLength_ とする。
-          1. それ以外
+          1. それ以外の場合、
             1. _elementSize_ を TypedArrayElementSize(_O_) とする。
-            1. _byteOffsetEnd_ を _byteOffsetStart_ + _O_.[[ArrayLength]] × _elementSize_ とする。
-          1. _byteOffsetStart_ > _bufferByteLength_ または _byteOffsetEnd_ > _bufferByteLength_ なら *true* を返す。
-          1. 注記: 長さ 0 の TypedArray は境界外とは見なされない。
+            1. _arrayByteLength_ を _O_.[[ArrayLength]] × _elementSize_ とする。
+            1. _byteOffsetEnd_ を _byteOffsetStart_ + _arrayByteLength_ とする。
+          1. 注記: [[ByteOffset]] が _bufferByteLength_ である長さ0の TypedArray は、アウトオブバウンズとは見なされない。
+          1. _byteOffsetStart_ > _bufferByteLength_ または _byteOffsetEnd_ > _bufferByteLength_ の場合、*true* を返す。
           1. *false* を返す。
         </emu-alg>
       </emu-clause>
@@ -28286,45 +28284,46 @@
             </dl>
 
             <emu-alg>
-              1. Assert: _module_.[[Status]] は ~new~ でない。
-              1. _resolveSet_ がなければ空リスト。
-              1. _resolveSet_ の各 Record _r_ について
-                1. もし _module_ と _r_.[[Module]] が同一で _exportName_ = _r_.[[ExportName]] なら
-                  1. Assert: 循環 import 要求。
+              1. アサート: _module_.[[Status]] は ~new~ ではない。
+              1. _resolveSet_ が存在しない場合は、新しい空のリストを _resolveSet_ に設定する。
+              1. _resolveSet_ の各 Record { [[Module]], [[ExportName]] } _r_ について、次を行う
+                1. _module_ と _r_.[[Module]] が同じ Module Record であり、かつ _exportName_ が _r_.[[ExportName]] である場合、
+                  1. アサート: これは循環インポート要求である。
                   1. *null* を返す。
-              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ } を _resolveSet_ に追加。
-              1. _module_.[[LocalExportEntries]] の各 _e_ について
-                1. もし _e_.[[ExportName]] = _exportName_ なら
-                  1. Assert: 直接束縛。
+              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ } を _resolveSet_ に追加する。
+              1. _module_.[[LocalExportEntries]] の各 ExportEntry Record _e_ について、次を行う
+                1. _e_.[[ExportName]] が _exportName_ である場合、
+                  1. アサート: _module_ はこのエクスポートに対する直接バインディングを提供する。
                   1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] } を返す。
-              1. _module_.[[IndirectExportEntries]] の各 _e_ について
-                1. もし _e_.[[ExportName]] = _exportName_ なら
-                  1. Assert: _e_.[[ModuleRequest]] は *null* でない。
-                  1. _importedModule_ を GetImportedModule(_module_, _e_.[[ModuleRequest]])。
-                  1. もし _e_.[[ImportName]] が ~all~ なら
+              1. _module_.[[IndirectExportEntries]] の各 ExportEntry Record _e_ について、次を行う
+                1. _e_.[[ExportName]] が _exportName_ である場合、
+                  1. アサート: _e_.[[ModuleRequest]] は *null* ではない。
+                  1. _importedModule_ を GetImportedModule(_module_, _e_.[[ModuleRequest]]) とする。
+                  1. _e_.[[ImportName]] が ~all~ の場合、
+                    1. アサート: _module_ はこのエクスポートに対する直接バインディングを提供しない。
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ } を返す。
-                  1. それ以外
-                    1. Assert: 具体的束縛 import。
-                    1. Assert: _e_.[[ImportName]] は文字列。
+                  1. それ以外の場合、
+                    1. アサート: _module_ はこのエクスポートに対する特定のバインディングをインポートする。
+                    1. アサート: _e_.[[ImportName]] は文字列型である。
                     1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_) を返す。
-              1. もし _exportName_ = *"default"* なら
-                1. Assert: 明示的な `default` export 非定義。
+              1. _exportName_ が *"default"* の場合、
+                1. アサート: このモジュールによって `default` エクスポートは明示的に定義されていない。
                 1. *null* を返す。
-                1. 注: `export * from "mod"` で `default` は供給されない。
+                1. 注記: `default` エクスポートは `export * from "mod"` 宣言によって供給されることはできない。
               1. _starResolution_ を *null* とする。
-              1. _module_.[[StarExportEntries]] の各 _e_ について
-                1. Assert: _e_.[[ModuleRequest]] は *null* でない。
-                1. _importedModule_ を GetImportedModule(_module_, _e_.[[ModuleRequest]])。
-                1. _resolution_ を _importedModule_.ResolveExport(_exportName_, _resolveSet_)。
-                1. _resolution_ が ~ambiguous~ なら ~ambiguous~ を返す。
-                1. _resolution_ が *null* でないなら
-                  1. Assert: _resolution_ は ResolvedBinding。
-                  1. もし _starResolution_ が *null* なら _starResolution_ = _resolution_。
-                  1. それ以外
-                    1. Assert: 複数の `*` import が同名を含む。
-                    1. もし _resolution_.[[Module]] ≠ _starResolution_.[[Module]] なら ~ambiguous~。
-                    1. もし [[BindingName]] が異なり、いずれかが ~namespace~ なら ~ambiguous~。
-                    1. 両方文字列かつ異なれば ~ambiguous~。
+              1. _module_.[[StarExportEntries]] の各 ExportEntry Record _e_ について、次を行う
+                1. アサート: _e_.[[ModuleRequest]] は *null* ではない。
+                1. _importedModule_ を GetImportedModule(_module_, _e_.[[ModuleRequest]]) とする。
+                1. _resolution_ を _importedModule_.ResolveExport(_exportName_, _resolveSet_) とする。
+                1. _resolution_ が ~ambiguous~ であれば ~ambiguous~ を返す。
+                1. _resolution_ が *null* でない場合、
+                  1. アサート: _resolution_ は ResolvedBinding Record である。
+                  1. _starResolution_ が *null* の場合、
+                    1. _starResolution_ に _resolution_ を設定する。
+                  1. それ以外の場合、
+                    1. アサート: 要求された名前を含む `*` インポートが複数存在する。
+                    1. _resolution_.[[Module]] と _starResolution_.[[Module]] が同じ Module Record でない場合、~ambiguous~ を返す。
+                    1. _resolution_.[[BindingName]] が _starResolution_.[[BindingName]] でない場合、~ambiguous~ を返す。
               1. _starResolution_ を返す。
             </emu-alg>
           </emu-clause>
@@ -41471,11 +41470,12 @@ THH:mm:ss.sss
         <h1>get %TypedArray%.prototype.byteLength</h1>
         <p>%TypedArray%`.prototype.byteLength` は set アクセサが *undefined* のアクセサプロパティであり、get アクセサは以下を行う:</p>
         <emu-alg>
-          1. _O_ を *this* 値。
-          1. ? RequireInternalSlot(_O_, [[TypedArrayName]])。
+          1. _O_ を *this* の値とする。
+          1. ? RequireInternalSlot(_O_, [[TypedArrayName]]) を実行する。
           1. アサート: _O_ は [[ViewedArrayBuffer]] 内部スロットを持つ。
-          1. _taRecord_ = MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~)。
-          1. _size_ = TypedArrayByteLength(_taRecord_)。
+          1. _taRecord_ を MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~) とする。
+          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* ならば、*+0*<sub>𝔽</sub> を返す。
+          1. _size_ を TypedArrayByteLength(_taRecord_) とする。
           1. 𝔽(_size_) を返す。
         </emu-alg>
       </emu-clause>
@@ -43462,8 +43462,8 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-set-objects">
     <h1>Set オブジェクト</h1>
-    <p>Set オブジェクトは ECMAScript 言語値のコレクションである。異なる値は Set のコレクション内で 1 度だけ要素として現れる。異なる値の判別には SameValueZero 比較アルゴリズムの意味論が用いられる。</p>
-    <p>Set オブジェクトはハッシュテーブルまたはコレクション内要素数に対し平均で亜線形アクセス時間を提供する他の機構を用いて実装されなければならない。本仕様で用いるデータ構造は Set オブジェクトの必要な観測可能セマンティクスを記述するためのみのものであり、実装モデルとなることを意図しない。</p>
+    <p><dfn variants="Set object">Set オブジェクト</dfn>は、ECMAScript 言語の値のコレクションです。Set には、各異なる値を最大一度だけ含めることができます。異なる値は SameValueZero 比較アルゴリズムのセマンティクスによって判別されます。</p>
+    <p>Set オブジェクトは、ハッシュテーブルまたはコレクション内の要素数に対して平均してサブリニアなアクセス時間を提供する他の機構を使って実装しなければなりません。本仕様で用いられているデータ構造は、Set オブジェクトの必要な観察可能なセマンティクスを記述するためのものであり、実際の実装モデルを意図したものではありません。</p>
 
     <emu-clause id="sec-abstract-operations-for-set-objects">
       <h1>Set オブジェクトに関する抽象操作</h1>
@@ -44455,12 +44455,12 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* かつ _arrayBuffer_ が [[ArrayBufferByteLengthData]] 内部スロットを持つなら
+          1. IsGrowableSharedArrayBuffer(_arrayBuffer_) が *true* の場合、
             1. _bufferByteLengthBlock_ を _arrayBuffer_.[[ArrayBufferByteLengthData]] とする。
             1. _rawLength_ を GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_) とする。
-            1. _isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値とする。
+            1. _isLittleEndian_ を、周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値とする。
             1. ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_)) を返す。
-          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false*。
+          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false* である。
           1. _arrayBuffer_.[[ArrayBufferByteLength]] を返す。
         </emu-alg>
       </emu-clause>
@@ -45156,14 +45156,27 @@ THH:mm:ss.sss
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>オブジェクトが ArrayBuffer / SharedArrayBuffer あるいはそのサブタイプかどうかを判定する。</dd>
+          <dd>これはオブジェクトが SharedArrayBuffer かどうかをテストします。</dd>
         </dl>
         <emu-alg>
-          1. _bufferData_ を _obj_.[[ArrayBufferData]] とする。
-          1. _bufferData_ が *null* なら *false* を返す。
-          1. _bufferData_ が Data Block なら *false* を返す。
-          1. アサート: _bufferData_ は Shared Data Block である。
-          1. *true* を返す。
+          1. _obj_.[[ArrayBufferData]] が共有データブロックである場合、*true* を返す。
+          1. *false* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-isgrowablesharedarraybuffer" type="abstract operation">
+        <h1>
+          IsGrowableSharedArrayBuffer (
+            _obj_: ArrayBuffer または SharedArrayBuffer,
+          ): Boolean
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>これはオブジェクトが growable な SharedArrayBuffer かどうかをテストします。</dd>
+        </dl>
+        <emu-alg>
+          1. IsSharedArrayBuffer(_obj_) が *true* かつ _obj_ が [[ArrayBufferByteLengthData]] 内部スロットを持つ場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -45180,13 +45193,13 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer の実装は以下の要件に従わなければならない:</p>
         <ul>
-          <li>抽象操作が ~unhandled~ で正常完了しない（= それ以外で正常完了する）場合で、_newByteLength_ が _buffer_ の現在のバイト長より小さい、または _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]] のいずれかなら *RangeError* 例外を投げる。</li>
-          <li>_isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールド値とする。抽象操作が ~handled~ で正常完了した場合、[[Order]] が ~seq-cst~、[[Payload]] が NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] が _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] が 0、[[ElementSize]] が 8 の WriteSharedMemory または ReadModifyWriteSharedMemory イベントを周囲のエージェントの候補実行 (candidate execution) に追加し、`SharedArrayBuffer.prototype.grow` への競合する呼び出しが「失われない」（沈黙して何もしないことがない）ようにする。</li>
+          <li>抽象操作が ~unhandled~ で正常に完了しない場合、かつ _newByteLength_ が _buffer_ の現在のバイト長より小さい、または _newByteLength_ が _buffer_.[[ArrayBufferMaxByteLength]] より大きい場合、*RangeError* 例外をスローする。</li>
+          <li>_isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値とする。抽象操作が ~handled~ で正常に完了した場合、WriteSharedMemory または ReadModifyWriteSharedMemory イベントが周囲のエージェントの候補実行に追加される。そのイベントの [[Order]] は ~seq-cst~、[[Payload]] は NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] は _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] は 0、[[ElementSize]] は 8 である。これは、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> への競合する呼び出しが「失われる」(つまり黙って何もしない)ことがないようにするためである。</li>
         </ul>
 
         <emu-note>
-          <p>上記 2 つ目の要件は、_buffer_ の現在バイト長をどのよう/いつ読み取るかについて意図的に曖昧にしている。基盤ハードウェア上でバイト長をアトミック read-modify-write で更新する必要があるため、load-link/store-conditional や load-exclusive/store-exclusive 命令対を用いるアーキテクチャでは命令ペアを命令ストリーム内で近接させたい場合がある。そのため SharedArrayBuffer.prototype.grow 自体は HostGrowSharedArrayBuffer を呼ぶ前に _newByteLength_ の境界チェックを行わず、また現在のバイト長をいつ読むかを規定しない。</p>
-          <p>これは HostResizeArrayBuffer と対照的であり、後者では _newByteLength_ が 0 以上かつ _buffer_.[[ArrayBufferMaxByteLength]] 以下であることが保証される。</p>
+          <p>上記の2番目の要件は、_buffer_ の現在のバイト長がどのように、またはいつ読み取られるかについて意図的に曖昧である。バイト長は基礎となるハードウェアでアトミックなread-modify-write操作によって更新しなければならないため、load-link/store-conditionalやload-exclusive/store-exclusive命令ペアを使用するアーキテクチャでは、この命令ペアを命令ストリーム中で近くに保ちたい場合がある。そのため、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 自体は HostGrowSharedArrayBuffer を呼び出す前に _newByteLength_ の境界チェックを行わず、また現在のバイト長がいつ読み取られるかにも要件はない。</p>
+          <p>これは、0 ≤ _newByteLength_ ≤ _buffer_.[[ArrayBufferMaxByteLength]] が保証されている HostResizeArrayBuffer とは対照的である。</p>
         </emu-note>
 
         <p>HostGrowSharedArrayBuffer の既定実装は NormalCompletion(~unhandled~) を返す。</p>
@@ -45406,7 +45419,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-dataview-with-buffer-witness-records">
         <h1>DataView With Buffer Witness Record</h1>
-        <p><dfn variants="DataView With Buffer Witness Records">DataView With Buffer Witness Record</dfn> は、DataView と、その参照バッファのキャッシュされたバイト長をカプセル化するための Record 値である。これは、参照バッファが成長可能 SharedArrayBuffer である場合にバイト長データブロックに対する単一の共有メモリ読み出しイベントを保証する助けとして用いられる。</p>
+        <p><dfn variants="DataView With Buffer Witness Records">DataView With Buffer Witness Record</dfn> は、DataView と、その参照しているバッファのキャッシュされたバイト長をまとめてカプセル化するための Record 値です。これは、参照しているバッファが拡張可能な SharedArrayBuffer である場合に、そのバイト長データブロックの ReadSharedMemory イベントが一度だけ発生することを保証するために使用されます。</p>
         <p>DataView With Buffer Witness Record は <emu-xref href="#table-dataview-with-buffer-witness-record-fields"></emu-xref> に示すフィールドを持つ。</p>
         <emu-table id="table-dataview-with-buffer-witness-record-fields" caption="DataView With Buffer Witness Record のフィールド">
           <table>
@@ -45499,15 +45512,17 @@ THH:mm:ss.sss
         <emu-alg>
           1. _view_ を _viewRecord_.[[Object]] とする。
           1. _bufferByteLength_ を _viewRecord_.[[CachedBufferByteLength]] とする。
-          1. アサート: IsDetachedBuffer(_view_.[[ViewedArrayBuffer]]) が *true* であることと _bufferByteLength_ が ~detached~ であることは同値。
-          1. _bufferByteLength_ が ~detached~ なら *true* を返す。
-          1. _byteOffsetStart_ = _view_.[[ByteOffset]]。
-          1. _view_.[[ByteLength]] が ~auto~ なら
-            1. _byteOffsetEnd_ = _bufferByteLength_。
-          1. そうでなければ
-            1. _byteOffsetEnd_ = _byteOffsetStart_ + _view_.[[ByteLength]]。
-          1. _byteOffsetStart_ > _bufferByteLength_ または _byteOffsetEnd_ > _bufferByteLength_ なら *true*。
-          1. 注: 長さ 0 の DataView は out-of-bounds とみなさない。
+          1. IsDetachedBuffer(_view_.[[ViewedArrayBuffer]]) が *true* ならば、
+            1. アサート: _bufferByteLength_ は ~detached~ である。
+            1. *true* を返す。
+          1. アサート: _bufferByteLength_ は 0 以上の整数である。
+          1. _byteOffsetStart_ を _view_.[[ByteOffset]] とする。
+          1. _view_.[[ByteLength]] が ~auto~ ならば、
+            1. _byteOffsetEnd_ を _bufferByteLength_ とする。
+          1. それ以外の場合、
+            1. _byteOffsetEnd_ を _byteOffsetStart_ + _view_.[[ByteLength]] とする。
+          1. 注記: [[ByteOffset]] が _bufferByteLength_ である長さ0の DataView は、アウトオブバウンズとは見なされない。
+          1. _byteOffsetStart_ > _bufferByteLength_ または _byteOffsetEnd_ > _bufferByteLength_ ならば、*true* を返す。
           1. *false* を返す。
         </emu-alg>
       </emu-clause>
@@ -50959,10 +50974,10 @@ THH:mm:ss.sss
 
 <emu-clause id="sec-memory-model">
   <h1>メモリーモデル (Memory Model)</h1>
-  <p>メモリ一貫性モデル、すなわち <dfn>memory model</dfn> は、SharedArrayBuffer に裏付けられた TypedArray インスタンスへのアクセスおよび Atomics オブジェクト上のメソッドにより生じる Shared Data Block イベントの起こり得る順序を規定する。プログラムに（後述の定義による）データ競合がない場合、イベント順序は逐次的一貫性 (sequentially consistent) として現れ、すなわち各エージェントのアクションのインターリーブとして現れる。プログラムにデータ競合がある場合、共有メモリアクセスは逐次的一貫性を欠いて見える可能性がある。例えばプログラムは因果律に反する振る舞いやその他の驚きを示し得る。これらの驚きはコンパイラ変換および CPU 設計（例: 命令のアウトオブオーダ実行や投機）に由来する。メモリーモデルはプログラムが逐次的一貫性を示す正確な条件と、データ競合から読み得る値の可能性を定義する。言い換えると、undefined behaviour は存在しない。</p>
-  <p>メモリーモデルは SharedArrayBuffer 上の抽象操作または Atomics オブジェクト上のメソッドによって評価中に導入されるイベントに対する関係制約として定義される。</p>
+  <p>メモリ一貫性モデル、または <dfn>メモリモデル</dfn> は、SharedArrayBuffer をバックとする TypedArray インスタンスへのアクセスや Atomics オブジェクトのメソッドを通じて発生する Shared Data Block イベントの可能な順序付けを規定します。プログラムにデータ競合（下記で定義）がない場合、イベントの順序は逐次一貫性があるように見えます。すなわち、各エージェントの動作が交互に実行されるものとして現れます。プログラムにデータ競合がある場合は、共有メモリ操作は逐次一貫性がないように見えることがあります。例えば、プログラムは因果律に反する振る舞いや、他にも驚くべき現象を示すことがあります。これらの驚きは、コンパイラの変換や CPU 設計（例えばアウトオブオーダー実行や投機実行）に起因します。メモリモデルは、プログラムが逐次一貫性のある挙動を示すための正確な条件と、データ競合から読み取られる可能性のある値の両方を定めています。言い換えれば、「未定義動作」はありません。</p>
+  <p>メモリモデルは、SharedArrayBuffer に対する抽象操作や Atomics オブジェクトのメソッドによって評価中に導入される Memory イベントに対する関係的制約として定義されます。</p>
   <emu-note>
-    <p>この節は SharedArrayBuffer 上の抽象操作によって導入されるイベントに関する公理的モデルを提供する。モデルは仕様の他の部分と異なりアルゴリズム的に表現できないことを強調する。抽象操作によるイベントの非決定的導入は ECMAScript 評価の操作的意味論とメモリーモデルの公理的意味論とのインタフェースである。これらイベントの意味は評価内の全イベントのグラフを考慮して定義される。これらは静的意味論でも実行時意味論でもない。既知のアルゴリズム実装は示されておらず、代わりに特定のイベントグラフが許容されるか否かを決定する制約集合がある。</p>
+    <p>この節では、SharedArrayBuffer に対する抽象操作によって導入される Memory イベントに関する公理的モデルを提供します。特に強調すべきは、このモデルが他の仕様とは異なり、アルゴリズムとして表現できるものではないという点です。抽象操作によるイベントの非決定的な導入は、ECMAScript 評価の操作的セマンティクスとメモリモデルの公理的セマンティクスのインターフェースとなっています。これらイベントのセマンティクスは、評価中のすべてのイベントのグラフを考察することで定義されます。これらは静的セマンティクスでも実行時セマンティクスでもありません。アルゴリズム的な実装が示されているわけではなく、特定のイベントグラフが許可されるか否かを決定する一連の制約があるのみです。</p>
   </emu-note>
 
   <emu-clause id="sec-memory-model-fundamentals">
@@ -50971,41 +50986,40 @@ THH:mm:ss.sss
     <emu-note>
       <p>逐次的一貫性より弱く、unordered より強い順序（例: release-acquire）はサポートされない。</p>
     </emu-note>
-    <p><dfn variants="Shared Data Block events">Shared Data Block event</dfn> は <dfn>ReadSharedMemory</dfn>、<dfn>WriteSharedMemory</dfn>、または <dfn>ReadModifyWriteSharedMemory</dfn> Record のいずれかである。</p>
-
+    <p><dfn variants="Shared Data Block events">共有データブロックイベント</dfn>は、<dfn>ReadSharedMemory</dfn>、<dfn>WriteSharedMemory</dfn>、または<dfn>ReadModifyWriteSharedMemory</dfn>レコードのいずれかです。<dfn variants="read events">読み出しイベント</dfn>は、ReadSharedMemory または ReadModifyWriteSharedMemory のいずれかです。<dfn variants="write events">書き込みイベント</dfn>は、WriteSharedMemory または ReadModifyWriteSharedMemory のいずれかです。</p>
     <emu-table id="table-readsharedmemory-fields" caption="ReadSharedMemory イベントフィールド (ReadSharedMemory Event Fields)">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>フィールド名</th>
+            <th>値</th>
+            <th>意味</th>
           </tr>
         </thead>
         <tr>
           <td>[[Order]]</td>
           <td>~seq-cst~ または ~unordered~</td>
-          <td>このイベントに対してメモリーモデルが保証する最弱の順序。</td>
+          <td>メモリモデルがこのイベントに対して保証する最も弱い順序。</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>Boolean</td>
-          <td>このイベントが同一範囲を持つ複数の書き込みイベントから読み取ることを許されるかどうか。</td>
+          <td>ブール値</td>
+          <td>このイベントが、自身と等しいメモリ範囲を持つ複数の書き込みイベントから読み取ることを許可されているかどうか。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
-          <td>Shared Data Block</td>
-          <td>イベントが作用するブロック。</td>
+          <td>共有データブロック</td>
+          <td>イベントが操作するブロック。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>非負整数</td>
-          <td>[[Block]] 内での読み取りのバイト位置。</td>
+          <td>0 以上の整数</td>
+          <td>[[Block]] 内での読み取りのバイトアドレス。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>非負整数</td>
-          <td>読み取りサイズ。</td>
+          <td>0 以上の整数</td>
+          <td>読み取りのサイズ。</td>
         </tr>
       </table>
     </emu-table>
@@ -51014,40 +51028,40 @@ THH:mm:ss.sss
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>フィールド名</th>
+            <th>値</th>
+            <th>意味</th>
           </tr>
         </thead>
         <tr>
           <td>[[Order]]</td>
-          <td>~seq-cst~, ~unordered~, または ~init~</td>
-          <td>このイベントに対してメモリーモデルが保証する最弱の順序。</td>
+          <td>~seq-cst~、~unordered~、または ~init~</td>
+          <td>メモリモデルがこのイベントに対して保証する最も弱い順序。</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>Boolean</td>
-          <td>このイベントが同一範囲を持つ複数の読み取りイベントから読み取られることを許されるかどうか。</td>
+          <td>ブール値</td>
+          <td>このイベントが、自身と等しいメモリ範囲を持つ複数のリードイベントから読み取られることを許可されているかどうか。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
-          <td>Shared Data Block</td>
-          <td>イベントが作用するブロック。</td>
+          <td>共有データブロック</td>
+          <td>イベントが操作するブロック。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>非負整数</td>
-          <td>[[Block]] 内での書き込みのバイト位置。</td>
+          <td>0 以上の整数</td>
+          <td>[[Block]] 内での書き込みのバイトアドレス。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>非負整数</td>
-          <td>書き込みサイズ。</td>
+          <td>0 以上の整数</td>
+          <td>書き込みのサイズ。</td>
         </tr>
         <tr>
           <td>[[Payload]]</td>
-          <td>バイト値の List</td>
-          <td>他のイベントによって読み取られるバイト値の List。</td>
+          <td>バイト値のリスト</td>
+          <td>他のイベントによって読み取られるバイト値のリスト。</td>
         </tr>
       </table>
     </emu-table>
@@ -51099,10 +51113,8 @@ THH:mm:ss.sss
       </table>
     </emu-table>
 
-    <p>これらのイベントは抽象操作または Atomics オブジェクト上のメソッドによって導入される。</p>
-    <p>一部操作は <dfn>Synchronize</dfn> イベントも導入し得る。<dfn variants="Synchronize events">Synchronize event</dfn> はフィールドを持たず、他イベントの許容順序を直接制約するためだけに存在する。</p>
-    <p>Shared Data Block イベントと Synchronize イベントに加えて、ホスト固有イベントが存在する。</p>
-    <p>ReadSharedMemory / WriteSharedMemory / ReadModifyWriteSharedMemory イベントの範囲はその [[ByteIndex]] から [[ByteIndex]] + [[ElementSize]] - 1 までの連続整数集合とする。2 つのイベントの範囲が同じ [[Block]] を持ち要素毎に等しいとき、それらの範囲は等しい。2 つのイベントの範囲が同じ [[Block]] を持ち、範囲が等しくなく かつ 交差が空でないとき、範囲は重複 (overlapping) する。2 つのイベントの範囲が同じ [[Block]] を持たないか、範囲が等しくも重複もしていないとき、範囲は素 (disjoint) である。</p>
+    <p>共有データブロックイベントは、抽象操作や Atomics オブジェクトのメソッドによって、候補実行のエージェントイベントレコードに導入されます。一部の操作は <dfn variants="Synchronize,Synchronize event">同期イベント</dfn> も導入します。これらにはフィールドがなく、他のイベントの許可される順序を直接制約するためだけに存在します。最後に、ホスト固有のイベントも存在します。<dfn variants="Memory events">メモリエベント</dfn>は、共有データブロックイベント、同期イベント、またはそのようなホスト固有イベントのいずれかです。</p>
+    <p>共有データブロックイベント _e_ の <dfn variants="memory ranges">メモリ範囲</dfn> とは、_e_.[[ByteIndex]]（含む）から _e_.[[ByteIndex]] + _e_.[[ElementSize]]（含まない）までの区間に含まれるすべての整数の集合とする。二つのイベントのメモリ範囲は、両イベントが同じ [[Block]]・[[ByteIndex]]・[[ElementSize]] を持つ場合に等しいとする。二つのイベントのメモリ範囲は、両イベントが同じ [[Block]] を持ち、範囲が等しくなく、かつその共通部分が空でない場合に重複するとする。二つのイベントのメモリ範囲は、[[Block]] が異なる場合、または範囲が等しくも重複もしていない場合に互いに素であるとする。</p>
     <emu-note>
       <p>考慮すべきホスト固有同期イベント例：SharedArrayBuffer を一方のエージェントから他方へ送る（ブラウザでの `postMessage` など）、エージェントの開始と停止、共有メモリ以外のチャネルによるエージェントクラスタ内通信。特定の実行 _execution_ において、それらイベントは host-synchronizes-with 厳密半順序を通じてホストにより提供される。さらにホストは is-agent-order-before 関係に参加するため _execution_.[[EventList]] にホスト固有同期イベントを追加できる。</p>
     </emu-note>
@@ -51112,29 +51124,29 @@ THH:mm:ss.sss
   <emu-clause id="sec-agent-event-records">
     <h1>Agent Events レコード (Agent Events Records)</h1>
     <p><dfn variants="Agent Events Records">Agent Events Record</dfn> は次のフィールドを持つ Record である。</p>
-    <emu-table id="table-agent-events-records" caption="Agent Events Record フィールド (Agent Events Record Fields)">
+    <emu-table id="table-agent-events-records" caption="エージェントイベントレコードのフィールド">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>フィールド名</th>
+            <th>値</th>
+            <th>意味</th>
           </tr>
         </thead>
         <tr>
           <td>[[AgentSignifier]]</td>
           <td>エージェント識別子</td>
-          <td>この順序付けに結果した評価を行ったエージェント。</td>
+          <td>この順序付けをもたらした評価を行ったエージェント。</td>
         </tr>
         <tr>
           <td>[[EventList]]</td>
-          <td>イベントの List</td>
-          <td>評価中にイベントがリストへ追加される。</td>
+          <td>メモリエベントのリスト</td>
+          <td>イベントは評価中にこのリストに追加される。</td>
         </tr>
         <tr>
           <td>[[AgentSynchronizesWith]]</td>
-          <td>Synchronize イベントのペアの List</td>
-          <td>操作的意味論によって導入された Synchronize 関係。</td>
+          <td>同期イベントのペアのリスト</td>
+          <td>操作的意味論によって導入される同期関係。</td>
         </tr>
       </table>
     </emu-table>
@@ -51169,24 +51181,24 @@ THH:mm:ss.sss
   <emu-clause id="sec-candidate-executions">
     <h1>候補実行 (Candidate Executions)</h1>
     <p><dfn variants="candidate executions">candidate execution</dfn> とは次のフィールドを持つエージェントクラスタ評価の Record である。</p>
-    <emu-table id="table-candidate-execution-records" caption="Candidate Execution Record フィールド (Candidate Execution Record Fields)">
+    <emu-table id="table-candidate-execution-records" caption="候補実行レコードのフィールド">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>フィールド名</th>
+            <th>値</th>
+            <th>意味</th>
           </tr>
         </thead>
         <tr>
           <td>[[EventsRecords]]</td>
-          <td>Agent Events Records の List</td>
-          <td>エージェントを評価中に追加されたイベントの List に対応付ける。</td>
+          <td>エージェントイベントレコードのリスト</td>
+          <td>エージェントを、評価中に追加されたメモリエベントのリストへマッピングする。</td>
         </tr>
         <tr>
           <td>[[ChosenValues]]</td>
-          <td>Chosen Value Records の List</td>
-          <td>ReadSharedMemory または ReadModifyWriteSharedMemory イベントを評価中に選択されたバイト値の List に対応付ける。</td>
+          <td>選択された値レコードのリスト</td>
+          <td>ReadSharedMemory または ReadModifyWriteSharedMemory イベントを、評価中に選択されたバイト値のリストへマッピングする。</td>
         </tr>
       </table>
     </emu-table>
@@ -51200,15 +51212,15 @@ THH:mm:ss.sss
     <emu-clause id="sec-event-set" type="abstract operation">
       <h1>
         EventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 候補実行,
+        ): メモリエベントの集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ を空集合とする。
-        1. _execution_.[[EventsRecords]] の各 Agent Events Record _aer_ について
-          1. _aer_.[[EventList]] の各イベント _E_ について
+        1. _events_ を空の集合とする。
+        1. _execution_.[[EventsRecords]] の各エージェントイベントレコード _aer_ について、次を行う
+          1. _aer_.[[EventList]] の各メモリエベント _E_ について、次を行う
             1. _E_ を _events_ に追加する。
         1. _events_ を返す。
       </emu-alg>
@@ -51217,15 +51229,15 @@ THH:mm:ss.sss
     <emu-clause id="sec-sharedatablockeventset" type="abstract operation">
       <h1>
         SharedDataBlockEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 候補実行,
+        ): 共有データブロックイベントの集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ を空集合とする。
-        1. EventSet(_execution_) の各イベント _E_ について
-          1. もし _E_ が ReadSharedMemory / WriteSharedMemory / ReadModifyWriteSharedMemory イベントなら _E_ を _events_ に追加する。
+        1. _events_ を空の集合とする。
+        1. EventSet(_execution_) の各メモリエベント _E_ について、次を行う
+          1. _E_ が共有データブロックイベントであれば、_E_ を _events_ に追加する。
         1. _events_ を返す。
       </emu-alg>
     </emu-clause>
@@ -51233,51 +51245,48 @@ THH:mm:ss.sss
     <emu-clause id="sec-hosteventset" type="abstract operation">
       <h1>
         HostEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 候補実行,
+        ): メモリエベントの集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ を空集合とする。
-        1. EventSet(_execution_) の各イベント _E_ について
-          1. もし _E_ が SharedDataBlockEventSet(_execution_) に含まれないなら _E_ を _events_ に追加する。
-        1. _events_ を返す。
+        1. EventSet(_execution_) のすべての要素のうち、SharedDataBlockEventSet(_execution_) に含まれないものを集めた新しい Set を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-composewriteeventbytes" type="abstract operation">
       <h1>
         ComposeWriteEventBytes (
-          _execution_: a candidate execution,
-          _byteIndex_: a non-negative integer,
-          _Ws_: a List of either WriteSharedMemory or ReadModifyWriteSharedMemory events,
-        ): a List of byte values
+          _execution_: 候補実行,
+          _byteIndex_: 0 以上の整数,
+          _Ws_: WriteSharedMemory または ReadModifyWriteSharedMemory イベントのリスト,
+        ): バイト値のリスト
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
         1. _byteLocation_ を _byteIndex_ とする。
-        1. _bytesRead_ を新しい空の List とする。
-        1. _Ws_ の各要素 _W_ について
-          1. 事前条件: _W_ はその範囲に _byteLocation_ を含む。
+        1. _bytesRead_ を新しい空のリストとする。
+        1. _Ws_ の各要素 _W_ について、次を行う
+          1. _W_ のメモリ範囲に _byteLocation_ が含まれていることをアサートする。
           1. _payloadIndex_ を _byteLocation_ - _W_.[[ByteIndex]] とする。
-          1. もし _W_ が WriteSharedMemory イベントなら
+          1. _W_ が WriteSharedMemory イベントである場合、
             1. _byte_ を _W_.[[Payload]][_payloadIndex_] とする。
-          1. それ以外
-            1. 事前条件: _W_ は ReadModifyWriteSharedMemory イベントである。
+          1. それ以外の場合、
+            1. _W_ が ReadModifyWriteSharedMemory イベントであることをアサートする。
             1. _bytes_ を ValueOfReadEvent(_execution_, _W_) とする。
             1. _bytesModified_ を _W_.[[ModifyOp]](_bytes_, _W_.[[Payload]]) とする。
             1. _byte_ を _bytesModified_[_payloadIndex_] とする。
           1. _byte_ を _bytesRead_ に追加する。
-          1. _byteLocation_ を _byteLocation_ + 1 に設定する。
+          1. _byteLocation_ に _byteLocation_ + 1 を設定する。
         1. _bytesRead_ を返す。
       </emu-alg>
       <emu-note>
-        <p>read-modify-write 変更 [[ModifyOp]] は ReadModifyWriteSharedMemory イベントを導入する Atomics オブジェクト上の関数プロパティによって与えられる。</p>
+        <p>Read-Modify-Write の修飾 [[ModifyOp]] は、ReadModifyWriteSharedMemory イベントを導入する Atomics オブジェクト上の関数プロパティによって与えられる。</p>
       </emu-note>
       <emu-note>
-        <p>この抽象操作は書き込みイベントの List をバイト値の List に合成する。ReadSharedMemory および ReadModifyWriteSharedMemory イベントのイベント意味論で使用される。</p>
+        <p>この抽象操作は、書き込みイベントのリストをバイト値のリストに合成するものである。これは ReadSharedMemory や ReadModifyWriteSharedMemory イベントのイベント意味論で使われる。</p>
       </emu-note>
     </emu-clause>
 
@@ -51301,308 +51310,313 @@ THH:mm:ss.sss
   <emu-clause id="sec-relations-of-candidate-executions">
     <h1>候補実行における関係 (Relations of Candidate Executions)</h1>
 
-    <p>以下の関係と数学的関数は特定の候補実行をパラメータに取り、そのイベントを順序付ける。</p>
+    <p>以下の関係および数学関数は、特定の候補実行にパラメータ化され、そのメモリエベントに順序を与えます。</p>
 
     <emu-clause id="sec-agent-order">
       <h1>is-agent-order-before</h1>
-      <p>候補実行 _execution_ における <dfn>is-agent-order-before</dfn> 関係は次を満たす最小のイベント上の関係である。</p>
+      <p>候補実行 _execution_ に対し、その <dfn>is-agent-order-before</dfn> 関係は、次の条件を満たすメモリエベント上の最小の関係です。</p>
       <ul>
-        <li>イベント _E_ と _D_ について、_execution_.[[EventsRecords]] 内のある Agent Events Record _aer_ が存在し _aer_.[[EventList]] に _E_ と _D_ が含まれ かつ _E_ が List 順序で _D_ より前にあるなら、_E_ is-agent-order-before _D_ in _execution_。</li>
+        <li>イベント _E_ と _D_ について、_execution_ の中で _E_ is-agent-order-before _D_ であるとは、あるエージェントイベントレコード _aer_ が _execution_.[[EventsRecords]] に含まれ、かつ _aer_.[[EventList]] が _E_ と _D_ の両方を含み、_E_ が _aer_.[[EventList]] のリスト順序で _D_ より前である場合です。</li>
       </ul>
 
       <emu-note>
-        <p>各エージェントは評価中にエージェント毎の厳密な全順序でイベントを導入する。これはそれら厳密全順序の合併である。</p>
+        <p>各エージェントは、評価中にエージェントごとの厳密な全順序でイベントを導入します。これは、それらの厳密な全順序の和集合です。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-reads-bytes-from" aoid="reads-bytes-from">
       <h1>reads-bytes-from</h1>
-      <p>候補実行 _execution_ における <em>reads-bytes-from</em> 関数は SharedDataBlockEventSet(_execution_) 内のイベントを同集合内のイベントの List に写像し次の条件を満たす数学的関数である。</p>
+      <p>候補実行 _execution_ に対し、その <em>reads-bytes-from</em> 関数は、SharedDataBlockEventSet(_execution_) 内のメモリエベントから SharedDataBlockEventSet(_execution_) 内のイベントのリストへの写像として、次の条件を満たす数学関数です。</p>
       <ul>
         <li>
-          <p>SharedDataBlockEventSet(_execution_) 内の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について、reads-bytes-from(_R_) in _execution_ は長さ _R_.[[ElementSize]] の List であり、その要素は WriteSharedMemory または ReadModifyWriteSharedMemory イベント _Ws_ で次を満たす。</p>
+          <p>SharedDataBlockEventSet(_execution_) 内の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について、reads-bytes-from(_R_) in _execution_ は長さ _R_.[[ElementSize]] のリストであり、その各要素は WriteSharedMemory または ReadModifyWriteSharedMemory イベント _Ws_ です。次のすべてを満たします。</p>
           <ul>
-            <li>_Ws_ 内インデックス _i_ を持つ各イベント _W_ は _R_.[[ByteIndex]] + _i_ をその範囲に含む。</li>
-            <li>_R_ は _Ws_ 内に存在しない。</li>
+            <li>_Ws_ のインデックス _i_ にある各イベント _W_ について、_R_.[[ByteIndex]] + _i_ が _W_ のメモリ範囲内である。</li>
+            <li>_Ws_ に _R_ は含まれない。</li>
           </ul>
         </li>
       </ul>
-      <p>候補実行は常に reads-bytes-from 関数を許容する。</p>
+      <p>候補実行は常に reads-bytes-from 関数を持ちます。</p>
     </emu-clause>
 
     <emu-clause id="sec-reads-from">
       <h1>reads-from</h1>
-      <p>候補実行 _execution_ における <dfn>reads-from</dfn> 関係は次を満たす最小のイベント上の関係である。</p>
+      <p>候補実行 _execution_ に対し、その <dfn>reads-from</dfn> 関係は、次の条件を満たすメモリエベント上の最小の関係です。</p>
       <ul>
-        <li>イベント _R_ と _W_ について、SharedDataBlockEventSet(_execution_) が両方を含み、かつ reads-bytes-from(_R_) in _execution_ が _W_ を含むなら _R_ reads-from _W_ in _execution_。</li>
+        <li>イベント _R_ および _W_ について、_execution_ において _R_ reads-from _W_ であるのは、SharedDataBlockEventSet(_execution_) が _R_ と _W_ の両方を含み、かつ reads-bytes-from(_R_) in _execution_ が _W_ を含む場合です。</li>
       </ul>
     </emu-clause>
 
     <emu-clause id="sec-host-synchronizes-with">
       <h1>host-synchronizes-with</h1>
-      <p>候補実行 _execution_ における <dfn>host-synchronizes-with</dfn> 関係はホスト提供のホスト固有イベント上の厳密半順序で少なくとも次を満たす。</p>
+      <p>候補実行 _execution_ に対し、その <dfn>host-synchronizes-with</dfn> 関係は、次を少なくとも満たす、ホスト固有のメモリエベントに対するホスト提供の厳密部分順序です。</p>
       <ul>
-        <li>もし _E_ host-synchronizes-with _D_ in _execution_ なら HostEventSet(_execution_) は _E_ と _D_ を含む。</li>
-        <li>host-synchronizes-with と is-agent-order-before の合併にサイクルが存在しない。</li>
+        <li>_execution_ において、_E_ host-synchronizes-with _D_ であれば、HostEventSet(_execution_) は _E_ および _D_ を含む。</li>
+        <li>host-synchronizes-with および is-agent-order-before の和集合にサイクルは存在しない。</li>
       </ul>
 
       <emu-note>
-        <p>候補実行 _execution_ 内のホスト固有イベント _E_ と _D_ について、_E_ host-synchronizes-with _D_ in _execution_ は _E_ happens-before _D_ in _execution_ を意味する。</p>
+        <p>候補実行 _execution_ の二つのホスト固有イベント _E_ および _D_ について、_E_ host-synchronizes-with _D_ であるなら、_E_ は _execution_ で _D_ より前に発生する (happens-before) ことを意味します。</p>
       </emu-note>
       <emu-note>
-        <p>この関係はホストに追加の同期機構（HTML ワーカー間の `postMessage` など）を提供させる。</p>
+        <p>この関係は、ホストが HTML ワーカー間の `postMessage` などの追加的な同期機構を提供することを許可します。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-synchronizes-with">
       <h1>synchronizes-with</h1>
-      <p>候補実行 _execution_ における <dfn>synchronizes-with</dfn> 関係は次を満たす最小のイベント上の関係である。</p>
+      <p>候補実行 _execution_ に対し、その <dfn>synchronizes-with</dfn> 関係は、次の条件を満たすメモリエベント上の最小の関係です。</p>
       <ul>
         <li>
-          イベント _R_ と _W_ について、_R_ reads-from _W_ in _execution_, _R_.[[Order]] が ~seq-cst~, _W_.[[Order]] が ~seq-cst~, かつ _R_ と _W_ が等しい範囲なら _W_ synchronizes-with _R_ in _execution_。
+          イベント _R_ および _W_ について、_execution_ において _W_ synchronizes-with _R_ であるのは、_R_ reads-from _W_ in _execution_ かつ _R_.[[Order]] が ~seq-cst~、_W_.[[Order]] が ~seq-cst~、さらに _R_ と _W_ のメモリ範囲が等しい場合です。
         </li>
         <li>
-          _execution_.[[EventsRecords]] の各要素 _eventsRecord_ について次が成り立つ。
+          _execution_.[[EventsRecords]] の各要素 _eventsRecord_ について、以下が成り立つ。
           <ul>
-            <li>イベント _S_ と _Sw_ について、_eventsRecord_.[[AgentSynchronizesWith]] が (_S_, _Sw_) を含むなら _S_ synchronizes-with _Sw_ in _execution_。</li>
+            <li>イベント _S_ および _Sw_ について、_eventsRecord_.[[AgentSynchronizesWith]] が (_S_, _Sw_) を含むとき、_S_ synchronizes-with _Sw_ in _execution_ である。</li>
           </ul>
         </li>
-        <li>イベント _E_ と _D_ について、_execution_.[[HostSynchronizesWith]] が (_E_, _D_) を含むなら _E_ synchronizes-with _D_ in _execution_。</li>
+        <li>イベント _E_ および _D_ について、_E_ synchronizes-with _D_ in _execution_ であるのは、_execution_.[[HostSynchronizesWith]] が (_E_, _D_) を含む場合である。</li>
       </ul>
 
       <emu-note>
-        <p>メモリーモデル文献の慣例により、候補実行 _execution_ では書き込みイベントが読み取りイベントを synchronizes-with する。</p>
+        <p>メモリモデル文献上の慣例として、候補実行 _execution_ においては、書き込みイベントが読み出しイベントに synchronizes-with する（読み出しイベントが書き込みイベントに synchronizes-with するのではない）。</p>
       </emu-note>
 
       <emu-note>
-        <p>候補実行 _execution_ では ~init~ イベントはこの関係に参加せず、代わりに happens-before により直接制約される。</p>
+        <p>候補実行 _execution_ において、~init~ イベントはこの関係に参加せず、代わりに happens-before によって直接制約される。</p>
       </emu-note>
 
       <emu-note>
-        <p>候補実行 _execution_ において reads-from で関連する全 ~seq-cst~ イベントが synchronizes-with で関連するとは限らない。等しい範囲を持つイベントのみが synchronizes-with で関連する。</p>
+        <p>候補実行 _execution_ において、reads-from で関連付けられたすべての ~seq-cst~ イベントが synchronizes-with で関連付けられるとは限らない。同じメモリ範囲を持つイベントのみが synchronizes-with で関連付けられる。</p>
       </emu-note>
 
       <emu-note>
-        <p>候補実行 _execution_ の Shared Data Block イベント _R_ と _W_ で _W_ synchronizes-with _R_ の場合、_R_ は _W_ 以外の書き込みからも reads-from し得る。</p>
+        <p>候補実行 _execution_ における Shared Data Block イベント _R_ および _W_ について、_W_ synchronizes-with _R_ である場合でも、_R_ は _W_ 以外の書き込みから reads-from することができる。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-happens-before">
       <h1>happens-before</h1>
-      <p>候補実行 _execution_ における <dfn>happens-before</dfn> 関係は次を満たす最小のイベント上の関係である。</p>
+      <p>候補実行 _execution_ に対し、その <dfn>happens-before</dfn> 関係は、次の条件を満たすメモリエベント上の最小の関係です。</p>
 
       <ul>
         <li>
-          <p>イベント _E_ と _D_ について、次のいずれかが真なら _E_ happens-before _D_ in _execution_。</p>
+          <p>イベント _E_ および _D_ について、_execution_ において _E_ happens-before _D_ であるのは、次のいずれかの条件が成り立つ場合です。</p>
           <ul>
             <li>_E_ is-agent-order-before _D_ in _execution_。</li>
             <li>_E_ synchronizes-with _D_ in _execution_。</li>
-            <li>SharedDataBlockEventSet(_execution_) が _E_ と _D_ を含み、_E_.[[Order]] が ~init~ で、_E_ と _D_ が重複する範囲を持つ。</li>
-            <li>イベント _F_ が存在し _E_ happens-before _F_ かつ _F_ happens-before _D_ in _execution_。</li>
+            <li>SharedDataBlockEventSet(_execution_) が _E_ と _D_ の両方を含み、_E_.[[Order]] が ~init~ であり、かつ _E_ と _D_ のメモリ範囲が重なっている。</li>
+            <li>あるイベント _F_ が存在し、_E_ happens-before _F_ かつ _F_ happens-before _D_ in _execution_。</li>
           </ul>
         </li>
       </ul>
 
       <emu-note>
-        <p>happens-before は agent-order の上位集合であるため、候補実行は ECMAScript の単一スレッド評価意味論と整合する。</p>
+        <p>happens-before は agent-order の上位集合であるため、候補実行は ECMAScript の単一スレッド評価意味論と整合性がある。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-properties-of-valid-executions">
-    <h1>有効な実行の性質 (Properties of Valid Executions)</h1>
+    <h1>有効な実行の性質</h1>
 
     <emu-clause id="sec-valid-chosen-reads">
-      <h1>Valid Chosen Reads</h1>
-      <p>候補実行 _execution_ が valid chosen reads を持つとは次のアルゴリズムが *true* を返す場合である。</p>
+      <h1>妥当な選択読み</h1>
+      <p>候補実行 _execution_ が妥当な選択読みを持つとは、次のアルゴリズムが *true* を返す場合である。</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について
-          1. _chosenValueRecord_ を _execution_.[[ChosenValues]] のうち [[Event]] フィールドが _R_ である要素とする。
+        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について、次を行う
+          1. _chosenValueRecord_ を _execution_.[[ChosenValues]] の中で [[Event]] フィールドが _R_ である要素とする。
           1. _chosenValue_ を _chosenValueRecord_.[[ChosenValue]] とする。
           1. _readValue_ を ValueOfReadEvent(_execution_, _R_) とする。
           1. _chosenLen_ を _chosenValue_ の要素数とする。
           1. _readLen_ を _readValue_ の要素数とする。
-          1. もし _chosenLen_ ≠ _readLen_ なら
+          1. _chosenLen_ ≠ _readLen_ ならば、
             1. *false* を返す。
-          1. もし 区間 [0, _chosenLen_) のある整数 _i_ について _chosenValue_[_i_] ≠ _readValue_[_i_] なら
+          1. 0（含む）から _chosenLen_（含まない）までの区間の整数 _i_ について、_chosenValue_[_i_] ≠ _readValue_[_i_] であれば、
             1. *false* を返す。
         1. *true* を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-coherent-reads">
-      <h1>Coherent Reads</h1>
-      <p>候補実行 _execution_ が coherent reads を持つとは次のアルゴリズムが *true* を返す場合である。</p>
+      <h1>コヒーレントリード</h1>
+      <p>候補実行 _execution_ がコヒーレントリードを持つとは、次のアルゴリズムが *true* を返す場合である。</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について
+        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について、次を行う
           1. _Ws_ を reads-bytes-from(_R_) in _execution_ とする。
           1. _byteLocation_ を _R_.[[ByteIndex]] とする。
-          1. _Ws_ の各要素 _W_ について
-            1. もし _R_ happens-before _W_ in _execution_ なら
+          1. _Ws_ の各要素 _W_ について、次を行う
+            1. _R_ happens-before _W_ in _execution_ であれば、
               1. *false* を返す。
-            1. もし _byteLocation_ をその範囲に含む WriteSharedMemory または ReadModifyWriteSharedMemory イベント _V_ が存在し、_W_ happens-before _V_ かつ _V_ happens-before _R_ in _execution_ なら
+            1. WriteSharedMemory または ReadModifyWriteSharedMemory イベント _V_ で _byteLocation_ がメモリ範囲に含まれており、さらに _W_ happens-before _V_ in _execution_ および _V_ happens-before _R_ in _execution_ なるものが存在すれば、
               1. *false* を返す。
-            1. _byteLocation_ を _byteLocation_ + 1 に設定する。
+            1. _byteLocation_ に _byteLocation_ + 1 を設定する。
         1. *true* を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tear-free-aligned-reads">
-      <h1>Tear Free Reads</h1>
-      <p>候補実行 _execution_ が tear free reads を持つとは次のアルゴリズムが *true* を返す場合である。</p>
+      <h1>ティアフリーリード</h1>
+      <p>候補実行 _execution_ がティアフリーリードを持つとは、次のアルゴリズムが *true* を返す場合である。</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について
-          1. もし _R_.[[NoTear]] が *true* なら
-            1. 事前条件: _R_.[[ByteIndex]] を _R_.[[ElementSize]] で割った余りは 0。
-            1. _R_ reads-from _W_ in _execution_ であり _W_.[[NoTear]] が *true* である各イベント _W_ について
-              1. もし _R_ と _W_ が等しい範囲を持ち、_R_ と _W_ が同じ Shared Data Block event でなく、_R_ reads-from _V_ in _execution_ を満たす等しい範囲と [[NoTear]] が *true* のイベント _V_ が存在するなら
+        1. SharedDataBlockEventSet(_execution_) の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _R_ について、次を行う
+          1. _R_.[[NoTear]] が *true* の場合、
+            1. _R_.[[ByteIndex]] を _R_.[[ElementSize]] で割った余りが 0 であることをアサートする。
+            1. _execution_ において _R_ reads-from _W_ かつ _W_.[[NoTear]] が *true* である各 Memory event _W_ について、次を行う
+              1. _R_ と _W_ のメモリ範囲が等しく、さらに Memory event _V_ が存在して _V_ と _W_ のメモリ範囲が等しく、_V_.[[NoTear]] が *true* 、_W_ と _V_ が同じ Shared Data Block event でなく、かつ _execution_ において _R_ reads-from _V_ であるなら、
                 1. *false* を返す。
         1. *true* を返す。
       </emu-alg>
 
       <emu-note>
-        <p>イベントの [[NoTear]] フィールドは整数 TypedArray へのアクセスで導入されたとき *true*、浮動小数点 TypedArray または DataView で導入されたとき *false*。</p>
-        <p>直感的説明: メモリ範囲が整数 TypedArray によりアラインされた形でアクセスされたとき、その範囲に対する単一の書き込みイベントが同範囲の他の書き込みイベントとのデータ競合で「勝つ」必要がある。より厳密には、アラインされた読み取りイベントが、同一範囲を持つ複数の異なる書き込みイベントのバイトを混合した値を読んではならない。なお、アラインされた読み取りイベントが重複範囲を持つ複数の書き込みイベントから読む可能性は残る。</p>
+        <p>共有データブロックイベントの [[NoTear]] フィールドは、そのイベントが整数型 TypedArray へのアクセスによって導入された場合 *true* となり、浮動小数点型 TypedArray や DataView へのアクセスによって導入された場合は *false* となる。</p>
+        <p>直感的には、この要件は、メモリ範囲が整数型 TypedArray によりアラインされた形でアクセスされる場合、等しい範囲を持つ他の書き込みイベントとのデータ競合では、その範囲へのひとつの書き込みイベントが「勝たなければならない」ことを意味する。より正確には、アラインされた読み出しイベントが、範囲が等しい複数の異なる書き込みイベントのバイトを合成して値を読み取ることができない、ということである。ただし、アラインされた読み出しイベントが、範囲が重なった複数の書き込みイベントから値を読み取ることは可能である。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-memory-order">
-      <h1>Sequentially Consistent Atomics</h1>
-      <p>候補実行 _execution_ において、<dfn>is-memory-order-before</dfn> は EventSet(_execution_) 内の全イベント上の厳密全順序で次を満たす。</p>
+      <h1>逐次一貫性のあるアトミック操作</h1>
+      <p>候補実行 _execution_ に対し、<dfn>is-memory-order-before</dfn> は EventSet(_execution_) 内のすべての Memory イベントの厳密全順序であり、次を満たす。</p>
       <ul>
-        <li>イベント _E_ と _D_ について、_E_ happens-before _D_ in _execution_ なら _E_ is-memory-order-before _D_ in _execution_。</li>
+        <li>イベント _E_ および _D_ について、_execution_ において _E_ is-memory-order-before _D_ とは、_E_ happens-before _D_ in _execution_ である場合である。</li>
         <li>
-          <p>_R_ reads-from _W_ in _execution_ であるイベント _R_ と _W_ について、SharedDataBlockEventSet(_execution_) 内に WriteSharedMemory または ReadModifyWriteSharedMemory イベント _V_ が存在し、_V_.[[Order]] が ~seq-cst~, _W_ is-memory-order-before _V_, _V_ is-memory-order-before _R_ であり、かつ以下のいずれかが真である状況は存在しない。</p>
+          <p>_execution_ において _R_ reads-from _W_ であるイベント _R_ および _W_ について、次をみたす WriteSharedMemory または ReadModifyWriteSharedMemory イベント _V_ が SharedDataBlockEventSet(_execution_) 内に存在しない：</p>
           <ul>
-            <li>_W_ synchronizes-with _R_ in _execution_ かつ _V_ と _R_ が等しい範囲。</li>
-            <li>_W_ happens-before _R_ かつ _V_ happens-before _R_ in _execution_, _W_.[[Order]] が ~seq-cst~, かつ _W_ と _V_ が等しい範囲。</li>
-            <li>_W_ happens-before _R_ かつ _W_ happens-before _V_ in _execution_, _R_.[[Order]] が ~seq-cst~, かつ _V_ と _R_ が等しい範囲。</li>
+            <li>_V_.[[Order]] が ~seq-cst~ である</li>
+            <li>_execution_ において _W_ is-memory-order-before _V_ かつ _V_ is-memory-order-before _R_ である</li>
+            <li>さらに下記のいずれかが成り立つ</li>
+            <ul>
+              <li>_W_ synchronizes-with _R_ in _execution_ かつ _V_ と _R_ のメモリ範囲が等しい場合</li>
+              <li>_W_ happens-before _R_ かつ _V_ happens-before _R_ in _execution_、_W_.[[Order]] が ~seq-cst~、かつ _W_ と _V_ のメモリ範囲が等しい場合</li>
+              <li>_W_ happens-before _R_ かつ _W_ happens-before _V_ in _execution_、_R_.[[Order]] が ~seq-cst~、かつ _V_ と _R_ のメモリ範囲が等しい場合</li>
+            </ul>
           </ul>
           <emu-note>
-            <p>この節は等しい範囲における ~seq-cst~ イベントを追加制約する。</p>
+            <p>この項は等しいメモリ範囲に対する ~seq-cst~ イベントを追加で制約する。</p>
           </emu-note>
         </li>
         <li>
-          <p>SharedDataBlockEventSet(_execution_) 内の各 WriteSharedMemory または ReadModifyWriteSharedMemory イベント _W_ について、_W_.[[Order]] が ~seq-cst~ なら、_W_ より memory-order 前に等しい範囲で無限個の ReadSharedMemory または ReadModifyWriteSharedMemory イベントが存在することはない。</p>
+          <p>SharedDataBlockEventSet(_execution_) 内の各 WriteSharedMemory または ReadModifyWriteSharedMemory イベント _W_ について、_W_.[[Order]] が ~seq-cst~ であるならば、_W_ よりもメモリ順序で前にある等しいメモリ範囲の ReadSharedMemory または ReadModifyWriteSharedMemory イベントが無限個存在することはない。</p>
           <emu-note>
-            <p>この節とエージェントの前進性保証により、~seq-cst~ 書き込みが有限時間で等しい範囲の ~seq-cst~ 読み取りに可視化されるという活性 (liveness) 条件を確保する。</p>
+            <p>この項とエージェントのフォワードプログレス保証により、~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">書き込み</emu-xref> は、等しいメモリ範囲を持つ~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">読み出し</emu-xref> から有限時間内に観測可能になる、というライブネス条件が担保される。</p>
           </emu-note>
         </li>
       </ul>
-      <p>候補実行は is-memory-order-before 関係を許容するなら sequentially consistent atomics を持つ。</p>
+      <p>候補実行が is-memory-order-before 関係を持つ場合、それは逐次一貫性のあるアトミック操作を持つという。</p>
 
       <emu-note>
-        <p>is-memory-order-before は EventSet(_execution_) の全イベントを含むが、_execution_ 内で happens-before または synchronizes-with によって制約されないものは順序中の任意位置に現れてよい。</p>
+        <p>is-memory-order-before は EventSet(_execution_) 内の全イベントを含むが、_execution_ 内で happens-before または synchronizes-with によって拘束されないものは順序内のどこでも現れることができる。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-valid-executions">
-      <h1>Valid Executions</h1>
-      <p>候補実行 _execution_ が有効実行 (execution) であるとは、以下すべてが真であること。</p>
+      <h1>有効な実行</h1>
+      <p>候補実行 _execution_ は、次のすべてが成り立つ場合、有効な実行（単に実行とも呼ぶ）である。</p>
       <ul>
-        <li>ホストが _execution_ に対する host-synchronizes-with 関係を提供する。</li>
-        <li>_execution_ が厳密半順序である happens-before 関係を許容する。</li>
-        <li>_execution_ が valid chosen reads を持つ。</li>
-        <li>_execution_ が coherent reads を持つ。</li>
-        <li>_execution_ が tear free reads を持つ。</li>
-        <li>_execution_ が sequentially consistent atomics を持つ。</li>
+        <li>ホストが _execution_ に対する host-synchronizes-with 関係を提供している。</li>
+        <li>_execution_ が厳密部分順序である happens-before 関係を持つ。</li>
+        <li>_execution_ が妥当な選択読みを持つ。</li>
+        <li>_execution_ がコヒーレントリードを持つ。</li>
+        <li>_execution_ がティアフリーリードを持つ。</li>
+        <li>_execution_ が逐次一貫性のあるアトミック操作を持つ。</li>
       </ul>
-      <p>全てのプログラムは少なくとも 1 つの有効実行を持つ。</p>
+      <p>すべてのプログラムは少なくとも1つの有効な実行を持つ。</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-races">
-    <h1>競合 (Races)</h1>
-    <p>実行 _execution_ と SharedDataBlockEventSet(_execution_) に含まれるイベント _E_ と _D_ について、次のアルゴリズムが *true* を返すとき _E_ と _D_ は <em>race</em> にある。</p>
+    <h1>競合</h1>
+    <p>実行 _execution_ および SharedDataBlockEventSet(_execution_) に含まれるイベント _E_ と _D_ について、次のアルゴリズムが *true* を返す場合、_E_ と _D_ は <em>競合（race）</em> している。</p>
     <emu-alg>
-      1. もし _E_ と _D_ が同一の Shared Data Block event でないなら
-        1. もし _E_ happens-before _D_ in _execution_ かつ _D_ happens-before _E_ in _execution_ の双方が成り立たないなら
-          1. もし _E_ と _D_ が共に WriteSharedMemory または ReadModifyWriteSharedMemory イベントで かつ _E_ と _D_ の範囲が素でないなら
+      1. _E_ と _D_ が同じ Shared Data Block event でない場合、
+        1. _execution_ において _E_ happens-before _D_ かつ _D_ happens-before _E_ の両方が成り立たない場合、
+          1. _E_ と _D_ の両方が WriteSharedMemory または ReadModifyWriteSharedMemory イベントであり、かつ _E_ と _D_ のメモリ範囲が互いに素でない場合、
             1. *true* を返す。
-          1. もし _E_ reads-from _D_ in _execution_ または _D_ reads-from _E_ in _execution_ なら
+          1. _execution_ において _E_ reads-from _D_ または _D_ reads-from _E_ である場合、
             1. *true* を返す。
       1. *false* を返す。
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-races">
-    <h1>データ競合 (Data Races)</h1>
-    <p>実行 _execution_ と SharedDataBlockEventSet(_execution_) に含まれるイベント _E_ と _D_ について、次のアルゴリズムが *true* を返すとき _E_ と _D_ は <dfn>data race</dfn> にある。</p>
+    <h1>データ競合</h1>
+    <p>実行 _execution_ および SharedDataBlockEventSet(_execution_) に含まれるイベント _E_ と _D_ について、次のアルゴリズムが *true* を返す場合、_E_ と _D_ は <dfn>データ競合（data race）</dfn> している。</p>
     <emu-alg>
-      1. もし _E_ と _D_ が <emu-xref href="#sec-races">race</emu-xref> in _execution_ にあるなら
-        1. もし _E_.[[Order]] が ~seq-cst~ ではない または _D_.[[Order]] が ~seq-cst~ ではないなら
+      1. _execution_ において _E_ と _D_ が <emu-xref href="#sec-races">競合</emu-xref> していれば、
+        1. _E_.[[Order]] が ~seq-cst~ でない、または _D_.[[Order]] が ~seq-cst~ でない場合、
           1. *true* を返す。
-        1. もし _E_ と _D_ が重複する範囲を持つなら
+        1. _E_ と _D_ のメモリ範囲が重複している場合、
           1. *true* を返す。
       1. *false* を返す。
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-race-freedom">
-    <h1>データ競合の不存在 (Data Race Freedom)</h1>
-    <p>実行 _execution_ が <dfn>data race free</dfn> とは SharedDataBlockEventSet(_execution_) 内に data race にある 2 つのイベントが存在しないこと。</p>
-    <p>プログラムが data race free とはそのすべての実行が data race free であること。</p>
-    <p>メモリーモデルは data race free プログラムの全イベントについて逐次的一貫性を保証する。</p>
+    <h1>データ競合なし</h1>
+    <p>実行 _execution_ が <dfn>データ競合なし（data race free）</dfn> であるとは、SharedDataBlockEventSet(_execution_) にデータ競合状態にあるイベントが2つ以上存在しないことである。</p>
+    <p>すべての実行がデータ競合なしであれば、そのプログラムはデータ競合なしである。</p>
+    <p>メモリモデルはデータ競合なしプログラムのすべてのイベントに対して逐次一貫性を保証する。</p>
   </emu-clause>
 
   <emu-clause id="sec-shared-memory-guidelines">
-    <h1>共有メモリ利用指針 (Shared Memory Guidelines)</h1>
+    <h1>共有メモリ利用指針</h1>
     <emu-note>
-      <p>以下は共有メモリを扱う ECMAScript プログラマ向けガイドラインである。</p>
-      <p>プログラムを data race free に保つ（すなわち同一メモリ位置に対する並行する非 atomic 操作が不可能であるようにする）ことを推奨する。Data race free プログラムは各エージェントの評価意味論ステップが互いにインターリーブされる意味論（インターリービング意味論）を持つ。Data race free プログラムではメモリーモデルの詳細を理解する必要はない。詳細は ECMAScript をより良く書くための直観をほぼ与えない。</p>
-      <p>より一般には、プログラムが data race free でなくとも、atomic 操作がどのデータ競合にも巻き込まれず、競合する操作がすべて同じアクセスサイズであれば予測可能な振る舞いを持ち得る。Atomic 操作を競合に巻き込まない最も簡単な方法は、atomic と非 atomic の操作が異なるメモリセルを使用し、異なるサイズの atomic アクセスを同じセルに同時利用しないようにすることである。実質的にプログラムは共有メモリを可能な限り強い型付けがあるものとして扱うべきである。依然として競合する非 atomic アクセスの順序やタイミングに依存することはできないが、メモリを強く型付けとして扱えば競合するアクセスは「tear」（値のビット断片の混在）しない。</p>
+      <p>以下は共有メモリを扱う ECMAScript プログラマー向けの指針です。</p>
+      <p>プログラムはデータ競合なしに保つこと（すなわち、同一メモリ位置に対する非アトミック操作が並行して発生しないこと）が推奨されます。データ競合なしプログラムは、各エージェントの評価意味論が交互にインターリーブされる意味論になります。データ競合なしであれば、メモリモデルの細部を理解する必要はありません。その詳細は ECMAScript をよりうまく書く直感の形成には役立たないでしょう。</p>
+      <p>より一般的には、プログラムがデータ競合なしでなくとも、アトミック操作が競合に関与せず、競合する操作がすべて同じアクセスサイズであれば、予測可能な挙動となる場合があります。もっとも単純なのは、アトミックと非アトミックの操作で異なるメモリセルを使う・異なるサイズのアトミックアクセスで同一セルを同時にアクセスしないようにすることです。すなわち、プログラムは可能な限り共有メモリを強く型付けされたものとして扱うべきです。依然として競合する非アトミックアクセスの順序やタイミングには依存できませんが、メモリを強く型付けとして扱えば競合アクセスで「ティア」（値のビットが混ざり合う）が発生しません。</p>
     </emu-note>
 
     <emu-note>
-      <p>以下は共有メモリを使用するプログラムにコンパイラ変換を適用する ECMAScript 実装者向けガイドラインである。</p>
-      <p>単一エージェント環境で有効なほとんどのプログラム変換をマルチエージェント環境でも許容することが望ましい。これによりマルチエージェントプログラムにおける各エージェントの性能が単一エージェント環境と同様に良好となる。しばしばこれら変換は判断が難しい。以下にメモリーモデルによって含意される（またはそれより強い）規範的意図を持つが網羅的ではない規則を示す。これらは is-agent-order-before 関係を構成するイベントが導入される以前のプログラム変換に適用されることを意図する。</p>
-      <p><dfn variants="agent-order slices">agent-order slice</dfn> を単一エージェントに関わる is-agent-order-before 関係の部分集合とする。</p>
-      <p>読み取りイベントの <dfn>possible read values</dfn> を、そのイベントに対する全有効実行における ValueOfReadEvent の値集合とする。</p>
-      <p>共有メモリが存在しない場合に有効なエージェント順スライスの任意の変換は、以下の例外を除き共有メモリ存在下でも有効である。</p>
+      <p>以下は共有メモリ利用プログラムのコンパイラ変換を行う ECMAScript 実装者向けの指針です。</p>
+      <p>シングルエージェント環境で有効なほとんどのプログラム変換を、マルチエージェント環境でも許可することが望ましい。これにより、マルチエージェントプログラムにおける各エージェントの性能が、シングルエージェント環境と同様に良好であることが保証される。多くの場合、これらの変換の妥当性を判断するのは難しい。本節では、プログラム変換に関するいくつかの規則を示す。これらの規則は規範的に（つまりメモリモデルによって暗に含まれるか、それよりも強い）捉えることを意図しているが、必ずしも網羅的ではない。これらの規則は、is-agent-order-before 関係を構成する Memory event の導入に先立ち行われるプログラム変換に適用されることを想定している。</p>
+      <p><dfn variants="agent-order slices">エージェント順序スライス</dfn>とは、is-agent-order-before 関係のうち単一エージェントに関係する部分集合である。</p>
+      <p>ある読み出しイベントの <dfn>可能な読み値（possible read values）</dfn> とは、そのイベントに対して全ての有効な実行における ValueOfReadEvent の値の集合である。</p>
+      <p>共有メモリなしの場合に有効なエージェント順序スライスの変換は、下記例外を除き、共有メモリがある場合でも有効である。</p>
       <ul>
         <li>
-          <p><em>Atomic は石版に刻まれている</em>: プログラム変換はエージェント順スライス内の ~seq-cst~ イベントを ~unordered~ 操作と再順序付けしてはならず、~seq-cst~ 操作同士を再順序付けしてもならず、~seq-cst~ 操作を is-agent-order-before 関係から除去してもならない。</p>
-          <p>(実際には並べ替え禁止はコンパイラに全 ~seq-cst~ 操作が同期であり最終的な is-memory-order-before 関係に含まれると仮定させる。これは相互エージェント解析不在で通常仮定せざるを得ない。さらに呼び出し先の memory-order への影響が未知な呼び出しは ~seq-cst~ 操作を含み得ると仮定させる。)</p>
+          <p><em>アトミックは常にそのまま</em>: プログラム変換によって、[[Order]] が ~seq-cst~ である Shared Data Block イベントが is-agent-order-before 関係から除外されたり、互いに順序を入れ替えたり、~unordered~ イベントとの順序がエージェント順序スライス内で入れ替えたりしてはならない。</p>
+          <p>（実際には、この順序変更の禁止によって、コンパイラはすべての ~seq-cst~ 操作が同期であり、最終的な is-memory-order-before 関係に含まれるものと仮定せざるを得ず、通常は他エージェントの解析がなければこう仮定することになる。また、呼び出し先のメモリ順序への影響が判明しない呼び出しも ~seq-cst~ を含む可能性を仮定する必要がある。）</p>
         </li>
         <li>
-          <p><em>読み取りは安定</em>: 任意の共有メモリ読み取りは 1 回の実行で単一の値のみ観測しなければならない。</p>
-          <p>(例: プログラム上意味的に 1 回の読みを複数回実行した場合、後続で観測される値はそのうち 1 つのみ許される。Rematerialization として知られる変換はこの規則に違反し得る。)</p>
+          <p><em>読み出しの安定性</em>: 各共有メモリ読み出しは、同一実行中つねに一つの値しか観測できないこと。</p>
+          <p>（例えば、意味的に単一の読み出しが複数回実行された場合、その後プログラムが観測できるのはそのうちいずれか一つだけになること。他の値も観測できるような変換（リマテリアリゼーション）は違反となる。）</p>
         </li>
         <li>
-          <p><em>書き込みは安定</em>: 共有メモリへの全ての観測可能な書き込みは実行中のプログラム意味論から導かれていなければならない。</p>
-          <p>(例: より大きな場所での read-modify-write を用いて小さなデータを書いたり、プログラムが書き得ない値の書き込み、他エージェントにより上書きされ得る位置に直前に読み取った値をそのまま書き戻したりしてはならない。)</p>
+          <p><em>書き込みの安定性</em>: 共有メモリへのすべての観測可能な書き込みは、各実行のプログラム意味論に従っていなければならない。</p>
+          <p>（例えば、リードモディファイライトによる大きい単位での書き込みで小さい値を書き込む・本来書けない値を書き込む・読み出した値を読み出し後に他のエージェントが上書きした可能性のあるアドレスに再度書き戻すなどによって、観測可能な書き込みを増やしてはならない。）</p>
         </li>
         <li>
-          <p><em>Possible read values は空であってはならない</em>: プログラム変換は共有メモリ読み取りの possible read values を空集合にしてはならない。</p>
-          <p>(直観に反して、この規則は実際には書き込み上の変換を制約する。書き込みは読み取りイベントにより読まれることでメモリーモデル上の効力を持つため。例えば書き込みは ~seq-cst~ 操作 2 つの間で移動・合併・時に再順序付けできるが、ある位置を更新する全ての書き込みを除去することはできない；何らかの書き込みは残さねばならない。)</p>
+          <p><em>可能な読み値は空であってはならない</em>: プログラム変換は、共有メモリ読み出しの可能な読み値が空になる原因になってはならない。</p>
+          <p>（これは直感に反するが、実際にはこの規則が書き込み変換を強く制限する。書き込みイベントはリードイベントに観測されてこそ意味があるので、~seq-cst~ の間で書きを合成・並び替えしても、位置ごとに一切書きを残さないことは許されない。）</p>
         </li>
       </ul>
-      <p>依然として有効な変換例: 同一位置への複数の非 atomic 読み取りのマージ、非 atomic 読み取りの再順序付け、投機的非 atomic 読み取りの導入、同一位置への複数非 atomic 書き込みのマージ、異なる位置への非 atomic 書き込みの再順序付け、非 atomic 読み取りのループ外へのホイスト（終了性に影響があっても）。一般にエイリアスされた TypedArray は位置が異なることの証明を難しくする。</p>
+      <p>妥当な変換例：同一アドレスへの複数の非アトミック読みをまとめる・非アトミック読みに順序をつけず並び替える・投機的な非アトミック読みを導入する・同一アドレスへの複数の非アトミック書きをまとめる・異なるアドレスへの非アトミック書きの順序を並び替える・巻き込み終端影響があってもループの外に非アトミック読みに抜き出す、など。一般に TypedArray が重複している場合はアドレスの違いの証明が難しいことに注意。</p>
     </emu-note>
 
     <emu-note>
-      <p>以下は共有メモリアクセスに対して機械語生成を行う ECMAScript 実装者向けガイドラインである。</p>
-      <p>ARM や Power より弱くないメモリーモデルを持つアーキテクチャでは、非 atomic store / load は素の store / load 命令にコンパイルできる。Atomic store / load は逐次的一貫性を保証する命令にコンパイルできる。そうした命令が無い場合、フェンス（両側への配置など）を利用する。Read-modify-write 操作は対象アーキテクチャの read-modify-write 命令列（x86 の <code>LOCK</code> 接頭辞、ARM の load-exclusive/store-exclusive、Power の load-link/store-conditional 等）にコンパイルできる。</p>
-      <p>具体的に、メモリーモデルは以下のコード生成を許容する意図である。</p>
+      <p>以下は共有メモリアクセスに対する機械語生成を行う ECMAScript 実装者向けの指針です。</p>
+      <p>ARMやPowerより弱くないメモリモデルのアーキテクチャでは、非アトミックなstore/loadはハードウェアの単純なストア・ロード命令で実装できる。アトミックなストア・ロードは逐次一貫性を保証する命令に降下でき、そうでなければ両側にバリアを置く。Read-Modify-Write 操作は、x86のLOCKプレフィックス・ARMのload-exclusive/store-exclusive・Powerのload-link/store-conditional等の命令に降下できる。</p>
+      <p>メモリモデルは以下のようなコード生成を容認することを意図する：</p>
       <ul>
-        <li>プログラム中の全 atomic 操作は必要であると仮定する。</li>
-        <li>Atomic 操作は互い、または非 atomic 操作と再順序付けされない。</li>
-        <li>関数呼び出しは常に atomic 操作を行うと仮定する。</li>
-        <li>Atomic 操作はより大きなデータ上の read-modify-write を用いて実装されず、適切なサイズの atomic 操作がプラットフォームにない場合は non-lock-free atomics として実装される。（全ての興味あるサイズの通常メモリアクセス命令は存在すると仮定。）</li>
+        <li>プログラム内のすべてのアトミック操作は必要なものと仮定される。</li>
+        <li>アトミック操作同士・アトミック・非アトミック間で操作は再順序化されない。</li>
+        <li>関数は常にアトミック操作を実施するものと仮定される。</li>
+        <li>アトミック操作はより大きな領域へのリードモディファイライトで実装されることはなく、プラットフォームに適切なアトミック命令がなければ非ロックフリーアトミックで実装する（どのサイズにも通常のメモリアクセス命令は想定ずみ）。</li>
       </ul>
-      <p>素朴なコード生成パターン:</p>
+      <p>単純なコード生成パターン：</p>
       <ul>
-        <li>通常の load/store は単一の load/store 命令。</li>
-        <li>ロックフリー atomic load/store は完全フェンス、通常 load/store、完全フェンス。</li>
-        <li>ロックフリー atomic read-modify-write は完全フェンス、atomic read-modify-write 命令列、完全フェンス。</li>
-        <li>非ロックフリー atomic はスピンロック獲得、完全フェンス、非 atomic load/store 列、完全フェンス、スピンロック解放。</li>
+        <li>通常のロード・ストア →1命令のロード・ストアに。</li>
+        <li>ロックフリーアトミック ロード・ストア → フルフェンス、ロード・ストア、フルフェンス。</li>
+        <li>ロックフリーアトミック リードモディファイライト → フルフェンス、アトミック命令列、フルフェンス。</li>
+        <li>非ロックフリーアトミック → スピンロック獲得、フルフェンス、非アトミック命令実行、フルフェンス、スピンロック解放。</li>
       </ul>
-      <p>この写像は、アドレス範囲上の atomic 操作が非 atomic 書き込みまたは異なるサイズの atomic 操作と競合しない限り正しい。それで十分である：メモリーモデルは競合に関与する atomic 操作を非 atomic とみなす。一方素朴な写像は強い：メモリーモデルが実際には保証しない逐次的一貫フェンスとして atomic 操作を使用できる。</p>
-      <p>これら基本パターンへの局所的改善も、メモリーモデル制約に従う限り許容される。例:</p>
+      <p>この対応は、アトミック操作が非アトミック書き込みや異なるサイズのアトミック操作と競合しなければ正しい。現実にはそれで十分であり、メモリモデルは競合中のアトミック操作を非アトミックなものとみなす。他方、単純対応はむしろ強力であり、アトミック操作を逐次一貫性フェンスであるかのように扱えるが、メモリモデルはそれを必ずしも保証しない。</p>
+      <p>この基本パターンへのローカルな改善も、メモリモデルの拘束条件の範囲内で認められる。例：</p>
       <ul>
-        <li>冗長フェンスの除去（x86 では load/store 周りのフェンス省略など、LOCK 接頭辞命令使用により read-modify-write でフェンス不要）や、弱いフェンスの使用。</li>
-        <li>多くのプラットフォームは必要な全サイズのロックフリー atomic をサポート。非ロックフリーが必要なら atomic 操作本体を囲むフェンスはロック獲得/解放に折り込める。最も簡単なのは SharedArrayBuffer 毎に単一のロック語を持つこと。</li>
-        <li>2 つの連続フェンスは単一フェンスと同等な場合が多く、連続する 2 つの atomic 操作生成時は間に 1 つで良い。x86 では atomic store 連続間のフェンスを省略可能など。</li>
+        <li>プラットフォーム依存の明らかな最適化によりフェンスの冗長性を除去可能。例えばx86ではロックフリーアトミックの前後フェンスはストア後のみで十分・リードモディファイライトには不要。他アーキテクチャでも弱いフェンスで逐次一貫性を壊さない範囲で利用可能。</li>
+        <li>多くの現代的なプラットフォームは必要なサイズのロックフリーアトミックをサポート。不足時はバリアをロックの内側で吸収できる場合も多い。最も単純な非ロックフリーアトミックは SharedArrayBuffer ごとに単一ロック語を持つこと。</li>
+        <li>より複雑なプラットフォーム依存最適化も解析次第で可能。例えば2連続のフェンスは1フェンスと等価になる場合が多いし、x86 ではストア後フェンスすらロード後に分離しない限り省略可能など。</li>
       </ul>
     </emu-note>
   </emu-clause>

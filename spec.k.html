@@ -159,6 +159,8 @@
   status: draft
   location: https://tc39.es/ecma262/
   markEffects: true
+  boilerplate:
+    copyright: alternative
 </pre>
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 로고"></p>
 <div id="metadata-block">
@@ -995,6 +997,25 @@
     <p>알고리즘 단계에서는 "Let _x_ be _someValue_" 형식으로 어떤 값에 대한 별칭을 선언할 수 있습니다. 이 별칭은 참조와 유사하여 _x_와 _someValue_가 동일한 데이터에 연결되며, 둘 중 하나를 수정하면 모두에 반영됩니다. 참조와 유사한 동작을 피하고 싶으면, 오른쪽 값을 명시적으로 복사하도록 "Let _x_ be a copy of _someValue_"를 사용합니다. 이는 _someValue_의 얕은 복사를 만듭니다.</p>
     <p>별칭이 선언된 이후에는 모든 이후 단계에서 참조할 수 있으며, 선언 이전 단계에서 참조해서는 안 됩니다. 별칭은 "Set _x_ to _someOtherValue_" 형태로 수정할 수 있습니다.</p>
 
+    <emu-clause id="sec-evaluation-order">
+      <h1>평가 순서</h1>
+      <p>알고리즘 단계에서 복잡한 식이 나타날 때, 그 식들은 왼쪽에서 오른쪽, 내부에서 외부로 평가되는 것으로 이해해야 한다. 예를 들어, 다음 단계는</p>
+      <emu-alg example>
+        1. Return A(B(), C.[[D]]) + E(F()).
+      </emu-alg>
+      <p>다음과 동치이다.</p>
+      <emu-alg example>
+        1. _tmp1_을 B()의 값으로 둔다.
+        1. _tmp2_를 C.[[D]]의 값으로 둔다.
+        1. _tmp3_을 A(_tmp1_, _tmp2_)의 값으로 둔다.
+        1. _tmp4_를 F()의 값으로 둔다.
+        1. _tmp5_를 E(_tmp4_)의 값으로 둔다.
+        1. _tmp6_을 _tmp3_ + _tmp5_의 값으로 둔다.
+        1. _tmp6_을 반환한다.
+      </emu-alg>
+      <p>여기서 각 _tmpN_ 변수는 일시적(alias)이며, 이 단계들에서만 보인다.</p>
+    </emu-clause>
+
     <emu-clause id="sec-algorithm-conventions-abstract-operations">
       <h1>추상 연산</h1>
       <p>이 명세서의 여러 부분에서 사용할 수 있도록, 일부 알고리즘(추상 연산)은 이름을 붙이고 매개변수화된 함수 형태로 작성되며, 다른 알고리즘 내에서 이름으로 참조될 수 있습니다. 추상 연산은 일반적으로 함수 호출 형태(OperationName(_arg1_, _arg2_))로 참조됩니다. 일부 추상 연산은 클래스와 유사한 명세 추상화의 다형적 메서드로 취급됩니다. 이러한 메서드형 추상 연산은 _someValue_.OperationName(_arg1_, _arg2_)와 같은 메서드 호출 형태로 참조됩니다.</p>
@@ -1058,74 +1079,44 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-returnifabrupt" aoid="ReturnIfAbrupt">
-        <h1>ReturnIfAbrupt</h1>
-        <p>다음과 같이 명시된 알고리즘 단계:</p>
+      <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt">
+        <h1>완료 레코드 언래핑을 위한 축약 표기</h1>
+        <p>`?` 및 `!` 접두사는 Completion Record를 언래핑(unwrapping)하는 축약형으로 사용된다. `?`는 비정상(abrupt) 완료를 호출자에게 전파하거나, 정상(normal) 완료라면 언래핑하는 데 사용된다. `!`는 Completion Record가 정상임을 단언(assert)하고 언래핑하는 데 사용된다. 공식적으로, 아래 단계는</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(_argument_).
+          1. _result_를 ? _record_로 둔다.
         </emu-alg>
-        <p>는 다음과 동일합니다:</p>
+        <p>다음과 동등하다.</p>
         <emu-alg example>
-          1. Assert: _argument_는 Completion Record이다.
-          1. _argument_가 abrupt completion이면 Completion(_argument_)를 반환한다.
-          1. 그렇지 않으면, _argument_를 _argument_.[[Value]]로 설정한다.
+          1. 단언: _record_는 Completion Record이다.
+          1. _record_가 abrupt completion이면, _record_를 반환한다.
+          1. _result_를 _record_.[[Value]]로 둔다.
         </emu-alg>
-        <p>다음과 같이 명시된 알고리즘 단계:</p>
+        <p>마찬가지로, 아래 단계는</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(AbstractOperation()).
+          1. _result_를 ! _record_로 둔다.
         </emu-alg>
-        <p>는 다음과 동일합니다:</p>
+        <p>다음과 동등하다.</p>
         <emu-alg example>
-          1. Let _hygienicTemp_ be AbstractOperation().
-          1. Assert: _hygienicTemp_는 Completion Record이다.
-          1. _hygienicTemp_가 abrupt completion이면 Completion(_hygienicTemp_)를 반환한다.
-          1. 그렇지 않으면, _hygienicTemp_를 _hygienicTemp_.[[Value]]로 설정한다.
+          1. 단언: _record_는 정상(normal) 완료이다.
+          1. _result_를 _record_.[[Value]]로 둔다.
         </emu-alg>
-        <p>여기서 _hygienicTemp_는 일시적이며, ReturnIfAbrupt 관련 단계에서만 보입니다.</p>
-        <p>다음과 같이 명시된 알고리즘 단계:</p>
+        <p>`?` 또는 `!`가 다른 맥락에서 사용될 때는, 먼저 <emu-xref href="#sec-evaluation-order" title></emu-xref>에 명시된 대로 재작성(rewrite)하여 이 규칙을 적용할 수 있을 때까지 변환한 뒤, 이 규칙을 적용한다. 예를 들어 다음 단계는</p>
         <emu-alg example>
-          1. Let _result_ be AbstractOperation(ReturnIfAbrupt(_argument_)).
+          1. AO(? Other())를 수행한다.
         </emu-alg>
-        <p>는 다음과 동일합니다:</p>
+        <p>다음과 같이 재작성할 수 있다.</p>
         <emu-alg example>
-          1. Assert: _argument_는 Completion Record이다.
-          1. _argument_가 abrupt completion이면 Completion(_argument_)를 반환한다.
-          1. 그렇지 않으면, _argument_를 _argument_.[[Value]]로 설정한다.
-          1. Let _result_ be AbstractOperation(_argument_).
+          1. _tmp1_을 Other()의 값으로 둔다.
+          1. _tmp2_를 ? _tmp1_으로 둔다.
+          1. AO(_tmp2_)를 수행한다.
         </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-returnifabrupt-shorthands">
-        <h1>ReturnIfAbrupt 축약 표기</h1>
-        <p>추상 연산 및 구문 지향 연산의 호출 앞에 `?`가 붙으면, 결과 Completion Record에 ReturnIfAbrupt를 적용해야 함을 나타냅니다. 예를 들어:</p>
+        <p>이는 다시 다음과 같이 확장된다.</p>
         <emu-alg example>
-          1. ? OperationName().
-        </emu-alg>
-        <p>는 다음 단계와 같습니다:</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(OperationName()).
-        </emu-alg>
-        <p>메서드 호출 형태에서도 마찬가지로 다음 단계:</p>
-        <emu-alg example>
-          1. ? _someValue_.OperationName().
-        </emu-alg>
-        <p>는 다음과 같습니다:</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(_someValue_.OperationName()).
-        </emu-alg>
-        <p>마찬가지로, `!`를 앞에 붙이면, 해당 추상 또는 구문 지향 연산이 abrupt completion을 반환하지 않음을 의미하며, 결과 Completion Record의 [[Value]] 필드를 연산의 반환값으로 사용함을 나타냅니다. 예를 들어:</p>
-        <emu-alg example>
-          1. Let _val_ be ! OperationName().
-        </emu-alg>
-        <p>는 다음 단계와 같습니다:</p>
-        <emu-alg example>
-          1. Let _val_ be OperationName().
-          1. Assert: _val_은 정상 completion이다.
-          1. _val_을 _val_.[[Value]]로 설정한다.
-        </emu-alg>
-        <p>런타임 의미론용 구문 지향 연산에서는 이 축약 표기를 사용하여 연산 호출 앞에 `!` 또는 `?`를 둡니다:</p>
-        <emu-alg example>
-          1. Perform ! SyntaxDirectedOperation of |NonTerminal|.
+          1. _tmp1_을 Other()의 값으로 둔다.
+          1. 단언: _tmp1_은 Completion Record이다.
+          1. _tmp1_이 abrupt completion이면, _tmp1_을 반환한다.
+          1. _tmp2_를 _tmp1_.[[Value]]로 둔다.
+          1. AO(_tmp2_)를 수행한다.
         </emu-alg>
       </emu-clause>
 
@@ -4193,7 +4184,7 @@
     <emu-clause id="sec-set-and-relation-specification-type">
       <h1>Set과 Relation 명세 타입</h1>
       <p><em>Set</em> 타입은 메모리 모델에서 사용될 무순서 요소 집합을 설명하는 데 사용됩니다. ECMAScript 컬렉션 타입 Set과는 다릅니다. 혼동을 피하기 위해, 명세에서는 ECMAScript 컬렉션 인스턴스를 “Set 객체”라고 일관되게 부릅니다. Set 타입 값은 중복 없는 간단한 요소 집합입니다. 요소는 추가·제거할 수 있으며, Set끼리 합집합·교집합·차집합 연산이 가능합니다.</p>
-      <p><dfn variants="Relations">Relation</dfn> 타입은 Set에 대한 제약을 설명하는 데 사용됩니다. Relation 타입 값은 값 도메인에서 가져온 순서쌍의 Set입니다. 예를 들어, 이벤트에 대한 Relation은 이벤트들의 순서쌍 집합입니다. Relation _R_과 값 도메인 내 두 값 _a_, _b_에 대해 _a_ _R_ _b_는 (_a_, _b_)가 _R_의 원소임을 뜻합니다. Relation이 어떤 조건에 대해 <dfn id="least-relation">최소 Relation</dfn>임은 그 조건을 만족하는 가장 작은 Relation임을 의미합니다.</p>
+      <p><dfn variants="Relations">관계(Relation)</dfn> 타입은 집합(Set)에 대한 제약을 설명하는 데 사용됩니다. Relation 타입의 값은 그 값의 도메인에서 나온 값들로 이루어진 순서쌍(Set)입니다. 예를 들어, 메모리 이벤트에 대한 Relation은 메모리 이벤트들의 순서쌍들의 집합입니다. Relation _R_과 _R_의 값 도메인에 포함되는 두 값 _a_와 _b_에 대해, _a_ _R_ _b_는 순서쌍(_a_, _b_)가 _R_의 멤버라는 것을 나타내는 약식 표기입니다. 어떤 조건들에 대해 Relation이 그 조건을 만족하는 가장 작은 Relation일 때, 그 Relation을 <dfn id="least-relation">최소 관계(least Relation)</dfn>라고 합니다.</p>
       <p><dfn variants="strict partial orders">엄격 부분 순서(strict partial order)</dfn>는 다음을 만족하는 Relation 값 _R_입니다.</p>
       <ul>
         <li>
@@ -11619,26 +11610,26 @@
       </dl>
       <emu-alg>
         1. _realm_을 새로운 Realm Record로 둔다.
-        1. CreateIntrinsics(_realm_)를 수행한다.
-        1. _realm_.[[AgentSignifier]]를 AgentSignifier()로 설정한다.
-        1. _realm_.[[TemplateMap]]을 새 빈 List로 설정한다.
-        1. _newContext_를 새 실행 컨텍스트로 둔다.
+        1. CreateIntrinsics(_realm_)을 수행한다.
+        1. _realm_.[[AgentSignifier]]를 AgentSignifier()의 값으로 설정한다.
+        1. _realm_.[[TemplateMap]]을 새 빈 리스트로 설정한다.
+        1. _newContext_를 새로운 실행 컨텍스트로 둔다.
         1. _newContext_의 Function을 *null*로 설정한다.
         1. _newContext_의 Realm을 _realm_으로 설정한다.
         1. _newContext_의 ScriptOrModule을 *null*로 설정한다.
-        1. 실행 컨텍스트 스택에 _newContext_를 push한다; 이제 _newContext_가 실행 중(running) 실행 컨텍스트다.
-        1. 호스트가 _realm_의 전역 객체로서 익조틱(exotic) 객체 사용을 요구한다면
-          1. _global_을 호스트 정의 방식으로 생성된 그러한 객체로 둔다.
-        1. Else,
+        1. 실행 컨텍스트 스택에 _newContext_를 푸시한다; _newContext_가 현재 실행 중인 실행 컨텍스트가 된다.
+        1. 호스트가 _realm_의 글로벌 객체로 사용될 특정 객체의 사용을 요구하면,
+          1. _global_을 호스트가 정의한 방법으로 생성된 해당 객체로 둔다.
+        1. 그렇지 않으면,
           1. _global_을 OrdinaryObjectCreate(_realm_.[[Intrinsics]].[[%Object.prototype%]])로 둔다.
-        1. 호스트가 _realm_ 전역 스코프의 `this` 바인딩이 전역 객체와 다른 객체를 반환하도록 요구한다면
-          1. _thisValue_를 호스트 정의 방식으로 생성된 그러한 객체로 둔다.
-        1. Else,
+        1. 호스트가 _realm_의 글로벌 스코프에서 `this` 바인딩이 글로벌 객체가 아닌 다른 객체를 반환해야 한다고 요구하면,
+          1. _thisValue_를 호스트가 정의한 방식으로 생성된 해당 객체로 둔다.
+        1. 그렇지 않으면,
           1. _thisValue_를 _global_로 둔다.
         1. _realm_.[[GlobalObject]]를 _global_로 설정한다.
-        1. _realm_.[[GlobalEnv]]를 NewGlobalEnvironment(_global_, _thisValue_)로 설정한다.
-        1. ? SetDefaultGlobalBindings(_realm_)를 수행한다.
-        1. 호스트 정의 전역 객체 프로퍼티들을 _global_에 생성한다.
+        1. _realm_.[[GlobalEnv]]를 NewGlobalEnvironment(_global_, _thisValue_)의 값으로 설정한다.
+        1. ? SetDefaultGlobalBindings(_realm_)을 수행한다.
+        1. 호스트가 정의한 글로벌 객체 프로퍼티들을 _global_에 생성한다.
         1. ~unused~를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -12092,73 +12083,77 @@
     </emu-note>
     <p>에이전트의 executing thread가 알고리즘 단계를 실행하는 동안, 그 에이전트는 그 단계들의 <dfn id="surrounding-agent" variants="surrounding agents">surrounding agent(둘러싼 에이전트)</dfn>이다. 그 단계들은 둘러싼 에이전트를 사용하여 에이전트가 보유한 명세 수준 실행 객체—실행 중 실행 컨텍스트, 실행 컨텍스트 스택, Agent Record의 필드—에 접근한다.</p>
     <p><dfn variants="agent signifiers">agent signifier(에이전트 식별자)</dfn>는 에이전트를 식별하기 위해 사용되는 전역적으로 고유한 불투명 값이다.</p>
-    <emu-table id="table-agent-record" caption="Agent Record 필드(Agent Record Fields)">
+    <emu-table id="table-agent-record" caption="에이전트 레코드 필드">
       <table>
         <thead>
           <tr>
-            <th>필드 이름(Field Name)</th>
-            <th>값(Value)</th>
-            <th>의미(Meaning)</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>Boolean</td>
-          <td>알고리즘 GetValueFromBuffer 및 SetValueInBuffer가 필요할 때 <em>isLittleEndian</em> 파라미터에 대해 계산되는 기본 값. 선택은 구현 정의이며 구현에 가장 효율적인 대안을 사용해야 한다. 한 번 관측된 후에는 변경될 수 없다.</td>
+          <td>Boolean 값</td>
+          <td>알고리즘 GetValueFromBuffer와 SetValueInBuffer에서 <em>isLittleEndian</em> 매개변수가 필요할 때 계산되는 기본값입니다. 선택은 구현 정의이며, 구현에 가장 효율적인 대안이어야 합니다.</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>Boolean</td>
-          <td>에이전트가 블록(block)될 수 있는지 여부를 결정.</td>
+          <td>Boolean 값</td>
+          <td>에이전트가 블록될 수 있는지 여부를 결정합니다.</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>agent signifier</td>
-          <td>에이전트를 그 에이전트 클러스터 내에서 고유하게 식별.</td>
+          <td>에이전트 식별자</td>
+          <td>에이전트 클러스터 내에서 에이전트를 고유하게 식별합니다.</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>Boolean</td>
-          <td>1-<emu-not-ref>byte 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 아니면 *false*.</td>
+          <td>Boolean 값</td>
+          <td>1-<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*이고, 그렇지 않으면 *false*입니다.</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>Boolean</td>
-          <td>2-<emu-not-ref>byte 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 아니면 *false*.</td>
+          <td>Boolean 값</td>
+          <td>2-<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*이고, 그렇지 않으면 *false*입니다.</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>Boolean</td>
-          <td>8-<emu-not-ref>byte 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 아니면 *false*.</td>
+          <td>Boolean 값</td>
+          <td>8-<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*이고, 그렇지 않으면 *false*입니다.</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>candidate execution Record</td>
-          <td>메모리 모델 참조.</td>
+          <td>후보 실행 레코드</td>
+          <td>메모리 모델을 참조하세요.</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>Objects 또는 Symbols 중 하나의 List</td>
-          <td>초기에는 새 빈 List로, 현재 Job 끝까지 유지(kept alive)되어야 하는 객체 및/또는 심볼들의 목록.</td>
+          <td>Object 또는 Symbol의 리스트</td>
+          <td>초기에는 새 빈 리스트이며, 현재 잡(Job)이 끝날 때까지 생존(keep alive)시켜야 하는 객체 및/또는 심볼의 리스트를 나타냅니다.</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
           <td>정수</td>
-          <td>초기값 0. 비동기 또는 비동기 의존성을 가진 모듈들의 [[AsyncEvaluationOrder]] 필드에 고유 증가값을 할당하는 데 사용.</td>
+          <td>초기값은 0이며, 비동기 모듈 또는 비동기 의존성을 가진 모듈의 [[AsyncEvaluationOrder]] 필드에 고유하게 증가하는 값을 할당할 때 사용됩니다.</td>
         </tr>
       </table>
     </emu-table>
 
-    <p>[[Signifier]], [[IsLockFree1]], [[IsLockFree2]]의 값은 에이전트 클러스터의 어떤 에이전트에 의해 관측된 후에는 변경될 수 없다.</p>
+    <p>[[LittleEndian]], [[Signifier]], [[IsLockFree1]], [[IsLockFree2]], [[IsLockFree8]]의 값은 변경될 수 없다.</p>
 
     <emu-note>
-      <p>[[IsLockFree1]]과 [[IsLockFree2]]의 값은 반드시 하드웨어에 의해 결정되는 것은 아니며, 시간에 따라 또는 ECMAScript 구현 간에 달라질 수 있는 구현 선택을 반영할 수도 있다.</p>
+      <p>[[IsLockFree1]], [[IsLockFree2]], [[IsLockFree8]]의 값은 반드시 하드웨어에 의해 결정되는 것은 아니며, ECMAScript 구현마다 그리고 시간에 따라 달라질 수 있는 구현 선택을 반영할 수도 있다.</p>
 
-      <p>[[IsLockFree4]] 필드는 없다: 4-byte 원자 연산은 항상 lock-free이다.</p>
+      <p>[[IsLockFree4]] 필드는 존재하지 않는다: 4-바이트 원자적 연산은 항상 lock-free이다.</p>
 
-      <p>실제로 어떤 종류의 락을 사용해 원자 연산이 구현된다면 그 연산은 lock-free가 아니다. Lock-free는 wait-free를 의미하지 않는다: lock-free 원자 연산을 완료하는 데 필요한 기계 단계 수에 상한은 없다.</p>
+      <p>실제로, 어떤 종류의 lock으로 원자적 연산이 구현된다면 해당 연산은 lock-free가 아니다. lock-free라고 해서 wait-free를 의미하지는 않는다: lock-free 원자적 연산을 완료하는 데 필요한 기계 단계의 상한은 없다.</p>
 
-      <p>크기 <em>n</em>의 원자 접근이 lock-free라고 해서 크기 <em>n</em>의 비원자(non-atomic) 접근의 (인지된) 원자성에 대해 아무것도 의미하지 않는다. 특히 비원자 접근은 여전히 여러 개의 별도 메모리 접근 시퀀스로 수행될 수 있다. 세부 사항은 ReadSharedMemory와 WriteSharedMemory 참조.</p>
+      <p>크기 <em>n</em>의 원자적 접근이 lock-free라는 사실은 크기 <em>n</em>의 비원자적 접근(의 인식된 원자성)에 대해 아무 것도 보장하지 않는다. 구체적으로, 비원자적 접근은 여전히 여러 번의 별도 메모리 접근 시퀀스로 수행될 수 있다. 자세한 내용은 ReadSharedMemory와 WriteSharedMemory를 참조할 것.</p>
+    </emu-note>
+
+    <emu-note>
+      <p>에이전트는 명세상의 메커니즘일 뿐, 반드시 ECMAScript 구현의 특정 산출물과 일치할 필요는 없다.</p>
     </emu-note>
 
     <emu-note>
@@ -12227,7 +12222,7 @@
       <p>에이전트 클러스터 내의 에이전트들이 [[LittleEndian]] 값이 서로 다르다면, 다중 바이트 데이터에 대해 공유 메모리를 사용하는 것이 어려워진다.</p>
     </emu-note>
 
-    <p>클러스터 내 모든 에이전트는 [[IsLockFree1]] 필드에 대해 동일한 값을 가져야 하며 [[IsLockFree2]] 필드도 마찬가지이다.</p>
+    <p>클러스터 내의 모든 에이전트는 각각의 에이전트 레코드에서 [[IsLockFree1]] 필드 값이 동일해야 한다. [[IsLockFree2]] 및 [[IsLockFree8]] 필드도 마찬가지로 동일해야 한다.</p>
 
     <p>클러스터 내 모든 에이전트는 각각의 Agent Record에서 [[Signifier]] 필드에 대해 서로 다른 값을 가져야 한다.</p>
 
@@ -14603,7 +14598,7 @@
 
       <emu-clause id="sec-typedarray-with-buffer-witness-records" oldids="sec-integer-indexed-object-with-buffer-witness-records">
         <h1>버퍼 증인 레코드가 있는 TypedArray (TypedArray With Buffer Witness Records)</h1>
-        <p><dfn variants="TypedArray With Buffer Witness Records">TypedArray With Buffer Witness Record</dfn> 는 TypedArray 와, 보기 버퍼(viewed buffer)의 캐시된 byte length 를 함께 캡슐화하는 Record 값이다. growable SharedArrayBuffer 를 보는 경우 byte length 데이터 블록에 대한 단일 공유 메모리 읽기 이벤트를 보장하는 데 사용된다.</p>
+        <p><dfn variants="TypedArray With Buffer Witness Records">버퍼 증명 보유 TypedArray 레코드</dfn>는 TypedArray와 조회 중인 버퍼의 캐시된 바이트 길이를 함께 캡슐화하기 위해 사용되는 레코드 값입니다. 이 레코드는 조회 중인 버퍼가 growable SharedArrayBuffer일 때 바이트 길이 데이터 블록에 대해 단 하나의 ReadSharedMemory 이벤트가 발생하도록 보장하는 데 사용됩니다.</p>
         <p>TypedArray With Buffer Witness Record 는 <emu-xref href="#table-typedarray-with-buffer-witness-record-fields"></emu-xref>에 나온 필드를 가진다.</p>
         <emu-table id="table-typedarray-with-buffer-witness-record-fields" oldids="table-integer-indexed-object-with-buffer-witness-record-fields" caption="TypedArray With Buffer Witness Record Fields">
           <table>
@@ -14680,13 +14675,13 @@
         </h1>
         <dl class="header"></dl>
         <emu-alg>
-          1. IsTypedArrayOutOfBounds(_taRecord_) 가 *true* 이면 0 반환.
-          1. _length_ 를 TypedArrayLength(_taRecord_) 로 둔다.
-          1. _length_ = 0 이면 0 반환.
-          1. _O_ 를 _taRecord_.[[Object]] 로 둔다.
-          1. _O_.[[ByteLength]] 이 ~auto~ 가 아니면 _O_.[[ByteLength]] 반환.
-          1. _elementSize_ 를 TypedArrayElementSize(_O_) 로 둔다.
-          1. _length_ × _elementSize_ 반환.
+          1. 단언: IsTypedArrayOutOfBounds(_taRecord_)는 *false*이다.
+          1. _O_를 _taRecord_.[[Object]]로 둔다.
+          1. _O_.[[ByteLength]]가 ~auto~가 아니면, _O_.[[ByteLength]]를 반환한다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _elementSize_를 TypedArrayElementSize(_O_)로 둔다.
+          1. 참고: 반환되는 바이트 길이는 항상 _elementSize_의 정수 배수인데, 이는 밑바탕의 버퍼가 정수가 아닌 배수로 리사이즈된 경우에도 마찬가지이다.
+          1. _length_ × _elementSize_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -14721,19 +14716,22 @@
           <dd>객체의 어떤 수치 프로퍼티라도 underlying buffer 범위를 벗어난 인덱스 값을 참조하는지 검사한다.</dd>
         </dl>
         <emu-alg>
-          1. _O_ 를 _taRecord_.[[Object]] 로 둔다.
-          1. _bufferByteLength_ 를 _taRecord_.[[CachedBufferByteLength]] 로 둔다.
-          1. 단언: IsDetachedBuffer(_O_.[[ViewedArrayBuffer]]) 는 _bufferByteLength_ 가 ~detached~ 일 때 그리고 그럴 때에만 *true*.
-          1. _bufferByteLength_ 가 ~detached~ 이면 *true* 반환.
-          1. _byteOffsetStart_ 를 _O_.[[ByteOffset]] 로 둔다.
-          1. _O_.[[ArrayLength]] 이 ~auto~ 이면
-            1. _byteOffsetEnd_ 를 _bufferByteLength_ 로 둔다.
-          1. Else
-            1. _elementSize_ 를 TypedArrayElementSize(_O_) 로 둔다.
-            1. _byteOffsetEnd_ 를 _byteOffsetStart_ + _O_.[[ArrayLength]] × _elementSize_ 로 둔다.
-          1. _byteOffsetStart_ > _bufferByteLength_ 또는 _byteOffsetEnd_ > _bufferByteLength_ 이면 *true* 반환.
-          1. NOTE: 길이 0 TypedArray 는 out-of-bounds 로 간주되지 않는다.
-          1. *false* 반환.
+          1. _O_를 _taRecord_.[[Object]]로 둔다.
+          1. _bufferByteLength_를 _taRecord_.[[CachedBufferByteLength]]로 둔다.
+          1. IsDetachedBuffer(_O_.[[ViewedArrayBuffer]])가 *true*이면,
+            1. 단언: _bufferByteLength_는 ~detached~이다.
+            1. *true*를 반환한다.
+          1. 단언: _bufferByteLength_는 음이 아닌 정수이다.
+          1. _byteOffsetStart_를 _O_.[[ByteOffset]]로 둔다.
+          1. _O_.[[ArrayLength]]가 ~auto~이면,
+            1. _byteOffsetEnd_를 _bufferByteLength_로 둔다.
+          1. 아니면,
+            1. _elementSize_를 TypedArrayElementSize(_O_)로 둔다.
+            1. _arrayByteLength_를 _O_.[[ArrayLength]] × _elementSize_로 둔다.
+            1. _byteOffsetEnd_를 _byteOffsetStart_ + _arrayByteLength_로 둔다.
+          1. 참고: [[ByteOffset]]이 _bufferByteLength_인 길이 0의 TypedArray는 out-of-bounds로 간주하지 않는다.
+          1. _byteOffsetStart_ > _bufferByteLength_이거나 _byteOffsetEnd_ > _bufferByteLength_이면, *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -27826,48 +27824,47 @@
             </dl>
 
             <emu-alg>
-              1. 단언: _module_.[[Status]] 는 ~new~ 아님.
-              1. _resolveSet_ 없으면 새 빈 리스트.
-              1. _resolveSet_ 의 각 Record { [[Module]], [[ExportName]] } _r_ 에 대해
-                1. _module_ 과 _r_.[[Module]] 동일이고 _exportName_ = _r_.[[ExportName]] 이면
-                  1. 단언: 순환 import 요청.
-                  1. *null* 반환.
-              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ } 를 _resolveSet_ 에 추가.
-              1. _module_.[[LocalExportEntries]] 각 ExportEntry Record _e_ 에 대해
-                1. _e_.[[ExportName]] = _exportName_ 이면
-                  1. 단언: 직접 바인딩 제공.
-                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] } 반환.
-              1. _module_.[[IndirectExportEntries]] 각 _e_ 에 대해
-                1. _e_.[[ExportName]] = _exportName_ 이면
-                  1. 단언: _e_.[[ModuleRequest]] ≠ *null*.
-                  1. _importedModule_ = GetImportedModule(_module_, _e_.[[ModuleRequest]]).
-                  1. _e_.[[ImportName]] 가 ~all~ 이면
-                    1. 단언: 직접 바인딩 제공 안 함.
-                    1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ } 반환.
-                  1. Else
-                    1. 단언: 특정 바인딩 import 후 재export.
-                    1. 단언: _e_.[[ImportName]] 는 String.
-                    1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_) 반환.
-              1. _exportName_ = *"default"* 이면
-                1. 단언: 명시적 `default` export 없음.
-                1. *null* 반환.
-                1. NOTE: `export * from "mod"` 는 `default` export 제공 불가.
-              1. _starResolution_ = *null*.
-              1. _module_.[[StarExportEntries]] 각 _e_ 에 대해
-                1. 단언: _e_.[[ModuleRequest]] ≠ *null*.
-                1. _importedModule_ = GetImportedModule(_module_, _e_.[[ModuleRequest]]).
-                1. _resolution_ = _importedModule_.ResolveExport(_exportName_, _resolveSet_).
-                1. _resolution_ = ~ambiguous~ 이면 ~ambiguous~ 반환.
-                1. _resolution_ ≠ *null* 이면
-                  1. 단언: _resolution_ 은 ResolvedBinding Record.
-                  1. _starResolution_ 이 *null* 이면
-                    1. _starResolution_ = _resolution_.
-                  1. Else
-                    1. 단언: 요청 이름을 포함하는 `*` import 가 하나 이상.
-                    1. _resolution_.[[Module]] ≠ _starResolution_.[[Module]] 이면 ~ambiguous~ 반환.
-                    1. _resolution_.[[BindingName]] ≠ _starResolution_.[[BindingName]] 이고 둘 중 하나가 ~namespace~ 이면 ~ambiguous~.
-                    1. 두 [[BindingName]] 이 모두 String 이고 다르면 ~ambiguous~.
-              1. _starResolution_ 반환.
+              1. 단언: _module_.[[Status]]는 ~new~가 아니다.
+              1. _resolveSet_이 없다면, _resolveSet_을 새 빈 리스트로 설정한다.
+              1. _resolveSet_의 각 Record { [[Module]], [[ExportName]] } _r_에 대해,
+                1. _module_과 _r_.[[Module]]이 동일한 Module Record이고, _exportName_이 _r_.[[ExportName]]과 같다면,
+                  1. 단언: 이것은 순환 import 요청이다.
+                  1. *null*을 반환한다.
+              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }를 _resolveSet_에 추가한다.
+              1. _module_.[[LocalExportEntries]]의 각 ExportEntry Record _e_에 대해,
+                1. _e_.[[ExportName]]이 _exportName_과 같다면,
+                  1. 단언: _module_이 이 export에 대한 직접 바인딩을 제공한다.
+                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }를 반환한다.
+              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _e_에 대해,
+                1. _e_.[[ExportName]]이 _exportName_과 같다면,
+                  1. 단언: _e_.[[ModuleRequest]]는 *null*이 아니다.
+                  1. _importedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
+                  1. _e_.[[ImportName]]이 ~all~이라면,
+                    1. 단언: _module_이 이 export에 대한 직접 바인딩을 제공하지 않는다.
+                    1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }를 반환한다.
+                  1. 아니면,
+                    1. 단언: _module_이 이 export에 대한 특정 바인딩을 import한다.
+                    1. 단언: _e_.[[ImportName]]은 문자열(String)이다.
+                    1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)을 반환한다.
+              1. _exportName_이 *"default"*이면,
+                1. 단언: `default` export가 이 모듈에서 명시적으로 정의되지 않았다.
+                1. *null*을 반환한다.
+                1. 참고: `default` export는 `export * from "mod"` 선언에 의해 제공될 수 없다.
+              1. _starResolution_을 *null*로 둔다.
+              1. _module_.[[StarExportEntries]]의 각 ExportEntry Record _e_에 대해,
+                1. 단언: _e_.[[ModuleRequest]]는 *null*이 아니다.
+                1. _importedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
+                1. _resolution_을 _importedModule_.ResolveExport(_exportName_, _resolveSet_)으로 둔다.
+                1. _resolution_이 ~ambiguous~이면 ~ambiguous~를 반환한다.
+                1. _resolution_이 *null*이 아니면,
+                  1. 단언: _resolution_은 ResolvedBinding Record이다.
+                  1. _starResolution_이 *null*이면,
+                    1. _starResolution_을 _resolution_으로 설정한다.
+                  1. 아니면,
+                    1. 단언: 요청된 이름을 포함하는 `*` import가 둘 이상이다.
+                    1. _resolution_.[[Module]]과 _starResolution_.[[Module]]이 동일한 Module Record가 아니라면 ~ambiguous~를 반환한다.
+                    1. _resolution_.[[BindingName]]이 _starResolution_.[[BindingName]]과 다르면 ~ambiguous~를 반환한다.
+              1. _starResolution_을 반환한다.
             </emu-alg>
           </emu-clause>
         </emu-clause>
@@ -41013,12 +41010,13 @@ THH:mm:ss.sss
         <h1>get %TypedArray%.prototype.byteLength</h1>
         <p>%TypedArray%`.prototype.byteLength` 는 set 접근자 함수가 *undefined* 인 접근자 프로퍼티이다. 그 get 접근자 함수는 다음을 수행한다:</p>
         <emu-alg>
-          1. _O_ = *this* 값.
-          1. ? RequireInternalSlot(_O_, [[TypedArrayName]]) 수행.
-          1. Assert: _O_ 는 [[ViewedArrayBuffer]] 내부 슬롯을 가진다.
-          1. _taRecord_ = MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~).
-          1. _size_ = TypedArrayByteLength(_taRecord_).
-          1. 𝔽(_size_) 반환.
+          1. _O_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_O_, [[TypedArrayName]])를 수행한다.
+          1. 단언: _O_는 [[ViewedArrayBuffer]] 내부 슬롯을 가진다.
+          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~)로 둔다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *+0*<sub>𝔽</sub>를 반환한다.
+          1. _size_를 TypedArrayByteLength(_taRecord_)로 둔다.
+          1. 𝔽(_size_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -43009,8 +43007,8 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-set-objects">
     <h1>Set 객체</h1>
-    <p>Set 객체는 ECMAScript 언어 값들의 컬렉션이다. 하나의 고유 값은 Set 컬렉션에서 한 번만 요소로 등장할 수 있다. 고유 값의 구분은 SameValueZero 비교 알고리즘 의미론을 사용한다.</p>
-    <p>Set 객체는 평균적으로 컬렉션 요소 수에 대해 준선형 접근 시간을 제공하는 해시 테이블 또는 다른 메커니즘으로 구현되어야 한다. 이 명세의 자료 구조는 Set 객체의 요구되는 관측 가능 의미를 설명하기 위한 것으로 실제 구현 모델을 의도하지 않는다.</p>
+    <p><dfn variants="Set object">Set 객체</dfn>는 ECMAScript 언어 값들의 모음입니다. Set은 각 서로 다른 값을 최대 한 번만 포함할 수 있습니다. 서로 다른 값의 구분은 SameValueZero 비교 알고리즘의 의미론을 따릅니다.</p>
+    <p>Set 객체는 반드시 해시 테이블 또는 평균적으로 컬렉션 내의 원소 수에 대해 부분선형(sublinear) 접근 시간을 제공하는 다른 메커니즘을 이용해 구현되어야 합니다. 이 명세서에서 사용된 자료구조는 Set 객체가 가져야 하는 관찰 가능한 의미론만을 설명하기 위한 것이며, 실제 구현 모델로 사용하기 위한 것이 아닙니다.</p>
 
     <emu-clause id="sec-abstract-operations-for-set-objects">
       <h1>Set 객체를 위한 추상 연산</h1>
@@ -44004,13 +44002,13 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsSharedArrayBuffer(_arrayBuffer_) = *true* 그리고 _arrayBuffer_ 가 [[ArrayBufferByteLengthData]] 내부 슬롯을 가지면
-            1. _bufferByteLengthBlock_ = _arrayBuffer_.[[ArrayBufferByteLengthData]].
-            1. _rawLength_ = GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_).
-            1. _isLittleEndian_ = 주변 에이전트의 Agent Record 의 [[LittleEndian]] 필드 값.
-            1. Return ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_)).
-          1. Assert: IsDetachedBuffer(_arrayBuffer_) = *false*.
-          1. Return _arrayBuffer_.[[ArrayBufferByteLength]].
+          1. IsGrowableSharedArrayBuffer(_arrayBuffer_)가 *true*이면,
+            1. _bufferByteLengthBlock_을 _arrayBuffer_.[[ArrayBufferByteLengthData]]로 둔다.
+            1. _rawLength_를 GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_)로 둔다.
+            1. _isLittleEndian_을 주변 에이전트의 에이전트 레코드의 [[LittleEndian]] 필드 값으로 둔다.
+            1. ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_))을 반환한다.
+          1. 단언: IsDetachedBuffer(_arrayBuffer_)가 *false*이다.
+          1. _arrayBuffer_.[[ArrayBufferByteLength]]를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -44700,15 +44698,28 @@ THH:mm:ss.sss
           ): Boolean
         </h1>
         <dl class="header">
-          <dt>description</dt>
-          <dd>객체가 ArrayBuffer, SharedArrayBuffer, 또는 그 서브타입인지 검사한다.</dd>
+          <dt>설명</dt>
+          <dd>이 알고리즘은 객체가 SharedArrayBuffer인지 테스트합니다.</dd>
         </dl>
         <emu-alg>
-          1. _bufferData_ = _obj_.[[ArrayBufferData]].
-          1. _bufferData_ 가 *null* 이면 *false* 반환.
-          1. _bufferData_ 가 Data Block 이면 *false* 반환.
-          1. Assert: _bufferData_ 는 Shared Data Block.
-          1. *true* 반환.
+          1. _obj_.[[ArrayBufferData]]가 공유 데이터 블록(Shared Data Block)이라면, *true*를 반환한다.
+          1. *false*를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-isgrowablesharedarraybuffer" type="abstract operation">
+        <h1>
+          IsGrowableSharedArrayBuffer (
+            _obj_: ArrayBuffer または SharedArrayBuffer,
+          ): Boolean
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>これはオブジェクトが growable な SharedArrayBuffer かどうかをテストします。</dd>
+        </dl>
+        <emu-alg>
+          1. IsSharedArrayBuffer(_obj_) が *true* かつ _obj_ が [[ArrayBufferByteLengthData]] 内部スロットを持つ場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -44725,13 +44736,13 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer 구현은 다음 요구사항을 따른다:</p>
         <ul>
-          <li>추상 연산이 ~unhandled~ 로 정상 완료하지 않고, _newByteLength_ &lt; _buffer_ 의 현재 바이트 길이이거나 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]] 이면 *RangeError* 예외.</li>
-          <li>_isLittleEndian_ = 주변 에이전트 Agent Record 의 [[LittleEndian]] 필드 값. 연산이 ~handled~ 로 정상 완료하면, [[Order]] = ~seq-cst~, [[Payload]] = NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]] = _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]] = 0, [[ElementSize]] = 8 인 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 후보 실행에 추가되어, `SharedArrayBuffer.prototype.grow` 에 대한 경합 호출이 “소실”(조용히 아무 것도 하지 않음)되지 않도록 한다.</li>
+          <li>추상 연산이 ~unhandled~로 정상 완료되지 않고, _newByteLength_ < _buffer_의 현재 바이트 길이 또는 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]]인 경우, *RangeError* 예외를 발생시킨다.</li>
+          <li>_isLittleEndian_을 주변 에이전트의 에이전트 레코드의 [[LittleEndian]] 필드 값으로 둔다. 추상 연산이 ~handled~로 정상 완료되면, WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 주변 에이전트의 후보 실행에 추가된다. 이 이벤트의 [[Order]]는 ~seq-cst~, [[Payload]]는 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]]은 _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]]는 0, [[ElementSize]]는 8이다. 이렇게 하면 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref>에 대한 경쟁 호출이 "유실"되지 않으며(즉, 아무 일도 없었던 것처럼 처리되지 않는다).</li>
         </ul>
 
         <emu-note>
-          <p>두 번째 요구사항은 _buffer_ 의 현재 바이트 길이를 언제/어떻게 읽는지에 대해 의도적으로 모호하다. 길이 갱신은 하드웨어의 원자적 read-modify-write 명령을 통해 이루어져야 하므로 load-link/store-conditional 또는 load-exclusive/store-exclusive 쌍을 사용하는 구조에서는 명령을 가깝게 유지하고 싶을 수 있다. 따라서 SharedArrayBuffer.prototype.grow 자체는 HostGrowSharedArrayBuffer 호출 전 _newByteLength_ 에 대한 경계 검사를 수행하지 않으며, 현재 바이트 길이를 언제 읽어야 한다는 요구도 없다.</p>
-          <p>이는 _newByteLength_ 가 0 이상이며 _buffer_.[[ArrayBufferMaxByteLength]] 이하임이 보장되는 HostResizeArrayBuffer 와 대조적이다.</p>
+          <p>두 번째 요구사항은 _buffer_의 현재 바이트 길이가 어떻게 또는 언제 읽히는지에 대해 의도적으로 모호하게 작성되어 있다. 바이트 길이는 기본 하드웨어에서 원자적 읽기-수정-쓰기 연산을 통해 갱신되어야 하므로, load-link/store-conditional 또는 load-exclusive/store-exclusive 명령어 쌍을 사용하는 아키텍처에서는 쌍을 이루는 명령어를 명령어 흐름상 가깝게 유지할 수 있다. 따라서 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 자체는 HostGrowSharedArrayBuffer를 호출하기 전에 _newByteLength_에 대한 경계 검사를 수행하지 않으며, 현재 바이트 길이가 언제 읽혀야 하는지에 대한 요구사항도 없다.</p>
+          <p>이는 HostResizeArrayBuffer와는 대조적이다. 후자는 0 ≤ _newByteLength_ ≤ _buffer_.[[ArrayBufferMaxByteLength]]가 보장된다.</p>
         </emu-note>
 
         <p>기본 구현은 NormalCompletion(~unhandled~) 를 반환한다.</p>
@@ -44951,7 +44962,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-dataview-with-buffer-witness-records">
         <h1>버퍼 증명(버퍼 위트니스) Record 를 가진 DataView</h1>
-        <p><dfn variants="DataView With Buffer Witness Records">DataView With Buffer Witness Record</dfn> 는 DataView 와, 뷰 대상 버퍼의 캐시된 바이트 길이를 함께 캡슐화하기 위해 사용되는 Record 값이다. 이는 뷰 대상 버퍼가 증가 가능 SharedArrayBuffer 인 경우 바이트 길이 데이터 블록에 대해 단일 공유 메모리 읽기 이벤트가 되도록 돕는 용도로 사용된다.</p>
+        <p><dfn variants="DataView With Buffer Witness Records">버퍼 증명 보유 DataView 레코드</dfn>는 DataView와 조회 중인 버퍼의 캐시된 바이트 길이를 함께 캡슐화하기 위해 사용되는 레코드 값입니다. 이 레코드는 조회 중인 버퍼가 growable SharedArrayBuffer일 때 바이트 길이 데이터 블록에 대해 단 하나의 ReadSharedMemory 이벤트가 발생하도록 보장하는 데 사용됩니다.</p>
         <p>DataView With Buffer Witness Record 는 <emu-xref href="#table-dataview-with-buffer-witness-record-fields"></emu-xref> 에 나열된 필드를 갖는다.</p>
         <emu-table id="table-dataview-with-buffer-witness-record-fields" caption="DataView With Buffer Witness Record 필드">
           <table>
@@ -45042,18 +45053,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _view_ = _viewRecord_.[[Object]].
-          1. _bufferByteLength_ = _viewRecord_.[[CachedBufferByteLength]].
-          1. Assert: IsDetachedBuffer(_view_.[[ViewedArrayBuffer]]) = *true* ⇔ _bufferByteLength_ = ~detached~.
-          1. _bufferByteLength_ = ~detached~ 이면 *true* 반환.
-          1. _byteOffsetStart_ = _view_.[[ByteOffset]].
-          1. _view_.[[ByteLength]] = ~auto~ 이면
-            1. _byteOffsetEnd_ = _bufferByteLength_.
-          1. Else
-            1. _byteOffsetEnd_ = _byteOffsetStart_ + _view_.[[ByteLength]].
-          1. _byteOffsetStart_ > _bufferByteLength_ 또는 _byteOffsetEnd_ > _bufferByteLength_ 이면 *true* 반환.
-          1. NOTE: 길이 0 DataView 는 out-of-bounds 로 간주되지 않는다.
-          1. *false* 반환.
+          1. _view_를 _viewRecord_.[[Object]]로 둔다.
+          1. _bufferByteLength_를 _viewRecord_.[[CachedBufferByteLength]]로 둔다.
+          1. IsDetachedBuffer(_view_.[[ViewedArrayBuffer]])가 *true*이면,
+            1. 단언: _bufferByteLength_는 ~detached~이다.
+            1. *true*를 반환한다.
+          1. 단언: _bufferByteLength_는 0보다 크거나 같은 정수이다.
+          1. _byteOffsetStart_를 _view_.[[ByteOffset]]으로 둔다.
+          1. _view_.[[ByteLength]]가 ~auto~이면,
+            1. _byteOffsetEnd_를 _bufferByteLength_로 둔다.
+          1. 아니면,
+            1. _byteOffsetEnd_를 _byteOffsetStart_ + _view_.[[ByteLength]]로 둔다.
+          1. 참고: [[ByteOffset]]이 _bufferByteLength_인 길이 0의 DataView는 out-of-bounds로 간주하지 않는다.
+          1. _byteOffsetStart_ > _bufferByteLength_ 또는 _byteOffsetEnd_ > _bufferByteLength_이면, *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -50498,10 +50511,10 @@ THH:mm:ss.sss
 
 <emu-clause id="sec-memory-model">
   <h1>메모리 모델 (Memory Model)</h1>
-  <p>메모리 일관성 모델 또는 <dfn>memory model</dfn> 은 SharedArrayBuffer 로 백업된 TypedArray 인스턴스 접근과 Atomics 객체의 메서드를 통해 발생하는 Shared Data Block 이벤트의 가능한 순서를 지정한다. 프로그램에 (아래 정의된) 데이터 레이스가 없을 때 이벤트들의 순서는 각 에이전트의 동작을 인터리빙한 것과 같이 순차적 일관성(sequentially consistent)으로 보인다. 프로그램에 데이터 레이스가 있을 때 공유 메모리 연산은 순차적 비일관성처럼 보일 수 있다. 예를 들어, 프로그램은 인과성 위반 동작 및 그 밖의 놀라운 현상을 보일 수 있다. 이러한 놀라움은 컴파일러 변환과 CPU 설계(예: 순서 재배치 실행 및 추측 실행)에서 비롯된다. 메모리 모델은 프로그램이 순차적 일관성 동작을 보이는 정확한 조건과 데이터 레이스에서 읽힐 수 있는 가능한 값들을 모두 정의한다. 즉, 정의되지 않은 동작은 없다.</p>
-  <p>메모리 모델은 SharedArrayBuffer 의 추상 연산 또는 평가 중 Atomics 객체 메서드에 의해 도입된 이벤트에 대한 관계 제약으로 정의된다.</p>
+  <p>메모리 일관성 모델, 또는 <dfn>메모리 모델</dfn>은 SharedArrayBuffer를 백업으로 하는 TypedArray 인스턴스의 접근이나 Atomics 객체의 메서드를 통한 접근으로 발생한 Shared Data Block 이벤트들의 가능한 순서를 지정합니다. 프로그램에 데이터 레이스가 없는 경우(아래에 정의됨), 이벤트의 순서는 순차적 일관성(sequential consistency)을 갖습니다. 즉, 각 에이전트의 동작이 교차 배치된 것처럼 동작합니다. 프로그램에 데이터 레이스가 있는 경우에는, 공유 메모리 연산이 순차적으로 일관되지 않을 수 있습니다. 예를 들어, 프로그램이 인과관계를 위반하는 행동이나 기타 놀라운 현상을 보일 수 있습니다. 이런 놀라움은 컴파일러 변환 및 CPU의 설계(예: 순서 무시 실행이나 추측 실행)로 인해 발생합니다. 메모리 모델은 프로그램이 순차적으로 일관된 동작을 보이는 정확한 조건과 데이터 레이스로부터 읽히는 가능한 값들을 모두 정의합니다. 즉, 정의되지 않은 동작(undefined behaviour)은 없습니다.</p>
+  <p>메모리 모델은 SharedArrayBuffer에 대한 추상 연산이나 Atomics 객체의 메서드에 의해 평가 중 도입되는 Memory 이벤트들에 대한 관계적 제약으로 정의됩니다.</p>
   <emu-note>
-    <p>이 절은 SharedArrayBuffer 추상 연산이 도입하는 이벤트에 대한 공리적(axiomatic) 모델을 제공한다. 모델은 명세의 나머지와 달리 알고리즘적으로 표현될 수 없음을 강조해야 한다. 추상 연산에 의한 비결정적 이벤트 도입은 ECMAScript 평가의 실행 의미와 메모리 모델의 공리적 의미 사이의 인터페이스이다. 이러한 이벤트의 의미는 평가 내 모든 이벤트의 그래프를 고려하여 정의된다. 이것들은 정적 의미(Static Semantics)나 런타임 의미(Runtime Semantics)가 아니다. 입증된 알고리즘 구현이 아니라 특정 이벤트 그래프가 허용되는지 금지되는지를 결정하는 제약 집합이다.</p>
+    <p>이 절에서는 SharedArrayBuffer에 대한 추상 연산으로 도입된 Memory 이벤트에 대한 공리적(axiomatic) 모델을 제공합니다. 이 모델은 이 명세서의 나머지 부분과 달리 알고리즘으로 표현될 수 없다는 점을 강조해야 합니다. 추상 연산에 의한 이벤트의 비결정적 도입은 ECMAScript 평가의 연산 의미론과 메모리 모델의 공리 의미론 사이의 인터페이스입니다. 이 이벤트들의 의미론은 평가 내의 모든 이벤트 그래프를 고려함으로써 정의됩니다. 이것은 정적 의미론도 아니고 런타임 의미론도 아닙니다. 입증된 알고리즘 구현은 없고, 특정 이벤트 그래프가 허용되는지 아닌지를 결정하는 제약 조건 집합만 있습니다.</p>
   </emu-note>
 
   <emu-clause id="sec-memory-model-fundamentals">
@@ -50510,41 +50523,40 @@ THH:mm:ss.sss
     <emu-note>
       <p>순차적 일관성과 unordered 보다 약하거나 강한(예: release-acquire) 순서는 지원되지 않는다.</p>
     </emu-note>
-    <p><dfn variants="Shared Data Block events">Shared Data Block event</dfn> 는 <dfn>ReadSharedMemory</dfn>, <dfn>WriteSharedMemory</dfn> 또는 <dfn>ReadModifyWriteSharedMemory</dfn> Record 이다.</p>
-
+    <p><dfn variants="Shared Data Block events">Shared Data Block 이벤트</dfn>란 <dfn>ReadSharedMemory</dfn>, <dfn>WriteSharedMemory</dfn>, <dfn>ReadModifyWriteSharedMemory</dfn> 레코드 중 하나를 의미한다. <dfn variants="read events">읽기 이벤트</dfn>는 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 중 하나이고, <dfn variants="write events">쓰기 이벤트</dfn>는 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 중 하나이다.</p>
     <emu-table id="table-readsharedmemory-fields" caption="ReadSharedMemory 이벤트 필드 (ReadSharedMemory Event Fields)">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[Order]]</td>
           <td>~seq-cst~ 또는 ~unordered~</td>
-          <td>이벤트에 대해 메모리 모델이 보장하는 가장 약한 순서.</td>
+          <td>이 이벤트에 대해 메모리 모델이 보장하는 가장 약한 순서입니다.</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>Boolean</td>
-          <td>이 이벤트가 동일 범위를 가진 여러 write 이벤트로부터 읽을 수 있는지 여부.</td>
+          <td>Boolean 값</td>
+          <td>이 이벤트가 동일한 메모리 범위를 가지는 여러 쓰기 이벤트로부터 읽기를 허용하는지 여부입니다.</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
           <td>Shared Data Block</td>
-          <td>이벤트가 동작하는 블록.</td>
+          <td>이벤트가 동작하는 블록입니다.</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>음이 아닌 정수</td>
-          <td>[[Block]] 내 읽기의 바이트 주소.</td>
+          <td>0 이상의 정수</td>
+          <td>[[Block]] 안에서 읽기가 발생한 바이트 주소입니다.</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>음이 아닌 정수</td>
-          <td>읽기의 크기.</td>
+          <td>0 이상의 정수</td>
+          <td>읽기 연산의 크기입니다.</td>
         </tr>
       </table>
     </emu-table>
@@ -50553,40 +50565,40 @@ THH:mm:ss.sss
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[Order]]</td>
           <td>~seq-cst~, ~unordered~, 또는 ~init~</td>
-          <td>이벤트에 대해 메모리 모델이 보장하는 가장 약한 순서.</td>
+          <td>이 이벤트에 대해 메모리 모델이 보장하는 가장 약한 순서입니다.</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>Boolean</td>
-          <td>이 이벤트가 동일 범위를 가진 여러 read 이벤트로부터 읽힐 수 있는지 여부.</td>
+          <td>Boolean 값</td>
+          <td>이 이벤트가 동일한 메모리 범위를 가진 여러 읽기 이벤트로부터 읽히는 것이 허용되는지 여부입니다.</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
           <td>Shared Data Block</td>
-          <td>이벤트가 동작하는 블록.</td>
+          <td>이벤트가 동작하는 블록입니다.</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>음이 아닌 정수</td>
-          <td>[[Block]] 내 쓰기의 바이트 주소.</td>
+          <td>0 이상의 정수</td>
+          <td>[[Block]] 내에서 쓰기가 발생한 바이트 주소입니다.</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>음이 아닌 정수</td>
-          <td>쓰기의 크기.</td>
+          <td>0 이상의 정수</td>
+          <td>쓰기 연산의 크기입니다.</td>
         </tr>
         <tr>
           <td>[[Payload]]</td>
-          <td>바이트 값 List</td>
-          <td>다른 이벤트가 읽을 바이트 값 List.</td>
+          <td>바이트 값들의 리스트</td>
+          <td>다른 이벤트에 의해 읽혀질 바이트 값들의 리스트입니다.</td>
         </tr>
       </table>
     </emu-table>
@@ -50638,10 +50650,8 @@ THH:mm:ss.sss
       </table>
     </emu-table>
 
-    <p>이러한 이벤트는 추상 연산 또는 Atomics 객체 메서드에 의해 도입된다.</p>
-    <p>일부 연산은 <dfn>Synchronize</dfn> 이벤트도 도입할 수 있다. <dfn variants="Synchronize events">Synchronize event</dfn> 는 필드가 없으며, 다른 이벤트의 허용 순서를 직접 제한하기 위해 존재한다.</p>
-    <p>Shared Data Block 및 Synchronize 이벤트 외에 호스트 특화 이벤트가 있다.</p>
-    <p>ReadSharedMemory, WriteSharedMemory, ReadModifyWriteSharedMemory 이벤트의 범위(range)는 [[ByteIndex]] 부터 [[ByteIndex]] + [[ElementSize]] - 1 까지의 연속 정수 집합이다. 두 이벤트의 [[Block]] 이 같고 범위가 원소별 동일하면 범위가 같다. [[Block]] 이 같고 범위가 동일하지 않으며 교집합이 비어 있지 않으면 범위가 겹친다(overlapping). [[Block]] 이 다르거나 범위가 같지도 겹치지도 않으면 범위는 분리(disjoint)되었다.</p>
+    <p>Shared Data Block 이벤트는 추상 연산이나 Atomics 객체의 메서드를 통해 후보 실행 에이전트 이벤트 레코드에 도입됩니다. 일부 연산은 <dfn variants="Synchronize,Synchronize event">동기화(Synchronize) 이벤트</dfn>도 도입하는데, 이 이벤트는 어떠한 필드도 가지지 않으며 오직 다른 이벤트의 허용된 순서를 직접적으로 제한하기 위해 존재합니다. 마지막으로 호스트 특화 이벤트도 존재합니다. <dfn variants="Memory events">메모리 이벤트</dfn>는 Shared Data Block 이벤트, 동기화(Synchronize) 이벤트, 혹은 이러한 호스트 특화 이벤트 중 하나입니다.</p>
+    <p>Shared Data Block 이벤트 _e_의 <dfn variants="memory ranges">메모리 범위</dfn>는 _e_.[[ByteIndex]](포함)부터 _e_.[[ByteIndex]] + _e_.[[ElementSize]](미포함)까지의 모든 정수의 집합이다. 두 이벤트의 메모리 범위는 [[Block]], [[ByteIndex]], [[ElementSize]]가 모두 동일할 때 같다. 두 이벤트의 메모리 범위는 [[Block]]이 같고, 범위가 같지 않으면서 교집합이 비어있지 않을 때 겹친다고 한다. 두 이벤트의 메모리 범위는 [[Block]]이 다르거나, 범위가 같지도 겹치지도 않을 때 서로 분리되어 있다고 한다.</p>
     <emu-note>
       <p>계정해야 할 호스트 특화 동기화 이벤트 예: 한 에이전트에서 다른 에이전트로 SharedArrayBuffer 를 보내기(브라우저의 `postMessage`), 에이전트 시작/종료, 공유 메모리 외 채널을 통한 에이전트 클러스터 내 통신. 특정 실행 _execution_ 에 대해 이러한 이벤트는 host-synchronizes-with 엄격 부분 순서로 호스트에 의해 제공된다. 추가로, 호스트는 _execution_.[[EventList]] 에 호스트 특화 동기화 이벤트를 추가하여 is-agent-order-before 관계에 참여할 수 있다.</p>
     </emu-note>
@@ -50651,29 +50661,29 @@ THH:mm:ss.sss
   <emu-clause id="sec-agent-event-records">
     <h1>에이전트 이벤트 레코드 (Agent Events Records)</h1>
     <p><dfn variants="Agent Events Records">Agent Events Record</dfn> 는 다음 필드를 가진 Record 이다.</p>
-    <emu-table id="table-agent-events-records" caption="Agent Events Record 필드 (Agent Events Record Fields)">
+    <emu-table id="table-agent-events-records" caption="에이전트 이벤트 레코드 필드">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[AgentSignifier]]</td>
           <td>에이전트 식별자</td>
-          <td>이 순서를 발생시킨 평가의 에이전트.</td>
+          <td>이 순서가 만들어지게 된 평가를 수행한 에이전트입니다.</td>
         </tr>
         <tr>
           <td>[[EventList]]</td>
-          <td>이벤트 List</td>
-          <td>평가 중 리스트에 이벤트가 추가된다.</td>
+          <td>메모리 이벤트들의 리스트</td>
+          <td>이벤트는 평가 도중 리스트에 추가됩니다.</td>
         </tr>
         <tr>
           <td>[[AgentSynchronizesWith]]</td>
-          <td>Synchronize 이벤트 쌍 List</td>
-          <td>운영상 의미가 도입한 동기화 관계.</td>
+          <td>동기화 이벤트 쌍들의 리스트</td>
+          <td>연산 의미론에 의해 도입된 동기화 관계입니다.</td>
         </tr>
       </table>
     </emu-table>
@@ -50708,24 +50718,24 @@ THH:mm:ss.sss
   <emu-clause id="sec-candidate-executions">
     <h1>후보 실행 (Candidate Executions)</h1>
     <p><dfn variants="candidate executions">candidate execution</dfn> 은 에이전트 클러스터 평가의 다음 필드를 가진 Record 이다.</p>
-    <emu-table id="table-candidate-execution-records" caption="Candidate Execution Record 필드 (Candidate Execution Record Fields)">
+    <emu-table id="table-candidate-execution-records" caption="후보 실행 레코드 필드">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[EventsRecords]]</td>
-          <td>Agent Events Records List</td>
-          <td>평가 중 추가된 이벤트 List 를 에이전트에 매핑.</td>
+          <td>에이전트 이벤트 레코드들의 리스트</td>
+          <td>에이전트와 평가 도중 추가된 메모리 이벤트들의 리스트를 매핑합니다.</td>
         </tr>
         <tr>
           <td>[[ChosenValues]]</td>
-          <td>Chosen Value Records List</td>
-          <td>평가 중 선택된 바이트 값 List 를 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트에 매핑.</td>
+          <td>선택된 값 레코드들의 리스트</td>
+          <td>ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트를 평가 중 선택된 바이트 값들의 리스트에 매핑합니다.</td>
         </tr>
       </table>
     </emu-table>
@@ -50739,84 +50749,81 @@ THH:mm:ss.sss
     <emu-clause id="sec-event-set" type="abstract operation">
       <h1>
         EventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 후보 실행,
+        ): 메모리 이벤트들의 집합
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ 를 빈 Set 으로 둔다.
-        1. _execution_.[[EventsRecords]] 의 각 Agent Events Record _aer_ 에 대해,
-          1. _aer_.[[EventList]] 의 각 이벤트 _E_ 에 대해
-            1. _E_ 를 _events_ 에 추가한다.
-        1. _events_ 를 반환한다.
+        1. _events_를 빈 집합으로 둔다.
+        1. _execution_.[[EventsRecords]]의 각 에이전트 이벤트 레코드 _aer_에 대해,
+          1. _aer_.[[EventList]]의 각 메모리 이벤트 _E_에 대해,
+            1. _E_를 _events_에 추가한다.
+        1. _events_를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-sharedatablockeventset" type="abstract operation">
       <h1>
         SharedDataBlockEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 후보 실행,
+        ): Shared Data Block 이벤트들의 집합
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ 를 빈 Set 으로 둔다.
-        1. EventSet(_execution_) 의 각 이벤트 _E_ 에 대해
-          1. _E_ 가 ReadSharedMemory, WriteSharedMemory, ReadModifyWriteSharedMemory 이벤트이면 _E_ 를 _events_ 에 추가한다.
-        1. _events_ 를 반환한다.
+        1. _events_를 빈 집합으로 둔다.
+        1. EventSet(_execution_)의 각 메모리 이벤트 _E_에 대해,
+          1. _E_가 Shared Data Block 이벤트라면, _E_를 _events_에 추가한다.
+        1. _events_를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-hosteventset" type="abstract operation">
       <h1>
         HostEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 후보 실행,
+        ): 메모리 이벤트들의 집합
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _events_ 를 빈 Set 으로 둔다.
-        1. EventSet(_execution_) 의 각 이벤트 _E_ 에 대해
-          1. _E_ 가 SharedDataBlockEventSet(_execution_) 에 없으면 _E_ 를 _events_ 에 추가한다.
-        1. _events_ 를 반환한다.
+        1. EventSet(_execution_)에 있는 모든 요소 중 SharedDataBlockEventSet(_execution_)에 없는 요소만을 포함하는 새로운 집합을 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-composewriteeventbytes" type="abstract operation">
       <h1>
         ComposeWriteEventBytes (
-          _execution_: a candidate execution,
-          _byteIndex_: a non-negative integer,
-          _Ws_: a List of either WriteSharedMemory or ReadModifyWriteSharedMemory events,
-        ): a List of byte values
+          _execution_: 후보 실행,
+          _byteIndex_: 0 이상의 정수,
+          _Ws_: WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트들의 리스트,
+        ): 바이트 값들의 리스트
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _byteLocation_ 을 _byteIndex_ 로 둔다.
-        1. _bytesRead_ 를 새 빈 List 로 둔다.
-        1. _Ws_ 의 각 요소 _W_ 에 대해
-          1. Assert: _W_ 는 자신의 범위에 _byteLocation_ 을 포함한다.
-          1. _payloadIndex_ 를 _byteLocation_ - _W_.[[ByteIndex]] 로 둔다.
-          1. _W_ 가 WriteSharedMemory 이벤트이면
-            1. _byte_ 를 _W_.[[Payload]][_payloadIndex_] 로 둔다.
-          1. 아니면
-            1. Assert: _W_ 는 ReadModifyWriteSharedMemory 이벤트.
-            1. _bytes_ 를 ValueOfReadEvent(_execution_, _W_) 로 둔다.
-            1. _bytesModified_ 를 _W_.[[ModifyOp]](_bytes_, _W_.[[Payload]]) 로 둔다.
-            1. _byte_ 를 _bytesModified_[_payloadIndex_] 로 둔다.
-          1. _byte_ 를 _bytesRead_ 끝에 추가한다.
-          1. _byteLocation_ 을 _byteLocation_ + 1 로 설정한다.
-        1. _bytesRead_ 를 반환한다.
+        1. _byteLocation_을 _byteIndex_로 둔다.
+        1. _bytesRead_를 새 빈 리스트로 둔다.
+        1. _Ws_의 각 요소 _W_에 대해,
+          1. 단언: _W_의 메모리 범위에 _byteLocation_이 포함된다.
+          1. _payloadIndex_를 _byteLocation_ - _W_.[[ByteIndex]]로 둔다.
+          1. _W_가 WriteSharedMemory 이벤트라면,
+            1. _byte_를 _W_.[[Payload]][_payloadIndex_]로 둔다.
+          1. 아니면,
+            1. 단언: _W_는 ReadModifyWriteSharedMemory 이벤트이다.
+            1. _bytes_를 ValueOfReadEvent(_execution_, _W_)로 둔다.
+            1. _bytesModified_를 _W_.[[ModifyOp]](_bytes_, _W_.[[Payload]])로 둔다.
+            1. _byte_를 _bytesModified_[_payloadIndex_]로 둔다.
+          1. _byte_를 _bytesRead_에 추가한다.
+          1. _byteLocation_을 _byteLocation_ + 1로 업데이트한다.
+        1. _bytesRead_를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>read-modify-write 수정 [[ModifyOp]] 는 ReadModifyWriteSharedMemory 이벤트를 도입하는 Atomics 객체의 함수 프로퍼티로 제공된다.</p>
+        <p>read-modify-write 변형 [[ModifyOp]]는 ReadModifyWriteSharedMemory 이벤트를 도입하는 Atomics 객체의 함수 프로퍼티에 의해 정해진다.</p>
       </emu-note>
       <emu-note>
-        <p>이 추상 연산은 write 이벤트 List 를 바이트 값 List 로 합성한다. 이는 ReadSharedMemory 및 ReadModifyWriteSharedMemory 이벤트의 이벤트 의미에서 사용된다.</p>
+        <p>이 추상 연산은 여러 쓰기 이벤트 리스트를 바이트 값 리스트로 합성한다. ReadSharedMemory와 ReadModifyWriteSharedMemory 이벤트의 이벤트 의미론에서 사용된다.</p>
       </emu-note>
     </emu-clause>
 
@@ -50840,302 +50847,306 @@ THH:mm:ss.sss
   <emu-clause id="sec-relations-of-candidate-executions">
     <h1>후보 실행의 관계 (Relations of Candidate Executions)</h1>
 
-    <p>다음 관계와 수학적 함수는 특정 후보 실행 위에서 매개변수화되며 그 이벤트들을 순서화한다.</p>
+    <p>다음 관계(Relation) 및 수학 함수들은 특정 후보 실행을 기준으로 매개변수화되며, 해당 후보 실행의 메모리 이벤트를 순서화합니다.</p>
 
     <emu-clause id="sec-agent-order">
       <h1>is-agent-order-before</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <dfn>is-agent-order-before</dfn> 관계는 다음을 만족하는 최소 관계이다.</p>
+      <p>후보 실행 _execution_에 대하여, <dfn>is-agent-order-before</dfn> 관계는 아래 조건을 만족하는 메모리 이벤트 상의 최소 관계입니다.</p>
       <ul>
-        <li>이벤트 _E_, _D_ 에 대해 _execution_.[[EventsRecords]] 의 어떤 Agent Events Record _aer_ 가 있어 _aer_.[[EventList]] 에 _E_ 와 _D_ 둘 다 포함되고 _E_ 가 List 순서에서 _D_ 앞에 있으면 _E_ is-agent-order-before _D_ 이다.</li>
+        <li>이벤트 _E_, _D_에 대하여, _execution_ 내에서 _E_가 _D_보다 is-agent-order-before이면, _execution_.[[EventsRecords]]에 어떤 에이전트 이벤트 레코드 _aer_가 존재하여, _aer_.[[EventList]]가 _E_와 _D_ 둘 다 포함하고, 리스트 순서상 _E_가 _D_보다 앞에 있음을 의미합니다.</li>
       </ul>
-
       <emu-note>
-        <p>각 에이전트는 평가 중 per-agent 엄격 전체 순서로 이벤트를 도입한다. 이것은 그 엄격 전체 순서들의 합집합이다.</p>
+        <p>각 에이전트는 평가 과정에서 에이전트별로 엄격한 전체 순서로 이벤트를 도입합니다. 이는 그러한 엄격한 전체 순서들의 합집합이 됩니다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-reads-bytes-from" aoid="reads-bytes-from">
       <h1>reads-bytes-from</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <em>reads-bytes-from</em> 함수는 SharedDataBlockEventSet(_execution_) 의 이벤트를 SharedDataBlockEventSet(_execution_) 내 이벤트 List 로 매핑하는 수학적 함수이며 다음 조건을 만족한다.</p>
+      <p>후보 실행 _execution_에 대하여, <em>reads-bytes-from</em> 함수는 SharedDataBlockEventSet(_execution_) 내의 메모리 이벤트를 SharedDataBlockEventSet(_execution_) 내 이벤트들의 리스트로 매핑하는 수학 함수이며, 다음 조건을 만족해야 합니다.</p>
       <ul>
         <li>
-          <p>SharedDataBlockEventSet(_execution_) 내 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_ 에 대해 reads-bytes-from(_R_) 는 길이가 _R_.[[ElementSize]] 인 List 로서 다음을 모두 만족하는 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _Ws_ 를 원소로 가진다.</p>
+          <p>SharedDataBlockEventSet(_execution_)의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_에 대해, _execution_에서 reads-bytes-from(_R_)은 길이 _R_.[[ElementSize]]인 리스트이며, 각 요소는 다음 조건을 모두 만족하는 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _Ws_이다.</p>
           <ul>
-            <li>_Ws_ 의 인덱스 _i_ 의 각 이벤트 _W_ 는 _R_.[[ByteIndex]] + _i_ 를 자신의 범위에 가진다.</li>
-            <li>_R_ 은 _Ws_ 안에 없다.</li>
+            <li>_Ws_에서 인덱스 _i_에 해당하는 각 이벤트 _W_는 _R_.[[ByteIndex]] + _i_를 자신의 메모리 범위에 가진다.</li>
+            <li>_R_은 _Ws_에 포함되지 않는다.</li>
           </ul>
         </li>
       </ul>
-      <p>후보 실행은 항상 reads-bytes-from 함수를 허용한다.</p>
+      <p>후보 실행에는 항상 reads-bytes-from 함수가 존재합니다.</p>
     </emu-clause>
 
     <emu-clause id="sec-reads-from">
       <h1>reads-from</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <dfn>reads-from</dfn> 관계는 다음을 만족하는 최소 관계이다.</p>
+      <p>후보 실행 _execution_에 대하여, <dfn>reads-from</dfn> 관계는 아래 조건을 만족하는 메모리 이벤트 상의 최소 관계입니다.</p>
       <ul>
-        <li>이벤트 _R_, _W_ 에 대해 SharedDataBlockEventSet(_execution_) 이 둘 다 포함하고 reads-bytes-from(_R_) 이 _W_ 를 포함하면 _R_ reads-from _W_ 이다.</li>
+        <li>이벤트 _R_, _W_에 대해, SharedDataBlockEventSet(_execution_)에 _R_과 _W_ 둘 다 존재하고, reads-bytes-from(_R_)이 _W_를 포함할 때 _R_ reads-from _W_가 성립합니다.</li>
       </ul>
     </emu-clause>
 
     <emu-clause id="sec-host-synchronizes-with">
       <h1>host-synchronizes-with</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <dfn>host-synchronizes-with</dfn> 관계는 적어도 다음을 만족하는 호스트 제공 엄격 부분 순서이다.</p>
+      <p>후보 실행 _execution_에 대해, <dfn>host-synchronizes-with</dfn> 관계는 호스트 특화 메모리 이벤트 위의 호스트가 제공하는 엄격 부분 순서로서 최소한 다음을 만족해야 합니다.</p>
       <ul>
-        <li>_E_ host-synchronizes-with _D_ 이면 HostEventSet(_execution_) 이 _E_ 와 _D_ 를 포함한다.</li>
-        <li>host-synchronizes-with 와 is-agent-order-before 의 합집합은 순환이 없다.</li>
+        <li>_E_가 _execution_에서 host-synchronizes-with _D_이면, HostEventSet(_execution_)에 _E_와 _D_가 모두 존재합니다.</li>
+        <li>host-synchronizes-with와 is-agent-order-before의 합집합에는 순환(cycle)이 존재하지 않아야 합니다.</li>
       </ul>
-
       <emu-note>
-        <p>두 호스트 특화 이벤트 _E_, _D_ 에 대해 _E_ host-synchronizes-with _D_ 이면 _E_ happens-before _D_ 이다.</p>
+        <p>후보 실행 _execution_ 내 두 호스트 특화 이벤트 _E_, _D_에 대해, _E_ host-synchronizes-with _D_이면 _E_는 _execution_에서 _D_보다 선행(happens-before)함을 의미합니다.</p>
       </emu-note>
       <emu-note>
-        <p>이 관계는 HTML 워커 간 `postMessage` 같은 추가 동기화 메커니즘을 호스트가 제공할 수 있게 한다.</p>
+        <p>이 관계는 호스트가 추가적인 동기화 수단(예: HTML 워커 사이의 <code>postMessage</code>)을 제공할 수 있게 해줍니다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-synchronizes-with">
       <h1>synchronizes-with</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <dfn>synchronizes-with</dfn> 관계는 다음을 만족하는 최소 관계이다.</p>
+      <p>후보 실행 _execution_에 대해, <dfn>synchronizes-with</dfn> 관계는 다음을 만족하는 메모리 이벤트에 관한 최소 관계이다.</p>
       <ul>
         <li>
-          이벤트 _R_, _W_ 에 대해 _R_ reads-from _W_, _R_.[[Order]] 가 ~seq-cst~, _W_.[[Order]] 가 ~seq-cst~, 그리고 _R_, _W_ 범위가 같으면 _W_ synchronizes-with _R_.
+          이벤트 _R_, _W_에 대해, _execution_에서 _R_이 _W_로부터 reads-from이고, _R_.[[Order]]와 _W_.[[Order]]가 둘 다 ~seq-cst~이며, _R_과 _W_의 메모리 범위가 같으면, _W_ synchronizes-with _R_이다.
         </li>
         <li>
-          _execution_.[[EventsRecords]] 의 각 _eventsRecord_ 에 대해:
+          _execution_.[[EventsRecords]]의 각 요소 _eventsRecord_에 대해, 다음이 성립한다.
           <ul>
-            <li>_eventsRecord_.[[AgentSynchronizesWith]] 가 (_S_, _Sw_) 를 포함하면 _S_ synchronizes-with _Sw_.</li>
+            <li>이벤트 _S_, _Sw_에 대해, _eventsRecord_.[[AgentSynchronizesWith]]에 (_S_, _Sw_)가 포함되어 있으면 _S_ synchronizes-with _Sw_이다.</li>
           </ul>
         </li>
-        <li>_execution_.[[HostSynchronizesWith]] 가 (_E_, _D_) 를 포함하면 _E_ synchronizes-with _D_.</li>
+        <li>이벤트 _E_, _D_에 대해, _execution_.[[HostSynchronizesWith]]에 (_E_, _D_)가 있으면 _E_ synchronizes-with _D_이다.</li>
       </ul>
 
       <emu-note>
-        <p>문헌 관례상 write 이벤트가 read 이벤트와 synchronizes-with 관계를 가진다.</p>
+        <p>메모리 모델 문헌의 관례에 따라, 후보 실행 _execution_에서는 write 이벤트가 read 이벤트와 synchronizes-with 관계를 맺으며, 반대는 성립하지 않는다.</p>
       </emu-note>
 
       <emu-note>
-        <p>~init~ 이벤트는 이 관계에 참여하지 않고 happens-before 에 의해 직접 제약된다.</p>
+        <p>후보 실행 _execution_에서 ~init~ 이벤트는 이 관계에 참여하지 않으며 happens-before에 의해 직접 제한된다.</p>
       </emu-note>
 
       <emu-note>
-        <p>reads-from 로 연결된 모든 ~seq-cst~ 이벤트가 synchronizes-with 로 연결되지는 않는다. 범위가 같은 경우에만 그렇다.</p>
+        <p>후보 실행 _execution_에서 reads-from으로 연결된 모든 ~seq-cst~ 이벤트가 synchronizes-with로 연결되는 것은 아니다. 오직 메모리 범위가 같은 이벤트만 synchronizes-with로 연결된다.</p>
       </emu-note>
 
       <emu-note>
-        <p>_W_ synchronizes-with _R_ 라도 _R_ 은 _W_ 이외의 write 로부터 reads-from 할 수 있다.</p>
+        <p>후보 실행 _execution_의 Shared Data Block 이벤트 _R_, _W_에 대해, _W_ synchronizes-with _R_이 성립하더라도 _R_은 _W_ 외의 다른 write로부터 reads-from 관계를 가질 수 있다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-happens-before">
       <h1>happens-before</h1>
-      <p>후보 실행 _execution_ 에 대해, 그 <dfn>happens-before</dfn> 관계는 다음을 만족하는 최소 관계이다.</p>
+      <p>후보 실행 _execution_에 대해, <dfn>happens-before</dfn> 관계는 다음을 만족하는 메모리 이벤트에 관한 최소 관계이다.</p>
 
       <ul>
         <li>
-          <p>이벤트 _E_, _D_ 에 대해 다음 중 하나가 참이면 _E_ happens-before _D_:</p>
+          <p>이벤트 _E_, _D_에 대해, 아래 조건 중 하나라도 만족하면 _execution_에서 _E_ happens-before _D_가 된다.</p>
           <ul>
-            <li>_E_ is-agent-order-before _D_.</li>
-            <li>_E_ synchronizes-with _D_.</li>
-            <li>SharedDataBlockEventSet(_execution_) 이 _E_, _D_ 를 모두 포함하고 _E_.[[Order]] 가 ~init~ 이며 _E_, _D_ 범위가 겹친다.</li>
-            <li>이벤트 _F_ 가 존재하여 _E_ happens-before _F_ 그리고 _F_ happens-before _D_.</li>
+            <li>_E_가 _execution_에서 _D_보다 is-agent-order-before이다.</li>
+            <li>_E_가 _execution_에서 _D_보다 synchronizes-with이다.</li>
+            <li>SharedDataBlockEventSet(_execution_)에 _E_, _D_가 모두 포함되고, _E_.[[Order]]가 ~init~이며, _E_와 _D_의 메모리 범위가 겹칠 때.</li>
+            <li>어떤 이벤트 _F_에 대해, _execution_에서 _E_ happens-before _F_이고 _F_ happens-before _D_인 경우.</li>
           </ul>
         </li>
       </ul>
 
       <emu-note>
-        <p>happens-before 는 agent-order 의 상위 집합이므로 후보 실행은 단일 스레드 평가 의미와 합치된다.</p>
+        <p>happens-before는 agent-order의 상위 집합이므로, 후보 실행은 ECMAScript의 단일 스레드 평가 의미와 일치한다.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-properties-of-valid-executions">
-    <h1>유효한 실행의 속성 (Properties of Valid Executions)</h1>
+    <h1>유효한 실행의 속성(Properties of Valid Executions)</h1>
 
     <emu-clause id="sec-valid-chosen-reads">
-      <h1>Valid Chosen Reads</h1>
-      <p>후보 실행 _execution_ 이 아래 알고리즘이 *true* 를 반환하면 valid chosen reads 를 가진다.</p>
+      <h1>유효한 선택 읽기(Valid Chosen Reads)</h1>
+      <p>후보 실행 _execution_이 아래 알고리즘이 *true*를 반환하면 유효한 선택 읽기를 가진다.</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) 의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_ 에 대해
-          1. _chosenValueRecord_ 를 _execution_.[[ChosenValues]] 중 [[Event]] 가 _R_ 인 요소로 둔다.
-          1. _chosenValue_ 를 _chosenValueRecord_.[[ChosenValue]] 로 둔다.
-          1. _readValue_ 를 ValueOfReadEvent(_execution_, _R_) 로 둔다.
-          1. _chosenLen_ 을 _chosenValue_ 의 원소 수로 둔다.
-          1. _readLen_ 을 _readValue_ 의 원소 수로 둔다.
-          1. _chosenLen_ ≠ _readLen_ 이면
-            1. *false* 반환.
-          1. 0 이상 _chosenLen_ 미만 정수 _i_ 중 일부에 대해 _chosenValue_[_i_] ≠ _readValue_[_i_] 이면
-            1. *false* 반환.
-        1. *true* 반환.
+        1. SharedDataBlockEventSet(_execution_)의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_에 대해,
+          1. _execution_.[[ChosenValues]]에서 [[Event]] 필드가 _R_인 요소를 _chosenValueRecord_로 둔다.
+          1. _chosenValueRecord_.[[ChosenValue]]를 _chosenValue_로 둔다.
+          1. ValueOfReadEvent(_execution_, _R_)을 _readValue_로 둔다.
+          1. _chosenValue_의 요소 개수를 _chosenLen_으로 둔다.
+          1. _readValue_의 요소 개수를 _readLen_으로 둔다.
+          1. _chosenLen_ ≠ _readLen_이면
+            1. *false*를 반환한다.
+          1. 정수 _i_가 0(포함)에서 _chosenLen_(제외) 사이에 존재하여 _chosenValue_[_i_] ≠ _readValue_[_i_]이면
+            1. *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-coherent-reads">
-      <h1>Coherent Reads</h1>
-      <p>후보 실행 _execution_ 이 아래 알고리즘이 *true* 면 coherent reads 를 가진다.</p>
+      <h1>일관된 읽기(Coherent Reads)</h1>
+      <p>후보 실행 _execution_이 아래 알고리즘이 *true*를 반환하면 일관된 읽기를 가진다.</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) 의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_ 에 대해
-          1. _Ws_ 를 reads-bytes-from(_R_) 로 둔다.
-          1. _byteLocation_ 을 _R_.[[ByteIndex]] 로 둔다.
-          1. _Ws_ 의 각 요소 _W_ 에 대해
-            1. _R_ happens-before _W_ 이면 *false* 반환.
-            1. _byteLocation_ 을 범위에 가지는 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _V_ 가 존재하고 _W_ happens-before _V_ 및 _V_ happens-before _R_ 이면 *false* 반환.
-            1. _byteLocation_ 을 _byteLocation_ + 1 로 설정.
-        1. *true* 반환.
+        1. SharedDataBlockEventSet(_execution_)의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_에 대해,
+          1. _execution_에서 reads-bytes-from(_R_)을 _Ws_로 둔다.
+          1. _R_.[[ByteIndex]]를 _byteLocation_으로 둔다.
+          1. _Ws_의 각 요소 _W_에 대해,
+            1. _execution_에서 _R_ happens-before _W_이면
+              1. *false*를 반환한다.
+            1. WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _V_가 존재하여, _V_의 메모리 범위에 _byteLocation_이 포함되고, _execution_에서 _W_ happens-before _V_, _V_ happens-before _R_이면
+              1. *false*를 반환한다.
+            1. _byteLocation_을 _byteLocation_ + 1로 설정한다.
+        1. *true*를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tear-free-aligned-reads">
-      <h1>Tear Free Reads</h1>
-      <p>후보 실행 _execution_ 이 아래 알고리즘이 *true* 면 tear free reads 를 가진다.</p>
+      <h1>찢김 없는 읽기(Tear Free Reads)</h1>
+      <p>후보 실행 _execution_이 아래 알고리즘이 *true*를 반환하면 찢김 없는 읽기를 가진다.</p>
       <emu-alg>
-        1. SharedDataBlockEventSet(_execution_) 의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_ 에 대해
-          1. _R_.[[NoTear]] 가 *true* 이면
-            1. _R_.[[ByteIndex]] % _R_.[[ElementSize]] == 0 임을 단언.
-            1. _R_ reads-from _W_ 이고 _W_.[[NoTear]] 가 *true* 인 각 이벤트 _W_ 에 대해
-              1. _R_, _W_ 범위가 같고 이벤트 _V_ 가 존재하여 _V_, _W_ 범위가 같고 _V_.[[NoTear]] *true* 이며 _W_ ≠ _V_, 그리고 _R_ reads-from _V_ 이면 *false* 반환.
-        1. *true* 반환.
+        1. SharedDataBlockEventSet(_execution_)의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _R_에 대해,
+          1. _R_.[[NoTear]]가 *true*이면,
+            1. _R_.[[ByteIndex]]를 _R_.[[ElementSize]]로 나눈 나머지가 0임을 단언한다.
+            1. _execution_에서 _R_이 reads-from _W_이고, _W_.[[NoTear]]가 *true*인 각 메모리 이벤트 _W_에 대해,
+              1. _R_과 _W_의 메모리 범위가 같고, _V_와 _W_의 메모리 범위가 같으며, _V_.[[NoTear]]가 *true*이고, _W_와 _V_가 동일한 Shared Data Block 이벤트가 아니면서, _execution_에서 _R_이 reads-from _V_인 _V_가 존재하면,
+                1. *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
 
       <emu-note>
-        <p>이벤트의 [[NoTear]] 가 *true* 는 해당 이벤트가 정수 TypedArray 접근으로 도입되었을 때이고, 부동소수 TypedArray 또는 DataView 접근이면 *false* 이다.</p>
-        <p>직관적으로 이는 정렬된(integer TypedArray) 방식으로 메모리 범위를 접근할 때 동일 범위를 가진 여러 write 이벤트와 경쟁 중 한 write 이벤트가 “승리”해야 함을 의미한다. 보다 정확히, 정렬된 read 이벤트는 같은 범위를 가진 서로 다른 여러 write 이벤트들의 바이트를 혼합해 읽을 수 없다. 다만 겹치는 범위를 가진 여러 write 이벤트로부터 읽는 것은 가능하다.</p>
+        <p>Shared Data Block 이벤트의 [[NoTear]] 필드는 정수형 TypedArray 접근으로 도입된 경우 *true*, 부동소수점 TypedArray 또는 DataView로 도입된 경우 *false*이다.</p>
+        <p>이 요구사항은, 정렬된 방식(aligned)으로 정수형 TypedArray를 통해 접근하는 경우, 해당 범위의 하나의 쓰기(write) 이벤트만이 동등 범위의 다른 쓰기와의 데이터 경합(race)에서 "승리"해야 함을 의미한다. 보다 정확히는, 정렬된 읽기 이벤트는 서로 다른 여러 쓰기 이벤트의 바이트를 합쳐 읽는 것이 허용되지 않는다. 단, 정렬된 읽기가 겹치는 여러 쓰기 이벤트에서 읽는 것은 허용될 수 있다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-memory-order">
-      <h1>순차적 일관 Atomics (Sequentially Consistent Atomics)</h1>
-      <p>후보 실행 _execution_ 에 대해 <dfn>is-memory-order-before</dfn> 는 EventSet(_execution_) 의 모든 이벤트에 대한 엄격 전체 순서이며 다음을 만족한다.</p>
+      <h1>순차적 일관성 원자적 연산(Sequentially Consistent Atomics)</h1>
+      <p>후보 실행 _execution_에 대해, <dfn>is-memory-order-before</dfn>는 EventSet(_execution_)에 포함된 모든 메모리 이벤트에 대한 엄격한 전체 순서(strict total order)이며, 다음을 만족해야 한다.</p>
       <ul>
-        <li>_E_ happens-before _D_ 이면 _E_ is-memory-order-before _D_.</li>
+        <li>이벤트 _E_, _D_에 대해, _execution_에서 _E_ happens-before _D_이면 _E_는 _D_보다 is-memory-order-before이다.</li>
         <li>
-          <p>_R_ reads-from _W_ 일 때, SharedDataBlockEventSet(_execution_) 내 ~seq-cst~ 인 어떤 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _V_ 가 존재하여 _W_ is-memory-order-before _V_, _V_ is-memory-order-before _R_ 이고 다음 중 하나가 참인 경우는 없다.</p>
+          <p>_execution_에서 _R_이 _W_로부터 reads-from인 이벤트 _R_, _W_에 대해, SharedDataBlockEventSet(_execution_)에 있는 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _V_ 중 _V_.[[Order]]가 ~seq-cst~, _W_가 _V_보다 is-memory-order-before, _V_가 _R_보다 is-memory-order-before이고, 아래 조건 중 하나 이상이 참인 경우가 없어야 한다.</p>
           <ul>
-            <li>_W_ synchronizes-with _R_ 이고 _V_, _R_ 범위가 같다.</li>
-            <li>_W_, _V_ 모두 _R_ happens-before 이고 _W_.[[Order]] 가 ~seq-cst~, 그리고 _W_, _V_ 범위가 같다.</li>
-            <li>_W_ happens-before _R_ 및 _W_ happens-before _V_, _R_.[[Order]] 가 ~seq-cst~ 이고 _V_, _R_ 범위가 같다.</li>
+            <li>_W_와 _R_이 synchronizes-with이고, _V_와 _R_의 메모리 범위가 같다.</li>
+            <li>_W_와 _R_이 happens-before이고, _V_도 _R_보다 happens-before인 경우, _W_.[[Order]]가 ~seq-cst~이며, _W_와 _V_의 메모리 범위가 같다.</li>
+            <li>_W_와 _R_이 happens-before이고, _W_가 _V_보다 happens-before이면, _R_.[[Order]]가 ~seq-cst~이고, _V_와 _R_의 메모리 범위가 같다.</li>
           </ul>
           <emu-note>
-            <p>이 항목은 동일 범위의 ~seq-cst~ 이벤트를 추가로 제한한다.</p>
+            <p>이 조항은 동일 메모리 범위의 ~seq-cst~ 이벤트에 추가 제약을 준다.</p>
           </emu-note>
         </li>
         <li>
-          <p>SharedDataBlockEventSet(_execution_) 의 각 _W_ (WriteSharedMemory 또는 ReadModifyWriteSharedMemory) 에 대해 _W_.[[Order]] 가 ~seq-cst~ 이면 _W_ 보다 memory-order 앞서는 동일 범위의 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 무한히 많지 않다.</p>
+          <p>SharedDataBlockEventSet(_execution_)에 포함되는 각 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _W_에 대해, _W_.[[Order]]가 ~seq-cst~이면 _W_보다 메모리 순서상 앞에 오는 동일 메모리 범위의 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 무한히 많을 수는 없다.</p>
           <emu-note>
-            <p>이 항목과 에이전트의 forward progress 보장은 ~seq-cst~ write 가 유한 시간 내 동일 범위 ~seq-cst~ read 에게 가시적이 되는 liveness 조건을 보장한다.</p>
+            <p>이 조항과 에이전트의 전진성 보장은 ~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">쓰기</emu-xref>가 동일한 메모리 범위의 ~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">읽기</emu-xref>에 유한한 시간 안에 관측될 수 있음을 보장하는 생존성 조건을 함께 충족한다.</p>
           </emu-note>
         </li>
       </ul>
-      <p>후보 실행이 is-memory-order-before 관계를 허용하면 sequentially consistent atomics 를 가진다.</p>
+      <p>후보 실행이 is-memory-order-before 관계를 허용하면, 그 실행은 순차적 일관성 원자적 연산을 가진다.</p>
 
       <emu-note>
-        <p>is-memory-order-before 는 EventSet(_execution_) 의 모든 이벤트를 포함하지만 happens-before 나 synchronizes-with 로 제약되지 않은 이벤트는 순서에서 어디든 위치할 수 있다.</p>
+        <p>is-memory-order-before는 EventSet(_execution_)의 모든 이벤트를 포함하지만, happens-before나 synchronizes-with로 제한되지 않은 이벤트들은 순서 내에서 임의의 위치에 올 수 있다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-valid-executions">
-      <h1>유효한 실행 (Valid Executions)</h1>
-      <p>후보 실행 _execution_ 이 아래 모두 참이면 유효 실행(또는 실행)이다.</p>
+      <h1>유효한 실행(Valid Executions)</h1>
+      <p>다음이 모두 참이면 후보 실행 _execution_은 유효한 실행(또는 간단히 실행)이다.</p>
       <ul>
-        <li>호스트가 _execution_ 에 대한 host-synchronizes-with 관계를 제공.</li>
-        <li>_execution_ 이 엄격 부분 순서인 happens-before 관계를 허용.</li>
-        <li>_execution_ 은 valid chosen reads.</li>
-        <li>_execution_ 은 coherent reads.</li>
-        <li>_execution_ 은 tear free reads.</li>
-        <li>_execution_ 은 sequentially consistent atomics.</li>
+        <li>호스트가 _execution_에 대한 host-synchronizes-with 관계를 제공한다.</li>
+        <li>_execution_은 엄격 부분 순서(strict partial order)인 happens-before 관계를 허용한다.</li>
+        <li>_execution_은 유효한 선택 읽기를 가진다.</li>
+        <li>_execution_은 일관된 읽기를 가진다.</li>
+        <li>_execution_은 찢김 없는 읽기를 가진다.</li>
+        <li>_execution_은 순차적 일관성 원자적 연산을 가진다.</li>
       </ul>
-      <p>모든 프로그램은 적어도 하나의 유효 실행을 가진다.</p>
+      <p>모든 프로그램은 적어도 하나의 유효한 실행을 가진다.</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-races">
-    <h1>경쟁 (Races)</h1>
-    <p>실행 _execution_ 과 SharedDataBlockEventSet(_execution_) 에 포함된 이벤트 _E_, _D_ 에 대해 아래 알고리즘이 *true* 를 반환하면 _E_, _D_ 는 <em>race</em> 관계이다.</p>
+    <h1>경합(Races)</h1>
+    <p>실행 _execution_과 SharedDataBlockEventSet(_execution_)에 포함된 이벤트 _E_, _D_에 대해, 아래 알고리즘이 *true*를 반환하면 _E_, _D_는 <em>경합(race)</em> 상태에 있다.</p>
     <emu-alg>
-      1. _E_, _D_ 가 동일 Shared Data Block 이벤트가 아니면
-        1. _E_ happens-before _D_ 및 _D_ happens-before _E_ 둘 다가 아닌 경우
-          1. _E_, _D_ 가 모두 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트이고 범위가 분리되지 않으면
-            1. *true* 반환.
-          1. _E_ reads-from _D_ 또는 _D_ reads-from _E_ 이면
-            1. *true* 반환.
-      1. *false* 반환.
+      1. _E_, _D_가 동일한 Shared Data Block 이벤트가 아니면
+        1. _execution_에서 _E_ happens-before _D_이고 _D_ happens-before _E_가 모두 성립하지 않는 경우,
+          1. _E_, _D_가 모두 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트이고, _E_, _D_의 메모리 범위가 분리되어 있지 않으면
+            1. *true*를 반환한다.
+          1. _execution_에서 _E_가 _D_로부터 reads-from이거나, _D_가 _E_로부터 reads-from이면
+            1. *true*를 반환한다.
+      1. *false*를 반환한다.
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-races">
-    <h1>데이터 레이스 (Data Races)</h1>
-    <p>실행 _execution_ 과 SharedDataBlockEventSet(_execution_) 에 포함된 이벤트 _E_, _D_ 에 대해 아래 알고리즘이 *true* 이면 _E_, _D_ 는 <dfn>data race</dfn> 관계이다.</p>
+    <h1>데이터 경합(Data Races)</h1>
+    <p>실행 _execution_과 SharedDataBlockEventSet(_execution_)에 포함된 이벤트 _E_, _D_에 대해, 아래 알고리즘이 *true*를 반환하면 _E_, _D_는 <dfn>데이터 경합(data race)</dfn> 상태에 있다.</p>
     <emu-alg>
-      1. _E_, _D_ 가 <emu-xref href="#sec-races">race</emu-xref> 이면
-        1. _E_.[[Order]] 가 ~seq-cst~ 가 아니거나 _D_.[[Order]] 가 ~seq-cst~ 가 아니면
-          1. *true* 반환.
-        1. _E_, _D_ 범위가 겹치면
-          1. *true* 반환.
-      1. *false* 반환.
+      1. _E_, _D_가 <emu-xref href="#sec-races">경합(race)</emu-xref>에 해당하면
+        1. _E_.[[Order]] ≠ ~seq-cst~이거나 _D_.[[Order]] ≠ ~seq-cst~이면
+          1. *true*를 반환한다.
+        1. _E_, _D_의 메모리 범위가 겹치면
+          1. *true*를 반환한다.
+      1. *false*를 반환한다.
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-race-freedom">
-    <h1>데이터 레이스 자유 (Data Race Freedom)</h1>
-    <p>실행 _execution_ 이 SharedDataBlockEventSet(_execution_) 내 어떤 두 이벤트도 data race 가 아니면 <dfn>data race free</dfn> 이다.</p>
-    <p>모든 실행이 data race free 이면 프로그램은 data race free 이다.</p>
-    <p>메모리 모델은 data race free 프로그램에 대해 모든 이벤트의 순차적 일관성을 보장한다.</p>
+    <h1>데이터 경합 없음(Data Race Freedom)</h1>
+    <p>실행 _execution_에 대해, SharedDataBlockEventSet(_execution_) 내 두 이벤트가 데이터 경합(data race) 상태에 있지 않으면 <dfn>데이터 경합 없음(data race free)</dfn>이다.</p>
+    <p>모든 실행이 데이터 경합 없어야 프로그램이 데이터 경합 없음으로 간주된다.</p>
+    <p>메모리 모델은 데이터 경합이 없는 프로그램에서 모든 이벤트의 순차적 일관성을 보장한다.</p>
   </emu-clause>
 
   <emu-clause id="sec-shared-memory-guidelines">
-    <h1>공유 메모리 가이드라인 (Shared Memory Guidelines)</h1>
+    <h1>공유 메모리 가이드라인(Shared Memory Guidelines)</h1>
     <emu-note>
-      <p>다음은 공유 메모리를 사용하는 ECMAScript 프로그래머를 위한 지침이다.</p>
-      <p>프로그램을 data race free 로 유지(즉 동일 메모리 위치에서 동시 비-atomic 연산이 불가능하도록)할 것을 권장한다. Data race free 프로그램은 각 에이전트 평가 의미 단계가 서로 인터리빙되는 의미를 갖는다. 이런 경우 메모리 모델 세부사항을 이해할 필요가 없다.</p>
-      <p>더 일반적으로, 프로그램이 data race free 가 아니어도 atomic 연산이 어떤 data race 에도 관여하지 않고 경쟁하는 연산이 모두 동일 접근 크기라면 예측 가능한 동작을 가질 수 있다. 가장 단순한 방법은 atomic 과 비-atomic 연산이 다른 메모리 셀을 사용하고 서로 다른 크기의 atomic 접근이 동시에 같은 셀을 접근하지 않게 하는 것이다. 즉 가능한 한 공유 메모리를 강한 타입처럼 다루어야 한다. 경쟁 중 비-atomic 접근의 순서와 타이밍에 의존할 수는 없지만 강한 타입처럼 다루면 값이 “찢어지는(tear)” 일은 없다.</p>
+      <p>아래는 ECMAScript 프로그래머가 shared memory를 사용할 때 참고할 가이드라인이다.</p>
+      <p>프로그램이 data race free(데이터 경합 없음) 상태를 유지하도록, 즉 동일 메모리 위치에 대해 원자적이지 않은 연산이 동시에 발생할 수 없도록 작성할 것을 권한다. 데이터 경합이 없는 프로그램은 각 에이전트의 평가 의미 단계가 서로 interleave(교차)되는 의미론(interleaving semantics)을 가진다. 데이터 경합 없는 프로그램에서는 메모리 모델의 세부 사항을 이해할 필요가 없다. 그 세부 사항이 ECMAScript를 더 잘 쓰는 데 도움이 되는 직관을 쌓게 해 주지는 않는다.</p>
+      <p>보다 일반적으로, 프로그램이 data race free가 아니어도, 원자적 연산이 어떤 데이터 경합에도 참여하지 않고 경합 중인 모든 연산의 접근 크기가 같다면 예측 가능한 행동을 가질 수 있다. 원자적 연산이 경합에 참여하지 않도록 하려면, 원자적 연산과 비원자적 연산이 서로 다른 메모리 셀을 사용하도록 하며, 서로 다른 크기의 원자적 접근이 동시에 같은 메모리 셀에 접근하지 않음이 보장되게 해야 한다. 실제로 프로그래머는 공유 메모리를 최대한 강한 타입(strongly typed)처럼 다루는 것이 좋다. 여전히 경합 중인 비원자적 접근의 순서와 타이밍에는 의존할 수 없으나, 강하게 타입된 것처럼 다루면 중첩 읽기나 쓰기에 값이 "찢기는" 현상은 발생하지 않는다.</p>
     </emu-note>
 
     <emu-note>
-      <p>다음은 공유 메모리를 사용하는 프로그램에 대한 컴파일러 변환을 작성하는 ECMAScript 구현자를 위한 지침이다.</p>
-      <p>단일 에이전트 환경에서 유효한 대부분의 프로그램 변환이 다중 에이전트 환경에서도 유효하도록 허용하는 것이 바람직하다. 종종 이러한 변환은 판단이 어렵다. 우리는 메모리 모델이 함축하거나 그보다 강한 규칙 몇 가지를 개략적으로 제시한다.</p>
-      <p><dfn variants="agent-order slices">agent-order slice</dfn> 를 단일 에이전트에 속하는 is-agent-order-before 부분집합이라 하자.</p>
-      <p>read 이벤트의 <dfn>possible read values</dfn> 는 모든 유효 실행에서 그 이벤트에 대한 ValueOfReadEvent 값들의 집합이다.</p>
-      <p>공유 메모리가 없을 때 유효한 agent-order slice 변환은 아래 예외를 제외하고 공유 메모리 존재 시에도 유효하다.</p>
+      <p>아래는 공유 메모리를 사용하는 프로그램에서 컴파일러 변환을 구현하는 ECMAScript 구현체 대상 가이드라인이다.</p>
+      <p>단일 에이전트 환경에서 유효한 대부분의 프로그램 변환을 다중 에이전트 환경에서도 허용하는 것이 바람직하다. 이는 다중 에이전트 프로그램에서 각 에이전트의 성능이 단일 에이전트 환경에서만큼 좋게 유지될 수 있도록 보장하기 위함이다. 이러한 변환은 종종 판단하기 어렵다. 우리는 프로그램 변환에 대한 몇 가지 규칙을 개략적으로 제시한다. 이 규칙들은 규범적(nomative)으로 받아들여져야 하며(즉, 메모리 모델에 의해 암시되거나 메모리 모델이 암시하는 것보다 강한 규칙일 수 있다), 반드시 모든 경우를 망라하는 것은 아니다. 이러한 규칙들은 is-agent-order-before 관계를 구성하는 Memory 이벤트가 도입되기 이전의 프로그램 변환에 적용되는 것을 의도한다.</p>
+      <p><dfn variants="agent-order slices">에이전트 순서 단편(agent-order slice)</dfn>은 is-agent-order-before 관계 중 하나의 에이전트에 속한 부분 집합이다.</p>
+      <p>읽기 이벤트의 <dfn>가능한 읽기 값(possible read values)</dfn>은 그 이벤트에 대해 모든 유효 실행에서 ValueOfReadEvent로 얻을 수 있는 모든 값들의 집합이다.</p>
+      <p>공유 메모리가 없는 상황에서 허용되는 에이전트 순서 단편의 모든 변환은 공유 메모리가 있는 상황에서도 아래 예외를 제외하고 유효하다.</p>
       <ul>
         <li>
-          <p><em>Atomics 는 고정</em>: 변환은 agent-order slice 의 ~seq-cst~ 이벤트를 그 ~unordered~ 연산과 재배열하거나 서로 재배열하거나 제거해서는 안 된다.</p>
-          <p>(실제로 재배열 금지는 ~seq-cst~ 연산이 동기화임을 가정하게 강제한다.)</p>
+          <p><em>Atomics은 석판에 새겨진 것처럼 불변</em>: 프로그램 변환은 [[Order]]가 ~seq-cst~인 Shared Data Block 이벤트를 is-agent-order-before 관계에서 제외하거나 서로 재배치(reorder)하거나, 또는 ~unordered~ 이벤트와의 상대적 순서를 에이전트 단편 내에서 재배치해서는 안 된다.</p>
+          <p>(실제로 재배치 금지는 컴파일러가 모든 ~seq-cst~ 연산이 동기화이고 최종 is-memory-order-before 관계에 포함됨을 가정하게 만든다. 이는 크로스 에이전트 프로그램 분석이 없는 상황에서 보통 반드시 가정해야 하는 것이다. 또한, 컴파일러는 호출자의 메모리 순서 효과를 알 수 없는 호출이 ~seq-cst~ 연산을 포함할 수 있음을 항상 가정해야 한다.)</p>
         </li>
         <li>
-          <p><em>읽기는 안정적</em>: 주어진 shared memory read 는 한 실행에서 단일 값만 관찰해야 한다.</p>
+          <p><em>읽기는 안정적이어야 한다</em>: 동일한 shared memory read는 한 실행에서 하나의 값만을 관측해야 한다.</p>
+          <p>(예를 들어, 의미상 단일 읽기인 부분이 프로그램 내에서 여러 번 실행되고, 그 각각에서 다른 값을 읽더라도, 프로그램은 결국 그 중 하나의 값만 관측할 수 있다. 이 규칙을 위반하는 변환을 rematerialization이라 한다.)</p>
         </li>
         <li>
-          <p><em>쓰기는 안정적</em>: 관찰 가능한 모든 shared memory write 는 실행의 프로그램 의미에서 비롯해야 한다.</p>
+          <p><em>쓰기도 안정적이어야 한다</em>: shared memory에 대한 모든 관측 가능한 쓰기는 실행의 프로그램 의미에 따라야 한다.</p>
+          <p>(예를 들어, 변환이 특정 관측 가능한 쓰기를 도입해서는 안 되는데, 더 큰 위치에 대해 read-modify-write 연산을 수행해 더 작은 데이터를 쓸 때, 프로그램이 쓸 수 없는 값을 메모리에 쓰거나, 방금 읽은 값을 그 위치에 다시 쓸 때 해당 위치가 그 사이에 다른 에이전트에 의해 덮어씌워질 수 있었다면 안 된다.)</p>
         </li>
         <li>
-          <p><em>가능한 읽기 값은 공집합이 아님</em>: 변환은 가능한 읽기 값 집합을 비게 할 수 없다.</p>
+          <p><em>가능한 읽기 값은 반드시 비어 있지 않아야 한다</em>: 프로그램 변환은 shared memory read의 가능한 읽기 값이 비워지게 해서는 안 된다.</p>
+          <p>(직관에 반하게도, 이 규칙은 쓰기 변화에 대한 제약을 의미한다. 쓰기는 read 이벤트에 의해 읽힐 수 있기에 의미를 가진다. 예를 들어, 쓰기를 이동하거나 합치는 것은 가능하고, 때로는 두 ~seq-cst~ 연산 사이에서 재배열도 가능하지만, 각 위치를 갱신하는 모든 쓰기를 없애서는 안 된다. 일부 쓰기는 반드시 남아있어야 한다.)</p>
         </li>
       </ul>
-      <p>여전히 유효한 변환 예: 동일 위치 다수 비-atomic 읽기 병합, 비-atomic 읽기 재배열, 추측 비-atomic 읽기 도입, 동일 위치 다수 비-atomic 쓰기 병합, 서로 다른 위치 비-atomic 쓰기 재배열, 루프 밖으로 비-atomic 읽기 hoist (종료 영향 있어도). 일반적으로 alias 된 TypedArray 는 위치 구분을 어렵게 한다.</p>
+      <p>여전히 유효한 변환의 예: 동일 위치에 대한 여러 비원자적 읽기의 병합, 비원자적 읽기들의 재배치, speculative(추측적) 비원자적 읽기 도입, 동일 위치에 대한 여러 비원자적 쓰기의 병합, 서로 다른 위치로의 비원자적 쓰기 재배열, 반복문 외부로의 비원자적 읽기 hoisting(끌어올리기, 결과적으로 종료 조건에 영향줌). 단, alias 되는 TypedArray의 존재로 인해 위치가 서로 다름을 입증하는 것이 일반적으로 어렵다는 점에 유의.</p>
     </emu-note>
 
     <emu-note>
-      <p>다음은 공유 메모리 접근에 대한 기계어 코드를 생성하는 ECMAScript 구현자를 위한 지침이다.</p>
-      <p>ARM 또는 Power 보다 약하지 않은 메모리 모델을 가진 아키텍처에서 비-atomic store/load 는 일반 store/load 로 컴파일할 수 있다. Atomic store/load 는 순차적 일관성을 보장하는 명령으로 컴파일한다. 없으면 메모리 배리어 사용. Read-modify-write 는 아키텍처의 read-modify-write 명령(예: x86 LOCK prefix, ARM load-exclusive/store-exclusive, Power load-link/store-conditional)으로 컴파일.</p>
-      <p>구체적으로 메모리 모델은 다음과 같은 코드 생성을 허용한다.</p>
+      <p>아래는 공유 메모리 접근에 대한 기계어 코드 생성 시 ECMAScript 구현체 대상 가이드라인이다.</p>
+      <p>ARM이나 Power 이상의 메모리 모델을 가진 아키텍처에서는, 비원자적 저장 및 로드를 대상 아키텍처의 순수 저장/로드 명령어로 컴파일할 수 있다. 원자적 저장 및 로드는 순차적 일관성을 보장하는 명령어로 컴파일할 수 있다. 만약 그러한 명령어가 없다면, 기억 장벽(memory barrier)을 사용해야 하며, bare store/load 앞뒤에 배치해야 한다. read-modify-write 연산은 대상 아키텍처의 read-modify-write 명령으로 컴파일할 수 있다. (예: x86에서는 <code>LOCK</code> 프리픽스 명령, ARM에서는 load-exclusive/store-exclusive, Power에서는 load-link/store-conditional)</p>
+      <p>구체적으로, 메모리 모델은 다음과 같은 코드 생성을 허용하도록 의도되었다.</p>
       <ul>
-        <li>프로그램의 모든 atomic 연산은 필요하다고 가정.</li>
-        <li>Atomic 연산은 서로 또는 비-atomic 과 재배열되지 않는다.</li>
-        <li>함수는 항상 atomic 연산 수행 가능하다고 가정.</li>
-        <li>Atomic 연산은 더 큰 데이터의 read-modify-write 로 구현되지 않는다(플랫폼에 그 크기 atomic 없으면 lock-free 아니게 구현).</li>
+        <li>프로그램의 모든 원자적 연산은 반드시 필요하다고 가정한다.</li>
+        <li>원자적 연산은 서로 혹은 비원자적 연산과 재배열되지 않는다.</li>
+        <li>함수는 항상 원자적 연산을 실행할 수 있다고 가정한다.</li>
+        <li>원자적 연산은 더 큰 데이터에 대한 read-modify-write 연산으로 구현되지 않고, 해당 크기의 원자적 연산이 플랫폼에서 lock-free가 아니면 비-lock-free 원자적으로 구현된다. (관심 있는 모든 크기의 일반 메모리 접근이 모든 플랫폼에 있다고 이미 가정한다.)</li>
       </ul>
-      <p>단순 코드 생성 패턴:</p>
+      <p>가장 단순한 naive 코드 생성 패턴은 다음과 같다:</p>
       <ul>
-        <li>일반 load/store → 단일 load/store 명령.</li>
-        <li>Lock-free atomic load/store → 전체 펜스, load/store, 전체 펜스.</li>
-        <li>Lock-free atomic RMW → 전체 펜스, atomic RMW 시퀀스, 전체 펜스.</li>
-        <li>Non-lock-free atomic → 스핀락 획득, 전체 펜스, 비-atomic load/store 시리즈, 전체 펜스, 스핀락 해제.</li>
+        <li>일반 load/store는 각각 단일 load/store 명령으로 변환된다.</li>
+        <li>lock-free atomic load/store는 전체 fence, 일반 load/store, 전체 fence로 변환된다.</li>
+        <li>lock-free atomic read-modify-write는 전체 fence, atomic read-modify-write 명령 시퀀스, 전체 fence로 변환된다.</li>
+        <li>비-lock-free atomics는 spinlock 획득, 전체 fence, 일련의 비원자적 load/store, 전체 fence, spinlock 해제 순이다.</li>
       </ul>
-      <p>이 매핑은 주소 범위에 대한 atomic 연산이 비-atomic 쓰기나 다른 크기 atomic 과 race 하지 않는 한 올바르다. 메모리 모델은 race 에 관여한 atomic 을 비-atomic 수준으로 강등하여 충분하다. 다만 이 단순 매핑은 atomic 연산을 순차적 일관성 펜스로 사용할 수 있게 하는 등 꽤 강하다.</p>
-      <p>허용되는 로컬 개선 예:</p>
+      <p>이는 atomic 연산이 비원자적 쓰기, 혹은 다른 크기의 atomic 연산과 경합하지 않을 때 올바르다. 메모리 모델은 경합한 atomic 연산의 원자성(atomicity)을 효과적으로 비원자적으로 강등시킨다. 반면, naive 매핑은 매우 강력해서 atomic 연산 자체가 순차적 일관성 fence로 사용될 수 있지만 실제로 메모리 모델이 이를 보장하지는 않는다.</p>
+      <p>메모리 모델의 제약 하에, 이 기본 패턴에 대한 국소적 최적화도 허용된다. 예:</p>
       <ul>
-        <li>플랫폼 의존 중복 펜스 제거 (예: x86 에서 load/store 전후 펜스 일부 생략 등).</li>
-        <li>대부분 플랫폼은 필요한 모든 크기 lock-free atomic 지원.</li>
-        <li>두 back-to-back 펜스 → 하나로 대체; x86 에서 store 뒤 펜스만 유지 등.</li>
+        <li>플랫폼 특유의 fence 최적화가 가능하다. 예를 들어 x86에서는 atomic load/store 앞뒤의 fence를 항상 생략 가능(단, store 이후 fence는 예외), lock-free atomic read-modify-write에는 fence가 필요 없다. 많은 플랫폼에는 여러 단계의 fence가 있고, 상황에 따라 더 약한 fence도 사용할 수 있다.</li>
+        <li>현대 플랫폼 대부분은 ECMAScript atomics에서 요구하는 모든 데이터 크기에 대해 lock-free atomics를 지원한다. 비-lock-free atomics가 필요한 경우 atomic 바디를 감싸는 fence는 lock/unlock 단계에 absorb(흡수)될 수 있다. 가장 간단한 방식은 SharedArrayBuffer당 하나의 lock word를 운영하는 것.</li>
+        <li>좀 더 복잡한 플랫폼 특유 최적화도 가능하다. 예를 들어 두 fence가 연속된다면 하나로 합칠 수 있다. atomic 연산이 연속된다면 그 사이에 하나의 fence만 두면 충분하다. x86에서는 atomic store 뒤의 fence조차도 생략 가능(이는 store 이후 다음 load를 보호하기 위해 필요).</li>
       </ul>
     </emu-note>
   </emu-clause>

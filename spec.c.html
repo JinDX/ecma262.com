@@ -159,6 +159,8 @@
   status: draft
   location: https://tc39.es/ecma262/
   markEffects: true
+  boilerplate:
+    copyright: alternative
 </pre>
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 标志"></p>
 <div id="metadata-block">
@@ -995,6 +997,25 @@
     <p>算法步骤可以用“Let _x_ be _someValue_”声明命名别名。这些别名类似引用，即 _x_ 和 _someValue_ 都引用相同的数据，对任一的修改都可见。若算法步骤希望避免引用行为，应显式复制右侧值：“Let _x_ be a copy of _someValue_”会创建 _someValue_ 的浅复制。</p>
     <p>别名声明后可在后续步骤引用，但不可在声明前引用。别名可用“Set _x_ to _someOtherValue_”进行赋值。</p>
 
+    <emu-clause id="sec-evaluation-order">
+      <h1>求值顺序</h1>
+      <p>当复杂表达式出现在算法步骤中时，应理解为以“从左到右、从内到外”的顺序进行求值。例如，下面这一步</p>
+      <emu-alg example>
+        1. Return A(B(), C.[[D]]) + E(F()).
+      </emu-alg>
+      <p>等价于</p>
+      <emu-alg example>
+        1. 令 _tmp1_ 为 B()。
+        1. 令 _tmp2_ 为 C.[[D]]。
+        1. 令 _tmp3_ 为 A(_tmp1_, _tmp2_)。
+        1. 令 _tmp4_ 为 F()。
+        1. 令 _tmp5_ 为 E(_tmp4_)。
+        1. 令 _tmp6_ 为 _tmp3_ + _tmp5_。
+        1. 返回 _tmp6_。
+      </emu-alg>
+      <p>其中所有 _tmpN_ 临时变量只在这些步骤中有效。</p>
+    </emu-clause>
+
     <emu-clause id="sec-algorithm-conventions-abstract-operations">
       <h1>抽象操作</h1>
       <p>为便于在规范多个部分中使用，部分算法（称为<dfn>抽象操作</dfn>）采用命名并参数化的函数形式书写，以便在其他算法中通过名称引用。抽象操作通常以函数调用形式引用，如 OperationName(_arg1_, _arg2_)。有些抽象操作作为类似类的规范抽象的多态分派方法对待，这类方法通常以 _someValue_.OperationName(_arg1_, _arg2_) 形式引用。</p>
@@ -1058,74 +1079,44 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-returnifabrupt" aoid="ReturnIfAbrupt">
-        <h1>ReturnIfAbrupt</h1>
-        <p>算法步骤如：</p>
+      <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt">
+        <h1>展开 Completion Record 的简写</h1>
+        <p>前缀 `?` 和 `!` 用作展开 Completion Record 的简写。`?` 用于将 abrupt completion 向上传播，或在为 normal completion 时展开其值。`!` 用于断言 Completion Record 是 normal，并展开其值。形式化来说，以下步骤</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(_argument_).
+          1. 令 _result_ 为 ? _record_。
         </emu-alg>
-        <p>与如下语句含义相同：</p>
+        <p>等价于</p>
         <emu-alg example>
-          1. Assert: _argument_ 是 Completion Record。
-          1. 如果 _argument_ 是异常完成，则返回 Completion(_argument_)。
-          1. 否则，将 _argument_ 设为 _argument_.[[Value]]。
+          1. 断言：_record_ 是一个 Completion Record。
+          1. 如果 _record_ 是 abrupt completion，则返回 _record_。
+          1. 令 _result_ 为 _record_.[[Value]]。
         </emu-alg>
-        <p>算法步骤如：</p>
+        <p>同理，以下步骤</p>
         <emu-alg example>
-          1. ReturnIfAbrupt(AbstractOperation()).
+          1. 令 _result_ 为 ! _record_。
         </emu-alg>
-        <p>与如下语句含义相同：</p>
+        <p>等价于</p>
         <emu-alg example>
-          1. Let _hygienicTemp_ be AbstractOperation().
-          1. Assert: _hygienicTemp_ 是 Completion Record。
-          1. 如果 _hygienicTemp_ 是异常完成，则返回 Completion(_hygienicTemp_)。
-          1. 否则，将 _hygienicTemp_ 设为 _hygienicTemp_.[[Value]]。
+          1. 断言：_record_ 是 normal completion。
+          1. 令 _result_ 为 _record_.[[Value]]。
         </emu-alg>
-        <p>其中 _hygienicTemp_ 仅在 ReturnIfAbrupt 相关步骤中可见且为临时变量。</p>
-        <p>算法步骤如：</p>
+        <p>当 `?` 或 `!` 用于其他上下文时，首先按照 <emu-xref href="#sec-evaluation-order" title></emu-xref> 中给出的改写规则重写，直到可应用本规则，然后再应用本规则。例如，步骤</p>
         <emu-alg example>
-          1. Let _result_ be AbstractOperation(ReturnIfAbrupt(_argument_)).
+          1. 执行 AO(? Other())。
         </emu-alg>
-        <p>与如下语句含义相同：</p>
+        <p>可以重写为</p>
         <emu-alg example>
-          1. Assert: _argument_ 是 Completion Record。
-          1. 如果 _argument_ 是异常完成，则返回 Completion(_argument_)。
-          1. 否则，将 _argument_ 设为 _argument_.[[Value]]。
-          1. Let _result_ be AbstractOperation(_argument_)。
+          1. 令 _tmp1_ 为 Other()。
+          1. 令 _tmp2_ 为 ? _tmp1_。
+          1. 执行 AO(_tmp2_)。
         </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-returnifabrupt-shorthands">
-        <h1>ReturnIfAbrupt 简记法</h1>
-        <p>抽象操作和语法导向操作调用前加 `?` 表示应对返回的 Completion Record 应用 ReturnIfAbrupt。例如：</p>
+        <p>进一步可展开为</p>
         <emu-alg example>
-          1. ? OperationName().
-        </emu-alg>
-        <p>等价于：</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(OperationName()).
-        </emu-alg>
-        <p>类似地，方法调用风格：</p>
-        <emu-alg example>
-          1. ? _someValue_.OperationName().
-        </emu-alg>
-        <p>等价于：</p>
-        <emu-alg example>
-          1. ReturnIfAbrupt(_someValue_.OperationName()).
-        </emu-alg>
-        <p>类似地，前缀 `!` 表示后续抽象或语法导向操作的调用不会返回异常完成，结果应取 Completion Record 的 [[Value]] 字段作为操作的返回值。例如：</p>
-        <emu-alg example>
-          1. Let _val_ be ! OperationName().
-        </emu-alg>
-        <p>等价于：</p>
-        <emu-alg example>
-          1. Let _val_ be OperationName()。
-          1. Assert: _val_ 是正常完成。
-          1. Set _val_ to _val_.[[Value]]。
-        </emu-alg>
-        <p>运行时语义的语法导向操作会通过在操作调用前加 `!` 或 `?` 使用此简记法：</p>
-        <emu-alg example>
-          1. Perform ! SyntaxDirectedOperation of |NonTerminal|。
+          1. 令 _tmp1_ 为 Other()。
+          1. 断言：_tmp1_ 是一个 Completion Record。
+          1. 如果 _tmp1_ 是 abrupt completion，则返回 _tmp1_。
+          1. 令 _tmp2_ 为 _tmp1_.[[Value]]。
+          1. 执行 AO(_tmp2_)。
         </emu-alg>
       </emu-clause>
 
@@ -4193,7 +4184,7 @@
     <emu-clause id="sec-set-and-relation-specification-type">
       <h1>Set 和 Relation 规范类型</h1>
       <p><em>Set</em> 类型用于说明内存模型中无序元素集合。它不同于 ECMAScript 集合类型 Set。为区分，规范中 ECMAScript 集合类型始终称为“Set 对象”。Set 类型值是元素集合，每个元素只出现一次。元素可加入或移除集合，集合之间可以并集、交集或相减。</p>
-      <p><dfn variants="Relations">Relation</dfn> 类型用于说明集合上的约束。Relation 类型值是其值域上的有序对集合。例如，事件上的 Relation 是事件有序对的集合。若 Relation _R_，值域中的 _a_ 和 _b_，则 _a_ _R_ _b_ 表示有序对 (_a_, _b_) 属于 _R_。Relation 是满足某些条件的<dfn id="least-relation">最小 Relation</dfn>，即满足条件的最小 Relation。</p>
+      <p><dfn variants="Relations">关系（Relation）</dfn> 类型用于解释对集合（Set）的约束。Relation 类型的值是其值域中值的有序对集合。例如，Memory 事件上的 Relation 就是由 Memory 事件有序对组成的集合。对于一个关系 _R_，以及 _R_ 值域中的两个值 _a_ 和 _b_，_a_ _R_ _b_ 是 (_a_, _b_) 属于 _R_ 的简写。当 Relation 是在某些条件下满足这些条件的最小 Relation 时，称其为这些条件下的<dfn id="least-relation">最小关系（least Relation）</dfn>。</p>
       <p><dfn variants="strict partial orders">严格偏序</dfn>是满足以下条件的 Relation 值 _R_。</p>
       <ul>
         <li>
@@ -11591,25 +11582,25 @@
       <emu-alg>
         1. 令 _realm_ 为一个新的 Realm Record。
         1. 执行 CreateIntrinsics(_realm_)。
-        1. 设 _realm_.[[AgentSignifier]] 为 AgentSignifier()。
-        1. 设 _realm_.[[TemplateMap]] 为一个新的空 List。
+        1. 设置 _realm_.[[AgentSignifier]] 为 AgentSignifier()。
+        1. 设置 _realm_.[[TemplateMap]] 为一个新的空列表。
         1. 令 _newContext_ 为一个新的执行上下文。
-        1. 将 _newContext_ 的 Function 设为 *null*。
-        1. 将 _newContext_ 的 Realm 设为 _realm_。
-        1. 将 _newContext_ 的 ScriptOrModule 设为 *null*。
-        1. 将 _newContext_ 压入执行上下文栈；_newContext_ 现在是运行执行上下文。
-        1. 若宿主要求使用一个特殊对象作为 _realm_ 的全局对象，则
-          1. 令 _global_ 为以宿主定义方式创建的此对象。
+        1. 设置 _newContext_ 的 Function 为 *null*。
+        1. 设置 _newContext_ 的 Realm 为 _realm_。
+        1. 设置 _newContext_ 的 ScriptOrModule 为 *null*。
+        1. 将 _newContext_ 推入执行上下文栈；_newContext_ 现在是运行中的执行上下文。
+        1. 如果宿主要求使用特定对象作为 _realm_ 的全局对象，则
+          1. 令 _global_ 为以宿主自定义方式创建的该对象。
         1. 否则，
           1. 令 _global_ 为 OrdinaryObjectCreate(_realm_.[[Intrinsics]].[[%Object.prototype%]])。
-        1. 若宿主要求 _realm_ 全局作用域中的 `this` 绑定返回不同于全局对象的对象，则
-          1. 令 _thisValue_ 为以宿主定义方式创建的该对象。
+        1. 如果宿主要求 _realm_ 的全局作用域中的 `this` 绑定返回一个不同于全局对象的对象，则
+          1. 令 _thisValue_ 为以宿主自定义方式创建的该对象。
         1. 否则，
           1. 令 _thisValue_ 为 _global_。
-        1. 设 _realm_.[[GlobalObject]] 为 _global_。
-        1. 设 _realm_.[[GlobalEnv]] 为 NewGlobalEnvironment(_global_, _thisValue_)。
+        1. 设置 _realm_.[[GlobalObject]] 为 _global_。
+        1. 设置 _realm_.[[GlobalEnv]] 为 NewGlobalEnvironment(_global_, _thisValue_)。
         1. 执行 ? SetDefaultGlobalBindings(_realm_)。
-        1. 在 _global_ 上创建任意宿主定义的全局对象属性。
+        1. 在 _global_ 上创建任意宿主自定义的全局对象属性。
         1. 返回 ~unused~。
       </emu-alg>
     </emu-clause>
@@ -12063,73 +12054,77 @@
     </emu-note>
     <p>当一个 agent 的执行线程在执行算法步骤时，该 agent 就是这些步骤的 <dfn id="surrounding-agent" variants="surrounding agents">包围 agent (surrounding agent)</dfn>。这些步骤通过该包围 agent 访问其持有的规范级执行对象：运行执行上下文、执行上下文栈以及 Agent Record 的字段。</p>
     <p><dfn variants="agent signifiers">agent signifier（代理标识符）</dfn> 是用于标识一个 Agent 的全局唯一不透明值。</p>
-    <emu-table id="table-agent-record" caption="Agent Record 字段">
+    <emu-table id="table-agent-record" caption="Agent 记录字段">
       <table>
         <thead>
           <tr>
             <th>字段名</th>
-            <th>值</th>
+            <th>取值</th>
             <th>含义</th>
           </tr>
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>a Boolean</td>
-          <td>用于算法 GetValueFromBuffer 与 SetValueInBuffer 所需参数 <em>isLittleEndian</em> 的默认值。选择由实现定义，应为实现效率最高的选项。一旦被观察到便不可改变。</td>
+          <td>布尔值</td>
+          <td>当算法 GetValueFromBuffer 和 SetValueInBuffer 需要 <em>isLittleEndian</em> 参数时，默认采用的值。具体取值由实现定义，应选取对实现最为高效的方案。</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>a Boolean</td>
-          <td>决定该 agent 是否可以阻塞。</td>
+          <td>布尔值</td>
+          <td>用于判断该 agent 是否可以阻塞。</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>an agent signifier</td>
-          <td>在其 agent 集群内唯一标识该 agent。</td>
+          <td>一个 agent 标识符</td>
+          <td>在所属的 agent 集群中唯一标识该 agent。</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>a Boolean</td>
-          <td>若对单<emu-not-ref>字节值</emu-not-ref>的原子操作无锁则为 *true*，否则 *false*。</td>
+          <td>布尔值</td>
+          <td>当对单<emu-not-ref>字节值</emu-not-ref>的原子操作是 lock-free 时为 *true*，否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>a Boolean</td>
-          <td>若对双<emu-not-ref>字节值</emu-not-ref>的原子操作无锁则为 *true*，否则 *false*。</td>
+          <td>布尔值</td>
+          <td>当对双<emu-not-ref>字节值</emu-not-ref>的原子操作是 lock-free 时为 *true*，否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>a Boolean</td>
-          <td>若对八<emu-not-ref>字节值</emu-not-ref>的原子操作无锁则为 *true*，否则 *false*。</td>
+          <td>布尔值</td>
+          <td>当对八<emu-not-ref>字节值</emu-not-ref>的原子操作是 lock-free 时为 *true*，否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>a candidate execution Record</td>
-          <td>参见内存模型。</td>
+          <td>候选执行记录</td>
+          <td>见内存模型。</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>a List of either Objects or Symbols</td>
-          <td>初始为空 List，表示在当前 Job 结束前需保持存活的对象和/或 symbol 列表。</td>
+          <td>对象或 Symbol 的列表</td>
+          <td>初始为新的空列表，表示在当前 Job 结束前应保持存活的对象和/或 symbol 的列表</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
-          <td>an integer</td>
-          <td>初始为 0，用于为异步或具有异步依赖的模块的 [[AsyncEvaluationOrder]] 字段分配递增唯一值。</td>
+          <td>整数</td>
+          <td>初始值为 0，用于为异步模块及其依赖分配唯一递增的 [[AsyncEvaluationOrder]] 字段值。</td>
         </tr>
       </table>
     </emu-table>
 
-    <p>一旦 [[Signifier]]、[[IsLockFree1]] 与 [[IsLockFree2]] 的值被 agent 集群中的任一 agent 观察到，它们就不可更改。</p>
+    <p>[[LittleEndian]]、[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]] 和 [[IsLockFree8]] 的值不可更改。</p>
 
     <emu-note>
-      <p>[[IsLockFree1]] 与 [[IsLockFree2]] 的值不一定由硬件决定，也可反映可能随时间与实现而变的实现选择。</p>
+      <p>[[IsLockFree1]]、[[IsLockFree2]] 和 [[IsLockFree8]] 的值不一定由硬件决定，也可能反映实现的策略，这些策略在不同时间和 ECMAScript 实现之间可能会变化。</p>
 
-      <p>没有 [[IsLockFree4]] 字段：4 字节原子操作总是无锁。</p>
+      <p>不存在 [[IsLockFree4]] 字段：4 字节的原子操作总是 lock-free 的。</p>
 
-      <p>实际上，如果某原子操作用任何形式的锁实现，该操作就不是无锁的。无锁不意味着无等待（wait-free）：完成一个无锁原子操作需要的机器步骤数没有上界。</p>
+      <p>实际上，如果原子操作的实现采用了任何形式的锁，该操作就不是 lock-free 的。lock-free 不代表 wait-free：lock-free 原子操作完成所需的机器步骤数没有上界。</p>
 
-      <p>某大小 <em>n</em> 的原子访问无锁并不意味着对同大小 <em>n</em> 的非原子访问具备（感知的）原子性；具体来说，非原子访问仍可能分解为多个独立的内存访问。详见 ReadSharedMemory 与 WriteSharedMemory。</p>
+      <p>某个大小为 <em>n</em> 的原子访问是 lock-free 的，并不意味着同样大小的非原子访问（感知上）具有原子性，具体来说，非原子访问仍然可能分为多次独立的内存访问。详情见 ReadSharedMemory 和 WriteSharedMemory。</p>
+    </emu-note>
+
+    <emu-note>
+      <p>agent 是一种规范机制，不必对应于 ECMAScript 实现中的任何特定实体。</p>
     </emu-note>
 
     <emu-note>
@@ -12198,7 +12193,7 @@
       <p>若集群中不同 agent 的 [[LittleEndian]] 值不同，就难以在多字节数据上使用共享内存。</p>
     </emu-note>
 
-    <p>同一集群内所有 agent 在其 [[IsLockFree1]] 字段上必须具有相同值；[[IsLockFree2]] 字段同理。</p>
+    <p>同一集群内的所有 agent，其各自 Agent Record 中的 [[IsLockFree1]] 字段值必须相同；[[IsLockFree2]] 和 [[IsLockFree8]] 字段也同理。</p>
 
     <p>同一集群内所有 agent 在其 [[Signifier]] 字段上必须具有不同值。</p>
 
@@ -14713,7 +14708,7 @@
 
       <emu-clause id="sec-typedarray-with-buffer-witness-records" oldids="sec-integer-indexed-object-with-buffer-witness-records">
         <h1>带缓冲区见证记录的 TypedArray (TypedArray With Buffer Witness Records)</h1>
-        <p><dfn variants="TypedArray With Buffer Witness Records">TypedArray With Buffer Witness Record</dfn> 是用于封装一个 TypedArray 及其被查看缓冲区缓存字节长度的 Record；当缓冲区为可增长 SharedArrayBuffer 时用于确保字节长度数据块的共享内存读取仅发生一次。</p>
+        <p><dfn variants="TypedArray With Buffer Witness Records">带缓冲区见证的 TypedArray 记录</dfn> 是一种 Record 值，用于封装一个 TypedArray 以及其所视图缓冲区的缓存字节长度。当视图缓冲区为可增长的 SharedArrayBuffer 时，它用于确保字节长度数据块只产生一次 ReadSharedMemory 事件。</p>
         <p>其字段列于 <emu-xref href="#table-typedarray-with-buffer-witness-record-fields"></emu-xref>。</p>
         <emu-table id="table-typedarray-with-buffer-witness-record-fields" oldids="table-integer-indexed-object-with-buffer-witness-record-fields" caption="TypedArray With Buffer Witness Record 字段">
           <table>
@@ -14810,12 +14805,12 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，返回 0。
-          1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 若 _length_ = 0，返回 0。
+          1. 断言：IsTypedArrayOutOfBounds(_taRecord_) 为 *false*。
           1. 令 _O_ 为 _taRecord_.[[Object]]。
-          1. 若 _O_.[[ByteLength]] 不为 ~auto~，返回 _O_.[[ByteLength]]。
+          1. 如果 _O_.[[ByteLength]] 不为 ~auto~，返回 _O_.[[ByteLength]]。
+          1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _elementSize_ 为 TypedArrayElementSize(_O_)。
+          1. 注：返回的字节长度始终是 _elementSize_ 的整数倍，即使底层缓冲区已被调整为非整数倍时也是如此。
           1. 返回 _length_ × _elementSize_。
         </emu-alg>
       </emu-clause>
@@ -14854,16 +14849,19 @@
         <emu-alg>
           1. 令 _O_ 为 _taRecord_.[[Object]]。
           1. 令 _bufferByteLength_ 为 _taRecord_.[[CachedBufferByteLength]]。
-          1. 断言：IsDetachedBuffer(_O_.[[ViewedArrayBuffer]]) 为 *true* 当且仅当 _bufferByteLength_ 为 ~detached~。
-          1. 若 _bufferByteLength_ 为 ~detached~，返回 *true*。
+          1. 如果 IsDetachedBuffer(_O_.[[ViewedArrayBuffer]]) 为 *true*，则
+            1. 断言：_bufferByteLength_ 为 ~detached~。
+            1. 返回 *true*。
+          1. 断言：_bufferByteLength_ 是一个非负整数。
           1. 令 _byteOffsetStart_ 为 _O_.[[ByteOffset]]。
-          1. 若 _O_.[[ArrayLength]] 为 ~auto~，则
+          1. 如果 _O_.[[ArrayLength]] 为 ~auto~，则
             1. 令 _byteOffsetEnd_ 为 _bufferByteLength_。
           1. 否则，
             1. 令 _elementSize_ 为 TypedArrayElementSize(_O_)。
-            1. 令 _byteOffsetEnd_ 为 _byteOffsetStart_ + _O_.[[ArrayLength]] × _elementSize_。
-          1. 若 _byteOffsetStart_ > _bufferByteLength_ 或 _byteOffsetEnd_ > _bufferByteLength_，返回 *true*。
-          1. 注：长度为 0 的 TypedArray 不视为越界。
+            1. 令 _arrayByteLength_ 为 _O_.[[ArrayLength]] × _elementSize_。
+            1. 令 _byteOffsetEnd_ 为 _byteOffsetStart_ + _arrayByteLength_。
+          1. 注意：长度为 0、其 [[ByteOffset]] 等于 _bufferByteLength_ 的 TypedArray 不被视为越界。
+          1. 如果 _byteOffsetStart_ > _bufferByteLength_ 或 _byteOffsetEnd_ > _bufferByteLength_，返回 *true*。
           1. 返回 *false*。
         </emu-alg>
       </emu-clause>
@@ -28049,31 +28047,46 @@
             </dl>
 
             <emu-alg>
-              1. 断言：_module_.[[Status]] 非 ~new~。
-              1. 若 _resolveSet_ 未传入，设为新空列表。
-              1. 若 _resolveSet_ 中存在记录与 (_module_, _exportName_) 相同：
-                1. 断言：循环导出请求。
+              1. 断言：_module_.[[Status]] 不是 ~new~。
+              1. 如果未提供 _resolveSet_，则将 _resolveSet_ 设为一个新的空列表。
+              1. 对于 _resolveSet_ 中的每个 Record { [[Module]], [[ExportName]] } _r_，执行
+                1. 如果 _module_ 和 _r_.[[Module]] 是同一个模块记录并且 _exportName_ 等于 _r_.[[ExportName]]，则
+                  1. 断言：这是一个循环导入请求。
+                  1. 返回 *null*。
+              1. 向 _resolveSet_ 添加 Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }。
+              1. 对于 _module_.[[LocalExportEntries]] 的每个 ExportEntry Record _e_，执行
+                1. 如果 _e_.[[ExportName]] 等于 _exportName_，则
+                  1. 断言：_module_ 提供了此导出的直接绑定。
+                  1. 返回 ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }。
+              1. 对于 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _e_，执行
+                1. 如果 _e_.[[ExportName]] 等于 _exportName_，则
+                  1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
+                  1. 令 _importedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
+                  1. 如果 _e_.[[ImportName]] 为 ~all~，则
+                    1. 断言：_module_ 不提供此导出的直接绑定。
+                    1. 返回 ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }。
+                  1. 否则，
+                    1. 断言：_module_ 导入了此导出的特定绑定。
+                    1. 断言：_e_.[[ImportName]] 是一个字符串。
+                    1. 返回 _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)。
+              1. 如果 _exportName_ 为 *"default"*，则
+                1. 断言：此模块未显式定义 `default` 导出。
                 1. 返回 *null*。
-              1. 追加 { [[Module]]: _module_, [[ExportName]]: _exportName_ } 至 _resolveSet_。
-              1. 遍历 [[LocalExportEntries]]：
-                1. 若匹配 _exportName_，返回 { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }。
-              1. 遍历 [[IndirectExportEntries]]：
-                1. 若匹配：
-                  1. 断言有 [[ModuleRequest]]。
-                  1. 令 _importedModule_ = GetImportedModule(_module_, _e_.[[ModuleRequest]])。
-                  1. 若 _e_.[[ImportName]] 为 ~all~：
-                    1. 返回 { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }。
-                  1. 否则返回 _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)。
-              1. 若 _exportName_ 为 *"default"*：
-                1. 返回 *null*。（默认导出不会由 `export * from` 提供）
-              1. 令 _starResolution_ = *null*。
-              1. 遍历 [[StarExportEntries]]：
-                1. 令 _importedModule_ = GetImportedModule(... )。
-                1. 令 _resolution_ = _importedModule_.ResolveExport(_exportName_, _resolveSet_)。
-                1. 若 ~ambiguous~ 返回 ~ambiguous~。
-                1. 若非 *null*：
-                  1. 若 _starResolution_ 为 *null*，设之。
-                  1. 否则若模块不同或 BindingName 不兼容（含命名空间冲突）返回 ~ambiguous~。
+                1. 注：`export * from "mod"` 声明不能提供 `default` 导出。
+              1. 令 _starResolution_ 为 *null*。
+              1. 对于 _module_.[[StarExportEntries]] 的每个 ExportEntry Record _e_，执行
+                1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
+                1. 令 _importedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
+                1. 令 _resolution_ 为 _importedModule_.ResolveExport(_exportName_, _resolveSet_)。
+                1. 如果 _resolution_ 为 ~ambiguous~，返回 ~ambiguous~。
+                1. 如果 _resolution_ 不为 *null*，则
+                  1. 断言：_resolution_ 是一个 ResolvedBinding Record。
+                  1. 如果 _starResolution_ 为 *null*，则
+                    1. 设置 _starResolution_ 为 _resolution_。
+                  1. 否则，
+                    1. 断言：有多个 `*` 导入包含了请求的名称。
+                    1. 如果 _resolution_.[[Module]] 和 _starResolution_.[[Module]] 不是同一个模块记录，则返回 ~ambiguous~。
+                    1. 如果 _resolution_.[[BindingName]] 不等于 _starResolution_.[[BindingName]]，则返回 ~ambiguous~。
               1. 返回 _starResolution_。
             </emu-alg>
           </emu-clause>
@@ -40923,8 +40936,9 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_O_, [[TypedArrayName]])。
-          1. 断言：_O_ 具有 [[ViewedArrayBuffer]] 内部槽。
+          1. 断言：_O_ 拥有 [[ViewedArrayBuffer]] 内部槽。
           1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_O_, ~seq-cst~)。
+          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，返回 *+0*<sub>𝔽</sub>。
           1. 令 _size_ 为 TypedArrayByteLength(_taRecord_)。
           1. 返回 𝔽(_size_)。
         </emu-alg>
@@ -42920,8 +42934,8 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-set-objects">
     <h1>Set 对象</h1>
-    <p>Set 对象是 ECMAScript 语言值的集合。一个特定的值在 Set 的集合中只能出现一次。不同的值通过 SameValueZero 比较算法的语义区分。</p>
-    <p>Set 对象必须使用哈希表或其他平均情况下提供次线性访问时间的机制实现。本规范使用的数据结构仅用于描述 Set 对象所需的可观察语义，不是可行的实现模型。</p>
+    <p><dfn variants="Set object">Set 对象</dfn> 是 ECMAScript 语言值的集合。Set 中的每个不同值最多只能出现一次。不同值的区分使用 SameValueZero 比较算法的语义。</p>
+    <p>Set 对象必须使用哈希表或其他平均情况下对子集合元素数量表现为亚线性访问时间的机制来实现。本规范中使用的数据结构仅用于描述 Set 对象所需的可观察语义，并不意味着这是一个可行的实现模型。</p>
 
     <emu-clause id="sec-abstract-operations-for-set-objects">
       <h1>Set 对象的抽象操作</h1>
@@ -43885,10 +43899,10 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 IsSharedArrayBuffer(_arrayBuffer_) 为 *true* 且 _arrayBuffer_ 具有内部槽 [[ArrayBufferByteLengthData]]，则
+          1. 如果 IsGrowableSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
             1. 令 _bufferByteLengthBlock_ 为 _arrayBuffer_.[[ArrayBufferByteLengthData]]。
             1. 令 _rawLength_ 为 GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_)。
-            1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。
+            1. 令 _isLittleEndian_ 为当前代理的 Agent Record 中 [[LittleEndian]] 字段的值。
             1. 返回 ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_))。
           1. 断言：IsDetachedBuffer(_arrayBuffer_) 为 *false*。
           1. 返回 _arrayBuffer_.[[ArrayBufferByteLength]]。
@@ -44579,15 +44593,28 @@ THH:mm:ss.sss
           ): a Boolean
         </h1>
         <dl class="header">
-          <dt>description</dt>
-          <dd>测试一个对象是否是 ArrayBuffer、SharedArrayBuffer，或它们的子类型。</dd>
+          <dt>描述</dt>
+          <dd>它用于测试一个对象是否为 SharedArrayBuffer。</dd>
         </dl>
         <emu-alg>
-          1. 令 _bufferData_ 为 _obj_.[[ArrayBufferData]]。
-          1. 若 _bufferData_ 为 *null*，返回 *false*。
-          1. 若 _bufferData_ 是 Data Block，返回 *false*。
-          1. 断言：_bufferData_ 是 Shared Data Block。
-          1. 返回 *true*。
+          1. 如果 _obj_.[[ArrayBufferData]] 是一个共享数据块，则返回 *true*。
+          1. 返回 *false*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-isgrowablesharedarraybuffer" type="abstract operation">
+        <h1>
+          IsGrowableSharedArrayBuffer (
+            _obj_: 一个 ArrayBuffer 或 SharedArrayBuffer,
+          ): 布尔值
+        </h1>
+        <dl class="header">
+          <dt>描述</dt>
+          <dd>它用于判断一个对象是否为可增长的 SharedArrayBuffer。</dd>
+        </dl>
+        <emu-alg>
+          1. 如果 IsSharedArrayBuffer(_obj_) 为 *true* 且 _obj_ 拥有 [[ArrayBufferByteLengthData]] 内部槽，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
@@ -44604,13 +44631,13 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer 的实现必须符合以下要求：</p>
         <ul>
-          <li>若该抽象操作未以 ~unhandled~ 正常完成，且 _newByteLength_ &lt; 当前 _buffer_ 的字节长度，或 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]]，抛出 *RangeError* 异常。</li>
-          <li>令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。若该抽象操作以 ~handled~ 正常完成，则一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件被加入外层 agent 的候选执行，其 [[Order]] 为 ~seq-cst~，[[Payload]] 为 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)，[[Block]] 为 _buffer_.[[ArrayBufferByteLengthData]]，[[ByteIndex]] 为 0，[[ElementSize]] 为 8，从而并发竞争的 `SharedArrayBuffer.prototype.grow` 调用不会“丢失”（即静默不做任何事）。</li>
+          <li>如果抽象操作未以 ~unhandled~ 正常完成，且 _newByteLength_ 小于 _buffer_ 当前字节长度或 _newByteLength_ 大于 _buffer_.[[ArrayBufferMaxByteLength]]，则抛出 *RangeError* 异常。</li>
+          <li>令 _isLittleEndian_ 为当前代理的 Agent Record 中 [[LittleEndian]] 字段的值。如果抽象操作以 ~handled~ 正常完成，则会向当前代理的候选执行中添加一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，其 [[Order]] 为 ~seq-cst~，[[Payload]] 为 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)，[[Block]] 为 _buffer_.[[ArrayBufferByteLengthData]]，[[ByteIndex]] 为 0，[[ElementSize]] 为 8，以确保对 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 的竞争调用不会被“丢失”，即不会悄悄什么也不做。</li>
         </ul>
 
         <emu-note>
-          <p>上面第二个要求有意未明确说明如何或何时读取 _buffer_ 的当前字节长度。由于字节长度必须通过底层硬件的原子读-改-写操作更新，使用 load-link/store-conditional 或 load-exclusive/store-exclusive 指令对的体系结构可能希望将该指令对在指令流中保持紧邻。因此，SharedArrayBuffer.prototype.grow 自身不会在调用 HostGrowSharedArrayBuffer 前对 _newByteLength_ 做边界检查，也不要求何时读取当前字节长度。</p>
-          <p>这与 HostResizeArrayBuffer 形成对比，后者被保证 _newByteLength_ 值 ≥ 0 且 ≤ _buffer_.[[ArrayBufferMaxByteLength]]。</p>
+          <p>上面第二条要求有意没有详细说明如何或何时读取 _buffer_ 的当前字节长度。因为必须通过底层硬件上的原子读-改-写操作来更新字节长度，所以使用 load-link/store-conditional 或 load-exclusive/store-exclusive 指令对的架构可能希望保持指令在指令流中的紧密相邻。因此，<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 本身在调用 HostGrowSharedArrayBuffer 之前不会对 _newByteLength_ 进行范围检查，也不要求何时读取当前字节长度。</p>
+          <p>这与 HostResizeArrayBuffer 形成对比，后者保证 0 ≤ _newByteLength_ ≤ _buffer_.[[ArrayBufferMaxByteLength]]。</p>
         </emu-note>
 
         <p>HostGrowSharedArrayBuffer 的默认实现是返回 NormalCompletion(~unhandled~)。</p>
@@ -44830,7 +44857,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-dataview-with-buffer-witness-records">
         <h1>具有缓冲区见证记录的 DataView</h1>
-        <p><dfn variants="DataView With Buffer Witness Records">具有缓冲区见证记录的 DataView</dfn> 是一个 Record 值，用于封装一个 DataView 以及已查看缓冲区的缓存字节长度。当被查看缓冲区是可增长 SharedArrayBuffers 时，它用于帮助确保对字节长度数据块只有一次共享内存读取事件。</p>
+        <p><dfn variants="DataView With Buffer Witness Records">带缓冲区见证的 DataView 记录</dfn> 是一种 Record 值，用于封装一个 DataView 以及其所视图缓冲区的缓存字节长度。当视图缓冲区为可增长的 SharedArrayBuffer 时，它用于确保只会有一次针对字节长度数据块的 ReadSharedMemory 事件。</p>
         <p>具有缓冲区见证记录的 DataView 拥有 <emu-xref href="#table-dataview-with-buffer-witness-record-fields"></emu-xref> 中列出的字段。</p>
         <emu-table id="table-dataview-with-buffer-witness-record-fields" caption="具有缓冲区见证记录的 DataView 字段">
           <table>
@@ -44923,15 +44950,17 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _view_ 为 _viewRecord_.[[Object]]。
           1. 令 _bufferByteLength_ 为 _viewRecord_.[[CachedBufferByteLength]]。
-          1. 断言：IsDetachedBuffer(_view_.[[ViewedArrayBuffer]]) 为 *true* 当且仅当 _bufferByteLength_ 为 ~detached~。
-          1. 若 _bufferByteLength_ 为 ~detached~，返回 *true*。
+          1. 如果 IsDetachedBuffer(_view_.[[ViewedArrayBuffer]]) 为 *true*，则
+            1. 断言：_bufferByteLength_ 为 ~detached~。
+            1. 返回 *true*。
+          1. 断言：_bufferByteLength_ 是一个非负整数。
           1. 令 _byteOffsetStart_ 为 _view_.[[ByteOffset]]。
-          1. 若 _view_.[[ByteLength]] 为 ~auto~，则
+          1. 如果 _view_.[[ByteLength]] 为 ~auto~，则
             1. 令 _byteOffsetEnd_ 为 _bufferByteLength_。
           1. 否则，
             1. 令 _byteOffsetEnd_ 为 _byteOffsetStart_ + _view_.[[ByteLength]]。
-          1. 若 _byteOffsetStart_ > _bufferByteLength_ 或 _byteOffsetEnd_ > _bufferByteLength_，返回 *true*。
-          1. 注：长度为 0 的 DataView 不被视为越界。
+          1. 注意：长度为 0，且其 [[ByteOffset]] 等于 _bufferByteLength_ 的 DataView 不被视为越界。
+          1. 如果 _byteOffsetStart_ > _bufferByteLength_ 或 _byteOffsetEnd_ > _bufferByteLength_，返回 *true*。
           1. 返回 *false*。
         </emu-alg>
       </emu-clause>
@@ -50387,10 +50416,10 @@ THH:mm:ss.sss
 
 <emu-clause id="sec-memory-model">
   <h1>内存模型</h1>
-  <p>内存一致性模型（或称 <dfn>内存模型</dfn>）规定了共享数据块事件的可能排序，这些事件通过访问由 SharedArrayBuffer 支持的 TypedArray 实例以及调用 Atomics 对象的方法产生。当程序无数据竞争（定义见下）时，事件的排序表现为顺序一致，即各代理动作的交错。当程序存在数据竞争时，共享内存操作可能表现为非顺序一致。例如，程序可能出现因果违反行为和其他令人惊讶的现象。这些惊讶源于编译器变换和 CPU 设计（例如乱序执行与推测执行）。内存模型定义了程序表现顺序一致行为的精确条件，以及数据竞争中可能读取的值。换言之，不存在未定义行为。</p>
-  <p>内存模型以关系约束形式定义，这些约束作用于在求值过程中由对 SharedArrayBuffer 的抽象操作或 Atomics 对象的方法引入的事件。</p>
+  <p>内存一致性模型，或称 <dfn>内存模型</dfn>，用于指定共享数据块事件可以出现的顺序，这些事件是通过访问以 SharedArrayBuffer 为后端的 TypedArray 实例以及通过 Atomics 对象的方法产生的。当程序不存在数据竞争（定义见下文）时，事件的顺序表现为顺序一致性，即表现为来自每个 agent 的动作按某种交织出现。当程序存在数据竞争时，内存操作可能不再表现为顺序一致。例如，程序可能会出现违反因果律的行为或其他令人惊讶的现象。这些现象源于编译器变换和 CPU 的设计（如乱序执行与推测执行）。内存模型既定义了程序表现为顺序一致行为的准确条件，也定义了数据竞争时可能读取的值。换言之，没有未定义行为。</p>
+  <p>内存模型被定义为作用于 Memory 事件的关系约束，这些事件是由对 SharedArrayBuffer 的抽象操作或 Atomics 对象方法在求值过程中引入的。</p>
   <emu-note>
-    <p>本节提供了对 SharedArrayBuffer 抽象操作引入事件的公理化模型。需强调该模型不同于规范其余部分，并非可算法表达。抽象操作非确定性引入事件，是 ECMAScript 求值的操作语义与内存模型公理语义之间的接口。事件语义通过考虑一次求值中所有事件组成的图来定义。它们既非静态语义，也非运行时语义。目前没有演示的算法实现，而是一组约束，用来判定某事件图是否被允许。</p>
+    <p>本节基于抽象操作引入的 SharedArrayBuffer 上的 Memory 事件提供了一个公理化模型。需要强调的是，这种模型不能像本规范其它部分一样用算法表述。抽象操作非确定性地引入事件，这成为 ECMAScript 求值的操作语义与内存模型的公理化语义之间的接口。这些事件的语义是通过考察一次求值中所有事件所组成的图来定义的。这既不是静态语义，也不是运行时语义。这里没有已证明的算法实现，而是一组约束，用于决定一个特定事件图是否被允许。</p>
   </emu-note>
 
   <emu-clause id="sec-memory-model-fundamentals">
@@ -50399,8 +50428,7 @@ THH:mm:ss.sss
     <emu-note>
       <p>不支持比顺序一致更弱、比无序更强的次序（如 release-acquire）。</p>
     </emu-note>
-    <p><dfn variants="Shared Data Block events">共享数据块事件</dfn> 是 <dfn>ReadSharedMemory</dfn>、<dfn>WriteSharedMemory</dfn> 或 <dfn>ReadModifyWriteSharedMemory</dfn> Record。</p>
-
+    <p><dfn variants="Shared Data Block events">共享数据块事件</dfn>是指 <dfn>ReadSharedMemory</dfn>、<dfn>WriteSharedMemory</dfn> 或 <dfn>ReadModifyWriteSharedMemory</dfn> 记录之一。<dfn variants="read events">读事件</dfn>是指 ReadSharedMemory 或 ReadModifyWriteSharedMemory。<dfn variants="write events">写事件</dfn>是指 WriteSharedMemory 或 ReadModifyWriteSharedMemory。</p>
     <emu-table id="table-readsharedmemory-fields" caption="ReadSharedMemory 事件字段">
       <table>
         <thead>
@@ -50413,26 +50441,26 @@ THH:mm:ss.sss
         <tr>
           <td>[[Order]]</td>
           <td>~seq-cst~ 或 ~unordered~</td>
-          <td>内存模型对该事件保证的最弱次序。</td>
+          <td>内存模型为该事件保证的最弱排序。</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>一个 Boolean</td>
-          <td>该事件是否允许从多个范围与其相等的写事件读取。</td>
+          <td>布尔值</td>
+          <td>该事件是否允许从多个与自身内存区间相等的写事件中读取。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
           <td>一个共享数据块</td>
-          <td>事件操作的块。</td>
+          <td>事件所操作的数据块。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>一个非负整数</td>
-          <td>在 [[Block]] 中读取的字节地址。</td>
+          <td>非负整数</td>
+          <td>[[Block]] 中读取的字节地址。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>一个非负整数</td>
+          <td>非负整数</td>
           <td>读取的大小。</td>
         </tr>
       </table>
@@ -50450,32 +50478,32 @@ THH:mm:ss.sss
         <tr>
           <td>[[Order]]</td>
           <td>~seq-cst~、~unordered~ 或 ~init~</td>
-          <td>内存模型对该事件保证的最弱次序。</td>
+          <td>内存模型为该事件保证的最弱排序。</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>一个 Boolean</td>
-          <td>该事件是否允许被多个范围与其相等的读事件读取。</td>
+          <td>布尔值</td>
+          <td>该事件是否允许被来自相同内存区间的多个读取事件读取。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
           <td>一个共享数据块</td>
-          <td>事件操作的块。</td>
+          <td>事件所操作的数据块。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>一个非负整数</td>
-          <td>在 [[Block]] 中写入的字节地址。</td>
+          <td>非负整数</td>
+          <td>在 [[Block]] 内写入的字节地址。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>一个非负整数</td>
+          <td>非负整数</td>
           <td>写入的大小。</td>
         </tr>
         <tr>
           <td>[[Payload]]</td>
-          <td>一个字节值的 List</td>
-          <td>供其他事件读取的字节值列表。</td>
+          <td>字节值的列表</td>
+          <td>可被其他事件读取的字节值列表。</td>
         </tr>
       </table>
     </emu-table>
@@ -50527,10 +50555,8 @@ THH:mm:ss.sss
       </table>
     </emu-table>
 
-    <p>这些事件由抽象操作或 Atomics 对象的方法引入。</p>
-    <p>某些操作还可能引入 <dfn>Synchronize</dfn> 事件。一个 <dfn variants="Synchronize events">Synchronize 事件</dfn> 没有字段，仅用于直接约束其他事件的允许顺序。</p>
-    <p>除共享数据块事件与 Synchronize 事件外，还存在宿主特定事件。</p>
-    <p>令 ReadSharedMemory、WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件的范围为从其 [[ByteIndex]] 到 [[ByteIndex]] + [[ElementSize]] - 1 的连续整数集合。两个事件的范围相等当且仅当它们具有相同 [[Block]] 且范围逐元素相等。若两个事件有相同 [[Block]]、范围不等且交集非空则范围重叠。若两个事件没有相同 [[Block]] 或其范围既不相等也不重叠则范围不相交。</p>
+    <p>共享数据块事件是通过抽象操作或者 Atomics 对象的方法引入到候选执行的代理事件记录中的。一些操作还会引入<dfn variants="Synchronize,Synchronize event">同步事件</dfn>，同步事件没有任何字段，仅用于直接约束其他事件被允许的排序。最后，还存在特定于宿主的事件。<dfn variants="Memory events">内存事件</dfn>指的是共享数据块事件、同步事件或此类宿主特定事件。</p>
+    <p>令共享数据块事件 _e_ 的<dfn variants="memory ranges">内存区间</dfn>为从 _e_.[[ByteIndex]]（包含）到 _e_.[[ByteIndex]] + _e_.[[ElementSize]]（不包含）之间所有整数的集合。当两个事件拥有相同的 [[Block]]、[[ByteIndex]] 和 [[ElementSize]] 时，它们的内存区间相等。若两个事件拥有相同的 [[Block]]，区间不等且它们的交集非空，则称它们的内存区间重叠。若两个事件没有相同的 [[Block]]，或它们的区间既不相等也不重叠，则称它们的内存区间不相交。</p>
     <emu-note>
       <p>应考虑的宿主特定同步事件示例：将一个 SharedArrayBuffer 从一代理发送至另一代理（例如浏览器中的 `postMessage`），代理的启动与停止，以及通过共享内存之外的通道在代理集群内通信。对于某次执行 _execution_，这些事件由宿主通过 host-synchronizes-with 严格偏序提供。此外，宿主可以将宿主特定同步事件加入 _execution_.[[EventList]] 以参与 is-agent-order-before 关系。</p>
     </emu-note>
@@ -50540,7 +50566,7 @@ THH:mm:ss.sss
   <emu-clause id="sec-agent-event-records">
     <h1>代理事件记录</h1>
     <p><dfn variants="Agent Events Records">Agent Events Record</dfn> 是具有以下字段的 Record。</p>
-    <emu-table id="table-agent-events-records" caption="Agent Events Record 字段">
+    <emu-table id="table-agent-events-records" caption="代理事件记录字段">
       <table>
         <thead>
           <tr>
@@ -50552,16 +50578,16 @@ THH:mm:ss.sss
         <tr>
           <td>[[AgentSignifier]]</td>
           <td>一个代理标识符</td>
-          <td>其求值导致此排序的代理。</td>
+          <td>产生此排序结果的代理。</td>
         </tr>
         <tr>
           <td>[[EventList]]</td>
-          <td>一个事件的 List</td>
-          <td>求值过程中事件被追加到该列表。</td>
+          <td>一个内存事件的列表</td>
+          <td>事件在求值过程中按顺序追加到此列表。</td>
         </tr>
         <tr>
           <td>[[AgentSynchronizesWith]]</td>
-          <td>一对 Synchronize 事件的 List</td>
+          <td>同步事件对的列表</td>
           <td>由操作语义引入的同步关系。</td>
         </tr>
       </table>
@@ -50597,7 +50623,7 @@ THH:mm:ss.sss
   <emu-clause id="sec-candidate-executions">
     <h1>候选执行</h1>
     <p>代理集群求值的一个 <dfn variants="candidate executions">candidate execution</dfn> 是具有以下字段的 Record。</p>
-    <emu-table id="table-candidate-execution-records" caption="Candidate Execution Record 字段">
+    <emu-table id="table-candidate-execution-records" caption="候选执行记录字段">
       <table>
         <thead>
           <tr>
@@ -50608,12 +50634,12 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[EventsRecords]]</td>
-          <td>Agent Events Record 的 List</td>
-          <td>映射一个代理到求值过程中追加的事件列表。</td>
+          <td>代理事件记录的列表</td>
+          <td>将代理映射到求值过程中追加的内存事件列表。</td>
         </tr>
         <tr>
           <td>[[ChosenValues]]</td>
-          <td>Chosen Value Record 的 List</td>
+          <td>已选值记录的列表</td>
           <td>将 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件映射为求值过程中选定的字节值列表。</td>
         </tr>
       </table>
@@ -50628,15 +50654,15 @@ THH:mm:ss.sss
     <emu-clause id="sec-event-set" type="abstract operation">
       <h1>
         EventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 一个候选执行,
+        ): 一个 Memory 事件的集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _events_ 为一个空 Set。
-        1. 对于 _execution_.[[EventsRecords]] 中的每个 Agent Events Record _aer_，执行
-          1. 对 _aer_.[[EventList]] 中的每个事件 _E_，执行
+        1. 令 _events_ 为一个空集合。
+        1. 对于 _execution_.[[EventsRecords]] 的每个代理事件记录 _aer_，执行
+          1. 对于 _aer_.[[EventList]] 的每个 Memory 事件 _E_，执行
             1. 将 _E_ 加入 _events_。
         1. 返回 _events_。
       </emu-alg>
@@ -50645,15 +50671,15 @@ THH:mm:ss.sss
     <emu-clause id="sec-sharedatablockeventset" type="abstract operation">
       <h1>
         SharedDataBlockEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 一个候选执行,
+        ): 一个共享数据块事件的集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _events_ 为一个空 Set。
-        1. 对 EventSet(_execution_) 中的每个事件 _E_，执行
-          1. 如果 _E_ 是 ReadSharedMemory、WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，将 _E_ 加入 _events_。
+        1. 令 _events_ 为一个空集合。
+        1. 对于 EventSet(_execution_) 的每个 Memory 事件 _E_，执行
+          1. 如果 _E_ 是一个共享数据块事件，则将 _E_ 加入 _events_。
         1. 返回 _events_。
       </emu-alg>
     </emu-clause>
@@ -50661,34 +50687,31 @@ THH:mm:ss.sss
     <emu-clause id="sec-hosteventset" type="abstract operation">
       <h1>
         HostEventSet (
-          _execution_: a candidate execution,
-        ): a Set of events
+          _execution_: 一个候选执行,
+        ): 一个 Memory 事件的集合
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _events_ 为一个空 Set。
-        1. 对 EventSet(_execution_) 中的每个事件 _E_，执行
-          1. 如果 _E_ 不在 SharedDataBlockEventSet(_execution_) 中，将 _E_ 加入 _events_。
-        1. 返回 _events_。
+        1. 返回一个包含 EventSet(_execution_) 中所有不在 SharedDataBlockEventSet(_execution_) 中元素的新集合。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-composewriteeventbytes" type="abstract operation">
       <h1>
         ComposeWriteEventBytes (
-          _execution_: a candidate execution,
-          _byteIndex_: a non-negative integer,
-          _Ws_: a List of either WriteSharedMemory or ReadModifyWriteSharedMemory events,
-        ): a List of byte values
+          _execution_: 一个候选执行,
+          _byteIndex_: 一个非负整数,
+          _Ws_: WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件的列表,
+        ): 一个字节值列表
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
         1. 令 _byteLocation_ 为 _byteIndex_。
-        1. 令 _bytesRead_ 为一个新的空 List。
-        1. 对 _Ws_ 中每个元素 _W_，执行
-          1. 断言：_W_ 的范围包含 _byteLocation_。
+        1. 令 _bytesRead_ 为一个新的空列表。
+        1. 对于 _Ws_ 中的每个元素 _W_，执行
+          1. 断言：_W_ 的内存区间包含 _byteLocation_。
           1. 令 _payloadIndex_ 为 _byteLocation_ - _W_.[[ByteIndex]]。
           1. 如果 _W_ 是 WriteSharedMemory 事件，则
             1. 令 _byte_ 为 _W_.[[Payload]][_payloadIndex_]。
@@ -50697,15 +50720,15 @@ THH:mm:ss.sss
             1. 令 _bytes_ 为 ValueOfReadEvent(_execution_, _W_)。
             1. 令 _bytesModified_ 为 _W_.[[ModifyOp]](_bytes_, _W_.[[Payload]])。
             1. 令 _byte_ 为 _bytesModified_[_payloadIndex_]。
-          1. 将 _byte_ 追加到 _bytesRead_。
-          1. 将 _byteLocation_ 设为 _byteLocation_ + 1。
+          1. 将 _byte_ 添加到 _bytesRead_。
+          1. 令 _byteLocation_ 加 1。
         1. 返回 _bytesRead_。
       </emu-alg>
       <emu-note>
-        <p>读-改-写修改 [[ModifyOp]] 由 Atomics 对象上引入 ReadModifyWriteSharedMemory 事件的函数属性给出。</p>
+        <p>读-改-写的修饰操作 [[ModifyOp]] 由引入 ReadModifyWriteSharedMemory 事件的 Atomics 对象上的函数属性给出。</p>
       </emu-note>
       <emu-note>
-        <p>此抽象操作将写事件的 List 组合为字节值的 List。用于 ReadSharedMemory 和 ReadModifyWriteSharedMemory 事件的事件语义。</p>
+        <p>该抽象操作将一组写事件组合为一个字节值列表。它用于 ReadSharedMemory 和 ReadModifyWriteSharedMemory 事件的事件语义中。</p>
       </emu-note>
     </emu-clause>
 
@@ -50731,306 +50754,308 @@ THH:mm:ss.sss
 
     <p>以下关系与数学函数以特定候选执行为参数，对其事件排序。</p>
 
+    <p>以下关系和数学函数是以特定的候选执行为参数，对其 Memory 事件进行排序。</p>
+
     <emu-clause id="sec-agent-order">
       <h1>is-agent-order-before</h1>
-      <p>对候选执行 _execution_，其 <dfn>is-agent-order-before</dfn> 关系是满足以下条件的事件上的最小关系。</p>
+      <p>对于候选执行 _execution_，其 <dfn>is-agent-order-before</dfn> 关系是在 Memory 事件上的最小关系，满足以下条件。</p>
       <ul>
-        <li>对事件 _E_ 与 _D_，若存在 _execution_.[[EventsRecords]] 中的某个 Agent Events Record _aer_，使得 _aer_.[[EventList]] 同时包含 _E_ 与 _D_ 且 _E_ 在该 List 顺序上位于 _D_ 之前，则 _E_ 在 _execution_ 中 is-agent-order-before _D_。</li>
+        <li>对于事件 _E_ 和 _D_，如果存在 _execution_.[[EventsRecords]] 中的 Agent Events Record _aer_，使得 _aer_.[[EventList]] 同时包含 _E_ 和 _D_，且 _E_ 在 _aer_.[[EventList]] 的列表顺序中位于 _D_ 之前，则 _E_ is-agent-order-before _D_。</li>
       </ul>
 
       <emu-note>
-        <p>每个代理在求值期间按代理内严格全序引入事件。这些严格全序的并集即本关系。</p>
+        <p>每个 agent 在求值过程中按每 agent 的严格全序引入事件。这是那些严格全序的并集。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-reads-bytes-from" aoid="reads-bytes-from">
       <h1>reads-bytes-from</h1>
-      <p>对候选执行 _execution_，其 <em>reads-bytes-from</em> 函数是一个数学函数，将 SharedDataBlockEventSet(_execution_) 中的事件映射到该集合中事件的 List，满足下列条件。</p>
+      <p>对于候选执行 _execution_，其 <em>reads-bytes-from</em> 函数是一个数学函数，将 SharedDataBlockEventSet(_execution_) 中的 Memory 事件映射到 SharedDataBlockEventSet(_execution_) 中事件的列表，满足以下条件。</p>
       <ul>
         <li>
-          <p>对 SharedDataBlockEventSet(_execution_) 中每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，reads-bytes-from(_R_) in _execution_ 为长度 _R_.[[ElementSize]] 的 List，其元素为 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _Ws_，满足：</p>
+          <p>对于 SharedDataBlockEventSet(_execution_) 中的每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，reads-bytes-from(_R_) 在 _execution_ 中是一个长度为 _R_.[[ElementSize]] 的列表，列表中的元素是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _Ws_，并且满足以下所有条件：</p>
           <ul>
-            <li>_Ws_ 中索引 _i_ 的每个事件 _W_ 的范围包含 _R_.[[ByteIndex]] + _i_。</li>
+            <li>对 _Ws_ 中索引为 _i_ 的每个事件 _W_，_R_.[[ByteIndex]] + _i_ 在 _W_ 的内存区间内。</li>
             <li>_R_ 不在 _Ws_ 中。</li>
           </ul>
         </li>
       </ul>
-      <p>一个候选执行总能容纳一个 reads-bytes-from 函数。</p>
+      <p>一个候选执行总是允许一个 reads-bytes-from 函数存在。</p>
     </emu-clause>
 
     <emu-clause id="sec-reads-from">
       <h1>reads-from</h1>
-      <p>对候选执行 _execution_，其 <dfn>reads-from</dfn> 关系是满足以下条件的事件上的最小关系。</p>
+      <p>对于候选执行 _execution_，其 <dfn>reads-from</dfn> 关系是在 Memory 事件上的最小关系，满足以下条件。</p>
       <ul>
-        <li>对事件 _R_ 与 _W_，若 SharedDataBlockEventSet(_execution_) 同时包含 _R_ 与 _W_ 且 reads-bytes-from(_R_) in _execution_ 包含 _W_，则 _R_ reads-from _W_。</li>
+        <li>对于事件 _R_ 和 _W_，如果 SharedDataBlockEventSet(_execution_) 同时包含 _R_ 和 _W_，且 reads-bytes-from(_R_) 在 _execution_ 中包含 _W_，那么 _R_ reads-from _W_。</li>
       </ul>
     </emu-clause>
 
     <emu-clause id="sec-host-synchronizes-with">
       <h1>host-synchronizes-with</h1>
-      <p>对候选执行 _execution_，其 <dfn>host-synchronizes-with</dfn> 关系是宿主提供的、在宿主特定事件上的严格偏序，至少满足：</p>
+      <p>对于候选执行 _execution_，其 <dfn>host-synchronizes-with</dfn> 关系是在宿主特定的 Memory 事件上的宿主提供的严格偏序，至少满足以下条件。</p>
       <ul>
-        <li>若 _E_ host-synchronizes-with _D_，则 HostEventSet(_execution_) 包含 _E_ 与 _D_。</li>
-        <li>host-synchronizes-with 与 is-agent-order-before 的并集中不存在环。</li>
+        <li>如果 _E_ host-synchronizes-with _D_ 在 _execution_ 中，HostEventSet(_execution_) 包含 _E_ 和 _D_。</li>
+        <li>host-synchronizes-with 与 is-agent-order-before 的并集在 _execution_ 中不存在环。</li>
       </ul>
 
       <emu-note>
-        <p>对候选执行 _execution_ 中两个宿主特定事件 _E_ 与 _D_，若 _E_ host-synchronizes-with _D_，则 _E_ happens-before _D_。</p>
+        <p>对于候选执行 _execution_ 中的两个宿主特定事件 _E_ 和 _D_，_E_ host-synchronizes-with _D_ 意味着 _E_ happens-before _D_。</p>
       </emu-note>
       <emu-note>
-        <p>该关系允许宿主提供额外同步机制，如在 HTML workers 间使用 `postMessage`。</p>
+        <p>该关系允许宿主提供额外的同步机制，例如 HTML worker 之间的 `postMessage`。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-synchronizes-with">
       <h1>synchronizes-with</h1>
-      <p>对候选执行 _execution_，其 <dfn>synchronizes-with</dfn> 关系是满足以下条件的事件上的最小关系：</p>
+      <p>对于候选执行 _execution_，其 <dfn>synchronizes-with</dfn> 关系是在 Memory 事件上的最小关系，满足以下条件。</p>
       <ul>
         <li>
-          对事件 _R_ 与 _W_，若 _R_ reads-from _W_ in _execution_、_R_.[[Order]] 为 ~seq-cst~、_W_.[[Order]] 为 ~seq-cst~ 且 _R_ 与 _W_ 范围相等，则 _W_ synchronizes-with _R_。
+          对于事件 _R_ 和 _W_，若 _R_ reads-from _W_ in _execution_，且 _R_.[[Order]] 为 ~seq-cst~，_W_.[[Order]] 为 ~seq-cst~，且 _R_ 和 _W_ 的内存区间相等，则 _W_ synchronizes-with _R_ in _execution_。
         </li>
         <li>
-          对 _execution_.[[EventsRecords]] 的每个元素 _eventsRecord_，以下成立：
+          对于 _execution_.[[EventsRecords]] 的每个元素 _eventsRecord_，如下成立。
           <ul>
-            <li>若 _eventsRecord_.[[AgentSynchronizesWith]] 包含 (_S_, _Sw_)，则 _S_ synchronizes-with _Sw_。</li>
+            <li>对于事件 _S_ 和 _Sw_，如果 _eventsRecord_.[[AgentSynchronizesWith]] 包含 (_S_, _Sw_)，则 _S_ synchronizes-with _Sw_ in _execution_。</li>
           </ul>
         </li>
-        <li>对事件 _E_ 与 _D_，若 _execution_.[[HostSynchronizesWith]] 包含 (_E_, _D_)，则 _E_ synchronizes-with _D_。</li>
+        <li>对于事件 _E_ 和 _D_，若 _execution_.[[HostSynchronizesWith]] 包含 (_E_, _D_)，则 _E_ synchronizes-with _D_ in _execution_。</li>
       </ul>
 
       <emu-note>
-        <p>按内存模型文献惯例，写事件 synchronizes-with 读事件，而不是反之。</p>
+        <p>根据内存模型文献的惯例，在候选执行 _execution_ 中，写事件 synchronizes-with 读事件，而不是读事件 synchronizes-with 写事件。</p>
       </emu-note>
 
       <emu-note>
-        <p>~init~ 事件不参与该关系，而由 happens-before 直接约束。</p>
+        <p>在候选执行 _execution_ 中，~init~ 事件不参与该关系，而是直接被 happens-before 约束。</p>
       </emu-note>
 
       <emu-note>
-        <p>并非所有通过 reads-from 关联的 ~seq-cst~ 事件都由 synchronizes-with 关联，只有范围相等者才关联。</p>
+        <p>在候选执行 _execution_ 中，并非所有通过 reads-from 相关的 ~seq-cst~ 事件都通过 synchronizes-with 相关。只有内存区间也相等的事件才通过 synchronizes-with 相关。</p>
       </emu-note>
 
       <emu-note>
-        <p>若共享数据块事件 _W_ synchronizes-with _R_，_R_ 仍可 reads-from 除 _W_ 之外的写。</p>
+        <p>对于候选执行 _execution_ 中的共享数据块事件 _R_ 和 _W_，若 _W_ synchronizes-with _R_，则 _R_ 仍有可能 reads-from 除 _W_ 之外的其他写事件。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-happens-before">
       <h1>happens-before</h1>
-      <p>对候选执行 _execution_，其 <dfn>happens-before</dfn> 关系是满足以下条件的事件上的最小关系。</p>
+      <p>对于候选执行 _execution_，其 <dfn>happens-before</dfn> 关系是在 Memory 事件上的最小关系，满足下列条件。</p>
 
       <ul>
         <li>
-          <p>对事件 _E_ 与 _D_，若以下任一成立则 _E_ happens-before _D_：</p>
+          <p>对于事件 _E_ 和 _D_，只要下列任何条件成立，则 _E_ happens-before _D_ in _execution_。</p>
           <ul>
-            <li>_E_ is-agent-order-before _D_。</li>
-            <li>_E_ synchronizes-with _D_。</li>
-            <li>SharedDataBlockEventSet(_execution_) 同时包含 _E_ 与 _D_，_E_.[[Order]] 为 ~init~，且 _E_ 与 _D_ 范围重叠。</li>
-            <li>存在事件 _F_ 使得 _E_ happens-before _F_ 且 _F_ happens-before _D_。</li>
+            <li>_E_ is-agent-order-before _D_ in _execution_。</li>
+            <li>_E_ synchronizes-with _D_ in _execution_。</li>
+            <li>SharedDataBlockEventSet(_execution_) 同时包含 _E_ 和 _D_，_E_.[[Order]] 为 ~init~，且 _E_ 和 _D_ 的内存区间重叠。</li>
+            <li>存在事件 _F_，满足 _E_ happens-before _F_ 且 _F_ happens-before _D_ in _execution_。</li>
           </ul>
         </li>
       </ul>
 
       <emu-note>
-        <p>因 happens-before 是 agent-order 的超集，候选执行与 ECMAScript 的单线程求值语义一致。</p>
+        <p>由于 happens-before 是 agent-order 的超集，候选执行与 ECMAScript 的单线程求值语义一致。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-properties-of-valid-executions">
-    <h1>合法执行的性质</h1>
+    <h1>有效执行的性质</h1>
 
     <emu-clause id="sec-valid-chosen-reads">
       <h1>有效选定读取</h1>
-      <p>候选执行 _execution_ 具有有效选定读取当且仅当以下算法返回 *true*。</p>
+      <p>若下述算法返回 *true*，则候选执行 _execution_ 具有有效选定读取。</p>
       <emu-alg>
-        1. 对 SharedDataBlockEventSet(_execution_) 中每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
+        1. 对于 SharedDataBlockEventSet(_execution_) 中的每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
           1. 令 _chosenValueRecord_ 为 _execution_.[[ChosenValues]] 中 [[Event]] 字段为 _R_ 的元素。
           1. 令 _chosenValue_ 为 _chosenValueRecord_.[[ChosenValue]]。
           1. 令 _readValue_ 为 ValueOfReadEvent(_execution_, _R_)。
-          1. 令 _chosenLen_ 为 _chosenValue_ 的元素个数。
-          1. 令 _readLen_ 为 _readValue_ 的元素个数。
+          1. 令 _chosenLen_ 为 _chosenValue_ 的元素数量。
+          1. 令 _readLen_ 为 _readValue_ 的元素数量。
           1. 如果 _chosenLen_ ≠ _readLen_，则
             1. 返回 *false*。
-          1. 如果 存在整数 _i_ 属于 [0, _chosenLen_) 使 _chosenValue_[_i_] ≠ _readValue_[_i_]，则
+          1. 如果存在某个整数 _i_，范围从 0（包含）到 _chosenLen_（不包含），满足 _chosenValue_[_i_] ≠ _readValue_[_i_]，则
             1. 返回 *false*。
         1. 返回 *true*。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-coherent-reads">
-      <h1>相干读取</h1>
-      <p>候选执行 _execution_ 具有相干读取当且仅当以下算法返回 *true*。</p>
+      <h1>一致性读取</h1>
+      <p>若下述算法返回 *true*，则候选执行 _execution_ 具有一致性读取。</p>
       <emu-alg>
-        1. 对 SharedDataBlockEventSet(_execution_) 中每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
+        1. 对于 SharedDataBlockEventSet(_execution_) 中的每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
           1. 令 _Ws_ 为 reads-bytes-from(_R_) in _execution_。
           1. 令 _byteLocation_ 为 _R_.[[ByteIndex]]。
-          1. 对 _Ws_ 中每个元素 _W_，执行
-            1. 如果 _R_ happens-before _W_，则
+          1. 对于 _Ws_ 中的每个元素 _W_，执行
+            1. 如果 _R_ happens-before _W_ in _execution_，则
               1. 返回 *false*。
-            1. 如果 存在 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _V_，其范围包含 _byteLocation_，且 _W_ happens-before _V_ 且 _V_ happens-before _R_，则
+            1. 如果存在 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _V_，它的内存区间包含 _byteLocation_，且 _W_ happens-before _V_ in _execution_ 并且 _V_ happens-before _R_ in _execution_，则
               1. 返回 *false*。
-            1. 将 _byteLocation_ 设为 _byteLocation_ + 1。
+            1. 令 _byteLocation_ 加 1。
         1. 返回 *true*。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tear-free-aligned-reads">
       <h1>无撕裂读取</h1>
-      <p>候选执行 _execution_ 具有无撕裂读取当且仅当以下算法返回 *true*。</p>
+      <p>若下述算法返回 *true*，则候选执行 _execution_ 具有无撕裂读取。</p>
       <emu-alg>
-        1. 对 SharedDataBlockEventSet(_execution_) 中每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
+        1. 对于 SharedDataBlockEventSet(_execution_) 中的每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _R_，执行
           1. 如果 _R_.[[NoTear]] 为 *true*，则
             1. 断言：_R_.[[ByteIndex]] 除以 _R_.[[ElementSize]] 的余数为 0。
-            1. 对每个事件 _W_（满足 _R_ reads-from _W_ 且 _W_.[[NoTear]] 为 *true*），执行
-              1. 如果 _R_ 与 _W_ 范围相等且存在事件 _V_ 使得 _V_ 与 _W_ 范围相等、_V_.[[NoTear]] 为 *true*、_W_ 与 _V_ 非同一共享数据块事件且 _R_ reads-from _V_，则
+            1. 对于满足 _R_ reads-from _W_ in _execution_ 且 _W_.[[NoTear]] 为 *true* 的 Memory 事件 _W_，执行
+              1. 如果 _R_ 和 _W_ 的内存区间相等，且存在 Memory 事件 _V_，满足 _V_ 和 _W_ 的内存区间相等，_V_.[[NoTear]] 为 *true*，_W_ 和 _V_ 不是同一个 Shared Data Block 事件，并且 _R_ reads-from _V_ in _execution_，则
                 1. 返回 *false*。
         1. 返回 *true*。
       </emu-alg>
 
       <emu-note>
-        <p>事件的 [[NoTear]] 字段为 *true* 表示该事件通过访问整数 TypedArray 引入；为 *false* 则表示通过访问浮点 TypedArray 或 DataView 引入。</p>
-        <p>直观地，该要求表示当内存范围以整数 TypedArray 对齐方式访问时，在与其他范围相等写事件的数据竞争中，必须由“单个”写事件“胜出”。更精确地：对齐的读事件不能读取由多个范围相等写事件的字节混合组成的值。然而对齐读事件仍可能读取来自范围重叠写事件的字节。</p>
+        <p>通过访问整型 TypedArray 引入事件时，共享数据块事件的 [[NoTear]] 字段为 *true*；通过访问浮点型 TypedArray 或 DataView 引入则为 *false*。</p>
+        <p>直观来说，这一要求意味着：当通过整型 TypedArray 以对齐方式访问内存区间时，在和其他写事件产生数据竞争时，该区间上的单个写事件必须“获胜”。更准确地说，就是对齐读取不能从多个、区间相等但事件不同的写事件的字节组合值中读取。然而，对齐读仍然可以从多个区间重叠的写事件中读取。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-memory-order">
-      <h1>顺序一致原子</h1>
-      <p>对候选执行 _execution_，<dfn>is-memory-order-before</dfn> 是 EventSet(_execution_) 所有事件的严格全序，且满足：</p>
+      <h1>顺序一致的原子操作</h1>
+      <p>对于候选执行 _execution_，<dfn>is-memory-order-before</dfn> 是对 EventSet(_execution_) 所有 Memory 事件的严格全序，满足如下条件。</p>
       <ul>
-        <li>对事件 _E_ 与 _D_，若 _E_ happens-before _D_，则 _E_ is-memory-order-before _D_。</li>
+        <li>对于事件 _E_ 和 _D_，若 _E_ happens-before _D_ in _execution_，则 _E_ is-memory-order-before _D_。</li>
         <li>
-          <p>对 _R_ 与 _W_（满足 _R_ reads-from _W_），不存在 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _V_ 属于 SharedDataBlockEventSet(_execution_)，使 _V_.[[Order]] 为 ~seq-cst~、_W_ is-memory-order-before _V_、_V_ is-memory-order-before _R_，且以下任一成立：</p>
+          <p>对于满足 _R_ reads-from _W_ in _execution_ 的事件 _R_ 和 _W_，不存在 SharedDataBlockEventSet(_execution_) 中的 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _V_，使得 _V_.[[Order]] 为 ~seq-cst~，_W_ is-memory-order-before _V_ in _execution_，_V_ is-memory-order-before _R_ in _execution_，且下列任一条件成立：</p>
           <ul>
-            <li>_W_ synchronizes-with _R_ 且 _V_ 与 _R_ 范围相等。</li>
-            <li>_W_ happens-before _R_ 且 _V_ happens-before _R_，_W_.[[Order]] 为 ~seq-cst~，且 _W_ 与 _V_ 范围相等。</li>
-            <li>_W_ happens-before _R_ 且 _W_ happens-before _V_，_R_.[[Order]] 为 ~seq-cst~，且 _V_ 与 _R_ 范围相等。</li>
+            <li>_W_ synchronizes-with _R_ in _execution_，且 _V_ 和 _R_ 的内存区间相等。</li>
+            <li>_W_ happens-before _R_、_V_ happens-before _R_ in _execution_，_W_.[[Order]] 为 ~seq-cst~，且 _W_ 和 _V_ 的内存区间相等。</li>
+            <li>_W_ happens-before _R_、_W_ happens-before _V_ in _execution_，_R_.[[Order]] 为 ~seq-cst~，且 _V_ 和 _R_ 的内存区间相等。</li>
           </ul>
           <emu-note>
-            <p>此条款额外约束范围相等的 ~seq-cst~ 事件。</p>
+            <p>本条进一步约束了相同内存区间上的 ~seq-cst~ 事件。</p>
           </emu-note>
         </li>
         <li>
-          <p>对 SharedDataBlockEventSet(_execution_) 中每个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _W_，若 _W_.[[Order]] 为 ~seq-cst~，则不可能存在无限多个与 _W_ 范围相等且 memory-order 位于 _W_ 之前的 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件。</p>
+          <p>对于 SharedDataBlockEventSet(_execution_) 中的每个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _W_，如果 _W_.[[Order]] 为 ~seq-cst~，则不存在无限多个与 _W_ 内存区间相等且 memory-order 在 _W_ 之前的 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件。</p>
           <emu-note>
-            <p>该条款与代理的前向进展保证一起确保：~seq-cst~ 写在有限时间内对范围相等的 ~seq-cst~ 读可见。</p>
+            <p>本条与 agent 的前向进展保证共同确保 ~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">写入</emu-xref> 能在有限时间内对区间相同的 ~seq-cst~ <emu-xref href="#sec-memory-model-fundamentals">读取</emu-xref> 可见，满足活性条件。</p>
           </emu-note>
         </li>
       </ul>
-      <p>若候选执行存在一个 is-memory-order-before 关系，则其具有顺序一致原子。</p>
+      <p>候选执行有顺序一致原子操作，当且仅当它允许存在 is-memory-order-before 关系。</p>
 
       <emu-note>
-        <p>虽然 is-memory-order-before 包含 EventSet(_execution_) 的所有事件，但未被 happens-before 或 synchronizes-with 约束的事件可在该顺序中任意位置出现。</p>
+        <p>虽然 is-memory-order-before 包含 EventSet(_execution_) 中所有事件，但那些不受 happens-before 或 synchronizes-with 约束的事件可以在顺序中的任意位置。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-valid-executions">
-      <h1>合法执行</h1>
-      <p>候选执行 _execution_ 是合法执行（或简称执行）当且仅当以下各项均为真：</p>
+      <h1>有效执行</h1>
+      <p>若候选执行 _execution_ 满足如下所有条件，则称其为有效执行（或简称执行）。</p>
       <ul>
-        <li>宿主为 _execution_ 提供 host-synchronizes-with 关系。</li>
-        <li>_execution_ 存在一个为严格偏序的 happens-before 关系。</li>
+        <li>宿主为 _execution_ 提供了 host-synchronizes-with 关系。</li>
+        <li>_execution_ 允许存在严格偏序的 happens-before 关系。</li>
         <li>_execution_ 具有有效选定读取。</li>
-        <li>_execution_ 具有相干读取。</li>
+        <li>_execution_ 具有一致性读取。</li>
         <li>_execution_ 具有无撕裂读取。</li>
-        <li>_execution_ 具有顺序一致原子。</li>
+        <li>_execution_ 具有顺序一致的原子操作。</li>
       </ul>
-      <p>所有程序至少有一个合法执行。</p>
+      <p>所有程序至少有一个有效执行。</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-races">
-    <h1>竞争</h1>
-    <p>对执行 _execution_ 及其中 SharedDataBlockEventSet(_execution_) 的事件 _E_ 与 _D_，若以下算法返回 *true*，则 _E_ 与 _D_ 处于一个 <em>race</em> 中。</p>
+    <h1>竞争（Races）</h1>
+    <p>对于 execution _execution_ 和已包含在 SharedDataBlockEventSet(_execution_) 内的事件 _E_ 和 _D_，若下述算法返回 *true*，则 _E_ 和 _D_ 存在 <em>竞争</em>。</p>
     <emu-alg>
-      1. 如果 _E_ 与 _D_ 不是同一共享数据块事件，则
-        1. 如果并非 _E_ happens-before _D_ 且 _D_ happens-before _E_ 同时成立，则
-          1. 如果 _E_ 与 _D_ 均为 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件且范围不相交为假，则
+      1. 如果 _E_ 和 _D_ 不是同一个 Shared Data Block 事件，则
+        1. 如果不存在 _E_ happens-before _D_ in _execution_ 且 _D_ happens-before _E_ in _execution_，则
+          1. 如果 _E_ 和 _D_ 均为 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，且 _E_ 和 _D_ 的内存区间不相交，则
             1. 返回 *true*。
-          1. 如果 _E_ reads-from _D_ 或 _D_ reads-from _E_，则
+          1. 如果 _E_ reads-from _D_ in _execution_ 或 _D_ reads-from _E_ in _execution_，则
             1. 返回 *true*。
       1. 返回 *false*。
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-races">
-    <h1>数据竞争</h1>
-    <p>对执行 _execution_ 及其中 SharedDataBlockEventSet(_execution_) 的事件 _E_ 与 _D_，若以下算法返回 *true*，则 _E_ 与 _D_ 处于一个 <dfn>data race</dfn> 中。</p>
+    <h1>数据竞争（Data Races）</h1>
+    <p>对于 execution _execution_ 和 SharedDataBlockEventSet(_execution_) 内的事件 _E_ 和 _D_，若下述算法返回 *true*，则它们存在 <dfn>数据竞争</dfn>。</p>
     <emu-alg>
-      1. 如果 _E_ 与 _D_ 在 _execution_ 中处于 <emu-xref href="#sec-races">race</emu-xref>，则
+      1. 如果 _E_ 和 _D_ 在 _execution_ 中存在 <emu-xref href="#sec-races">竞争</emu-xref>，则
         1. 如果 _E_.[[Order]] 不是 ~seq-cst~ 或 _D_.[[Order]] 不是 ~seq-cst~，则
           1. 返回 *true*。
-        1. 如果 _E_ 与 _D_ 范围重叠，则
+        1. 如果 _E_ 和 _D_ 的内存区间重叠，则
           1. 返回 *true*。
       1. 返回 *false*。
     </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-race-freedom">
-    <h1>数据竞争自由</h1>
-    <p>执行 _execution_ 是 <dfn>data race free</dfn> 当且仅当 SharedDataBlockEventSet(_execution_) 中不存在两事件处于数据竞争。</p>
-    <p>若程序所有执行均数据竞争自由，则该程序为数据竞争自由程序。</p>
-    <p>内存模型保证数据竞争自由程序所有事件的顺序一致性。</p>
+    <h1>无数据竞争（Data Race Freedom）</h1>
+    <p>若 SharedDataBlockEventSet(_execution_) 中不存在任何处于数据竞争的事件对，则执行 _execution_ 是<dfn>无数据竞争</dfn>的。</p>
+    <p>若某程序的所有执行都无数据竞争，则该程序是无数据竞争的。</p>
+    <p>内存模型保证无数据竞争程序的全部事件都具有顺序一致性。</p>
   </emu-clause>
 
   <emu-clause id="sec-shared-memory-guidelines">
-    <h1>共享内存指南</h1>
+    <h1>共享内存编程指南</h1>
     <emu-note>
-      <p>以下是面向使用共享内存的 ECMAScript 程序员的指南。</p>
-      <p>推荐保持程序数据竞争自由，即使同一内存位置不可能同时发生并发非原子操作。数据竞争自由程序具有交错语义：每个代理的每一步求值语义互相交错。此时无需理解内存模型细节，细节对编写 ECMAScript 的直觉帮助有限。</p>
-      <p>更一般地，即便程序非数据竞争自由，也可能具可预测行为，只要原子操作不参与任何数据竞争，且竞争操作的访问大小一致。最简单方式是保证原子与非原子操作使用不同内存单元，且不同大小的原子访问不同时访问相同单元。实质上，程序应尽量将共享内存视为强类型。仍不可依赖竞争的非原子访问的顺序与时序，但若内存被强类型对待，竞争访问不会“撕裂”（其值的位不会混合）。</p>
+      <p>以下是 ECMAScript 程序员在使用共享内存时的相关建议。</p>
+      <p>我们建议程序保持无数据竞争（即确保不存在对同一内存地址的并发非原子操作）。无数据竞争的程序具有交织语义，每个 agent 的求值语义中的每一步都可以与其他 agent 交织。在无数据竞争程序下，不必理解内存模型的细节。细节并不会真正帮助你更好地编写 ECMAScript 代码。</p>
+      <p>更一般来说，即使程序不是无数据竞争的，只要所有涉及原子操作的数据竞争都不存在，且发生竞争的操作具有相同的访问大小，程序可能依然是可预测的。让原子操作不参与竞争最简单的方式是确保原子和非原子操作访问不同的内存单元，并且不同大小的原子访问不会同时访问同一单元。实质上，程序应尽量把共享内存视为强类型内存。你仍不能依赖于参与竞争的非原子访问的顺序和时机，但如果内存视为强类型，则访问不会“撕裂”（即值的各位不会出现混杂）。</p>
     </emu-note>
 
     <emu-note>
-      <p>以下是面向为使用共享内存程序编写编译器变换的 ECMAScript 实现者的指南。</p>
-      <p>希望在多代理环境中允许大多数在单代理环境有效的程序变换，以确保多代理程序中每个代理的性能与单代理时一样。此类变换往往难以判定。我们概述若干应视为规范性的规则（由内存模型蕴含或比其更强），但不一定穷尽。规则适用于在组成 is-agent-order-before 关系的事件引入之前的程序变换。</p>
-      <p>令 <dfn variants="agent-order slices">agent-order slice</dfn> 为 is-agent-order-before 关系中属于单一代理的子集。</p>
-      <p>令读取事件的 <dfn>possible read values</dfn> 为该事件在所有合法执行中 ValueOfReadEvent 的所有值集合。</p>
-      <p>在无共享内存时有效的任意 agent-order slice 变换在存在共享内存时亦有效，以下例外：</p>
+      <p>以下是 ECMAScript 实现者针对使用共享内存的程序编译器转换的建议。</p>
+      <p>在多 agent 环境下，允许大多数在单 agent 环境中有效的程序变换是很有必要的，这样可以确保多 agent 程序中每个 agent 的性能不会低于其在单 agent 情境下的表现。然而，这些变换通常难以评判。我们在此概述了一些关于程序变换的规范性规则（即这些规则要么隐含于内存模型，要么比内存模型更严格），但这些规则很可能不是完全穷尽的。这些规则旨在适用于那些发生在组成 is-agent-order-before 关系的 Memory 事件被引入之前的程序变换。</p>
+      <p>定义 <dfn variants="agent-order slices">agent-order 切片</dfn> 为 is-agent-order-before 关系中，属于单个 agent 的子集。</p>
+      <p>定义某次读事件的 <dfn>可能读取值</dfn>（possible read values）为所有有效执行中 ValueOfReadEvent 的所有可能值之集合。</p>
+      <p>任何在无共享内存场景下有效的 agent-order 切片转换，在有共享内存下同样有效，但需遵循以下例外：</p>
       <ul>
         <li>
-          <p><em>原子操作不可动摇</em>：程序变换不得使 agent-order slice 中的 ~seq-cst~ 事件与其 ~unordered~ 操作重排，亦不得重排其 ~seq-cst~ 操作之间的顺序，也不得移除 ~seq-cst~ 操作。</p>
-          <p>（实践中，该限制迫使编译器假设每个 ~seq-cst~ 操作均为同步点并被包含在最终 is-memory-order-before 关系中。）</p>
+          <p><em>原子操作不可改变</em>：程序变换不得导致 is-agent-order-before 关系中 [[Order]] 为 ~seq-cst~ 的共享数据块事件被移除、互相重排序，或与 [[Order]] 为 ~unordered~ 的事件重排序。</p>
+          <p>（实际上，对重排序的禁止迫使编译器假定每个 ~seq-cst~ 操作都是一次同步，并会出现在最终的 is-memory-order-before 关系中，实际在无跨 agent 程序分析下也必须这样处理。同时编译器还假定所有调用、其中被调函数对 memory-order 影响未知时，也可能含有 ~seq-cst~ 操作。）</p>
         </li>
         <li>
-          <p><em>读取必须稳定</em>：任一共享内存读取在一次执行中只能观察到单一值。</p>
-          <p>（例如，若语义上单次读取被多次执行，则程序只能观察其中一个值；某些再物化变换可违反此规则。）</p>
+          <p><em>读取需稳定</em>：每个共享内存读取在一次执行中只能见到唯一值。</p>
+          <p>（例如，若语义上是一次读取而程序实际执行了多次，那么之后程序只允许观察到其中一个读取结果。rematerialization 等变换会破坏这个规则。）</p>
         </li>
         <li>
-          <p><em>写入必须稳定</em>：所有可观察写入必须源于该次执行的程序语义。</p>
-          <p>（例如，变换不能引入程序本不可能的写，如对更大位置的读改写来写较小数据，写入程序原本不可写的值，或将刚读取的值写回其位置且期间可能被他代理覆盖。）</p>
+          <p><em>写入需稳定</em>：所有可观察到的对共享内存的写都必须基于执行过程产生。</p>
+          <p>（如：某些变换不得引入新的可观察写入，比如用对更大内存的读改写操作写入小数据，在程序无法写出的值被写入、或者读取后又立即写回，而该地址可能已被其它 agent 覆盖。）</p>
         </li>
         <li>
-          <p><em>可能读取值不得为空</em>：程序变换不能使某共享内存读取的可能读取值集合为空。</p>
-          <p>（反直觉地，该规则实际限制对写的变换，因为写的作用仅在被读事件读取。例如写可移动、合并，有时在两个 ~seq-cst~ 操作间重排，但不可删掉所有更新某位置的写，必须保留一个。）</p>
+          <p><em>读取的可能值不能为空</em>：程序变换不得导致某次共享内存读取的"可能读取值"集合为空。</p>
+          <p>（直观上，这一规则实则限制了对写的变换，因为写只有能被读到才有模型效力。例如，允许合并/重排序写，但不得移除全部写入，否则可能会让某次读取无值可读。）</p>
         </li>
       </ul>
-      <p>仍然有效的变换示例：合并多个对同一位置的非原子读；重排非原子读；引入推测非原子读；合并多个对同一位置的非原子写；对不同位置的非原子写重排；将非原子读外提出循环（即使影响终止性）。注意别名 TypedArrays 使证明位置不同变得困难。</p>
+      <p>例如：合并同一地址的多次非原子读取、重排序非原子读取、引入投机性非原子读取，合并同一地址的多次非原子写、重排序写到不同地址的非原子写，以及将非原子读取提出循环体外甚至影响终止性等，都是有效的变换。但需要注意别名 TypedArray 情况下难以证明地址不同。</p>
     </emu-note>
 
     <emu-note>
-      <p>以下是面向为共享内存访问生成机器码的 ECMAScript 实现者的指南。</p>
-      <p>对内存模型不弱于 ARM 或 Power 的架构，非原子存取可编译为裸存取。原子存取可编译为保证顺序一致的指令。若不存在此类指令，则使用内存屏障（如在裸存/取两侧放置）。读改写操作可编译为目标架构的读改写指令，如 x86 上的 <code>LOCK</code> 前缀指令，ARM 的 load-exclusive/store-exclusive，Power 的 load-link/store-conditional。</p>
-      <p>具体而言，内存模型旨在允许如下代码生成：</p>
+      <p>以下是 ECMAScript 实现者在为共享内存访问生成机器码时的建议。</p>
+      <p>对于内存模型不弱于 ARM 或 Power 的体系结构，非原子读写可直接编译为普通的存取指令。原子读写可编译为保证顺序一致性的指令，如无则应组合内存屏障：在普通存取指令前后分别插入屏障。读改写操作可编译为对应的读改写指令，例如 x86 的 <code>LOCK</code> 前缀、ARM 的 load-exclusive/store-exclusive、Power 的 load-link/store-conditional。</p>
+      <p>本内存模型的本意容许如下代码生成：</p>
       <ul>
-        <li>程序中的每个原子操作都被视为必要。</li>
-        <li>原子操作不与其他原子或非原子操作重排。</li>
-        <li>函数被假定执行原子操作。</li>
-        <li>原子操作不以更大数据的读改写实现，而在不支持相应大小原子时使用非锁自由原子（假定平台具备所有必要尺寸的普通内存访问）。</li>
+        <li>程序中的每个原子操作都视为必需。</li>
+        <li>原子操作之间，及与非原子操作之间，都不得重排序。</li>
+        <li>所有函数都假定可能执行原子操作。</li>
+        <li>原子操作不得通过在更大数据上做读改写实现（不能偷懒为非 lock-free 的原子操作），如目标平台无相应原子操作，则应退化为非 lock-free 原子（假定任意有用数据尺寸的常规内存存取操作总是有）。</li>
       </ul>
-      <p>朴素代码生成模式：</p>
+      <p>朴素代码生成模式如下：</p>
       <ul>
-        <li>常规加载与存储 -> 单条加载/存储指令。</li>
-        <li>锁自由原子加载与存储 -> 全栅栏，常规加载/存储，再全栅栏。</li>
-        <li>锁自由原子读改写 -> 全栅栏，原子读改写指令序列，全栅栏。</li>
-        <li>非锁自由原子 -> 自旋锁获取，全栅栏，一系列非原子读写，全栅栏，自旋锁释放。</li>
+        <li>普通读写编译为单条指令。</li>
+        <li>lock-free 的原子读写生成：完整（顺序一致性）屏障、常规指令、完整屏障。</li>
+        <li>lock-free 的原子读改写：完整屏障、原子读改写指令序列、完整屏障。</li>
+        <li>非 lock-free 原子需加自旋锁 acquire、完整屏障、非原子读写指令序列、完整屏障、自旋锁 release。</li>
       </ul>
-      <p>该映射在原子操作与非原子写或不同大小原子不竞争下正确；若竞争，内存模型将相关原子操作降级为非原子。但此朴素映射很强：允许原子操作充当顺序一致栅栏，这超出模型实际保证。</p>
-      <p>局部优化在模型约束下也是允许的，例如：</p>
+      <p>只要原子操作的内存区间不与非原子写或不同大小的原子操作竞争，这种方式就是正确的。内存模型实际上会把参与竞争的原子操作降级为非原子。而该映射方式比规范还强：它允许原子操作用来实现顺序一致的全局屏障，这是内存模型本身未实际保证的。</p>
+      <p>对上述模式的局部优化也是允许的，只要遵循内存模型约束。例如：</p>
       <ul>
-        <li>平台相关的消除冗余栅栏（例如 x86 上锁自由原子读写的栅栏多可省略，除写后的栅栏）。</li>
-        <li>多数现代平台支持所需数据大小的锁自由原子；若需非锁自由原子，可将原子操作体周围栅栏折叠进锁操作；最简单是每个 SharedArrayBuffer 一个锁字。</li>
-        <li>更复杂的局部优化，如合并背靠背栅栏；x86 上分隔原子写的栅栏可省，因写后所需栅栏仅用于分隔与后续读。</li>
+        <li>可以根据平台移除冗余屏障。如 x86 上 lock-free 原子读写前后的屏障一般都可以省略，仅存储后需要，lock-free 原子读改写则完全无需屏障（因皆用 <code>LOCK</code> 前缀）。多数平台有不同强度的屏障，根据场景可用更弱屏障而不破坏顺序一致性。</li>
+        <li>大多数现代平台都支持 ECMAScript 所需尺寸的 lock-free 原子，如需非 lock-free 的原子，原子的屏障通常能融合进锁的 acquire/release。最简单的方案是为每个 SharedArrayBuffer 配一个锁字。</li>
+        <li>还可进行更复杂的平台依赖本地优化，需一些代码分析。例如两条屏障连续出现时效果等同于一条，只须按需插入。如 x86 上，甚至原子写之后的屏障就可省略，因为仅需将写与随后的读隔开。</li>
       </ul>
     </emu-note>
   </emu-clause>
