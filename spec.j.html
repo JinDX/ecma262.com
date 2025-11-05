@@ -4740,13 +4740,14 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _db_を_size_バイトからなる新しいShared Data Block値とする。作成不可能なら*RangeError*例外を投げる。
-          1. _execution_を周囲エージェントのAgent Recordの[[CandidateExecution]]フィールドとする。
-          1. _eventsRecord_を_agent_のAgent Events Record（_execution_.[[EventsRecords]]中で[[AgentSignifier]]がAgentSignifier()となるもの）とする。
-          1. _zero_を« 0 »とする。
-          1. _db_の各インデックス_i_について：
-            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _i_, [[ElementSize]]: 1, [[Payload]]: _zero_ }を_eventsRecord_.[[EventList]]に追加する。
-          1. _db_を返す。
+          1. _db_ を _size_ バイトからなる新しい Shared Data Block 値とする。そのような Shared Data Block を作成することが不可能な場合、*RangeError* 例外をスローする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _execution_ を _AR_.[[CandidateExecution]] とする。
+          1. _eventsRecord_ を、_execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+          1. _zero_ を « 0 » とする。
+          1. _db_ の各インデックス _i_ について、次を実行する
+            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _i_, [[ElementSize]]: 1, [[Payload]]: _zero_ } を _eventsRecord_.[[EventList]] に追加する。
+          1. _db_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -4763,31 +4764,32 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _fromBlock_と_toBlock_が異なる値であることをアサートする。
-          1. _fromSize_を_fromBlock_のバイト数とする。
-          1. _fromIndex_ + _count_ ≤ _fromSize_をアサートする。
-          1. _toSize_を_toBlock_のバイト数とする。
-          1. _toIndex_ + _count_ ≤ _toSize_をアサートする。
-          1. _count_ > 0の間、繰り返す：
-            1. _fromBlock_がShared Data Blockの場合
-              1. _execution_を周囲エージェントのAgent Recordの[[CandidateExecution]]フィールドとする。
-              1. _eventsRecord_を_agent_のAgent Events Record（_execution_.[[EventsRecords]]中で[[AgentSignifier]]がAgentSignifier()となるもの）とする。
-              1. _bytes_を、非決定的に選ばれたバイト値を唯一の要素とするListとする。
-              1. 注：実装では、_bytes_は基底ハードウェアで非アトミックな読込命令の結果。非決定性は、弱い一貫性ハードウェアの観測可能挙動を記述するメモリモデルの意味論的規定。
-              1. _readEvent_をReadSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _fromBlock_, [[ByteIndex]]: _fromIndex_, [[ElementSize]]: 1 }とする。
-              1. _readEvent_を_eventsRecord_.[[EventList]]に追加する。
-              1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _bytes_ }を_execution_.[[ChosenValues]]に追加する。
-              1. _toBlock_がShared Data Blockなら
-                1. WriteSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _toBlock_, [[ByteIndex]]: _toIndex_, [[ElementSize]]: 1, [[Payload]]: _bytes_ }を_eventsRecord_.[[EventList]]に追加する。
-              1. それ以外の場合
-                1. _toBlock_[_toIndex_]に_bytes_[0]を設定する。
-            1. それ以外の場合
-              1. _toBlock_がShared Data Blockでないことをアサートする。
-              1. _toBlock_[_toIndex_]に_fromBlock_[_fromIndex_]を設定する。
-            1. _toIndex_を_toIndex_ + 1に設定する。
-            1. _fromIndex_を_fromIndex_ + 1に設定する。
-            1. _count_を_count_ - 1に設定する。
-          1. ~unused~を返す。
+          1. アサート: _fromBlock_ と _toBlock_ は異なる値である。
+          1. _fromSize_ を _fromBlock_ のバイト数とする。
+          1. アサート: _fromIndex_ + _count_ ≤ _fromSize_ である。
+          1. _toSize_ を _toBlock_ のバイト数とする。
+          1. アサート: _toIndex_ + _count_ ≤ _toSize_ である。
+          1. _count_ > 0 の間、繰り返す:
+            1. もし _fromBlock_ が Shared Data Block なら
+              1. _AR_ を周囲のエージェントの Agent Record とする。
+              1. _execution_ を _AR_.[[CandidateExecution]] とする。
+              1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+              1. _bytes_ を、要素が非決定的に選ばれたバイト値1つだけのリストとする。
+              1. 注記: 実装において、_bytes_ は基礎となるハードウェア上で非アトミックな読み取り命令の結果となる。非決定性は、メモリモデルの意味的要請として、弱い一貫性を持つハードウェアの観測可能な動作を記述するためのものである。
+              1. _readEvent_ を ReadSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _fromBlock_, [[ByteIndex]]: _fromIndex_, [[ElementSize]]: 1 } とする。
+              1. _readEvent_ を _eventsRecord_.[[EventList]] に追加する。
+              1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _bytes_ } を _execution_.[[ChosenValues]] に追加する。
+              1. もし _toBlock_ が Shared Data Block なら
+                1. WriteSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _toBlock_, [[ByteIndex]]: _toIndex_, [[ElementSize]]: 1, [[Payload]]: _bytes_ } を _eventsRecord_.[[EventList]] に追加する。
+              1. それ以外の場合、
+                1. _toBlock_[_toIndex_] に _bytes_[0] を設定する。
+            1. それ以外の場合、
+              1. アサート: _toBlock_ は Shared Data Block でない。
+              1. _toBlock_[_toIndex_] に _fromBlock_[_fromIndex_] を設定する。
+            1. _toIndex_ に _toIndex_ + 1 を設定する。
+            1. _fromIndex_ に _fromIndex_ + 1 を設定する。
+            1. _count_ に _count_ - 1 を設定する。
+          1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -44458,7 +44460,8 @@ THH:mm:ss.sss
           1. IsGrowableSharedArrayBuffer(_arrayBuffer_) が *true* の場合、
             1. _bufferByteLengthBlock_ を _arrayBuffer_.[[ArrayBufferByteLengthData]] とする。
             1. _rawLength_ を GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_) とする。
-            1. _isLittleEndian_ を、周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値とする。
+            1. _AR_ を周囲のエージェントの Agent Record とする。
+            1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
             1. ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_)) を返す。
           1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false* である。
           1. _arrayBuffer_.[[ArrayBufferByteLength]] を返す。
@@ -44721,15 +44724,16 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値とする。
-          1. _execution_ を周囲のエージェントの Agent Record の [[CandidateExecution]] フィールドとする。
-          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
-          1. _isTypedArray_ が *true* かつ IsNoTearConfiguration(_type_, _order_) が *true* なら _noTear_ = *true*、そうでなければ *false*。
-          1. _rawValue_ を長さ _elementSize_ の List で、その要素が非決定的に選ばれたバイト値とする。
-          1. 注: 実装では _rawValue_ は基盤ハードウェア上の非アトミックまたはアトミック read 命令の結果。非決定性は弱い一貫性ハードウェアの観測可能動作を記述するメモリモデル上の意味的規定。
+          1. _elementSize_ を、要素型 _type_ に対して <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定されている Element Size 値とする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _execution_ を _AR_.[[CandidateExecution]] とする。
+          1. _eventsRecord_ を、_execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+          1. もし _isTypedArray_ が *true* であり、かつ IsNoTearConfiguration(_type_, _order_) が *true* なら、_noTear_ を *true* とし、そうでなければ *false* とする。
+          1. _rawValue_ を、長さ _elementSize_ で要素が非決定的に選ばれたバイト値であるリストとする。
+          1. 注記: 実装において、_rawValue_ は基礎となるハードウェア上で非アトミックまたはアトミックな読み取り命令の結果となる。非決定性は、メモリモデルの意味的要請として、弱い一貫性を持つハードウェアの観測可能な動作を記述するためのものである。
           1. _readEvent_ を ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ } とする。
-          1. _readEvent_ を _eventsRecord_.[[EventList]] に追加。
-          1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } を _execution_.[[ChosenValues]] に追加。
+          1. _readEvent_ を _eventsRecord_.[[EventList]] に追加する。
+          1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } を _execution_.[[ChosenValues]] に追加する。
           1. _rawValue_ を返す。
         </emu-alg>
       </emu-clause>
@@ -44748,17 +44752,19 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false*。
-          1. アサート: _arrayBuffer_ の _byteIndex_ から _type_ の値を表現するのに十分なバイトが存在する。
+          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false* である。
+          1. アサート: _arrayBuffer_ の _byteIndex_ から始まるバイト数が _type_ の値を表現するのに十分である。
           1. _block_ を _arrayBuffer_.[[ArrayBufferData]] とする。
-          1. _elementSize_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値とする。
-          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* なら
-            1. アサート: _block_ は Shared Data Block。
+          1. _elementSize_ を、要素型 _type_ に対して <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定されている Element Size 値とする。
+          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* の場合、
+            1. アサート: _block_ は Shared Data Block である。
             1. _rawValue_ を GetRawBytesFromSharedBlock(_block_, _byteIndex_, _type_, _isTypedArray_, _order_) とする。
-          1. そうでなければ
-            1. _rawValue_ を、_byteIndex_ (含む) から _byteIndex_ + _elementSize_ (含まない) のインデックスにある _block_ のバイトからなる List とする。
-          1. アサート: _rawValue_ の要素数は _elementSize_。
-          1. _isLittleEndian_ が存在しなければ、周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値を設定。
+          1. それ以外の場合、
+            1. _rawValue_ を、_block_ の _byteIndex_（含む）から _byteIndex_ + _elementSize_（含まない）までのインデックスにあるバイトのリストとする。
+          1. アサート: _rawValue_ の要素数は _elementSize_ である。
+          1. _isLittleEndian_ が存在しない場合、
+            1. _AR_ を周囲のエージェントの Agent Record とする。
+            1. _isLittleEndian_ に _AR_.[[LittleEndian]] を設定する。
           1. RawBytesToNumeric(_type_, _rawValue_, _isLittleEndian_) を返す。
         </emu-alg>
       </emu-clause>
@@ -44808,20 +44814,22 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false*。
-          1. アサート: _byteIndex_ から始まり _type_ の値を表す十分なバイトが存在する。
-          1. アサート: IsBigIntElementType(_type_) が *true* なら _value_ は BigInt、そうでなければ Number。
+          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false* である。
+          1. アサート: _arrayBuffer_ の _byteIndex_ から始まるバイト数が _type_ の値を表現するのに十分である。
+          1. アサート: IsBigIntElementType(_type_) が *true* なら _value_ は BigInt、そうでなければ _value_ は Number である。
           1. _block_ を _arrayBuffer_.[[ArrayBufferData]] とする。
-          1. _elementSize_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値。
-          1. _isLittleEndian_ が存在しなければ周囲のエージェントの Agent Record の [[LittleEndian]] フィールド値を設定。
+          1. _elementSize_ を、要素型 _type_ に対して <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定されている Element Size 値とする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ が存在しない場合、
+            1. _isLittleEndian_ に _AR_.[[LittleEndian]] を設定する。
           1. _rawBytes_ を NumericToRawBytes(_type_, _value_, _isLittleEndian_) とする。
-          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* なら
-            1. _execution_ を周囲のエージェントの Agent Record の [[CandidateExecution]] フィールド。
-            1. _eventsRecord_ を _execution_.[[EventsRecords]] 内で [[AgentSignifier]] が AgentSignifier() の Agent Events Record。
-            1. _isTypedArray_ が *true* かつ IsNoTearConfiguration(_type_, _order_) が *true* なら _noTear_ = *true*、そうでなければ *false*。
-            1. WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ } を _eventsRecord_.[[EventList]] に追加。
-          1. そうでなければ
-            1. _rawBytes_ の各バイトを _block_[_byteIndex_] から順に格納。
+          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* の場合、
+            1. _execution_ を _AR_.[[CandidateExecution]] とする。
+            1. _eventsRecord_ を、_execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+            1. _isTypedArray_ が *true* かつ IsNoTearConfiguration(_type_, _order_) が *true* なら _noTear_ を *true*、そうでなければ *false* とする。
+            1. WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ } を _eventsRecord_.[[EventList]] に追加する。
+          1. それ以外の場合、
+            1. _rawBytes_ の各バイトを _block_[_byteIndex_] から格納する。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -44839,25 +44847,26 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false*。
-          1. アサート: _byteIndex_ から _type_ の値を表す十分なバイトが存在する。
-          1. アサート: IsBigIntElementType(_type_) が *true* なら _value_ は BigInt、そうでなければ Number。
+          1. アサート: IsDetachedBuffer(_arrayBuffer_) は *false* である。
+          1. アサート: _arrayBuffer_ の _byteIndex_ から始まるバイト数が _type_ の値を表すのに十分である。
+          1. アサート: IsBigIntElementType(_type_) が *true* の場合、_value_ は BigInt である。そうでなければ、_value_ は Number である。
           1. _block_ を _arrayBuffer_.[[ArrayBufferData]] とする。
-          1. _elementSize_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値。
-          1. _isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールド値とする。
+          1. _elementSize_ を、要素型 _type_ に対して <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定されている Element Size 値とする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
           1. _rawBytes_ を NumericToRawBytes(_type_, _value_, _isLittleEndian_) とする。
-          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* なら
-            1. _execution_ を周囲のエージェントの Agent Record の [[CandidateExecution]]。
-            1. _eventsRecord_ を _execution_.[[EventsRecords]] 内で [[AgentSignifier]] が AgentSignifier() の Agent Events Record。
-            1. _rawBytesRead_ を長さ _elementSize_ の List（非決定的に選ばれたバイト値）。
-            1. 注: _rawBytesRead_ は基盤ハードウェア上の read-modify-write 命令、load-link、load-exclusive などのオペランド結果。非決定性は弱い一貫性ハードウェアの観測可能動作を記述。
+          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* の場合、
+            1. _execution_ を _AR_.[[CandidateExecution]] とする。
+            1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+            1. _rawBytesRead_ を、長さ _elementSize_ のリストで、その要素が非決定的に選ばれたバイト値とする。
+            1. 注記: 実装において、_rawBytesRead_ は基盤となるハードウェア上でロードリンク、ロードエクスクルーシブ、またはリード-モディファイ-ライト命令のオペランドの結果となる。非決定性は、メモリモデルの意味的要請として、弱い一貫性を持つハードウェアの観測可能な動作を記述するためのものである。
             1. _rmwEvent_ を ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_, [[ModifyOp]]: _op_ } とする。
-            1. _rmwEvent_ を _eventsRecord_.[[EventList]] に追加。
-            1. Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ } を _execution_.[[ChosenValues]] に追加。
-          1. そうでなければ
-            1. _rawBytesRead_ を長さ _elementSize_ の List で、_block_[_byteIndex_] からの _elementSize_ バイト列。
+            1. _rmwEvent_ を _eventsRecord_.[[EventList]] に追加する。
+            1. Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ } を _execution_.[[ChosenValues]] に追加する。
+          1. それ以外の場合、
+            1. _rawBytesRead_ を、_block_[_byteIndex_] から始まる _elementSize_ バイトの列のリストとする。
             1. _rawBytesModified_ を _op_(_rawBytesRead_, _rawBytes_) とする。
-            1. _rawBytesModified_ の各バイトを _block_[_byteIndex_] から格納。
+            1. _rawBytesModified_ の各バイトを _block_[_byteIndex_] から格納する。
           1. RawBytesToNumeric(_type_, _rawBytesRead_, _isLittleEndian_) を返す。
         </emu-alg>
       </emu-clause>
@@ -45193,8 +45202,8 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer の実装は以下の要件に従わなければならない:</p>
         <ul>
-          <li>抽象操作が ~unhandled~ で正常に完了しない場合、かつ _newByteLength_ が _buffer_ の現在のバイト長より小さい、または _newByteLength_ が _buffer_.[[ArrayBufferMaxByteLength]] より大きい場合、*RangeError* 例外をスローする。</li>
-          <li>_isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールドの値とする。抽象操作が ~handled~ で正常に完了した場合、WriteSharedMemory または ReadModifyWriteSharedMemory イベントが周囲のエージェントの候補実行に追加される。そのイベントの [[Order]] は ~seq-cst~、[[Payload]] は NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] は _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] は 0、[[ElementSize]] は 8 である。これは、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> への競合する呼び出しが「失われる」(つまり黙って何もしない)ことがないようにするためである。</li>
+          <li>抽象操作が ~unhandled~ で正常に完了しない場合、かつ _newByteLength_ が _buffer_ の現在のバイト長より小さい、または _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]] の場合、*RangeError* 例外をスローする。</li>
+          <li>_AR_ を周囲のエージェントの Agent Record とし、_isLittleEndian_ を _AR_.[[LittleEndian]] とする。抽象操作が ~handled~ で正常に完了した場合、[[Order]] が ~seq-cst~、[[Payload]] が NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] が _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] が 0、[[ElementSize]] が 8 である WriteSharedMemory または ReadModifyWriteSharedMemory イベントが周囲のエージェントの候補実行に追加される。その際、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> への競合呼び出しが「失われる」（つまり黙って何もしない）ことがないようにする。</li>
         </ul>
 
         <emu-note>
@@ -45291,26 +45300,27 @@ THH:mm:ss.sss
         <p>このメソッドは呼び出し時に以下を行う:</p>
         <emu-alg>
           1. _O_ を *this* 値とする。
-          1. ? RequireInternalSlot(_O_, [[ArrayBufferMaxByteLength]])。
-          1. IsSharedArrayBuffer(_O_) が *false* なら *TypeError* 例外。
+          1. ? RequireInternalSlot(_O_, [[ArrayBufferMaxByteLength]]) を実行する。
+          1. IsSharedArrayBuffer(_O_) が *false* の場合、*TypeError* 例外をスローする。
           1. _newByteLength_ を ? ToIndex(_newLength_) とする。
           1. _hostHandled_ を ? HostGrowSharedArrayBuffer(_O_, _newByteLength_) とする。
-          1. _hostHandled_ が ~handled~ なら *undefined* を返す。
-          1. _isLittleEndian_ を周囲のエージェントの Agent Record の [[LittleEndian]] フィールド値とする。
+          1. _hostHandled_ が ~handled~ の場合、*undefined* を返す。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
           1. _byteLengthBlock_ を _O_.[[ArrayBufferByteLengthData]] とする。
           1. _currentByteLengthRawBytes_ を GetRawBytesFromSharedBlock(_byteLengthBlock_, 0, ~biguint64~, *true*, ~seq-cst~) とする。
           1. _newByteLengthRawBytes_ を NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_) とする。
-          1. 繰り返し、
-            1. 注: 競合する grow を全順序化し、失われたり沈黙して無視されたりしないようにするための compare-and-exchange ループ。
+          1. 次を繰り返す:
+            1. 注記: これは同じバッファの並行的・競合的な grow を完全順序付けし、失われたり、黙って何もしなかったりしないことを保証するための比較交換ループである。競合しない grow を試みることができた場合にはループを抜ける。
             1. _currentByteLength_ を ℝ(RawBytesToNumeric(~biguint64~, _currentByteLengthRawBytes_, _isLittleEndian_)) とする。
-            1. _newByteLength_ = _currentByteLength_ なら *undefined* を返す。
-            1. _newByteLength_ &lt; _currentByteLength_ または _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]] なら *RangeError* 例外。
+            1. _newByteLength_ = _currentByteLength_ なら、*undefined* を返す。
+            1. _newByteLength_ < _currentByteLength_ または _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]] の場合、*RangeError* 例外をスローする。
             1. _byteLengthDelta_ を _newByteLength_ - _currentByteLength_ とする。
-            1. _byteLengthDelta_ バイトから成る新しい Shared Data Block 値を作成できないなら *RangeError* 例外。
-            1. 注: ここで新しい Shared Data Block を作って差し替えるわけではない。最大サイズの Shared Data Block を事前確保する仕様上のモデルであり、メモリ不足なら *RangeError* を投げることを要求するための手順。
+            1. _byteLengthDelta_ バイトからなる新しい Shared Data Block を作成することが不可能な場合、*RangeError* 例外をスローする。
+            1. 注記: ここでは新しい Shared Data Block は構築・利用されない。grow 可能な SharedArrayBuffer の観測可能な挙動はコンストラクト時に最大サイズの Shared Data Block を割り当てることで規定されており、このステップは実装がメモリ不足になった場合 *RangeError* を投げなければならないという要件を表している。
             1. _readByteLengthRawBytes_ を AtomicCompareExchangeInSharedBlock(_byteLengthBlock_, 0, 8, _currentByteLengthRawBytes_, _newByteLengthRawBytes_) とする。
-            1. ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_) が *true* なら *undefined* を返す。
-            1. _currentByteLengthRawBytes_ を _readByteLengthRawBytes_ に設定。
+            1. ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_) が *true* の場合、*undefined* を返す。
+            1. _currentByteLengthRawBytes_ に _readByteLengthRawBytes_ を設定する。
         </emu-alg>
         <emu-note>
           <p>長さ更新の compare-exchange の擬似的失敗は許されない。新しい長さの境界チェックが通り、実装がメモリ不足でない場合、候補実行には常に ReadModifyWriteSharedMemory イベント（成功した compare-exchange）が追加される。</p>
@@ -46170,13 +46180,14 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 事前条件: 周囲のエージェントはいかなる WaiterList Record のクリティカルセクションにも入っていない。
-          1. いずれのエージェントも _WL_ のクリティカルセクションにいないまで待ち、次に（他のエージェントを入れずに）_WL_ のクリティカルセクションへ入る。
-          1. もし _WL_.[[MostRecentLeaveEvent]] が ~empty~ でないなら、
-            1. 注: _WL_ のクリティカルセクションが少なくとも一度入場された場合、LeaveCriticalSection により Synchronize event が設定されている。
-            1. _execution_ を周囲エージェントの Agent Record の [[CandidateExecution]] フィールドとする。
+          1. アサート: 周囲のエージェントはいかなる WaiterList Record のクリティカルセクションにも入っていない。
+          1. _WL_ について、どのエージェントもクリティカルセクションにいないことを待ち、その後で（他のエージェントが入れないようにして）_WL_ のクリティカルセクションに入る。
+          1. もし _WL_.[[MostRecentLeaveEvent]] が ~empty~ でなければ、
+            1. 注記: クリティカルセクションに一度でも入った _WL_ には、LeaveCriticalSection によって Synchronize イベントが設定されている。
+            1. _AR_ を周囲のエージェントの Agent Record とする。
+            1. _execution_ を _AR_.[[CandidateExecution]] とする。
             1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
-            1. _enterEvent_ を新たな Synchronize event とする。
+            1. _enterEvent_ を新しい Synchronize イベントとする。
             1. _enterEvent_ を _eventsRecord_.[[EventList]] に追加する。
             1. (_WL_.[[MostRecentLeaveEvent]], _enterEvent_) を _eventsRecord_.[[AgentSynchronizesWith]] に追加する。
           1. ~unused~ を返す。
@@ -46193,13 +46204,14 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 事前条件: 周囲のエージェントは _WL_ のクリティカルセクション内にいる。
-          1. _execution_ を周囲エージェントの Agent Record の [[CandidateExecution]] フィールドとする。
-          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() の Agent Events Record とする。
-          1. _leaveEvent_ を新たな Synchronize event とする。
+          1. アサート: 周囲のエージェントが _WL_ のクリティカルセクションにいる。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _execution_ を _AR_.[[CandidateExecution]] とする。
+          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+          1. _leaveEvent_ を新しい Synchronize イベントとする。
           1. _leaveEvent_ を _eventsRecord_.[[EventList]] に追加する。
-          1. _WL_.[[MostRecentLeaveEvent]] を _leaveEvent_ に設定する。
-          1. _WL_ のクリティカルセクションを離れる。
+          1. _WL_.[[MostRecentLeaveEvent]] に _leaveEvent_ を設定する。
+          1. _WL_ のクリティカルセクションから出る。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -46437,15 +46449,17 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _execution_ を周囲エージェントの Agent Record の [[CandidateExecution]] フィールドとする。
-          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() の Agent Events Record とする。
-          1. _rawBytesRead_ を長さ _elementSize_ の List とし、要素は非決定的に選ばれるバイト値とする。
-          1. 注: 実装では _rawBytesRead_ は基盤ハードウェア上のロードリンク、ロード排他、または read-modify-write 命令のオペランドの結果である。この非決定性は弱い一貫性を持つハードウェアの観測可能な振る舞いを記述するための意味的規定。
-          1. 注: 期待値と読み取った値の比較は read-modify-write 変更関数の外で行い、期待値不一致の場合に不必要な強い同期化を避ける。
-          1. もし ByteListEqual(_rawBytesRead_, _expectedBytes_) が *true* なら
-            1. _second_ を (_oldBytes_, _newBytes_) を引数に取り何も捕捉せず呼ばれるとアトミックに次を行う新たな read-modify-write 変更関数とし、_newBytes_ を返す。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _execution_ を _AR_.[[CandidateExecution]] とする。
+          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+          1. _rawBytesRead_ を、長さ _elementSize_ で要素が非決定的に選ばれたバイト値からなるリストとする。
+          1. 注記: 実装において、_rawBytesRead_ は基礎となるハードウェア上でロードリンクやロードエクスクルーシブ、あるいはread-modify-write命令のオペランドの結果である。非決定性は、メモリモデルの意味的要請として、弱い一貫性を持つハードウェアの観測可能な動作を記述するためのものである。
+          1. 注記: 期待値と読み取った値の比較は、read-modify-write変更関数の外部で行われる。これは、期待値と読み取り値が一致しない場合に、不要に強い同期を発生させないためである。
+          1. ByteListEqual(_rawBytesRead_, _expectedBytes_) が *true* の場合、
+            1. _second_ を、何もキャプチャせず、呼び出された時に次の手順をアトミックに実行する(_oldBytes_, _newBytes_) というパラメータの新しいread-modify-write修正関数とする：
+              1. _newBytes_ を返す。
             1. _event_ を ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_, [[Payload]]: _replacementBytes_, [[ModifyOp]]: _second_ } とする。
-          1. それ以外なら
+          1. それ以外の場合、
             1. _event_ を ReadSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_ } とする。
           1. _event_ を _eventsRecord_.[[EventList]] に追加する。
           1. Chosen Value Record { [[Event]]: _event_, [[ChosenValue]]: _rawBytesRead_ } を _execution_.[[ChosenValues]] に追加する。
@@ -46533,18 +46547,19 @@ THH:mm:ss.sss
       <h1>Atomics.add ( _typedArray_, _index_, _value_ )</h1>
       <p>この関数は呼び出されたとき次を行う:</p>
       <emu-alg>
-        1. _add_ を (_xBytes_, _yBytes_) を引数に取り _typedArray_ を捕捉し、呼ばれるとアトミックに以下を行う新たな read-modify-write 変更関数とする:
+        1. _add_ を、(_xBytes_, _yBytes_) というパラメータを取り、_typedArray_ をキャプチャし、呼び出されたときに次の手順をアトミックに実行するread-modify-write修正関数の新しいインスタンスとする：
           1. _type_ を TypedArrayElementType(_typedArray_) とする。
-          1. _isLittleEndian_ を周囲エージェントの Agent Record の [[LittleEndian]] フィールドの値とする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
           1. _x_ を RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_) とする。
           1. _y_ を RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_) とする。
-          1. もし _x_ が Number なら
+          1. もし _x_ が Number ならば
             1. _sum_ を Number::add(_x_, _y_) とする。
-          1. それ以外
-            1. 事前条件: _x_ は BigInt。
+          1. それ以外の場合、
+            1. アサート: _x_ は BigInt である。
             1. _sum_ を BigInt::add(_x_, _y_) とする。
           1. _sumBytes_ を NumericToRawBytes(_type_, _sum_, _isLittleEndian_) とする。
-          1. 事前条件: _sumBytes_, _xBytes_, _yBytes_ は同じ要素数。
+          1. _sumBytes_, _xBytes_, _yBytes_ は同じ要素数であることをアサートする。
           1. _sumBytes_ を返す。
         1. ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _add_) を返す。
       </emu-alg>
@@ -46566,24 +46581,25 @@ THH:mm:ss.sss
         1. _byteIndexInBuffer_ を ? ValidateAtomicAccessOnIntegerTypedArray(_typedArray_, _index_) とする。
         1. _buffer_ を _typedArray_.[[ViewedArrayBuffer]] とする。
         1. _block_ を _buffer_.[[ArrayBufferData]] とする。
-        1. もし _typedArray_.[[ContentType]] が ~bigint~ なら
+        1. もし _typedArray_.[[ContentType]] が ~bigint~ であれば、
           1. _expected_ を ? ToBigInt(_expectedValue_) とする。
           1. _replacement_ を ? ToBigInt(_replacementValue_) とする。
-        1. それ以外
+        1. それ以外の場合、
           1. _expected_ を 𝔽(? ToIntegerOrInfinity(_expectedValue_)) とする。
           1. _replacement_ を 𝔽(? ToIntegerOrInfinity(_replacementValue_)) とする。
         1. ? RevalidateAtomicAccess(_typedArray_, _byteIndexInBuffer_) を実行する。
         1. _elementType_ を TypedArrayElementType(_typedArray_) とする。
         1. _elementSize_ を TypedArrayElementSize(_typedArray_) とする。
-        1. _isLittleEndian_ を周囲エージェントの Agent Record の [[LittleEndian]] フィールド値とする。
+        1. _AR_ を周囲のエージェントの Agent Record とする。
+        1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
         1. _expectedBytes_ を NumericToRawBytes(_elementType_, _expected_, _isLittleEndian_) とする。
         1. _replacementBytes_ を NumericToRawBytes(_elementType_, _replacement_, _isLittleEndian_) とする。
-        1. もし IsSharedArrayBuffer(_buffer_) が *true* なら
+        1. IsSharedArrayBuffer(_buffer_) が *true* の場合、
           1. _rawBytesRead_ を AtomicCompareExchangeInSharedBlock(_block_, _byteIndexInBuffer_, _elementSize_, _expectedBytes_, _replacementBytes_) とする。
-        1. それ以外
-          1. _rawBytesRead_ を長さ _elementSize_ の List とし、_block_[_byteIndexInBuffer_] から始まる _elementSize_ バイト列とする。
-          1. もし ByteListEqual(_rawBytesRead_, _expectedBytes_) が *true* なら
-            1. _replacementBytes_ の各バイトを _block_ の _block_[_byteIndexInBuffer_] から書き込む。
+        1. それ以外の場合、
+          1. _rawBytesRead_ を、_block_[_byteIndexInBuffer_] から始まる _elementSize_ バイトの列のリストとする。
+          1. ByteListEqual(_rawBytesRead_, _expectedBytes_) が *true* の場合、
+            1. _replacementBytes_ の各バイトを _block_[_byteIndexInBuffer_] から格納する。
         1. RawBytesToNumeric(_elementType_, _rawBytesRead_, _isLittleEndian_) を返す。
       </emu-alg>
     </emu-clause>
@@ -46656,18 +46672,19 @@ THH:mm:ss.sss
       <h1>Atomics.sub ( _typedArray_, _index_, _value_ )</h1>
       <p>この関数は呼び出されたとき次を行う:</p>
       <emu-alg>
-        1. _subtract_ を (_xBytes_, _yBytes_) を引数に取り _typedArray_ を捕捉し、呼ばれるとアトミックに以下を行う新たな read-modify-write 変更関数とする:
+        1. _subtract_ を、(_xBytes_, _yBytes_) というパラメータを取り、_typedArray_ をキャプチャし、呼び出されたときに次の手順をアトミックに実行するread-modify-write修正関数の新しいインスタンスとする：
           1. _type_ を TypedArrayElementType(_typedArray_) とする。
-          1. _isLittleEndian_ を周囲エージェントの Agent Record の [[LittleEndian]] フィールド値とする。
+          1. _AR_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ を _AR_.[[LittleEndian]] とする。
           1. _x_ を RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_) とする。
           1. _y_ を RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_) とする。
-          1. もし _x_ が Number なら
+          1. もし _x_ が Number ならば
             1. _difference_ を Number::subtract(_x_, _y_) とする。
-          1. それ以外
-            1. 事前条件: _x_ は BigInt。
+          1. それ以外の場合、
+            1. アサート: _x_ は BigInt である。
             1. _difference_ を BigInt::subtract(_x_, _y_) とする。
           1. _differenceBytes_ を NumericToRawBytes(_type_, _difference_, _isLittleEndian_) とする。
-          1. 事前条件: _differenceBytes_, _xBytes_, _yBytes_ は同じ要素数。
+          1. _differenceBytes_, _xBytes_, _yBytes_ は同じ要素数であることをアサートする。
           1. _differenceBytes_ を返す。
         1. ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _subtract_) を返す。
       </emu-alg>
@@ -50516,35 +50533,6 @@ THH:mm:ss.sss
               1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) を実行。
           1. _generator_.[[AsyncGeneratorState]] を ~completed~ に設定。
           1. ~unused~ を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-createasynciteratorfromclosure" type="abstract operation">
-        <h1>
-          CreateAsyncIteratorFromClosure (
-            _closure_: an Abstract Closure with no parameters,
-            _generatorBrand_: a String or ~empty~,
-            _generatorPrototype_: an Object,
-          ): an AsyncGenerator
-        </h1>
-        <dl class="header">
-        </dl>
-        <emu-alg>
-          1. 注: _closure_ は Await 操作および IteratorResult オブジェクトを yield するための Yield 操作を含み得る。
-          1. _internalSlotsList_ を « [[AsyncGeneratorState]], [[AsyncGeneratorContext]], [[AsyncGeneratorQueue]], [[GeneratorBrand]] » とする。
-          1. _generator_ を OrdinaryObjectCreate(_generatorPrototype_, _internalSlotsList_) とする。
-          1. _generator_.[[GeneratorBrand]] を _generatorBrand_ に設定する。
-          1. _generator_.[[AsyncGeneratorState]] を ~suspended-start~ に設定する。
-          1. _callerContext_ を実行中の実行コンテキストとする。
-          1. _calleeContext_ を新しい実行コンテキストとする。
-          1. _calleeContext_ の Function を *null* に設定する。
-          1. _calleeContext_ の Realm を現在の Realm Record に設定する。
-          1. _calleeContext_ の ScriptOrModule を _callerContext_ の ScriptOrModule に設定する。
-          1. もし _callerContext_ がまだサスペンドされていなければ _callerContext_ をサスペンドする。
-          1. _calleeContext_ を実行コンテキストスタックにプッシュし、実行中の実行コンテキストとする。
-          1. AsyncGeneratorStart(_generator_, _closure_) を実行する。
-          1. _calleeContext_ を実行コンテキストスタックから除去し、_callerContext_ を実行中として復元する。
-          1. _generator_ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>

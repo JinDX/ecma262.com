@@ -4736,11 +4736,12 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _db_ 为由 _size_ 字节组成的新 Shared Data Block 值。若无法创建该 Shared Data Block，抛出 *RangeError* 异常。
-          1. 令 _execution_ 为当前 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
-          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
+          1. 令 _db_ 为由 _size_ 字节组成的新 Shared Data Block 值。如果无法创建这样的 Shared Data Block，则抛出一个 *RangeError* 异常。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
+          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中其 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
           1. 令 _zero_ 为 « 0 »。
-          1. 对 _db_ 的每个索引 _i_，
+          1. 对于 _db_ 的每个索引 _i_，执行
             1. 将 WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _i_, [[ElementSize]]: 1, [[Payload]]: _zero_ } 添加到 _eventsRecord_.[[EventList]]。
           1. 返回 _db_。
         </emu-alg>
@@ -4759,21 +4760,22 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：_fromBlock_ 和 _toBlock_ 是不同值。
-          1. 令 _fromSize_ 为 _fromBlock_ 的字节数。
+          1. 断言：_fromBlock_ 和 _toBlock_ 是不同的值。
+          1. 令 _fromSize_ 为 _fromBlock_ 中的字节数。
           1. 断言：_fromIndex_ + _count_ ≤ _fromSize_。
-          1. 令 _toSize_ 为 _toBlock_ 的字节数。
+          1. 令 _toSize_ 为 _toBlock_ 中的字节数。
           1. 断言：_toIndex_ + _count_ ≤ _toSize_。
-          1. 当 _count_ > 0 时重复：
-            1. 若 _fromBlock_ 是 Shared Data Block，
-              1. 令 _execution_ 为当前 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
-              1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-              1. 令 _bytes_ 为仅有一个由非确定性选择的字节值的 List。
-              1. 注：在实现中，_bytes_ 是底层硬件非原子读指令的结果。非确定性由内存模型语义规定，以描述弱一致性硬件的可观察行为。
+          1. 当 _count_ > 0 时重复，
+            1. 如果 _fromBlock_ 是 Shared Data Block，则
+              1. 令 _AR_ 为当前 agent 的 Agent Record。
+              1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
+              1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中其 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
+              1. 令 _bytes_ 为仅包含一个非确定性选取的字节值的 List。
+              1. 注：在实现中，_bytes_ 是底层硬件上一次非原子读取指令的结果。这种非确定性是内存模型的语义性规定，用于描述弱一致性硬件的可观测行为。
               1. 令 _readEvent_ 为 ReadSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _fromBlock_, [[ByteIndex]]: _fromIndex_, [[ElementSize]]: 1 }。
               1. 将 _readEvent_ 添加到 _eventsRecord_.[[EventList]]。
               1. 将 Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _bytes_ } 添加到 _execution_.[[ChosenValues]]。
-              1. 若 _toBlock_ 是 Shared Data Block，
+              1. 如果 _toBlock_ 是 Shared Data Block，则
                 1. 将 WriteSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _toBlock_, [[ByteIndex]]: _toIndex_, [[ElementSize]]: 1, [[Payload]]: _bytes_ } 添加到 _eventsRecord_.[[EventList]]。
               1. 否则，
                 1. 设置 _toBlock_[_toIndex_] 为 _bytes_[0]。
@@ -43899,10 +43901,11 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 如果 IsGrowableSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
+          1. 如果 IsGrowableSharedArrayBuffer(_arrayBuffer_) 为 *true*，那么
             1. 令 _bufferByteLengthBlock_ 为 _arrayBuffer_.[[ArrayBufferByteLengthData]]。
             1. 令 _rawLength_ 为 GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_)。
-            1. 令 _isLittleEndian_ 为当前代理的 Agent Record 中 [[LittleEndian]] 字段的值。
+            1. 令 _AR_ 为当前 agent 的 Agent Record。
+            1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
             1. 返回 ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_))。
           1. 断言：IsDetachedBuffer(_arrayBuffer_) 为 *false*。
           1. 返回 _arrayBuffer_.[[ArrayBufferByteLength]]。
@@ -44161,15 +44164,16 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 指定的元素大小值。
-          1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
-          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-          1. 若 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，令 _noTear_ 为 *true*；否则为 *false*。
-          1. 令 _rawValue_ 为长度 _elementSize_、元素为非确定性选择字节值的 List。
-          1. 注：在实现中，_rawValue_ 是底层硬件非原子或原子读取指令的结果；该非确定性是内存模型对弱一致硬件可观察行为的语义规定。
+          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中针对元素类型 _type_ 所指定的元素大小（Element Size）值。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
+          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中其 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
+          1. 如果 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，则令 _noTear_ 为 *true*；否则令 _noTear_ 为 *false*。
+          1. 令 _rawValue_ 为一个长度为 _elementSize_ 的 List，其元素是非确定性选取的字节值。
+          1. 注：在实际实现中，_rawValue_ 是底层硬件上非原子或原子读取指令的结果。该非确定性描述了弱一致性硬件的可观察行为，这是内存模型的语义规定。
           1. 令 _readEvent_ 为 ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }。
-          1. 将 _readEvent_ 追加到 _eventsRecord_.[[EventList]]。
-          1. 将 Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } 追加到 _execution_.[[ChosenValues]]。
+          1. 将 _readEvent_ 添加到 _eventsRecord_.[[EventList]]。
+          1. 将 Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } 添加到 _execution_.[[ChosenValues]]。
           1. 返回 _rawValue_。
         </emu-alg>
       </emu-clause>
@@ -44189,16 +44193,18 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 断言：IsDetachedBuffer(_arrayBuffer_) 为 *false*。
-          1. 断言：_arrayBuffer_ 中自 _byteIndex_ 起有足够字节表示 _type_ 的一个值。
+          1. 断言：_arrayBuffer_ 从 _byteIndex_ 开始有足够的字节来表示一个 _type_ 类型的值。
           1. 令 _block_ 为 _arrayBuffer_.[[ArrayBufferData]]。
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 的元素大小值。
-          1. 若 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
-            1. 断言：_block_ 为 Shared Data Block。
-            1. 令 _rawValue_ 为 GetRawBytesFromSharedBlock(_block_, _byteIndex_, _type_, _isTypedArray_, _order_)。
+          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 所对应的元素大小值。
+          1. 如果 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
+            1. 断言：_block_ 是 Shared Data Block。
+            1. 令 _rawValue_ 为 GetRawBytesFromSharedBlock(_block_, _byteIndex_, _type_, _isTypedArray_, _order_) 的结果。
           1. 否则，
-            1. 令 _rawValue_ 为 _block_ 中索引区间 [_byteIndex_, _byteIndex_ + _elementSize_) 的字节组成的 List。
-          1. 断言：_rawValue_ 元素个数为 _elementSize_。
-          1. 若 _isLittleEndian_ 不存在，设其为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段值。
+            1. 令 _rawValue_ 为 _block_ 中从索引 _byteIndex_（包含）到 _byteIndex_ + _elementSize_（不包含）区间的字节组成的 List。
+          1. 断言：_rawValue_ 的元素数量为 _elementSize_。
+          1. 如果 _isLittleEndian_ 未提供，则
+            1. 令 _AR_ 为当前 agent 的 Agent Record。
+            1. 设置 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
           1. 返回 RawBytesToNumeric(_type_, _rawValue_, _isLittleEndian_)。
         </emu-alg>
       </emu-clause>
@@ -44247,19 +44253,21 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 断言：IsDetachedBuffer(_arrayBuffer_) 为 *false*。
-          1. 断言：_arrayBuffer_ 中自 _byteIndex_ 起有足够字节表示 _type_ 的一个值。
-          1. 断言：若 IsBigIntElementType(_type_) 为 *true*，_value_ 为 BigInt；否则为 Number。
+          1. 断言：_arrayBuffer_ 从 _byteIndex_ 开始有足够的字节以表示 _type_ 类型的值。
+          1. 断言：当 IsBigIntElementType(_type_) 为 *true* 时，_value_ 是 BigInt；否则，_value_ 是 Number。
           1. 令 _block_ 为 _arrayBuffer_.[[ArrayBufferData]]。
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 的元素大小值。
-          1. 若 _isLittleEndian_ 不存在，设其为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段值。
-          1. 令 _rawBytes_ 为 NumericToRawBytes(_type_, _value_, _isLittleEndian_)。
-          1. 若 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
-            1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
+          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 所对应的元素大小值。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 如果 _isLittleEndian_ 未提供，则
+            1. 设置 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
+          1. 令 _rawBytes_ 为 NumericToRawBytes(_type_, _value_, _isLittleEndian_) 的结果。
+          1. 如果 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
+            1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
             1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-            1. 若 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，令 _noTear_ 为 *true*；否则为 *false*。
-            1. 将 WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ } 追加到 _eventsRecord_.[[EventList]]。
+            1. 如果 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，则令 _noTear_ 为 *true*；否则令 _noTear_ 为 *false*。
+            1. 将 WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ } 添加到 _eventsRecord_.[[EventList]]。
           1. 否则，
-            1. 将 _rawBytes_ 的各字节存入 _block_，起始于 _block_[_byteIndex_]。
+            1. 将 _rawBytes_ 的各个字节存入 _block_，从 _block_[_byteIndex_] 开始。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -44278,24 +44286,25 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 断言：IsDetachedBuffer(_arrayBuffer_) 为 *false*。
-          1. 断言：_arrayBuffer_ 中自 _byteIndex_ 起有足够字节表示 _type_ 的一个值。
-          1. 断言：若 IsBigIntElementType(_type_) 为 *true*，_value_ 为 BigInt；否则为 Number。
+          1. 断言：_arrayBuffer_ 从 _byteIndex_ 开始有足够的字节来表示一个 _type_ 类型的值。
+          1. 断言：若 IsBigIntElementType(_type_) 为 *true*，则 _value_ 是 BigInt；否则，_value_ 是 Number。
           1. 令 _block_ 为 _arrayBuffer_.[[ArrayBufferData]]。
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 的元素大小值。
-          1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段值。
+          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 所指定的元素大小值。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
           1. 令 _rawBytes_ 为 NumericToRawBytes(_type_, _value_, _isLittleEndian_)。
-          1. 若 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
-            1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
+          1. 如果 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则
+            1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
             1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-            1. 令 _rawBytesRead_ 为长度 _elementSize_、元素为非确定性选择字节值的 List。
-            1. 注：在实现中，_rawBytesRead_ 来自底层硬件的 load-link、load-exclusive 或读-改-写指令操作数；非确定性用于描述弱一致硬件的可观察行为。
+            1. 令 _rawBytesRead_ 为一个长度为 _elementSize_ 的 List，其元素是非确定性选取的字节值。
+            1. 注：在实现中，_rawBytesRead_ 是底层硬件上的 load-link、load-exclusive 或某个读-改-写指令操作数的结果。该非确定性是内存模型的语义规定，用于描述弱一致性硬件的可观察行为。
             1. 令 _rmwEvent_ 为 ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_, [[ModifyOp]]: _op_ }。
-            1. 将 _rmwEvent_ 追加到 _eventsRecord_.[[EventList]]。
-            1. 将 Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ } 追加到 _execution_.[[ChosenValues]]。
+            1. 将 _rmwEvent_ 添加到 _eventsRecord_.[[EventList]]。
+            1. 将 Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ } 添加到 _execution_.[[ChosenValues]]。
           1. 否则，
-            1. 令 _rawBytesRead_ 为长度 _elementSize_ 的 List，其元素为自 _block_[_byteIndex_] 起的 _elementSize_ 个字节。
+            1. 令 _rawBytesRead_ 为一个长度为 _elementSize_ 的 List，其元素是从 _block_[_byteIndex_] 开始的 _elementSize_ 个字节。
             1. 令 _rawBytesModified_ 为 _op_(_rawBytesRead_, _rawBytes_)。
-            1. 将 _rawBytesModified_ 的字节存入 _block_，起始于 _block_[_byteIndex_]。
+            1. 将 _rawBytesModified_ 的各字节写入 _block_，从 _block_[_byteIndex_] 开始。
           1. 返回 RawBytesToNumeric(_type_, _rawBytesRead_, _isLittleEndian_)。
         </emu-alg>
       </emu-clause>
@@ -44631,8 +44640,8 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer 的实现必须符合以下要求：</p>
         <ul>
-          <li>如果抽象操作未以 ~unhandled~ 正常完成，且 _newByteLength_ 小于 _buffer_ 当前字节长度或 _newByteLength_ 大于 _buffer_.[[ArrayBufferMaxByteLength]]，则抛出 *RangeError* 异常。</li>
-          <li>令 _isLittleEndian_ 为当前代理的 Agent Record 中 [[LittleEndian]] 字段的值。如果抽象操作以 ~handled~ 正常完成，则会向当前代理的候选执行中添加一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，其 [[Order]] 为 ~seq-cst~，[[Payload]] 为 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)，[[Block]] 为 _buffer_.[[ArrayBufferByteLengthData]]，[[ByteIndex]] 为 0，[[ElementSize]] 为 8，以确保对 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 的竞争调用不会被“丢失”，即不会悄悄什么也不做。</li>
+          <li>如果抽象操作未以 ~unhandled~ 正常完成，且 _newByteLength_ 小于 _buffer_ 当前字节长度，或者 _newByteLength_ 大于 _buffer_.[[ArrayBufferMaxByteLength]]，则抛出一个 *RangeError* 异常。</li>
+          <li>令 _AR_ 为当前 agent 的 Agent Record。令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。如果抽象操作以 ~handled~ 正常完成，则添加一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件到当前 agent 的候选执行，其中 [[Order]] 为 ~seq-cst~，[[Payload]] 为 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)，[[Block]] 为 _buffer_.[[ArrayBufferByteLengthData]]，[[ByteIndex]] 为 0，[[ElementSize]] 为 8，这样可确保对 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 的并发调用不会“丢失”，即不会被静默忽略。</li>
         </ul>
 
         <emu-note>
@@ -44730,25 +44739,26 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_O_, [[ArrayBufferMaxByteLength]])。
-          1. 若 IsSharedArrayBuffer(_O_) 为 *false*，抛出 *TypeError* 异常。
+          1. 如果 IsSharedArrayBuffer(_O_) 为 *false*，抛出一个 *TypeError* 异常。
           1. 令 _newByteLength_ 为 ? ToIndex(_newLength_)。
           1. 令 _hostHandled_ 为 ? HostGrowSharedArrayBuffer(_O_, _newByteLength_)。
-          1. 若 _hostHandled_ 为 ~handled~，返回 *undefined*。
-          1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。
+          1. 如果 _hostHandled_ 为 ~handled~，返回 *undefined*。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
           1. 令 _byteLengthBlock_ 为 _O_.[[ArrayBufferByteLengthData]]。
           1. 令 _currentByteLengthRawBytes_ 为 GetRawBytesFromSharedBlock(_byteLengthBlock_, 0, ~biguint64~, *true*, ~seq-cst~)。
           1. 令 _newByteLengthRawBytes_ 为 NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_)。
           1. 重复，
-            1. 注：这是一个比较并交换循环，确保对同一缓冲区的并行竞争增长是全序的，不会丢失，也不会静默不执行。循环在能够无竞争地尝试增长时退出。
+            1. 注：这是一个比较-交换循环，确保对同一个缓冲区的并发竞争 grow 操作是完全有序的，不会丢失，也不会被静默忽略。如果能够尝试无竞争增长则退出循环。
             1. 令 _currentByteLength_ 为 ℝ(RawBytesToNumeric(~biguint64~, _currentByteLengthRawBytes_, _isLittleEndian_))。
-            1. 若 _newByteLength_ = _currentByteLength_，返回 *undefined*。
-            1. 若 _newByteLength_ &lt; _currentByteLength_ 或 _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]]，抛出 *RangeError* 异常。
+            1. 如果 _newByteLength_ = _currentByteLength_，返回 *undefined*。
+            1. 如果 _newByteLength_ < _currentByteLength_ 或 _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]]，抛出一个 *RangeError* 异常。
             1. 令 _byteLengthDelta_ 为 _newByteLength_ - _currentByteLength_。
-            1. 若无法创建由 _byteLengthDelta_ 个字节组成的新 Shared Data Block 值，抛出 *RangeError* 异常。
-            1. 注：此处未构造并使用新的 Shared Data Block。对可增长 SharedArrayBuffer 的可观察行为通过在构造时分配最大尺寸 Shared Data Block 指定，此步体现实现若内存不足必须抛出 *RangeError* 的要求。
+            1. 如果无法创建一个由 _byteLengthDelta_ 字节组成的新 Shared Data Block 值，则抛出一个 *RangeError* 异常。
+            1. 注：此处不会构造并使用新的 Shared Data Block。growable SharedArrayBuffer 的可观察行为通过构造时分配一个最大长度的 Shared Data Block 来指定，此步骤表明如果实现耗尽内存，则必须抛出 *RangeError*。
             1. 令 _readByteLengthRawBytes_ 为 AtomicCompareExchangeInSharedBlock(_byteLengthBlock_, 0, 8, _currentByteLengthRawBytes_, _newByteLengthRawBytes_)。
-            1. 若 ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_) 为 *true*，返回 *undefined*。
-            1. 设 _currentByteLengthRawBytes_ 为 _readByteLengthRawBytes_。
+            1. 如果 ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_) 为 *true*，返回 *undefined*。
+            1. 设置 _currentByteLengthRawBytes_ 为 _readByteLengthRawBytes_。
         </emu-alg>
         <emu-note>
           <p>禁止比较交换更新长度的虚假失败。若新长度的边界检查通过且实现未耗尽内存，则总会向候选执行添加一个 ReadModifyWriteSharedMemory 事件（即成功的比较交换）。</p>
@@ -45608,15 +45618,16 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：外层 agent 不在任何 WaiterList Record 的临界区中。
-          1. 等待直到没有 agent 在 _WL_ 的临界区中，然后进入 _WL_ 的临界区（期间不允许其他 agent 进入）。
-          1. 若 _WL_.[[MostRecentLeaveEvent]] 不为 ~empty~，则
-            1. 注：至少进入过一次临界区的 _WL_ 有由 LeaveCriticalSection 设置的 Synchronize 事件。
-            1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
+          1. 断言：当前 agent 不在任何 WaiterList 记录的临界区内。
+          1. 等待，直到没有 agent 处于 _WL_ 的临界区，然后进入 _WL_ 的临界区（不允许任何其他 agent 进入）。
+          1. 如果 _WL_.[[MostRecentLeaveEvent]] 不为 ~empty~，则
+            1. 注：至少进入过一次临界区的 _WL_，其临界区通过 LeaveCriticalSection 设置了一个 Synchronize 事件。
+            1. 令 _AR_ 为当前 agent 的 Agent Record。
+            1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
             1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
             1. 令 _enterEvent_ 为一个新的 Synchronize 事件。
-            1. 将 _enterEvent_ 追加到 _eventsRecord_.[[EventList]]。
-            1. 将 (_WL_.[[MostRecentLeaveEvent]], _enterEvent_) 追加到 _eventsRecord_.[[AgentSynchronizesWith]]。
+            1. 将 _enterEvent_ 添加到 _eventsRecord_.[[EventList]]。
+            1. 将 (_WL_.[[MostRecentLeaveEvent]], _enterEvent_) 添加到 _eventsRecord_.[[AgentSynchronizesWith]]。
           1. 返回 ~unused~。
         </emu-alg>
         <p>当尝试进入临界区的 agent 必须等待另一个 agent 离开时，EnterCriticalSection 存在 <dfn>争用（contention）</dfn>。无争用时，EnterCriticalSection 调用的 FIFO 顺序是可观察的；有争用时，实现可选择任意顺序，但不能导致某个 agent 无限期等待。</p>
@@ -45631,12 +45642,13 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：外层 agent 正在 _WL_ 的临界区中。
-          1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
+          1. 断言：当前 agent 位于 _WL_ 的临界区内。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
           1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
           1. 令 _leaveEvent_ 为一个新的 Synchronize 事件。
-          1. 将 _leaveEvent_ 追加到 _eventsRecord_.[[EventList]]。
-          1. 设 _WL_.[[MostRecentLeaveEvent]] 为 _leaveEvent_。
+          1. 将 _leaveEvent_ 添加到 _eventsRecord_.[[EventList]]。
+          1. 设置 _WL_.[[MostRecentLeaveEvent]] 为 _leaveEvent_。
           1. 离开 _WL_ 的临界区。
           1. 返回 ~unused~。
         </emu-alg>
@@ -45875,19 +45887,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _execution_ 为外层 agent 的 Agent Record 的 [[CandidateExecution]] 字段。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
           1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-          1. 令 _rawBytesRead_ 为长度 _elementSize_ 的 List，其元素为非确定性选择的字节值。
-          1. 注：在实现中，_rawBytesRead_ 是底层硬件 load-link、load-exclusive 或读-改-写指令操作数的结果；该非确定性是内存模型对弱一致硬件可观察行为的语义描述。
-          1. 注：期望值与读值的比较在读-改-写修改函数之外执行，以避免当期望值不等于读值时产生不必要的强同步。
-          1. 若 ByteListEqual(_rawBytesRead_, _expectedBytes_) 为 *true*，则
-            1. 令 _second_ 为一个具有参数 (_oldBytes_, _newBytes_) 的新读-改-写修改函数，不捕获任何内容，被调用时原子地执行：
+          1. 令 _rawBytesRead_ 为一个长度为 _elementSize_ 的列表，其元素是非确定性选取的字节值。
+          1. 注：在实现中，_rawBytesRead_ 是底层硬件上的 load-link、load-exclusive 或某个读-改-写指令操作数的结果。这种非确定性是内存模型的语义规定，用于描述弱一致性硬件的可观察行为。
+          1. 注：期望值与读取值的比较是在读-改-写修改函数之外执行的，以避免在期望值不等于读取值时产生不必要的强同步。
+          1. 如果 ByteListEqual(_rawBytesRead_, _expectedBytes_) 为 *true*，则
+            1. 令 _second_ 为一个新的读-改-写修改函数，带参数 (_oldBytes_, _newBytes_)，不捕获任何内容，调用时原子地执行以下步骤：
               1. 返回 _newBytes_。
             1. 令 _event_ 为 ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_, [[Payload]]: _replacementBytes_, [[ModifyOp]]: _second_ }。
           1. 否则，
             1. 令 _event_ 为 ReadSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_ }。
-          1. 将 _event_ 追加到 _eventsRecord_.[[EventList]]。
-          1. 将 Chosen Value Record { [[Event]]: _event_, [[ChosenValue]]: _rawBytesRead_ } 追加到 _execution_.[[ChosenValues]]。
+          1. 将 _event_ 添加到 _eventsRecord_.[[EventList]]。
+          1. 将 Chosen Value Record { [[Event]]: _event_, [[ChosenValue]]: _rawBytesRead_ } 添加到 _execution_.[[ChosenValues]]。
           1. 返回 _rawBytesRead_。
         </emu-alg>
       </emu-clause>
@@ -45972,18 +45985,19 @@ THH:mm:ss.sss
       <h1>Atomics.add ( _typedArray_, _index_, _value_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _add_ 为一个具有参数 (_xBytes_, _yBytes_) 的新读-改-写修改函数，捕获 _typedArray_，被调用时原子地执行：
+        1. 令 _add_ 为一个新的读-改-写修改函数，带参数 (_xBytes_, _yBytes_)，捕获 _typedArray_，调用时以原子方式执行以下步骤：
           1. 令 _type_ 为 TypedArrayElementType(_typedArray_)。
-          1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
           1. 令 _x_ 为 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)。
           1. 令 _y_ 为 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)。
-          1. 若 _x_ 是 Number，则
+          1. 如果 _x_ 是 Number，则
             1. 令 _sum_ 为 Number::add(_x_, _y_)。
           1. 否则，
-            1. 断言：_x_ 是 BigInt。
+            1. 断言：_x_ 为 BigInt。
             1. 令 _sum_ 为 BigInt::add(_x_, _y_)。
           1. 令 _sumBytes_ 为 NumericToRawBytes(_type_, _sum_, _isLittleEndian_)。
-          1. 断言：_sumBytes_、_xBytes_ 与 _yBytes_ 拥有相同数量的元素。
+          1. 断言：_sumBytes_、_xBytes_ 和 _yBytes_ 拥有相同数量的元素。
           1. 返回 _sumBytes_。
         1. 返回 ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _add_)。
       </emu-alg>
@@ -46006,7 +46020,7 @@ THH:mm:ss.sss
         1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccessOnIntegerTypedArray(_typedArray_, _index_)。
         1. 令 _buffer_ 为 _typedArray_.[[ViewedArrayBuffer]]。
         1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
-        1. 若 _typedArray_.[[ContentType]] 为 ~bigint~，则
+        1. 如果 _typedArray_.[[ContentType]] 为 ~bigint~，则
           1. 令 _expected_ 为 ? ToBigInt(_expectedValue_)。
           1. 令 _replacement_ 为 ? ToBigInt(_replacementValue_)。
         1. 否则，
@@ -46015,15 +46029,16 @@ THH:mm:ss.sss
         1. 执行 ? RevalidateAtomicAccess(_typedArray_, _byteIndexInBuffer_)。
         1. 令 _elementType_ 为 TypedArrayElementType(_typedArray_)。
         1. 令 _elementSize_ 为 TypedArrayElementSize(_typedArray_)。
-        1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。
+        1. 令 _AR_ 为当前 agent 的 Agent Record。
+        1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
         1. 令 _expectedBytes_ 为 NumericToRawBytes(_elementType_, _expected_, _isLittleEndian_)。
         1. 令 _replacementBytes_ 为 NumericToRawBytes(_elementType_, _replacement_, _isLittleEndian_)。
-        1. 若 IsSharedArrayBuffer(_buffer_) 为 *true*，则
+        1. 如果 IsSharedArrayBuffer(_buffer_) 为 *true*，则
           1. 令 _rawBytesRead_ 为 AtomicCompareExchangeInSharedBlock(_block_, _byteIndexInBuffer_, _elementSize_, _expectedBytes_, _replacementBytes_)。
         1. 否则，
-          1. 令 _rawBytesRead_ 为长度 _elementSize_ 的 List，其元素为自 _block_[_byteIndexInBuffer_] 起的 _elementSize_ 个字节。
-          1. 若 ByteListEqual(_rawBytesRead_, _expectedBytes_) 为 *true*，则
-            1. 将 _replacementBytes_ 的各字节写入 _block_，起始于 _block_[_byteIndexInBuffer_]。
+          1. 令 _rawBytesRead_ 为一个长度为 _elementSize_ 的列表，其元素为从 _block_[_byteIndexInBuffer_] 开始的 _elementSize_ 个字节。
+          1. 如果 ByteListEqual(_rawBytesRead_, _expectedBytes_) 为 *true*，则
+            1. 将 _replacementBytes_ 的每个字节存入 _block_，从 _block_[_byteIndexInBuffer_] 开始。
         1. 返回 RawBytesToNumeric(_elementType_, _rawBytesRead_, _isLittleEndian_)。
       </emu-alg>
     </emu-clause>
@@ -46098,18 +46113,19 @@ THH:mm:ss.sss
       <h1>Atomics.sub ( _typedArray_, _index_, _value_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _subtract_ 为一个具有参数 (_xBytes_, _yBytes_) 的新读-改-写修改函数，捕获 _typedArray_，被调用时原子地执行：
+        1. 令 _subtract_ 为一个新的读-改-写修改函数，带参数 (_xBytes_, _yBytes_)，捕获 _typedArray_，调用时以原子方式执行以下步骤：
           1. 令 _type_ 为 TypedArrayElementType(_typedArray_)。
-          1. 令 _isLittleEndian_ 为外层 agent 的 Agent Record 的 [[LittleEndian]] 字段的值。
+          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _isLittleEndian_ 为 _AR_.[[LittleEndian]]。
           1. 令 _x_ 为 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)。
           1. 令 _y_ 为 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)。
-          1. 若 _x_ 是 Number，则
+          1. 如果 _x_ 是 Number，则
             1. 令 _difference_ 为 Number::subtract(_x_, _y_)。
           1. 否则，
-            1. 断言：_x_ 是 BigInt。
+            1. 断言：_x_ 为 BigInt。
             1. 令 _difference_ 为 BigInt::subtract(_x_, _y_)。
           1. 令 _differenceBytes_ 为 NumericToRawBytes(_type_, _difference_, _isLittleEndian_)。
-          1. 断言：_differenceBytes_、_xBytes_ 与 _yBytes_ 拥有相同数量的元素。
+          1. 断言：_differenceBytes_、_xBytes_ 和 _yBytes_ 拥有相同数量的元素。
           1. 返回 _differenceBytes_。
         1. 返回 ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _subtract_)。
       </emu-alg>
@@ -49958,35 +49974,6 @@ THH:mm:ss.sss
               1. 执行 AsyncGeneratorCompleteStep(_generator_, _completion_, *true*)。
           1. 将 _generator_.[[AsyncGeneratorState]] 设为 ~completed~。
           1. 返回 ~unused~。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-createasynciteratorfromclosure" type="abstract operation">
-        <h1>
-          CreateAsyncIteratorFromClosure (
-            _closure_: an Abstract Closure with no parameters,
-            _generatorBrand_: a String or ~empty~,
-            _generatorPrototype_: an Object,
-          ): an AsyncGenerator
-        </h1>
-        <dl class="header">
-        </dl>
-        <emu-alg>
-          1. 注：_closure_ 可以包含 Await 操作的使用以及 Yield 操作以产出一个 IteratorResult 对象。
-          1. 令 _internalSlotsList_ 为 « [[AsyncGeneratorState]], [[AsyncGeneratorContext]], [[AsyncGeneratorQueue]], [[GeneratorBrand]] »。
-          1. 令 _generator_ 为 OrdinaryObjectCreate(_generatorPrototype_, _internalSlotsList_)。
-          1. 将 _generator_.[[GeneratorBrand]] 设为 _generatorBrand_。
-          1. 将 _generator_.[[AsyncGeneratorState]] 设为 ~suspended-start~。
-          1. 令 _callerContext_ 为正在运行的执行上下文。
-          1. 令 _calleeContext_ 为一个新的执行上下文。
-          1. 将 _calleeContext_ 的 Function 设为 *null*。
-          1. 将 _calleeContext_ 的 Realm 设为当前 Realm Record。
-          1. 将 _calleeContext_ 的 ScriptOrModule 设为 _callerContext_ 的 ScriptOrModule。
-          1. 如果 _callerContext_ 尚未被挂起，则挂起 _callerContext_。
-          1. 将 _calleeContext_ 压入执行上下文栈；_calleeContext_ 现在是正在运行的执行上下文。
-          1. 执行 AsyncGeneratorStart(_generator_, _closure_)。
-          1. 将 _calleeContext_ 从执行上下文栈移除并恢复 _callerContext_ 为正在运行的执行上下文。
-          1. 返回 _generator_。
         </emu-alg>
       </emu-clause>
     </emu-clause>

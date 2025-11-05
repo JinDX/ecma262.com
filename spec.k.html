@@ -4742,11 +4742,12 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _db_를 _size_ 바이트로 구성된 새로운 Shared Data Block 값으로 한다. 생성이 불가능하면 *RangeError* 예외를 throw한다.
-          1. _execution_을 주위 agent의 Agent Record의 [[CandidateExecution]] 필드로 한다.
-          1. _eventsRecord_를 _execution_.[[EventsRecords]] 중 [[AgentSignifier]]가 AgentSignifier()인 Agent Events Record로 한다.
-          1. _zero_를 « 0 »으로 한다.
-          1. _db_의 각 인덱스 _i_에 대해,
+          1. _db_를 _size_ 바이트로 구성된 새로운 공유 데이터 블록 값으로 설정한다. 만약 이러한 공유 데이터 블록을 생성할 수 없다면, *RangeError* 예외를 발생시킨다.
+          1. _AR_을(를) 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _execution_을(를) _AR_.[[CandidateExecution]]으로 설정한다.
+          1. _eventsRecord_를 _execution_.[[EventsRecords]]의 에이전트 이벤트 레코드 중 [[AgentSignifier]]가 AgentSignifier()인 것으로 설정한다.
+          1. _zero_를 « 0 »으로 설정한다.
+          1. _db_의 각 인덱스 _i_에 대하여, 다음을 수행한다
             1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _i_, [[ElementSize]]: 1, [[Payload]]: _zero_ }를 _eventsRecord_.[[EventList]]에 추가한다.
           1. _db_를 반환한다.
         </emu-alg>
@@ -4766,29 +4767,30 @@
         </dl>
         <emu-alg>
           1. 단언: _fromBlock_과 _toBlock_은 서로 다른 값이다.
-          1. _fromSize_를 _fromBlock_의 바이트 수로 한다.
+          1. _fromSize_를 _fromBlock_의 바이트 수로 둔다.
           1. 단언: _fromIndex_ + _count_ ≤ _fromSize_이다.
-          1. _toSize_를 _toBlock_의 바이트 수로 한다.
+          1. _toSize_를 _toBlock_의 바이트 수로 둔다.
           1. 단언: _toIndex_ + _count_ ≤ _toSize_이다.
-          1. _count_ > 0 동안 반복한다,
-            1. _fromBlock_이 Shared Data Block이면,
-              1. _execution_을 주위 agent의 Agent Record의 [[CandidateExecution]] 필드로 한다.
-              1. _eventsRecord_를 _execution_.[[EventsRecords]] 중 [[AgentSignifier]]가 AgentSignifier()인 Agent Events Record로 한다.
-              1. _bytes_를 nondeterministically 선택된 byte value 1개만 담은 List로 한다.
-              1. 참고: 구현에서 _bytes_는 기저 하드웨어에서 비원자적 읽기 명령 결과입니다. 이 nondeterminism은 하드웨어의 약한 일관성에서 관찰 가능한 행동을 설명하기 위한 메모리 모델의 의미론적 처방입니다.
-              1. _readEvent_를 ReadSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _fromBlock_, [[ByteIndex]]: _fromIndex_, [[ElementSize]]: 1 }로 한다.
+          1. _count_ > 0인 동안 반복한다,
+            1. _fromBlock_이 공유 데이터 블록(Shared Data Block)이면,
+              1. _AR_을 주변 에이전트의 에이전트 레코드로 둔다.
+              1. _execution_을 _AR_.[[CandidateExecution]]으로 둔다.
+              1. _eventsRecord_를 _execution_.[[EventsRecords]] 중 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 둔다.
+              1. _bytes_를 비결정적으로 선택된 바이트 값을 단일 요소로 갖는 리스트로 둔다.
+              1. 참고: 실제 구현에서 _bytes_는 하드웨어에서 비원자적 읽기 명령어의 결과이다. 이 비결정성은 약한 일관성 하드웨어의 관찰 가능한 동작을 설명하기 위한 메모리 모델의 의미적 규정이다.
+              1. _readEvent_를 ReadSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _fromBlock_, [[ByteIndex]]: _fromIndex_, [[ElementSize]]: 1 }로 둔다.
               1. _readEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
               1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _bytes_ }를 _execution_.[[ChosenValues]]에 추가한다.
-              1. _toBlock_이 Shared Data Block이면,
+              1. _toBlock_이 공유 데이터 블록이면,
                 1. WriteSharedMemory { [[Order]]: ~unordered~, [[NoTear]]: *true*, [[Block]]: _toBlock_, [[ByteIndex]]: _toIndex_, [[ElementSize]]: 1, [[Payload]]: _bytes_ }를 _eventsRecord_.[[EventList]]에 추가한다.
               1. 아니면,
                 1. _toBlock_[_toIndex_]를 _bytes_[0]로 설정한다.
             1. 아니면,
-              1. 단언: _toBlock_은 Shared Data Block이 아니다.
+              1. 단언: _toBlock_은 공유 데이터 블록이 아니다.
               1. _toBlock_[_toIndex_]를 _fromBlock_[_fromIndex_]로 설정한다.
-            1. _toIndex_를 _toIndex_ + 1로 한다.
-            1. _fromIndex_를 _fromIndex_ + 1로 한다.
-            1. _count_를 _count_ - 1로 한다.
+            1. _toIndex_를 _toIndex_ + 1로 설정한다.
+            1. _fromIndex_를 _fromIndex_ + 1로 설정한다.
+            1. _count_를 _count_ - 1로 설정한다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -44002,11 +44004,12 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsGrowableSharedArrayBuffer(_arrayBuffer_)가 *true*이면,
-            1. _bufferByteLengthBlock_을 _arrayBuffer_.[[ArrayBufferByteLengthData]]로 둔다.
-            1. _rawLength_를 GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_)로 둔다.
-            1. _isLittleEndian_을 주변 에이전트의 에이전트 레코드의 [[LittleEndian]] 필드 값으로 둔다.
-            1. ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_))을 반환한다.
+          1. IsGrowableSharedArrayBuffer(_arrayBuffer_)가 *true*이면
+            1. _bufferByteLengthBlock_을 _arrayBuffer_.[[ArrayBufferByteLengthData]]로 설정한다.
+            1. _rawLength_를 GetRawBytesFromSharedBlock(_bufferByteLengthBlock_, 0, ~biguint64~, *true*, _order_)로 설정한다.
+            1. _AR_을(를) 주변 에이전트의 에이전트 레코드로 설정한다.
+            1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+            1. ℝ(RawBytesToNumeric(~biguint64~, _rawLength_, _isLittleEndian_))를 반환한다.
           1. 단언: IsDetachedBuffer(_arrayBuffer_)가 *false*이다.
           1. _arrayBuffer_.[[ArrayBufferByteLength]]를 반환한다.
         </emu-alg>
@@ -44264,16 +44267,17 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 요소 타입 _type_ 의 Element Size 값.
-          1. _execution_ = 주변 에이전트의 Agent Record 의 [[CandidateExecution]] 필드.
-          1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 [[AgentSignifier]] = AgentSignifier() 인 Agent Events Record.
-          1. _isTypedArray_ = *true* 그리고 IsNoTearConfiguration(_type_, _order_) = *true* 이면 _noTear_ = *true*, 아니면 *false*.
-          1. _rawValue_ = 길이 _elementSize_ 이고 요소가 비결정적으로 선택된 바이트 값인 List.
-          1. NOTE: 구현에서 _rawValue_ 는 하드웨어의 비원자/원자 읽기 결과이다. 비결정성은 약한 일관성 하드웨어의 관측 가능 동작을 기술하기 위한 의미적 규정이다.
-          1. _readEvent_ = ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }.
-          1. _eventsRecord_.[[EventList]] 에 _readEvent_ 추가.
-          1. _execution_.[[ChosenValues]] 에 Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } 추가.
-          1. _rawValue_ 반환.
+          1. _elementSize_를 Element Type _type_에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 지정된 요소 크기 값으로 설정한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+          1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+          1. _isTypedArray_가 *true*이고 IsNoTearConfiguration(_type_, _order_)가 *true*이면, _noTear_를 *true*로 설정한다; 그렇지 않으면 _noTear_를 *false*로 설정한다.
+          1. _rawValue_를 길이가 _elementSize_이고 각 요소는 비결정적으로 선택된 바이트 값인 리스트로 설정한다.
+          1. 참고: 실제 구현에서 _rawValue_는 하드웨어의 비원자적 또는 원자적 읽기 명령의 결과이다. 이 비결정성은 약한 일관성을 가진 하드웨어의 관찰 가능한 동작을 설명하는 메모리 모델의 의미적 규정이다.
+          1. _readEvent_를 ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }로 설정한다.
+          1. _readEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
+          1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ }를 _execution_.[[ChosenValues]]에 추가한다.
+          1. _rawValue_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -44291,18 +44295,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Assert: IsDetachedBuffer(_arrayBuffer_) = *false*.
-          1. Assert: _byteIndex_ 에서 시작하여 _type_ 값을 표현하기에 충분한 바이트가 존재.
-          1. _block_ = _arrayBuffer_.[[ArrayBufferData]].
-          1. _elementSize_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 _type_ 의 Element Size.
-          1. IsSharedArrayBuffer(_arrayBuffer_) = *true* 이면
-            1. Assert: _block_ 은 Shared Data Block.
-            1. _rawValue_ = GetRawBytesFromSharedBlock(_block_, _byteIndex_, _type_, _isTypedArray_, _order_).
-          1. Else
-            1. _rawValue_ = _block_ 에서 [_byteIndex_, _byteIndex_ + _elementSize_) 구간의 바이트 List.
-          1. Assert: _rawValue_ 길이 = _elementSize_.
-          1. _isLittleEndian_ 미지정이면 주변 에이전트 Agent Record 의 [[LittleEndian]] 값으로 설정.
-          1. Return RawBytesToNumeric(_type_, _rawValue_, _isLittleEndian_).
+          1. 단언: IsDetachedBuffer(_arrayBuffer_)가 *false*이다.
+          1. 단언: _arrayBuffer_의 _byteIndex_에서 시작하여 _type_ 값을 표현할 수 있는 충분한 바이트가 존재한다.
+          1. _block_을 _arrayBuffer_.[[ArrayBufferData]]로 설정한다.
+          1. _elementSize_를 Element Type _type_에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 지정된 요소 크기 값으로 설정한다.
+          1. IsSharedArrayBuffer(_arrayBuffer_)가 *true*이면,
+            1. 단언: _block_은 Shared Data Block이다.
+            1. _rawValue_를 GetRawBytesFromSharedBlock(_block_, _byteIndex_, _type_, _isTypedArray_, _order_)로 설정한다.
+          1. 아니면,
+            1. _rawValue_를 _block_의 _byteIndex_(포함)부터 _byteIndex_ + _elementSize_(제외)까지 구간의 바이트로 이루어진 리스트로 설정한다.
+          1. 단언: _rawValue_의 요소 수는 _elementSize_이다.
+          1. _isLittleEndian_이 존재하지 않으면,
+            1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+            1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+          1. RawBytesToNumeric(_type_, _rawValue_, _isLittleEndian_)을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -44351,21 +44357,23 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Assert: IsDetachedBuffer(_arrayBuffer_) = *false*.
-          1. Assert: _byteIndex_ 에서 시작하여 _type_ 값을 표현하기 충분한 바이트 존재.
-          1. Assert: IsBigIntElementType(_type_) = *true* 이면 _value_ 는 BigInt; 아니면 Number.
-          1. _block_ = _arrayBuffer_.[[ArrayBufferData]].
-          1. _elementSize_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 _type_ 의 Element Size.
-          1. _isLittleEndian_ 미지정이면 주변 에이전트 Agent Record 의 [[LittleEndian]] 값으로 설정.
-          1. _rawBytes_ = NumericToRawBytes(_type_, _value_, _isLittleEndian_).
-          1. IsSharedArrayBuffer(_arrayBuffer_) = *true* 이면
-            1. _execution_ = 주변 에이전트 Agent Record 의 [[CandidateExecution]].
-            1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 현재 AgentSignifier() 와 일치하는 것.
-            1. _isTypedArray_ = *true* 그리고 IsNoTearConfiguration(_type_, _order_) = *true* 이면 _noTear_ = *true*; 아니면 *false*.
-            1. WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ } 를 _eventsRecord_.[[EventList]] 에 추가.
-          1. Else
-            1. _rawBytes_ 개별 바이트를 _block_[_byteIndex_] 부터 순서대로 저장.
-          1. ~unused~ 반환.
+          1. 단언: IsDetachedBuffer(_arrayBuffer_)가 *false*이다.
+          1. 단언: _arrayBuffer_의 _byteIndex_에서 시작하여 _type_ 값을 표현할 수 있는 충분한 바이트가 존재한다.
+          1. 단언: IsBigIntElementType(_type_)이 *true*이면 _value_는 BigInt이고, 그렇지 않으면 _value_는 Number이다.
+          1. _block_을 _arrayBuffer_.[[ArrayBufferData]]로 설정한다.
+          1. _elementSize_를 Element Type _type_에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 지정된 요소 크기 값으로 설정한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _isLittleEndian_이 존재하지 않으면,
+            1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+          1. _rawBytes_를 NumericToRawBytes(_type_, _value_, _isLittleEndian_)로 설정한다.
+          1. IsSharedArrayBuffer(_arrayBuffer_)가 *true*이면,
+            1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+            1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+            1. _isTypedArray_가 *true*이고 IsNoTearConfiguration(_type_, _order_)가 *true*이면 _noTear_를 *true*로 설정하고, 그렇지 않으면 _noTear_를 *false*로 설정한다.
+            1. WriteSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_ }를 _eventsRecord_.[[EventList]]에 추가한다.
+          1. 아니면,
+            1. _rawBytes_의 각각의 바이트를 _block_의 _block_[_byteIndex_]에서 시작하여 저장한다.
+          1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -44382,26 +44390,27 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Assert: IsDetachedBuffer(_arrayBuffer_) = *false*.
-          1. Assert: _byteIndex_ 에서 시작하여 _type_ 값을 표현하기 충분한 바이트 존재.
-          1. Assert: IsBigIntElementType(_type_) = *true* 이면 _value_ 는 BigInt; 아니면 Number.
-          1. _block_ = _arrayBuffer_.[[ArrayBufferData]].
-          1. _elementSize_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 _type_ 의 Element Size.
-          1. _isLittleEndian_ = 주변 에이전트 Agent Record 의 [[LittleEndian]] 값.
-          1. _rawBytes_ = NumericToRawBytes(_type_, _value_, _isLittleEndian_).
-          1. IsSharedArrayBuffer(_arrayBuffer_) = *true* 이면
-            1. _execution_ = 주변 에이전트 Agent Record 의 [[CandidateExecution]].
-            1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 현재 AgentSignifier() 에 해당하는 것.
-            1. _rawBytesRead_ = 길이 _elementSize_ 인, 비결정적으로 선택된 바이트 값 List.
-            1. NOTE: 구현에서 _rawBytesRead_ 는 하드웨어의 load-link / load-exclusive / read-modify-write 명령의 피연산자 결과. 비결정성은 약한 일관성 하드웨어의 관측 가능 행위를 기술.
-            1. _rmwEvent_ = ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_, [[ModifyOp]]: _op_ }.
-            1. _eventsRecord_.[[EventList]] 에 _rmwEvent_ 추가.
-            1. _execution_.[[ChosenValues]] 에 Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ } 추가.
-          1. Else
-            1. _rawBytesRead_ = 길이 _elementSize_ 인 바이트 시퀀스 (_block_[_byteIndex_] 부터).
-            1. _rawBytesModified_ = _op_(_rawBytesRead_, _rawBytes_).
-            1. _rawBytesModified_ 바이트를 _block_[_byteIndex_] 부터 저장.
-          1. Return RawBytesToNumeric(_type_, _rawBytesRead_, _isLittleEndian_).
+          1. 단언: IsDetachedBuffer(_arrayBuffer_)가 *false*이다.
+          1. 단언: _arrayBuffer_의 _byteIndex_에서 시작하여 _type_ 값을 표현할 수 있는 충분한 바이트가 있다.
+          1. 단언: IsBigIntElementType(_type_)이 *true*이면 _value_는 BigInt이고, 그렇지 않으면 _value_는 Number이다.
+          1. _block_을 _arrayBuffer_.[[ArrayBufferData]]로 설정한다.
+          1. _elementSize_를 Element Type _type_에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 지정된 요소 크기 값으로 설정한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+          1. _rawBytes_를 NumericToRawBytes(_type_, _value_, _isLittleEndian_)로 설정한다.
+          1. IsSharedArrayBuffer(_arrayBuffer_)가 *true*이면,
+            1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+            1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+            1. _rawBytesRead_를 길이가 _elementSize_이고 각 요소가 비결정적으로 선택된 바이트 값인 리스트로 설정한다.
+            1. 주: 실제 구현에서 _rawBytesRead_는 하드웨어에서 load-link, load-exclusive 또는 read-modify-write 명령의 오퍼랜드 결과이다. 이 비결정성은 약한 일관성을 가진 하드웨어의 관찰 가능한 동작을 설명하기 위한 메모리 모델의 의미적 규정이다.
+            1. _rmwEvent_를 ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_, [[Payload]]: _rawBytes_, [[ModifyOp]]: _op_ }로 설정한다.
+            1. _rmwEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
+            1. Chosen Value Record { [[Event]]: _rmwEvent_, [[ChosenValue]]: _rawBytesRead_ }를 _execution_.[[ChosenValues]]에 추가한다.
+          1. 아니면,
+            1. _rawBytesRead_를 _block_[_byteIndex_]에서 시작하는 _elementSize_개의 바이트 시퀀스가 요소인 리스트로 설정한다.
+            1. _rawBytesModified_를 _op_(_rawBytesRead_, _rawBytes_)로 설정한다.
+            1. _rawBytesModified_의 각각의 바이트를 _block_의 _block_[_byteIndex_]에서 시작하여 저장한다.
+          1. RawBytesToNumeric(_type_, _rawBytesRead_, _isLittleEndian_)을 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -44736,8 +44745,8 @@ THH:mm:ss.sss
         </dl>
         <p>HostGrowSharedArrayBuffer 구현은 다음 요구사항을 따른다:</p>
         <ul>
-          <li>추상 연산이 ~unhandled~로 정상 완료되지 않고, _newByteLength_ < _buffer_의 현재 바이트 길이 또는 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]]인 경우, *RangeError* 예외를 발생시킨다.</li>
-          <li>_isLittleEndian_을 주변 에이전트의 에이전트 레코드의 [[LittleEndian]] 필드 값으로 둔다. 추상 연산이 ~handled~로 정상 완료되면, WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 주변 에이전트의 후보 실행에 추가된다. 이 이벤트의 [[Order]]는 ~seq-cst~, [[Payload]]는 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]]은 _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]]는 0, [[ElementSize]]는 8이다. 이렇게 하면 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref>에 대한 경쟁 호출이 "유실"되지 않으며(즉, 아무 일도 없었던 것처럼 처리되지 않는다).</li>
+          <li>추상 연산이 ~unhandled~로 정상적으로 완료되지 않았고, _newByteLength_가 _buffer_의 현재 바이트 길이보다 작거나, _newByteLength_가 _buffer_.[[ArrayBufferMaxByteLength]]보다 크면 *RangeError* 예외를 발생시킨다.</li>
+          <li>_AR_을(를) 주변 에이전트의 에이전트 레코드로 둔다. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 둔다. 추상 연산이 ~handled~로 정상적으로 완료되면, [[Order]]가 ~seq-cst~, [[Payload]]가 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]]이 _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]]가 0, [[ElementSize]]가 8인 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 주변 에이전트의 후보 실행에 추가된다. 이렇게 하면 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref>에 대한 경쟁 호출이 "누락"되지 않고, 즉 조용히 아무 동작도 하지 않게 된다.</li>
         </ul>
 
         <emu-note>
@@ -44833,27 +44842,28 @@ THH:mm:ss.sss
         <h1>SharedArrayBuffer.prototype.grow ( _newLength_ )</h1>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _O_ = *this* 값.
-          1. ? RequireInternalSlot(_O_, [[ArrayBufferMaxByteLength]]) 수행.
-          1. IsSharedArrayBuffer(_O_) = *false* 이면 *TypeError* 예외.
-          1. _newByteLength_ = ? ToIndex(_newLength_).
-          1. _hostHandled_ = ? HostGrowSharedArrayBuffer(_O_, _newByteLength_).
-          1. _hostHandled_ = ~handled~ 이면 *undefined* 반환.
-          1. _isLittleEndian_ = 주변 에이전트 Agent Record 의 [[LittleEndian]] 값.
-          1. _byteLengthBlock_ = _O_.[[ArrayBufferByteLengthData]].
-          1. _currentByteLengthRawBytes_ = GetRawBytesFromSharedBlock(_byteLengthBlock_, 0, ~biguint64~, *true*, ~seq-cst~).
-          1. _newByteLengthRawBytes_ = NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_).
-          1. 반복:
-            1. NOTE: 동일 버퍼에 대한 경합 증가 호출이 완전 순서화되고 유실되지 않으며 침묵 실패하지 않도록 하는 compare-and-exchange 루프이다. 경합 없이 증가 시도 가능하면 루프 종료.
-            1. _currentByteLength_ = ℝ(RawBytesToNumeric(~biguint64~, _currentByteLengthRawBytes_, _isLittleEndian_)).
-            1. _newByteLength_ = _currentByteLength_ 이면 *undefined* 반환.
-            1. _newByteLength_ &lt; _currentByteLength_ 또는 _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]] 이면 *RangeError* 예외.
-            1. _byteLengthDelta_ = _newByteLength_ - _currentByteLength_.
-            1. _byteLengthDelta_ 바이트로 구성된 새 Shared Data Block 값을 생성할 수 없으면 *RangeError* 예외.
-            1. NOTE: 새 Shared Data Block 은 여기서 구성/사용되지 않는다. 증가 가능한 SharedArrayBuffer 의 관측 가능 동작은 생성 시 최대 크기 Shared Data Block 할당으로 지정되며, 구현이 메모리를 소진하면 *RangeError* 를 던져야 함을 이 단계가 반영.
-            1. _readByteLengthRawBytes_ = AtomicCompareExchangeInSharedBlock(_byteLengthBlock_, 0, 8, _currentByteLengthRawBytes_, _newByteLengthRawBytes_).
-            1. ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_) = *true* 이면 *undefined* 반환.
-            1. _currentByteLengthRawBytes_ = _readByteLengthRawBytes_.
+          1. _O_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_O_, [[ArrayBufferMaxByteLength]])를 수행한다.
+          1. IsSharedArrayBuffer(_O_)가 *false*이면 *TypeError* 예외를 발생시킨다.
+          1. _newByteLength_를 ? ToIndex(_newLength_)로 둔다.
+          1. _hostHandled_를 ? HostGrowSharedArrayBuffer(_O_, _newByteLength_)로 둔다.
+          1. _hostHandled_가 ~handled~이면 *undefined*를 반환한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 둔다.
+          1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 둔다.
+          1. _byteLengthBlock_을 _O_.[[ArrayBufferByteLengthData]]로 둔다.
+          1. _currentByteLengthRawBytes_를 GetRawBytesFromSharedBlock(_byteLengthBlock_, 0, ~biguint64~, *true*, ~seq-cst~)로 둔다.
+          1. _newByteLengthRawBytes_를 NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_)로 둔다.
+          1. 반복한다,
+            1. 참고: 이는 같은 버퍼의 병렬적인 grow 경쟁이 모두 정렬되고, 손실되지 않으며, 조용히 아무 동작도 하지 않도록 보장하기 위한 compare-and-exchange 루프이다. 경합 없이 grow를 시도할 수 있을 때 루프는 종료된다.
+            1. _currentByteLength_를 ℝ(RawBytesToNumeric(~biguint64~, _currentByteLengthRawBytes_, _isLittleEndian_))로 둔다.
+            1. _newByteLength_ = _currentByteLength_이면 *undefined*를 반환한다.
+            1. _newByteLength_ < _currentByteLength_ 또는 _newByteLength_ > _O_.[[ArrayBufferMaxByteLength]]이면 *RangeError* 예외를 발생시킨다.
+            1. _byteLengthDelta_를 _newByteLength_ - _currentByteLength_로 둔다.
+            1. _byteLengthDelta_ 바이트로 구성된 새로운 Shared Data Block 값을 생성할 수 없으면 *RangeError* 예외를 발생시킨다.
+            1. 참고: 여기에서는 새로운 Shared Data Block을 생성하거나 사용하지 않는다. growable SharedArrayBuffer의 관찰 가능한 동작은 생성 시점에 최대 크기의 Shared Data Block을 할당해 정의되며, 이 단계는 메모리가 부족한 경우 구현이 *RangeError*를 던져야 함을 나타낸다.
+            1. _readByteLengthRawBytes_를 AtomicCompareExchangeInSharedBlock(_byteLengthBlock_, 0, 8, _currentByteLengthRawBytes_, _newByteLengthRawBytes_)로 둔다.
+            1. ByteListEqual(_readByteLengthRawBytes_, _currentByteLengthRawBytes_)가 *true*이면 *undefined*를 반환한다.
+            1. _currentByteLengthRawBytes_를 _readByteLengthRawBytes_로 설정한다.
         </emu-alg>
         <emu-note>
           <p>길이 갱신 compare-exchange 의 허위 실패는 금지된다. 새 길이에 대한 경계 검사 통과 및 메모리 부족이 아니면 항상 ReadModifyWriteSharedMemory 이벤트(성공한 compare-exchange)가 후보 실행에 추가된다.</p>
@@ -45712,16 +45722,17 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Assert: 주변 에이전트는 어떤 WaiterList Record 의 critical section 안에 있지 않다.
-          1. 어떤 에이전트도 _WL_ 의 critical section 에 없을 때까지 대기한 후 다른 에이전트가 진입하지 못하게 한 상태로 진입.
-          1. _WL_.[[MostRecentLeaveEvent]] ≠ ~empty~ 이면
-            1. NOTE: 최소 1번 진입된 _WL_ 은 LeaveCriticalSection 에 의해 Synchronize 이벤트가 설정된다.
-            1. _execution_ = 주변 에이전트의 Agent Record.[[CandidateExecution]].
-            1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 [[AgentSignifier]] = AgentSignifier() 인 Agent Events Record.
-            1. _enterEvent_ = 새로운 Synchronize 이벤트.
-            1. _eventsRecord_.[[EventList]] 에 _enterEvent_ 추가.
-            1. _eventsRecord_.[[AgentSynchronizesWith]] 에 (_WL_.[[MostRecentLeaveEvent]], _enterEvent_) 추가.
-          1. Return ~unused~.
+          1. 단언: 주변 에이전트는 어떤 WaiterList Record에 대해서도 임계 구역에 있지 않다.
+          1. 어떠한 에이전트도 _WL_의 임계 구역에 있지 않을 때까지 대기한 후, _WL_의 임계 구역에 진입한다(다른 에이전트가 진입하지 못하도록 한다).
+          1. _WL_.[[MostRecentLeaveEvent]]가 ~empty~가 아니면,
+            1. 참고: 임계 구역에 한 번이라도 진입한 _WL_은 LeaveCriticalSection에 의해 Synchronize 이벤트가 설정된다.
+            1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+            1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+            1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+            1. _enterEvent_를 새로운 Synchronize 이벤트로 설정한다.
+            1. _enterEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
+            1. (_WL_.[[MostRecentLeaveEvent]], _enterEvent_)를 _eventsRecord_.[[AgentSynchronizesWith]]에 추가한다.
+          1. ~unused~를 반환한다.
         </emu-alg>
         <p>EnterCriticalSection 은 에이전트가 다른 에이전트가 떠나기를 기다려야 할 때 <dfn>경합(contention)</dfn> 이 있다. 경합이 없을 때 EnterCriticalSection 호출의 FIFO 순서가 관측 가능하다. 경합이 있을 때 구현은 임의 순서를 선택할 수 있으나 무기한 대기는 유발할 수 없다.</p>
       </emu-clause>
@@ -45735,14 +45746,15 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Assert: 주변 에이전트는 _WL_ 의 critical section 안에 있다.
-          1. _execution_ = 주변 에이전트 Agent Record.[[CandidateExecution]].
-          1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 [[AgentSignifier]] = AgentSignifier() 인 것.
-          1. _leaveEvent_ = 새로운 Synchronize 이벤트.
-          1. _eventsRecord_.[[EventList]] 에 _leaveEvent_ 추가.
-          1. _WL_.[[MostRecentLeaveEvent]] = _leaveEvent_ 로 설정.
-          1. _WL_ 의 critical section 떠남.
-          1. Return ~unused~.
+          1. 단언: 주변 에이전트가 _WL_의 임계 구역에 있다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+          1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+          1. _leaveEvent_를 새로운 Synchronize 이벤트로 설정한다.
+          1. _leaveEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
+          1. _WL_.[[MostRecentLeaveEvent]]를 _leaveEvent_로 설정한다.
+          1. _WL_의 임계 구역에서 나간다.
+          1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -45978,19 +45990,21 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _execution_ = 주변 에이전트 Agent Record.[[CandidateExecution]].
-          1. _eventsRecord_ = _execution_.[[EventsRecords]] 중 [[AgentSignifier]] = AgentSignifier() 인 것.
-          1. _rawBytesRead_ = 길이 _elementSize_ 이고 요소가 비결정적으로 선택된 바이트 값 List.
-          1. NOTE: 구현에서 _rawBytesRead_ 는 load-link, load-exclusive, 또는 read-modify-write 명령의 피연산자 결과. 비결정성은 약한 일관성 하드웨어 관측 가능 동작을 기술.
-          1. NOTE: 기대값과 읽은 값 비교는 기대값 불일치 시 불필요한 강한 동기화를 피하기 위해 read-modify-write 수정 함수 밖에서 수행.
-          1. ByteListEqual(_rawBytesRead_, _expectedBytes_) = *true* 이면
-            1. _second_ = 매개변수 (_oldBytes_, _newBytes_) 를 가지고 아무것도 캡처하지 않으며 호출 시 원자적으로 _newBytes_ 반환하는 새 read-modify-write 수정 함수.
-            1. _event_ = ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_, [[Payload]]: _replacementBytes_, [[ModifyOp]]: _second_ }.
-          1. Else
-            1. _event_ = ReadSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_ }.
-          1. _eventsRecord_.[[EventList]] 에 _event_ 추가.
-          1. _execution_.[[ChosenValues]] 에 Chosen Value Record { [[Event]]: _event_, [[ChosenValue]]: _rawBytesRead_ } 추가.
-          1. Return _rawBytesRead_.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
+          1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
+          1. _rawBytesRead_를 길이가 _elementSize_이고 각 요소가 비결정적으로 선택된 바이트 값인 리스트로 설정한다.
+          1. 참고: 실제 구현에서 _rawBytesRead_는 하드웨어의 load-link, load-exclusive 또는 read-modify-write 명령어의 오퍼랜드 결과이다. 이 비결정성은 약한 일관성을 가진 하드웨어의 관찰 가능한 동작을 설명하는 메모리 모델의 의미적 규정이다.
+          1. 참고: 기대 값과 읽은 값을 비교하는 연산은 read-modify-write 수정 함수 외부에서 수행되며, 이는 기대 값이 읽은 값과 다를 때 불필요하게 강한 동기화를 피하기 위함이다.
+          1. ByteListEqual(_rawBytesRead_, _expectedBytes_)가 *true*이면,
+            1. _second_를 어떠한 값도 캡처하지 않고, 호출 시 다음 단계를 원자적으로 수행하는 인자 (_oldBytes_, _newBytes_)를 갖는 새로운 read-modify-write 수정 함수로 설정한다:
+              1. _newBytes_를 반환한다.
+            1. _event_를 ReadModifyWriteSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_, [[Payload]]: _replacementBytes_, [[ModifyOp]]: _second_ }로 설정한다.
+          1. 아니면,
+            1. _event_를 ReadSharedMemory { [[Order]]: ~seq-cst~, [[NoTear]]: *true*, [[Block]]: _block_, [[ByteIndex]]: _byteIndexInBuffer_, [[ElementSize]]: _elementSize_ }로 설정한다.
+          1. _event_를 _eventsRecord_.[[EventList]]에 추가한다.
+          1. Chosen Value Record { [[Event]]: _event_, [[ChosenValue]]: _rawBytesRead_ }를 _execution_.[[ChosenValues]]에 추가한다.
+          1. _rawBytesRead_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -46073,20 +46087,21 @@ THH:mm:ss.sss
       <h1>Atomics.add ( _typedArray_, _index_, _value_ )</h1>
       <p>이 함수는 호출 시 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _add_ = 매개변수 (_xBytes_, _yBytes_) 를 가지고 _typedArray_ 를 캡처하며 호출 시 원자적으로:
-          1. _type_ = TypedArrayElementType(_typedArray_).
-          1. _isLittleEndian_ = 주변 에이전트 Agent Record 의 [[LittleEndian]] 값.
-          1. _x_ = RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_).
-          1. _y_ = RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_).
-          1. _x_ 가 Number 이면
-            1. _sum_ = Number::add(_x_, _y_).
-          1. Else
-            1. Assert: _x_ 는 BigInt.
-            1. _sum_ = BigInt::add(_x_, _y_).
-          1. _sumBytes_ = NumericToRawBytes(_type_, _sum_, _isLittleEndian_).
-          1. Assert: _sumBytes_, _xBytes_, _yBytes_ 길이 동일.
-          1. Return _sumBytes_.
-        1. Return ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _add_).
+        1. _add_를 (_xBytes_, _yBytes_)를 매개변수로 가지는 새로운 read-modify-write 수정 함수로 두고, _typedArray_를 캡처하며, 호출될 때 다음 단계를 원자적으로 수행한다:
+          1. _type_을 TypedArrayElementType(_typedArray_)로 설정한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+          1. _x_를 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)로 설정한다.
+          1. _y_를 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)로 설정한다.
+          1. _x_가 Number이면,
+            1. _sum_을 Number::add(_x_, _y_)로 설정한다.
+          1. 아니면,
+            1. 단언: _x_는 BigInt이다.
+            1. _sum_을 BigInt::add(_x_, _y_)로 설정한다.
+          1. _sumBytes_를 NumericToRawBytes(_type_, _sum_, _isLittleEndian_)로 설정한다.
+          1. 단언: _sumBytes_, _xBytes_, _yBytes_는 동일한 개수의 요소를 가진다.
+          1. _sumBytes_를 반환한다.
+        1. ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _add_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -46104,28 +46119,29 @@ THH:mm:ss.sss
       <h1>Atomics.compareExchange ( _typedArray_, _index_, _expectedValue_, _replacementValue_ )</h1>
       <p>이 함수는 호출 시 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _byteIndexInBuffer_ = ? ValidateAtomicAccessOnIntegerTypedArray(_typedArray_, _index_).
-        1. _buffer_ = _typedArray_.[[ViewedArrayBuffer]].
-        1. _block_ = _buffer_.[[ArrayBufferData]].
-        1. _typedArray_.[[ContentType]] = ~bigint~ 이면
-          1. _expected_ = ? ToBigInt(_expectedValue_).
-          1. _replacement_ = ? ToBigInt(_replacementValue_).
-        1. Else
-          1. _expected_ = 𝔽(? ToIntegerOrInfinity(_expectedValue_)).
-          1. _replacement_ = 𝔽(? ToIntegerOrInfinity(_replacementValue_)).
-        1. ? RevalidateAtomicAccess(_typedArray_, _byteIndexInBuffer_) 수행.
-        1. _elementType_ = TypedArrayElementType(_typedArray_).
-        1. _elementSize_ = TypedArrayElementSize(_typedArray_).
-        1. _isLittleEndian_ = 주변 에이전트 Agent Record.[[LittleEndian]].
-        1. _expectedBytes_ = NumericToRawBytes(_elementType_, _expected_, _isLittleEndian_).
-        1. _replacementBytes_ = NumericToRawBytes(_elementType_, _replacement_, _isLittleEndian_).
-        1. IsSharedArrayBuffer(_buffer_) = *true* 이면
-          1. _rawBytesRead_ = AtomicCompareExchangeInSharedBlock(_block_, _byteIndexInBuffer_, _elementSize_, _expectedBytes_, _replacementBytes_).
-        1. Else
-          1. _rawBytesRead_ = 길이 _elementSize_ 인 List ( _block_[_byteIndexInBuffer_] 로부터 _elementSize_ 바이트 ).
-          1. ByteListEqual(_rawBytesRead_, _expectedBytes_) = *true* 이면
-            1. _replacementBytes_ 바이트들을 _block_[_byteIndexInBuffer_] 부터 저장.
-        1. Return RawBytesToNumeric(_elementType_, _rawBytesRead_, _isLittleEndian_).
+        1. _byteIndexInBuffer_를 ? ValidateAtomicAccessOnIntegerTypedArray(_typedArray_, _index_)로 설정한다.
+        1. _buffer_를 _typedArray_.[[ViewedArrayBuffer]]로 설정한다.
+        1. _block_을 _buffer_.[[ArrayBufferData]]로 설정한다.
+        1. _typedArray_.[[ContentType]]가 ~bigint~이면,
+          1. _expected_를 ? ToBigInt(_expectedValue_)로 설정한다.
+          1. _replacement_를 ? ToBigInt(_replacementValue_)로 설정한다.
+        1. 아니면,
+          1. _expected_를 𝔽(? ToIntegerOrInfinity(_expectedValue_))로 설정한다.
+          1. _replacement_를 𝔽(? ToIntegerOrInfinity(_replacementValue_))로 설정한다.
+        1. ? RevalidateAtomicAccess(_typedArray_, _byteIndexInBuffer_)를 수행한다.
+        1. _elementType_을 TypedArrayElementType(_typedArray_)로 설정한다.
+        1. _elementSize_를 TypedArrayElementSize(_typedArray_)로 설정한다.
+        1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+        1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+        1. _expectedBytes_를 NumericToRawBytes(_elementType_, _expected_, _isLittleEndian_)로 설정한다.
+        1. _replacementBytes_를 NumericToRawBytes(_elementType_, _replacement_, _isLittleEndian_)로 설정한다.
+        1. IsSharedArrayBuffer(_buffer_)가 *true*이면,
+          1. _rawBytesRead_를 AtomicCompareExchangeInSharedBlock(_block_, _byteIndexInBuffer_, _elementSize_, _expectedBytes_, _replacementBytes_)로 설정한다.
+        1. 아니면,
+          1. _rawBytesRead_를 _block_[_byteIndexInBuffer_]에서 시작하는 _elementSize_ 바이트 시퀀스로 이루어진 길이 _elementSize_의 리스트로 설정한다.
+          1. ByteListEqual(_rawBytesRead_, _expectedBytes_)가 *true*이면,
+            1. _replacementBytes_의 각 바이트를 _block_의 _block_[_byteIndexInBuffer_]에서 시작하여 저장한다.
+        1. RawBytesToNumeric(_elementType_, _rawBytesRead_, _isLittleEndian_)을 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -46197,20 +46213,21 @@ THH:mm:ss.sss
       <h1>Atomics.sub ( _typedArray_, _index_, _value_ )</h1>
       <p>이 함수는 호출 시 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _subtract_ = 매개변수 (_xBytes_, _yBytes_) 를 가지고 _typedArray_ 를 캡처하며 호출 시 원자적으로:
-          1. _type_ = TypedArrayElementType(_typedArray_).
-          1. _isLittleEndian_ = 주변 에이전트 Agent Record.[[LittleEndian]].
-          1. _x_ = RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_).
-          1. _y_ = RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_).
-          1. _x_ 가 Number 이면
-            1. _difference_ = Number::subtract(_x_, _y_).
-          1. Else
-            1. Assert: _x_ 는 BigInt.
-            1. _difference_ = BigInt::subtract(_x_, _y_).
-          1. _differenceBytes_ = NumericToRawBytes(_type_, _difference_, _isLittleEndian_).
-          1. Assert: _differenceBytes_, _xBytes_, _yBytes_ 길이 동일.
-          1. Return _differenceBytes_.
-        1. Return ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _subtract_).
+        1. _subtract_를 (_xBytes_, _yBytes_)를 매개변수로 가지는 새로운 read-modify-write 수정 함수로 설정하고, _typedArray_를 캡처하며 호출될 때 다음 단계를 원자적으로 수행한다:
+          1. _type_을 TypedArrayElementType(_typedArray_)로 설정한다.
+          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
+          1. _isLittleEndian_을 _AR_.[[LittleEndian]]으로 설정한다.
+          1. _x_를 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)로 설정한다.
+          1. _y_를 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)로 설정한다.
+          1. _x_가 Number이면,
+            1. _difference_를 Number::subtract(_x_, _y_)로 설정한다.
+          1. 아니면,
+            1. 단언: _x_는 BigInt이다.
+            1. _difference_를 BigInt::subtract(_x_, _y_)로 설정한다.
+          1. _differenceBytes_를 NumericToRawBytes(_type_, _difference_, _isLittleEndian_)로 설정한다.
+          1. 단언: _differenceBytes_, _xBytes_, _yBytes_는 동일한 개수의 요소를 가진다.
+          1. _differenceBytes_를 반환한다.
+        1. ? AtomicReadModifyWrite(_typedArray_, _index_, _value_, _subtract_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -50053,35 +50070,6 @@ THH:mm:ss.sss
               1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) 를 수행한다.
           1. _generator_.[[AsyncGeneratorState]] 를 ~completed~ 로 설정한다.
           1. ~unused~ 를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-createasynciteratorfromclosure" type="abstract operation">
-        <h1>
-          CreateAsyncIteratorFromClosure (
-            _closure_: an Abstract Closure with no parameters,
-            _generatorBrand_: a String or ~empty~,
-            _generatorPrototype_: an Object,
-          ): an AsyncGenerator
-        </h1>
-        <dl class="header">
-        </dl>
-        <emu-alg>
-          1. NOTE: _closure_ 는 Await 연산과 IteratorResult 객체를 산출하기 위한 Yield 연산을 포함할 수 있다.
-          1. _internalSlotsList_ 를 « [[AsyncGeneratorState]], [[AsyncGeneratorContext]], [[AsyncGeneratorQueue]], [[GeneratorBrand]] » 로 둔다.
-          1. _generator_ 를 OrdinaryObjectCreate(_generatorPrototype_, _internalSlotsList_) 로 둔다.
-          1. _generator_.[[GeneratorBrand]] 를 _generatorBrand_ 로 설정한다.
-          1. _generator_.[[AsyncGeneratorState]] 를 ~suspended-start~ 로 설정한다.
-          1. _callerContext_ 를 실행 중인 실행 컨텍스트로 둔다.
-          1. _calleeContext_ 를 새로운 실행 컨텍스트로 둔다.
-          1. _calleeContext_ 의 Function 을 *null* 로 설정한다.
-          1. _calleeContext_ 의 Realm 을 현재 Realm Record 로 설정한다.
-          1. _calleeContext_ 의 ScriptOrModule 을 _callerContext_ 의 ScriptOrModule 로 설정한다.
-          1. _callerContext_ 가 이미 suspend 상태가 아니면 suspend 한다.
-          1. _calleeContext_ 를 실행 컨텍스트 스택에 push; 이제 _calleeContext_ 가 실행 중인 실행 컨텍스트.
-          1. AsyncGeneratorStart(_generator_, _closure_) 를 수행한다.
-          1. _calleeContext_ 를 실행 컨텍스트 스택에서 제거하고 _callerContext_ 를 실행 중인 실행 컨텍스트로 복원한다.
-          1. _generator_ 를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
