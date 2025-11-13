@@ -26507,30 +26507,34 @@
             </dl>
 
             <emu-alg>
-              1. 단언: 이번 Evaluate 호출은 주변 에이전트 내에서 다른 Evaluate 호출과 동시에 발생하지 않는다.
-              1. 단언: _module_.[[Status]]는 ~linked~, ~evaluating-async~, ~evaluated~ 중 하나이다.
-              1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~인 경우, _module_에 _module_.[[CycleRoot]]를 할당한다.
+              1. 단언: 이 Evaluate 호출은 주변 에이전트 내의 다른 Evaluate 호출과 동시에 일어나지 않는다.
+              1. 단언: _module_.[[Status]]는 ~linked~, ~evaluating-async~, 또는 ~evaluated~ 중 하나이다.
+              1. 만약 _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~라면,
+                1. _module_.[[CycleRoot]]가 ~empty~가 아니면,
+                  1. _module_을 _module_.[[CycleRoot]]로 설정한다.
+                1. 그렇지 않으면,
+                  1. 단언: _module_.[[Status]]는 ~evaluated~이고 _module_.[[EvaluationError]]는 throw 완료이다.
               1. _module_.[[TopLevelCapability]]가 ~empty~가 아니면,
                 1. _module_.[[TopLevelCapability]].[[Promise]]를 반환한다.
-              1. _stack_에 새로운 빈 리스트를 할당한다.
-              1. _capability_에 ! NewPromiseCapability(%Promise%)를 할당한다.
+              1. _stack_을 새로운 빈 List로 둔다.
+              1. _capability_를 ! NewPromiseCapability(%Promise%)로 둔다.
               1. _module_.[[TopLevelCapability]]에 _capability_를 설정한다.
-              1. _result_에 Completion(InnerModuleEvaluation(_module_, _stack_, 0))을 할당한다.
-              1. _result_가 abrupt completion이면,
-                1. _stack_의 각 Cyclic Module Record _m_에 대해,
+              1. _result_를 Completion(InnerModuleEvaluation(_module_, _stack_, 0))으로 둔다.
+              1. 만약 _result_가 abrupt completion이라면,
+                1. _stack_의 각 Cyclic Module Record _m_에 대해, 다음을 수행한다
                   1. 단언: _m_.[[Status]]는 ~evaluating~이다.
                   1. 단언: _m_.[[AsyncEvaluationOrder]]는 ~unset~이다.
                   1. _m_.[[Status]]를 ~evaluated~로 설정한다.
-                  1. _m_.[[EvaluationError]]에 _result_를 설정한다.
+                  1. _m_.[[EvaluationError]]를 _result_로 설정한다.
                 1. 단언: _module_.[[Status]]는 ~evaluated~이다.
                 1. 단언: _module_.[[EvaluationError]]와 _result_는 동일한 Completion Record이다.
                 1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] »)를 수행한다.
               1. 그렇지 않으면,
-                1. 단언: _module_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~이다.
+                1. 단언: _module_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
                 1. 단언: _module_.[[EvaluationError]]는 ~empty~이다.
-                1. _module_.[[Status]]가 ~evaluated~이면,
-                  1. 단언: _module_.[[AsyncEvaluationOrder]]는 ~unset~ 또는 ~done~이다.
-                  1. 참고: _module_.[[AsyncEvaluationOrder]]가 ~done~인 경우는 오직 _module_이 이미 평가되었고 그 평가가 비동기였을 때뿐이다.
+                1. _module_.[[Status]]가 ~evaluated~라면,
+                  1. 단언: _module_.[[AsyncEvaluationOrder]]는 ~unset~ 또는 ~done~ 중 하나이다.
+                  1. 참고: _module_.[[AsyncEvaluationOrder]]는 오직 비동기적으로 이미 평가된 경우에만 ~done~이다.
                   1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
                 1. 단언: _stack_은 비어 있다.
               1. _capability_.[[Promise]]를 반환한다.
@@ -27863,7 +27867,7 @@
                   1. _starResolution_이 *null*이면,
                     1. _starResolution_을 _resolution_으로 설정한다.
                   1. 아니면,
-                    1. 단언: 요청된 이름을 포함하는 `*` import가 둘 이상이다.
+                    1. 단언: 요청된 이름을 포함하는 `*` export가 둘 이상이다.
                     1. _resolution_.[[Module]]과 _starResolution_.[[Module]]이 동일한 Module Record가 아니라면 ~ambiguous~를 반환한다.
                     1. _resolution_.[[BindingName]]이 _starResolution_.[[BindingName]]과 다르면 ~ambiguous~를 반환한다.
               1. _starResolution_을 반환한다.
@@ -32294,8 +32298,8 @@
           1. _n64_ 에 대응하는 ECMAScript Number 값 반환.
         </emu-alg>
         <emu-note>
-          <p>이 연산은 먼저 binary32 로 변환 후 binary16 으로 변환하는 것과 다르다(이중 반올림 가능성). 예: _k_ = *1.00048828125000022204*<sub>𝔽</sub> 에 대해 Math.f16round(_k_) 는 *1.0009765625*<sub>𝔽</sub> 이지만 Math.f16round(Math.fround(_k_)) 는 *1*<sub>𝔽</sub> 이다.</p>
-          <p>모든 플랫폼이 binary64→binary16 캐스팅을 네이티브 지원하지는 않는다. MIT 라이선스 <a href="https://half.sourceforge.net/">half</a> 라이브러리 등 사용 가능. 또는 binary64→binary32 (roundTiesToEven) 후 잘못된 이중 반올림 가능성 검사, 해당 경우 mantissa 조정(odd 라운드에 해당) 후 최종 binary16 캐스팅 등으로 구현 가능.</p>
+          <p>이 연산은 double-rounding(이중 반올림) 가능성 때문에 binary32로 변환한 후 다시 binary16으로 캐스팅하는 것과 동일하지 않습니다. 예를 들어, 수 _k_ = *1.00048828125000022204*<sub>𝔽</sub>의 경우, Math.f16round(_k_)는 *1.0009765625*<sub>𝔽</sub>가 되지만 Math.f16round(Math.fround(_k_))는 *1*<sub>𝔽</sub>가 됩니다.</p>
+          <p>모든 플랫폼이 binary64에서 binary16으로의 변환을 네이티브로 지원하는 것은 아닙니다. 이를 지원하는 다양한 라이브러리가 있으며, MIT 라이선스를 사용하는 <a href="https://half.sourceforge.net/">half</a> 라이브러리도 포함되어 있습니다. 또는, 먼저 binary64에서 binary32로 roundTiesToEven 방식으로 변환한 후 결과가 잘못된 이중 반올림으로 이어질 수 있는지 확인하는 방법도 있습니다. 이러한 경우에는 binary32 값의 맨티사를 조정하여 처음 변환을 roundTiesToOdd 방식으로 수행할 때 생성될 값을 만들면 됩니다. 이 조정된 값을 roundTiesToEven으로 binary16에 캐스팅하면 올바른 값을 얻을 수 있습니다.</p>
         </emu-note>
       </emu-clause>
 

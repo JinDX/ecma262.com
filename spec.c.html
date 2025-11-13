@@ -26896,30 +26896,34 @@
             </dl>
 
             <emu-alg>
-              1. 断言：本次对 Evaluate 的调用不会与同一 agent 内的其他 Evaluate 调用同时发生。
-              1. 断言：_module_.[[Status]] 必须是 ~linked~、~evaluating-async~ 或 ~evaluated~ 之一。
-              1. 如果 _module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~，则将 _module_ 设为 _module_.[[CycleRoot]]。
-              1. 如果 _module_.[[TopLevelCapability]] 不为 ~empty~，则
+              1. 断言：这次对 Evaluate 的调用不会与同一代理内的另一 Evaluate 调用同时发生。
+              1. 断言：_module_.[[Status]] 是 ~linked~、~evaluating-async~ 或 ~evaluated~ 其中之一。
+              1. 如果 _module_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~，那么
+                1. 如果 _module_.[[CycleRoot]] 不是 ~empty~，则
+                  1. 将 _module_ 设为 _module_.[[CycleRoot]]。
+                1. 否则，
+                  1. 断言：_module_.[[Status]] 是 ~evaluated~ 且 _module_.[[EvaluationError]] 是抛出完成（throw completion）。
+              1. 如果 _module_.[[TopLevelCapability]] 不是 ~empty~，则
                 1. 返回 _module_.[[TopLevelCapability]].[[Promise]]。
-              1. 令 _stack_ 为一个新的空 List。
+              1. 令 _stack_ 为一个新的空列表。
               1. 令 _capability_ 为 ! NewPromiseCapability(%Promise%)。
               1. 设置 _module_.[[TopLevelCapability]] 为 _capability_。
               1. 令 _result_ 为 Completion(InnerModuleEvaluation(_module_, _stack_, 0))。
-              1. 如果 _result_ 是 abrupt completion，则
-                1. 对 _stack_ 中每个循环模块记录 _m_，执行
-                  1. 断言：_m_.[[Status]] 为 ~evaluating~。
-                  1. 断言：_m_.[[AsyncEvaluationOrder]] 为 ~unset~。
+              1. 如果 _result_ 是一个突然完成（abrupt completion），则
+                1. 对于 _stack_ 中的每一个循环模块记录（Cyclic Module Record）_m_，执行
+                  1. 断言：_m_.[[Status]] 是 ~evaluating~。
+                  1. 断言：_m_.[[AsyncEvaluationOrder]] 是 ~unset~。
                   1. 设置 _m_.[[Status]] 为 ~evaluated~。
                   1. 设置 _m_.[[EvaluationError]] 为 _result_。
-                1. 断言：_module_.[[Status]] 为 ~evaluated~。
-                1. 断言：_module_.[[EvaluationError]] 与 _result_ 是同一个 Completion Record。
+                1. 断言：_module_.[[Status]] 是 ~evaluated~。
+                1. 断言：_module_.[[EvaluationError]] 和 _result_ 是同一个完成记录（Completion Record）。
                 1. 执行 ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] »)。
               1. 否则，
-                1. 断言：_module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~。
-                1. 断言：_module_.[[EvaluationError]] 为 ~empty~。
-                1. 如果 _module_.[[Status]] 为 ~evaluated~，则
-                  1. 断言：_module_.[[AsyncEvaluationOrder]] 为 ~unset~ 或 ~done~。
-                  1. 注：仅当 _module_ 已经被异步求值且该过程已完成时，_module_.[[AsyncEvaluationOrder]] 才为 ~done~。
+                1. 断言：_module_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~ 之一。
+                1. 断言：_module_.[[EvaluationError]] 是 ~empty~。
+                1. 如果 _module_.[[Status]] 是 ~evaluated~，则
+                  1. 断言：_module_.[[AsyncEvaluationOrder]] 是 ~unset~ 或 ~done~ 之一。
+                  1. 注：仅当 _module_ 已经被评估且该评估是异步发生时，_module_.[[AsyncEvaluationOrder]] 才是 ~done~。
                   1. 执行 ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* »)。
                 1. 断言：_stack_ 为空。
               1. 返回 _capability_.[[Promise]]。
@@ -28086,7 +28090,7 @@
                   1. 如果 _starResolution_ 为 *null*，则
                     1. 设置 _starResolution_ 为 _resolution_。
                   1. 否则，
-                    1. 断言：有多个 `*` 导入包含了请求的名称。
+                    1. 断言：有多个 `*` 导出包含了被请求的名字。
                     1. 如果 _resolution_.[[Module]] 和 _starResolution_.[[Module]] 不是同一个模块记录，则返回 ~ambiguous~。
                     1. 如果 _resolution_.[[BindingName]] 不等于 _starResolution_.[[BindingName]]，则返回 ~ambiguous~。
               1. 返回 _starResolution_。
@@ -32465,8 +32469,8 @@
           1. 返回与 _n64_ 对应的 ECMAScript Number 值。
         </emu-alg>
         <emu-note>
-          <p>此操作不同于先转换为 binary32 再转换为 binary16，因为可能出现双重舍入：例如 _k_ = *1.00048828125000022204*<sub>𝔽</sub>，Math.f16round(_k_) 为 *1.0009765625*<sub>𝔽</sub>，但 Math.f16round(Math.fround(_k_)) 为 *1*<sub>𝔽</sub>。</p>
-          <p>并非所有平台都提供从 binary64 转换到 binary16 的原生支持。有多种库可提供此功能，包括 MIT 许可的 <a href="https://half.sourceforge.net/">half</a> 库。或者，可以先在 roundTiesToEven 下从 binary64 转换到 binary32，然后检查结果是否可能导致错误的双重舍入。可能导致的情况可以通过调整 binary32 尾数，使其等同于在 roundTiesToOdd 下的初始转换结果来显式处理。随后在 roundTiesToEven 下将调整后的值转换为 binary16 即可得到正确值。</p>
+          <p>该操作与先转换为 binary32 再转换为 binary16 并不相同，因为存在双重舍入（double-rounding）的可能性：例如，考虑数字 _k_ = *1.00048828125000022204*<sub>𝔽</sub>，对于该值，Math.f16round(_k_) 的结果是 *1.0009765625*<sub>𝔽</sub>，但 Math.f16round(Math.fround(_k_)) 的结果却是 *1*<sub>𝔽</sub>。</p>
+          <p>并非所有平台都原生支持从 binary64 到 binary16 的转换。市面上有各种库可以实现这种功能，包括 MIT 许可证下的<a href="https://half.sourceforge.net/">half</a>库。或者，也可以先在 roundTiesToEven 模式下将 binary64 转换为 binary32，然后检查结果是否会导致不正确的双重舍入。这类情况可以通过显式调整 binary32 数值的尾数（mantissa）来处理，使其等同于在 roundTiesToOdd 模式下进行初次转换时产生的值。再在 roundTiesToEven 模式下将调整后的值转换为 binary16，即可得到正确的结果。</p>
         </emu-note>
       </emu-clause>
 

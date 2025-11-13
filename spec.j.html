@@ -26967,32 +26967,36 @@
             </dl>
 
             <emu-alg>
-              1. 断言: この Evaluate の呼び出しは、同じエージェント内で他の Evaluate の呼び出しと同時に発生していない。
-              1. 断言: _module_.[[Status]] は ~linked~、~evaluating-async~、または ~evaluated~ のいずれかである。
-              1. _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ の場合、_module_ を _module_.[[CycleRoot]] に設定する。
-              1. _module_.[[TopLevelCapability]] が ~empty~ でない場合、
+              1. アサート: この Evaluate の呼び出しは、周囲のエージェント内で他の Evaluate の呼び出しと同時に発生していない。
+              1. アサート: _module_.[[Status]] は ~linked~、~evaluating-async~、または ~evaluated~ のいずれかである。
+              1. もし _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ のいずれかであれば、
+                1. もし _module_.[[CycleRoot]] が ~empty~ でなければ、
+                  1. _module_ を _module_.[[CycleRoot]] に設定する。
+                1. それ以外の場合、
+                  1. アサート: _module_.[[Status]] は ~evaluated~ であり、_module_.[[EvaluationError]] は throw completion である。
+              1. もし _module_.[[TopLevelCapability]] が ~empty~ でなければ、
                 1. _module_.[[TopLevelCapability]].[[Promise]] を返す。
               1. _stack_ を新しい空のリストとする。
               1. _capability_ を ! NewPromiseCapability(%Promise%) とする。
               1. _module_.[[TopLevelCapability]] に _capability_ を設定する。
               1. _result_ を Completion(InnerModuleEvaluation(_module_, _stack_, 0)) とする。
-              1. _result_ がアブストラクトコンプリーションの場合、
-                1. _stack_ の各 Cyclic Module Record _m_ について、次を行う
-                  1. 断言: _m_.[[Status]] は ~evaluating~ である。
-                  1. 断言: _m_.[[AsyncEvaluationOrder]] は ~unset~ である。
-                  1. _m_.[[Status]] を ~evaluated~ に設定する。
+              1. もし _result_ がアブストラクトコンプリ―ションであれば、
+                1. _stack_ の各 Cyclic Module Record _m_ について、以下を行う
+                  1. アサート: _m_.[[Status]] は ~evaluating~ である。
+                  1. アサート: _m_.[[AsyncEvaluationOrder]] は ~unset~ である。
+                  1. _m_.[[Status]] に ~evaluated~ を設定する。
                   1. _m_.[[EvaluationError]] に _result_ を設定する。
-                1. 断言: _module_.[[Status]] は ~evaluated~ である。
-                1. 断言: _module_.[[EvaluationError]] と _result_ は同じ Completion Record である。
+                1. アサート: _module_.[[Status]] は ~evaluated~ である。
+                1. アサート: _module_.[[EvaluationError]] と _result_ は同じ Completion Record である。
                 1. ! Call(_capability_.[[Reject]], *undefined*, « _result_.[[Value]] ») を実行する。
               1. それ以外の場合、
-                1. 断言: _module_.[[Status]] は ~evaluating-async~ または ~evaluated~ のいずれかである。
-                1. 断言: _module_.[[EvaluationError]] は ~empty~ である。
-                1. _module_.[[Status]] が ~evaluated~ の場合、
-                  1. 断言: _module_.[[AsyncEvaluationOrder]] は ~unset~ または ~done~ である。
-                  1. 注: _module_.[[AsyncEvaluationOrder]] が ~done~ となるのは、_module_ がすでに評価され、その評価が非同期であった場合のみである。
+                1. アサート: _module_.[[Status]] は ~evaluating-async~ または ~evaluated~ のいずれかである。
+                1. アサート: _module_.[[EvaluationError]] は ~empty~ である。
+                1. もし _module_.[[Status]] が ~evaluated~ であれば、
+                  1. アサート: _module_.[[AsyncEvaluationOrder]] は ~unset~ または ~done~ のいずれかである。
+                  1. 注: _module_.[[AsyncEvaluationOrder]] は、_module_ がすでに評価され、その評価が非同期だった場合に限り ~done~ となる。
                   1. ! Call(_capability_.[[Resolve]], *undefined*, « *undefined* ») を実行する。
-                1. 断言: _stack_ は空である。
+                1. アサート: _stack_ は空である。
               1. _capability_.[[Promise]] を返す。
             </emu-alg>
 
@@ -28323,7 +28327,7 @@
                   1. _starResolution_ が *null* の場合、
                     1. _starResolution_ に _resolution_ を設定する。
                   1. それ以外の場合、
-                    1. アサート: 要求された名前を含む `*` インポートが複数存在する。
+                    1. アサート: 要求された名前を含む `*` エクスポートが複数存在する。
                     1. _resolution_.[[Module]] と _starResolution_.[[Module]] が同じ Module Record でない場合、~ambiguous~ を返す。
                     1. _resolution_.[[BindingName]] が _starResolution_.[[BindingName]] でない場合、~ambiguous~ を返す。
               1. _starResolution_ を返す。
@@ -32750,8 +32754,8 @@
           1. _n64_ に対応する ECMAScript Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>この操作は double-rounding の可能性があるため binary32 へ変換後 binary16 へ変換するのと同じではない。例として _k_ = *1.00048828125000022204*<sub>𝔽</sub> では Math.f16round(_k_) は *1.0009765625*<sub>𝔽</sub> だが Math.f16round(Math.fround(_k_)) は *1*<sub>𝔽</sub> となる。</p>
-          <p>全てのプラットフォームが binary64 から binary16 へのネイティブ変換を提供するわけではない。MIT ライセンスの <a href="https://half.sourceforge.net/">half</a> ライブラリ等で可能である。別案として、まず roundTiesToEven で binary64 から binary32 に変換し、結果が誤った二重丸めを生む可能性があるか検査できる。該当する場合 binary32 値の仮数を roundTiesToOdd で初期変換した場合に得られる値に調整し、その調整値を binary16 に roundTiesToEven で変換することで正しい値を得られる。</p>
+          <p>この操作は、先にbinary32へキャストしてからbinary16へキャストするのとは異なります。なぜなら、ダブルラウンディング（二重丸め）が発生する可能性があるためです。たとえば、数値 _k_ = *1.00048828125000022204*<sub>𝔽</sub> の場合、Math.f16round(_k_) は *1.0009765625*<sub>𝔽</sub> になりますが、Math.f16round(Math.fround(_k_)) は *1*<sub>𝔽</sub> となります。</p>
+          <p>すべてのプラットフォームで binary64 から binary16 へのネイティブキャストがサポートされているわけではありません。これを提供する様々なライブラリがあり、その中にはMITライセンスの <a href="https://half.sourceforge.net/">half</a> ライブラリも含まれます。あるいは、まず binary64 から binary32 へ roundTiesToEven でキャストし、その結果が誤ったダブルラウンディングにつながる可能性があるかどうかを確認することも可能です。そのような場合、binary32値の仮数部を調整して、最初のキャストを roundTiesToOdd で行った場合に得られる値にすることで明示的に対処できます。調整後の値を roundTiesToEven で binary16 にキャストすると、正しい値が得られます。</p>
         </emu-note>
       </emu-clause>
 

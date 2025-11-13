@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 언어&nbsp;명세서"><meta property="og:description" content="소개
   이 Ecma 표준은 ECMAScript 2026 언어를 정의합니다. 이는 ECMAScript 언어 명세서의 열일곱 번째 판입니다. 1997년 첫 판이 발표된 이후 ECMAScript는 세계에서 가장 널리 사용되는 범용 프로그래밍 언어 중 하나로 성장했습니다. 웹 브라우저에 내장된 언어로 가장 잘 알려져 있지만, 서버 및 임베디드 애플리케이션에서도 널리 채택되었습니다.
   ECMAScript는 여러 기술에서 유래했으며, 그 중 가장 잘 알려진 것은 JavaScript(Netscape)와 JScript(Microsoft)">
-<script src="..\assets\js\multipage.js?cache=7jjJHy_q" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<script src="..\assets\js\multipage.js?cache=SYNrR5VZ" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
@@ -154,7 +154,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2026 언어&nbsp;명세서</title><script src="..\assets\js\ecmarkup.js?cache=6_fBMEQv" defer=""></script><style>
+<title>ECMAScript® 2026 언어&nbsp;명세서</title><script src="..\assets\js\ecmarkup.js?cache=_feM6JlW" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -366,47 +366,47 @@
 
   <emu-clause id="sec-weak-ref-objects">
     <h1><span class="secnum">26.1</span> WeakRef 객체</h1>
-    <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10261"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 는 대상 객체나 심볼을 가비지 컬렉션으로부터 유지하지(보호하지) 않은 채로 참조하기 위해 사용되는 객체이다. <emu-xref href="#sec-weak-ref-constructor" id="_ref_10262"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 는 대상이 아직 가비지 컬렉션에 의해 회수되지 않았다면 대상 값에 접근할 수 있도록 역참조(dereference)될 수 있다.</p>
+    <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10262"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 는 대상 객체나 심볼을 가비지 컬렉션으로부터 유지하지(보호하지) 않은 채로 참조하기 위해 사용되는 객체이다. <emu-xref href="#sec-weak-ref-constructor" id="_ref_10263"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 는 대상이 아직 가비지 컬렉션에 의해 회수되지 않았다면 대상 값에 접근할 수 있도록 역참조(dereference)될 수 있다.</p>
 
     <emu-clause id="sec-weak-ref-constructor">
       <h1><span class="secnum">26.1.1</span> WeakRef 생성자</h1>
-      <p><dfn variants="WeakRefs" tabindex="-1">WeakRef</dfn> <emu-xref href="#constructor" id="_ref_10263"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
+      <p><dfn variants="WeakRefs" tabindex="-1">WeakRef</dfn> <emu-xref href="#constructor" id="_ref_10264"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
       <ul>
         <li><dfn tabindex="-1">%WeakRef%</dfn> 이다.</li>
         <li>
-          <emu-xref href="#sec-global-object" id="_ref_10264"><a href="global-object.html#sec-global-object">전역 객체</a></emu-xref>의 <emu-val>"WeakRef"</emu-val> 프로퍼티 초기 값이다.
+          <emu-xref href="#sec-global-object" id="_ref_10265"><a href="global-object.html#sec-global-object">전역 객체</a></emu-xref>의 <emu-val>"WeakRef"</emu-val> 프로퍼티 초기 값이다.
         </li>
         <li>
-          <emu-xref href="#constructor" id="_ref_10265"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>로 호출될 때 새 WeakRef 를 생성하고 초기화한다.
+          <emu-xref href="#constructor" id="_ref_10266"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>로 호출될 때 새 WeakRef 를 생성하고 초기화한다.
         </li>
         <li>
           함수로 호출하도록 의도되지 않았으며 그렇게 호출되면 예외를 던진다.
         </li>
         <li>
-          클래스 정의의 <code>extends</code> 절 값으로 사용할 수 있다. 지정된 <code>WeakRef</code> 동작을 상속하려는 서브클래스 <emu-xref href="#constructor" id="_ref_10266"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>는 <code>WeakRef.prototype</code> 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성·초기화하기 위해 <code>WeakRef</code> <emu-xref href="#constructor" id="_ref_10267"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>에 대한 <code>super</code> 호출을 포함해야 한다.
+          클래스 정의의 <code>extends</code> 절 값으로 사용할 수 있다. 지정된 <code>WeakRef</code> 동작을 상속하려는 서브클래스 <emu-xref href="#constructor" id="_ref_10267"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>는 <code>WeakRef.prototype</code> 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성·초기화하기 위해 <code>WeakRef</code> <emu-xref href="#constructor" id="_ref_10268"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>에 대한 <code>super</code> 호출을 포함해야 한다.
         </li>
       </ul>
 
       <emu-clause id="sec-weak-ref-target">
         <h1><span class="secnum">26.1.1.1</span> WeakRef ( <var>target</var> )</h1>
         <p>이 함수는 호출 시 다음 단계를 수행한다:</p>
-        <emu-alg><ol><li>NewTarget 이 <emu-val>undefined</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10268"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>target</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><var>weakRef</var> = ?&nbsp;<emu-xref aoid="OrdinaryCreateFromConstructor" id="_ref_10269"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinarycreatefromconstructor" class="e-user-code">OrdinaryCreateFromConstructor</a></emu-xref>(NewTarget, <emu-val>"%WeakRef.prototype%"</emu-val>, « <var class="field">[[WeakRefTarget]]</var>&nbsp;»).</li><li><emu-xref aoid="AddToKeptObjects" id="_ref_10270"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref>(<var>target</var>) 수행.</li><li><var>weakRef</var>.<var class="field">[[WeakRefTarget]]</var> 를 <var>target</var> 으로 설정.</li><li><var>weakRef</var> 반환.</li></ol></emu-alg>
+        <emu-alg><ol><li>NewTarget 이 <emu-val>undefined</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10269"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>target</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><var>weakRef</var> = ?&nbsp;<emu-xref aoid="OrdinaryCreateFromConstructor" id="_ref_10270"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinarycreatefromconstructor" class="e-user-code">OrdinaryCreateFromConstructor</a></emu-xref>(NewTarget, <emu-val>"%WeakRef.prototype%"</emu-val>, « <var class="field">[[WeakRefTarget]]</var>&nbsp;»).</li><li><emu-xref aoid="AddToKeptObjects" id="_ref_10271"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref>(<var>target</var>) 수행.</li><li><var>weakRef</var>.<var class="field">[[WeakRefTarget]]</var> 를 <var>target</var> 으로 설정.</li><li><var>weakRef</var> 반환.</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-weak-ref-constructor">
       <h1><span class="secnum">26.1.2</span> WeakRef 생성자의 프로퍼티</h1>
-      <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10271"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> <emu-xref href="#constructor" id="_ref_10272"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
+      <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10272"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> <emu-xref href="#constructor" id="_ref_10273"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
       <ul>
         <li>
-          값이 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_10273"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">%Function.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
+          값이 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_10274"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">%Function.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
         </li>
         <li>다음 프로퍼티를 가진다:</li>
       </ul>
 
       <emu-clause id="sec-weak-ref.prototype">
         <h1><span class="secnum">26.1.2.1</span> WeakRef.prototype</h1>
-        <p><code>WeakRef.prototype</code> 의 초기 값은 <emu-xref href="#sec-properties-of-the-weak-ref-prototype-object" id="_ref_10274"><a href="managing-memory.html#sec-properties-of-the-weak-ref-prototype-object">WeakRef 프로토타입 객체</a></emu-xref>이다.</p>
+        <p><code>WeakRef.prototype</code> 의 초기 값은 <emu-xref href="#sec-properties-of-the-weak-ref-prototype-object" id="_ref_10275"><a href="managing-memory.html#sec-properties-of-the-weak-ref-prototype-object">WeakRef 프로토타입 객체</a></emu-xref>이다.</p>
         <p>이 프로퍼티는 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>false</emu-val> } 속성을 가진다.</p>
       </emu-clause>
     </emu-clause>
@@ -417,25 +417,25 @@
       <ul>
         <li><dfn tabindex="-1">%WeakRef.prototype%</dfn> 이다.</li>
         <li>
-          값이 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_10275"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">%Object.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
+          값이 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_10276"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">%Object.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
         </li>
-        <li><emu-xref href="#ordinary-object" id="_ref_10276"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다.</li>
+        <li><emu-xref href="#ordinary-object" id="_ref_10277"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다.</li>
         <li><var class="field">[[WeakRefTarget]]</var> 내부 슬롯을 가지지 않는다.</li>
       </ul>
 
       <emu-clause id="sec-weak-ref.prototype.constructor" normative-optional=""><div class="attributes-tag">Normative Optional</div>
         <h1><span class="secnum">26.1.3.1</span> WeakRef.prototype.constructor</h1>
 
-        <p><code>WeakRef.prototype.constructor</code> 의 초기 값은 <emu-xref href="#sec-weak-ref-constructor" id="_ref_10277"><a href="managing-memory.html#sec-weak-ref-constructor">%WeakRef%</a></emu-xref> 이다.</p>
+        <p><code>WeakRef.prototype.constructor</code> 의 초기 값은 <emu-xref href="#sec-weak-ref-constructor" id="_ref_10278"><a href="managing-memory.html#sec-weak-ref-constructor">%WeakRef%</a></emu-xref> 이다.</p>
       </emu-clause>
 
       <emu-clause id="sec-weak-ref.prototype.deref">
         <h1><span class="secnum">26.1.3.2</span> WeakRef.prototype.deref ( )</h1>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
-        <emu-alg><ol><li><var>weakRef</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10278"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>weakRef</var>, <var class="field">[[WeakRefTarget]]</var>) 수행.</li><li><emu-xref aoid="WeakRefDeref" id="_ref_10279"><a href="managing-memory.html#sec-weakrefderef">WeakRefDeref</a></emu-xref>(<var>weakRef</var>) 를 반환.</li></ol></emu-alg>
+        <emu-alg><ol><li><var>weakRef</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10279"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>weakRef</var>, <var class="field">[[WeakRefTarget]]</var>) 수행.</li><li><emu-xref aoid="WeakRefDeref" id="_ref_10280"><a href="managing-memory.html#sec-weakrefderef">WeakRefDeref</a></emu-xref>(<var>weakRef</var>) 를 반환.</li></ol></emu-alg>
 
         <emu-note><span class="note">Note</span><div class="note-contents">
-          <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10280"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 가 <emu-val>undefined</emu-val> 가 아닌 <var>target</var> 값을 반환한다면, 현재 ECMAScript 코드 실행이 완료될 때까지 이 <var>target</var> 값은 가비지 컬렉션되지 않아야 한다. <emu-xref aoid="AddToKeptObjects" id="_ref_10281"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref> 연산이 읽기 일관성이 유지되도록 보장한다.</p>
+          <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10281"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 가 <emu-val>undefined</emu-val> 가 아닌 <var>target</var> 값을 반환한다면, 현재 ECMAScript 코드 실행이 완료될 때까지 이 <var>target</var> 값은 가비지 컬렉션되지 않아야 한다. <emu-xref aoid="AddToKeptObjects" id="_ref_10282"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref> 연산이 읽기 일관성이 유지되도록 보장한다.</p>
 
           <pre><code class="javascript hljs"><span class="hljs-keyword">let</span> target = { <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {} };
 <span class="hljs-keyword">let</span> weakRef = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakRef</span>(target);
@@ -452,7 +452,7 @@
 
       <emu-clause oldids="sec-weak-ref.prototype-@@tostringtag" id="sec-weak-ref.prototype-%symbol.tostringtag%"><span id="sec-weak-ref.prototype-@@tostringtag"></span>
         <h1><span class="secnum">26.1.3.3</span> WeakRef.prototype [ %Symbol.toStringTag% ]</h1>
-        <p><emu-xref href="#sec-well-known-symbols" id="_ref_10282"><a href="ecmascript-data-types-and-values.html#sec-well-known-symbols">%Symbol.toStringTag%</a></emu-xref> 프로퍼티 초기 값은 String <emu-val>"WeakRef"</emu-val> 이다.</p>
+        <p><emu-xref href="#sec-well-known-symbols" id="_ref_10283"><a href="ecmascript-data-types-and-values.html#sec-well-known-symbols">%Symbol.toStringTag%</a></emu-xref> 프로퍼티 초기 값은 String <emu-val>"WeakRef"</emu-val> 이다.</p>
         <p>이 프로퍼티는 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> } 속성을 가진다.</p>
       </emu-clause>
     </emu-clause>
@@ -462,8 +462,8 @@
 
       <emu-clause id="sec-weakrefderef" type="abstract operation" aoid="WeakRefDeref">
         <h1><span class="secnum">26.1.4.1</span> WeakRefDeref ( <var>weakRef</var> )</h1>
-        <p>The abstract operation WeakRefDeref takes argument <var>weakRef</var> (a <emu-xref href="#sec-weak-ref-constructor" id="_ref_10283"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref>) and returns an ECMAScript language value. It performs the following steps when called:</p>
-        <emu-alg><ol><li><var>target</var> = <var>weakRef</var>.<var class="field">[[WeakRefTarget]]</var>.</li><li><var>target</var> 이 <emu-const>empty</emu-const> 가 아니면<ol><li><emu-xref aoid="AddToKeptObjects" id="_ref_10284"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref>(<var>target</var>) 수행.</li><li><var>target</var> 반환.</li></ol></li><li><emu-val>undefined</emu-val> 반환.</li></ol></emu-alg>
+        <p>The abstract operation WeakRefDeref takes argument <var>weakRef</var> (a <emu-xref href="#sec-weak-ref-constructor" id="_ref_10284"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref>) and returns an ECMAScript language value. It performs the following steps when called:</p>
+        <emu-alg><ol><li><var>target</var> = <var>weakRef</var>.<var class="field">[[WeakRefTarget]]</var>.</li><li><var>target</var> 이 <emu-const>empty</emu-const> 가 아니면<ol><li><emu-xref aoid="AddToKeptObjects" id="_ref_10285"><a href="executable-code-and-execution-contexts.html#sec-addtokeptobjects">AddToKeptObjects</a></emu-xref>(<var>target</var>) 수행.</li><li><var>target</var> 반환.</li></ol></li><li><emu-val>undefined</emu-val> 반환.</li></ol></emu-alg>
         <emu-note><span class="note">Note</span><div class="note-contents">
           <p>이 추상 연산은 liveness 를 간단히 정의할 수 있도록 WeakRef.prototype.deref 와 분리되어 정의된다.</p>
         </div></emu-note>
@@ -472,53 +472,53 @@
 
     <emu-clause id="sec-properties-of-weak-ref-instances">
       <h1><span class="secnum">26.1.5</span> WeakRef 인스턴스의 프로퍼티</h1>
-      <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10285"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 인스턴스는 <emu-xref href="#sec-properties-of-the-weak-ref-prototype-object" id="_ref_10286"><a href="managing-memory.html#sec-properties-of-the-weak-ref-prototype-object">WeakRef 프로토타입 객체</a></emu-xref>로부터 프로퍼티를 상속하는 <emu-xref href="#ordinary-object" id="_ref_10287"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다. 또한 <var class="field">[[WeakRefTarget]]</var> 내부 슬롯을 가진다.</p>
+      <p><emu-xref href="#sec-weak-ref-constructor" id="_ref_10286"><a href="managing-memory.html#sec-weak-ref-constructor">WeakRef</a></emu-xref> 인스턴스는 <emu-xref href="#sec-properties-of-the-weak-ref-prototype-object" id="_ref_10287"><a href="managing-memory.html#sec-properties-of-the-weak-ref-prototype-object">WeakRef 프로토타입 객체</a></emu-xref>로부터 프로퍼티를 상속하는 <emu-xref href="#ordinary-object" id="_ref_10288"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다. 또한 <var class="field">[[WeakRefTarget]]</var> 내부 슬롯을 가진다.</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-finalization-registry-objects">
     <h1><span class="secnum">26.2</span> FinalizationRegistry 객체</h1>
-    <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10288"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> 는 대상 객체와 심볼이 가비지 컬렉션될 때 수행되는 정리(cleanup) 동작의 등록 및 등록 해제를 관리하는 객체이다.</p>
+    <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10289"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> 는 대상 객체와 심볼이 가비지 컬렉션될 때 수행되는 정리(cleanup) 동작의 등록 및 등록 해제를 관리하는 객체이다.</p>
 
     <emu-clause id="sec-finalization-registry-constructor">
       <h1><span class="secnum">26.2.1</span> FinalizationRegistry 생성자</h1>
-      <p><dfn variants="FinalizationRegistrys" tabindex="-1">FinalizationRegistry</dfn> <emu-xref href="#constructor" id="_ref_10289"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
+      <p><dfn variants="FinalizationRegistrys" tabindex="-1">FinalizationRegistry</dfn> <emu-xref href="#constructor" id="_ref_10290"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
       <ul>
         <li><dfn tabindex="-1">%FinalizationRegistry%</dfn> 이다.</li>
         <li>
-          <emu-xref href="#sec-global-object" id="_ref_10290"><a href="global-object.html#sec-global-object">전역 객체</a></emu-xref>의 <emu-val>"FinalizationRegistry"</emu-val> 프로퍼티 초기 값이다.
+          <emu-xref href="#sec-global-object" id="_ref_10291"><a href="global-object.html#sec-global-object">전역 객체</a></emu-xref>의 <emu-val>"FinalizationRegistry"</emu-val> 프로퍼티 초기 값이다.
         </li>
         <li>
-          <emu-xref href="#constructor" id="_ref_10291"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>로 호출될 때 새 FinalizationRegistry 를 생성·초기화한다.
+          <emu-xref href="#constructor" id="_ref_10292"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>로 호출될 때 새 FinalizationRegistry 를 생성·초기화한다.
         </li>
         <li>
           함수로 호출하도록 의도되지 않았으며 그렇게 호출되면 예외를 던진다.
         </li>
         <li>
-          클래스 정의의 <code>extends</code> 절 값으로 사용할 수 있다. 지정된 <code>FinalizationRegistry</code> 동작을 상속하려는 서브클래스 <emu-xref href="#constructor" id="_ref_10292"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>는 <code>FinalizationRegistry.prototype</code> 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성·초기화하기 위해 <code>FinalizationRegistry</code> <emu-xref href="#constructor" id="_ref_10293"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>에 대한 <code>super</code> 호출을 포함해야 한다.
+          클래스 정의의 <code>extends</code> 절 값으로 사용할 수 있다. 지정된 <code>FinalizationRegistry</code> 동작을 상속하려는 서브클래스 <emu-xref href="#constructor" id="_ref_10293"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>는 <code>FinalizationRegistry.prototype</code> 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성·초기화하기 위해 <code>FinalizationRegistry</code> <emu-xref href="#constructor" id="_ref_10294"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>에 대한 <code>super</code> 호출을 포함해야 한다.
         </li>
       </ul>
 
       <emu-clause id="sec-finalization-registry-cleanup-callback">
         <h1><span class="secnum">26.2.1.1</span> FinalizationRegistry ( <var>cleanupCallback</var> )</h1>
         <p>이 함수는 호출 시 다음 단계를 수행한다:</p>
-        <emu-alg><ol><li>NewTarget 이 <emu-val>undefined</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><emu-xref aoid="IsCallable" id="_ref_10294"><a href="abstract-operations.html#sec-iscallable">IsCallable</a></emu-xref>(<var>cleanupCallback</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><var>finalizationRegistry</var> = ?&nbsp;<emu-xref aoid="OrdinaryCreateFromConstructor" id="_ref_10295"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinarycreatefromconstructor" class="e-user-code">OrdinaryCreateFromConstructor</a></emu-xref>(NewTarget, <emu-val>"%FinalizationRegistry.prototype%"</emu-val>, « <var class="field">[[Realm]]</var>, <var class="field">[[CleanupCallback]]</var>, <var class="field">[[Cells]]</var>&nbsp;»).</li><li><var>fn</var> = 활성 <emu-xref href="#function-object" id="_ref_10296"><a href="ecmascript-data-types-and-values.html#function-object">함수 객체</a></emu-xref>로 둔다.</li><li><var>finalizationRegistry</var>.<var class="field">[[Realm]]</var> = <var>fn</var>.<var class="field">[[Realm]]</var> 로 설정.</li><li><var>finalizationRegistry</var>.<var class="field">[[CleanupCallback]]</var> = <emu-xref aoid="HostMakeJobCallback" id="_ref_10297"><a href="executable-code-and-execution-contexts.html#sec-hostmakejobcallback">HostMakeJobCallback</a></emu-xref>(<var>cleanupCallback</var>) 로 설정.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> = 새 빈 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10298"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">List</a></emu-xref> 로 설정.</li><li><var>finalizationRegistry</var> 반환.</li></ol></emu-alg>
+        <emu-alg><ol><li>NewTarget 이 <emu-val>undefined</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><emu-xref aoid="IsCallable" id="_ref_10295"><a href="abstract-operations.html#sec-iscallable">IsCallable</a></emu-xref>(<var>cleanupCallback</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외를 던진다.</li><li><var>finalizationRegistry</var> = ?&nbsp;<emu-xref aoid="OrdinaryCreateFromConstructor" id="_ref_10296"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinarycreatefromconstructor" class="e-user-code">OrdinaryCreateFromConstructor</a></emu-xref>(NewTarget, <emu-val>"%FinalizationRegistry.prototype%"</emu-val>, « <var class="field">[[Realm]]</var>, <var class="field">[[CleanupCallback]]</var>, <var class="field">[[Cells]]</var>&nbsp;»).</li><li><var>fn</var> = 활성 <emu-xref href="#function-object" id="_ref_10297"><a href="ecmascript-data-types-and-values.html#function-object">함수 객체</a></emu-xref>로 둔다.</li><li><var>finalizationRegistry</var>.<var class="field">[[Realm]]</var> = <var>fn</var>.<var class="field">[[Realm]]</var> 로 설정.</li><li><var>finalizationRegistry</var>.<var class="field">[[CleanupCallback]]</var> = <emu-xref aoid="HostMakeJobCallback" id="_ref_10298"><a href="executable-code-and-execution-contexts.html#sec-hostmakejobcallback">HostMakeJobCallback</a></emu-xref>(<var>cleanupCallback</var>) 로 설정.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> = 새 빈 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10299"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">List</a></emu-xref> 로 설정.</li><li><var>finalizationRegistry</var> 반환.</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-finalization-registry-constructor">
       <h1><span class="secnum">26.2.2</span> FinalizationRegistry 생성자의 프로퍼티</h1>
-      <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10299"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> <emu-xref href="#constructor" id="_ref_10300"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
+      <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10300"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> <emu-xref href="#constructor" id="_ref_10301"><a href="ecmascript-data-types-and-values.html#constructor">생성자</a></emu-xref>:</p>
       <ul>
         <li>
-          값이 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_10301"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">%Function.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
+          값이 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_10302"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">%Function.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
         </li>
         <li>다음 프로퍼티를 가진다:</li>
       </ul>
 
       <emu-clause id="sec-finalization-registry.prototype">
         <h1><span class="secnum">26.2.2.1</span> FinalizationRegistry.prototype</h1>
-        <p><code>FinalizationRegistry.prototype</code> 의 초기 값은 <emu-xref href="#sec-properties-of-the-finalization-registry-prototype-object" id="_ref_10302"><a href="managing-memory.html#sec-properties-of-the-finalization-registry-prototype-object">FinalizationRegistry 프로토타입 객체</a></emu-xref>이다.</p>
+        <p><code>FinalizationRegistry.prototype</code> 의 초기 값은 <emu-xref href="#sec-properties-of-the-finalization-registry-prototype-object" id="_ref_10303"><a href="managing-memory.html#sec-properties-of-the-finalization-registry-prototype-object">FinalizationRegistry 프로토타입 객체</a></emu-xref>이다.</p>
         <p>이 프로퍼티는 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>false</emu-val> } 속성을 가진다.</p>
       </emu-clause>
     </emu-clause>
@@ -529,9 +529,9 @@
       <ul>
         <li><dfn tabindex="-1">%FinalizationRegistry.prototype%</dfn> 이다.</li>
         <li>
-          값이 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_10303"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">%Object.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
+          값이 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_10304"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">%Object.prototype%</a></emu-xref> 인 <var class="field">[[Prototype]]</var> 내부 슬롯을 가진다.
         </li>
-        <li><emu-xref href="#ordinary-object" id="_ref_10304"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다.</li>
+        <li><emu-xref href="#ordinary-object" id="_ref_10305"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다.</li>
         <li>
           <var class="field">[[Cells]]</var> 및 <var class="field">[[CleanupCallback]]</var> 내부 슬롯을 가지지 않는다.
         </li>
@@ -539,35 +539,35 @@
 
       <emu-clause id="sec-finalization-registry.prototype.constructor">
         <h1><span class="secnum">26.2.3.1</span> FinalizationRegistry.prototype.constructor</h1>
-        <p><code>FinalizationRegistry.prototype.constructor</code> 의 초기 값은 <emu-xref href="#sec-finalization-registry-constructor" id="_ref_10305"><a href="managing-memory.html#sec-finalization-registry-constructor">%FinalizationRegistry%</a></emu-xref> 이다.</p>
+        <p><code>FinalizationRegistry.prototype.constructor</code> 의 초기 값은 <emu-xref href="#sec-finalization-registry-constructor" id="_ref_10306"><a href="managing-memory.html#sec-finalization-registry-constructor">%FinalizationRegistry%</a></emu-xref> 이다.</p>
       </emu-clause>
 
       <emu-clause id="sec-finalization-registry.prototype.register">
         <h1><span class="secnum">26.2.3.2</span> FinalizationRegistry.prototype.register ( <var>target</var>, <var>heldValue</var> [ , <var>unregisterToken</var> ] )</h1>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
-        <emu-alg><ol><li><var>finalizationRegistry</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10306"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>finalizationRegistry</var>, <var class="field">[[Cells]]</var>) 수행.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10307"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>target</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><emu-xref aoid="SameValue" id="_ref_10308"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref>(<var>target</var>, <var>heldValue</var>) = <emu-val>true</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10309"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>unregisterToken</var>) 이 <emu-val>false</emu-val> 이면<ol><li><var>unregisterToken</var> 이 <emu-val>undefined</emu-val> 가 아니면 <emu-val>TypeError</emu-val> 예외.</li><li><var>unregisterToken</var> = <emu-const>empty</emu-const> 로 설정.</li></ol></li><li><var>cell</var> = <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10310"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[WeakRefTarget]]</var>: <var>target</var>, <var class="field">[[HeldValue]]</var>: <var>heldValue</var>, <var class="field">[[UnregisterToken]]</var>: <var>unregisterToken</var>&nbsp;}.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 에 <var>cell</var> 추가.</li><li><emu-val>undefined</emu-val> 반환.</li></ol></emu-alg>
+        <emu-alg><ol><li><var>finalizationRegistry</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10307"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>finalizationRegistry</var>, <var class="field">[[Cells]]</var>) 수행.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10308"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>target</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><emu-xref aoid="SameValue" id="_ref_10309"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref>(<var>target</var>, <var>heldValue</var>) = <emu-val>true</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10310"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>unregisterToken</var>) 이 <emu-val>false</emu-val> 이면<ol><li><var>unregisterToken</var> 이 <emu-val>undefined</emu-val> 가 아니면 <emu-val>TypeError</emu-val> 예외.</li><li><var>unregisterToken</var> = <emu-const>empty</emu-const> 로 설정.</li></ol></li><li><var>cell</var> = <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10311"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[WeakRefTarget]]</var>: <var>target</var>, <var class="field">[[HeldValue]]</var>: <var>heldValue</var>, <var class="field">[[UnregisterToken]]</var>: <var>unregisterToken</var>&nbsp;}.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 에 <var>cell</var> 추가.</li><li><emu-val>undefined</emu-val> 반환.</li></ol></emu-alg>
 
         <emu-note><span class="note">Note</span><div class="note-contents">
-          <p>명세의 알고리즘과 정의에 따르면 <var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 가 <var>cell</var> 을 포함하는 동안 <var>cell</var>.<var class="field">[[HeldValue]]</var> 는 <emu-xref href="#sec-liveness" id="_ref_10311"><a href="executable-code-and-execution-contexts.html#sec-liveness">live</a></emu-xref> 이다; 그러나 이것이 반드시 <var>cell</var>.<var class="field">[[UnregisterToken]]</var> 또는 <var>cell</var>.<var class="field">[[Target]]</var> 이 <emu-xref href="#sec-liveness" id="_ref_10312"><a href="executable-code-and-execution-contexts.html#sec-liveness">live</a></emu-xref> 임을 의미하지는 않는다. 예를 들어 객체를 자기 자신을 unregister token 으로 하여 등록해도 그 객체를 영원히 살려 두지 않는다.</p>
+          <p>명세의 알고리즘과 정의에 따르면 <var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 가 <var>cell</var> 을 포함하는 동안 <var>cell</var>.<var class="field">[[HeldValue]]</var> 는 <emu-xref href="#sec-liveness" id="_ref_10312"><a href="executable-code-and-execution-contexts.html#sec-liveness">live</a></emu-xref> 이다; 그러나 이것이 반드시 <var>cell</var>.<var class="field">[[UnregisterToken]]</var> 또는 <var>cell</var>.<var class="field">[[Target]]</var> 이 <emu-xref href="#sec-liveness" id="_ref_10313"><a href="executable-code-and-execution-contexts.html#sec-liveness">live</a></emu-xref> 임을 의미하지는 않는다. 예를 들어 객체를 자기 자신을 unregister token 으로 하여 등록해도 그 객체를 영원히 살려 두지 않는다.</p>
         </div></emu-note>
       </emu-clause>
 
       <emu-clause id="sec-finalization-registry.prototype.unregister">
         <h1><span class="secnum">26.2.3.3</span> FinalizationRegistry.prototype.unregister ( <var>unregisterToken</var> )</h1>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
-        <emu-alg><ol><li><var>finalizationRegistry</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10313"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>finalizationRegistry</var>, <var class="field">[[Cells]]</var>) 수행.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10314"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>unregisterToken</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><var>removed</var> = <emu-val>false</emu-val> 로 둔다.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 의 각 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10315"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[WeakRefTarget]]</var>, <var class="field">[[HeldValue]]</var>, <var class="field">[[UnregisterToken]]</var>&nbsp;} <var>cell</var> 에 대해<ol><li><var>cell</var>.<var class="field">[[UnregisterToken]]</var> 이 <emu-const>empty</emu-const> 가 아니고 <emu-xref aoid="SameValue" id="_ref_10316"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref>(<var>cell</var>.<var class="field">[[UnregisterToken]]</var>, <var>unregisterToken</var>) = <emu-val>true</emu-val> 이면<ol><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 에서 <var>cell</var> 제거.</li><li><var>removed</var> = <emu-val>true</emu-val> 로 설정.</li></ol></li></ol></li><li><var>removed</var> 반환.</li></ol></emu-alg>
+        <emu-alg><ol><li><var>finalizationRegistry</var> 를 <emu-val>this</emu-val> 값으로 둔다.</li><li>?&nbsp;<emu-xref aoid="RequireInternalSlot" id="_ref_10314"><a href="ordinary-and-exotic-objects-behaviours.html#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>finalizationRegistry</var>, <var class="field">[[Cells]]</var>) 수행.</li><li><emu-xref aoid="CanBeHeldWeakly" id="_ref_10315"><a href="executable-code-and-execution-contexts.html#sec-canbeheldweakly">CanBeHeldWeakly</a></emu-xref>(<var>unregisterToken</var>) 이 <emu-val>false</emu-val> 이면 <emu-val>TypeError</emu-val> 예외.</li><li><var>removed</var> = <emu-val>false</emu-val> 로 둔다.</li><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 의 각 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_10316"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> { <var class="field">[[WeakRefTarget]]</var>, <var class="field">[[HeldValue]]</var>, <var class="field">[[UnregisterToken]]</var>&nbsp;} <var>cell</var> 에 대해<ol><li><var>cell</var>.<var class="field">[[UnregisterToken]]</var> 이 <emu-const>empty</emu-const> 가 아니고 <emu-xref aoid="SameValue" id="_ref_10317"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref>(<var>cell</var>.<var class="field">[[UnregisterToken]]</var>, <var>unregisterToken</var>) = <emu-val>true</emu-val> 이면<ol><li><var>finalizationRegistry</var>.<var class="field">[[Cells]]</var> 에서 <var>cell</var> 제거.</li><li><var>removed</var> = <emu-val>true</emu-val> 로 설정.</li></ol></li></ol></li><li><var>removed</var> 반환.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause oldids="sec-finalization-registry.prototype-@@tostringtag" id="sec-finalization-registry.prototype-%symbol.tostringtag%"><span id="sec-finalization-registry.prototype-@@tostringtag"></span>
         <h1><span class="secnum">26.2.3.4</span> FinalizationRegistry.prototype [ %Symbol.toStringTag% ]</h1>
-        <p><emu-xref href="#sec-well-known-symbols" id="_ref_10317"><a href="ecmascript-data-types-and-values.html#sec-well-known-symbols">%Symbol.toStringTag%</a></emu-xref> 프로퍼티 초기 값은 String <emu-val>"FinalizationRegistry"</emu-val> 이다.</p>
+        <p><emu-xref href="#sec-well-known-symbols" id="_ref_10318"><a href="ecmascript-data-types-and-values.html#sec-well-known-symbols">%Symbol.toStringTag%</a></emu-xref> 프로퍼티 초기 값은 String <emu-val>"FinalizationRegistry"</emu-val> 이다.</p>
         <p>이 프로퍼티는 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> } 속성을 가진다.</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-finalization-registry-instances">
       <h1><span class="secnum">26.2.4</span> FinalizationRegistry 인스턴스의 프로퍼티</h1>
-      <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10318"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> 인스턴스는 <emu-xref href="#sec-properties-of-the-finalization-registry-prototype-object" id="_ref_10319"><a href="managing-memory.html#sec-properties-of-the-finalization-registry-prototype-object">FinalizationRegistry 프로토타입 객체</a></emu-xref>로부터 프로퍼티를 상속하는 <emu-xref href="#ordinary-object" id="_ref_10320"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다. 또한 <var class="field">[[Cells]]</var> 및 <var class="field">[[CleanupCallback]]</var> 내부 슬롯을 가진다.</p>
+      <p><emu-xref href="#sec-finalization-registry-constructor" id="_ref_10319"><a href="managing-memory.html#sec-finalization-registry-constructor">FinalizationRegistry</a></emu-xref> 인스턴스는 <emu-xref href="#sec-properties-of-the-finalization-registry-prototype-object" id="_ref_10320"><a href="managing-memory.html#sec-properties-of-the-finalization-registry-prototype-object">FinalizationRegistry 프로토타입 객체</a></emu-xref>로부터 프로퍼티를 상속하는 <emu-xref href="#ordinary-object" id="_ref_10321"><a href="ecmascript-data-types-and-values.html#ordinary-object">일반 객체</a></emu-xref>이다. 또한 <var class="field">[[Cells]]</var> 및 <var class="field">[[CleanupCallback]]</var> 내부 슬롯을 가진다.</p>
     </emu-clause>
   </emu-clause>
 </emu-clause></div></body>

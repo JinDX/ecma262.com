@@ -154,7 +154,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2026 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=PMXJ6-Sp" defer=""></script><style>
+<title>ECMAScript® 2026 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=6J5WQcMm" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -946,8 +946,8 @@
         <p>该函数被调用时执行以下步骤：</p>
         <emu-alg><ol><li>令 <var>n</var> 为 ?&nbsp;<emu-xref aoid="ToNumber" id="_ref_6072"><a href="abstract-operations.html#sec-tonumber">ToNumber</a></emu-xref>(<var>x</var>)。</li><li>如果 <var>n</var> 是 <emu-val>NaN</emu-val>，返回 <emu-val>NaN</emu-val>。</li><li>如果 <var>n</var> 是 <emu-val>+0</emu-val><sub>𝔽</sub>、* -0*<sub>𝔽</sub>、<emu-val>+∞</emu-val><sub>𝔽</sub> 或 <emu-val>-∞</emu-val><sub>𝔽</sub> 之一，返回 <var>n</var>。</li><li>令 <var>n16</var> 为将 <var>n</var> 按 roundTiesToEven 模式转换为 <emu-xref href="#sec-bibliography" id="_ref_6073"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> binary16 格式的结果。</li><li>令 <var>n64</var> 为将 <var>n16</var> 转换为 <emu-xref href="#sec-bibliography" id="_ref_6074"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> binary64 格式的结果。</li><li>返回与 <var>n64</var> 对应的 ECMAScript Number 值。</li></ol></emu-alg>
         <emu-note><span class="note">Note</span><div class="note-contents">
-          <p>此操作不同于先转换为 binary32 再转换为 binary16，因为可能出现双重舍入：例如 <var>k</var> = <emu-val>1.00048828125000022204</emu-val><sub>𝔽</sub>，Math.f16round(<var>k</var>) 为 <emu-val>1.0009765625</emu-val><sub>𝔽</sub>，但 Math.f16round(Math.fround(<var>k</var>)) 为 <emu-val>1</emu-val><sub>𝔽</sub>。</p>
-          <p>并非所有平台都提供从 binary64 转换到 binary16 的原生支持。有多种库可提供此功能，包括 MIT 许可的 <a href="https://half.sourceforge.net/">half</a> 库。或者，可以先在 roundTiesToEven 下从 binary64 转换到 binary32，然后检查结果是否可能导致错误的双重舍入。可能导致的情况可以通过调整 binary32 尾数，使其等同于在 roundTiesToOdd 下的初始转换结果来显式处理。随后在 roundTiesToEven 下将调整后的值转换为 binary16 即可得到正确值。</p>
+          <p>该操作与先转换为 binary32 再转换为 binary16 并不相同，因为存在双重舍入（double-rounding）的可能性：例如，考虑数字 <var>k</var> = <emu-val>1.00048828125000022204</emu-val><sub>𝔽</sub>，对于该值，Math.f16round(<var>k</var>) 的结果是 <emu-val>1.0009765625</emu-val><sub>𝔽</sub>，但 Math.f16round(Math.fround(<var>k</var>)) 的结果却是 <emu-val>1</emu-val><sub>𝔽</sub>。</p>
+          <p>并非所有平台都原生支持从 binary64 到 binary16 的转换。市面上有各种库可以实现这种功能，包括 MIT 许可证下的<a href="https://half.sourceforge.net/">half</a>库。或者，也可以先在 roundTiesToEven 模式下将 binary64 转换为 binary32，然后检查结果是否会导致不正确的双重舍入。这类情况可以通过显式调整 binary32 数值的尾数（mantissa）来处理，使其等同于在 roundTiesToOdd 模式下进行初次转换时产生的值。再在 roundTiesToEven 模式下将调整后的值转换为 binary16，即可得到正确的结果。</p>
         </div></emu-note>
       </emu-clause>
 
