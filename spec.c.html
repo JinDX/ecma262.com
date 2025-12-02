@@ -7127,6 +7127,24 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-iteratorcloseall" type="abstract operation">
+      <h1>
+        IteratorCloseAll (
+        _iters_：迭代器记录的列表，
+        _completion_：完成记录，
+        )：完成记录
+      </h1>
+      <dl class="header">
+        <dt>跳过全局检查</dt>
+        <dd>true</dd>
+      </dl>
+      <emu-alg>
+        1. 对于 _iters_ 的每个元素 _iter_（以列表的逆序），执行
+          1. 令 _completion_ 为 Completion(IteratorClose(_iter_, _completion_))。
+        1. 返回 ? _completion_。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
       <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
       <p>IfAbruptCloseIterator 是使用 Iterator Record 相关步骤的简写。形如：</p>
@@ -45784,31 +45802,29 @@ THH:mm:ss.sss
       <emu-clause id="sec-dowait" type="abstract operation">
         <h1>
           DoWait (
-            _mode_: ~sync~ or ~async~,
-            _typedArray_: an ECMAScript language value,
-            _index_: an ECMAScript language value,
-            _value_: an ECMAScript language value,
-            _timeout_: an ECMAScript language value,
-          ): 要么是包含一个 Object、*"not-equal"*、*"timed-out"* 或 *"ok"* 的正常完成，要么是抛出完成
+          _mode_：~sync~ 或 ~async~，
+          _typedArray_：一个 ECMAScript 语言值，
+          _index_：一个 ECMAScript 语言值，
+          _value_：一个 ECMAScript 语言值，
+          _timeout_：一个 ECMAScript 语言值，
+          )：正常完成时包含 Object、*"not-equal"*、*"timed-out"* 或 *"ok"*，或者抛出完成
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
           1. 令 _taRecord_ 为 ? ValidateIntegerTypedArray(_typedArray_, *true*)。
           1. 令 _buffer_ 为 _taRecord_.[[Object]].[[ViewedArrayBuffer]]。
-          1. 若 IsSharedArrayBuffer(_buffer_) 为 *false*，抛出 *TypeError* 异常。
-          1. 令 _i_ 为 ? ValidateAtomicAccess(_taRecord_, _index_)。
+          1. 如果 IsSharedArrayBuffer(_buffer_) 为 *false*，抛出 *TypeError* 异常。
+          1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccess(_taRecord_, _index_)。
           1. 令 _arrayTypeName_ 为 _typedArray_.[[TypedArrayName]]。
-          1. 若 _arrayTypeName_ 为 *"BigInt64Array"*，令 _v_ 为 ? ToBigInt64(_value_)。
+          1. 如果 _arrayTypeName_ 为 *"BigInt64Array"*，令 _v_ 为 ? ToBigInt64(_value_)。
           1. 否则，令 _v_ 为 ? ToInt32(_value_)。
           1. 令 _q_ 为 ? ToNumber(_timeout_)。
-          1. 若 _q_ 为 *NaN* 或 *+∞*<sub>𝔽</sub>，令 _t_ 为 +∞；否则若 _q_ 为 *-∞*<sub>𝔽</sub>，令 _t_ 为 0；否则令 _t_ 为 max(ℝ(_q_), 0)。
-          1. 若 _mode_ 为 ~sync~ 且 AgentCanSuspend() 为 *false*，抛出 *TypeError* 异常。
+          1. 如果 _q_ 为 *NaN* 或 *+∞*<sub>𝔽</sub>，则令 _t_ 为 +∞；否则如果 _q_ 为 *-∞*<sub>𝔽</sub>，令 _t_ 为 0；否则令 _t_ 为 max(ℝ(_q_), 0)。
+          1. 如果 _mode_ 为 ~sync~ 且 AgentCanSuspend() 为 *false*，抛出 *TypeError* 异常。
           1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
-          1. 令 _offset_ 为 _typedArray_.[[ByteOffset]]。
-          1. 令 _byteIndexInBuffer_ 为 (_i_ × 4) + _offset_。
           1. 令 _WL_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
-          1. 若 _mode_ 为 ~sync~，则
+          1. 如果 _mode_ 为 ~sync~，那么
             1. 令 _promiseCapability_ 为 ~blocking~。
             1. 令 _resultObject_ 为 *undefined*。
           1. 否则，
@@ -45817,37 +45833,37 @@ THH:mm:ss.sss
           1. 执行 EnterCriticalSection(_WL_)。
           1. 令 _elementType_ 为 TypedArrayElementType(_typedArray_)。
           1. 令 _w_ 为 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)。
-          1. 若 _v_ ≠ _w_，则
+          1. 如果 _v_ ≠ _w_，那么
             1. 执行 LeaveCriticalSection(_WL_)。
-            1. 若 _mode_ 为 ~sync~，返回 *"not-equal"*。
+            1. 如果 _mode_ 为 ~sync~，返回 *"not-equal"*。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*)。
             1. 返回 _resultObject_。
-          1. 若 _t_ = 0 且 _mode_ 为 ~async~，则
-            1. 注：对同步的立即超时没有特殊处理；异步立即超时被特殊处理以快速失败并避免不必要的 Promise 作业。
+          1. 如果 _t_ = 0 且 _mode_ 为 ~async~，那么
+            1. 注：同步的立即超时没有特殊处理。异步的立即超时有特殊处理，以便快速失败并避免不必要的 Promise 任务。
             1. 执行 LeaveCriticalSection(_WL_)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*)。
             1. 返回 _resultObject_。
           1. 令 _thisAgent_ 为 AgentSignifier()。
-          1. 令 _now_ 为标识当前时间的时间值 (UTC)。
+          1. 令 _now_ 为标识当前时间的时间值（UTC）。
           1. 令 _additionalTimeout_ 为实现定义的非负数学值。
           1. 令 _timeoutTime_ 为 ℝ(_now_) + _t_ + _additionalTimeout_。
-          1. 注：当 _t_ 为 +∞ 时，_timeoutTime_ 亦为 +∞。
-          1. 令 _waiterRecord_ 为一个新 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
+          1. 注：当 _t_ 为 +∞ 时，_timeoutTime_ 也是 +∞。
+          1. 令 _waiterRecord_ 为一个新的 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
           1. 执行 AddWaiter(_WL_, _waiterRecord_)。
-          1. 若 _mode_ 为 ~sync~，则
+          1. 如果 _mode_ 为 ~sync~，那么
             1. 执行 SuspendThisAgent(_WL_, _waiterRecord_)。
-          1. 否则若 _timeoutTime_ 是有限的，则
+          1. 否则如果 _timeoutTime_ 是有限的，那么
             1. 执行 EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_)。
           1. 执行 LeaveCriticalSection(_WL_)。
-          1. 若 _mode_ 为 ~sync~，返回 _waiterRecord_.[[Result]]。
+          1. 如果 _mode_ 为 ~sync~，返回 _waiterRecord_.[[Result]]。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*)。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]])。
           1. 返回 _resultObject_。
         </emu-alg>
         <emu-note>
-          <p>_additionalTimeout_ 允许实现按需填充超时，例如用于降低能耗或粗化计时器分辨率以缓解计时攻击。该值在不同 DoWait 调用间可能不同。</p>
+          <p>_additionalTimeout_ 允许实现根据需要对超时进行填充，比如减少功耗或粗化定时器精度以减轻定时攻击。该值在每次调用 DoWait 时可能不同。</p>
         </emu-note>
       </emu-clause>
 
@@ -47236,16 +47252,16 @@ THH:mm:ss.sss
         <emu-clause id="sec-%iteratorhelperprototype%.return">
           <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 执行 ? RequireInternalSlot(_O_, [[UnderlyingIterator]]).
-            1. 断言：_O_ 具有 [[GeneratorState]] 内部槽。
-            1. 若 _O_.[[GeneratorState]] 为 ~suspended-start~，则
-              1. 设 _O_.[[GeneratorState]] 为 ~completed~。
-              1. 注：一旦生成器进入 completed 状态，它将不再离开该状态，且其关联的执行上下文不再被恢复。与 _O_ 关联的任何执行状态此时都可被丢弃。
-              1. 执行 ? IteratorClose(_O_.[[UnderlyingIterator]], NormalCompletion(~unused~)).
+            1. 令 _O_ 为 *this* 的值。
+            1. 执行 ? RequireInternalSlot(_O_, [[UnderlyingIterators]])。
+            1. 断言：_O_ 拥有 [[GeneratorState]] 内部槽。
+            1. 如果 _O_.[[GeneratorState]] 为 ~suspended-start~，那么
+              1. 将 _O_.[[GeneratorState]] 设为 ~completed~。
+              1. 注：一旦生成器进入 completed 状态，就不会再离开，且它关联的执行上下文也不会被恢复。此时与 _O_ 相关的任何执行状态都可以被丢弃。
+              1. 执行 ? IteratorCloseAll(_O_.[[UnderlyingIterators]], NormalCompletion(~unused~))。
               1. 返回 CreateIteratorResultObject(*undefined*, *true*)。
             1. 令 _C_ 为 ReturnCompletion(*undefined*)。
-            1. 返回 ? GeneratorResumeAbrupt(_O_, _C_, *"Iterator Helper"*).
+            1. 返回 ? GeneratorResumeAbrupt(_O_, _C_, *"Iterator Helper"*)。
           </emu-alg>
         </emu-clause>
 
@@ -47286,6 +47302,36 @@ THH:mm:ss.sss
           <li>具有一个 [[Prototype]] 内部槽，其值为 %Function.prototype%。</li>
           <li>具有以下属性：</li>
         </ul>
+
+        <emu-clause id="sec-iterator.concat">
+          <h1>Iterator.concat（..._items_）</h1>
+          <emu-alg>
+            1. 令 _iterables_ 为一个新的空列表。
+            1. 对于 _items_ 的每个元素 _item_，执行
+              1. 如果 _item_ 不是一个对象，则抛出 *TypeError* 异常。
+              1. 令 _method_ 为 ? GetMethod(_item_, %Symbol.iterator%)。
+              1. 如果 _method_ 为 *undefined*，则抛出 *TypeError* 异常。
+              1. 将记录 { [[OpenMethod]]: _method_, [[Iterable]]: _item_ } 添加到 _iterables_。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterables_，在调用时执行以下步骤：
+              1. 对于 _iterables_ 中的每个记录 _iterable_，执行
+                1. 令 _iter_ 为 ? Call(_iterable_.[[OpenMethod]], _iterable_.[[Iterable]])。
+                1. 如果 _iter_ 不是一个对象，则抛出 *TypeError* 异常。
+                1. 令 _iteratorRecord_ 为 ? GetIteratorDirect(_iter_)。
+                1. 令 _innerAlive_ 为 *true*。
+                1. 当 _innerAlive_ 为 *true* 时重复，
+                  1. 令 _innerValue_ 为 ? IteratorStepValue(_iteratorRecord_)。
+                  1. 如果 _innerValue_ 为 ~done~，那么
+                    1. 将 _innerAlive_ 设为 *false*。
+                  1. 否则，
+                    1. 令 _completion_ 为 Completion(Yield(_innerValue_))。
+                    1. 如果 _completion_ 是一个 abrupt completion，那么
+                      1. 返回 ? IteratorClose(_iteratorRecord_, _completion_)。
+              1. 返回 ReturnCompletion(*undefined*)。
+            1. 令 _gen_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _gen_.[[UnderlyingIterators]] 设为一个新的空列表。
+            1. 返回 _gen_。
+          </emu-alg>
+        </emu-clause>
 
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
@@ -47381,36 +47427,36 @@ THH:mm:ss.sss
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.drop">
-          <h1>Iterator.prototype.drop ( _limit_ )</h1>
+          <h1>Iterator.prototype.drop（_limit_）</h1>
           <p>当调用此方法时，执行以下步骤：</p>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 如果 _O_ 不是一个 Object，抛出一个 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 令 _O_ 为 *this* 的值。
+            1. 如果 _O_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
             1. 令 _numLimit_ 为 Completion(ToNumber(_limit_))。
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-            1. 若 _numLimit_ 为 *NaN*，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *RangeError* 对象)。
+            1. 执行 IfAbruptCloseIterator(_numLimit_, _iterated_)。
+            1. 如果 _numLimit_ 为 *NaN*，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 令 _integerLimit_ 为 ! ToIntegerOrInfinity(_numLimit_)。
-            1. 若 _integerLimit_ &lt; 0，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *RangeError* 对象)。
+            1. 如果 _integerLimit_ &lt; 0，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
-            1. 设 _iterated_ 为 ? GetIteratorDirect(_O_)。
-            1. 令 _closure_ 为一个新的无参数抽象闭包，捕获 _iterated_ 与 _integerLimit_，调用时执行：
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_O_)。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterated_ 和 _integerLimit_，在调用时执行以下步骤：
               1. 令 _remaining_ 为 _integerLimit_。
-              1. 重复，当 _remaining_ > 0，
-                1. 若 _remaining_ ≠ +∞，则
-                  1. 设 _remaining_ 为 _remaining_ - 1。
+              1. 重复，条件为 _remaining_ > 0，
+                1. 如果 _remaining_ ≠ +∞，那么
+                  1. 将 _remaining_ 设为 _remaining_ - 1。
                 1. 令 _next_ 为 ? IteratorStep(_iterated_)。
-                1. 若 _next_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _next_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
               1. 重复，
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 若 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
                 1. 令 _completion_ 为 Completion(Yield(_value_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)。
-            1. 设 _result_.[[UnderlyingIterator]] 为 _iterated_。
+                1. 执行 IfAbruptCloseIterator(_completion_, _iterated_)。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
             1. 返回 _result_。
           </emu-alg>
         </emu-clause>
@@ -47438,29 +47484,29 @@ THH:mm:ss.sss
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.filter">
-          <h1>Iterator.prototype.filter ( _predicate_ )</h1>
+          <h1>Iterator.prototype.filter（_predicate_）</h1>
           <p>当调用此方法时，执行以下步骤：</p>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 如果 _O_ 不是一个 Object，抛出一个 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 若 IsCallable(_predicate_) 为 *false*，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *TypeError* 对象)。
+            1. 令 _O_ 为 *this* 的值。
+            1. 如果 _O_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_predicate_) 为 *false*，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
-            1. 设 _iterated_ 为 ? GetIteratorDirect(_O_)。
-            1. 令 _closure_ 为一个新的无参数抽象闭包，捕获 _iterated_ 与 _predicate_，调用时执行：
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_O_)。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterated_ 和 _predicate_，在调用时执行以下步骤：
               1. 令 _counter_ 为 0。
               1. 重复，
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 若 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
                 1. 令 _selected_ 为 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_selected_, _iterated_)。
-                1. 若 ToBoolean(_selected_) 为 *true*，则
+                1. 执行 IfAbruptCloseIterator(_selected_, _iterated_)。
+                1. 如果 ToBoolean(_selected_) 为 *true*，那么
                   1. 令 _completion_ 为 Completion(Yield(_value_))。
-                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. 设 _counter_ 为 _counter_ + 1。
-            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)。
-            1. 设 _result_.[[UnderlyingIterator]] 为 _iterated_。
+                  1. 执行 IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. 将 _counter_ 设为 _counter_ + 1。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
             1. 返回 _result_。
           </emu-alg>
         </emu-clause>
@@ -47488,40 +47534,40 @@ THH:mm:ss.sss
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.flatmap">
-          <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
+          <h1>Iterator.prototype.flatMap（_mapper_）</h1>
           <p>当调用此方法时，执行以下步骤：</p>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 如果 _O_ 不是一个 Object，抛出一个 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 若 IsCallable(_mapper_) 为 *false*，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *TypeError* 对象)。
+            1. 令 _O_ 为 *this* 的值。
+            1. 如果 _O_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_mapper_) 为 *false*，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
-            1. 设 _iterated_ 为 ? GetIteratorDirect(_O_)。
-            1. 令 _closure_ 为一个新的无参数抽象闭包，捕获 _iterated_ 与 _mapper_，调用时执行：
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_O_)。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterated_ 和 _mapper_，在调用时执行以下步骤：
               1. 令 _counter_ 为 0。
               1. 重复，
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 若 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
                 1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. 执行 IfAbruptCloseIterator(_mapped_, _iterated_)。
                 1. 令 _innerIterator_ 为 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))。
-                1. IfAbruptCloseIterator(_innerIterator_, _iterated_)。
+                1. 执行 IfAbruptCloseIterator(_innerIterator_, _iterated_)。
                 1. 令 _innerAlive_ 为 *true*。
-                1. 重复，当 _innerAlive_ 为 *true*，
+                1. 当 _innerAlive_ 为 *true* 时重复，
                   1. 令 _innerValue_ 为 Completion(IteratorStepValue(_innerIterator_))。
-                  1. IfAbruptCloseIterator(_innerValue_, _iterated_)。
-                  1. 若 _innerValue_ 为 ~done~，则
-                    1. 设 _innerAlive_ 为 *false*。
+                  1. 执行 IfAbruptCloseIterator(_innerValue_, _iterated_)。
+                  1. 如果 _innerValue_ 为 ~done~，那么
+                    1. 将 _innerAlive_ 设为 *false*。
                   1. 否则，
                     1. 令 _completion_ 为 Completion(Yield(_innerValue_))。
-                    1. 若 _completion_ 是一个 abrupt completion，则
+                    1. 如果 _completion_ 是一个 abrupt completion，那么
                       1. 令 _backupCompletion_ 为 Completion(IteratorClose(_innerIterator_, _completion_))。
-                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
+                      1. 执行 IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
                       1. 返回 ? IteratorClose(_iterated_, _completion_)。
-                1. 设 _counter_ 为 _counter_ + 1。
-            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)。
-            1. 设 _result_.[[UnderlyingIterator]] 为 _iterated_。
+                1. 将 _counter_ 设为 _counter_ + 1。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
             1. 返回 _result_。
           </emu-alg>
         </emu-clause>
@@ -47548,28 +47594,28 @@ THH:mm:ss.sss
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.map">
-          <h1>Iterator.prototype.map ( _mapper_ )</h1>
+          <h1>Iterator.prototype.map（_mapper_）</h1>
           <p>当调用此方法时，执行以下步骤：</p>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 如果 _O_ 不是一个 Object，抛出一个 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 若 IsCallable(_mapper_) 为 *false*，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *TypeError* 对象)。
+            1. 令 _O_ 为 *this* 的值。
+            1. 如果 _O_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_mapper_) 为 *false*，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
-            1. 设 _iterated_ 为 ? GetIteratorDirect(_O_)。
-            1. 令 _closure_ 为一个新的无参数抽象闭包，捕获 _iterated_ 与 _mapper_，调用时执行：
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_O_)。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterated_ 和 _mapper_，在调用时执行以下步骤：
               1. 令 _counter_ 为 0。
               1. 重复，
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 若 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
                 1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. 执行 IfAbruptCloseIterator(_mapped_, _iterated_)。
                 1. 令 _completion_ 为 Completion(Yield(_mapped_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. 设 _counter_ 为 _counter_ + 1。
-            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)。
-            1. 设 _result_.[[UnderlyingIterator]] 为 _iterated_。
+                1. 执行 IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. 将 _counter_ 设为 _counter_ + 1。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
             1. 返回 _result_。
           </emu-alg>
         </emu-clause>
@@ -47625,35 +47671,35 @@ THH:mm:ss.sss
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.take">
-          <h1>Iterator.prototype.take ( _limit_ )</h1>
+          <h1>Iterator.prototype.take（_limit_）</h1>
           <p>当调用此方法时，执行以下步骤：</p>
           <emu-alg>
-            1. 令 _O_ 为 *this* 值。
-            1. 如果 _O_ 不是一个 Object，抛出一个 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 令 _O_ 为 *this* 的值。
+            1. 如果 _O_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
             1. 令 _numLimit_ 为 Completion(ToNumber(_limit_))。
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-            1. 若 _numLimit_ 为 *NaN*，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *RangeError* 对象)。
+            1. 执行 IfAbruptCloseIterator(_numLimit_, _iterated_)。
+            1. 如果 _numLimit_ 为 *NaN*，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 令 _integerLimit_ 为 ! ToIntegerOrInfinity(_numLimit_)。
-            1. 若 _integerLimit_ &lt; 0，则
-              1. 令 _error_ 为 ThrowCompletion(一个新建的 *RangeError* 对象)。
+            1. 如果 _integerLimit_ &lt; 0，那么
+              1. 令 _error_ 为 ThrowCompletion(新建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
-            1. 设 _iterated_ 为 ? GetIteratorDirect(_O_)。
-            1. 令 _closure_ 为一个新的无参数抽象闭包，捕获 _iterated_ 与 _integerLimit_，调用时执行：
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_O_)。
+            1. 令 _closure_ 为一个新建的抽象闭包，无参数，捕获 _iterated_ 和 _integerLimit_，在调用时执行以下步骤：
               1. 令 _remaining_ 为 _integerLimit_。
               1. 重复，
-                1. 若 _remaining_ = 0，则
+                1. 如果 _remaining_ = 0，那么
                   1. 返回 ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))。
-                1. 若 _remaining_ ≠ +∞，则
-                  1. 设 _remaining_ 为 _remaining_ - 1。
+                1. 如果 _remaining_ ≠ +∞，那么
+                  1. 将 _remaining_ 设为 _remaining_ - 1。
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 若 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，返回 ReturnCompletion(*undefined*)。
                 1. 令 _completion_ 为 Completion(Yield(_value_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)。
-            1. 设 _result_.[[UnderlyingIterator]] 为 _iterated_。
+                1. 执行 IfAbruptCloseIterator(_completion_, _iterated_)。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
             1. 返回 _result_。
           </emu-alg>
         </emu-clause>
@@ -48435,65 +48481,50 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-performpromiseall" type="abstract operation">
+        <emu-clause id="sec-performpromiseall" oldids="sec-promise.all-resolve-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAll (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个 constructor,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 要么是包含一个 ECMAScript 语言值的 normal completion，要么是一个 throw completion
+            _iteratorRecord_：一个迭代器记录，
+            _constructor_：一个构造器，
+            _resultCapability_：一个 PromiseCapability 记录，
+            _promiseResolve_：一个函数对象，
+            )：正常完成时包含 ECMAScript 语言值，或者抛出完成
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _values_ 为一个新的空 List。
-            1. 令 _remainingElementsCount_ 为 Record { [[Value]]: 1 }。
+            1. 令 _values_ 为一个新的空列表。
+            1. [declared="remainingElementsCount"] 注：_remainingElementsCount_ 从 1 而不是 0 开始，以确保即使存在错误实现的 *"then"* 在输入迭代器耗尽前就调用了回调，也只会调用一次 _resultCapability_.[[Resolve]]。
+            1. 令 _remainingElementsCount_ 为记录 { [[Value]]: 1 }。
             1. 令 _index_ 为 0。
             1. 重复，
               1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-              1. 如果 _next_ 是 ~done~，则
+              1. 如果 _next_ 为 ~done~，那么
                 1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
                   1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
                   1. 执行 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
                 1. 返回 _resultCapability_.[[Promise]]。
-              1. 将 *undefined* 追加到 _values_。
+              1. 向 _values_ 追加 *undefined*。
               1. 令 _nextPromise_ 为 ? Call(_promiseResolve_, _constructor_, « _next_ »)。
-              1. 令 _steps_ 为 <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> 中定义的算法步骤。
-              1. 令 _length_ 为 <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> 中函数定义的非可选参数个数。
-              1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_steps_, _length_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »)。
-              1. 将 _onFulfilled_.[[AlreadyCalled]] 设为 *false*。
-              1. 将 _onFulfilled_.[[Index]] 设为 _index_。
-              1. 将 _onFulfilled_.[[Values]] 设为 _values_。
-              1. 将 _onFulfilled_.[[Capability]] 设为 _resultCapability_。
-              1. 将 _onFulfilled_.[[RemainingElements]] 设为 _remainingElementsCount_。
-              1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] + 1。
+              1. 令 _fulfilledSteps_ 为一个新建的抽象闭包，有参数 (_value_)，捕获 _values_、_resultCapability_ 和 _remainingElementsCount_，在被调用时执行以下步骤：
+                1. 令 _F_ 为当前激活的函数对象。
+                1. 如果 _F_.[[AlreadyCalled]] 为 *true*，返回 *undefined*。
+                1. 将 _F_.[[AlreadyCalled]] 设为 *true*。
+                1. 令 _index_ 为 _F_.[[Index]]。
+                1. 设置 _values_[_index_] 为 _value_。
+                1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
+                  1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
+                  1. 返回 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
+                1. 返回 *undefined*。
+              1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)。
+              1. 设置 _onFulfilled_.[[AlreadyCalled]] 为 *false*。
+              1. 设置 _onFulfilled_.[[Index]] 为 _index_。
+              1. 设置 _index_ 为 _index_ + 1。
+              1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] + 1。
               1. 执行 ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _resultCapability_.[[Reject]] »)。
-              1. 将 _index_ 设为 _index_ + 1。
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.all-resolve-element-functions">
-          <h1>`Promise.all` Resolve 元素函数</h1>
-          <p>`Promise.all` resolve 元素函数是一个匿名内建函数，用于 resolve 某个特定的 `Promise.all` 元素。每个此类函数具有 [[Index]]、[[Values]]、[[Capability]]、[[RemainingElements]] 和 [[AlreadyCalled]] 内部槽。</p>
-          <p>当一个 `Promise.all` resolve 元素函数以参数 _x_ 被调用时，执行下列步骤：</p>
-          <emu-alg>
-            1. 令 _F_ 为活动函数对象。
-            1. 如果 _F_.[[AlreadyCalled]] 是 *true*，返回 *undefined*。
-            1. 将 _F_.[[AlreadyCalled]] 设为 *true*。
-            1. 令 _index_ 为 _F_.[[Index]]。
-            1. 令 _values_ 为 _F_.[[Values]]。
-            1. 令 _promiseCapability_ 为 _F_.[[Capability]]。
-            1. 令 _remainingElementsCount_ 为 _F_.[[RemainingElements]]。
-            1. 将 _values_[_index_] 设为 _x_。
-            1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-            1. 如果 _remainingElementsCount_.[[Value]] = 0，则
-              1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
-              1. 返回 ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
-            1. 返回 *undefined*。
-          </emu-alg>
-          <p>`Promise.all` resolve 元素函数的 *"length"* 属性是 *1*<sub>𝔽</sub>。</p>
         </emu-clause>
       </emu-clause>
 

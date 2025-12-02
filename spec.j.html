@@ -7151,6 +7151,24 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-iteratorcloseall" type="abstract operation">
+      <h1>
+        IteratorCloseAll (
+          _iters_: イテレータレコードのリスト,
+          _completion_: 完了レコード,
+        ): 完了レコード
+      </h1>
+      <dl class="header">
+        <dt>グローバルチェックをスキップ</dt>
+        <dd>true</dd>
+      </dl>
+      <emu-alg>
+        1. _iters_ の各要素 _iter_ について、リストの逆順で次を行う
+          1. _completion_ を Completion(IteratorClose(_iter_, _completion_)) に設定する。
+        1. ? _completion_ を返す。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
       <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
       <p>IfAbruptCloseIterator は Iterator Record を用いるアルゴリズム手順列の省略記法。次の形式のステップ:</p>
@@ -46346,70 +46364,68 @@ THH:mm:ss.sss
       <emu-clause id="sec-dowait" type="abstract operation">
         <h1>
           DoWait (
-            _mode_: ~sync~ or ~async~,
-            _typedArray_: an ECMAScript language value,
-            _index_: an ECMAScript language value,
-            _value_: an ECMAScript language value,
-            _timeout_: an ECMAScript language value,
-          ): 正常完了で Object, *"not-equal"*, *"timed-out"*, *"ok"* のいずれか、または throw completion
+            _mode_: ~sync~ または ~async~,
+            _typedArray_: ECMAScript 言語値,
+            _index_: ECMAScript 言語値,
+            _value_: ECMAScript 言語値,
+            _timeout_: ECMAScript 言語値,
+          ): オブジェクト、*"not-equal"*、*"timed-out"*、*"ok"* のいずれか、または throw completion を含む通常の完了
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
           1. _taRecord_ を ? ValidateIntegerTypedArray(_typedArray_, *true*) とする。
           1. _buffer_ を _taRecord_.[[Object]].[[ViewedArrayBuffer]] とする。
-          1. もし IsSharedArrayBuffer(_buffer_) が *false* なら *TypeError* 例外を投げる。
-          1. _i_ を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
+          1. IsSharedArrayBuffer(_buffer_) が *false* なら、*TypeError* 例外を投げる。
+          1. _byteIndexInBuffer_ を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
           1. _arrayTypeName_ を _typedArray_.[[TypedArrayName]] とする。
-          1. もし _arrayTypeName_ が *"BigInt64Array"* なら _v_ を ? ToBigInt64(_value_) とする。
-          1. そうでなければ _v_ を ? ToInt32(_value_) とする。
+          1. _arrayTypeName_ が *"BigInt64Array"* の場合、_v_ を ? ToBigInt64(_value_) とする。
+          1. それ以外の場合、_v_ を ? ToInt32(_value_) とする。
           1. _q_ を ? ToNumber(_timeout_) とする。
-          1. もし _q_ が *NaN* 又は *+∞*<sub>𝔽</sub> なら _t_ を +∞ とする；_q_ が *-∞*<sub>𝔽</sub> なら _t_ を 0；それ以外は _t_ を max(ℝ(_q_), 0) とする。
-          1. もし _mode_ が ~sync~ かつ AgentCanSuspend() が *false* なら *TypeError* 例外を投げる。
+          1. _q_ が *NaN* または *+∞*<sub>𝔽</sub> の場合、_t_ を +∞ とする。そうでなければ _q_ が *-∞*<sub>𝔽</sub> の場合、_t_ を 0 とする。それ以外は _t_ を max(ℝ(_q_), 0) とする。
+          1. _mode_ が ~sync~ かつ AgentCanSuspend() が *false* なら、*TypeError* 例外を投げる。
           1. _block_ を _buffer_.[[ArrayBufferData]] とする。
-          1. _offset_ を _typedArray_.[[ByteOffset]] とする。
-          1. _byteIndexInBuffer_ を (_i_ × 4) + _offset_ とする。
           1. _WL_ を GetWaiterList(_block_, _byteIndexInBuffer_) とする。
-          1. もし _mode_ が ~sync~ なら
+          1. _mode_ が ~sync~ の場合、
             1. _promiseCapability_ を ~blocking~ とする。
             1. _resultObject_ を *undefined* とする。
-          1. それ以外なら
+          1. それ以外の場合、
             1. _promiseCapability_ を ! NewPromiseCapability(%Promise%) とする。
             1. _resultObject_ を OrdinaryObjectCreate(%Object.prototype%) とする。
           1. EnterCriticalSection(_WL_) を実行する。
           1. _elementType_ を TypedArrayElementType(_typedArray_) とする。
           1. _w_ を GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~) とする。
-          1. もし _v_ ≠ _w_ なら
+          1. _v_ ≠ _w_ の場合、
             1. LeaveCriticalSection(_WL_) を実行する。
-            1. もし _mode_ が ~sync~ なら *"not-equal"* を返す。
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行。
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*) を実行。
+            1. _mode_ が ~sync~ の場合、*"not-equal"* を返す。
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行する。
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*) を実行する。
             1. _resultObject_ を返す。
-          1. もし _t_ = 0 かつ _mode_ が ~async~ なら
-            1. 注: 同期即時タイムアウトには特別扱いはない。非同期即時タイムアウトは失敗を速め、不要な Promise ジョブを避ける特別扱いを持つ。
+          1. _t_ = 0 かつ _mode_ が ~async~ の場合、
+            1. 注記: 同期即時タイムアウトに対する特別な扱いはない。非同期即時タイムアウトは素早く失敗し不要な Promise ジョブを避けるために特別な扱いがなされる。
             1. LeaveCriticalSection(_WL_) を実行する。
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行。
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*) を実行。
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行する。
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*) を実行する。
             1. _resultObject_ を返す。
           1. _thisAgent_ を AgentSignifier() とする。
-          1. _now_ を現在時刻 (UTC) を示す time value とする。
-          1. _additionalTimeout_ を実装定義の非負数学的値とする。
+          1. _now_ を現在時刻（UTC）の値とする。
+          1. _additionalTimeout_ を実装依存の非負の数学値とする。
           1. _timeoutTime_ を ℝ(_now_) + _t_ + _additionalTimeout_ とする。
-          1. 注: _t_ が +∞ のとき _timeoutTime_ も +∞。
-          1. _waiterRecord_ を新たな Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* } とする。
+          1. 注記: _t_ が +∞ の場合、_timeoutTime_ も +∞ となる。
+          1. _waiterRecord_ を新しい Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* } とする。
           1. AddWaiter(_WL_, _waiterRecord_) を実行する。
-          1. もし _mode_ が ~sync~ なら
+          1. _mode_ が ~sync~ の場合、
             1. SuspendThisAgent(_WL_, _waiterRecord_) を実行する。
-          1. それ以外で _timeoutTime_ が有限なら
+          1. それ以外で _timeoutTime_ が有限の場合、
             1. EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_) を実行する。
           1. LeaveCriticalSection(_WL_) を実行する。
-          1. もし _mode_ が ~sync~ なら _waiterRecord_.[[Result]] を返す。
-          1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*) を実行。
-          1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]]) を実行。
+          1. _mode_ が ~sync~ の場合、_waiterRecord_.[[Result]] を返す。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]]) を実行する。
           1. _resultObject_ を返す。
         </emu-alg>
         <emu-note>
-          <p>_additionalTimeout_ は、電力消費削減やタイミング攻撃緩和のためのタイマー分解能粗化など、実装が必要に応じてタイムアウトにパディングを追加することを許容する。値は DoWait の呼び出しごとに異なり得る。</p>
+          <p>_additionalTimeout_ は、例えば省電力のためやタイミング攻撃の緩和のためにタイマー分解能を粗くするなど、必要に応じて実装がタイムアウト時間を調整するために使われます。この値は DoWait の呼び出しごとに異なる場合があります。</p>
         </emu-note>
       </emu-clause>
 
@@ -47799,13 +47815,13 @@ THH:mm:ss.sss
         <emu-clause id="sec-%iteratorhelperprototype%.return">
           <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. ? RequireInternalSlot(_O_, [[UnderlyingIterator]]) を実行する。
-            1. 事前条件: _O_ は [[GeneratorState]] 内部スロットを持つ。
-            1. もし _O_.[[GeneratorState]] が ~suspended-start~ なら
+            1. _O_ を *this* の値とする。
+            1. ? RequireInternalSlot(_O_, [[UnderlyingIterators]]) を実行する。
+            1. 仮定：_O_ は [[GeneratorState]] 内部スロットを持つ。
+            1. もし _O_.[[GeneratorState]] が ~suspended-start~ であるなら、
               1. _O_.[[GeneratorState]] を ~completed~ に設定する。
-              1. 注: 一度 generator が completed 状態になると離脱せず、その関連実行コンテキストは再開されない。_O_ に関連する任意の実行状態はここで破棄できる。
-              1. ? IteratorClose(_O_.[[UnderlyingIterator]], NormalCompletion(~unused~)) を実行する。
+              1. 注記：ジェネレーターが completed 状態になると、再びその状態を離れることはなく、その関連する実行コンテキストは再開されない。_O_ に関連付けられたあらゆる実行状態はこの時点で破棄できる。
+              1. ? IteratorCloseAll(_O_.[[UnderlyingIterators]], NormalCompletion(~unused~)) を実行する。
               1. CreateIteratorResultObject(*undefined*, *true*) を返す。
             1. _C_ を ReturnCompletion(*undefined*) とする。
             1. ? GeneratorResumeAbrupt(_O_, _C_, *"Iterator Helper"*) を返す。
@@ -47849,6 +47865,36 @@ THH:mm:ss.sss
           <li>[[Prototype]] 内部スロットの値は %Function.prototype% である。</li>
           <li>次のプロパティを持つ:</li>
         </ul>
+
+        <emu-clause id="sec-iterator.concat">
+          <h1>Iterator.concat ( ..._items_ )</h1>
+          <emu-alg>
+            1. _iterables_ を新しい空のリストとする。
+            1. _items_ の各要素 _item_ について、次を行う
+              1. _item_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+              1. _method_ を ? GetMethod(_item_, %Symbol.iterator%) とする。
+              1. _method_ が *undefined* の場合、*TypeError* 例外を投げる。
+              1. レコード { [[OpenMethod]]: _method_, [[Iterable]]: _item_ } を _iterables_ に追加する。
+            1. _iterables_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）を _closure_ とする：
+              1. _iterables_ の各レコード _iterable_ について、次を行う
+                1. _iter_ を ? Call(_iterable_.[[OpenMethod]], _iterable_.[[Iterable]]) とする。
+                1. _iter_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+                1. _iteratorRecord_ を ? GetIteratorDirect(_iter_) とする。
+                1. _innerAlive_ を *true* とする。
+                1. _innerAlive_ が *true* の間、次を繰り返す
+                  1. _innerValue_ を ? IteratorStepValue(_iteratorRecord_) とする。
+                  1. _innerValue_ が ~done~ の場合、
+                    1. _innerAlive_ を *false* に設定する。
+                  1. それ以外の場合、
+                    1. _completion_ を Completion(Yield(_innerValue_)) とする。
+                    1. _completion_ がアブストラクトコンプリーション（abrupt completion）の場合、
+                      1. ? IteratorClose(_iteratorRecord_, _completion_) を返す。
+              1. ReturnCompletion(*undefined*) を返す。
+            1. _gen_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _gen_.[[UnderlyingIterators]] を新しい空リストに設定する。
+            1. _gen_ を返す。
+          </emu-alg>
+        </emu-clause>
 
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
@@ -47945,35 +47991,35 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-iterator.prototype.drop">
           <h1>Iterator.prototype.drop ( _limit_ )</h1>
-          <p>このメソッドは呼び出されると次を実行する:</p>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する:</p>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _O_ を *this* の値とする。
+            1. _O_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+            1. _iterated_ をイテレータレコード { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
             1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-            1. もし _numLimit_ が *NaN* なら
-              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_) を実行する。
+            1. _numLimit_ が *NaN* の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *RangeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
-            1. もし _integerLimit_ &lt; 0 なら
-              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+            1. _integerLimit_ &lt; 0 の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *RangeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-            1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し、呼び出されると次を実行する新たな Abstract Closure とする:
+            1. _closure_ を、_iterated_ と _integerLimit_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）とする:
               1. _remaining_ を _integerLimit_ とする。
-              1. _remaining_ > 0 の間繰り返す,
-                1. もし _remaining_ ≠ +∞ なら
-                  1. _remaining_ を _remaining_ - 1 にする。
+              1. _remaining_ > 0 の間、繰り返す
+                1. _remaining_ ≠ +∞ の場合、
+                  1. _remaining_ を _remaining_ - 1 に設定する。
                 1. _next_ を ? IteratorStep(_iterated_) とする。
-                1. もし _next_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
-              1. 繰り返す,
+                1. _next_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+              1. 次を繰り返す:
                 1. _value_ を ? IteratorStepValue(_iterated_) とする。
-                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
                 1. _completion_ を Completion(Yield(_value_)) とする。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+                1. IfAbruptCloseIterator(_completion_, _iterated_) を実行する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
             1. _result_ を返す。
           </emu-alg>
         </emu-clause>
@@ -48002,28 +48048,28 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-iterator.prototype.filter">
           <h1>Iterator.prototype.filter ( _predicate_ )</h1>
-          <p>このメソッドは呼び出されると次を実行する:</p>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する:</p>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-            1. もし IsCallable(_predicate_) が *false* なら
-              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+            1. _O_ を *this* の値とする。
+            1. _O_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+            1. _iterated_ をイテレータレコード { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_predicate_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *TypeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-            1. _closure_ を、引数なしで _iterated_ と _predicate_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+            1. _closure_ を、_iterated_ と _predicate_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）とする:
               1. _counter_ を 0 とする。
-              1. 繰り返す,
+              1. 次を繰り返す:
                 1. _value_ を ? IteratorStepValue(_iterated_) とする。
-                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
                 1. _selected_ を Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-                1. IfAbruptCloseIterator(_selected_, _iterated_)。
-                1. もし ToBoolean(_selected_) が *true* なら
+                1. IfAbruptCloseIterator(_selected_, _iterated_) を実行する。
+                1. ToBoolean(_selected_) が *true* の場合、
                   1. _completion_ を Completion(Yield(_value_)) とする。
-                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. _counter_ を _counter_ + 1 にする。
-            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+                  1. IfAbruptCloseIterator(_completion_, _iterated_) を実行する。
+                1. _counter_ を _counter_ + 1 に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
             1. _result_ を返す。
           </emu-alg>
         </emu-clause>
@@ -48052,39 +48098,39 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-iterator.prototype.flatmap">
           <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
-          <p>このメソッドは呼び出されると次を実行する:</p>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する:</p>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-            1. もし IsCallable(_mapper_) が *false* なら
-              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+            1. _O_ を *this* の値とする。
+            1. _O_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+            1. _iterated_ をイテレータレコード { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_mapper_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *TypeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-            1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+            1. _closure_ を、_iterated_ と _mapper_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）とする:
               1. _counter_ を 0 とする。
-              1. 繰り返す,
+              1. 次を繰り返す:
                 1. _value_ を ? IteratorStepValue(_iterated_) とする。
-                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
                 1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_) を実行する。
                 1. _innerIterator_ を Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~)) とする。
-                1. IfAbruptCloseIterator(_innerIterator_, _iterated_)。
+                1. IfAbruptCloseIterator(_innerIterator_, _iterated_) を実行する。
                 1. _innerAlive_ を *true* とする。
-                1. _innerAlive_ が *true* の間繰り返す,
+                1. _innerAlive_ が *true* の間、次を繰り返す:
                   1. _innerValue_ を Completion(IteratorStepValue(_innerIterator_)) とする。
-                  1. IfAbruptCloseIterator(_innerValue_, _iterated_)。
-                  1. もし _innerValue_ が ~done~ なら
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_) を実行する。
+                  1. _innerValue_ が ~done~ の場合、
                     1. _innerAlive_ を *false* に設定する。
-                  1. それ以外
+                  1. それ以外の場合、
                     1. _completion_ を Completion(Yield(_innerValue_)) とする。
-                    1. もし _completion_ が abrupt completion なら
+                    1. _completion_ がアブストラクトコンプリーション（abrupt completion）の場合、
                       1. _backupCompletion_ を Completion(IteratorClose(_innerIterator_, _completion_)) とする。
-                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
+                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_) を実行する。
                       1. ? IteratorClose(_iterated_, _completion_) を返す。
-                1. _counter_ を _counter_ + 1 にする。
-            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+                1. _counter_ を _counter_ + 1 に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
             1. _result_ を返す。
           </emu-alg>
         </emu-clause>
@@ -48112,27 +48158,27 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-iterator.prototype.map">
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
-          <p>このメソッドは呼び出されると次を実行する:</p>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する：</p>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
-            1. もし IsCallable(_mapper_) が *false* なら
-              1. _error_ を ThrowCompletion(新しく生成された *TypeError* オブジェクト) とする。
+            1. _O_ を *this* の値とする。
+            1. _O_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+            1. _iterated_ をイテレータレコード { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_mapper_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *TypeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-            1. _closure_ を、引数なしで _iterated_ と _mapper_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+            1. _closure_ を _iterated_ と _mapper_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）とする：
               1. _counter_ を 0 とする。
-              1. 繰り返す,
+              1. 次を繰り返す：
                 1. _value_ を ? IteratorStepValue(_iterated_) とする。
-                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
                 1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)) とする。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_) を実行する。
                 1. _completion_ を Completion(Yield(_mapped_)) とする。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. _counter_ を _counter_ + 1 にする。
-            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+                1. IfAbruptCloseIterator(_completion_, _iterated_) を実行する。
+                1. _counter_ を _counter_ + 1 に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
             1. _result_ を返す。
           </emu-alg>
         </emu-clause>
@@ -48189,34 +48235,34 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-iterator.prototype.take">
           <h1>Iterator.prototype.take ( _limit_ )</h1>
-          <p>このメソッドは呼び出されると次を実行する:</p>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する：</p>
           <emu-alg>
-            1. _O_ を *this* 値とする。
-            1. もし _O_ が Object でなければ *TypeError* 例外を投げる。
-            1. _iterated_ を Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _O_ を *this* の値とする。
+            1. _O_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+            1. _iterated_ をイテレータレコード { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
             1. _numLimit_ を Completion(ToNumber(_limit_)) とする。
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_)。
-            1. もし _numLimit_ が *NaN* なら
-              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_) を実行する。
+            1. _numLimit_ が *NaN* の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *RangeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _integerLimit_ を ! ToIntegerOrInfinity(_numLimit_) とする。
-            1. もし _integerLimit_ &lt; 0 なら
-              1. _error_ を ThrowCompletion(新しく生成された *RangeError* オブジェクト) とする。
+            1. _integerLimit_ &lt; 0 の場合、
+              1. _error_ を ThrowCompletion(新しく作成した *RangeError* オブジェクト) とする。
               1. ? IteratorClose(_iterated_, _error_) を返す。
             1. _iterated_ を ? GetIteratorDirect(_O_) に設定する。
-            1. _closure_ を、引数なしで _iterated_ と _integerLimit_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とする:
+            1. _closure_ を、_iterated_ と _integerLimit_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャ（パラメータなし）とする：
               1. _remaining_ を _integerLimit_ とする。
-              1. 繰り返す,
-                1. もし _remaining_ = 0 なら
+              1. 次を繰り返す：
+                1. _remaining_ = 0 の場合、
                   1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*)) を返す。
-                1. もし _remaining_ ≠ +∞ なら
-                  1. _remaining_ を _remaining_ - 1 にする。
+                1. _remaining_ ≠ +∞ の場合、
+                  1. _remaining_ を _remaining_ - 1 に設定する。
                 1. _value_ を ? IteratorStepValue(_iterated_) とする。
-                1. もし _value_ が ~done~ なら ReturnCompletion(*undefined*) を返す。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
                 1. _completion_ を Completion(Yield(_value_)) とする。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] ») とする。
-            1. _result_.[[UnderlyingIterator]] に _iterated_ を設定する。
+                1. IfAbruptCloseIterator(_completion_, _iterated_) を実行する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
             1. _result_ を返す。
           </emu-alg>
         </emu-clause>
@@ -48996,65 +49042,50 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-performpromiseall" type="abstract operation">
+        <emu-clause id="sec-performpromiseall" oldids="sec-promise.all-resolve-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAll (
-              _iteratorRecord_: an Iterator Record,
-              _constructor_: a constructor,
-              _resultCapability_: a PromiseCapability Record,
-              _promiseResolve_: a function object,
-            ): 正常完了で ECMAScript 言語値を含むか、または throw completion
+              _iteratorRecord_: イテレータレコード,
+              _constructor_: コンストラクター,
+              _resultCapability_: PromiseCapability レコード,
+              _promiseResolve_: 関数オブジェクト,
+            ): ECMAScript 言語値を含む通常の完了か throw 完了のいずれか
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_ を新しい空 List とする。
-            1. _remainingElementsCount_ を Record { [[Value]]: 1 } とする。
+            1. _values_ を新しい空のリストとする。
+            1. [declared="remainingElementsCount"] 注記: _remainingElementsCount_ は 0 ではなく 1 で開始される。これは、不正な *"then"* が入力イテレータが尽きる前にコールバックを呼んだとしても、_resultCapability_.[[Resolve]] が一度だけ呼ばれることを保証するためである。
+            1. _remainingElementsCount_ をレコード { [[Value]]: 1 } とする。
             1. _index_ を 0 とする。
-            1. 繰り返す,
+            1. 次を繰り返す:
               1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
-              1. もし _next_ が ~done~ なら
+              1. _next_ が ~done~ の場合、
                 1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-                1. もし _remainingElementsCount_.[[Value]] = 0 なら
+                1. _remainingElementsCount_.[[Value]] = 0 の場合、
                   1. _valuesArray_ を CreateArrayFromList(_values_) とする。
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を実行する。
                 1. _resultCapability_.[[Promise]] を返す。
               1. *undefined* を _values_ に追加する。
               1. _nextPromise_ を ? Call(_promiseResolve_, _constructor_, « _next_ ») とする。
-              1. _steps_ を <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-              1. _length_ を <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-              1. _onFulfilled_ を CreateBuiltinFunction(_steps_, _length_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») とする。
+              1. _fulfilledSteps_ を、パラメータ (_value_) を取り、_values_, _resultCapability_, _remainingElementsCount_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャとする:
+                1. _F_ をアクティブな関数オブジェクトとする。
+                1. _F_.[[AlreadyCalled]] が *true* なら、*undefined* を返す。
+                1. _F_.[[AlreadyCalled]] を *true* に設定する。
+                1. _index_ を _F_.[[Index]] とする。
+                1. _values_[_index_] に _value_ を設定する。
+                1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
+                1. _remainingElementsCount_.[[Value]] = 0 の場合、
+                  1. _valuesArray_ を CreateArrayFromList(_values_) とする。
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
+                1. *undefined* を返す。
+              1. _onFulfilled_ を CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] ») とする。
               1. _onFulfilled_.[[AlreadyCalled]] を *false* に設定する。
               1. _onFulfilled_.[[Index]] を _index_ に設定する。
-              1. _onFulfilled_.[[Values]] を _values_ に設定する。
-              1. _onFulfilled_.[[Capability]] を _resultCapability_ に設定する。
-              1. _onFulfilled_.[[RemainingElements]] を _remainingElementsCount_ に設定する。
+              1. _index_ を _index_ + 1 に設定する。
               1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] + 1 に設定する。
               1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _resultCapability_.[[Reject]] ») を実行する。
-              1. _index_ を _index_ + 1 に設定する。
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.all-resolve-element-functions">
-          <h1>`Promise.all` Resolve 要素関数 (`Promise.all` Resolve Element Functions)</h1>
-          <p>`Promise.all` Resolve 要素関数は特定の `Promise.all` の要素を解決するために使われる匿名組み込み関数である。各 `Promise.all` Resolve 要素関数は [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 内部スロットを持つ。</p>
-          <p>`Promise.all` Resolve 要素関数が引数 _x_ で呼ばれたとき、次を行う:</p>
-          <emu-alg>
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. もし _F_.[[AlreadyCalled]] が *true* なら *undefined* を返す。
-            1. _F_.[[AlreadyCalled]] を *true* に設定する。
-            1. _index_ を _F_.[[Index]] とする。
-            1. _values_ を _F_.[[Values]] とする。
-            1. _promiseCapability_ を _F_.[[Capability]] とする。
-            1. _remainingElementsCount_ を _F_.[[RemainingElements]] とする。
-            1. _values_[_index_] を _x_ に設定する。
-            1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-            1. もし _remainingElementsCount_.[[Value]] = 0 なら
-              1. _valuesArray_ を CreateArrayFromList(_values_) とする。
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
-            1. *undefined* を返す。
-          </emu-alg>
-          <p>`Promise.all` Resolve 要素関数の *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
         </emu-clause>
       </emu-clause>
 

@@ -7153,6 +7153,24 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-iteratorcloseall" type="abstract operation">
+      <h1>
+        IteratorCloseAll (
+          _iters_: Iterator 기록의 목록,
+          _completion_: Completion 기록,
+        ): Completion 기록
+      </h1>
+      <dl class="header">
+        <dt>전역 검사 생략</dt>
+        <dd>true</dd>
+      </dl>
+      <emu-alg>
+        1. _iters_의 각 요소 _iter_에 대해, 리스트의 역순으로, 다음을 수행한다.
+          1. _completion_을 Completion(IteratorClose(_iter_, _completion_))으로 설정한다.
+        1. ? _completion_을 반환한다.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
       <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
       <p>IfAbruptCloseIterator는 Iterator Record를 사용하는 알고리즘 단계의 축약 표현입니다. 다음 형태의 알고리즘 단계:</p>
@@ -45888,69 +45906,68 @@ THH:mm:ss.sss
       <emu-clause id="sec-dowait" type="abstract operation">
         <h1>
           DoWait (
-            _mode_: ~sync~ or ~async~,
-            _typedArray_: an ECMAScript language value,
-            _index_: an ECMAScript language value,
-            _value_: an ECMAScript language value,
-            _timeout_: an ECMAScript language value,
-          ): 정상 완료(Object, *"not-equal"*, *"timed-out"*, *"ok"* 중 하나) 또는 throw completion
+            _mode_: ~sync~ 또는 ~async~,
+            _typedArray_: ECMAScript 언어 값,
+            _index_: ECMAScript 언어 값,
+            _value_: ECMAScript 언어 값,
+            _timeout_: ECMAScript 언어 값,
+          ): Object, *"not-equal"*, *"timed-out"*, *"ok"* 중 하나를 포함하는 정상 완료 또는 throw completion
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _taRecord_ = ? ValidateIntegerTypedArray(_typedArray_, *true*).
-          1. _buffer_ = _taRecord_.[[Object]].[[ViewedArrayBuffer]].
-          1. IsSharedArrayBuffer(_buffer_) = *false* 이면 *TypeError* 예외.
-          1. _i_ = ? ValidateAtomicAccess(_taRecord_, _index_).
-          1. _arrayTypeName_ = _typedArray_.[[TypedArrayName]].
-          1. _arrayTypeName_ = *"BigInt64Array"* 이면 _v_ = ? ToBigInt64(_value_); Else _v_ = ? ToInt32(_value_).
-          1. _q_ = ? ToNumber(_timeout_).
-          1. _q_ 가 *NaN* 또는 *+∞*<sub>𝔽</sub> 이면 _t_ = +∞; else if _q_ = *-∞*<sub>𝔽</sub> 이면 _t_ = 0; else _t_ = max(ℝ(_q_), 0).
-          1. _mode_ = ~sync~ 그리고 AgentCanSuspend() = *false* 이면 *TypeError* 예외.
-          1. _block_ = _buffer_.[[ArrayBufferData]].
-          1. _offset_ = _typedArray_.[[ByteOffset]].
-          1. _byteIndexInBuffer_ = (_i_ × 4) + _offset_.
-          1. _WL_ = GetWaiterList(_block_, _byteIndexInBuffer_).
-          1. _mode_ = ~sync~ 이면
-            1. _promiseCapability_ = ~blocking~.
-            1. _resultObject_ = *undefined*.
-          1. Else
-            1. _promiseCapability_ = ! NewPromiseCapability(%Promise%).
-            1. _resultObject_ = OrdinaryObjectCreate(%Object.prototype%).
-          1. EnterCriticalSection(_WL_) 수행.
-          1. _elementType_ = TypedArrayElementType(_typedArray_).
-          1. _w_ = GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~).
-          1. _v_ ≠ _w_ 이면
-            1. LeaveCriticalSection(_WL_) 수행.
-            1. _mode_ = ~sync~ 이면 *"not-equal"* 반환.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) 수행.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*) 수행.
-            1. Return _resultObject_.
-          1. _t_ = 0 그리고 _mode_ = ~async~ 이면
-            1. NOTE: 동기 즉시 타임아웃은 특별 처리 없음. 비동기 즉시 타임아웃은 빠른 실패를 위해 특별 처리.
-            1. LeaveCriticalSection(_WL_) 수행.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) 수행.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*) 수행.
-            1. Return _resultObject_.
-          1. _thisAgent_ = AgentSignifier().
-          1. _now_ = 현재 시간(UTC) time value.
-          1. _additionalTimeout_ = 구현 정의 음이 아닌 수학적 값.
-          1. _timeoutTime_ = ℝ(_now_) + _t_ + _additionalTimeout_.
-          1. NOTE: _t_ = +∞ 이면 _timeoutTime_ 도 +∞.
-          1. _waiterRecord_ = 새 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }.
-          1. AddWaiter(_WL_, _waiterRecord_) 수행.
-          1. _mode_ = ~sync~ 이면
-            1. SuspendThisAgent(_WL_, _waiterRecord_) 수행.
-          1. Else if _timeoutTime_ 유한이면
-            1. EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_) 수행.
-          1. LeaveCriticalSection(_WL_) 수행.
-          1. _mode_ = ~sync~ 이면 _waiterRecord_.[[Result]] 반환.
-          1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*) 수행.
-          1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]]) 수행.
-          1. Return _resultObject_.
+          1. _taRecord_를 ? ValidateIntegerTypedArray(_typedArray_, *true*)로 둔다.
+          1. _buffer_를 _taRecord_.[[Object]].[[ViewedArrayBuffer]]로 둔다.
+          1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *TypeError* 예외를 발생시킨다.
+          1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 둔다.
+          1. _arrayTypeName_을 _typedArray_.[[TypedArrayName]]로 둔다.
+          1. _arrayTypeName_이 *"BigInt64Array"*이면, _v_를 ? ToBigInt64(_value_)로 둔다.
+          1. 그렇지 않으면, _v_를 ? ToInt32(_value_)로 둔다.
+          1. _q_를 ? ToNumber(_timeout_)로 둔다.
+          1. _q_가 *NaN* 또는 *+∞*<sub>𝔽</sub>이면 _t_를 +∞로, _q_가 *-∞*<sub>𝔽</sub>이면 _t_를 0으로, 그렇지 않으면 _t_를 max(ℝ(_q_), 0)으로 둔다.
+          1. _mode_가 ~sync~이고 AgentCanSuspend()가 *false*이면, *TypeError* 예외를 발생시킨다.
+          1. _block_을 _buffer_.[[ArrayBufferData]]로 둔다.
+          1. _WL_을 GetWaiterList(_block_, _byteIndexInBuffer_)로 둔다.
+          1. _mode_가 ~sync~이면,
+            1. _promiseCapability_를 ~blocking~으로 둔다.
+            1. _resultObject_를 *undefined*로 둔다.
+          1. 그렇지 않으면,
+            1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
+            1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+          1. EnterCriticalSection(_WL_)을 수행한다.
+          1. _elementType_을 TypedArrayElementType(_typedArray_)로 둔다.
+          1. _w_를 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)로 둔다.
+          1. _v_ ≠ _w_이면,
+            1. LeaveCriticalSection(_WL_)을 수행한다.
+            1. _mode_가 ~sync~이면 *"not-equal"*을 반환한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)을 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*)을 수행한다.
+            1. _resultObject_를 반환한다.
+          1. _t_ = 0이고 _mode_가 ~async~이면,
+            1. 주: 동기적 즉각 시간초과는 특별 취급하지 않는다. 비동기적 즉각 시간초과는 Promise job을 불필요하게 생성하지 않고 빠르게 실패하도록 특별 취급이 있다.
+            1. LeaveCriticalSection(_WL_)을 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)를 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*)을 수행한다.
+            1. _resultObject_를 반환한다.
+          1. _thisAgent_를 AgentSignifier()로 둔다.
+          1. _now_를 현재 시각(UTC) 값으로 둔다.
+          1. _additionalTimeout_을 구현 정의된 0 이상의 수학적 값으로 둔다.
+          1. _timeoutTime_을 ℝ(_now_) + _t_ + _additionalTimeout_로 둔다.
+          1. 주: _t_가 +∞일 때, _timeoutTime_도 +∞이다.
+          1. _waiterRecord_를 새로운 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }로 둔다.
+          1. AddWaiter(_WL_, _waiterRecord_)를 수행한다.
+          1. _mode_가 ~sync~이면,
+            1. SuspendThisAgent(_WL_, _waiterRecord_)를 수행한다.
+          1. 그렇지 않고 _timeoutTime_이 유한이면,
+            1. EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_)를 수행한다.
+          1. LeaveCriticalSection(_WL_)을 수행한다.
+          1. _mode_가 ~sync~이면 _waiterRecord_.[[Result]]를 반환한다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*)를 수행한다.
+          1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]])를 수행한다.
+          1. _resultObject_를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>_additionalTimeout_ 은 전력 소비 감소나 타이밍 공격 완화를 위한 타이머 해상도 조정 등 필요 시 타임아웃에 패딩을 허용한다. 호출마다 값이 다를 수 있다.</p>
+          <p>_additionalTimeout_은 구현체가 timeout을 필요에 따라 조정할 수 있도록 허용하며, 예를 들어 전력 소모를 줄이거나 타이밍 공격을 완화하기 위해 타이머 해상도를 거칠게 만들 수 있다. 이 값은 DoWait를 호출할 때마다 달라질 수 있다.</p>
         </emu-note>
       </emu-clause>
 
@@ -47332,15 +47349,15 @@ THH:mm:ss.sss
         <emu-clause id="sec-%iteratorhelperprototype%.return">
           <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. ? RequireInternalSlot(_O_, [[UnderlyingIterator]])를 수행한다.
-            1. _O_ 가 [[GeneratorState]] 내부 슬롯을 가지고 있음을 단언(Assert)한다.
-            1. _O_.[[GeneratorState]] 가 ~suspended-start~ 이면,
-              1. _O_.[[GeneratorState]] 를 ~completed~ 로 설정한다.
-              1. 주: 한 번 generator가 completed 상태에 들어가면 다시 나오지 않고 그 연관 실행 컨텍스트는 재개되지 않는다. _O_ 와 연관된 어떤 실행 상태도 이 시점에서 폐기될 수 있다.
-              1. ? IteratorClose(_O_.[[UnderlyingIterator]], NormalCompletion(~unused~))를 수행한다.
+            1. _O_를 *this* 값으로 둔다.
+            1. ? RequireInternalSlot(_O_, [[UnderlyingIterators]])를 수행한다.
+            1. _O_가 [[GeneratorState]] 내부 슬롯을 가지고 있음을 단언한다.
+            1. 만약 _O_.[[GeneratorState]]가 ~suspended-start~라면,
+              1. _O_.[[GeneratorState]]를 ~completed~로 설정한다.
+              1. 주: generator가 completed 상태에 들어가면 절대 이 상태를 벗어나지 않으며, 연관된 실행 컨텍스트도 다시 실행되지 않는다. 이 시점에서 _O_와 관련된 모든 실행 상태는 폐기될 수 있다.
+              1. ? IteratorCloseAll(_O_.[[UnderlyingIterators]], NormalCompletion(~unused~))을 수행한다.
               1. CreateIteratorResultObject(*undefined*, *true*)를 반환한다.
-            1. _C_ 를 ReturnCompletion(*undefined*)로 둔다.
+            1. _C_를 ReturnCompletion(*undefined*)로 둔다.
             1. ? GeneratorResumeAbrupt(_O_, _C_, *"Iterator Helper"*)를 반환한다.
           </emu-alg>
         </emu-clause>
@@ -47382,6 +47399,36 @@ THH:mm:ss.sss
           <li>[[Prototype]] 내부 슬롯 값이 %Function.prototype%이다.</li>
           <li>다음 프로퍼티들을 가진다:</li>
         </ul>
+
+        <emu-clause id="sec-iterator.concat">
+          <h1>Iterator.concat ( ..._items_ )</h1>
+          <emu-alg>
+            1. _iterables_를 새로운 비어 있는 List로 둔다.
+            1. _items_의 각 요소 _item_에 대하여, 다음을 수행한다
+              1. _item_이 객체가 아니면, *TypeError* 예외를 발생시킨다.
+              1. _method_를 ? GetMethod(_item_, %Symbol.iterator%)로 둔다.
+              1. _method_가 *undefined*이면, *TypeError* 예외를 발생시킨다.
+              1. 기록 { [[OpenMethod]]: _method_, [[Iterable]]: _item_ }를 _iterables_에 추가한다.
+            1. _closure_를 _iterables_을 캡처하는, 매개변수 없는 새로운 Abstract Closure로 두고 호출될 때 다음 단계를 수행한다:
+              1. _iterables_의 각 기록 _iterable_에 대하여, 다음을 수행한다
+                1. _iter_를 ? Call(_iterable_.[[OpenMethod]], _iterable_.[[Iterable]])로 둔다.
+                1. _iter_가 객체가 아니면, *TypeError* 예외를 발생시킨다.
+                1. _iteratorRecord_를 ? GetIteratorDirect(_iter_)로 둔다.
+                1. _innerAlive_를 *true*로 둔다.
+                1. _innerAlive_가 *true*인 동안 반복한다,
+                  1. _innerValue_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
+                  1. _innerValue_가 ~done~이면,
+                    1. _innerAlive_를 *false*로 설정한다.
+                  1. 그렇지 않으면,
+                    1. _completion_을 Completion(Yield(_innerValue_))로 둔다.
+                    1. _completion_이 abrupt completion이면,
+                      1. ? IteratorClose(_iteratorRecord_, _completion_)을 반환한다.
+              1. ReturnCompletion(*undefined*)를 반환한다.
+            1. _gen_을 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _gen_.[[UnderlyingIterators]]를 새로운 빈 List로 설정한다.
+            1. _gen_을 반환한다.
+          </emu-alg>
+        </emu-clause>
 
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
@@ -47480,34 +47527,34 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.drop ( _limit_ )</h1>
           <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-            1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_).
-            1. _numLimit_ 이 *NaN* 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+            1. _O_를 *this* 값으로 둔다.
+            1. _O_가 Object가 아니면, *TypeError* 예외를 발생시킨다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. _numLimit_을 Completion(ToNumber(_limit_))으로 둔다.
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_)를 수행한다.
+            1. _numLimit_이 *NaN*이면,
+              1. _error_를 새로 생성된 *RangeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
-            1. _integerLimit_ &lt; 0 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+            1. _integerLimit_을 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
+            1. _integerLimit_이 0보다 작으면,
+              1. _error_를 새로 생성된 *RangeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-            1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획(capture)하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-              1. _remaining_ 을 _integerLimit_ 로 둔다.
-              1. _remaining_ > 0 인 동안 반복,
-                1. _remaining_ ≠ +∞ 이면,
-                  1. _remaining_ 을 _remaining_ - 1 로 설정한다.
-                1. _next_ 를 ? IteratorStep(_iterated_)로 둔다.
-                1. _next_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
-              1. 반복,
-                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-                1. _value_ 가 ~done~ 이면, ReturnCompletion(*undefined*)를 반환한다.
-                1. _completion_ 을 Completion(Yield(_value_))로 둔다.
-                1. IfAbruptCloseIterator(_completion_, _iterated_).
-            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-            1. _result_ 를 반환한다.
+            1. _iterated_를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_를 _iterated_와 _integerLimit_을 캡처하는, 매개변수가 없는 새로운 Abstract Closure로 두고, 호출될 때 다음 단계를 수행한다:
+              1. _remaining_을 _integerLimit_으로 둔다.
+              1. _remaining_ > 0인 동안 반복한다,
+                1. _remaining_ ≠ +∞이면,
+                  1. _remaining_을 _remaining_ - 1로 설정한다.
+                1. _next_를 ? IteratorStep(_iterated_)로 둔다.
+                1. _next_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+              1. 반복한다,
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+                1. _completion_을 Completion(Yield(_value_))로 둔다.
+                1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행한다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _result_.[[UnderlyingIterators]]에 « _iterated_ »를 설정한다.
+            1. _result_를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -47537,27 +47584,27 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.filter ( _predicate_ )</h1>
           <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-            1. IsCallable(_predicate_) 가 *false* 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+            1. _O_를 *this* 값으로 둔다.
+            1. _O_가 객체가 아니면, *TypeError* 예외를 발생시킨다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. IsCallable(_predicate_)가 *false*이면,
+              1. _error_를 새로 생성된 *TypeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-            1. _closure_ 를 _iterated_ 와 _predicate_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-              1. _counter_ 를 0 으로 둔다.
-              1. 반복,
-                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-                1. _selected_ 를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-                1. IfAbruptCloseIterator(_selected_, _iterated_).
-                1. ToBoolean(_selected_) 가 *true* 이면,
-                  1. _completion_ 을 Completion(Yield(_value_))로 둔다.
-                  1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. _counter_ 를 _counter_ + 1 로 설정한다.
-            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-            1. _result_ 를 반환한다.
+            1. _iterated_를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_를 _iterated_와 _predicate_를 캡처하는, 매개변수가 없는 새로운 Abstract Closure로 두고, 호출될 때 다음 단계를 수행한다:
+              1. _counter_를 0으로 둔다.
+              1. 반복한다,
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+                1. _selected_를 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_selected_, _iterated_)를 수행한다.
+                1. ToBoolean(_selected_)가 *true*이면,
+                  1. _completion_을 Completion(Yield(_value_))로 둔다.
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행한다.
+                1. _counter_를 _counter_ + 1로 설정한다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _result_.[[UnderlyingIterators]]에 « _iterated_ »를 설정한다.
+            1. _result_를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -47587,38 +47634,38 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
           <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-            1. IsCallable(_mapper_) 가 *false* 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+            1. _O_를 *this* 값으로 둔다.
+            1. _O_가 객체가 아니면, *TypeError* 예외를 발생시킨다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. IsCallable(_mapper_)가 *false*이면,
+              1. _error_를 새로 생성된 *TypeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-            1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-              1. _counter_ 를 0 으로 둔다.
-              1. 반복,
-                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-                1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-                1. IfAbruptCloseIterator(_mapped_, _iterated_).
-                1. _innerIterator_ 를 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))로 둔다.
-                1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
-                1. _innerAlive_ 를 *true* 로 둔다.
-                1. _innerAlive_ 가 *true* 인 동안 반복,
-                  1. _innerValue_ 를 Completion(IteratorStepValue(_innerIterator_))로 둔다.
-                  1. IfAbruptCloseIterator(_innerValue_, _iterated_).
-                  1. _innerValue_ 가 ~done~ 이면,
-                    1. _innerAlive_ 를 *false* 로 설정한다.
+            1. _iterated_를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_를 _iterated_와 _mapper_를 캡처하는, 매개변수가 없는 새로운 Abstract Closure로 두고, 호출될 때 다음 단계를 수행한다:
+              1. _counter_를 0으로 둔다.
+              1. 반복한다,
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+                1. _mapped_를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_mapped_, _iterated_)를 수행한다.
+                1. _innerIterator_를 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))로 둔다.
+                1. IfAbruptCloseIterator(_innerIterator_, _iterated_)를 수행한다.
+                1. _innerAlive_를 *true*로 둔다.
+                1. _innerAlive_가 *true*인 동안 반복한다,
+                  1. _innerValue_를 Completion(IteratorStepValue(_innerIterator_))로 둔다.
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_)를 수행한다.
+                  1. _innerValue_가 ~done~이면,
+                    1. _innerAlive_를 *false*로 설정한다.
                   1. 그렇지 않으면,
-                    1. _completion_ 을 Completion(Yield(_innerValue_))로 둔다.
-                    1. _completion_ 이 abrupt completion 이면,
-                      1. _backupCompletion_ 을 Completion(IteratorClose(_innerIterator_, _completion_))로 둔다.
-                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
-                      1. ? IteratorClose(_iterated_, _completion_)를 반환한다.
-                1. _counter_ 를 _counter_ + 1 로 설정한다.
-            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-            1. _result_ 를 반환한다.
+                    1. _completion_을 Completion(Yield(_innerValue_))로 둔다.
+                    1. _completion_이 abrupt completion이면,
+                      1. _backupCompletion_을 Completion(IteratorClose(_innerIterator_, _completion_))로 둔다.
+                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)를 수행한다.
+                      1. ? IteratorClose(_iterated_, _completion_)을 반환한다.
+                1. _counter_를 _counter_ + 1로 설정한다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _result_.[[UnderlyingIterators]]에 « _iterated_ »를 설정한다.
+            1. _result_를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -47647,26 +47694,26 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
           <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-            1. IsCallable(_mapper_) 가 *false* 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둔다.
+            1. _O_를 *this* 값으로 둔다.
+            1. _O_가 객체가 아니면, *TypeError* 예외를 발생시킨다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. IsCallable(_mapper_)가 *false*이면,
+              1. _error_를 새로 생성된 *TypeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-            1. _closure_ 를 _iterated_ 와 _mapper_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-              1. _counter_ 를 0 으로 둔다.
-              1. 반복,
-                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-                1. _mapped_ 를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
-                1. IfAbruptCloseIterator(_mapped_, _iterated_).
-                1. _completion_ 을 Completion(Yield(_mapped_))로 둔다.
-                1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. _counter_ 를 _counter_ + 1 로 설정한다.
-            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-            1. _result_ 를 반환한다.
+            1. _iterated_를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_를 _iterated_와 _mapper_를 캡처하는, 매개변수가 없는 새로운 Abstract Closure로 두고, 호출될 때 다음 단계를 수행한다:
+              1. _counter_를 0으로 둔다.
+              1. 반복한다,
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+                1. _mapped_를 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))로 둔다.
+                1. IfAbruptCloseIterator(_mapped_, _iterated_)를 수행한다.
+                1. _completion_을 Completion(Yield(_mapped_))로 둔다.
+                1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행한다.
+                1. _counter_를 _counter_ + 1로 설정한다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _result_.[[UnderlyingIterators]]에 « _iterated_ »를 설정한다.
+            1. _result_를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -47724,33 +47771,33 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.take ( _limit_ )</h1>
           <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
           <emu-alg>
-            1. _O_ 를 *this* 값으로 둔다.
-            1. _O_ 가 Object 가 아니면 *TypeError* 예외를 던진다.
-            1. _iterated_ 를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* } 로 둔다.
-            1. _numLimit_ 를 Completion(ToNumber(_limit_))로 둔다.
-            1. IfAbruptCloseIterator(_numLimit_, _iterated_).
-            1. _numLimit_ 이 *NaN* 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+            1. _O_를 *this* 값으로 둔다.
+            1. _O_가 객체가 아니면, *TypeError* 예외를 발생시킨다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _O_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. _numLimit_을 Completion(ToNumber(_limit_))로 둔다.
+            1. IfAbruptCloseIterator(_numLimit_, _iterated_)를 수행한다.
+            1. _numLimit_이 *NaN*이면,
+              1. _error_를 새로 생성된 *RangeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _integerLimit_ 를 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
-            1. _integerLimit_ &lt; 0 이면,
-              1. _error_ 를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둔다.
+            1. _integerLimit_을 ! ToIntegerOrInfinity(_numLimit_)로 둔다.
+            1. _integerLimit_이 0보다 작으면,
+              1. _error_를 새로 생성된 *RangeError* 객체로 ThrowCompletion(_error_)로 둔다.
               1. ? IteratorClose(_iterated_, _error_)를 반환한다.
-            1. _iterated_ 를 ? GetIteratorDirect(_O_)로 설정한다.
-            1. _closure_ 를 _iterated_ 와 _integerLimit_ 를 포획하는 매개변수 없는 새로운 Abstract Closure 로 두고, 호출 시 다음 단계를 수행하게 한다:
-              1. _remaining_ 을 _integerLimit_ 로 둔다.
-              1. 반복,
-                1. _remaining_ = 0 이면,
+            1. _iterated_를 ? GetIteratorDirect(_O_)로 설정한다.
+            1. _closure_를 _iterated_와 _integerLimit_을 캡처하는, 매개변수가 없는 새로운 Abstract Closure로 두고, 호출될 때 다음 단계를 수행한다:
+              1. _remaining_을 _integerLimit_으로 둔다.
+              1. 반복한다,
+                1. _remaining_이 0이면,
                   1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))를 반환한다.
-                1. _remaining_ ≠ +∞ 이면,
-                  1. _remaining_ 을 _remaining_ - 1 로 설정한다.
-                1. _value_ 를 ? IteratorStepValue(_iterated_)로 둔다.
-                1. _value_ 가 ~done~ 이면 ReturnCompletion(*undefined*)를 반환한다.
-                1. _completion_ 을 Completion(Yield(_value_))로 둔다.
-                1. IfAbruptCloseIterator(_completion_, _iterated_).
-            1. _result_ 를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »)로 둔다.
-            1. _result_.[[UnderlyingIterator]] 를 _iterated_ 로 설정한다.
-            1. _result_ 를 반환한다.
+                1. _remaining_ ≠ +∞이면,
+                  1. _remaining_을 _remaining_ - 1로 설정한다.
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+                1. _value_가 ~done~이면, ReturnCompletion(*undefined*)를 반환한다.
+                1. _completion_을 Completion(Yield(_value_))로 둔다.
+                1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행한다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둔다.
+            1. _result_.[[UnderlyingIterators]]에 « _iterated_ »를 설정한다.
+            1. _result_를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -48531,65 +48578,50 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-performpromiseall" type="abstract operation">
+        <emu-clause id="sec-performpromiseall" oldids="sec-promise.all-resolve-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAll (
-              _iteratorRecord_: an Iterator Record,
-              _constructor_: a constructor,
-              _resultCapability_: a PromiseCapability Record,
-              _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+              _iteratorRecord_: Iterator Record,
+              _constructor_: constructor,
+              _resultCapability_: PromiseCapability Record,
+              _promiseResolve_: 함수 객체,
+            ): ECMAScript 언어 값을 담는 정상 완료 또는 throw completion
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_ 를 새로운 빈 List 로 둔다.
-            1. _remainingElementsCount_ 를 Record { [[Value]]: 1 } 로 둔다.
-            1. _index_ 를 0 으로 둔다.
-            1. 반복,
-              1. _next_ 를 ? IteratorStepValue(_iteratorRecord_) 로 둔다.
-              1. _next_ 가 ~done~ 이면,
-                1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-                1. _remainingElementsCount_.[[Value]] = 0 이면,
-                  1. _valuesArray_ 를 CreateArrayFromList(_values_) 로 둔다.
-                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») 를 수행한다.
-                1. _resultCapability_.[[Promise]] 를 반환한다.
-              1. *undefined* 를 _values_ 에 추가한다.
-              1. _nextPromise_ 를 ? Call(_promiseResolve_, _constructor_, « _next_ ») 로 둔다.
-              1. _steps_ 를 <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-              1. _length_ 를 <emu-xref href="#sec-promise.all-resolve-element-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-              1. _onFulfilled_ 를 CreateBuiltinFunction(_steps_, _length_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») 로 둔다.
-              1. _onFulfilled_.[[AlreadyCalled]] 를 *false* 로 설정한다.
-              1. _onFulfilled_.[[Index]] 를 _index_ 로 설정한다.
-              1. _onFulfilled_.[[Values]] 를 _values_ 로 설정한다.
-              1. _onFulfilled_.[[Capability]] 를 _resultCapability_ 로 설정한다.
-              1. _onFulfilled_.[[RemainingElements]] 를 _remainingElementsCount_ 로 설정한다.
-              1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] + 1 로 설정한다.
-              1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _resultCapability_.[[Reject]] ») 를 수행한다.
-              1. _index_ 를 _index_ + 1 로 설정한다.
+            1. _values_를 새로운 비어 있는 List로 둔다.
+            1. [declared="remainingElementsCount"] 참고: _remainingElementsCount_는 0이 아니라 1에서 시작한다. 이는 입력 이터레이터가 모두 소진되기 전에 전달된 콜백을 호출하는 오동작 *"then"*이 있더라도 _resultCapability_.[[Resolve]]가 단 한 번만 호출되도록 보장하기 위함이다.
+            1. _remainingElementsCount_를 Record { [[Value]]: 1 }로 둔다.
+            1. _index_를 0으로 둔다.
+            1. 반복한다,
+              1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
+              1. _next_가 ~done~이면,
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]]가 0이면,
+                  1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 수행한다.
+                1. _resultCapability_.[[Promise]]를 반환한다.
+              1. *undefined*를 _values_에 추가한다.
+              1. _nextPromise_를 ? Call(_promiseResolve_, _constructor_, « _next_ »)로 둔다.
+              1. _fulfilledSteps_를 매개변수 (_value_)를 가지며 _values_, _resultCapability_, _remainingElementsCount_를 캡처하는 새로운 Abstract Closure로 두고 호출될 때 다음 단계를 수행한다:
+                1. _F_를 활성 함수 객체로 둔다.
+                1. _F_.[[AlreadyCalled]]가 *true*이면, *undefined*를 반환한다.
+                1. _F_.[[AlreadyCalled]]를 *true*로 설정한다.
+                1. _index_를 _F_.[[Index]]로 둔다.
+                1. _values_[_index_]에 _value_를 설정한다.
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]]가 0이면,
+                  1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 반환한다.
+                1. *undefined*를 반환한다.
+              1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)로 둔다.
+              1. _onFulfilled_.[[AlreadyCalled]]를 *false*로 설정한다.
+              1. _onFulfilled_.[[Index]]를 _index_로 설정한다.
+              1. _index_를 _index_ + 1로 설정한다.
+              1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] + 1로 설정한다.
+              1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _resultCapability_.[[Reject]] »)를 수행한다.
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.all-resolve-element-functions">
-          <h1>`Promise.all` Resolve Element Functions</h1>
-          <p>`Promise.all` resolve 요소 함수는 특정 `Promise.all` 요소를 resolve 하는 데 사용되는 익명 내장 함수이다. 각 `Promise.all` resolve 요소 함수는 [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 내부 슬롯을 가진다.</p>
-          <p>`Promise.all` resolve 요소 함수가 인수 _x_ 와 함께 호출되면 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. _F_.[[AlreadyCalled]] 가 *true* 이면 *undefined* 를 반환한다.
-            1. _F_.[[AlreadyCalled]] 를 *true* 로 설정한다.
-            1. _index_ 를 _F_.[[Index]] 로 둔다.
-            1. _values_ 를 _F_.[[Values]] 로 둔다.
-            1. _promiseCapability_ 를 _F_.[[Capability]] 로 둔다.
-            1. _remainingElementsCount_ 를 _F_.[[RemainingElements]] 로 둔다.
-            1. _values_[_index_] 를 _x_ 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] = 0 이면,
-              1. _valuesArray_ 를 CreateArrayFromList(_values_) 로 둔다.
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») 를 반환한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-          <p>`Promise.all` resolve 요소 함수의 *"length"* 프로퍼티는 *1*<sub>𝔽</sub> 이다.</p>
         </emu-clause>
       </emu-clause>
 
