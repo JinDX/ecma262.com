@@ -49054,28 +49054,28 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_ を新しい空のリストとする。
-            1. [declared="remainingElementsCount"] 注記: _remainingElementsCount_ は 0 ではなく 1 で開始される。これは、不正な *"then"* が入力イテレータが尽きる前にコールバックを呼んだとしても、_resultCapability_.[[Resolve]] が一度だけ呼ばれることを保証するためである。
-            1. _remainingElementsCount_ をレコード { [[Value]]: 1 } とする。
+            1. _values_ を新しい空の List とする。
+            1. [declared="remainingElementsCount"] 注記: _remainingElementsCount_ は 0 ではなく 1 から開始する。これは、入力反復子が消費される前に渡されたコールバックを呼び出す誤作動する *"then"* が存在する場合でも、_resultCapability_.[[Resolve]] が一度だけ呼ばれることを保証するためである。
+            1. _remainingElementsCount_ を Record { [[Value]]: 1 } とする。
             1. _index_ を 0 とする。
-            1. 次を繰り返す:
+            1. 繰り返し、
               1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
-              1. _next_ が ~done~ の場合、
+              1. もし _next_ が ~done~ なら、
                 1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-                1. _remainingElementsCount_.[[Value]] = 0 の場合、
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
                   1. _valuesArray_ を CreateArrayFromList(_values_) とする。
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を実行する。
                 1. _resultCapability_.[[Promise]] を返す。
               1. *undefined* を _values_ に追加する。
               1. _nextPromise_ を ? Call(_promiseResolve_, _constructor_, « _next_ ») とする。
-              1. _fulfilledSteps_ を、パラメータ (_value_) を取り、_values_, _resultCapability_, _remainingElementsCount_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャとする:
+              1. _fulfilledSteps_ を、_values_, _resultCapability_, および _remainingElementsCount_ を捕捉し、呼び出されたときに次の手順を実行するパラメータ (_value_) を持つ新しい抽象クロージャとする:
                 1. _F_ をアクティブな関数オブジェクトとする。
-                1. _F_.[[AlreadyCalled]] が *true* なら、*undefined* を返す。
+                1. もし _F_.[[AlreadyCalled]] が *true* なら、*undefined* を返す。
                 1. _F_.[[AlreadyCalled]] を *true* に設定する。
-                1. _index_ を _F_.[[Index]] とする。
-                1. _values_[_index_] に _value_ を設定する。
+                1. _thisIndex_ を _F_.[[Index]] とする。
+                1. _values_[_thisIndex_] を _value_ に設定する。
                 1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-                1. _remainingElementsCount_.[[Value]] = 0 の場合、
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
                   1. _valuesArray_ を CreateArrayFromList(_values_) とする。
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
                 1. *undefined* を返す。
@@ -49091,122 +49091,89 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-promise.allsettled">
         <h1>Promise.allSettled ( _iterable_ )</h1>
-        <p>この関数は、元のすべての Promise が確定（fulfilled か rejected）した後に、Promise 状態スナップショットの配列で履行される Promise を返す。実行中、渡された iterable の各要素を Promise に解決する。</p>
+        <p>この関数は、元のすべての Promise が完了（すなわち、fulfilled または rejected のいずれかになる）した後にのみ、Promise の状態スナップショットの配列で fulfill される Promise を返す。実行時に、渡された iterable の各要素を Promise に解決してこのアルゴリズムを進める。</p>
         <emu-alg>
-          1. _C_ を *this* 値とする。
+          1. _C_ を *this* の値とする。
           1. _promiseCapability_ を ? NewPromiseCapability(_C_) とする。
           1. _promiseResolve_ を Completion(GetPromiseResolve(_C_)) とする。
           1. IfAbruptRejectPromise(_promiseResolve_, _promiseCapability_)。
           1. _iteratorRecord_ を Completion(GetIterator(_iterable_, ~sync~)) とする。
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_)。
           1. _result_ を Completion(PerformPromiseAllSettled(_iteratorRecord_, _C_, _promiseCapability_, _promiseResolve_)) とする。
-          1. もし _result_ が abrupt completion なら
-            1. もし _iteratorRecord_.[[Done]] が *false* なら _result_ を Completion(IteratorClose(_iteratorRecord_, _result_)) に設定する。
+          1. もし _result_ が急な完了であるなら、
+            1. もし _iteratorRecord_.[[Done]] が *false* なら、_result_ を Completion(IteratorClose(_iteratorRecord_, _result_)) に設定する。
             1. IfAbruptRejectPromise(_result_, _promiseCapability_)。
           1. ! _result_ を返す。
         </emu-alg>
         <emu-note>
-          <p>この関数は *this* 値が Promise コンストラクタのパラメータ規約をサポートするコンストラクタ関数であることを要する。</p>
+          <p>この関数は、*this* の値が Promise コンストラクターのパラメーター規約をサポートするコンストラクター関数であることを要求する。</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseallsettled" type="abstract operation">
+        <emu-clause id="sec-performpromiseallsettled" oldids="sec-promise.allsettled-resolve-element-functions,sec-promise.allsettled-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAllSettled (
-              _iteratorRecord_: an Iterator Record,
-              _constructor_: a constructor,
-              _resultCapability_: a PromiseCapability Record,
-              _promiseResolve_: a function object,
-            ): 正常完了で ECMAScript 言語値を含むか、または throw completion
+              _iteratorRecord_: 反復子レコード,
+              _constructor_: コンストラクター,
+              _resultCapability_: PromiseCapability レコード,
+              _promiseResolve_: 関数オブジェクト,
+            ): ECMAScript 言語値を含む通常完了または送出完了のいずれか
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_ を新しい空 List とする。
+            1. _values_ を新しい空の List とする。
+            1. [declared="remainingElementsCount"] 注記: _remainingElementsCount_ は 0 ではなく 1 から開始する。これは、入力反復子が消費される前に渡されたコールバックの一つを呼び出す誤作動する *"then"* が存在する場合でも、_resultCapability_.[[Resolve]] が一度だけ呼ばれることを保証するためである。
             1. _remainingElementsCount_ を Record { [[Value]]: 1 } とする。
             1. _index_ を 0 とする。
-            1. 繰り返す,
+            1. 繰り返し、
               1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
-              1. もし _next_ が ~done~ なら
+              1. もし _next_ が ~done~ なら、
                 1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-                1. もし _remainingElementsCount_.[[Value]] = 0 なら
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
                   1. _valuesArray_ を CreateArrayFromList(_values_) とする。
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を実行する。
                 1. _resultCapability_.[[Promise]] を返す。
               1. *undefined* を _values_ に追加する。
               1. _nextPromise_ を ? Call(_promiseResolve_, _constructor_, « _next_ ») とする。
-              1. _stepsFulfilled_ を <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-              1. _lengthFulfilled_ を <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-              1. _onFulfilled_ を CreateBuiltinFunction(_stepsFulfilled_, _lengthFulfilled_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») とする。
               1. _alreadyCalled_ を Record { [[Value]]: *false* } とする。
+              1. _fulfilledSteps_ を、_values_, _resultCapability_, および _remainingElementsCount_ を捕捉し、呼び出されたときに次の手順を実行するパラメータ (_value_) を持つ新しい抽象クロージャとする:
+                1. _F_ をアクティブな関数オブジェクトとする。
+                1. もし _F_.[[AlreadyCalled]].[[Value]] が *true* なら、*undefined* を返す。
+                1. _F_.[[AlreadyCalled]].[[Value]] を *true* に設定する。
+                1. _obj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+                1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*) を実行する。
+                1. ! CreateDataPropertyOrThrow(_obj_, *"value"*, _value_) を実行する。
+                1. _thisIndex_ を _F_.[[Index]] とする。
+                1. _values_[_thisIndex_] を _obj_ に設定する。
+                1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
+                  1. _valuesArray_ を CreateArrayFromList(_values_) とする。
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
+                1. *undefined* を返す。
+              1. _onFulfilled_ を CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] ») とする。
               1. _onFulfilled_.[[AlreadyCalled]] を _alreadyCalled_ に設定する。
               1. _onFulfilled_.[[Index]] を _index_ に設定する。
-              1. _onFulfilled_.[[Values]] を _values_ に設定する。
-              1. _onFulfilled_.[[Capability]] を _resultCapability_ に設定する。
-              1. _onFulfilled_.[[RemainingElements]] を _remainingElementsCount_ に設定する。
-              1. _stepsRejected_ を <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-              1. _lengthRejected_ を <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-              1. _onRejected_ を CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») とする。
+              1. _rejectedSteps_ を、_values_, _resultCapability_, および _remainingElementsCount_ を捕捉し、呼び出されたときに次の手順を実行するパラメータ (_error_) を持つ新しい抽象クロージャとする:
+                1. _F_ をアクティブな関数オブジェクトとする。
+                1. もし _F_.[[AlreadyCalled]].[[Value]] が *true* なら、*undefined* を返す。
+                1. _F_.[[AlreadyCalled]].[[Value]] を *true* に設定する。
+                1. _obj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+                1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*) を実行する。
+                1. ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _error_) を実行する。
+                1. _thisIndex_ を _F_.[[Index]] とする。
+                1. _values_[_thisIndex_] を _obj_ に設定する。
+                1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
+                  1. _valuesArray_ を CreateArrayFromList(_values_) とする。
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
+                1. *undefined* を返す。
+              1. _onRejected_ を CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] ») とする。
               1. _onRejected_.[[AlreadyCalled]] を _alreadyCalled_ に設定する。
               1. _onRejected_.[[Index]] を _index_ に設定する。
-              1. _onRejected_.[[Values]] を _values_ に設定する。
-              1. _onRejected_.[[Capability]] を _resultCapability_ に設定する。
-              1. _onRejected_.[[RemainingElements]] を _remainingElementsCount_ に設定する。
+              1. _index_ を _index_ + 1 に設定する。
               1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] + 1 に設定する。
               1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _onRejected_ ») を実行する。
-              1. _index_ を _index_ + 1 に設定する。
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-resolve-element-functions">
-          <h1>`Promise.allSettled` Resolve 要素関数 (`Promise.allSettled` Resolve Element Functions)</h1>
-          <p>`Promise.allSettled` Resolve 要素関数は特定の `Promise.allSettled` の要素を解決するために使われる匿名組み込み関数である。各 `Promise.allSettled` Resolve 要素関数は [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 内部スロットを持つ。</p>
-          <p>`Promise.allSettled` Resolve 要素関数が引数 _x_ で呼ばれたとき、次を行う:</p>
-          <emu-alg>
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. _alreadyCalled_ を _F_.[[AlreadyCalled]] とする。
-            1. もし _alreadyCalled_.[[Value]] が *true* なら *undefined* を返す。
-            1. _alreadyCalled_.[[Value]] を *true* に設定する。
-            1. _index_ を _F_.[[Index]] とする。
-            1. _values_ を _F_.[[Values]] とする。
-            1. _promiseCapability_ を _F_.[[Capability]] とする。
-            1. _remainingElementsCount_ を _F_.[[RemainingElements]] とする。
-            1. _obj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
-            1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*) を実行する。
-            1. ! CreateDataPropertyOrThrow(_obj_, *"value"*, _x_) を実行する。
-            1. _values_[_index_] を _obj_ に設定する。
-            1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-            1. もし _remainingElementsCount_.[[Value]] = 0 なら
-              1. _valuesArray_ を CreateArrayFromList(_values_) とする。
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
-            1. *undefined* を返す。
-          </emu-alg>
-          <p>`Promise.allSettled` Resolve 要素関数の *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-reject-element-functions">
-          <h1>`Promise.allSettled` Reject 要素関数 (`Promise.allSettled` Reject Element Functions)</h1>
-          <p>`Promise.allSettled` Reject 要素関数は特定の `Promise.allSettled` の要素を拒否させるために使われる匿名組み込み関数である。各 `Promise.allSettled` Reject 要素関数は [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 内部スロットを持つ。</p>
-          <p>`Promise.allSettled` Reject 要素関数が引数 _x_ で呼ばれたとき、次を行う:</p>
-          <emu-alg>
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. _alreadyCalled_ を _F_.[[AlreadyCalled]] とする。
-            1. もし _alreadyCalled_.[[Value]] が *true* なら *undefined* を返す。
-            1. _alreadyCalled_.[[Value]] を *true* に設定する。
-            1. _index_ を _F_.[[Index]] とする。
-            1. _values_ を _F_.[[Values]] とする。
-            1. _promiseCapability_ を _F_.[[Capability]] とする。
-            1. _remainingElementsCount_ を _F_.[[RemainingElements]] とする。
-            1. _obj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
-            1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*) を実行する。
-            1. ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _x_) を実行する。
-            1. _values_[_index_] を _obj_ に設定する。
-            1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-            1. もし _remainingElementsCount_.[[Value]] = 0 なら
-              1. _valuesArray_ を CreateArrayFromList(_values_) とする。
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») を返す。
-            1. *undefined* を返す。
-          </emu-alg>
-          <p>`Promise.allSettled` Reject 要素関数の *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
         </emu-clause>
       </emu-clause>
 
@@ -49230,43 +49197,50 @@ THH:mm:ss.sss
           <p>この関数は *this* 値が `Promise` コンストラクタのパラメータ規約をサポートするコンストラクタ関数であることを要する。</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseany" type="abstract operation">
+        <emu-clause id="sec-performpromiseany" oldids="sec-promise.any-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAny (
-              _iteratorRecord_: an Iterator Record,
-              _constructor_: a constructor,
-              _resultCapability_: a PromiseCapability Record,
-              _promiseResolve_: a function object,
-            ): 正常完了で ECMAScript 言語値を含むか、または throw completion
+              _iteratorRecord_: 反復子レコード,
+              _constructor_: コンストラクター,
+              _resultCapability_: PromiseCapability レコード,
+              _promiseResolve_: 関数オブジェクト,
+            ): ECMAScript 言語値を含む通常完了または送出完了のいずれか
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _errors_ を新しい空 List とする。
+            1. _errors_ を新しい空の List とする。
+            1. [declared="remainingElementsCount"] 注記: _remainingElementsCount_ は、入力反復子が消費される前に渡されたコールバックを呼び出す誤作動する *"then"* の存在下でも、_resultCapability_.[[Reject]] が一度だけ呼ばれることを保証するために 0 ではなく 1 から開始する。
             1. _remainingElementsCount_ を Record { [[Value]]: 1 } とする。
             1. _index_ を 0 とする。
-            1. 繰り返す,
+            1. 繰り返し、
               1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
-              1. もし _next_ が ~done~ なら
+              1. もし _next_ が ~done~ なら、
                 1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
-                1. もし _remainingElementsCount_.[[Value]] = 0 なら
-                  1. _error_ を新しく生成された *AggregateError* オブジェクトとする。
-                  1. ! DefinePropertyOrThrow(_error_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) }) を実行する。
-                  1. Return ThrowCompletion(_error_)。
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
+                  1. _aggregateError_ を新規作成された *AggregateError* オブジェクトとする。
+                  1. ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) }) を実行する。
+                  1. ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ ») を実行する。
                 1. _resultCapability_.[[Promise]] を返す。
               1. *undefined* を _errors_ に追加する。
               1. _nextPromise_ を ? Call(_promiseResolve_, _constructor_, « _next_ ») とする。
-              1. _stepsRejected_ を <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-              1. _lengthRejected_ を <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-              1. _onRejected_ を CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Errors]], [[Capability]], [[RemainingElements]] ») とする。
+              1. _rejectedSteps_ を、_errors_, _resultCapability_, および _remainingElementsCount_ を捕捉し、呼び出されたときに次の手順を実行するパラメータ (_error_) を持つ新しい抽象クロージャとする:
+                1. _F_ をアクティブな関数オブジェクトとする。
+                1. もし _F_.[[AlreadyCalled]] が *true* なら、*undefined* を返す。
+                1. _F_.[[AlreadyCalled]] を *true* に設定する。
+                1. _errors_[_F_.[[Index]]] を _error_ に設定する。
+                1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] - 1 に設定する。
+                1. もし _remainingElementsCount_.[[Value]] = 0 なら、
+                  1. _aggregateError_ を新規作成された *AggregateError* オブジェクトとする。
+                  1. ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) }) を実行する。
+                  1. ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ ») を返す。
+                1. *undefined* を返す。
+              1. _onRejected_ を CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] ») とする。
               1. _onRejected_.[[AlreadyCalled]] を *false* に設定する。
               1. _onRejected_.[[Index]] を _index_ に設定する。
-              1. _onRejected_.[[Errors]] を _errors_ に設定する。
-              1. _onRejected_.[[Capability]] を _resultCapability_ に設定する。
-              1. _onRejected_.[[RemainingElements]] を _remainingElementsCount_ に設定する。
+              1. _index_ を _index_ + 1 に設定する。
               1. _remainingElementsCount_.[[Value]] を _remainingElementsCount_.[[Value]] + 1 に設定する。
               1. ? Invoke(_nextPromise_, *"then"*, « _resultCapability_.[[Resolve]], _onRejected_ ») を実行する。
-              1. _index_ を _index_ + 1 に設定する。
           </emu-alg>
         </emu-clause>
 

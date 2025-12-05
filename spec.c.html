@@ -48494,27 +48494,27 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. 令 _values_ 为一个新的空列表。
-            1. [declared="remainingElementsCount"] 注：_remainingElementsCount_ 从 1 而不是 0 开始，以确保即使存在错误实现的 *"then"* 在输入迭代器耗尽前就调用了回调，也只会调用一次 _resultCapability_.[[Resolve]]。
+            1. [declared="remainingElementsCount"] 注：_remainingElementsCount_ 从 1 开始而不是 0，这是为了确保即使存在异常行为的 *"then"* 在输入迭代器耗尽前调用回调，_resultCapability_.[[Resolve]] 也只会被调用一次。
             1. 令 _remainingElementsCount_ 为记录 { [[Value]]: 1 }。
             1. 令 _index_ 为 0。
-            1. 重复，
+            1. 循环执行，
               1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-              1. 如果 _next_ 为 ~done~，那么
-                1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
+              1. 如果 _next_ 为 ~done~，则
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
                   1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
                   1. 执行 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
                 1. 返回 _resultCapability_.[[Promise]]。
               1. 向 _values_ 追加 *undefined*。
               1. 令 _nextPromise_ 为 ? Call(_promiseResolve_, _constructor_, « _next_ »)。
-              1. 令 _fulfilledSteps_ 为一个新建的抽象闭包，有参数 (_value_)，捕获 _values_、_resultCapability_ 和 _remainingElementsCount_，在被调用时执行以下步骤：
+              1. 令 _fulfilledSteps_ 为一个新的抽象闭包，参数为 (_value_)，捕获 _values_、_resultCapability_ 和 _remainingElementsCount_，在被调用时执行以下步骤：
                 1. 令 _F_ 为当前激活的函数对象。
                 1. 如果 _F_.[[AlreadyCalled]] 为 *true*，返回 *undefined*。
-                1. 将 _F_.[[AlreadyCalled]] 设为 *true*。
-                1. 令 _index_ 为 _F_.[[Index]]。
-                1. 设置 _values_[_index_] 为 _value_。
-                1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
+                1. 设置 _F_.[[AlreadyCalled]] 为 *true*。
+                1. 令 _thisIndex_ 为 _F_.[[Index]]。
+                1. 设置 _values_[_thisIndex_] 为 _value_。
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
                   1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
                   1. 返回 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
                 1. 返回 *undefined*。
@@ -48529,8 +48529,8 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-promise.allsettled">
-        <h1>Promise.allSettled ( _iterable_ )</h1>
-        <p>该函数返回一个 promise，当所有原始 promise 均已 settle（即变为 fulfilled 或 rejected）后，以包含 promise 状态快照的数组 fulfill。它在运行本算法时将传入可迭代对象的所有元素解析为 promise。</p>
+        <h1>Promise.allSettled（_iterable_）</h1>
+        <p>该函数返回一个在所有原始 promise 都 settle（即都变成已兑现或已拒绝）之后，以 promise 状态快照数组完成的 promise。在执行此算法时，它会将传入的 iterable 的所有元素解析为 promise。</p>
         <emu-alg>
           1. 令 _C_ 为 *this* 值。
           1. 令 _promiseCapability_ 为 ? NewPromiseCapability(_C_)。
@@ -48539,113 +48539,80 @@ THH:mm:ss.sss
           1. 令 _iteratorRecord_ 为 Completion(GetIterator(_iterable_, ~sync~))。
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_)。
           1. 令 _result_ 为 Completion(PerformPromiseAllSettled(_iteratorRecord_, _C_, _promiseCapability_, _promiseResolve_))。
-          1. 如果 _result_ 是一个 abrupt completion，则
-            1. 如果 _iteratorRecord_.[[Done]] 是 *false*，将 _result_ 设为 Completion(IteratorClose(_iteratorRecord_, _result_))。
+          1. 如果 _result_ 为 abrupt completion，则
+            1. 如果 _iteratorRecord_.[[Done]] 为 *false*，则将 _result_ 设为 Completion(IteratorClose(_iteratorRecord_, _result_))。
             1. IfAbruptRejectPromise(_result_, _promiseCapability_)。
           1. 返回 ! _result_。
         </emu-alg>
         <emu-note>
-          <p>该函数要求其 *this* 值为一个支持 Promise 构造函数参数约定的构造函数。</p>
+          <p>本函数要求其 *this* 值为一个支持 Promise 构造函数参数约定的构造函数。</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseallsettled" type="abstract operation">
+        <emu-clause id="sec-performpromiseallsettled" oldids="sec-promise.allsettled-resolve-element-functions,sec-promise.allsettled-reject-element-functions" type="abstract operation">
           <h1>
-            PerformPromiseAllSettled (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个 constructor,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 要么是包含一个 ECMAScript 语言值的 normal completion，要么是一个 throw completion
+            执行 PerformPromiseAllSettled（
+            _iteratorRecord_：一个迭代器记录，
+            _constructor_：一个构造函数，
+            _resultCapability_：一个 PromiseCapability 记录，
+            _promiseResolve_：一个函数对象，
+            ）：返回一个包含 ECMAScript 语言值的正常完成或抛出完成
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _values_ 为一个新的空 List。
-            1. 令 _remainingElementsCount_ 为 Record { [[Value]]: 1 }。
+            1. 令 _values_ 为一个新的空列表。
+            1. [declared="remainingElementsCount"] 注：_remainingElementsCount_ 从 1 开始而不是 0，这样能确保即使异常行为的 *"then"* 在输入迭代器耗尽前调用其中一个回调，_resultCapability_.[[Resolve]] 也只会被调用一次。
+            1. 令 _remainingElementsCount_ 为记录 { [[Value]]: 1 }。
             1. 令 _index_ 为 0。
-            1. 重复，
+            1. 循环执行，
               1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-              1. 如果 _next_ 是 ~done~，则
-                1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
+              1. 如果 _next_ 为 ~done~，则
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
                 1. 如果 _remainingElementsCount_.[[Value]] = 0，则
                   1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
                   1. 执行 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
                 1. 返回 _resultCapability_.[[Promise]]。
-              1. 将 *undefined* 追加到 _values_。
+              1. 向 _values_ 追加 *undefined*。
               1. 令 _nextPromise_ 为 ? Call(_promiseResolve_, _constructor_, « _next_ »)。
-              1. 令 _stepsFulfilled_ 为 <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> 中定义的算法步骤。
-              1. 令 _lengthFulfilled_ 为 <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> 中函数定义的非可选参数个数。
-              1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_stepsFulfilled_, _lengthFulfilled_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »)。
-              1. 令 _alreadyCalled_ 为 Record { [[Value]]: *false* }。
-              1. 将 _onFulfilled_.[[AlreadyCalled]] 设为 _alreadyCalled_。
-              1. 将 _onFulfilled_.[[Index]] 设为 _index_。
-              1. 将 _onFulfilled_.[[Values]] 设为 _values_。
-              1. 将 _onFulfilled_.[[Capability]] 设为 _resultCapability_。
-              1. 将 _onFulfilled_.[[RemainingElements]] 设为 _remainingElementsCount_。
-              1. 令 _stepsRejected_ 为 <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> 中定义的算法步骤。
-              1. 令 _lengthRejected_ 为 <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> 中函数定义的非可选参数个数。
-              1. 令 _onRejected_ 为 CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »)。
-              1. 将 _onRejected_.[[AlreadyCalled]] 设为 _alreadyCalled_。
-              1. 将 _onRejected_.[[Index]] 设为 _index_。
-              1. 将 _onRejected_.[[Values]] 设为 _values_。
-              1. 将 _onRejected_.[[Capability]] 设为 _resultCapability_。
-              1. 将 _onRejected_.[[RemainingElements]] 设为 _remainingElementsCount_。
-              1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] + 1。
+              1. 令 _alreadyCalled_ 为记录 { [[Value]]: *false* }。
+              1. 令 _fulfilledSteps_ 为一个新的抽象闭包，参数为 (_value_)，捕获 _values_、_resultCapability_ 和 _remainingElementsCount_，在被调用时执行以下步骤：
+                1. 令 _F_ 为当前活动的函数对象。
+                1. 如果 _F_.[[AlreadyCalled]].[[Value]] 为 *true*，返回 *undefined*。
+                1. 设置 _F_.[[AlreadyCalled]].[[Value]] 为 *true*。
+                1. 令 _obj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+                1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*)。
+                1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"value"*, _value_)。
+                1. 令 _thisIndex_ 为 _F_.[[Index]]。
+                1. 设置 _values_[_thisIndex_] 为 _obj_。
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
+                  1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
+                  1. 返回 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
+                1. 返回 *undefined*。
+              1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)。
+              1. 设置 _onFulfilled_.[[AlreadyCalled]] 为 _alreadyCalled_。
+              1. 设置 _onFulfilled_.[[Index]] 为 _index_。
+              1. 令 _rejectedSteps_ 为一个新的抽象闭包，参数为 (_error_)，捕获 _values_、_resultCapability_ 和 _remainingElementsCount_，在被调用时执行以下步骤：
+                1. 令 _F_ 为当前活动的函数对象。
+                1. 如果 _F_.[[AlreadyCalled]].[[Value]] 为 *true*，返回 *undefined*。
+                1. 设置 _F_.[[AlreadyCalled]].[[Value]] 为 *true*。
+                1. 令 _obj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+                1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*)。
+                1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _error_)。
+                1. 令 _thisIndex_ 为 _F_.[[Index]]。
+                1. 设置 _values_[_thisIndex_] 为 _obj_。
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
+                  1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
+                  1. 返回 ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
+                1. 返回 *undefined*。
+              1. 令 _onRejected_ 为 CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)。
+              1. 设置 _onRejected_.[[AlreadyCalled]] 为 _alreadyCalled_。
+              1. 设置 _onRejected_.[[Index]] 为 _index_。
+              1. 设置 _index_ 为 _index_ + 1。
+              1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] + 1。
               1. 执行 ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _onRejected_ »)。
-              1. 将 _index_ 设为 _index_ + 1。
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-resolve-element-functions">
-          <h1>`Promise.allSettled` Resolve 元素函数</h1>
-          <p>`Promise.allSettled` resolve 元素函数是一个匿名内建函数，用于 resolve 某个特定的 `Promise.allSettled` 元素。每个此类函数具有 [[Index]]、[[Values]]、[[Capability]]、[[RemainingElements]] 和 [[AlreadyCalled]] 内部槽。</p>
-          <p>当一个 `Promise.allSettled` resolve 元素函数以参数 _x_ 被调用时，执行下列步骤：</p>
-          <emu-alg>
-            1. 令 _F_ 为活动函数对象。
-            1. 令 _alreadyCalled_ 为 _F_.[[AlreadyCalled]]。
-            1. 如果 _alreadyCalled_.[[Value]] 是 *true*，返回 *undefined*。
-            1. 将 _alreadyCalled_.[[Value]] 设为 *true*。
-            1. 令 _index_ 为 _F_.[[Index]]。
-            1. 令 _values_ 为 _F_.[[Values]]。
-            1. 令 _promiseCapability_ 为 _F_.[[Capability]]。
-            1. 令 _remainingElementsCount_ 为 _F_.[[RemainingElements]]。
-            1. 令 _obj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
-            1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*)。
-            1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"value"*, _x_)。
-            1. 将 _values_[_index_] 设为 _obj_。
-            1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-            1. 如果 _remainingElementsCount_.[[Value]] = 0，则
-              1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
-              1. 返回 ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
-            1. 返回 *undefined*。
-          </emu-alg>
-          <p>`Promise.allSettled` resolve 元素函数的 *"length"* 属性是 *1*<sub>𝔽</sub>。</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-reject-element-functions">
-          <h1>`Promise.allSettled` Reject 元素函数</h1>
-          <p>`Promise.allSettled` reject 元素函数是一个匿名内建函数，用于 reject 某个特定的 `Promise.allSettled` 元素。每个此类函数具有 [[Index]]、[[Values]]、[[Capability]]、[[RemainingElements]] 和 [[AlreadyCalled]] 内部槽。</p>
-          <p>当一个 `Promise.allSettled` reject 元素函数以参数 _x_ 被调用时，执行下列步骤：</p>
-          <emu-alg>
-            1. 令 _F_ 为活动函数对象。
-            1. 令 _alreadyCalled_ 为 _F_.[[AlreadyCalled]]。
-            1. 如果 _alreadyCalled_.[[Value]] 是 *true*，返回 *undefined*。
-            1. 将 _alreadyCalled_.[[Value]] 设为 *true*。
-            1. 令 _index_ 为 _F_.[[Index]]。
-            1. 令 _values_ 为 _F_.[[Values]]。
-            1. 令 _promiseCapability_ 为 _F_.[[Capability]]。
-            1. 令 _remainingElementsCount_ 为 _F_.[[RemainingElements]]。
-            1. 令 _obj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
-            1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*)。
-            1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _x_)。
-            1. 将 _values_[_index_] 设为 _obj_。
-            1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-            1. 如果 _remainingElementsCount_.[[Value]] = 0，则
-              1. 令 _valuesArray_ 为 CreateArrayFromList(_values_)。
-              1. 返回 ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)。
-            1. 返回 *undefined*。
-          </emu-alg>
-          <p>`Promise.allSettled` reject 元素函数的 *"length"* 属性是 *1*<sub>𝔽</sub>。</p>
         </emu-clause>
       </emu-clause>
 
@@ -48669,43 +48636,50 @@ THH:mm:ss.sss
           <p>该函数要求其 *this* 值为一个支持 `Promise` 构造函数参数约定的构造函数。</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseany" type="abstract operation">
+        <emu-clause id="sec-performpromiseany" oldids="sec-promise.any-reject-element-functions" type="abstract operation">
           <h1>
-            PerformPromiseAny (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个 constructor,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 要么是包含一个 ECMAScript 语言值的 normal completion，要么是一个 throw completion
+            执行 PerformPromiseAny (
+            _iteratorRecord_：一个迭代器记录，
+            _constructor_：一个构造函数，
+            _resultCapability_：一个 PromiseCapability 记录，
+            _promiseResolve_：一个函数对象，
+            )：返回一个包含 ECMAScript 语言值的正常完成或者一个 throw 完成
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _errors_ 为一个新的空 List。
-            1. 令 _remainingElementsCount_ 为 Record { [[Value]]: 1 }。
+            1. 令 _errors_ 为一个新的空列表。
+            1. [declared="remainingElementsCount"] 注：_remainingElementsCount_ 初始为 1 而不是 0，以确保即使存在“then”异常行为提前调用回调的情况下，也只调用一次 _resultCapability_.[[Reject]]。
+            1. 令 _remainingElementsCount_ 为记录 { [[Value]]: 1 }。
             1. 令 _index_ 为 0。
             1. 重复，
               1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-              1. 如果 _next_ 是 ~done~，则
-                1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] - 1。
-                1. 如果 _remainingElementsCount_.[[Value]] = 0，则
-                  1. 令 _error_ 为一个新创建的 *AggregateError* 对象。
-                  1. 执行 ! DefinePropertyOrThrow(_error_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) })。
-                  1. 返回 ThrowCompletion(_error_)。
+              1. 如果 _next_ 为 ~done~，那么
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
+                  1. 令 _aggregateError_ 为新建的 *AggregateError* 对象。
+                  1. 执行 ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) })。
+                  1. 执行 ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ »)。
                 1. 返回 _resultCapability_.[[Promise]]。
-              1. 将 *undefined* 追加到 _errors_。
+              1. 向 _errors_ 追加 *undefined*。
               1. 令 _nextPromise_ 为 ? Call(_promiseResolve_, _constructor_, « _next_ »)。
-              1. 令 _stepsRejected_ 为 <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> 中定义的算法步骤。
-              1. 令 _lengthRejected_ 为 <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> 中函数定义的非可选参数个数。
-              1. 令 _onRejected_ 为 CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Errors]], [[Capability]], [[RemainingElements]] »)。
-              1. 将 _onRejected_.[[AlreadyCalled]] 设为 *false*。
-              1. 将 _onRejected_.[[Index]] 设为 _index_。
-              1. 将 _onRejected_.[[Errors]] 设为 _errors_。
-              1. 将 _onRejected_.[[Capability]] 设为 _resultCapability_。
-              1. 将 _onRejected_.[[RemainingElements]] 设为 _remainingElementsCount_。
-              1. 将 _remainingElementsCount_.[[Value]] 设为 _remainingElementsCount_.[[Value]] + 1。
+              1. 令 _rejectedSteps_ 为一个新的抽象闭包，参数为 (_error_)，捕获 _errors_、_resultCapability_ 和 _remainingElementsCount_，并在调用时执行以下步骤：
+                1. 令 _F_ 为当前活动的函数对象。
+                1. 如果 _F_.[[AlreadyCalled]] 为 *true*，返回 *undefined*。
+                1. 设置 _F_.[[AlreadyCalled]] 为 *true*。
+                1. 设置 _errors_[_F_.[[Index]]] 为 _error_。
+                1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] - 1。
+                1. 如果 _remainingElementsCount_.[[Value]] = 0，那么
+                  1. 令 _aggregateError_ 为新建的 *AggregateError* 对象。
+                  1. 执行 ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) })。
+                  1. 返回 ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ »)。
+                1. 返回 *undefined*。
+              1. 令 _onRejected_ 为 CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)。
+              1. 设置 _onRejected_.[[AlreadyCalled]] 为 *false*。
+              1. 设置 _onRejected_.[[Index]] 为 _index_。
+              1. 设置 _index_ 为 _index_ + 1。
+              1. 设置 _remainingElementsCount_.[[Value]] 为 _remainingElementsCount_.[[Value]] + 1。
               1. 执行 ? Invoke(_nextPromise_, *"then"*, « _resultCapability_.[[Resolve]], _onRejected_ »)。
-              1. 将 _index_ 设为 _index_ + 1。
           </emu-alg>
         </emu-clause>
 

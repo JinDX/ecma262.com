@@ -48590,28 +48590,28 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_를 새로운 비어 있는 List로 둔다.
-            1. [declared="remainingElementsCount"] 참고: _remainingElementsCount_는 0이 아니라 1에서 시작한다. 이는 입력 이터레이터가 모두 소진되기 전에 전달된 콜백을 호출하는 오동작 *"then"*이 있더라도 _resultCapability_.[[Resolve]]가 단 한 번만 호출되도록 보장하기 위함이다.
+            1. _values_를 새로운 빈 List로 둔다.
+            1. [declared="remainingElementsCount"] 주의: 입력 이터레이터가 소진되기 전에 전달된 콜백을 호출하는 잘못 동작하는 *"then"*이 있더라도 _resultCapability_.[[Resolve]]가 한 번만 호출되도록 하기 위해 _remainingElementsCount_는 0이 아닌 1에서 시작한다.
             1. _remainingElementsCount_를 Record { [[Value]]: 1 }로 둔다.
             1. _index_를 0으로 둔다.
             1. 반복한다,
               1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
               1. _next_가 ~done~이면,
                 1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
-                1. _remainingElementsCount_.[[Value]]가 0이면,
+                1. _remainingElementsCount_.[[Value]] = 0이면,
                   1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 수행한다.
                 1. _resultCapability_.[[Promise]]를 반환한다.
               1. *undefined*를 _values_에 추가한다.
               1. _nextPromise_를 ? Call(_promiseResolve_, _constructor_, « _next_ »)로 둔다.
-              1. _fulfilledSteps_를 매개변수 (_value_)를 가지며 _values_, _resultCapability_, _remainingElementsCount_를 캡처하는 새로운 Abstract Closure로 두고 호출될 때 다음 단계를 수행한다:
+              1. _fulfilledSteps_를 매개변수 (_value_)를 가지며 _values_, _resultCapability_, 그리고 _remainingElementsCount_를 캡처하고 호출되었을 때 다음 단계를 수행하는 새로운 Abstract Closure로 둔다:
                 1. _F_를 활성 함수 객체로 둔다.
                 1. _F_.[[AlreadyCalled]]가 *true*이면, *undefined*를 반환한다.
                 1. _F_.[[AlreadyCalled]]를 *true*로 설정한다.
-                1. _index_를 _F_.[[Index]]로 둔다.
-                1. _values_[_index_]에 _value_를 설정한다.
+                1. _thisIndex_를 _F_.[[Index]]로 둔다.
+                1. _values_[_thisIndex_]를 _value_로 설정한다.
                 1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
-                1. _remainingElementsCount_.[[Value]]가 0이면,
+                1. _remainingElementsCount_.[[Value]] = 0이면,
                   1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
                   1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 반환한다.
                 1. *undefined*를 반환한다.
@@ -48627,122 +48627,89 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-promise.allsettled">
         <h1>Promise.allSettled ( _iterable_ )</h1>
-        <p>이 함수는 모든 원래 promise 가 settled(즉 fulfilled 또는 rejected) 된 후에, promise 상태 스냅샷 객체들의 배열로 이행되는 promise 를 반환한다. 이 알고리즘을 수행하면서 전달된 iterable 의 모든 요소를 promise 로 resolve 한다.</p>
+        <p>이 함수는 모든 원래의 Promise가 정착(즉, 이행되거나 거부됨)한 후에만, Promise 상태 스냅샷 배열로 이행되는 Promise를 반환한다. 이 알고리즘을 실행하는 동안 전달된 iterable의 모든 요소를 Promise로 해석한다.</p>
         <emu-alg>
-          1. _C_ 를 *this* 값으로 둔다.
-          1. _promiseCapability_ 를 ? NewPromiseCapability(_C_) 로 둔다.
-          1. _promiseResolve_ 를 Completion(GetPromiseResolve(_C_)) 로 둔다.
+          1. _C_를 *this* 값으로 둔다.
+          1. _promiseCapability_를 ? NewPromiseCapability(_C_)로 둔다.
+          1. _promiseResolve_를 Completion(GetPromiseResolve(_C_))로 둔다.
           1. IfAbruptRejectPromise(_promiseResolve_, _promiseCapability_).
-          1. _iteratorRecord_ 를 Completion(GetIterator(_iterable_, ~sync~)) 로 둔다.
+          1. _iteratorRecord_를 Completion(GetIterator(_iterable_, ~sync~))로 둔다.
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_).
-          1. _result_ 를 Completion(PerformPromiseAllSettled(_iteratorRecord_, _C_, _promiseCapability_, _promiseResolve_)) 로 둔다.
-          1. _result_ 가 abrupt completion 이면,
-            1. _iteratorRecord_.[[Done]] 가 *false* 이면 _result_ 를 Completion(IteratorClose(_iteratorRecord_, _result_)) 로 설정한다.
+          1. _result_를 Completion(PerformPromiseAllSettled(_iteratorRecord_, _C_, _promiseCapability_, _promiseResolve_))로 둔다.
+          1. _result_가 abrupt completion이면,
+            1. _iteratorRecord_.[[Done]]이 *false*이면, _result_를 Completion(IteratorClose(_iteratorRecord_, _result_))로 설정한다.
             1. IfAbruptRejectPromise(_result_, _promiseCapability_).
-          1. ! _result_ 를 반환한다.
+          1. Return ! _result_.
         </emu-alg>
         <emu-note>
-          <p>이 함수는 *this* 값이 Promise 생성자의 매개변수 규약을 지원하는 생성자 함수이기를 요구한다.</p>
+          <p>이 함수는 *this* 값이 Promise 생성자의 매개변수 규약을 지원하는 생성자 함수여야 한다.</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseallsettled" type="abstract operation">
+        <emu-clause id="sec-performpromiseallsettled" oldids="sec-promise.allsettled-resolve-element-functions,sec-promise.allsettled-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAllSettled (
               _iteratorRecord_: an Iterator Record,
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): ECMAScript 언어 값을 포함하는 정상 완료 또는 throw 완료
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _values_ 를 새로운 빈 List 로 둔다.
-            1. _remainingElementsCount_ 를 Record { [[Value]]: 1 } 로 둔다.
-            1. _index_ 를 0 으로 둔다.
-            1. 반복,
-              1. _next_ 를 ? IteratorStepValue(_iteratorRecord_) 로 둔다.
-              1. _next_ 가 ~done~ 이면,
-                1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-                1. _remainingElementsCount_.[[Value]] = 0 이면,
-                  1. _valuesArray_ 를 CreateArrayFromList(_values_) 로 둔다.
-                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») 를 수행한다.
-                1. _resultCapability_.[[Promise]] 를 반환한다.
-              1. *undefined* 를 _values_ 에 추가한다.
-              1. _nextPromise_ 를 ? Call(_promiseResolve_, _constructor_, « _next_ ») 로 둔다.
-              1. _stepsFulfilled_ 를 <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-              1. _lengthFulfilled_ 를 <emu-xref href="#sec-promise.allsettled-resolve-element-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-              1. _onFulfilled_ 를 CreateBuiltinFunction(_stepsFulfilled_, _lengthFulfilled_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») 로 둔다.
-              1. _alreadyCalled_ 를 Record { [[Value]]: *false* } 로 둔다.
-              1. _onFulfilled_.[[AlreadyCalled]] 를 _alreadyCalled_ 로 설정한다.
-              1. _onFulfilled_.[[Index]] 를 _index_ 로 설정한다.
-              1. _onFulfilled_.[[Values]] 를 _values_ 로 설정한다.
-              1. _onFulfilled_.[[Capability]] 를 _resultCapability_ 로 설정한다.
-              1. _onFulfilled_.[[RemainingElements]] 를 _remainingElementsCount_ 로 설정한다.
-              1. _stepsRejected_ 를 <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-              1. _lengthRejected_ 를 <emu-xref href="#sec-promise.allsettled-reject-element-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-              1. _onRejected_ 를 CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] ») 로 둔다.
-              1. _onRejected_.[[AlreadyCalled]] 를 _alreadyCalled_ 로 설정한다.
-              1. _onRejected_.[[Index]] 를 _index_ 로 설정한다.
-              1. _onRejected_.[[Values]] 를 _values_ 로 설정한다.
-              1. _onRejected_.[[Capability]] 를 _resultCapability_ 로 설정한다.
-              1. _onRejected_.[[RemainingElements]] 를 _remainingElementsCount_ 로 설정한다.
-              1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] + 1 로 설정한다.
-              1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _onRejected_ ») 를 수행한다.
-              1. _index_ 를 _index_ + 1 로 설정한다.
+            1. _values_를 새로운 빈 List로 둔다.
+            1. [declared="remainingElementsCount"] 주의: 입력 이터레이터가 소진되기 전에 전달된 콜백 중 하나를 호출하는 잘못 동작하는 *"then"*이 있더라도 _resultCapability_.[[Resolve]]가 한 번만 호출되도록 하기 위해 _remainingElementsCount_는 0이 아닌 1에서 시작한다.
+            1. _remainingElementsCount_를 Record { [[Value]]: 1 }로 둔다.
+            1. _index_를 0으로 둔다.
+            1. 반복한다,
+              1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
+              1. _next_가 ~done~이면,
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]] = 0이면,
+                  1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 수행한다.
+                1. _resultCapability_.[[Promise]]를 반환한다.
+              1. *undefined*를 _values_에 추가한다.
+              1. _nextPromise_를 ? Call(_promiseResolve_, _constructor_, « _next_ »)로 둔다.
+              1. _alreadyCalled_를 Record { [[Value]]: *false* }로 둔다.
+              1. _fulfilledSteps_를 매개변수 (_value_)를 가지며 _values_, _resultCapability_, 그리고 _remainingElementsCount_를 캡처하고 호출되었을 때 다음 단계를 수행하는 새로운 Abstract Closure로 둔다:
+                1. _F_를 활성 함수 객체로 둔다.
+                1. _F_.[[AlreadyCalled]].[[Value]]가 *true*이면, *undefined*를 반환한다.
+                1. _F_.[[AlreadyCalled]].[[Value]]를 *true*로 설정한다.
+                1. _obj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+                1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*)를 수행한다.
+                1. ! CreateDataPropertyOrThrow(_obj_, *"value"*, _value_)를 수행한다.
+                1. _thisIndex_를 _F_.[[Index]]로 둔다.
+                1. _values_[_thisIndex_]를 _obj_로 설정한다.
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]] = 0이면,
+                  1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 반환한다.
+                1. *undefined*를 반환한다.
+              1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)로 둔다.
+              1. _onFulfilled_.[[AlreadyCalled]]를 _alreadyCalled_로 설정한다.
+              1. _onFulfilled_.[[Index]]를 _index_로 설정한다.
+              1. _rejectedSteps_를 매개변수 (_error_)를 가지며 _values_, _resultCapability_, 그리고 _remainingElementsCount_를 캡처하고 호출되었을 때 다음 단계를 수행하는 새로운 Abstract Closure로 둔다:
+                1. _F_를 활성 함수 객체로 둔다.
+                1. _F_.[[AlreadyCalled]].[[Value]]가 *true*이면, *undefined*를 반환한다.
+                1. _F_.[[AlreadyCalled]].[[Value]]를 *true*로 설정한다.
+                1. _obj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+                1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*)를 수행한다.
+                1. ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _error_)를 수행한다.
+                1. _thisIndex_를 _F_.[[Index]]로 둔다.
+                1. _values_[_thisIndex_]를 _obj_로 설정한다.
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]] = 0이면,
+                  1. _valuesArray_를 CreateArrayFromList(_values_)로 둔다.
+                  1. ? Call(_resultCapability_.[[Resolve]], *undefined*, « _valuesArray_ »)를 반환한다.
+                1. *undefined*를 반환한다.
+              1. _onRejected_를 CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)로 둔다.
+              1. _onRejected_.[[AlreadyCalled]]를 _alreadyCalled_로 설정한다.
+              1. _onRejected_.[[Index]]를 _index_로 설정한다.
+              1. _index_를 _index_ + 1로 설정한다.
+              1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] + 1로 설정한다.
+              1. ? Invoke(_nextPromise_, *"then"*, « _onFulfilled_, _onRejected_ »)를 수행한다.
           </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-resolve-element-functions">
-          <h1>`Promise.allSettled` Resolve Element Functions</h1>
-          <p>`Promise.allSettled` resolve 요소 함수는 특정 `Promise.allSettled` 요소를 resolve 하는 데 사용되는 익명 내장 함수이다. 각 함수는 [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 내부 슬롯을 가진다.</p>
-          <p>`Promise.allSettled` resolve 요소 함수가 인수 _x_ 로 호출되면 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. _alreadyCalled_ 를 _F_.[[AlreadyCalled]] 로 둔다.
-            1. _alreadyCalled_.[[Value]] 가 *true* 이면 *undefined* 를 반환한다.
-            1. _alreadyCalled_.[[Value]] 를 *true* 로 설정한다.
-            1. _index_ 를 _F_.[[Index]] 로 둔다.
-            1. _values_ 를 _F_.[[Values]] 로 둔다.
-            1. _promiseCapability_ 를 _F_.[[Capability]] 로 둔다.
-            1. _remainingElementsCount_ 를 _F_.[[RemainingElements]] 로 둔다.
-            1. _obj_ 를 OrdinaryObjectCreate(%Object.prototype%) 로 둔다.
-            1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"fulfilled"*) 를 수행한다.
-            1. ! CreateDataPropertyOrThrow(_obj_, *"value"*, _x_) 를 수행한다.
-            1. _values_[_index_] 를 _obj_ 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] = 0 이면,
-              1. _valuesArray_ 를 CreateArrayFromList(_values_) 로 둔다.
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») 를 반환한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-          <p>`Promise.allSettled` resolve 요소 함수의 *"length"* 프로퍼티는 *1*<sub>𝔽</sub> 이다.</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise.allsettled-reject-element-functions">
-          <h1>`Promise.allSettled` Reject Element Functions</h1>
-          <p>`Promise.allSettled` reject 요소 함수는 특정 `Promise.allSettled` 요소를 reject 하는 데 사용되는 익명 내장 함수이다. 각 함수는 [[Index]], [[Values]], [[Capability]], [[RemainingElements]], [[AlreadyCalled]] 내부 슬롯을 가진다.</p>
-          <p>`Promise.allSettled` reject 요소 함수가 인수 _x_ 로 호출되면 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. _alreadyCalled_ 를 _F_.[[AlreadyCalled]] 로 둔다.
-            1. _alreadyCalled_.[[Value]] 가 *true* 이면 *undefined* 를 반환한다.
-            1. _alreadyCalled_.[[Value]] 를 *true* 로 설정한다.
-            1. _index_ 를 _F_.[[Index]] 로 둔다.
-            1. _values_ 를 _F_.[[Values]] 로 둔다.
-            1. _promiseCapability_ 를 _F_.[[Capability]] 로 둔다.
-            1. _remainingElementsCount_ 를 _F_.[[RemainingElements]] 로 둔다.
-            1. _obj_ 를 OrdinaryObjectCreate(%Object.prototype%) 로 둔다.
-            1. ! CreateDataPropertyOrThrow(_obj_, *"status"*, *"rejected"*) 를 수행한다.
-            1. ! CreateDataPropertyOrThrow(_obj_, *"reason"*, _x_) 를 수행한다.
-            1. _values_[_index_] 를 _obj_ 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-            1. _remainingElementsCount_.[[Value]] = 0 이면,
-              1. _valuesArray_ 를 CreateArrayFromList(_values_) 로 둔다.
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _valuesArray_ ») 를 반환한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-          <p>`Promise.allSettled` reject 요소 함수의 *"length"* 프로퍼티는 *1*<sub>𝔽</sub> 이다.</p>
         </emu-clause>
       </emu-clause>
 
@@ -48766,43 +48733,50 @@ THH:mm:ss.sss
           <p>이 함수는 *this* 값이 `Promise` 생성자의 매개변수 규약을 지원하는 생성자 함수이기를 요구한다.</p>
         </emu-note>
 
-        <emu-clause id="sec-performpromiseany" type="abstract operation">
+        <emu-clause id="sec-performpromiseany" oldids="sec-promise.any-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAny (
               _iteratorRecord_: an Iterator Record,
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): ECMAScript 언어 값을 포함하는 정상 완료 또는 throw 완료
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _errors_ 를 새로운 빈 List 로 둔다.
-            1. _remainingElementsCount_ 를 Record { [[Value]]: 1 } 로 둔다.
-            1. _index_ 를 0 으로 둔다.
-            1. 반복,
-              1. _next_ 를 ? IteratorStepValue(_iteratorRecord_) 로 둔다.
-              1. _next_ 가 ~done~ 이면,
-                1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] - 1 로 설정한다.
-                1. _remainingElementsCount_.[[Value]] = 0 이면,
-                  1. _error_ 를 새로 생성된 *AggregateError* 객체로 둔다.
-                  1. ! DefinePropertyOrThrow(_error_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) }) 를 수행한다.
-                  1. ThrowCompletion(_error_) 를 반환한다.
-                1. _resultCapability_.[[Promise]] 를 반환한다.
-              1. *undefined* 를 _errors_ 에 추가한다.
-              1. _nextPromise_ 를 ? Call(_promiseResolve_, _constructor_, « _next_ ») 로 둔다.
-              1. _stepsRejected_ 를 <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-              1. _lengthRejected_ 를 <emu-xref href="#sec-promise.any-reject-element-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-              1. _onRejected_ 를 CreateBuiltinFunction(_stepsRejected_, _lengthRejected_, *""*, « [[AlreadyCalled]], [[Index]], [[Errors]], [[Capability]], [[RemainingElements]] ») 로 둔다.
-              1. _onRejected_.[[AlreadyCalled]] 를 *false* 로 설정한다.
-              1. _onRejected_.[[Index]] 를 _index_ 로 설정한다.
-              1. _onRejected_.[[Errors]] 를 _errors_ 로 설정한다.
-              1. _onRejected_.[[Capability]] 를 _resultCapability_ 로 설정한다.
-              1. _onRejected_.[[RemainingElements]] 를 _remainingElementsCount_ 로 설정한다.
-              1. _remainingElementsCount_.[[Value]] 를 _remainingElementsCount_.[[Value]] + 1 로 설정한다.
-              1. ? Invoke(_nextPromise_, *"then"*, « _resultCapability_.[[Resolve]], _onRejected_ ») 를 수행한다.
-              1. _index_ 를 _index_ + 1 로 설정한다.
+            1. _errors_를 새로운 빈 List로 둔다.
+            1. [declared="remainingElementsCount"] 주의: _remainingElementsCount_는 입력 이터레이터가 소진되기 전에 전달된 콜백을 호출하는 잘못 동작하는 *"then"*이 있더라도 _resultCapability_.[[Reject]]가 한 번만 호출되도록 하기 위해 0이 아닌 1에서 시작한다.
+            1. _remainingElementsCount_를 Record { [[Value]]: 1 }로 둔다.
+            1. _index_를 0으로 둔다.
+            1. 반복한다,
+              1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
+              1. _next_가 ~done~이면,
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]] = 0이면,
+                  1. _aggregateError_를 새로 생성한 *AggregateError* 객체로 둔다.
+                  1. ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) })를 수행한다.
+                  1. ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ »)를 수행한다.
+                1. _resultCapability_.[[Promise]]를 반환한다.
+              1. *undefined*를 _errors_에 추가한다.
+              1. _nextPromise_를 ? Call(_promiseResolve_, _constructor_, « _next_ »)로 둔다.
+              1. _rejectedSteps_를 매개변수 (_error_)를 가지며 _errors_, _resultCapability_, 그리고 _remainingElementsCount_를 캡처하고 호출되었을 때 다음 단계를 수행하는 새로운 Abstract Closure로 둔다:
+                1. _F_를 활성 함수 객체로 둔다.
+                1. _F_.[[AlreadyCalled]]가 *true*이면, *undefined*를 반환한다.
+                1. _F_.[[AlreadyCalled]]를 *true*로 설정한다.
+                1. _errors_[_F_.[[Index]]]를 _error_로 설정한다.
+                1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] - 1로 설정한다.
+                1. _remainingElementsCount_.[[Value]] = 0이면,
+                  1. _aggregateError_를 새로 생성한 *AggregateError* 객체로 둔다.
+                  1. ! DefinePropertyOrThrow(_aggregateError_, *"errors"*, PropertyDescriptor { [[Configurable]]: *true*, [[Enumerable]]: *false*, [[Writable]]: *true*, [[Value]]: CreateArrayFromList(_errors_) })를 수행한다.
+                  1. ? Call(_resultCapability_.[[Reject]], *undefined*, « _aggregateError_ »)를 반환한다.
+                1. *undefined*를 반환한다.
+              1. _onRejected_를 CreateBuiltinFunction(_rejectedSteps_, 1, *""*, « [[AlreadyCalled]], [[Index]] »)로 둔다.
+              1. _onRejected_.[[AlreadyCalled]]를 *false*로 설정한다.
+              1. _onRejected_.[[Index]]를 _index_로 설정한다.
+              1. _index_를 _index_ + 1로 설정한다.
+              1. _remainingElementsCount_.[[Value]]를 _remainingElementsCount_.[[Value]] + 1로 설정한다.
+              1. ? Invoke(_nextPromise_, *"then"*, « _resultCapability_.[[Resolve]], _onRejected_ »)를 수행한다.
           </emu-alg>
         </emu-clause>
 
