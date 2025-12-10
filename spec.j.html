@@ -27207,11 +27207,11 @@
                 1. _module_.[[Status]] を ~evaluated~ に設定。
                 1. _module_.[[AsyncEvaluationOrder]] を ~done~ に設定。
                 1. 注: 対称性のため ~done~。InnerModuleEvaluation では [[EvaluationError]] が ~empty~ でない場合 [[AsyncEvaluationOrder]] は利用されない。
-                1. _module_.[[AsyncParentModules]] の各 Cyclic Module Record _m_ について
-                  1. AsyncModuleExecutionRejected(_m_, _error_) を実行。
                 1. もし _module_.[[TopLevelCapability]] が ~empty~ でないなら
                   1. Assert: _module_.[[CycleRoot]] と _module_ は同一。
                   1. ! Call(_module_.[[TopLevelCapability]].[[Reject]], *undefined*, « _error_ ») を実行。
+                1. _module_.[[AsyncParentModules]] の各 Cyclic Module Record _m_ について
+                  1. AsyncModuleExecutionRejected(_m_, _error_) を実行。
                 1. ~unused~ を返す。
               </emu-alg>
             </emu-clause>
@@ -30297,7 +30297,7 @@
       </ul>
 
       <emu-clause id="sec-object-value">
-        <h1>Object ( [ _value_ ] )</h1>
+        <h1>Object ( _value_ )</h1>
         <p>この関数は呼び出されたとき次の手順を行う:</p>
         <emu-alg>
           1. NewTarget が *undefined* でもアクティブな関数オブジェクトでもないなら
@@ -30313,7 +30313,6 @@
       <p>Object コンストラクタ:</p>
       <ul>
         <li>値 %Function.prototype% を持つ [[Prototype]] 内部スロットを有する。</li>
-        <li>値 *1*<sub>𝔽</sub> の *"length"* プロパティを持つ。</li>
         <li>以下の追加プロパティを持つ:</li>
       </ul>
 
@@ -35513,16 +35512,16 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-string.prototype.match">
         <h1>String.prototype.match ( _regexp_ )</h1>
-        <p>呼び出し時:</p>
+        <p>このメソッドは呼び出されたときに以下の手順を実行します：</p>
         <emu-alg>
-          1. _O_ を *this*。
-          1. ? RequireObjectCoercible(_O_)。
-          1. _regexp_ が *undefined* でも *null* でもないなら
-            1. _matcher_ を ? GetMethod(_regexp_, %Symbol.match%)。
-            1. _matcher_ が *undefined* でなければ
+          1. _O_ を *this* の値とする。
+          1. ? RequireObjectCoercible(_O_) を実行する。
+          1. _regexp_ がオブジェクトである場合、
+            1. _matcher_ を ? GetMethod(_regexp_, %Symbol.match%) とする。
+            1. _matcher_ が *undefined* でない場合、
               1. ? Call(_matcher_, _regexp_, « _O_ ») を返す。
-          1. _S_ を ? ToString(_O_)。
-          1. _rx_ を ? RegExpCreate(_regexp_, *undefined*)。
+          1. _S_ を ? ToString(_O_) とする。
+          1. _rx_ を ? RegExpCreate(_regexp_, *undefined*) とする。
           1. ? Invoke(_rx_, %Symbol.match%, « _S_ ») を返す。
         </emu-alg>
         <emu-note>
@@ -35536,19 +35535,19 @@ THH:mm:ss.sss
         <p>呼び出し時:</p>
 
         <emu-alg>
-          1. _O_ を *this*。
-          1. ? RequireObjectCoercible(_O_)。
-          1. _regexp_ が *undefined* でも *null* でもないなら
-            1. _isRegExp_ を ? IsRegExp(_regexp_)。
-            1. _isRegExp_ が *true* なら
-              1. _flags_ を ? Get(_regexp_, *"flags"*)。
-              1. ? RequireObjectCoercible(_flags_)。
-              1. ? ToString(_flags_) が *"g"* を含まなければ *TypeError*。
-            1. _matcher_ を ? GetMethod(_regexp_, %Symbol.matchAll%)。
-            1. _matcher_ が *undefined* でなければ
+          1. _O_ を *this* の値とする。
+          1. ? RequireObjectCoercible(_O_) を実行する。
+          1. _regexp_ がオブジェクトの場合、
+            1. _isRegExp_ を ? IsRegExp(_regexp_) とする。
+            1. _isRegExp_ が *true* の場合、
+              1. _flags_ を ? Get(_regexp_, *"flags"*) とする。
+              1. ? RequireObjectCoercible(_flags_) を実行する。
+              1. ? ToString(_flags_) が *"g"* を含まない場合、*TypeError* 例外を投げる。
+            1. _matcher_ を ? GetMethod(_regexp_, %Symbol.matchAll%) とする。
+            1. _matcher_ が *undefined* でない場合、
               1. ? Call(_matcher_, _regexp_, « _O_ ») を返す。
-          1. _S_ を ? ToString(_O_)。
-          1. _rx_ を ? RegExpCreate(_regexp_, *"g"*)。
+          1. _S_ を ? ToString(_O_) とする。
+          1. _rx_ を ? RegExpCreate(_regexp_, *"g"*) とする。
           1. ? Invoke(_rx_, %Symbol.matchAll%, « _S_ ») を返す。
         </emu-alg>
         <emu-note>このメソッドはジェネリックで、*this* が String オブジェクトである必要はない。</emu-note>
@@ -35682,29 +35681,29 @@ THH:mm:ss.sss
         <h1>String.prototype.replace ( _searchValue_, _replaceValue_ )</h1>
         <p>呼び出し時:</p>
         <emu-alg>
-          1. _O_ を *this*。
-          1. ? RequireObjectCoercible(_O_)。
-          1. _searchValue_ が *undefined* でも *null* でもないなら
-            1. _replacer_ を ? GetMethod(_searchValue_, %Symbol.replace%)。
-            1. _replacer_ が *undefined* でなければ
+          1. _O_ を *this* の値とする。
+          1. ? RequireObjectCoercible(_O_) を実行する。
+          1. _searchValue_ がオブジェクトの場合、
+            1. _replacer_ を ? GetMethod(_searchValue_, %Symbol.replace%) とする。
+            1. _replacer_ が *undefined* でない場合、
               1. ? Call(_replacer_, _searchValue_, « _O_, _replaceValue_ ») を返す。
-          1. _string_ を ? ToString(_O_)。
-          1. _searchString_ を ? ToString(_searchValue_)。
-          1. _functionalReplace_ を IsCallable(_replaceValue_)。
-          1. _functionalReplace_ が *false* なら
-            1. _replaceValue_ を ? ToString(_replaceValue_) に設定。
-          1. _searchLength_ を _searchString_ の長さ。
-          1. _position_ を StringIndexOf(_string_, _searchString_, 0)。
-          1. _position_ が ~not-found~ なら _string_ を返す。
-          1. _preceding_ を _string_ の 0 から _position_ まで。
-          1. _following_ を _string_ の _position_ + _searchLength_ 以降。
-          1. _functionalReplace_ が *true* なら
-            1. _replacement_ を ? ToString(? Call(_replaceValue_, *undefined*, « _searchString_, 𝔽(_position_), _string_ »))。
-          1. それ以外
-            1. アサート: _replaceValue_ は String。
-            1. _captures_ を空リスト。
-            1. _replacement_ を ! GetSubstitution(_searchString_, _string_, _position_, _captures_, *undefined*, _replaceValue_)。
-          1. _preceding_, _replacement_, _following_ を連結して返す。
+          1. _string_ を ? ToString(_O_) とする。
+          1. _searchString_ を ? ToString(_searchValue_) とする。
+          1. _functionalReplace_ を IsCallable(_replaceValue_) とする。
+          1. _functionalReplace_ が *false* の場合、
+            1. _replaceValue_ を ? ToString(_replaceValue_) に設定する。
+          1. _searchLength_ を _searchString_ の長さとする。
+          1. _position_ を StringIndexOf(_string_, _searchString_, 0) とする。
+          1. _position_ が ~not-found~ の場合、_string_ を返す。
+          1. _preceding_ を _string_ の 0 から _position_ までの部分文字列とする。
+          1. _following_ を _string_ の _position_ + _searchLength_ からの部分文字列とする。
+          1. _functionalReplace_ が *true* の場合、
+            1. _replacement_ を ? ToString(? Call(_replaceValue_, *undefined*, « _searchString_, 𝔽(_position_), _string_ »)) とする。
+          1. それ以外の場合、
+            1. Assert: _replaceValue_ は文字列である。
+            1. _captures_ を新しい空のリストとする。
+            1. _replacement_ を ! GetSubstitution(_searchString_, _string_, _position_, _captures_, *undefined*, _replaceValue_) とする。
+          1. _preceding_、_replacement_、_following_ を連結した文字列を返す。
         </emu-alg>
         <emu-note>
           <p>ジェネリック。</p>
@@ -35798,7 +35797,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_ を *this*。
           1. ? RequireObjectCoercible(_O_)。
-          1. _searchValue_ が *undefined* でも *null* でもないなら
+          1. _searchValue_ がオブジェクトの場合、
             1. _isRegExp_ を ? IsRegExp(_searchValue_)。
             1. _isRegExp_ が *true* なら
               1. _flags_ を ? Get(_searchValue_, *"flags"*)。
@@ -35843,7 +35842,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_ を *this*。
           1. ? RequireObjectCoercible(_O_)。
-          1. _regexp_ が *undefined* でも *null* でもないなら
+          1. _regexp_ がオブジェクトの場合、
             1. _searcher_ を ? GetMethod(_regexp_, %Symbol.search%)。
             1. _searcher_ が *undefined* でなければ
               1. ? Call(_searcher_, _regexp_, « _O_ ») を返す。
@@ -35888,7 +35887,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_ を *this*。
           1. ? RequireObjectCoercible(_O_)。
-          1. _separator_ が *undefined* でも *null* でもないなら
+          1. _separator_ がオブジェクトの場合、
             1. _splitter_ を ? GetMethod(_separator_, %Symbol.split%)。
             1. _splitter_ が *undefined* でなければ
               1. ? Call(_splitter_, _separator_, « _O_, _limit_ ») を返す。

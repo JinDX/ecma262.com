@@ -27130,11 +27130,11 @@
                 1. 设 _module_.[[Status]] = ~evaluated~。
                 1. 设 _module_.[[AsyncEvaluationOrder]] = ~done~。
                 1. 注：出于与 AsyncModuleExecutionFulfilled 对称，在出现错误时也设为 ~done~；当 [[EvaluationError]] 非 ~empty~ 时，其 [[AsyncEvaluationOrder]] 不再使用。
-                1. 对 _module_.[[AsyncParentModules]] 中每个 Cyclic Module Record _m_：
-                  1. 执行 AsyncModuleExecutionRejected(_m_, _error_)。
                 1. 若 _module_.[[TopLevelCapability]] 非 ~empty~，则
                   1. 断言：_module_.[[CycleRoot]] 与 _module_ 相同。
                   1. 执行 ! Call(_module_.[[TopLevelCapability]].[[Reject]], *undefined*, « _error_ »)。
+                1. 对 _module_.[[AsyncParentModules]] 中每个 Cyclic Module Record _m_：
+                  1. 执行 AsyncModuleExecutionRejected(_m_, _error_)。
                 1. 返回 ~unused~。
               </emu-alg>
             </emu-clause>
@@ -30010,7 +30010,7 @@
       </ul>
 
       <emu-clause id="sec-object-value">
-        <h1>Object ( [ _value_ ] )</h1>
+        <h1>Object ( _value_ )</h1>
         <p>该函数被调用时执行以下步骤：</p>
         <emu-alg>
           1. 如果 NewTarget 既不是 *undefined* 也不是活动函数对象，则
@@ -30026,7 +30026,6 @@
       <p>Object 构造函数：</p>
       <ul>
         <li>拥有一个 [[Prototype]] 内部槽，其值为 %Function.prototype%。</li>
-        <li>有 *"length"* 属性，其值为 *1*<sub>𝔽</sub>。</li>
         <li>具有以下附加属性：</li>
       </ul>
 
@@ -35229,13 +35228,13 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-string.prototype.match">
         <h1>String.prototype.match ( _regexp_ )</h1>
-        <p>调用该方法时执行以下步骤：</p>
+        <p>当调用此方法时，执行以下步骤：</p>
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _regexp_ 既不是 *undefined* 也不是 *null*，则
+          1. 如果 _regexp_ 是一个 Object，则
             1. 令 _matcher_ 为 ? GetMethod(_regexp_, %Symbol.match%)。
-            1. 若 _matcher_ 不为 *undefined*，则
+            1. 如果 _matcher_ 不是 *undefined*，则
               1. 返回 ? Call(_matcher_, _regexp_, « _O_ »)。
           1. 令 _S_ 为 ? ToString(_O_)。
           1. 令 _rx_ 为 ? RegExpCreate(_regexp_, *undefined*)。
@@ -35254,14 +35253,14 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _regexp_ 既不是 *undefined* 也不是 *null*，则
+          1. 如果 _regexp_ 是一个 Object，则
             1. 令 _isRegExp_ 为 ? IsRegExp(_regexp_)。
-            1. 若 _isRegExp_ 为 *true*，则
+            1. 如果 _isRegExp_ 为 *true*，则
               1. 令 _flags_ 为 ? Get(_regexp_, *"flags"*)。
               1. 执行 ? RequireObjectCoercible(_flags_)。
-              1. 若 ? ToString(_flags_) 不包含 *"g"*，抛出 *TypeError* 异常。
+              1. 如果 ? ToString(_flags_) 不包含 *"g"*，抛出 *TypeError* 异常。
             1. 令 _matcher_ 为 ? GetMethod(_regexp_, %Symbol.matchAll%)。
-            1. 若 _matcher_ 不为 *undefined*，则
+            1. 如果 _matcher_ 不是 *undefined*，则
               1. 返回 ? Call(_matcher_, _regexp_, « _O_ »)。
           1. 令 _S_ 为 ? ToString(_O_)。
           1. 令 _rx_ 为 ? RegExpCreate(_regexp_, *"g"*)。
@@ -35400,27 +35399,27 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _searchValue_ 既非 *undefined* 也非 *null*，则
+          1. 如果 _searchValue_ 是一个 Object，则
             1. 令 _replacer_ 为 ? GetMethod(_searchValue_, %Symbol.replace%)。
-            1. 若 _replacer_ 不为 *undefined*，则
+            1. 如果 _replacer_ 不是 *undefined*，则
               1. 返回 ? Call(_replacer_, _searchValue_, « _O_, _replaceValue_ »)。
           1. 令 _string_ 为 ? ToString(_O_)。
           1. 令 _searchString_ 为 ? ToString(_searchValue_)。
           1. 令 _functionalReplace_ 为 IsCallable(_replaceValue_)。
-          1. 若 _functionalReplace_ 为 *false*，则
-            1. 将 _replaceValue_ 设为 ? ToString(_replaceValue_)。
+          1. 如果 _functionalReplace_ 为 *false*，则
+            1. 设置 _replaceValue_ 为 ? ToString(_replaceValue_)。
           1. 令 _searchLength_ 为 _searchString_ 的长度。
           1. 令 _position_ 为 StringIndexOf(_string_, _searchString_, 0)。
-          1. 若 _position_ 为 ~not-found~，返回 _string_。
-          1. 令 _preceding_ 为 _string_ 中从 0 到 _position_ 的子串。
-          1. 令 _following_ 为 _string_ 中从 _position_ + _searchLength_ 起的子串。
-          1. 若 _functionalReplace_ 为 *true*，则
+          1. 如果 _position_ 是 ~not-found~，返回 _string_。
+          1. 令 _preceding_ 为 _string_ 的子串，从 0 到 _position_。
+          1. 令 _following_ 为 _string_ 的子串，从 _position_ + _searchLength_ 开始。
+          1. 如果 _functionalReplace_ 为 *true*，则
             1. 令 _replacement_ 为 ? ToString(? Call(_replaceValue_, *undefined*, « _searchString_, 𝔽(_position_), _string_ »))。
           1. 否则，
-            1. 断言：_replaceValue_ 为字符串。
+            1. 断言：_replaceValue_ 为一个字符串。
             1. 令 _captures_ 为一个新的空列表。
             1. 令 _replacement_ 为 ! GetSubstitution(_searchString_, _string_, _position_, _captures_, *undefined*, _replaceValue_)。
-          1. 返回 _preceding_、_replacement_、_following_ 的字符串拼接。
+          1. 返回 _preceding_、_replacement_ 和 _following_ 的字符串连接结果。
         </emu-alg>
         <emu-note>
           <p>该方法特意设计为泛型；其 *this* 不要求为 String 对象，因此可转移到其他对象类型作为方法使用。</p>
@@ -35514,7 +35513,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _searchValue_ 既非 *undefined* 也非 *null*，则
+          1. 若 _searchValue_ 是一个 Object，则
             1. 令 _isRegExp_ 为 ? IsRegExp(_searchValue_)。
             1. 若 _isRegExp_ 为 *true*，则
               1. 令 _flags_ 为 ? Get(_searchValue_, *"flags"*)。
@@ -35559,7 +35558,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _regexp_ 既非 *undefined* 也非 *null*，则
+          1. 若 _regexp_ 是一个 Object，则
             1. 令 _searcher_ 为 ? GetMethod(_regexp_, %Symbol.search%)。
             1. 若 _searcher_ 不为 *undefined*，则
               1. 返回 ? Call(_searcher_, _regexp_, « _O_ »)。
@@ -35604,7 +35603,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_O_)。
-          1. 若 _separator_ 既非 *undefined* 也非 *null*，则
+          1. 若 _separator_ 是一个 Object，则
             1. 令 _splitter_ 为 ? GetMethod(_separator_, %Symbol.split%)。
             1. 若 _splitter_ 不为 *undefined*，则
               1. 返回 ? Call(_splitter_, _separator_, « _O_, _limit_ »)。

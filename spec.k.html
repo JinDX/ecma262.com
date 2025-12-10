@@ -26747,11 +26747,11 @@
                 1. _module_.[[Status]] = ~evaluated~.
                 1. _module_.[[AsyncEvaluationOrder]] = ~done~.
                 1. 참고: _module_.[[EvaluationError]] 가 ~empty~ 가 아닐 때 InnerModuleEvaluation 에서 [[AsyncEvaluationOrder]] 값은 사용되지 않는다.
-                1. _module_.[[AsyncParentModules]] 의 각 Cyclic Module Record _m_ 에 대해
-                  1. AsyncModuleExecutionRejected(_m_, _error_) 수행.
                 1. _module_.[[TopLevelCapability]] 가 ~empty~ 아니면
                   1. 단언: _module_.[[CycleRoot]] 와 _module_ 동일.
                   1. ! Call(_module_.[[TopLevelCapability]].[[Reject]], *undefined*, « _error_ ») 수행.
+                1. _module_.[[AsyncParentModules]] 의 각 Cyclic Module Record _m_ 에 대해
+                  1. AsyncModuleExecutionRejected(_m_, _error_) 수행.
                 1. ~unused~ 반환.
               </emu-alg>
             </emu-clause>
@@ -29841,7 +29841,7 @@
       </ul>
 
       <emu-clause id="sec-object-value">
-        <h1>Object ( [ _value_ ] )</h1>
+        <h1>Object ( _value_ )</h1>
         <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
           1. NewTarget 이 *undefined* 도 아니고 활성 함수 객체도 아니면
@@ -29857,7 +29857,6 @@
       <p>Object 생성자는:</p>
       <ul>
         <li>값이 %Function.prototype% 인 [[Prototype]] 내부 슬롯을 갖는다.</li>
-        <li>값이 *1*<sub>𝔽</sub> 인 *"length"* 프로퍼티를 갖는다.</li>
         <li>다음 추가 프로퍼티들을 갖는다:</li>
       </ul>
 
@@ -35058,13 +35057,13 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-string.prototype.match">
         <h1>String.prototype.match ( _regexp_ )</h1>
-        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <p>이 메서드는 호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _regexp_가 *undefined*도 *null*도 아니면
+          1. 만약 _regexp_가 Object이면
             1. _matcher_를 ? GetMethod(_regexp_, %Symbol.match%)로 둔다.
-            1. _matcher_가 *undefined*가 아니면
+            1. 만약 _matcher_가 *undefined*가 아니면
               1. ? Call(_matcher_, _regexp_, « _O_ »)를 반환한다.
           1. _S_를 ? ToString(_O_)로 둔다.
           1. _rx_를 ? RegExpCreate(_regexp_, *undefined*)로 둔다.
@@ -35083,14 +35082,14 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _regexp_가 *undefined*도 *null*도 아니면
+          1. 만약 _regexp_가 Object이면
             1. _isRegExp_를 ? IsRegExp(_regexp_)로 둔다.
-            1. _isRegExp_가 *true*이면
+            1. 만약 _isRegExp_가 *true*이면
               1. _flags_를 ? Get(_regexp_, *"flags"*)로 둔다.
               1. ? RequireObjectCoercible(_flags_)를 수행한다.
-              1. ? ToString(_flags_)에 *"g"*가 없으면 *TypeError* 예외를 던진다.
+              1. 만약 ? ToString(_flags_)가 *"g"*를 포함하지 않으면, *TypeError* 예외를 throw한다.
             1. _matcher_를 ? GetMethod(_regexp_, %Symbol.matchAll%)로 둔다.
-            1. _matcher_가 *undefined*가 아니면
+            1. 만약 _matcher_가 *undefined*가 아니면
               1. ? Call(_matcher_, _regexp_, « _O_ »)를 반환한다.
           1. _S_를 ? ToString(_O_)로 둔다.
           1. _rx_를 ? RegExpCreate(_regexp_, *"g"*)로 둔다.
@@ -35229,27 +35228,27 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _searchValue_가 *undefined*도 *null*도 아니면
+          1. 만약 _searchValue_가 Object이면
             1. _replacer_를 ? GetMethod(_searchValue_, %Symbol.replace%)로 둔다.
-            1. _replacer_가 *undefined*가 아니면
+            1. 만약 _replacer_가 *undefined*가 아니면
               1. ? Call(_replacer_, _searchValue_, « _O_, _replaceValue_ »)를 반환한다.
           1. _string_을 ? ToString(_O_)로 둔다.
           1. _searchString_을 ? ToString(_searchValue_)로 둔다.
           1. _functionalReplace_를 IsCallable(_replaceValue_)로 둔다.
-          1. _functionalReplace_가 *false*이면
-            1. _replaceValue_를 ? ToString(_replaceValue_)로 둔다.
+          1. 만약 _functionalReplace_가 *false*이면
+            1. _replaceValue_를 ? ToString(_replaceValue_)로 설정한다.
           1. _searchLength_를 _searchString_의 길이로 둔다.
-          1. _position_을 StringIndexOf(_string_, _searchString_, 0)으로 둔다.
-          1. _position_이 ~not-found~이면 _string_을 반환한다.
-          1. _preceding_을 _string_의 0부터 _position_ 전까지 부분 문자열로 둔다.
-          1. _following_을 _string_의 _position_ + _searchLength_부터 끝까지 부분 문자열로 둔다.
-          1. _functionalReplace_가 *true*이면
-            1. _replacement_를 ? ToString(? Call(_replaceValue_, *undefined*, « _searchString_, 𝔽(_position_), _string_ »))로 둔다.
-          1. 아니면
-            1. 단언: _replaceValue_는 문자열이다.
-            1. _captures_를 새 빈 리스트로 둔다.
-            1. _replacement_를 ! GetSubstitution(_searchString_, _string_, _position_, _captures_, *undefined*, _replaceValue_)로 둔다.
-          1. _preceding_, _replacement_, _following_의 문자열 결합을 반환한다.
+          1. _position_을 StringIndexOf(_string_, _searchString_, 0)로 둔다.
+          1. 만약 _position_이 ~not-found~이면, _string_을 반환한다.
+          1. _preceding_을 _string_의 0부터 _position_까지의 부분 문자열로 둔다.
+          1. _following_을 _string_의 _position_ + _searchLength_부터의 부분 문자열로 둔다.
+          1. 만약 _functionalReplace_가 *true*이면
+            1. _replacement_을 ? ToString(? Call(_replaceValue_, *undefined*, « _searchString_, 𝔽(_position_), _string_ »))로 둔다.
+          1. 그렇지 않으면,
+            1. Assert: _replaceValue_는 String이다.
+            1. _captures_를 새로운 빈 List로 둔다.
+            1. _replacement_을 ! GetSubstitution(_searchString_, _string_, _position_, _captures_, *undefined*, _replaceValue_)로 둔다.
+          1. _preceding_, _replacement_, 그리고 _following_을 연결한 문자열을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 메서드는 의도적으로 제네릭이다.</p>
@@ -35343,7 +35342,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _searchValue_가 *undefined*도 *null*도 아니면
+          1. _searchValue_가 Object이면
             1. _isRegExp_를 ? IsRegExp(_searchValue_)로 둔다.
             1. _isRegExp_가 *true*이면
               1. _flags_를 ? Get(_searchValue_, *"flags"*)로 둔다.
@@ -35388,7 +35387,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _regexp_가 *undefined*도 *null*도 아니면
+          1. _regexp_가 Object이면
             1. _searcher_를 ? GetMethod(_regexp_, %Symbol.search%)로 둔다.
             1. _searcher_가 *undefined*가 아니면
               1. ? Call(_searcher_, _regexp_, « _O_ »)를 반환한다.
@@ -35433,7 +35432,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _O_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_O_)를 수행한다.
-          1. _separator_가 *undefined*도 *null*도 아니면
+          1. _separator_가 Object이면
             1. _splitter_를 ? GetMethod(_separator_, %Symbol.split%)로 둔다.
             1. _splitter_가 *undefined*가 아니면
               1. ? Call(_splitter_, _separator_, « _O_, _limit_ »)를 반환한다.
