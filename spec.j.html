@@ -165,7 +165,7 @@
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International ロゴ"></p>
 <div id="metadata-block">
   <h1>この仕様書について</h1>
-  <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> にある文書は、最も正確かつ最新の ECMAScript 仕様です。ここには、最新の年次スナップショットの内容と、スナップショット以降に <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">完了した提案</a>（<a href="https://tc39.es/process-document/">提案プロセス</a>にて Stage&nbsp;4 に到達し、複数の実装に導入され、次回の実用的な改訂に含まれる予定のもの）が含まれています。</p>
+  <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> のドキュメントは、最も正確かつ最新の ECMAScript 仕様です。最新の年次スナップショットの内容に加え、<a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">完了した提案</a> ― <a href="https://tc39.es/process-document/">提案プロセス</a>の Stage 4 に到達し、複数の実装で導入され、次回の年次スナップショットに含まれる予定のもの ― も掲載されています。過去のスナップショットは <a href="https://ecma-international.org/publications-and-standards/standards/ecma-262/">https://ecma-international.org/publications-and-standards/standards/ecma-262/</a> で利用できます。</p>
   <p>本仕様書は <a href>単一ページ</a>、および <a href="multipage/">複数ページ</a>でご利用いただけます。</p>
   <h1>この仕様書への貢献について</h1>
   <p>この仕様は GitHub 上で ECMAScript コミュニティの協力によって開発されています。仕様書の開発に貢献する方法はいくつかあります：</p>
@@ -11640,10 +11640,10 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _realmRec_.[[Intrinsics]] を新しい Record に設定。
-        1. [declared="steps,name,length,slots,prototype"] _realmRec_.[[Intrinsics]] のフィールドを <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> に列挙される値で設定する。フィールド名は表の第 1 列の名前。各フィールドの値は、<emu-xref href="#sec-global-object"></emu-xref> から <emu-xref href="#sec-reflection"></emu-xref> の各節で定義されたとおりのプロパティ値で完全かつ再帰的に埋められた新しいオブジェクト値。すべてのオブジェクトプロパティ値は新たに作成されるオブジェクト値。ビルトイン関数オブジェクトとなる値はすべて CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_) を実行して作成される。ここで _steps_ は本仕様で提供されるその関数の定義、_name_ は関数の *"name"* プロパティの初期値、_length_ は *"length"* プロパティの初期値、_slots_ はその関数に指定された内部スロット名（存在する場合）のリスト、_prototype_ はその関数の [[Prototype]] 内部スロットの指定値。intrinsic とそのプロパティの生成順序は未生成のオブジェクトに依存しないよう配慮しなければならない。
-        1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_) を実行。
-        1. ~unused~ を返す。
+        1. _realmRec_.[[Intrinsics]]に新しいRecordを設定する。
+        1. [declared="steps,name,length,slots,prototype,async"] <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>に記載されている値で_realmRec_.[[Intrinsics]]のフィールドを設定する。フィールド名は、表の1列目に記載されている名前である。各フィールドの値は、それぞれのオブジェクトの仕様で<emu-xref href="#sec-global-object"></emu-xref>から<emu-xref href="#sec-reflection"></emu-xref>までに定義されているとおり、完全かつ再帰的にプロパティ値で構成された新しいオブジェクト値である。すべてのオブジェクトプロパティ値は新たに作成されたオブジェクト値である。組み込み関数オブジェクトとなる値はすべて、CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_)を実行して作成される。ここで_steps_は本仕様書によって提供されるその関数の定義、_name_は関数の*"name"*プロパティの初期値、_length_は関数の*"length"*プロパティの初期値、_slots_は関数の指定された内部スロット名のリスト（存在する場合）、_prototype_は関数の[[Prototype]]内部スロットの指定値、_async_は関数が「async」として記述されていれば*true*、そうでなければ*false*である。インタリンスィクスとそのプロパティの生成は、まだ作成されていないオブジェクトに依存しないよう順序付けなければならない。
+        1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)を実行する。
+        1. ~unused~を返す。
       </emu-alg>
     </emu-clause>
 
@@ -13799,6 +13799,7 @@
     <ul>
       <li>[[Realm]]: その関数が生成された realm を表す Realm Record。</li>
       <li>[[InitialName]]: 関数の初期名である String。<emu-xref href="#sec-function.prototype.tostring"></emu-xref> で使用される。</li>
+      <li>[[Async]]は、関数がBuiltinCallOrConstructにおいてasync関数呼び出しおよびコンストラクトの挙動を持つかどうかを示す真偽値です。</li>
     </ul>
     <p>組み込み関数オブジェクトの [[Prototype]] 内部スロットの初期値は、特に指定がない限り %Function.prototype% である。</p>
     <p>組み込み関数オブジェクトは <emu-xref href="#sec-built-in-function-objects-call-thisargument-argumentslist"></emu-xref> の定義に適合する [[Call]] 内部メソッドを持たなければならない。</p>

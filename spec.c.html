@@ -165,7 +165,7 @@
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 标志"></p>
 <div id="metadata-block">
   <h1>关于本规范</h1>
-  <p>位于 <a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> 的文档是最准确且最新的 ECMAScript 规范。它包含了最近年度快照的内容，以及自该快照以来所有已完成的 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">提案</a>（即已在 <a href="https://tc39.es/process-document/">提案流程</a>中达到第 4 阶段，并且已在多个实现中落地、将在下一次实际修订中包含的提案）。</p>
+  <p>在 <a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> 的文档是最准确、最新的 ECMAScript 规范。它包含最近年度快照的内容，以及所有 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">已完成提案</a> —— 这些提案已经在 <a href="https://tc39.es/process-document/">提案流程</a> 中达到第四阶段&nbsp;4，并已在多个实现中实现，并将被纳入下一个年度快照。历史快照可在 <a href="https://ecma-international.org/publications-and-standards/standards/ecma-262/">https://ecma-international.org/publications-and-standards/standards/ecma-262/</a> 找到。</p>
   <p>本文件可作为<a href>单页</a>或<a href="multipage/">多页</a>形式获取。</p>
   <h1>如何参与规范制定</h1>
   <p>本规范在 GitHub 上由 ECMAScript 社区协作开发。您可以通过以下几种方式参与本规范的制定：</p>
@@ -11635,7 +11635,7 @@
       </dl>
       <emu-alg>
         1. 将 _realmRec_.[[Intrinsics]] 设为一个新的 Record。
-        1. [declared="steps,name,length,slots,prototype"] 按 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> 中的值设置 _realmRec_.[[Intrinsics]] 的字段。字段名为该表第一列列出的名称。每个字段的值为一个根据 <emu-xref href="#sec-global-object"></emu-xref> 至 <emu-xref href="#sec-reflection"></emu-xref> 中各对象规范完全递归填充属性值的新对象。所有对象属性值均为新创建对象。所有内置函数对象通过执行 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_) 创建，其中 _steps_ 是本规范给出的该函数定义，_name_ 是函数 *"name"* 属性初始值，_length_ 是函数 *"length"* 属性初始值，_slots_ 是函数指定内部槽名称列表（若有），_prototype_ 是指定的 [[Prototype]] 内部槽值。内在对象及其属性的创建顺序必须避免依赖尚未创建的对象。
+        1. [declared="steps,name,length,slots,prototype,async"] 用 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> 中列出的值设置 _realmRec_.[[Intrinsics]] 的各字段。字段名为该表第一列中列出的名称。每个字段的值是根据本规范中每个对象在 <emu-xref href="#sec-global-object"></emu-xref> 到 <emu-xref href="#sec-reflection"></emu-xref> 条款定义的属性值，完全并递归地填充的新对象值。所有的对象属性值都是新创建的对象值。所有为内建函数对象的值，都通过执行 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_) 创建，其中 _steps_ 是本规范定义的该函数的实现，_name_ 是该函数 *"name"* 属性的初始值，_length_ 是该函数 *"length"* 属性的初始值，_slots_ 是该函数指定的内部槽名称（如有），_prototype_ 是指定的 [[Prototype]] 内部槽的值，_async_ 若该函数被描述为 “async” 则为 *true*，否则为 *false*。内建对象及其属性的创建顺序必须避免依赖尚未创建的对象。
         1. 执行 AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)。
         1. 返回 ~unused~。
       </emu-alg>
@@ -13794,6 +13794,7 @@
     <ul>
       <li>[[Realm]]：一个 Realm Record，表示创建该函数的 realm。</li>
       <li>[[InitialName]]：一个 String，函数的初始名称，被 <emu-xref href="#sec-function.prototype.tostring"></emu-xref> 使用。</li>
+      <li>[[Async]]，布尔值，指示该函数在 BuiltinCallOrConstruct 中是否具有 async 函数调用和构造行为。</li>
     </ul>
     <p>内置函数对象的 [[Prototype]] 内部槽初始值为 %Function.prototype%，除非另有规定。</p>
     <p>内置函数对象必须具有符合 <emu-xref href="#sec-built-in-function-objects-call-thisargument-argumentslist"></emu-xref> 定义的 [[Call]] 内部方法。</p>

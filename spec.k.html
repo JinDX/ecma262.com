@@ -165,7 +165,7 @@
 <p><img src="https://tc39.es/ecma262/img/ecma-logo.svg" id="ecma-logo" alt="Ecma International 로고"></p>
 <div id="metadata-block">
   <h1>이 명세서에 대하여</h1>
-  <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a>에 있는 문서는 가장 정확하고 최신의 ECMAScript 명세서입니다. 이 문서에는 가장 최근 연간 스냅샷의 내용과, 그 스냅샷 이후의 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">완료된 제안</a>(<a href="https://tc39.es/process-document/">제안 절차</a>에서 Stage&nbsp;4에 도달하여 여러 구현에 적용되었고 다음 실질적인 개정에 포함될 제안)이 함께 담겨 있습니다.</p>
+  <p><a href="https://tc39.es/ecma262/">https://tc39.es/ecma262/</a> 문서는 가장 정확하고 최신의 ECMAScript 명세서입니다. 이 문서에는 최신 연간 스냅샷의 내용과 더불어 <a href="https://github.com/tc39/proposals/blob/HEAD/finished-proposals.md">완료된 제안</a> — 즉, <a href="https://tc39.es/process-document/">제안 프로세스</a>에서 Stage 4에 도달해 여러 구현체에 적용되었으며 다음 연간 스냅샷에 포함될 제안 사항들이 들어 있습니다. 과거 스냅샷은 <a href="https://ecma-international.org/publications-and-standards/standards/ecma-262/">https://ecma-international.org/publications-and-standards/standards/ecma-262/</a>에서 볼 수 있습니다.</p>
   <p>이 문서는 <a href>단일 페이지</a>와 <a href="multipage/">여러 페이지</a>로 제공됩니다.</p>
   <h1>이 명세서에 기여하기</h1>
   <p>이 명세서는 ECMAScript 커뮤니티의 도움으로 GitHub에서 개발됩니다. 명세서 개발에 기여하는 방법은 여러 가지가 있습니다:</p>
@@ -11663,8 +11663,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _realmRec_.[[Intrinsics]]를 새 Record로 설정한다.
-        1. [declared="steps,name,length,slots,prototype"] _realmRec_.[[Intrinsics]]의 필드들을 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>에 나열된 값으로 설정한다. 필드 이름은 테이블 첫 번째 열의 이름들이다. 각 필드 값은 <emu-xref href="#sec-global-object"></emu-xref>부터 <emu-xref href="#sec-reflection"></emu-xref>까지의 각 객체 명세에 따라 그 프로퍼티 값으로 완전하고 재귀적으로 채워진 새 객체 값이다. 모든 객체 프로퍼티 값은 새로 생성된 객체 값이다. 내장 함수 객체인 모든 값은 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_)을 수행하여 생성되는데, 여기서 _steps_는 이 명세가 제공하는 그 함수의 정의, _name_은 함수의 초기 *"name"* 프로퍼티 값, _length_는 함수의 초기 *"length"* 프로퍼티 값, _slots_는 (있다면) 함수의 지정된 내부 슬롯 이름들의 리스트, _prototype_은 함수 [[Prototype]] 내부 슬롯의 지정된 값이다. intrinsic과 그 프로퍼티 생성은 아직 생성되지 않은 객체에 대한 의존성이 없도록 순서가 정해져야 한다.
+        1. _realmRec_.[[Intrinsics]]를 새로운 Record로 설정한다.
+        1. [declared="steps,name,length,slots,prototype,async"] _realmRec_.[[Intrinsics]]의 필드들을 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>에 나열된 값들로 설정한다. 필드 이름은 표의 첫 번째 열에 나열된 이름들이다. 각 필드의 값은, <emu-xref href="#sec-global-object"></emu-xref>부터 <emu-xref href="#sec-reflection"></emu-xref>까지 각 객체의 명세에 따라 완전히 재귀적으로 프로퍼티 값들로 채워진 새로운 객체 값이다. 모든 객체 프로퍼티 값은 새롭게 생성된 객체 값이다. 내장 함수 객체인 값들은 모두 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_)을 수행하여 생성된다. 여기서 _steps_는 명세에서 지정된 그 함수의 정의이며, _name_은 함수 *"name"* 프로퍼티의 초기값, _length_는 함수 *"length"* 프로퍼티의 초기값, _slots_는 함수에 지정된 내부 슬롯의 이름 리스트(있을 경우), _prototype_은 함수의 [[Prototype]] 내부 슬롯의 지정된 값, _async_는 함수가 “async”로 기술된 경우 *true*, 그렇지 않으면 *false*이다. 내재 객체 및 그 프로퍼티의 생성 순서는 아직 생성되지 않은 객체에 대한 의존성이 없도록 해야 한다.
         1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -13713,6 +13713,7 @@
     <ul>
       <li>[[Realm]]: 함수가 생성된 realm 을 나타내는 Realm Record.</li>
       <li>[[InitialName]]: 함수의 초기 이름인 String. <emu-xref href="#sec-function.prototype.tostring"></emu-xref>에서 사용된다.</li>
+      <li>[[Async]], BuiltinCallOrConstruct에서 함수가 async 함수 호출 및 생성 동작을 가지는지 여부를 나타내는 Boolean 값입니다.</li>
     </ul>
     <p>명시적으로 달리 지정되지 않은 한, 내장 함수 객체의 [[Prototype]] 내부 슬롯 초기 값은 %Function.prototype% 이다.</p>
     <p>내장 함수 객체는 <emu-xref href="#sec-built-in-function-objects-call-thisargument-argumentslist"></emu-xref>의 정의에 부합하는 [[Call]] 내부 메서드를 가져야 한다.</p>
