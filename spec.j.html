@@ -196,8 +196,7 @@
 
 <emu-intro id="sec-intro">
   <h1>はじめに</h1>
-  <p>このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第17版です。1997年の第1版公開以来、ECMAScriptは世界で最も広く使われている汎用プログラミング言語の一つに成長しました。主にウェブブラウザに組み込まれている言語として知られていますが、サーバーや組み込み用途にも広く採用されています。</p>
-  <p>ECMAScriptはいくつかの技術をもとにしており、最もよく知られているのはJavaScript（Netscape）とJScript（Microsoft）です。この言語はNetscapeのBrendan Eichによって発明され、同社のNavigator 2.0ブラウザで初めて登場しました。その後、Netscapeの全てのブラウザと、Internet Explorer 3.0以降のMicrosoftの全てのブラウザに搭載されています。</p>
+  <p>このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第十七版です。ECMAScriptは複数の起源技術に基づいており、最もよく知られているのは JavaScript（Netscape） と JScript（Microsoft）です。この言語は Netscape の Brendan Eich によって発明され、同社の Navigator 2.0 ブラウザで初めて登場しました。その後のすべての Netscape ブラウザおよび Microsoft の Internet Explorer 3.0 以降のすべてのブラウザに搭載されました。ウェブブラウザに組み込まれた言語として最もよく知られていますが、ブラウザ外でも広く採用され、サーバーや組み込み用途などでも利用されており、世界で最も広く使われている汎用プログラミング言語の一つに成長しています。</p>
   <p>ECMAScript言語仕様の開発は1996年11月に始まりました。このEcma標準の第1版は1997年6月のEcma総会で採択されました。</p>
   <p>このEcma標準はISO/IEC JTC 1に高速トラック手続きで提出され、1998年4月に国際標準ISO/IEC 16262として承認されました。1998年6月のEcma総会では、ISO/IEC 16262との完全な整合性を保つため第2版（ECMA-262）が承認されました。第1版と第2版の間の変更は編集上のものです。</p>
   <p>第3版の標準では、強力な正規表現、より良い文字列処理、新しい制御文、try/catch例外処理、エラー定義の強化、数値出力のフォーマット、将来の言語成長を見越した小さな変更などが導入されました。ECMAScript標準の第3版は1999年12月のEcma総会で採択され、2002年6月にISO/IEC 16262:2002として発行されました。</p>
@@ -4446,11 +4445,11 @@
               1. ? PrivateGet(_baseObj_, _V_.[[ReferencedName]])を返す。
             1. _V_.[[ReferencedName]]がプロパティキーでない場合
               1. _V_.[[ReferencedName]]を? ToPropertyKey(_V_.[[ReferencedName]])に設定する。
-            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]]</emu-meta>(_V_.[[ReferencedName]], GetThisValue(_V_))を返す。
+            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>を返す。
           1. それ以外の場合
             1. _base_を_V_.[[Base]]とする。
             1. アサート：_base_はEnvironment Record。
-            1. ? <emu-meta effects="user-code">_base_.GetBindingValue</emu-meta>(_V_.[[ReferencedName]], _V_.[[Strict]])（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
+            1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
         </emu-alg>
         <emu-note>
           <p>step <emu-xref href="#step-getvalue-toobject"></emu-xref>で生成されるオブジェクトは、上記抽象操作および通常オブジェクト[[Get]]内部メソッド以外からはアクセスできません。実装によっては、実際のオブジェクト生成を省略する場合もあります。</p>
@@ -4479,13 +4478,13 @@
               1. ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_)を返す。
             1. _V_.[[ReferencedName]]がプロパティキーでない場合
               1. _V_.[[ReferencedName]]を? ToPropertyKey(_V_.[[ReferencedName]])に設定する。
-            1. _succeeded_を? <emu-meta effects="user-code">_baseObj_.[[Set]]</emu-meta>(_V_.[[ReferencedName]], _W_, GetThisValue(_V_))とする。
+            1. _succeeded_を? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>とする。
             1. _succeeded_が*false*かつ_V_.[[Strict]]が*true*なら*TypeError*例外を投げる。
             1. ~unused~を返す。
           1. それ以外の場合
             1. _base_を_V_.[[Base]]とする。
             1. アサート：_base_はEnvironment Record。
-            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding</emu-meta>(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
+            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
         </emu-alg>
         <emu-note>
           <p>step <emu-xref href="#step-putvalue-toobject"></emu-xref>で生成されるオブジェクトは、上記抽象操作および通常オブジェクト[[Set]]内部メソッド以外からはアクセスできません。実装によっては、実際のオブジェクト生成を省略する場合もあります。</p>
@@ -5794,7 +5793,7 @@
         <dd>_O_ に追加のプロパティを加えられるか判定する。</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[IsExtensible]]</emu-meta>() を返す。
+        1. ? <emu-meta effects="user-code">_O_.[[IsExtensible]]()</emu-meta> を返す。
       </emu-alg>
     </emu-clause>
 
@@ -6097,7 +6096,7 @@
         <dd>オブジェクトの特定プロパティの値を取得するために使用される。</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _O_) を返す。
+        1. ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _O_)</emu-meta> を返す。
       </emu-alg>
     </emu-clause>
 
@@ -6114,7 +6113,7 @@
       </dl>
       <emu-alg>
         1. _O_ を ? ToObject(_V_) とする。
-        1. ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _V_) を返す。
+        1. ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _V_)</emu-meta> を返す。
       </emu-alg>
     </emu-clause>
 
@@ -6132,7 +6131,7 @@
         <dd>オブジェクトの特定プロパティの値を設定するために用いられる。_V_ は新しい値。</dd>
       </dl>
       <emu-alg>
-        1. _success_ を ? <emu-meta effects="user-code">_O_.[[Set]]</emu-meta>(_P_, _V_, _O_) とする。
+        1. _success_ を ? <emu-meta effects="user-code">_O_.[[Set]](_P_, _V_, _O_)</emu-meta> とする。
         1. _success_ が *false* かつ _Throw_ が *true* なら *TypeError* 例外を投げる。
         1. ~unused~ を返す。
       </emu-alg>
@@ -6152,7 +6151,7 @@
       </dl>
       <emu-alg>
         1. _newDesc_ を PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } とする。
-        1. ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _newDesc_) を返す。
+        1. ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _newDesc_)</emu-meta> を返す。
       </emu-alg>
       <emu-note>
         <p>この抽象操作は ECMAScript の代入演算子で作られるプロパティと同じ既定属性を持つプロパティを生成する。通常プロパティは未存在であり、存在し非設定可能または _O_ が拡張不可能なら [[DefineOwnProperty]] は *false* を返す。</p>
@@ -6217,7 +6216,7 @@
         <dd>オブジェクトの [[DefineOwnProperty]] 内部メソッドを呼び、要求された更新が行えない場合 *TypeError* を投げる。</dd>
       </dl>
       <emu-alg>
-        1. _success_ を ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _desc_) とする。
+        1. _success_ を ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _desc_)</emu-meta> とする。
         1. _success_ が *false* なら *TypeError* 例外を投げる。
         1. ~unused~ を返す。
       </emu-alg>
@@ -6235,7 +6234,7 @@
         <dd>オブジェクトの特定自身プロパティを削除する。プロパティが設定可能でない場合例外を投げる。</dd>
       </dl>
       <emu-alg>
-        1. _success_ を ? <emu-meta effects="user-code">_O_.[[Delete]]</emu-meta>(_P_) とする。
+        1. _success_ を ? <emu-meta effects="user-code">_O_.[[Delete]](_P_)</emu-meta> とする。
         1. _success_ が *false* なら *TypeError* 例外を投げる。
         1. ~unused~ を返す。
       </emu-alg>
@@ -6272,7 +6271,7 @@
         <dd>オブジェクトが指定キーのプロパティ（自身または継承）を持つか判定する。</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[HasProperty]]</emu-meta>(_P_) を返す。
+        1. ? <emu-meta effects="user-code">_O_.[[HasProperty]](_P_)</emu-meta> を返す。
       </emu-alg>
     </emu-clause>
 
@@ -6288,7 +6287,7 @@
         <dd>オブジェクトが指定キーの自身プロパティを持つか判定する。</dd>
       </dl>
       <emu-alg>
-        1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _desc_ が *undefined* なら *false* を返す。
         1. *true* を返す。
       </emu-alg>
@@ -6309,7 +6308,7 @@
       <emu-alg>
         1. _argumentsList_ が存在しないなら _argumentsList_ を空の新 List に設定する。
         1. IsCallable(_F_) が *false* なら *TypeError* 例外を投げる。
-        1. ? <emu-meta effects="user-code">_F_.[[Call]]</emu-meta>(_V_, _argumentsList_) を返す。
+        1. ? <emu-meta effects="user-code">_F_.[[Call]](_V_, _argumentsList_)</emu-meta> を返す。
       </emu-alg>
     </emu-clause>
 
@@ -6328,7 +6327,7 @@
       <emu-alg>
         1. _newTarget_ が存在しないなら _newTarget_ を _F_ に設定する。
         1. _argumentsList_ が存在しないなら _argumentsList_ を空の新 List に設定する。
-        1. ? <emu-meta effects="user-code">_F_.[[Construct]]</emu-meta>(_argumentsList_, _newTarget_) を返す。
+        1. ? <emu-meta effects="user-code">_F_.[[Construct]](_argumentsList_, _newTarget_)</emu-meta> を返す。
       </emu-alg>
       <emu-note>
         <p>_newTarget_ が無い場合、この操作は `new F(...argumentsList)` と同等。</p>
@@ -6356,7 +6355,7 @@
         1. それ以外
           1. アサート: _level_ は ~frozen~。
           1. _keys_ の各要素 _k_ について
-            1. _currentDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_) とする。
+            1. _currentDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta> とする。
             1. _currentDesc_ が *undefined* でないなら
               1. IsAccessorDescriptor(_currentDesc_) が *true* なら
                 1. _desc_ を PropertyDescriptor { [[Configurable]]: *false* } とする。
@@ -6384,7 +6383,7 @@
         1. 注: オブジェクトが拡張可能ならプロパティは調べない。
         1. _keys_ を ? _O_.[[OwnPropertyKeys]]() とする。
         1. _keys_ の各要素 _k_ について
-          1. _currentDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_) とする。
+          1. _currentDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta> とする。
           1. _currentDesc_ が *undefined* でないなら
             1. _currentDesc_.[[Configurable]] が *true* なら *false* を返す。
             1. _level_ が ~frozen~ かつ IsDataDescriptor(_currentDesc_) が *true* なら
@@ -6502,7 +6501,7 @@
         1. _P_ を ? Get(_C_, *"prototype"*) とする。
         1. _P_ が Object でないなら *TypeError* 例外を投げる。
         1. 繰り返し
-          1. _O_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() に設定する。
+          1. _O_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> に設定する。
           1. _O_ が *null* なら *false* を返す。
           1. SameValue(_P_, _O_) が *true* なら *true* を返す。
       </emu-alg>
@@ -6540,11 +6539,11 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _ownKeys_ を ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]</emu-meta>() とする。
+        1. _ownKeys_ を ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]()</emu-meta> とする。
         1. _results_ を空の新 List とする。
         1. _ownKeys_ の各要素 _key_ について
           1. _key_ が String なら
-            1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
+            1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta> とする。
             1. _desc_ が *undefined* でなく _desc_.[[Enumerable]] が *true* なら
               1. _kind_ が ~key~ なら
                 1. _key_ を _results_ に追加する。
@@ -6599,14 +6598,14 @@
       <emu-alg>
         1. _source_ が *undefined* または *null* のいずれかなら ~unused~ を返す。
         1. _from_ を ! ToObject(_source_) とする。
-        1. _keys_ を ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]</emu-meta>() とする。
+        1. _keys_ を ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta> とする。
         1. _keys_ の各要素 _nextKey_ について
           1. _excluded_ を *false* とする。
           1. _excludedItems_ の各要素 _e_ について
             1. SameValue(_e_, _nextKey_) が *true* なら
               1. _excluded_ を *true* に設定する。
           1. _excluded_ が *false* なら
-            1. _desc_ を ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_) とする。
+            1. _desc_ を ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta> とする。
             1. _desc_ が *undefined* でなく _desc_.[[Enumerable]] が *true* なら
               1. _propValue_ を ? Get(_from_, _nextKey_) とする。
               1. ! CreateDataPropertyOrThrow(_target_, _nextKey_, _propValue_) を実行する。
@@ -10477,7 +10476,7 @@
             <dd>名前 _N_ の現在の束縛値を _V_ に設定する。</dd>
           </dl>
           <emu-alg>
-            1. ? <emu-meta effects="user-code">_envRec_.SetMutableBinding</emu-meta>(_N_, _V_, *false*) を実行。
+            1. ? <emu-meta effects="user-code">_envRec_.SetMutableBinding(_N_, _V_, *false*)</emu-meta> を実行。
             1. ~unused~ を返す。
           </emu-alg>
           <emu-note>
@@ -10547,7 +10546,7 @@
           </dl>
           <emu-alg>
             1. _bindingObject_ を _envRec_.[[BindingObject]] とする。
-            1. ? <emu-meta effects="user-code">_bindingObject_.[[Delete]]</emu-meta>(_N_) を返す。
+            1. ? <emu-meta effects="user-code">_bindingObject_.[[Delete]](_N_)</emu-meta> を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10852,7 +10851,7 @@
             1. _DclRec_ を _envRec_.[[DeclarativeRecord]] とする。
             1. ! _DclRec_.HasBinding(_N_) が *true* なら *true* を返す。
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
-            1. ? <emu-meta effects="user-code">_ObjRec_.HasBinding</emu-meta>(_N_) を返す。
+            1. ? <emu-meta effects="user-code">_ObjRec_.HasBinding(_N_)</emu-meta> を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10918,7 +10917,7 @@
               1. ! _DclRec_.InitializeBinding(_N_, _V_) を返す。
             1. アサート: 束縛が存在するなら Object Environment Record にある。
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
-            1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, _V_) を返す。
+            1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, _V_)</emu-meta> を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10942,7 +10941,7 @@
             1. ! _DclRec_.HasBinding(_N_) が *true* なら
               1. ? _DclRec_.SetMutableBinding(_N_, _V_, _S_) を返す。
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
-            1. ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding</emu-meta>(_N_, _V_, _S_) を返す。
+            1. ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding(_N_, _V_, _S_)</emu-meta> を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10965,7 +10964,7 @@
             1. ! _DclRec_.HasBinding(_N_) が *true* なら
               1. ? _DclRec_.GetBindingValue(_N_, _S_) を返す。
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
-            1. ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue</emu-meta>(_N_, _S_) を返す。
+            1. ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue(_N_, _S_)</emu-meta> を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10990,7 +10989,7 @@
             1. _globalObject_ を _ObjRec_.[[BindingObject]] とする。
             1. _existingProp_ を ? HasOwnProperty(_globalObject_, _N_) とする。
             1. _existingProp_ が *true* なら
-              1. ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding</emu-meta>(_N_) を返す。
+              1. ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding(_N_)</emu-meta> を返す。
             1. *true* を返す。
           </emu-alg>
         </emu-clause>
@@ -11076,7 +11075,7 @@
           <emu-alg>
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
             1. _globalObject_ を _ObjRec_.[[BindingObject]] とする。
-            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_) とする。
+            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta> とする。
             1. _existingProp_ が *undefined* なら *false* を返す。
             1. _existingProp_.[[Configurable]] が *true* なら *false* を返す。
             1. *true* を返す。
@@ -11120,7 +11119,7 @@
           <emu-alg>
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
             1. _globalObject_ を _ObjRec_.[[BindingObject]] とする。
-            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_) とする。
+            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta> とする。
             1. _existingProp_ が *undefined* なら ? IsExtensible(_globalObject_) を返す。
             1. _existingProp_.[[Configurable]] が *true* なら *true* を返す。
             1. IsDataDescriptor(_existingProp_) が *true* かつ _existingProp_ が属性 { [[Writable]]: *true*, [[Enumerable]]: *true* } を持つなら *true* を返す。
@@ -11146,8 +11145,8 @@
             1. _hasProperty_ を ? HasOwnProperty(_globalObject_, _N_) とする。
             1. _extensible_ を ? IsExtensible(_globalObject_) とする。
             1. _hasProperty_ が *false* かつ _extensible_ が *true* なら
-              1. ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding</emu-meta>(_N_, _D_) を実行。
-              1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, *undefined*) を実行。
+              1. ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding(_N_, _D_)</emu-meta> を実行。
+              1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, *undefined*)</emu-meta> を実行。
             1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
@@ -11168,7 +11167,7 @@
           <emu-alg>
             1. _ObjRec_ を _envRec_.[[ObjectRecord]] とする。
             1. _globalObject_ を _ObjRec_.[[BindingObject]] とする。
-            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_) とする。
+            1. _existingProp_ を ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta> とする。
             1. _existingProp_ が *undefined* または _existingProp_.[[Configurable]] が *true* なら
               1. _desc_ を PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: _D_ } とする。
             1. それ以外
@@ -11231,7 +11230,7 @@
               1. _M_ と _N2_ をこの束縛作成時に提供された間接化値とする。
               1. _targetEnv_ を _M_.[[Environment]] とする。
               1. _targetEnv_ が ~empty~ なら *ReferenceError* 例外を投げる。
-              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue</emu-meta>(_N2_, *true*) を返す。
+              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta> を返す。
             1. _envRec_ における _N_ の束縛が未初期化なら *ReferenceError* 例外を投げる。
             1. 現在 _envRec_ で _N_ に束縛されている値を返す。
           </emu-alg>
@@ -11313,7 +11312,7 @@
         <emu-alg>
           1. _env_ が *null* なら
             1. Reference Record { [[Base]]: ~unresolvable~, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } を返す。
-          1. _exists_ を ? <emu-meta effects="user-code">_env_.HasBinding</emu-meta>(_name_) とする。
+          1. _exists_ を ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta> とする。
           1. _exists_ が *true* なら
             1. Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } を返す。
           1. それ以外
@@ -12661,7 +12660,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _current_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _current_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _extensible_ を ? IsExtensible(_O_) とする。
           1. ValidateAndApplyPropertyDescriptor(_O_, _P_, _extensible_, _Desc_, _current_) を返す。
         </emu-alg>
@@ -12759,11 +12758,11 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _hasOwn_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _hasOwn_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _hasOwn_ が *undefined* でないなら *true* を返す。
-          1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() とする。
+          1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> とする。
           1. _parent_ が *null* でないなら
-            1. ? <emu-meta effects="user-code">_parent_.[[HasProperty]]</emu-meta>(_P_) を返す。
+            1. ? <emu-meta effects="user-code">_parent_.[[HasProperty]](_P_)</emu-meta> を返す。
           1. *false* を返す。
         </emu-alg>
       </emu-clause>
@@ -12797,11 +12796,11 @@
         </dl>
 
         <emu-alg>
-          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _desc_ が *undefined* なら
-            1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() とする。
+            1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> とする。
             1. _parent_ が *null* なら *undefined* を返す。
-            1. ? <emu-meta effects="user-code">_parent_.[[Get]]</emu-meta>(_P_, _Receiver_) を返す。
+            1. ? <emu-meta effects="user-code">_parent_.[[Get]](_P_, _Receiver_)</emu-meta> を返す。
           1. IsDataDescriptor(_desc_) が *true* なら _desc_.[[Value]] を返す。
           1. アサート: IsAccessorDescriptor(_desc_) は *true* である。
           1. _getter_ を _desc_.[[Get]] とする。
@@ -12840,7 +12839,7 @@
         </dl>
 
         <emu-alg>
-          1. _ownDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _ownDesc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. ? OrdinarySetWithOwnDescriptor(_O_, _P_, _V_, _Receiver_, _ownDesc_) を返す。
         </emu-alg>
       </emu-clause>
@@ -12860,20 +12859,20 @@
 
         <emu-alg>
           1. _ownDesc_ が *undefined* なら
-            1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() とする。
+            1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> とする。
             1. _parent_ が *null* でないなら
-              1. ? <emu-meta effects="user-code">_parent_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_) を返す。
+              1. ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> を返す。
             1. それ以外なら
               1. _ownDesc_ を PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } に設定する。
           1. IsDataDescriptor(_ownDesc_) が *true* なら
             1. _ownDesc_.[[Writable]] が *false* なら *false* を返す。
             1. _Receiver_ が Object でないなら *false* を返す。
-            1. _existingDescriptor_ を ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+            1. _existingDescriptor_ を ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta> とする。
             1. _existingDescriptor_ が *undefined* でないなら
               1. IsAccessorDescriptor(_existingDescriptor_) が *true* なら *false* を返す。
               1. _existingDescriptor_.[[Writable]] が *false* なら *false* を返す。
               1. _valueDesc_ を PropertyDescriptor { [[Value]]: _V_ } とする。
-              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]]</emu-meta>(_P_, _valueDesc_) を返す。
+              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta> を返す。
             1. それ以外なら
               1. アサート: _Receiver_ は現在プロパティ _P_ を持たない。
               1. ? CreateDataProperty(_Receiver_, _P_, _V_) を返す。
@@ -12910,7 +12909,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _desc_ が *undefined* なら *true* を返す。
           1. _desc_.[[Configurable]] が *true* なら
             1. 名前 _P_ の自身のプロパティを _O_ から除去する。
@@ -14024,16 +14023,16 @@
           <dd>新しい束縛関数エキゾチックオブジェクトの生成を規定する。</dd>
         </dl>
         <emu-alg>
-          1. _proto_ を ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]</emu-meta>() とする。
-          1. _internalSlotsList_ を « [[Prototype]], [[Extensible]] » と <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref> に列挙される内部スロットのリスト結合とする。
-          1. _obj_ を MakeBasicObject(_internalSlotsList_) とする。
-          1. _obj_.[[Prototype]] を _proto_ に設定する。
-          1. _obj_.[[Call]] を <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref> で述べるとおりに設定する。
-          1. IsConstructor(_targetFunction_) が *true* なら
-            1. _obj_.[[Construct]] を <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref> で述べるとおりに設定する。
-          1. _obj_.[[BoundTargetFunction]] を _targetFunction_ に設定する。
-          1. _obj_.[[BoundThis]] を _boundThis_ に設定する。
-          1. _obj_.[[BoundArguments]] を _boundArgs_ に設定する。
+          1. _proto_ に ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]()</emu-meta> を設定する。
+          1. _internalSlotsList_ に « [[Prototype]], [[Extensible]] » と <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref> に記載されている内部スロットを連結したリストを設定する。
+          1. _obj_ に MakeBasicObject(_internalSlotsList_) を設定する。
+          1. _obj_.[[Prototype]] に _proto_ を設定する。
+          1. <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref> で規定されているように _obj_.[[Call]] を設定する。
+          1. IsConstructor(_targetFunction_) が *true* の場合、
+            1. <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref> で規定されているように _obj_.[[Construct]] を設定する。
+          1. _obj_.[[BoundTargetFunction]] に _targetFunction_ を設定する。
+          1. _obj_.[[BoundThis]] に _boundThis_ を設定する。
+          1. _obj_.[[BoundArguments]] に _boundArgs_ を設定する。
           1. _obj_ を返す。
         </emu-alg>
       </emu-clause>
@@ -15291,7 +15290,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _current_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() とする。
+          1. _current_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> とする。
           1. SameValue(_V_, _current_) が *true* なら *true* を返す。
           1. *false* を返す。
         </emu-alg>
@@ -15441,12 +15440,12 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"getPrototypeOf"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> を返す。
         1. _handlerProto_ を ? Call(_trap_, _handler_, « _target_ ») とする。
         1. _handlerProto_ が Object でなく *null* でもないなら *TypeError* 例外を投げる。
         1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
         1. _extensibleTarget_ が *true* なら _handlerProto_ を返す。
-        1. _targetProto_ を ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() とする。
+        1. _targetProto_ を ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> とする。
         1. SameValue(_handlerProto_, _targetProto_) が *false* なら *TypeError* 例外を投げる。
         1. _handlerProto_ を返す。
       </emu-alg>
@@ -15480,12 +15479,12 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"setPrototypeOf"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_V_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_V_)</emu-meta> を返す。
         1. _booleanTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _V_ »)) とする。
         1. _booleanTrapResult_ が *false* なら *false* を返す。
         1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
         1. _extensibleTarget_ が *true* なら *true* を返す。
-        1. _targetProto_ を ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() とする。
+        1. _targetProto_ を ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> とする。
         1. SameValue(_V_, _targetProto_) が *false* なら *TypeError* 例外を投げる。
         1. *true* を返す。
       </emu-alg>
@@ -15584,10 +15583,10 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"getOwnPropertyDescriptor"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> を返す。
         1. _trapResultObj_ を ? Call(_trap_, _handler_, « _target_, _P_ ») とする。
         1. _trapResultObj_ が Object でなく *undefined* でもないなら *TypeError* 例外を投げる。
-        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _trapResultObj_ が *undefined* なら
           1. _targetDesc_ が *undefined* なら *undefined* を返す。
           1. _targetDesc_.[[Configurable]] が *false* なら *TypeError* 例外を投げる。
@@ -15650,11 +15649,11 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"defineProperty"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_P_, _Desc_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_P_, _Desc_)</emu-meta> を返す。
         1. _descObj_ を FromPropertyDescriptor(_Desc_) とする。
         1. _booleanTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _descObj_ »)) とする。
         1. _booleanTrapResult_ が *false* なら *false* を返す。
-        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
         1. _Desc_ が [[Configurable]] フィールドを持ちかつ _Desc_.[[Configurable]] が *false* なら
           1. _settingConfigFalse_ を *true* とする。
@@ -15709,10 +15708,10 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"has"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_P_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[HasProperty]](_P_)</emu-meta> を返す。
         1. _booleanTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »)) とする。
         1. _booleanTrapResult_ が *false* なら
-          1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _targetDesc_ が *undefined* でないなら
             1. _targetDesc_.[[Configurable]] が *false* なら *TypeError* 例外を投げる。
             1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
@@ -15753,9 +15752,9 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"get"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_P_, _Receiver_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[Get]](_P_, _Receiver_)</emu-meta> を返す。
         1. _trapResult_ を ? Call(_trap_, _handler_, « _target_, _P_, _Receiver_ ») とする。
-        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _targetDesc_ が *undefined* でなくかつ _targetDesc_.[[Configurable]] が *false* なら
           1. IsDataDescriptor(_targetDesc_) が *true* かつ _targetDesc_.[[Writable]] が *false* なら
             1. SameValue(_trapResult_, _targetDesc_.[[Value]]) が *false* なら *TypeError* 例外を投げる。
@@ -15795,10 +15794,10 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"set"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> を返す。
         1. _booleanTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _V_, _Receiver_ »)) とする。
         1. _booleanTrapResult_ が *false* なら *false* を返す。
-        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _targetDesc_ が *undefined* でなくかつ _targetDesc_.[[Configurable]] が *false* なら
           1. IsDataDescriptor(_targetDesc_) が *true* かつ _targetDesc_.[[Writable]] が *false* なら
             1. SameValue(_V_, _targetDesc_.[[Value]]) が *false* なら *TypeError* 例外を投げる。
@@ -15839,10 +15838,10 @@
         1. アサート: _handler_ は Object である。
         1. _trap_ を ? GetMethod(_handler_, *"deleteProperty"*) とする。
         1. _trap_ が *undefined* なら
-          1. ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_P_) を返す。
+          1. ? <emu-meta effects="user-code">_target_.[[Delete]](_P_)</emu-meta> を返す。
         1. _booleanTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »)) とする。
         1. _booleanTrapResult_ が *false* なら *false* を返す。
-        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> とする。
         1. _targetDesc_ が *undefined* なら *true* を返す。
         1. _targetDesc_.[[Configurable]] が *false* なら *TypeError* 例外を投げる。
         1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
@@ -15889,7 +15888,7 @@
         1. _targetConfigurableKeys_ を新しい空の List とする。
         1. _targetNonconfigurableKeys_ を新しい空の List とする。
         1. _targetKeys_ の各要素 _key_ について
-          1. _desc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
+          1. _desc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta> とする。
           1. _desc_ が *undefined* でなくかつ _desc_.[[Configurable]] が *false* なら
             1. _key_ を _targetNonconfigurableKeys_ に追加する。
           1. それ以外
@@ -18600,7 +18599,7 @@
             1. _propValue_ を ? GetValue(_exprValueRef_)。
           1. _isProtoSetter_ が *true* なら
             1. _propValue_ が Object か *null* なら
-              1. ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]]</emu-meta>(_propValue_) を実行。
+              1. ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]](_propValue_)</emu-meta> を実行。
             1. ~unused~ を返す。
           1. 事前条件: _object_ は通常で拡張可能、非 configurable プロパティなし。
           1. ! CreateDataPropertyOrThrow(_object_, _propKey_, _propValue_) を実行。
@@ -19663,7 +19662,7 @@
             1. _evaluatePromise_ を _module_.Evaluate()。
             1. _fulfilledClosure_ をパラメータなしで _module_, _promiseCapability_ を捕捉する Abstract Closure とし、呼ばれたら:
               1. _namespace_ を GetModuleNamespace(_module_)。
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ »)。
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ »)</emu-meta>。
               1. Return NormalCompletion(*undefined*)。
             1. _onFulfilled_ を CreateBuiltinFunction(_fulfilledClosure_, 0, *""*, « »)。
             1. PerformPromiseThen(_evaluatePromise_, _onFulfilled_, _onRejected_) を実行。
@@ -19940,13 +19939,13 @@
             1. [id="step-delete-operator-toobject"] _baseObj_ を ? ToObject(_ref_.[[Base]]) とする。
             1. _ref_.[[ReferencedName]] が property key でなければ
               1. _ref_.[[ReferencedName]] を ? ToPropertyKey(_ref_.[[ReferencedName]]) に設定。
-            1. _deleteStatus_ を ? <emu-meta effects="user-code">_baseObj_.[[Delete]]</emu-meta>(_ref_.[[ReferencedName]]) とする。
+            1. _deleteStatus_ を ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta> とする。
             1. _deleteStatus_ が *false* かつ _ref_.[[Strict]] が *true* なら *TypeError* 例外。
             1. _deleteStatus_ を返す。
           1. そうでなければ
             1. _base_ を _ref_.[[Base]] とする。
             1. Assert: _base_ は Environment Record。
-            1. ? <emu-meta effects="user-code">_base_.DeleteBinding</emu-meta>(_ref_.[[ReferencedName]]) を返す。
+            1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> を返す。
         </emu-alg>
         <emu-note>
           <p>strict mode コード内で `delete` 演算子が出現し、その |UnaryExpression| が変数・引数・関数名への直接参照であると *SyntaxError* 例外となる。さらに strict mode で `delete` の対象プロパティが { [[Configurable]]: *false* }（または削除不能）である場合 *TypeError* 例外となる。</p>
@@ -22425,7 +22424,7 @@
                   1. _r_ を _O_.[[RemainingKeys]] の先頭要素とする。
                   1. 先頭要素を削除。
                   1. _O_.[[VisitedKeys]] が _r_ を含まないなら:
-                    1. _desc_ を ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]]</emu-meta>(_r_) とする。
+                    1. _desc_ を ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]](_r_)</emu-meta> とする。
                     1. _desc_ が *undefined* でなければ:
                       1. _O_.[[VisitedKeys]] に _r_ を追加。
                       1. _desc_.[[Enumerable]] が *true* なら CreateIteratorResultObject(_r_, *false*) を返す。
@@ -24590,7 +24589,7 @@
       <emu-alg>
         1. _list_ を |ClassElementList| の NonConstructorElements とする。
         1. |ClassElement| の ClassElementKind が ~non-constructor-method~ なら
-          1. _list_ の末尾に |ClassElement| を追加。
+          1. _list_ に |ClassElement| を追加。
         1. _list_ を返す。
       </emu-alg>
     </emu-clause>
@@ -26061,7 +26060,7 @@
                       1. _gEnv_ を実行中の実行コンテキストの VariableEnvironment とする。
                       1. _bEnv_ を実行中の実行コンテキストの LexicalEnvironment とする。
                       1. _fObj_ を ! _bEnv_.GetBindingValue(_F_, *false*) とする。
-                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*) を実行する。
+                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta> を実行する。
                       1. ~unused~ を返す。
         1. _lexDeclarations_ を _script_ の LexicallyScopedDeclarations とする。
         1. _privateEnv_ を *null* とする。
@@ -26069,15 +26068,15 @@
           1. 注: 字句的に宣言された名前はここでインスタンス化されるが初期化されない。
           1. _d_ の BoundNames の各要素 _dn_ について、
             1. _d_ の IsConstantDeclaration が *true* の場合、
-              1. ? <emu-meta effects="user-code">_env_.CreateImmutableBinding</emu-meta>(_dn_, *true*) を実行する。
+              1. ? <emu-meta effects="user-code">_env_.CreateImmutableBinding(_dn_, *true*)</emu-meta> を実行する。
             1. そうでなければ、
-              1. ? <emu-meta effects="user-code">_env_.CreateMutableBinding</emu-meta>(_dn_, *false*) を実行する。
+              1. ? <emu-meta effects="user-code">_env_.CreateMutableBinding(_dn_, *false*)</emu-meta> を実行する。
         1. _functionsToInitialize_ の各 Parse Node _f_ について、
           1. _fn_ を _f_ の BoundNames の唯一の要素とする。
           1. _fo_ を引数 _env_ と _privateEnv_ での _f_ の InstantiateFunctionObject とする。
-          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding</emu-meta>(_env_, _fn_, _fo_, *false*) を実行する。
+          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_env_, _fn_, _fo_, *false*)</emu-meta> を実行する。
         1. _declaredVarNames_ の各文字列 _vn_ について、
-          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding</emu-meta>(_env_, _vn_, *false*) を実行する。
+          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_env_, _vn_, *false*)</emu-meta> を実行する。
         1. ~unused~ を返す。
       </emu-alg>
       <emu-note>
@@ -27113,7 +27112,7 @@
                   1. NormalCompletion(*undefined*) を返す。
                 1. _onRejected_ を CreateBuiltinFunction(_rejectedClosure_, 0, *""*, « ») とする。
                 1. PerformPromiseThen(_capability_.[[Promise]], _onFulfilled_, _onRejected_) を実行。
-                1. ! <emu-meta effects="user-code">_module_.ExecuteModule</emu-meta>(_capability_) を実行。
+                1. ! <emu-meta effects="user-code">_module_.ExecuteModule(_capability_)</emu-meta> を実行。
                 1. ~unused~ を返す。
               </emu-alg>
             </emu-clause>
@@ -29749,7 +29748,7 @@
                     1. _gEnv_ を実行中実行コンテキストの VariableEnvironment とする。
                     1. _bEnv_ を実行中実行コンテキストの LexicalEnvironment とする。
                     1. _fObj_ を ! _bEnv_.GetBindingValue(_F_, *false*) とする。
-                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*) を実行。
+                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta> を実行。
                     1. ~unused~ を返す。
           1. [id="step-evaldeclarationinstantiation-post-validation"] 注: このアルゴリズムステップ以降は、_varEnv_ が Global Environment Record かつグローバルオブジェクトが Proxy exotic でない限り異常終了しない。
           1. _lexDeclarations_ を _body_ の LexicallyScopedDeclarations とする。
@@ -30329,7 +30328,7 @@
               1. _from_ を ! ToObject(_nextSource_) とする。
               1. _keys_ を ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta> とする。
               1. _keys_ の各 _nextKey_ について
-                1. _desc_ を ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_) とする。
+                1. _desc_ を ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta> とする。
                 1. _desc_ が *undefined* でなく _desc_.[[Enumerable]] が *true* なら
                   1. _propValue_ を ? Get(_from_, _nextKey_) とする。
                   1. ? Set(_to_, _nextKey_, _propValue_, *true*) を実行。
@@ -30374,7 +30373,7 @@
             1. _keys_ を ? <emu-meta effects="user-code">_props_.[[OwnPropertyKeys]]()</emu-meta> とする。
             1. _descriptors_ を空リストとする。
             1. _keys_ の各 _nextKey_ について
-              1. _propDesc_ を ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]]</emu-meta>(_nextKey_) とする。
+              1. _propDesc_ を ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]](_nextKey_)</emu-meta> とする。
               1. _propDesc_ が *undefined* でなく _propDesc_.[[Enumerable]] が *true* なら
                 1. _descObj_ を ? Get(_props_, _nextKey_) とする。
                 1. _desc_ を ? ToPropertyDescriptor(_descObj_) とする。
@@ -30445,7 +30444,7 @@
         <emu-alg>
           1. _obj_ を ? ToObject(_O_) とする。
           1. _key_ を ? ToPropertyKey(_P_) とする。
-          1. _desc_ を ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
+          1. _desc_ を ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]](_key_)</emu-meta> とする。
           1. FromPropertyDescriptor(_desc_) を返す。
         </emu-alg>
       </emu-clause>
@@ -30458,7 +30457,7 @@
           1. _ownKeys_ を ? <emu-meta effects="user-code">_obj_.[[OwnPropertyKeys]]()</emu-meta> とする。
           1. _descriptors_ を OrdinaryObjectCreate(%Object.prototype%) とする。
           1. _ownKeys_ の各 _key_ について
-            1. _desc_ を ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
+            1. _desc_ を ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]](_key_)</emu-meta> とする。
             1. _descriptor_ を FromPropertyDescriptor(_desc_) とする。
             1. _descriptor_ が *undefined* でなければ ! CreateDataPropertyOrThrow(_descriptors_, _key_, _descriptor_)。
           1. _descriptors_ を返す。
@@ -30618,7 +30617,7 @@
           1. ? RequireObjectCoercible(_O_) を実行。
           1. _proto_ が Object でなく かつ *null* でもないなら *TypeError*。
           1. _O_ が Object でなければ _O_ を返す。
-          1. _status_ を ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_) とする。
+          1. _status_ を ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta> とする。
           1. _status_ が *false* なら *TypeError*。
           1. _O_ を返す。
         </emu-alg>
@@ -30685,7 +30684,7 @@
         <emu-alg>
           1. [id="step-propertyisenumerable-topropertykey"] _P_ を ? ToPropertyKey(_V_) とする。
           1. [id="step-propertyisenumerable-toobject"] _O_ を ? ToObject(*this* value) とする。
-          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) とする。
+          1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> とする。
           1. _desc_ が *undefined* なら *false*。
           1. _desc_.[[Enumerable]] を返す。
         </emu-alg>
@@ -30769,7 +30768,7 @@
             1. ? RequireObjectCoercible(_O_)。
             1. _proto_ が Object でなく *null* でもなければ *undefined* を返す。
             1. _O_ が Object でなければ *undefined* を返す。
-            1. _status_ を ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_) とする。
+            1. _status_ を ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta> とする。
             1. _status_ が *false* なら *TypeError*。
             1. *undefined* を返す。
           </emu-alg>
@@ -30812,7 +30811,7 @@
             1. _O_ を ? ToObject(*this* value) とする。
             1. _key_ を ? ToPropertyKey(_P_) とする。
             1. 繰り返し:
-              1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
+              1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta> とする。
               1. _desc_ が *undefined* でなければ
                 1. IsAccessorDescriptor(_desc_) が *true* なら _desc_.[[Get]] を返す。
                 1. *undefined* を返す。
@@ -30828,7 +30827,7 @@
             1. _O_ を ? ToObject(*this* value)。
             1. _key_ を ? ToPropertyKey(_P_)。
             1. 繰り返し:
-              1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_)。
+              1. _desc_ を ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta>。
               1. _desc_ が *undefined* でなければ
                 1. IsAccessorDescriptor(_desc_) が *true* なら _desc_.[[Set]] を返す。
                 1. *undefined* を返す。
@@ -46855,7 +46854,7 @@ THH:mm:ss.sss
                 1. _prop_ を ! ToString(𝔽(_I_)) とする。
                 1. _newElement_ を ? InternalizeJSONProperty(_val_, _prop_, _reviver_) とする。
                 1. もし _newElement_ が *undefined* なら
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_prop_) を実行。
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta> を実行。
                 1. それ以外
                   1. ? CreateDataProperty(_val_, _prop_, _newElement_) を実行。
                 1. _I_ を _I_ + 1 にする。
@@ -46864,7 +46863,7 @@ THH:mm:ss.sss
               1. 各 String _P_ について
                 1. _newElement_ を ? InternalizeJSONProperty(_val_, _P_, _reviver_) とする。
                 1. もし _newElement_ が *undefined* なら
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_P_) を実行。
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta> を実行。
                 1. それ以外
                   1. ? CreateDataProperty(_val_, _P_, _newElement_) を実行。
           1. ? Call(_reviver_, _holder_, « _name_, _val_ ») を返す。
@@ -48403,7 +48402,7 @@ THH:mm:ss.sss
             1. IfAbruptRejectPromise(_return_, _promiseCapability_)。
             1. もし _return_ が *undefined* なら
               1. _iteratorResult_ を CreateIteratorResultObject(_value_, *true*) とする。
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ ») を実行する。
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta> を実行する。
               1. _promiseCapability_.[[Promise]] を返す。
             1. もし _value_ が存在すれば
               1. _result_ を Completion(Call(_return_, _syncIterator_, « _value_ »)) とする。
@@ -48672,79 +48671,47 @@ THH:mm:ss.sss
         </emu-table>
       </emu-clause>
 
-      <emu-clause id="sec-createresolvingfunctions" type="abstract operation">
+      <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions (
             _promise_: a Promise,
-          ): [[Resolve]] (関数オブジェクト) および [[Reject]] (関数オブジェクト) フィールドを持つ Record
+          ): [[Resolve]]（関数オブジェクト）と[[Reject]]（関数オブジェクト）のフィールドを持つレコードを返す
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _alreadyResolved_ を Record { [[Value]]: *false* } とする。
-          1. _stepsResolve_ を <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-          1. _lengthResolve_ を <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-          1. _resolve_ を CreateBuiltinFunction(_stepsResolve_, _lengthResolve_, *""*, « [[Promise]], [[AlreadyResolved]] ») とする。
-          1. _resolve_.[[Promise]] に _promise_ を設定する。
-          1. _resolve_.[[AlreadyResolved]] に _alreadyResolved_ を設定する。
-          1. _stepsReject_ を <emu-xref href="#sec-promise-reject-functions" title></emu-xref> で定義されるアルゴリズム手順とする。
-          1. _lengthReject_ を <emu-xref href="#sec-promise-reject-functions" title></emu-xref> にある関数定義の省略不可パラメータ数とする。
-          1. _reject_ を CreateBuiltinFunction(_stepsReject_, _lengthReject_, *""*, « [[Promise]], [[AlreadyResolved]] ») とする。
-          1. _reject_.[[Promise]] に _promise_ を設定する。
-          1. _reject_.[[AlreadyResolved]] に _alreadyResolved_ を設定する。
-          1. Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ } を返す。
-        </emu-alg>
-
-        <emu-clause id="sec-promise-reject-functions">
-          <h1>Promise Reject 関数</h1>
-          <p>Promise reject 関数は [[Promise]] と [[AlreadyResolved]] 内部スロットを持つ匿名組み込み関数である。</p>
-          <p>Promise reject 関数が引数 _reason_ で呼ばれたとき、次を行う:</p>
-          <emu-alg>
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. 事前条件: _F_ は値が Object である [[Promise]] 内部スロットを持つ。
-            1. _promise_ を _F_.[[Promise]] とする。
-            1. _alreadyResolved_ を _F_.[[AlreadyResolved]] とする。
-            1. もし _alreadyResolved_.[[Value]] が *true* なら *undefined* を返す。
+          1. _alreadyResolved_ に Record { [[Value]]: *false* } を設定する。
+          1. _resolveSteps_ に、パラメーターを（_resolution_）とし、_promise_ と _alreadyResolved_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャを設定する:
+            1. _alreadyResolved_.[[Value]] が *true* である場合、*undefined* を返す。
+            1. _alreadyResolved_.[[Value]] を *true* に設定する。
+            1. SameValue(_resolution_, _promise_) が *true* である場合、次を行う:
+              1. _selfResolutionError_ に新たに作成された *TypeError* オブジェクトを設定する。
+              1. RejectPromise(_promise_, _selfResolutionError_) を実行する。
+              1. *undefined* を返す。
+            1. _resolution_ がオブジェクトでない場合、次を行う:
+              1. FulfillPromise(_promise_, _resolution_) を実行する。
+              1. *undefined* を返す。
+            1. _then_ に Completion(Get(_resolution_, *"then"* )) を設定する。
+            1. _then_ が突然完了（abrupt completion）である場合、次を行う:
+              1. RejectPromise(_promise_, _then_.[[Value]]) を実行する。
+              1. *undefined* を返す。
+            1. _thenAction_ に _then_.[[Value]] を設定する。
+            1. IsCallable(_thenAction_) が *false* である場合、次を行う:
+              1. FulfillPromise(_promise_, _resolution_) を実行する。
+              1. *undefined* を返す。
+            1. _thenJobCallback_ に HostMakeJobCallback(_thenAction_) を設定する。
+            1. _job_ に NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_) を設定する。
+            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]]) を実行する。
+            1. *undefined* を返す。
+          1. _resolve_ に CreateBuiltinFunction(_resolveSteps_, 1, *""*, « ») を設定する。
+          1. _rejectSteps_ に、パラメーターを（_reason_）とし、_promise_ と _alreadyResolved_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャを設定する:
+            1. _alreadyResolved_.[[Value]] が *true* である場合、*undefined* を返す。
             1. _alreadyResolved_.[[Value]] を *true* に設定する。
             1. RejectPromise(_promise_, _reason_) を実行する。
             1. *undefined* を返す。
-          </emu-alg>
-          <p>Promise reject 関数の *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise-resolve-functions">
-          <h1>Promise Resolve 関数</h1>
-          <p>Promise resolve 関数は [[Promise]] と [[AlreadyResolved]] 内部スロットを持つ匿名組み込み関数である。</p>
-          <p>Promise resolve 関数が引数 _resolution_ で呼ばれたとき、次を行う:</p>
-          <emu-alg>
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. 事前条件: _F_ は値が Object である [[Promise]] 内部スロットを持つ。
-            1. _promise_ を _F_.[[Promise]] とする。
-            1. _alreadyResolved_ を _F_.[[AlreadyResolved]] とする。
-            1. もし _alreadyResolved_.[[Value]] が *true* なら *undefined* を返す。
-            1. _alreadyResolved_.[[Value]] を *true* に設定する。
-            1. もし SameValue(_resolution_, _promise_) が *true* なら
-              1. _selfResolutionError_ を新たに生成された *TypeError* オブジェクトとする。
-              1. RejectPromise(_promise_, _selfResolutionError_) を実行する。
-              1. *undefined* を返す。
-            1. もし _resolution_ が Object でなければ
-              1. FulfillPromise(_promise_, _resolution_) を実行する。
-              1. *undefined* を返す。
-            1. _then_ を Completion(Get(_resolution_, *"then"*)) とする。
-            1. もし _then_ が abrupt completion なら
-              1. RejectPromise(_promise_, _then_.[[Value]]) を実行する。
-              1. *undefined* を返す。
-            1. _thenAction_ を _then_.[[Value]] とする。
-            1. もし IsCallable(_thenAction_) が *false* なら
-              1. FulfillPromise(_promise_, _resolution_) を実行する。
-              1. *undefined* を返す。
-            1. _thenJobCallback_ を HostMakeJobCallback(_thenAction_) とする。
-            1. _job_ を NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_) とする。
-            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]]) を実行する。
-            1. *undefined* を返す。
-          </emu-alg>
-          <p>Promise resolve 関数の *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
-        </emu-clause>
+          1. _reject_ に CreateBuiltinFunction(_rejectSteps_, 1, *""*, « ») を設定する。
+          1. レコード { [[Resolve]]: _resolve_, [[Reject]]: _reject_ } を返す。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-fulfillpromise" type="abstract operation">
@@ -49986,7 +49953,7 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_generator_, [[GeneratorState]]) を実行する。
           1. ? RequireInternalSlot(_generator_, [[GeneratorBrand]]) を実行する。
           1. もし _generator_.[[GeneratorBrand]] が _generatorBrand_ でなければ *TypeError* 例外を投げる。
-          1. 事前条件: _generator_ は [[GeneratorContext]] 内部スロットも持つ。
+          1. 事前条件: _generator_ は [[GeneratorContext]] 内部スロット持つ。
           1. _state_ を _generator_.[[GeneratorState]] とする。
           1. もし _state_ が ~executing~ なら *TypeError* 例外を投げる。
           1. _state_ を返す。
@@ -50168,7 +50135,7 @@ THH:mm:ss.sss
           1. _state_ を _generator_.[[AsyncGeneratorState]] とする。
           1. もし _state_ が ~completed~ なら
             1. _iteratorResult_ を CreateIteratorResultObject(*undefined*, *true*) とする。
-            1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ ») を実行する。
+            1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta> を実行する。
             1. _promiseCapability_.[[Promise]] を返す。
           1. _completion_ を NormalCompletion(_value_) とする。
           1. AsyncGeneratorEnqueue(_generator_, _completion_, _promiseCapability_) を実行する。
@@ -50397,7 +50364,7 @@ THH:mm:ss.sss
               1. 実行中の実行コンテキストの Realm を _oldRealm_ に戻す。
             1. それ以外
               1. _iteratorResult_ を CreateIteratorResultObject(_value_, _done_) とする。
-            1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ ») を実行する。
+            1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta> を実行する。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -50686,7 +50653,7 @@ THH:mm:ss.sss
             1. もし _result_ が normal completion なら
               1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* ») を実行。
             1. それ以外で _result_ が return completion なら
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] ») を実行。
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta> を実行。
             1. それ以外
               1. 事前条件: _result_ は throw completion。
               1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] ») を実行。
@@ -50740,231 +50707,231 @@ THH:mm:ss.sss
 </emu-clause>
 
 <emu-clause id="sec-reflection">
-  <h1>リフレクション (Reflection)</h1>
+  <h1>リフレクション</h1>
 
   <emu-clause id="sec-reflect-object">
-    <h1>Reflect オブジェクト (The Reflect Object)</h1>
-    <p>Reflect オブジェクト:</p>
+    <h1>Reflectオブジェクト</h1>
+    <p>Reflectオブジェクト:</p>
     <ul>
-      <li><dfn>%Reflect%</dfn> である。</li>
-      <li>グローバルオブジェクトの *"Reflect"* プロパティの初期値である。</li>
+      <li><dfn>%Reflect%</dfn>である。</li>
+      <li>グローバルオブジェクトの*"Reflect"*プロパティの初期値である。</li>
       <li>通常のオブジェクトである。</li>
-      <li>[[Prototype]] 内部スロットの値は %Object.prototype% である。</li>
+      <li>値が%Object.prototype%である[[Prototype]]内部スロットを持つ。</li>
       <li>関数オブジェクトではない。</li>
-      <li>[[Construct]] 内部メソッドを持たない；`new` 演算子でコンストラクタとして使用できない。</li>
-      <li>[[Call]] 内部メソッドを持たない；関数として呼び出すことはできない。</li>
+      <li>[[Construct]]内部メソッドを持たない。`new`演算子でコンストラクターとして使用できない。</li>
+      <li>[[Call]]内部メソッドを持たない。関数として呼び出せない。</li>
     </ul>
 
     <emu-clause id="sec-reflect.apply">
       <h1>Reflect.apply ( _target_, _thisArgument_, _argumentsList_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし IsCallable(_target_) が *false* なら *TypeError* 例外を投げる。
-        1. _args_ を ? CreateListFromArrayLike(_argumentsList_) とする。
-        1. PrepareForTailCall() を実行する。
-        1. ? Call(_target_, _thisArgument_, _args_) を返す。
+        1. IsCallable(_target_)が*false*なら、*TypeError*例外をスローする。
+        1. _args_に? CreateListFromArrayLike(_argumentsList_)を設定する。
+        1. PrepareForTailCall()を実行する。
+        1. ? Call(_target_, _thisArgument_, _args_)を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.construct">
       <h1>Reflect.construct ( _target_, _argumentsList_ [ , _newTarget_ ] )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし IsConstructor(_target_) が *false* なら *TypeError* 例外を投げる。
-        1. もし _newTarget_ が存在しなければ _newTarget_ を _target_ に設定する。
-        1. それ以外で IsConstructor(_newTarget_) が *false* なら *TypeError* 例外を投げる。
-        1. _args_ を ? CreateListFromArrayLike(_argumentsList_) とする。
-        1. ? Construct(_target_, _args_, _newTarget_) を返す。
+        1. IsConstructor(_target_)が*false*なら、*TypeError*例外をスローする。
+        1. _newTarget_が存在しない場合、_newTarget_に_target_を設定する。
+        1. それ以外で、IsConstructor(_newTarget_)が*false*なら、*TypeError*例外をスローする。
+        1. _args_に? CreateListFromArrayLike(_argumentsList_)を設定する。
+        1. ? Construct(_target_, _args_, _newTarget_)を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.defineproperty">
       <h1>Reflect.defineProperty ( _target_, _propertyKey_, _attributes_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. _desc_ を ? ToPropertyDescriptor(_attributes_) とする。
-        1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_key_, _desc_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. _desc_に? ToPropertyDescriptor(_attributes_)を設定する。
+        1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_key_, _desc_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.deleteproperty">
       <h1>Reflect.deleteProperty ( _target_, _propertyKey_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_key_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. ? <emu-meta effects="user-code">_target_.[[Delete]](_key_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.get">
       <h1>Reflect.get ( _target_, _propertyKey_ [ , _receiver_ ] )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. もし _receiver_ が存在しなければ
-          1. _receiver_ を _target_ に設定する。
-        1. ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_key_, _receiver_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. _receiver_が存在しない場合、
+          1. _receiver_に_target_を設定する。
+        1. ? <emu-meta effects="user-code">_target_.[[Get]](_key_, _receiver_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.getownpropertydescriptor">
       <h1>Reflect.getOwnPropertyDescriptor ( _target_, _propertyKey_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. _desc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_) とする。
-        1. FromPropertyDescriptor(_desc_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. _desc_に? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta>を設定する。
+        1. FromPropertyDescriptor(_desc_)を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.getprototypeof">
       <h1>Reflect.getPrototypeOf ( _target_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.has">
       <h1>Reflect.has ( _target_, _propertyKey_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_key_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. ? <emu-meta effects="user-code">_target_.[[HasProperty]](_key_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.isextensible">
       <h1>Reflect.isExtensible ( _target_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. ? <emu-meta effects="user-code">_target_.[[IsExtensible]]()</emu-meta> を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. ? <emu-meta effects="user-code">_target_.[[IsExtensible]]()</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.ownkeys">
       <h1>Reflect.ownKeys ( _target_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _keys_ を ? <emu-meta effects="user-code">_target_.[[OwnPropertyKeys]]()</emu-meta> とする。
-        1. CreateArrayFromList(_keys_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _keys_に? <emu-meta effects="user-code">_target_.[[OwnPropertyKeys]]()</emu-meta>を設定する。
+        1. CreateArrayFromList(_keys_)を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.preventextensions">
       <h1>Reflect.preventExtensions ( _target_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. ? <emu-meta effects="user-code">_target_.[[PreventExtensions]]()</emu-meta> を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. ? <emu-meta effects="user-code">_target_.[[PreventExtensions]]()</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.set">
       <h1>Reflect.set ( _target_, _propertyKey_, _V_ [ , _receiver_ ] )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. _key_ を ? ToPropertyKey(_propertyKey_) とする。
-        1. もし _receiver_ が存在しなければ
-          1. _receiver_ を _target_ に設定する。
-        1. ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_key_, _V_, _receiver_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _key_に? ToPropertyKey(_propertyKey_)を設定する。
+        1. _receiver_が存在しない場合、
+          1. _receiver_に_target_を設定する。
+        1. ? <emu-meta effects="user-code">_target_.[[Set]](_key_, _V_, _receiver_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.setprototypeof">
       <h1>Reflect.setPrototypeOf ( _target_, _proto_ )</h1>
-      <p>この関数は呼び出されると次の手順を実行する:</p>
+      <p>この関数が呼び出されたとき、次の手順を実行する:</p>
       <emu-alg>
-        1. もし _target_ が Object でなければ *TypeError* 例外を投げる。
-        1. もし _proto_ が Object でなく かつ _proto_ が *null* でなければ *TypeError* 例外を投げる。
-        1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_proto_) を返す。
+        1. _target_がオブジェクトでない場合、*TypeError*例外をスローする。
+        1. _proto_がオブジェクトでも*null*でもない場合、*TypeError*例外をスローする。
+        1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_proto_)</emu-meta>を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause oldids="sec-reflect-@@tostringtag" id="sec-reflect-%symbol.tostringtag%">
       <h1>Reflect [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% プロパティの初期値は文字列値 *"Reflect"* である。</p>
-      <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
+      <p>%Symbol.toStringTag%プロパティの初期値は文字列値*"Reflect"*である。</p>
+      <p>このプロパティは{ [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }の属性を持つ。</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-proxy-objects">
-    <h1>Proxy オブジェクト (Proxy Objects)</h1>
+    <h1>Proxyオブジェクト</h1>
 
     <emu-clause id="sec-proxy-constructor">
-      <h1>Proxy コンストラクタ (The Proxy Constructor)</h1>
-      <p>Proxy コンストラクタ:</p>
+      <h1>Proxyコンストラクター</h1>
+      <p>Proxyコンストラクター:</p>
       <ul>
-        <li><dfn>%Proxy%</dfn> である。</li>
-        <li>グローバルオブジェクトの *"Proxy"* プロパティの初期値である。</li>
-        <li>コンストラクタとして呼び出されたとき新しい Proxy オブジェクトを生成し初期化する。</li>
-        <li>関数として呼び出すことは意図されておらず、そのように呼び出されると例外を投げる。</li>
+        <li><dfn>%Proxy%</dfn>である。</li>
+        <li>グローバルオブジェクトの*"Proxy"*プロパティの初期値である。</li>
+        <li>コンストラクターとして呼び出されたとき、新しいProxyオブジェクトを生成・初期化する。</li>
+        <li>関数として呼び出されることを意図しておらず、そのように呼ばれると例外をスローする。</li>
       </ul>
 
       <emu-clause id="sec-proxy-target-handler">
         <h1>Proxy ( _target_, _handler_ )</h1>
-        <p>この関数は呼び出されると次の手順を実行する:</p>
+        <p>この関数が呼び出されたとき、次の手順を実行する:</p>
         <emu-alg>
-          1. もし NewTarget が *undefined* なら *TypeError* 例外を投げる。
-          1. ? ProxyCreate(_target_, _handler_) を返す。
+          1. NewTargetが*undefined*なら、*TypeError*例外をスローする。
+          1. ? ProxyCreate(_target_, _handler_)を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-proxy-constructor">
-      <h1>Proxy コンストラクタのプロパティ (Properties of the Proxy Constructor)</h1>
-      <p>Proxy コンストラクタ:</p>
+      <h1>Proxyコンストラクターのプロパティ</h1>
+      <p>Proxyコンストラクター:</p>
       <ul>
-        <li>[[Prototype]] 内部スロットの値は %Function.prototype% である。</li>
-        <li>Proxy オブジェクトは初期化を要する [[Prototype]] 内部スロットを持たないため *"prototype"* プロパティを持たない。</li>
+        <li>値が%Function.prototype%である[[Prototype]]内部スロットを持つ。</li>
+        <li>Proxyオブジェクトは初期化すべき[[Prototype]]内部スロットを持たないため、*"prototype"*プロパティを持たない。</li>
         <li>次のプロパティを持つ:</li>
       </ul>
 
       <emu-clause id="sec-proxy.revocable" oldids="sec-proxy-revocation-functions">
         <h1>Proxy.revocable ( _target_, _handler_ )</h1>
-        <p>この関数は取り消し可能な Proxy オブジェクトを生成する。</p>
+        <p>この関数は取り消し可能なProxyオブジェクトを生成する。</p>
         <p>呼び出されると次の手順を実行する:</p>
         <emu-alg>
-          1. _proxy_ を ? ProxyCreate(_target_, _handler_) とする。
-          1. _revokerClosure_ を、引数無しで何も捕捉せず呼び出されると次を行う新たな Abstract Closure とする:
-            1. _F_ をアクティブな関数オブジェクトとする。
-            1. _p_ を _F_.[[RevocableProxy]] とする。
-            1. もし _p_ が *null* なら NormalCompletion(*undefined*) を返す。
-            1. _F_.[[RevocableProxy]] を *null* に設定する。
-            1. 事前条件: _p_ は Proxy エキゾチックオブジェクトである。
-            1. _p_.[[ProxyTarget]] を *null* に設定する。
-            1. _p_.[[ProxyHandler]] を *null* に設定する。
-            1. NormalCompletion(*undefined*) を返す。
-          1. _revoker_ を CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] ») とする。
-          1. _revoker_.[[RevocableProxy]] を _proxy_ に設定する。
-          1. _result_ を OrdinaryObjectCreate(%Object.prototype%) とする。
-          1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_) を実行する。
-          1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_) を実行する。
-          1. _result_ を返す。
+          1. _proxy_に? ProxyCreate(_target_, _handler_)を設定する。
+          1. 引数なし・何もキャプチャしない新しい抽象クロージャ_ _revokerClosure_ を作成し、呼び出されたとき次の手順を実行する:
+            1. _F_にアクティブな関数オブジェクトを設定する。
+            1. _p_に_F_.[[RevocableProxy]]を設定する。
+            1. _p_が*null*なら、NormalCompletion(*undefined*)を返す。
+            1. _F_.[[RevocableProxy]]に*null*を設定する。
+            1. アサート: _p_はProxyエキゾチックオブジェクトである。
+            1. _p_.[[ProxyTarget]]に*null*を設定する。
+            1. _p_.[[ProxyHandler]]に*null*を設定する。
+            1. NormalCompletion(*undefined*)を返す。
+          1. _revoker_にCreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)を設定する。
+          1. _revoker_.[[RevocableProxy]]に_proxy_を設定する。
+          1. _result_にOrdinaryObjectCreate(%Object.prototype%)を設定する。
+          1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)を実行する。
+          1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)を実行する。
+          1. _result_を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-module-namespace-objects">
-    <h1>モジュール名前空間オブジェクト (Module Namespace Objects)</h1>
-    <p>モジュール名前空間オブジェクトはモジュールのエクスポート束縛へ実行時のプロパティベースアクセスを提供する module namespace エキゾチックオブジェクトである。Module Namespace Objects 用のコンストラクタ関数は存在しない。代わりに、このようなオブジェクトは |NameSpaceImport| を含む |ImportDeclaration| によりインポートされた各モジュールごとに生成される。</p>
-    <p><emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref> で規定されるプロパティに加えて、各 Module Namespace Object は次の自前プロパティを持つ:</p>
+    <h1>モジュール名前空間オブジェクト</h1>
+    <p>モジュール名前空間オブジェクトは、モジュールのエクスポートバインディングに実行時にプロパティベースでアクセスできるモジュール名前空間エキゾチックオブジェクトである。モジュール名前空間オブジェクト用のコンストラクター関数は存在しない。代わりに、|NameSpaceImport|を含む|ImportDeclaration|でインポートされる各モジュールごとにそのようなオブジェクトが生成される。</p>
+    <p><emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref>で規定されるプロパティに加えて、各モジュール名前空間オブジェクトは次の独自プロパティを持つ:</p>
 
     <emu-clause oldids="sec-@@tostringtag" id="sec-%symbol.tostringtag%">
       <h1>%Symbol.toStringTag%</h1>
-      <p>%Symbol.toStringTag% プロパティの初期値は文字列値 *"Module"* である。</p>
-      <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
+      <p>%Symbol.toStringTag%プロパティの初期値は文字列値*"Module"*である。</p>
+      <p>このプロパティは{ [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }の属性を持つ。</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>

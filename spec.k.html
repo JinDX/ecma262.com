@@ -196,8 +196,7 @@
 
 <emu-intro id="sec-intro">
   <h1>소개</h1>
-  <p>이 Ecma 표준은 ECMAScript 2026 언어를 정의합니다. 이는 ECMAScript 언어 명세서의 열일곱 번째 판입니다. 1997년 첫 판이 발표된 이후 ECMAScript는 세계에서 가장 널리 사용되는 범용 프로그래밍 언어 중 하나로 성장했습니다. 웹 브라우저에 내장된 언어로 가장 잘 알려져 있지만, 서버 및 임베디드 애플리케이션에서도 널리 채택되었습니다.</p>
-  <p>ECMAScript는 여러 기술에서 유래했으며, 그 중 가장 잘 알려진 것은 JavaScript(Netscape)와 JScript(Microsoft)입니다. 이 언어는 Netscape의 Brendan Eich가 발명하였으며, 최초로 해당 회사의 Navigator 2.0 브라우저에 등장했습니다. 이후 Netscape의 모든 브라우저와 Microsoft의 Internet Explorer 3.0부터 모든 브라우저에 포함되었습니다.</p>
+  <p>이 Ecma 표준은 ECMAScript 2026 언어를 정의합니다. 이는 ECMAScript 언어 명세의 열일곱 번째 판입니다. ECMAScript는 여러 기원 기술을 기반으로 하며, 그 중 가장 잘 알려진 것은 JavaScript(Netscape)와 JScript(Microsoft)입니다. 이 언어는 Netscape의 Brendan Eich에 의해 발명되었고, 그 회사의 Navigator 2.0 브라우저에서 처음 등장했습니다. 웹 브라우저에 내장된 언어로 가장 잘 알려져 있지만, 서버 및 임베디드 애플리케이션 등 브라우저 외부에서도 널리 채택되었으며, 세계에서 가장 널리 사용되는 범용 프로그래밍 언어 중 하나로 성장했습니다.</p>
   <p>ECMAScript 언어 명세서의 개발은 1996년 11월에 시작되었습니다. 이 Ecma 표준의 첫 번째 판은 1997년 6월 Ecma 총회에서 채택되었습니다.</p>
   <p>그 Ecma 표준은 ISO/IEC JTC 1에 신속 채택 절차(fast-track procedure)를 통해 제출되었고, 1998년 4월 국제 표준 ISO/IEC 16262로 승인되었습니다. 1998년 6월 Ecma 총회에서 ECMA-262 두 번째 판이 승인되어 ISO/IEC 16262와 완전히 일치하게 되었습니다. 첫 번째 판과 두 번째 판의 변경 사항은 편집상의 변화입니다.</p>
   <p>표준의 세 번째 판에서는 강력한 정규 표현식, 향상된 문자열 처리, 새로운 제어문, try/catch 예외 처리, 오류 정의 강화, 숫자 출력 형식 지정, 그리고 향후 언어 성장을 대비한 소규모 변경 사항이 도입되었습니다. ECMAScript 표준의 세 번째 판은 1999년 12월 Ecma 총회에서 채택되었고, 2002년 6월 ISO/IEC 16262:2002로 출판되었습니다.</p>
@@ -4448,11 +4447,11 @@
               1. ? PrivateGet(_baseObj_, _V_.[[ReferencedName]])를 반환한다.
             1. _V_.[[ReferencedName]]이 프로퍼티 키가 아니면,
               1. _V_.[[ReferencedName]]을 ? ToPropertyKey(_V_.[[ReferencedName]])로 설정한다.
-            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]]</emu-meta>(_V_.[[ReferencedName]], GetThisValue(_V_))를 반환한다.
+            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>를 반환한다.
           1. 아니면,
             1. _base_를 _V_.[[Base]]로 한다.
             1. 단언: _base_는 Environment Record이다.
-            1. ? <emu-meta effects="user-code">_base_.GetBindingValue</emu-meta>(_V_.[[ReferencedName]], _V_.[[Strict]])를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
+            1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
         </emu-alg>
         <emu-note>
           <p><emu-xref href="#step-getvalue-toobject"></emu-xref> 단계에서 생성되는 객체는 위 추상 연산과 ordinary object [[Get]] 내부 메소드 외부에서는 접근할 수 없습니다. 구현에서는 실제 객체 생성을 생략할 수 있습니다.</p>
@@ -4481,13 +4480,13 @@
               1. ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_)를 반환한다.
             1. _V_.[[ReferencedName]]이 프로퍼티 키가 아니면,
               1. _V_.[[ReferencedName]]을 ? ToPropertyKey(_V_.[[ReferencedName]])로 설정한다.
-            1. _succeeded_를 ? <emu-meta effects="user-code">_baseObj_.[[Set]]</emu-meta>(_V_.[[ReferencedName]], _W_, GetThisValue(_V_))로 한다.
+            1. _succeeded_를 ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>로 한다.
             1. _succeeded_가 *false*이고 _V_.[[Strict]]가 *true*이면 *TypeError* 예외를 throw한다.
             1. ~unused~를 반환한다.
           1. 아니면,
             1. _base_를 _V_.[[Base]]로 한다.
             1. 단언: _base_는 Environment Record이다.
-            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding</emu-meta>(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
+            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
         </emu-alg>
         <emu-note>
           <p><emu-xref href="#step-putvalue-toobject"></emu-xref> 단계에서 생성되는 객체는 위 추상 연산과 ordinary object [[Set]] 내부 메소드 외부에서는 접근할 수 없습니다. 구현에서는 실제 객체 생성을 생략할 수 있습니다.</p>
@@ -5796,7 +5795,7 @@
         <dd>_O_에 추가 프로퍼티를 더할 수 있는지 결정하는 데 사용됩니다.</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[IsExtensible]]</emu-meta>()를 반환한다.
+        1. ? <emu-meta effects="user-code">_O_.[[IsExtensible]]()</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -6099,7 +6098,7 @@
         <dd>객체의 특정 프로퍼티 값을 가져오는 데 사용됩니다.</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _O_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _O_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -6116,7 +6115,7 @@
       </dl>
       <emu-alg>
         1. _O_를 ? ToObject(_V_)로 둔다.
-        1. ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _V_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _V_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -6134,7 +6133,7 @@
         <dd>객체의 특정 프로퍼티 값을 설정하는 데 사용됩니다. _V_는 프로퍼티의 새 값입니다.</dd>
       </dl>
       <emu-alg>
-        1. _success_를 ? <emu-meta effects="user-code">_O_.[[Set]]</emu-meta>(_P_, _V_, _O_)로 둔다.
+        1. _success_를 ? <emu-meta effects="user-code">_O_.[[Set]](_P_, _V_, _O_)</emu-meta>로 둔다.
         1. _success_가 *false*이고 _Throw_가 *true*이면 *TypeError* 예외를 던진다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -6154,7 +6153,7 @@
       </dl>
       <emu-alg>
         1. _newDesc_를 PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }로 둔다.
-        1. ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _newDesc_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _newDesc_)</emu-meta>를 반환한다.
       </emu-alg>
       <emu-note>
         <p>이 추상 연산은 ECMAScript 대입 연산자가 생성하는 프로퍼티와 동일 기본 속성 값을 가진 프로퍼티를 생성합니다. 일반적으로 프로퍼티는 미존재 상태입니다. 존재하고 비구성이거나 _O_가 비확장 가능이면 [[DefineOwnProperty]]는 *false*를 반환합니다.</p>
@@ -6219,7 +6218,7 @@
         <dd>객체의 [[DefineOwnProperty]] 내부 메소드를 호출하되, 요청된 프로퍼티 갱신이 수행될 수 없으면 *TypeError* 예외를 던집니다.</dd>
       </dl>
       <emu-alg>
-        1. _success_를 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _desc_)로 둔다.
+        1. _success_를 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _desc_)</emu-meta>로 둔다.
         1. _success_가 *false*이면 *TypeError* 예외를 던진다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -6237,7 +6236,7 @@
         <dd>객체의 특정 own 프로퍼티를 제거하는 데 사용됩니다. 프로퍼티가 비구성이면 예외를 던집니다.</dd>
       </dl>
       <emu-alg>
-        1. _success_를 ? <emu-meta effects="user-code">_O_.[[Delete]]</emu-meta>(_P_)로 둔다.
+        1. _success_를 ? <emu-meta effects="user-code">_O_.[[Delete]](_P_)</emu-meta>로 둔다.
         1. _success_가 *false*이면 *TypeError* 예외를 던진다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -6274,7 +6273,7 @@
         <dd>객체가 지정된 프로퍼티 키를 가진 프로퍼티(own 또는 상속)를 갖는지 판정합니다.</dd>
       </dl>
       <emu-alg>
-        1. ? <emu-meta effects="user-code">_O_.[[HasProperty]]</emu-meta>(_P_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_O_.[[HasProperty]](_P_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -6290,7 +6289,7 @@
         <dd>객체가 지정된 프로퍼티 키를 가진 own 프로퍼티를 갖는지 판정합니다.</dd>
       </dl>
       <emu-alg>
-        1. _desc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)로 둔다.
+        1. _desc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>로 둔다.
         1. _desc_가 *undefined*이면 *false*를 반환한다.
         1. *true*를 반환한다.
       </emu-alg>
@@ -6311,7 +6310,7 @@
       <emu-alg>
         1. _argumentsList_가 존재하지 않으면 새 빈 List로 설정한다.
         1. IsCallable(_F_)가 *false*이면 *TypeError* 예외를 던진다.
-        1. ? <emu-meta effects="user-code">_F_.[[Call]]</emu-meta>(_V_, _argumentsList_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_F_.[[Call]](_V_, _argumentsList_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -6330,7 +6329,7 @@
       <emu-alg>
         1. _newTarget_이 존재하지 않으면 _newTarget_을 _F_로 둔다.
         1. _argumentsList_가 존재하지 않으면 새 빈 List로 둔다.
-        1. ? <emu-meta effects="user-code">_F_.[[Construct]]</emu-meta>(_argumentsList_, _newTarget_)를 반환한다.
+        1. ? <emu-meta effects="user-code">_F_.[[Construct]](_argumentsList_, _newTarget_)</emu-meta>를 반환한다.
       </emu-alg>
       <emu-note>
         <p>_newTarget_이 없으면 이 연산은 `new F(...argumentsList)`와 동일합니다.</p>
@@ -6358,7 +6357,7 @@
         1. Else,
           1. 단언: _level_은 ~frozen~.
           1. _keys_의 각 요소 _k_에 대해
-            1. _currentDesc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_)로 둔다.
+            1. _currentDesc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta>로 둔다.
             1. _currentDesc_가 *undefined*가 아니면,
               1. IsAccessorDescriptor(_currentDesc_)가 *true*이면
                 1. _desc_를 PropertyDescriptor { [[Configurable]]: *false* }로 둔다.
@@ -6386,7 +6385,7 @@
         1. 주: 객체가 확장이 가능하면 프로퍼티를 검사하지 않는다.
         1. _keys_를 ? _O_.[[OwnPropertyKeys]]()로 둔다.
         1. _keys_의 각 요소 _k_에 대해
-          1. _currentDesc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_)로 둔다.
+          1. _currentDesc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta>로 둔다.
           1. _currentDesc_가 *undefined*가 아니면,
             1. _currentDesc_.[[Configurable]]이 *true*이면 *false*를 반환한다.
             1. _level_이 ~frozen~이고 IsDataDescriptor(_currentDesc_)가 *true*이면,
@@ -6504,7 +6503,7 @@
         1. _P_를 ? Get(_C_, *"prototype"*)으로 둔다.
         1. _P_가 Object가 아니면 *TypeError* 예외를 던진다.
         1. 반복,
-          1. _O_를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()로 둔다.
+          1. _O_를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>로 둔다.
           1. _O_가 *null*이면 *false*를 반환한다.
           1. SameValue(_P_, _O_)가 *true*이면 *true*를 반환한다.
       </emu-alg>
@@ -6542,11 +6541,11 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _ownKeys_를 ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]</emu-meta>()로 둔다.
+        1. _ownKeys_를 ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]()</emu-meta>로 둔다.
         1. _results_를 새 빈 List로 둔다.
         1. _ownKeys_의 각 요소 _key_에 대해
           1. _key_가 String이면,
-            1. _desc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_)로 둔다.
+            1. _desc_를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta>로 둔다.
             1. _desc_가 *undefined*가 아니고 _desc_.[[Enumerable]]이 *true*이면,
               1. _kind_가 ~key~이면
                 1. _key_를 _results_에 추가한다.
@@ -6601,14 +6600,14 @@
       <emu-alg>
         1. _source_가 *undefined* 또는 *null*이면 ~unused~를 반환한다.
         1. _from_을 ! ToObject(_source_)로 둔다.
-        1. _keys_를 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]</emu-meta>()로 둔다.
+        1. _keys_를 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>로 둔다.
         1. _keys_의 각 요소 _nextKey_에 대해
           1. _excluded_를 *false*로 둔다.
           1. _excludedItems_의 각 요소 _e_에 대해
             1. SameValue(_e_, _nextKey_)가 *true*이면
               1. _excluded_를 *true*로 둔다.
           1. _excluded_가 *false*이면
-            1. _desc_를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_)로 둔다.
+            1. _desc_를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>로 둔다.
             1. _desc_가 *undefined*가 아니고 _desc_.[[Enumerable]]이 *true*이면
               1. _propValue_를 ? Get(_from_, _nextKey_)로 둔다.
               1. ! CreateDataPropertyOrThrow(_target_, _nextKey_, _propValue_)를 수행한다.
@@ -10500,7 +10499,7 @@
             <dd>이름 _N_인 바인딩 객체 프로퍼티의 값을 _V_로 설정.</dd>
           </dl>
           <emu-alg>
-            1. ? <emu-meta effects="user-code">_envRec_.SetMutableBinding</emu-meta>(_N_, _V_, *false*) 수행.
+            1. ? <emu-meta effects="user-code">_envRec_.SetMutableBinding(_N_, _V_, *false*)</emu-meta> 수행.
             1. ~unused~ 반환.
           </emu-alg>
           <emu-note>
@@ -10570,7 +10569,7 @@
           </dl>
           <emu-alg>
             1. _bindingObject_를 _envRec_.[[BindingObject]]로 둔다.
-            1. ? <emu-meta effects="user-code">_bindingObject_.[[Delete]]</emu-meta>(_N_) 반환.
+            1. ? <emu-meta effects="user-code">_bindingObject_.[[Delete]](_N_)</emu-meta> 반환.
           </emu-alg>
         </emu-clause>
 
@@ -10875,7 +10874,7 @@
             1. _DclRec_을 _envRec_.[[DeclarativeRecord]]로 둔다.
             1. ! _DclRec_.HasBinding(_N_)이 *true*이면 *true* 반환.
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
-            1. ? <emu-meta effects="user-code">_ObjRec_.HasBinding</emu-meta>(_N_) 반환.
+            1. ? <emu-meta effects="user-code">_ObjRec_.HasBinding(_N_)</emu-meta> 반환.
           </emu-alg>
         </emu-clause>
 
@@ -10941,7 +10940,7 @@
               1. ! _DclRec_.InitializeBinding(_N_, _V_) 반환.
             1. 단언: 바인딩이 존재한다면 Object Environment Record에 있다.
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
-            1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, _V_) 반환.
+            1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, _V_)</emu-meta> 반환.
           </emu-alg>
         </emu-clause>
 
@@ -10965,7 +10964,7 @@
             1. ! _DclRec_.HasBinding(_N_)이 *true*이면
               1. ? _DclRec_.SetMutableBinding(_N_, _V_, _S_) 반환.
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
-            1. ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding</emu-meta>(_N_, _V_, _S_) 반환.
+            1. ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding(_N_, _V_, _S_)</emu-meta> 반환.
           </emu-alg>
         </emu-clause>
 
@@ -10988,7 +10987,7 @@
             1. ! _DclRec_.HasBinding(_N_)이 *true*이면
               1. ? _DclRec_.GetBindingValue(_N_, _S_) 반환.
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
-            1. ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue</emu-meta>(_N_, _S_) 반환.
+            1. ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue(_N_, _S_)</emu-meta> 반환.
           </emu-alg>
         </emu-clause>
 
@@ -11013,7 +11012,7 @@
             1. _globalObject_를 _ObjRec_.[[BindingObject]]로 둔다.
             1. _existingProp_을 ? HasOwnProperty(_globalObject_, _N_)로 둔다.
             1. _existingProp_이 *true*이면
-              1. ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding</emu-meta>(_N_) 반환.
+              1. ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding(_N_)</emu-meta> 반환.
             1. *true* 반환.
           </emu-alg>
         </emu-clause>
@@ -11099,7 +11098,7 @@
           <emu-alg>
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
             1. _globalObject_를 _ObjRec_.[[BindingObject]]로 둔다.
-            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)로 둔다.
+            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>로 둔다.
             1. _existingProp_이 *undefined*이면 *false* 반환.
             1. _existingProp_.[[Configurable]]이 *true*이면 *false* 반환.
             1. *true* 반환.
@@ -11143,7 +11142,7 @@
           <emu-alg>
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
             1. _globalObject_를 _ObjRec_.[[BindingObject]]로 둔다.
-            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)로 둔다.
+            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>로 둔다.
             1. _existingProp_이 *undefined*이면 ? IsExtensible(_globalObject_) 반환.
             1. _existingProp_.[[Configurable]]이 *true*이면 *true* 반환.
             1. IsDataDescriptor(_existingProp_)가 *true*이고 _existingProp_ 속성 값이 { [[Writable]]: *true*, [[Enumerable]]: *true* }이면 *true* 반환.
@@ -11169,8 +11168,8 @@
             1. _hasProperty_를 ? HasOwnProperty(_globalObject_, _N_)로 둔다.
             1. _extensible_을 ? IsExtensible(_globalObject_)로 둔다.
             1. _hasProperty_가 *false*이고 _extensible_이 *true*이면
-              1. ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding</emu-meta>(_N_, _D_) 수행.
-              1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, *undefined*) 수행.
+              1. ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding(_N_, _D_)</emu-meta> 수행.
+              1. ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, *undefined*)</emu-meta> 수행.
             1. ~unused~ 반환.
           </emu-alg>
         </emu-clause>
@@ -11191,7 +11190,7 @@
           <emu-alg>
             1. _ObjRec_을 _envRec_.[[ObjectRecord]]로 둔다.
             1. _globalObject_를 _ObjRec_.[[BindingObject]]로 둔다.
-            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)로 둔다.
+            1. _existingProp_을 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>로 둔다.
             1. _existingProp_이 *undefined*이거나 _existingProp_.[[Configurable]]이 *true*이면
               1. _desc_를 PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: _D_ }로 둔다.
             1. Else
@@ -11254,7 +11253,7 @@
               1. 이 _N_ 바인딩 생성 시 제공된 간접 값 _M_, _N2_를 둔다.
               1. _targetEnv_를 _M_.[[Environment]]로 둔다.
               1. _targetEnv_가 ~empty~이면 *ReferenceError* 예외.
-              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue</emu-meta>(_N2_, *true*) 반환.
+              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta> 반환.
             1. _envRec_의 _N_ 바인딩이 초기화되지 않았으면 *ReferenceError* 예외.
             1. 현재 _envRec_에 _N_으로 바인딩된 값을 반환.
           </emu-alg>
@@ -11336,7 +11335,7 @@
         <emu-alg>
           1. _env_가 *null*이면
             1. Reference Record { [[Base]]: ~unresolvable~, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } 반환.
-          1. _exists_를 ? <emu-meta effects="user-code">_env_.HasBinding</emu-meta>(_name_)로 둔다.
+          1. _exists_를 ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta>로 둔다.
           1. _exists_가 *true*이면
             1. Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } 반환.
           1. Else
@@ -12685,7 +12684,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _current_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _current_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _extensible_ 을 ? IsExtensible(_O_) 로 둔다.
           1. ValidateAndApplyPropertyDescriptor(_O_, _P_, _extensible_, _Desc_, _current_) 를 반환한다.
         </emu-alg>
@@ -12783,11 +12782,11 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _hasOwn_ 을 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _hasOwn_ 을 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _hasOwn_ 이 *undefined* 가 아니면 *true* 반환.
-          1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+          1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
           1. _parent_ 가 *null* 이 아니면
-            1. ? <emu-meta effects="user-code">_parent_.[[HasProperty]]</emu-meta>(_P_) 를 반환한다.
+            1. ? <emu-meta effects="user-code">_parent_.[[HasProperty]](_P_)</emu-meta> 를 반환한다.
           1. *false* 반환.
         </emu-alg>
       </emu-clause>
@@ -12821,11 +12820,11 @@
         </dl>
 
         <emu-alg>
-          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _desc_ 가 *undefined* 이면
-            1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+            1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
             1. _parent_ 가 *null* 이면 *undefined* 반환.
-            1. ? <emu-meta effects="user-code">_parent_.[[Get]]</emu-meta>(_P_, _Receiver_) 를 반환한다.
+            1. ? <emu-meta effects="user-code">_parent_.[[Get]](_P_, _Receiver_)</emu-meta> 를 반환한다.
           1. IsDataDescriptor(_desc_) 가 *true* 이면 _desc_.[[Value]] 를 반환한다.
           1. 단언: IsAccessorDescriptor(_desc_) 는 *true* 이다.
           1. _getter_ 를 _desc_.[[Get]] 로 둔다.
@@ -12864,7 +12863,7 @@
         </dl>
 
         <emu-alg>
-          1. _ownDesc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _ownDesc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. ? OrdinarySetWithOwnDescriptor(_O_, _P_, _V_, _Receiver_, _ownDesc_) 를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -12884,20 +12883,20 @@
 
         <emu-alg>
           1. _ownDesc_ 가 *undefined* 이면
-            1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+            1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
             1. _parent_ 가 *null* 이 아니면
-              1. ? <emu-meta effects="user-code">_parent_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_) 를 반환한다.
+              1. ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> 를 반환한다.
             1. 그렇지 않으면
               1. _ownDesc_ 를 PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } 로 설정한다.
           1. IsDataDescriptor(_ownDesc_) 가 *true* 이면
             1. _ownDesc_.[[Writable]] 이 *false* 이면 *false* 반환.
             1. _Receiver_ 가 객체가 아니면 *false* 반환.
-            1. _existingDescriptor_ 를 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+            1. _existingDescriptor_ 를 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
             1. _existingDescriptor_ 가 *undefined* 가 아니면
               1. IsAccessorDescriptor(_existingDescriptor_) 가 *true* 이면 *false* 반환.
               1. _existingDescriptor_.[[Writable]] 이 *false* 이면 *false* 반환.
               1. _valueDesc_ 를 PropertyDescriptor { [[Value]]: _V_ } 로 둔다.
-              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]]</emu-meta>(_P_, _valueDesc_) 를 반환한다.
+              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta> 를 반환한다.
             1. 그렇지 않으면
               1. 단언: _Receiver_ 는 현재 프로퍼티 _P_ 를 갖지 않는다.
               1. ? CreateDataProperty(_Receiver_, _P_, _V_) 를 반환한다.
@@ -12934,7 +12933,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _desc_ 가 *undefined* 이면 *true* 반환.
           1. _desc_.[[Configurable]] 이 *true* 이면
             1. 이름 _P_ 인 자체 프로퍼티를 _O_ 에서 제거한다.
@@ -13913,17 +13912,17 @@
           <dd>새 바운드 함수 이그조틱 객체 생성을 명세하는 데 사용된다.</dd>
         </dl>
         <emu-alg>
-          1. _proto_ 를 ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
-          1. _internalSlotsList_ 를 « [[Prototype]], [[Extensible]] » 와 <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref>에 나열된 내부 슬롯의 리스트 연결로 둔다.
-          1. _obj_ 를 MakeBasicObject(_internalSlotsList_) 로 둔다.
-          1. _obj_.[[Prototype]] 을 _proto_ 로 설정한다.
-          1. _obj_.[[Call]] 을 <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref>에 기술된 대로 설정한다.
-          1. IsConstructor(_targetFunction_) 가 *true* 이면
-            1. _obj_.[[Construct]] 를 <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref>에 기술된 대로 설정한다.
-          1. _obj_.[[BoundTargetFunction]] 을 _targetFunction_ 으로 설정한다.
-          1. _obj_.[[BoundThis]] 를 _boundThis_ 로 설정한다.
-          1. _obj_.[[BoundArguments]] 를 _boundArgs_ 로 설정한다.
-          1. _obj_ 를 반환한다.
+          1. _proto_를 ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]()</emu-meta>로 한다.
+          1. _internalSlotsList_를 « [[Prototype]], [[Extensible]] »와 <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref>에 나열된 내부 슬롯의 리스트 결합으로 한다.
+          1. _obj_를 MakeBasicObject(_internalSlotsList_)로 한다.
+          1. _obj_.[[Prototype]]를 _proto_로 설정한다.
+          1. _obj_.[[Call]]을 <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref>에 지정된 대로 설정한다.
+          1. IsConstructor(_targetFunction_)이 *true*이면,
+            1. _obj_.[[Construct]]를 <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref>에 지정된 대로 설정한다.
+          1. _obj_.[[BoundTargetFunction]]을 _targetFunction_으로 설정한다.
+          1. _obj_.[[BoundThis]]를 _boundThis_로 설정한다.
+          1. _obj_.[[BoundArguments]]를 _boundArgs_로 설정한다.
+          1. _obj_를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -15132,7 +15131,7 @@
         </h1>
         <dl class="header"></dl>
         <emu-alg>
-          1. _current_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+          1. _current_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
           1. SameValue(_V_, _current_) 가 *true* 이면 *true* 반환.
           1. *false* 반환.
         </emu-alg>
@@ -15282,12 +15281,12 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"getPrototypeOf"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() 를 반환한다.
+          1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> 를 반환한다.
         1. _handlerProto_ 를 ? Call(_trap_, _handler_, « _target_ ») 로 둔다.
         1. _handlerProto_ 가 Object 도 아니고 *null* 도 아니면 *TypeError* 예외 throw.
         1. _extensibleTarget_ 을 ? IsExtensible(_target_) 로 둔다.
         1. _extensibleTarget_ 이 *true* 이면 _handlerProto_ 반환.
-        1. _targetProto_ 를 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+        1. _targetProto_ 를 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
         1. SameValue(_handlerProto_, _targetProto_) 가 *false* 이면 *TypeError* 예외 throw.
         1. _handlerProto_ 반환.
       </emu-alg>
@@ -15317,12 +15316,12 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"setPrototypeOf"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_V_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_V_)</emu-meta> 반환.
         1. _booleanTrapResult_ 를 ToBoolean(? Call(_trap_, _handler_, « _target_, _V_ »)) 로 둔다.
         1. _booleanTrapResult_ 가 *false* 이면 *false* 반환.
         1. _extensibleTarget_ 을 ? IsExtensible(_target_) 로 둔다.
         1. _extensibleTarget_ 이 *true* 이면 *true* 반환.
-        1. _targetProto_ 를 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>() 로 둔다.
+        1. _targetProto_ 를 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
         1. SameValue(_V_, _targetProto_) 가 *false* 이면 *TypeError* 예외 throw.
         1. *true* 반환.
       </emu-alg>
@@ -15409,10 +15408,10 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"getOwnPropertyDescriptor"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 반환.
         1. _trapResultObj_ 를 ? Call(_trap_, _handler_, « _target_, _P_ ») 로 둔다.
         1. _trapResultObj_ 가 Object 도 아니고 *undefined* 도 아니면 *TypeError* 예외 throw.
-        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
         1. _trapResultObj_ 가 *undefined* 이면
           1. _targetDesc_ 가 *undefined* 이면 *undefined* 반환.
           1. _targetDesc_.[[Configurable]] 이 *false* 이면 *TypeError* 예외 throw.
@@ -15463,11 +15462,11 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"defineProperty"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_P_, _Desc_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_P_, _Desc_)</emu-meta> 반환.
         1. _descObj_ 를 FromPropertyDescriptor(_Desc_) 로 둔다.
         1. _booleanTrapResult_ 를 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _descObj_ »)) 로 둔다.
         1. _booleanTrapResult_ 가 *false* 이면 *false* 반환.
-        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
         1. _extensibleTarget_ 을 ? IsExtensible(_target_) 로 둔다.
         1. _Desc_ 에 [[Configurable]] 필드가 있고 _Desc_.[[Configurable]] 이 *false* 이면
           1. _settingConfigFalse_ 를 *true* 로 둔다.
@@ -15512,10 +15511,10 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"has"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_P_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[HasProperty]](_P_)</emu-meta> 반환.
         1. _booleanTrapResult_ 를 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »)) 로 둔다.
         1. _booleanTrapResult_ 가 *false* 이면
-          1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _targetDesc_ 가 *undefined* 가 아니면
             1. _targetDesc_.[[Configurable]] 이 *false* 이면 *TypeError* 예외 throw.
             1. _extensibleTarget_ 을 ? IsExtensible(_target_) 로 둔다.
@@ -15550,9 +15549,9 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"get"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_P_, _Receiver_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[Get]](_P_, _Receiver_)</emu-meta> 반환.
         1. _trapResult_ 를 ? Call(_trap_, _handler_, « _target_, _P_, _Receiver_ ») 로 둔다.
-        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
         1. _targetDesc_ 가 *undefined* 가 아니고 _targetDesc_.[[Configurable]] 이 *false* 이면
           1. IsDataDescriptor(_targetDesc_) 가 *true* 이고 _targetDesc_.[[Writable]] 이 *false* 이면
             1. SameValue(_trapResult_, _targetDesc_.[[Value]]) 가 *false* 이면 *TypeError* 예외 throw.
@@ -15588,10 +15587,10 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"set"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> 반환.
         1. _booleanTrapResult_ 를 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _V_, _Receiver_ »)) 로 둔다.
         1. _booleanTrapResult_ 가 *false* 이면 *false* 반환.
-        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
         1. _targetDesc_ 가 *undefined* 가 아니고 _targetDesc_.[[Configurable]] 이 *false* 이면
           1. IsDataDescriptor(_targetDesc_) 가 *true* 이고 _targetDesc_.[[Writable]] 이 *false* 이면
             1. SameValue(_V_, _targetDesc_.[[Value]]) 가 *false* 이면 *TypeError* 예외 throw.
@@ -15626,10 +15625,10 @@
         1. 단언: _handler_ 는 Object.
         1. _trap_ 을 ? GetMethod(_handler_, *"deleteProperty"*) 로 둔다.
         1. _trap_ 이 *undefined* 이면
-          1. ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_P_) 반환.
+          1. ? <emu-meta effects="user-code">_target_.[[Delete]](_P_)</emu-meta> 반환.
         1. _booleanTrapResult_ 를 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »)) 로 둔다.
         1. _booleanTrapResult_ 가 *false* 이면 *false* 반환.
-        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+        1. _targetDesc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
         1. _targetDesc_ 가 *undefined* 이면 *true* 반환.
         1. _targetDesc_.[[Configurable]] 이 *false* 이면 *TypeError* 예외 throw.
         1. _extensibleTarget_ 을 ? IsExtensible(_target_) 로 둔다.
@@ -15670,7 +15669,7 @@
         1. _targetConfigurableKeys_ 를 새 빈 List 로 둔다.
         1. _targetNonconfigurableKeys_ 를 새 빈 List 로 둔다.
         1. _targetKeys_ 의 각 요소 _key_ 에 대해
-          1. _desc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
+          1. _desc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta> 로 둔다.
           1. _desc_ 가 *undefined* 가 아니고 _desc_.[[Configurable]] 이 *false* 이면
             1. _targetNonconfigurableKeys_ 에 _key_ 추가.
           1. Else
@@ -18201,7 +18200,7 @@
             1. _propValue_ 를 ? GetValue(_exprValueRef_) 로 둔다.
           1. _isProtoSetter_ 가 *true* 이면
             1. _propValue_ 가 Object 이거나 *null* 이면
-              1. ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]]</emu-meta>(_propValue_) 수행.
+              1. ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]](_propValue_)</emu-meta> 수행.
             1. ~unused~ 반환.
           1. 단언: _object_ 는 비구성 불가능한 프로퍼티가 없는 보통의 확장 가능한 객체.
           1. ! CreateDataPropertyOrThrow(_object_, _propKey_, _propValue_) 수행.
@@ -19264,7 +19263,7 @@
             1. _evaluatePromise_ 를 _module_.Evaluate() 로 둔다.
             1. _fulfilledClosure_ 를 매개변수 없고 _module_, _promiseCapability_ 캡처하며 호출 시:
               1. _namespace_ = GetModuleNamespace(_module_).
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ ») 수행.
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ »)</emu-meta> 수행.
               1. NormalCompletion(*undefined*) 반환.
             1. _onFulfilled_ = CreateBuiltinFunction(_fulfilledClosure_, 0, *""*, « »).
             1. PerformPromiseThen(_evaluatePromise_, _onFulfilled_, _onRejected_) 수행.
@@ -19541,13 +19540,13 @@
             1. [id="step-delete-operator-toobject"] _baseObj_ 를 ? ToObject(_ref_.[[Base]]) 로 둔다.
             1. _ref_.[[ReferencedName]] 가 property key 가 아니면
               1. _ref_.[[ReferencedName]] 를 ? ToPropertyKey(_ref_.[[ReferencedName]]) 로 설정.
-            1. _deleteStatus_ 를 ? <emu-meta effects="user-code">_baseObj_.[[Delete]]</emu-meta>(_ref_.[[ReferencedName]]) 로 둔다.
+            1. _deleteStatus_ 를 ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta> 로 둔다.
             1. _deleteStatus_ 가 *false* 이고 _ref_.[[Strict]] 가 *true* 이면 *TypeError* 예외 throw.
             1. _deleteStatus_ 반환.
           1. 그렇지 않으면
             1. _base_ 를 _ref_.[[Base]] 로 둔다.
             1. 단언: _base_ 는 Environment Record.
-            1. ? <emu-meta effects="user-code">_base_.DeleteBinding</emu-meta>(_ref_.[[ReferencedName]]) 반환.
+            1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> 반환.
         </emu-alg>
         <emu-note>
           <p>`delete` 연산자가 strict 모드 코드 안에 나타나고 그 |UnaryExpression| 이 변수, 함수 인자, 함수 이름에 대한 직접 참조이면 *SyntaxError* 예외가 발생한다. 또한 strict 모드 코드에서 `delete` 가 발생하고 삭제하려는 프로퍼티가 { [[Configurable]]: *false* } 속성을 가지거나(또는 삭제 불가) 하면 *TypeError* 예외가 발생한다.</p>
@@ -22040,7 +22039,7 @@
                   1. _r_ = 첫 요소
                   1. 첫 요소 제거
                   1. _O_.[[VisitedKeys]] 에 _r_ 없으면
-                    1. _desc_ = ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]]</emu-meta>(_r_)
+                    1. _desc_ = ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]](_r_)</emu-meta>
                     1. _desc_ != *undefined* 이면
                       1. _r_ 를 _O_.[[VisitedKeys]] 에 추가
                       1. _desc_.[[Enumerable]] *true* 이면 CreateIteratorResultObject(_r_, *false*) 반환
@@ -24128,7 +24127,7 @@
       <emu-alg>
         1. _list_ 를 |ClassElementList| 의 NonConstructorElements 로 둔다.
         1. |ClassElement| 의 ClassElementKind 가 ~non-constructor-method~ 이면
-          1. _list_ 끝에 |ClassElement| 추가.
+          1. _list_ 에 |ClassElement| 추가.
         1. _list_ 반환.
       </emu-alg>
     </emu-clause>
@@ -25600,7 +25599,7 @@
                       1. _gEnv_를 실행 중인 실행 컨텍스트의 VariableEnvironment로 둔다.
                       1. _bEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
                       1. _fObj_를 ! _bEnv_.GetBindingValue(_F_, *false*)로 둔다.
-                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*)를 수행한다.
+                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta>를 수행한다.
                       1. ~unused~를 반환한다.
         1. _lexDeclarations_를 _script_의 LexicallyScopedDeclarations로 둔다.
         1. _privateEnv_를 *null*로 둔다.
@@ -25608,15 +25607,15 @@
           1. 참고: 어휘적으로 선언된 이름은 여기서만 인스턴스화되고 초기화되지 않는다.
           1. _d_의 BoundNames의 각 요소 _dn_에 대해
             1. _d_의 IsConstantDeclaration이 *true*이면
-              1. ? <emu-meta effects="user-code">_env_.CreateImmutableBinding</emu-meta>(_dn_, *true*)를 수행한다.
+              1. ? <emu-meta effects="user-code">_env_.CreateImmutableBinding(_dn_, *true*)</emu-meta>를 수행한다.
             1. 그렇지 않으면
-              1. ? <emu-meta effects="user-code">_env_.CreateMutableBinding</emu-meta>(_dn_, *false*)를 수행한다.
+              1. ? <emu-meta effects="user-code">_env_.CreateMutableBinding(_dn_, *false*)</emu-meta>를 수행한다.
         1. _functionsToInitialize_의 각 Parse Node _f_에 대해
           1. _fn_을 _f_의 BoundNames의 유일한 요소로 둔다.
           1. _fo_를 인수 _env_와 _privateEnv_를 사용한 _f_의 InstantiateFunctionObject로 둔다.
-          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding</emu-meta>(_env_, _fn_, _fo_, *false*)를 수행한다.
+          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_env_, _fn_, _fo_, *false*)</emu-meta>를 수행한다.
         1. _declaredVarNames_의 각 String _vn_에 대해
-          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding</emu-meta>(_env_, _vn_, *false*)를 수행한다.
+          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_env_, _vn_, *false*)</emu-meta>를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
       <emu-note>
@@ -26653,7 +26652,7 @@
                   1. NormalCompletion(*undefined*) 반환.
                 1. _onRejected_ = CreateBuiltinFunction(_rejectedClosure_, 0, *""*, « »).
                 1. PerformPromiseThen(_capability_.[[Promise]], _onFulfilled_, _onRejected_) 수행.
-                1. ! <emu-meta effects="user-code">_module_.ExecuteModule</emu-meta>(_capability_) 수행.
+                1. ! <emu-meta effects="user-code">_module_.ExecuteModule(_capability_)</emu-meta> 수행.
                 1. ~unused~ 반환.
               </emu-alg>
             </emu-clause>
@@ -29293,7 +29292,7 @@
                     1. _gEnv_ = 실행 중 컨텍스트 VariableEnvironment.
                     1. _bEnv_ = 실행 중 컨텍스트 LexicalEnvironment.
                     1. _fObj_ = ! _bEnv_.GetBindingValue(_F_, *false*).
-                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*).
+                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta>.
                     1. ~unused~ 반환.
           1. [id="step-evaldeclarationinstantiation-post-validation"] 참고: _varEnv_ 가 Global Environment Record 이고 전역 객체가 Proxy exotic object 인 경우가 아니면 이 단계 이후 비정상 종료 없음.
           1. _lexDeclarations_ = LexicallyScopedDeclarations(_body_).
@@ -29873,7 +29872,7 @@
               1. _from_ 을 ! ToObject(_nextSource_) 로 둔다.
               1. _keys_ 를 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta> 로 둔다.
               1. _keys_ 의 각 요소 _nextKey_ 에 대해
-                1. _desc_ 를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_) 로 둔다.
+                1. _desc_ 를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta> 로 둔다.
                 1. _desc_ 가 *undefined* 가 아니고 _desc_.[[Enumerable]] 가 *true* 이면
                   1. _propValue_ 를 ? Get(_from_, _nextKey_) 로 둔다.
                   1. ? Set(_to_, _nextKey_, _propValue_, *true*) 를 수행한다.
@@ -29918,7 +29917,7 @@
             1. _keys_ 를 ? <emu-meta effects="user-code">_props_.[[OwnPropertyKeys]]()</emu-meta> 로 둔다.
             1. _descriptors_ 를 새 빈 리스트로 둔다.
             1. _keys_ 의 각 요소 _nextKey_ 에 대해
-              1. _propDesc_ 를 ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]]</emu-meta>(_nextKey_) 로 둔다.
+              1. _propDesc_ 를 ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]](_nextKey_)</emu-meta> 로 둔다.
               1. _propDesc_ 가 *undefined* 가 아니고 _propDesc_.[[Enumerable]] 가 *true* 이면
                 1. _descObj_ 를 ? Get(_props_, _nextKey_) 로 둔다.
                 1. _desc_ 를 ? ToPropertyDescriptor(_descObj_) 로 둔다.
@@ -29989,7 +29988,7 @@
         <emu-alg>
           1. _obj_ 를 ? ToObject(_O_) 로 둔다.
           1. _key_ 를 ? ToPropertyKey(_P_) 로 둔다.
-          1. _desc_ 를 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
+          1. _desc_ 를 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]<(_key_)/emu-meta> 로 둔다.
           1. FromPropertyDescriptor(_desc_) 를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -30002,7 +30001,7 @@
           1. _ownKeys_ 를 ? <emu-meta effects="user-code">_obj_.[[OwnPropertyKeys]]()</emu-meta> 로 둔다.
           1. _descriptors_ 를 OrdinaryObjectCreate(%Object.prototype%) 로 둔다.
           1. _ownKeys_ 의 각 요소 _key_ 에 대해
-            1. _desc_ 를 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
+            1. _desc_ 를 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]](_key_)</emu-meta> 로 둔다.
             1. _descriptor_ 를 FromPropertyDescriptor(_desc_) 로 둔다.
             1. _descriptor_ 가 *undefined* 가 아니면 ! CreateDataPropertyOrThrow(_descriptors_, _key_, _descriptor_) 를 수행한다.
           1. _descriptors_ 를 반환한다.
@@ -30162,7 +30161,7 @@
           1. ? RequireObjectCoercible(_O_) 를 수행한다.
           1. _proto_ 가 Object 가 아니고 *null* 도 아니면 *TypeError* 예외를 throw 한다.
           1. _O_ 가 Object 가 아니면 _O_ 를 반환한다.
-          1. _status_ 를 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_) 로 둔다.
+          1. _status_ 를 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta> 로 둔다.
           1. _status_ 가 *false* 이면 *TypeError* 예외를 throw 한다.
           1. _O_ 를 반환한다.
         </emu-alg>
@@ -30229,7 +30228,7 @@
         <emu-alg>
           1. [id="step-propertyisenumerable-topropertykey"] _P_ 를 ? ToPropertyKey(_V_) 로 둔다.
           1. [id="step-propertyisenumerable-toobject"] _O_ 를 ? ToObject(*this* value) 로 둔다.
-          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_) 로 둔다.
+          1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
           1. _desc_ 가 *undefined* 이면 *false* 반환.
           1. _desc_.[[Enumerable]] 를 반환한다.
         </emu-alg>
@@ -30313,7 +30312,7 @@
             1. ? RequireObjectCoercible(_O_) 를 수행한다.
             1. _proto_ 가 Object 가 아니고 *null* 도 아니면 *undefined* 를 반환한다.
             1. _O_ 가 Object 가 아니면 *undefined* 를 반환한다.
-            1. _status_ 를 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_) 로 둔다.
+            1. _status_ 를 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta> 로 둔다.
             1. _status_ 가 *false* 이면 *TypeError* 예외를 throw 한다.
             1. *undefined* 를 반환한다.
           </emu-alg>
@@ -30356,7 +30355,7 @@
             1. _O_ 를 ? ToObject(*this* value) 로 둔다.
             1. _key_ 를 ? ToPropertyKey(_P_) 로 둔다.
             1. 반복,
-              1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
+              1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta> 로 둔다.
               1. _desc_ 가 *undefined* 가 아니면
                 1. IsAccessorDescriptor(_desc_) 가 *true* 이면 _desc_.[[Get]] 를 반환한다.
                 1. *undefined* 를 반환한다.
@@ -30372,7 +30371,7 @@
             1. _O_ 를 ? ToObject(*this* value) 로 둔다.
             1. _key_ 를 ? ToPropertyKey(_P_) 로 둔다.
             1. 반복,
-              1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
+              1. _desc_ 를 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta> 로 둔다.
               1. _desc_ 가 *undefined* 가 아니면
                 1. IsAccessorDescriptor(_desc_) 가 *true* 이면 _desc_.[[Set]] 를 반환한다.
                 1. *undefined* 를 반환한다.
@@ -46398,7 +46397,7 @@ THH:mm:ss.sss
                 1. _prop_ = ! ToString(𝔽(_I_)).
                 1. _newElement_ = ? InternalizeJSONProperty(_val_, _prop_, _reviver_).
                 1. _newElement_ = *undefined* 이면
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_prop_) 수행.
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta> 수행.
                 1. Else
                   1. ? CreateDataProperty(_val_, _prop_, _newElement_) 수행.
                 1. _I_ = _I_ + 1.
@@ -46407,7 +46406,7 @@ THH:mm:ss.sss
               1. 각 String _P_ ∈ _keys_ 에 대해
                 1. _newElement_ = ? InternalizeJSONProperty(_val_, _P_, _reviver_).
                 1. _newElement_ = *undefined* 이면
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_P_) 수행.
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta> 수행.
                 1. Else
                   1. ? CreateDataProperty(_val_, _P_, _newElement_) 수행.
           1. Return ? Call(_reviver_, _holder_, « _name_, _val_ »).
@@ -47937,7 +47936,7 @@ THH:mm:ss.sss
             1. IfAbruptRejectPromise(_return_, _promiseCapability_).
             1. _return_ 이 *undefined* 이면,
               1. _iteratorResult_ 를 CreateIteratorResultObject(_value_, *true*)로 둔다.
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)를 수행한다.
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta>를 수행한다.
               1. _promiseCapability_.[[Promise]] 를 반환한다.
             1. _value_ 가 존재하면,
               1. _result_ 를 Completion(Call(_return_, _syncIterator_, « _value_ »))로 둔다.
@@ -48208,79 +48207,47 @@ THH:mm:ss.sss
         </emu-table>
       </emu-clause>
 
-      <emu-clause id="sec-createresolvingfunctions" type="abstract operation">
+      <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions (
             _promise_: a Promise,
-          ): a Record with fields [[Resolve]] (a function object) and [[Reject]] (a function object)
+          ): [[Resolve]] (함수 객체)와 [[Reject]] (함수 객체) 필드를 가진 Record
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _alreadyResolved_ 를 Record { [[Value]]: *false* } 로 둔다.
-          1. _stepsResolve_ 를 <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-          1. _lengthResolve_ 를 <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-          1. _resolve_ 를 CreateBuiltinFunction(_stepsResolve_, _lengthResolve_, *""*, « [[Promise]], [[AlreadyResolved]] ») 로 둔다.
-          1. _resolve_.[[Promise]] 를 _promise_ 로 설정한다.
-          1. _resolve_.[[AlreadyResolved]] 를 _alreadyResolved_ 로 설정한다.
-          1. _stepsReject_ 을 <emu-xref href="#sec-promise-reject-functions" title></emu-xref> 에 정의된 알고리즘 단계로 둔다.
-          1. _lengthReject_ 를 <emu-xref href="#sec-promise-reject-functions" title></emu-xref> 에 있는 함수 정의의 선택적이 아닌 매개변수 개수로 둔다.
-          1. _reject_ 를 CreateBuiltinFunction(_stepsReject_, _lengthReject_, *""*, « [[Promise]], [[AlreadyResolved]] ») 로 둔다.
-          1. _reject_.[[Promise]] 를 _promise_ 로 설정한다.
-          1. _reject_.[[AlreadyResolved]] 를 _alreadyResolved_ 로 설정한다.
-          1. Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ } 를 반환한다.
+          1. _alreadyResolved_를 Record { [[Value]]: *false* }로 한다.
+          1. _resolveSteps_를 매개변수 (_resolution_)를 가지며 _promise_와 _alreadyResolved_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 한다:
+            1. _alreadyResolved_.[[Value]]가 *true*이면 *undefined*를 반환한다.
+            1. _alreadyResolved_.[[Value]]를 *true*로 설정한다.
+            1. SameValue(_resolution_, _promise_)가 *true*이면,
+              1. _selfResolutionError_를 새로 생성된 *TypeError* 객체로 한다.
+              1. RejectPromise(_promise_, _selfResolutionError_)를 수행한다.
+              1. *undefined*를 반환한다.
+            1. _resolution_이 객체가 아니면,
+              1. FulfillPromise(_promise_, _resolution_)를 수행한다.
+              1. *undefined*를 반환한다.
+            1. _then_를 Completion(Get(_resolution_, *"then"*))로 한다.
+            1. _then_가 비정상 완료이면,
+              1. RejectPromise(_promise_, _then_.[[Value]])를 수행한다.
+              1. *undefined*를 반환한다.
+            1. _thenAction_를 _then_.[[Value]]로 한다.
+            1. IsCallable(_thenAction_)이 *false*이면,
+              1. FulfillPromise(_promise_, _resolution_)를 수행한다.
+              1. *undefined*를 반환한다.
+            1. _thenJobCallback_를 HostMakeJobCallback(_thenAction_)로 한다.
+            1. _job_를 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)로 한다.
+            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])를 수행한다.
+            1. *undefined*를 반환한다.
+          1. _resolve_를 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)로 한다.
+          1. _rejectSteps_를 매개변수 (_reason_)를 가지며 _promise_와 _alreadyResolved_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 한다:
+            1. _alreadyResolved_.[[Value]]가 *true*이면 *undefined*를 반환한다.
+            1. _alreadyResolved_.[[Value]]를 *true*로 설정한다.
+            1. RejectPromise(_promise_, _reason_)를 수행한다.
+            1. *undefined*를 반환한다.
+          1. _reject_를 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)로 한다.
+          1. Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }를 반환한다.
         </emu-alg>
-
-        <emu-clause id="sec-promise-reject-functions">
-          <h1>Promise Reject Functions</h1>
-          <p>Promise reject 함수는 [[Promise]] 와 [[AlreadyResolved]] 내부 슬롯을 가진 익명 내장 함수이다.</p>
-          <p>Promise reject 함수가 인수 _reason_ 과 함께 호출되면 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. Assert: _F_ 는 값이 Object 인 [[Promise]] 내부 슬롯을 가진다.
-            1. _promise_ 를 _F_.[[Promise]] 로 둔다.
-            1. _alreadyResolved_ 를 _F_.[[AlreadyResolved]] 로 둔다.
-            1. _alreadyResolved_.[[Value]] 가 *true* 이면 *undefined* 를 반환한다.
-            1. _alreadyResolved_.[[Value]] 를 *true* 로 설정한다.
-            1. RejectPromise(_promise_, _reason_) 를 수행한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-          <p>Promise reject 함수의 *"length"* 프로퍼티는 *1*<sub>𝔽</sub> 이다.</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise-resolve-functions">
-          <h1>Promise Resolve Functions</h1>
-          <p>Promise resolve 함수는 [[Promise]] 와 [[AlreadyResolved]] 내부 슬롯을 가진 익명 내장 함수이다.</p>
-          <p>Promise resolve 함수가 인수 _resolution_ 과 함께 호출되면 다음 단계를 수행한다:</p>
-          <emu-alg>
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. Assert: _F_ 는 값이 Object 인 [[Promise]] 내부 슬롯을 가진다.
-            1. _promise_ 를 _F_.[[Promise]] 로 둔다.
-            1. _alreadyResolved_ 를 _F_.[[AlreadyResolved]] 로 둔다.
-            1. _alreadyResolved_.[[Value]] 가 *true* 이면 *undefined* 를 반환한다.
-            1. _alreadyResolved_.[[Value]] 를 *true* 로 설정한다.
-            1. SameValue(_resolution_, _promise_) 가 *true* 이면,
-              1. _selfResolutionError_ 를 새로 생성된 *TypeError* 객체로 둔다.
-              1. RejectPromise(_promise_, _selfResolutionError_) 를 수행한다.
-              1. *undefined* 를 반환한다.
-            1. _resolution_ 이 Object 가 아니면,
-              1. FulfillPromise(_promise_, _resolution_) 를 수행한다.
-              1. *undefined* 를 반환한다.
-            1. _then_ 을 Completion(Get(_resolution_, *"then"* )) 로 둔다.
-            1. _then_ 이 abrupt completion 이면,
-              1. RejectPromise(_promise_, _then_.[[Value]]) 를 수행한다.
-              1. *undefined* 를 반환한다.
-            1. _thenAction_ 을 _then_.[[Value]] 로 둔다.
-            1. IsCallable(_thenAction_) 이 *false* 이면,
-              1. FulfillPromise(_promise_, _resolution_) 를 수행한다.
-              1. *undefined* 를 반환한다.
-            1. _thenJobCallback_ 을 HostMakeJobCallback(_thenAction_) 로 둔다.
-            1. _job_ 을 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_) 로 둔다.
-            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]]) 를 수행한다.
-            1. *undefined* 를 반환한다.
-          </emu-alg>
-          <p>Promise resolve 함수의 *"length"* 프로퍼티는 *1*<sub>𝔽</sub> 이다.</p>
-        </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-fulfillpromise" type="abstract operation">
@@ -49524,7 +49491,7 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_generator_, [[GeneratorState]]) 를 수행한다.
           1. ? RequireInternalSlot(_generator_, [[GeneratorBrand]]) 를 수행한다.
           1. _generator_.[[GeneratorBrand]] 가 _generatorBrand_ 와 다르면 *TypeError* 예외를 던진다.
-          1. Assert: _generator_ 는 또한 [[GeneratorContext]] 내부 슬롯을 가진다.
+          1. Assert: _generator_ 는 [[GeneratorContext]] 내부 슬롯을 가진다.
           1. _state_ 를 _generator_.[[GeneratorState]] 로 둔다.
           1. _state_ 가 ~executing~ 이면 *TypeError* 예외를 던진다.
           1. _state_ 를 반환한다.
@@ -49706,7 +49673,7 @@ THH:mm:ss.sss
           1. _state_ 를 _generator_.[[AsyncGeneratorState]] 로 둔다.
           1. _state_ 가 ~completed~ 이면,
             1. _iteratorResult_ 를 CreateIteratorResultObject(*undefined*, *true*) 로 둔다.
-            1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ ») 를 수행한다.
+            1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta> 를 수행한다.
             1. _promiseCapability_.[[Promise]] 를 반환한다.
           1. _completion_ 을 NormalCompletion(_value_) 로 둔다.
           1. AsyncGeneratorEnqueue(_generator_, _completion_, _promiseCapability_) 를 수행한다.
@@ -49935,7 +49902,7 @@ THH:mm:ss.sss
               1. 실행 중인 실행 컨텍스트의 Realm 을 _oldRealm_ 으로 되돌린다.
             1. 그렇지 않으면,
               1. _iteratorResult_ 를 CreateIteratorResultObject(_value_, _done_) 로 둔다.
-            1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ ») 를 수행한다.
+            1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta> 를 수행한다.
           1. ~unused~ 를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -50224,7 +50191,7 @@ THH:mm:ss.sss
             1. _result_ 가 normal completion 이면
               1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* ») 를 수행한다.
             1. Else if _result_ 가 return completion 이면
-              1. ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] ») 를 수행한다.
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta> 를 수행한다.
             1. Else,
               1. Assert: _result_ 는 throw completion.
               1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] ») 를 수행한다.
@@ -50278,16 +50245,16 @@ THH:mm:ss.sss
 </emu-clause>
 
 <emu-clause id="sec-reflection">
-  <h1>반사 (Reflection)</h1>
+  <h1>리플렉션</h1>
 
   <emu-clause id="sec-reflect-object">
-    <h1>Reflect 객체 (The Reflect Object)</h1>
+    <h1>Reflect 객체</h1>
     <p>Reflect 객체:</p>
     <ul>
       <li><dfn>%Reflect%</dfn>이다.</li>
-      <li>전역 객체의 *"Reflect"* 프로퍼티 초기 값이다.</li>
+      <li>전역 객체의 *"Reflect"* 프로퍼티의 초기값이다.</li>
       <li>일반 객체이다.</li>
-      <li>[[Prototype]] 내부 슬롯 값이 %Object.prototype%이다.</li>
+      <li>값이 %Object.prototype%인 [[Prototype]] 내부 슬롯을 가진다.</li>
       <li>함수 객체가 아니다.</li>
       <li>[[Construct]] 내부 메서드가 없다; `new` 연산자로 생성자로 사용할 수 없다.</li>
       <li>[[Call]] 내부 메서드가 없다; 함수로 호출될 수 없다.</li>
@@ -50295,10 +50262,10 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-reflect.apply">
       <h1>Reflect.apply ( _target_, _thisArgument_, _argumentsList_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. IsCallable(_target_) 이 *false*이면 *TypeError* 예외를 던진다.
-        1. _args_ 를 ? CreateListFromArrayLike(_argumentsList_)로 둔다.
+        1. IsCallable(_target_)이 *false*이면 *TypeError* 예외를 발생시킨다.
+        1. _args_를 ? CreateListFromArrayLike(_argumentsList_)로 한다.
         1. PrepareForTailCall()을 수행한다.
         1. ? Call(_target_, _thisArgument_, _args_)를 반환한다.
       </emu-alg>
@@ -50306,203 +50273,203 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-reflect.construct">
       <h1>Reflect.construct ( _target_, _argumentsList_ [ , _newTarget_ ] )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. IsConstructor(_target_) 가 *false*이면 *TypeError* 예외를 던진다.
-        1. _newTarget_ 이 존재하지 않으면 _newTarget_ 을 _target_ 으로 설정한다.
-        1. 아니고 IsConstructor(_newTarget_) 이 *false*이면 *TypeError* 예외를 던진다.
-        1. _args_ 를 ? CreateListFromArrayLike(_argumentsList_)로 둔다.
-        1. ? Construct(_target_, _args_, _newTarget_) 를 반환한다.
+        1. IsConstructor(_target_)이 *false*이면 *TypeError* 예외를 발생시킨다.
+        1. _newTarget_이 없으면 _newTarget_을 _target_으로 설정한다.
+        1. 아니면 IsConstructor(_newTarget_)이 *false*이면 *TypeError* 예외를 발생시킨다.
+        1. _args_를 ? CreateListFromArrayLike(_argumentsList_)로 한다.
+        1. ? Construct(_target_, _args_, _newTarget_)을 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.defineproperty">
       <h1>Reflect.defineProperty ( _target_, _propertyKey_, _attributes_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. _desc_ 를 ? ToPropertyDescriptor(_attributes_) 로 둔다.
-        1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_key_, _desc_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. _desc_를 ? ToPropertyDescriptor(_attributes_)로 한다.
+        1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_key_, _desc_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.deleteproperty">
       <h1>Reflect.deleteProperty ( _target_, _propertyKey_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_key_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. ? <emu-meta effects="user-code">_target_.[[Delete]](_key_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.get">
       <h1>Reflect.get ( _target_, _propertyKey_ [ , _receiver_ ] )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. _receiver_ 가 존재하지 않으면
-          1. _receiver_ 를 _target_ 으로 설정한다.
-        1. ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_key_, _receiver_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. _receiver_가 없으면,
+          1. _receiver_를 _target_으로 설정한다.
+        1. ? <emu-meta effects="user-code">_target_.[[Get]](_key_, _receiver_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.getownpropertydescriptor">
       <h1>Reflect.getOwnPropertyDescriptor ( _target_, _propertyKey_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. _desc_ 를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_) 로 둔다.
-        1. FromPropertyDescriptor(_desc_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. _desc_를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta>로 한다.
+        1. FromPropertyDescriptor(_desc_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.getprototypeof">
       <h1>Reflect.getPrototypeOf ( _target_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta> 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.has">
       <h1>Reflect.has ( _target_, _propertyKey_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_key_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. ? <emu-meta effects="user-code">_target_.[[HasProperty]](_key_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.isextensible">
       <h1>Reflect.isExtensible ( _target_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. ? <emu-meta effects="user-code">_target_.[[IsExtensible]]()</emu-meta> 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. ? <emu-meta effects="user-code">_target_.[[IsExtensible]]()</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.ownkeys">
       <h1>Reflect.ownKeys ( _target_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _keys_ 를 ? <emu-meta effects="user-code">_target_.[[OwnPropertyKeys]]()</emu-meta> 로 둔다.
-        1. CreateArrayFromList(_keys_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _keys_를 ? <emu-meta effects="user-code">_target_.[[OwnPropertyKeys]]()</emu-meta>로 한다.
+        1. CreateArrayFromList(_keys_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.preventextensions">
       <h1>Reflect.preventExtensions ( _target_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. ? <emu-meta effects="user-code">_target_.[[PreventExtensions]]()</emu-meta> 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. ? <emu-meta effects="user-code">_target_.[[PreventExtensions]]()</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.set">
       <h1>Reflect.set ( _target_, _propertyKey_, _V_ [ , _receiver_ ] )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _key_ 를 ? ToPropertyKey(_propertyKey_) 로 둔다.
-        1. _receiver_ 가 존재하지 않으면
-          1. _receiver_ 를 _target_ 으로 설정한다.
-        1. ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_key_, _V_, _receiver_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _key_를 ? ToPropertyKey(_propertyKey_)로 한다.
+        1. _receiver_가 없으면,
+          1. _receiver_를 _target_으로 설정한다.
+        1. ? <emu-meta effects="user-code">_target_.[[Set]](_key_, _V_, _receiver_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-reflect.setprototypeof">
       <h1>Reflect.setPrototypeOf ( _target_, _proto_ )</h1>
-      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+      <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _target_ 이 Object 가 아니면 *TypeError* 예외를 던진다.
-        1. _proto_ 가 Object 가 아니고 *null* 도 아니면 *TypeError* 예외를 던진다.
-        1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_proto_) 를 반환한다.
+        1. _target_이 객체가 아니면 *TypeError* 예외를 발생시킨다.
+        1. _proto_가 객체가 아니고 *null*도 아니면 *TypeError* 예외를 발생시킨다.
+        1. ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_proto_)</emu-meta>를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause oldids="sec-reflect-@@tostringtag" id="sec-reflect-%symbol.tostringtag%">
       <h1>Reflect [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% 프로퍼티 초기 값은 문자열 *"Reflect"* 이다.</p>
-      <p>이 프로퍼티의 특성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }이다.</p>
+      <p>%Symbol.toStringTag% 프로퍼티의 초기값은 문자열 값 *"Reflect"*이다.</p>
+      <p>이 프로퍼티의 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }이다.</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-proxy-objects">
-    <h1>Proxy 객체 (Proxy Objects)</h1>
+    <h1>프록시 객체</h1>
 
     <emu-clause id="sec-proxy-constructor">
-      <h1>Proxy 생성자 (The Proxy Constructor)</h1>
+      <h1>Proxy 생성자</h1>
       <p>Proxy 생성자:</p>
       <ul>
         <li><dfn>%Proxy%</dfn>이다.</li>
-        <li>전역 객체의 *"Proxy"* 프로퍼티 초기 값이다.</li>
-        <li>생성자로 호출될 때 새 Proxy 객체를 생성·초기화한다.</li>
-        <li>함수로 호출하도록 의도되지 않았으며 그렇게 호출하면 예외를 던진다.</li>
+        <li>전역 객체의 *"Proxy"* 프로퍼티의 초기값이다.</li>
+        <li>생성자로 호출될 때 새로운 프록시 객체를 생성하고 초기화한다.</li>
+        <li>함수로 호출되는 것은 의도된 사용이 아니며, 그렇게 호출하면 예외를 발생시킨다.</li>
       </ul>
 
       <emu-clause id="sec-proxy-target-handler">
         <h1>Proxy ( _target_, _handler_ )</h1>
-        <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+        <p>이 함수가 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. NewTarget 이 *undefined* 이면 *TypeError* 예외를 던진다.
-          1. ? ProxyCreate(_target_, _handler_) 를 반환한다.
+          1. NewTarget이 *undefined*이면 *TypeError* 예외를 발생시킨다.
+          1. ? ProxyCreate(_target_, _handler_)를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-proxy-constructor">
-      <h1>Proxy 생성자의 프로퍼티 (Properties of the Proxy Constructor)</h1>
+      <h1>Proxy 생성자의 속성</h1>
       <p>Proxy 생성자:</p>
       <ul>
-        <li>[[Prototype]] 내부 슬롯 값이 %Function.prototype%이다.</li>
-        <li>*"prototype"* 프로퍼티가 없다 (Proxy 객체는 초기화가 필요한 [[Prototype]] 내부 슬롯을 갖지 않는다).</li>
-        <li>다음 프로퍼티들을 가진다:</li>
+        <li>값이 %Function.prototype%인 [[Prototype]] 내부 슬롯을 가진다.</li>
+        <li>프록시 객체가 초기화할 [[Prototype]] 내부 슬롯을 가지지 않으므로 *"prototype"* 프로퍼티가 없다.</li>
+        <li>다음의 속성들을 가진다:</li>
       </ul>
 
       <emu-clause id="sec-proxy.revocable" oldids="sec-proxy-revocation-functions">
         <h1>Proxy.revocable ( _target_, _handler_ )</h1>
-        <p>이 함수는 취소(revocable) 가능한 Proxy 객체를 생성한다.</p>
+        <p>이 함수는 취소 가능한 프록시 객체를 생성한다.</p>
         <p>호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _proxy_ 를 ? ProxyCreate(_target_, _handler_) 로 둔다.
-          1. _revokerClosure_ 를 아무 것도 포획하지 않고 매개변수 없는 새로운 Abstract Closure 로 두어 호출 시 다음 단계를 수행하게 한다:
-            1. _F_ 를 활성 함수 객체로 둔다.
-            1. _p_ 를 _F_.[[RevocableProxy]] 로 둔다.
-            1. _p_ 가 *null* 이면 NormalCompletion(*undefined*) 를 반환한다.
-            1. _F_.[[RevocableProxy]] 를 *null* 로 설정한다.
-            1. Assert: _p_ 는 Proxy 특이(exotic) 객체이다.
-            1. _p_.[[ProxyTarget]] 을 *null* 로 설정한다.
-            1. _p_.[[ProxyHandler]] 를 *null* 로 설정한다.
-            1. NormalCompletion(*undefined*) 를 반환한다.
-          1. _revoker_ 를 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] ») 로 둔다.
-          1. _revoker_.[[RevocableProxy]] 를 _proxy_ 로 설정한다.
-          1. _result_ 를 OrdinaryObjectCreate(%Object.prototype%) 로 둔다.
-          1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_) 를 수행한다.
-          1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_) 를 수행한다.
-          1. _result_ 를 반환한다.
+          1. _proxy_를 ? ProxyCreate(_target_, _handler_)로 한다.
+          1. _revokerClosure_를 파라미터가 없고 아무것도 캡처하지 않으며 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 한다:
+            1. _F_를 활성 함수 객체로 한다.
+            1. _p_를 _F_.[[RevocableProxy]]로 한다.
+            1. _p_가 *null*이면 NormalCompletion(*undefined*)를 반환한다.
+            1. _F_.[[RevocableProxy]]를 *null*로 설정한다.
+            1. _p_는 프록시 익조틱 객체임을 단언한다.
+            1. _p_.[[ProxyTarget]]을 *null*로 설정한다.
+            1. _p_.[[ProxyHandler]]를 *null*로 설정한다.
+            1. NormalCompletion(*undefined*)를 반환한다.
+          1. _revoker_를 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)로 한다.
+          1. _revoker_.[[RevocableProxy]]를 _proxy_로 설정한다.
+          1. _result_를 OrdinaryObjectCreate(%Object.prototype%)로 한다.
+          1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)를 수행한다.
+          1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)를 수행한다.
+          1. _result_를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-module-namespace-objects">
-    <h1>모듈 네임스페이스 객체 (Module Namespace Objects)</h1>
-    <p>모듈 네임스페이스 객체는 모듈의 내보낸 바인딩에 속성 기반 런타임 접근을 제공하는 모듈 네임스페이스 특이 객체이다. 이를 위한 생성자 함수는 없다. 대신 |NameSpaceImport| 를 포함하는 |ImportDeclaration| 으로 가져온 각 모듈마다 이러한 객체가 생성된다.</p>
-    <p><emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref> 에 명시된 프로퍼티 외에 각 모듈 네임스페이스 객체는 다음 자체 프로퍼티를 가진다:</p>
+    <h1>모듈 네임스페이스 객체</h1>
+    <p>모듈 네임스페이스 객체는 모듈 네임스페이스 익조틱 객체로, 모듈의 내보낸 바인딩에 대한 런타임 프로퍼티 기반 접근을 제공한다. 모듈 네임스페이스 객체의 생성자 함수는 없다. 대신, |NameSpaceImport|를 포함하는 |ImportDeclaration|에 의해 임포트된 각 모듈마다 이러한 객체가 생성된다.</p>
+    <p><emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref>에 명시된 속성 외에도 각 모듈 네임스페이스 객체는 다음의 고유 프로퍼티를 가진다:</p>
 
     <emu-clause oldids="sec-@@tostringtag" id="sec-%symbol.tostringtag%">
       <h1>%Symbol.toStringTag%</h1>
-      <p>%Symbol.toStringTag% 프로퍼티 초기 값은 문자열 *"Module"* 이다.</p>
-      <p>이 프로퍼티 특성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }이다.</p>
+      <p>%Symbol.toStringTag% 프로퍼티의 초기값은 문자열 값 *"Module"*이다.</p>
+      <p>이 프로퍼티의 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }이다.</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>

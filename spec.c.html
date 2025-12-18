@@ -196,8 +196,7 @@
 
 <emu-intro id="sec-intro">
   <h1>简介</h1>
-  <p>本 Ecma 标准定义了 ECMAScript 2026 语言，这是 ECMAScript 语言规范的第十七版。自1997年第一版发布以来，ECMAScript已发展为全球使用最广泛的通用编程语言之一。它最著名的应用是在网页浏览器中嵌入的语言，但也在服务器和嵌入式应用中被广泛采用。</p>
-  <p>ECMAScript 基于多种起源技术，其中最知名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。随后，Netscape 的所有浏览器以及 Microsoft 从 Internet Explorer 3.0 起的所有浏览器均支持该语言。</p>
+  <p>本 Ecma 标准定义了 ECMAScript 2026 语言。这是 ECMAScript 语言规范的第十七版。ECMAScript 基于多种最初的技术，其中最著名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。虽然 ECMAScript 最为人熟知的是作为网页浏览器中的嵌入式语言，但它也被广泛应用于浏览器之外的场景，包括服务器和嵌入式应用程序，并且已经发展成为全球最广泛使用的通用编程语言之一。</p>
   <p>ECMAScript 语言规范的开发始于 1996 年 11 月。该 Ecma 标准的第一版由 Ecma 大会在 1997 年 6 月通过。</p>
   <p>该 Ecma 标准按快速通道程序提交至 ISO/IEC JTC 1，并于 1998 年 4 月获批为国际标准 ISO/IEC 16262。Ecma 大会于 1998 年 6 月批准了 ECMA-262 的第二版，以确保其与 ISO/IEC 16262 完全一致。第一版与第二版之间的更改仅为编辑性质。</p>
   <p>标准的第三版引入了强大的正则表达式、更好的字符串处理、新的控制语句、try/catch 异常处理、更严格的错误定义、数字输出格式，以及为未来语言发展做出的细微调整。第三版由 Ecma 大会于 1999 年 12 月通过，并作为 ISO/IEC 16262:2002 于 2002 年 6 月发布。</p>
@@ -4442,11 +4441,11 @@
               1. 返回 ? PrivateGet(_baseObj_, _V_.[[ReferencedName]])。
             1. 若 _V_.[[ReferencedName]] 不是属性键，
               1. 令 _V_.[[ReferencedName]] 为 ? ToPropertyKey(_V_.[[ReferencedName]])。
-            1. 返回 ? <emu-meta effects="user-code">_baseObj_.[[Get]]</emu-meta>(_V_.[[ReferencedName]], GetThisValue(_V_))。
+            1. 返回 ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>。
           1. 否则，
             1. 令 _base_ 为 _V_.[[Base]]。
             1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.GetBindingValue</emu-meta>(_V_.[[ReferencedName]], _V_.[[Strict]])（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
+            1. 返回 ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
         </emu-alg>
         <emu-note>
           <p>步骤 <emu-xref href="#step-getvalue-toobject"></emu-xref> 可能创建的对象仅在上述抽象操作和普通对象 [[Get]] 内部方法中可访问。实现可选择避免实际创建该对象。</p>
@@ -4475,13 +4474,13 @@
               1. 返回 ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_)。
             1. 若 _V_.[[ReferencedName]] 不是属性键，
               1. 令 _V_.[[ReferencedName]] 为 ? ToPropertyKey(_V_.[[ReferencedName]])。
-            1. 令 _succeeded_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Set]]</emu-meta>(_V_.[[ReferencedName]], _W_, GetThisValue(_V_))。
+            1. 令 _succeeded_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>。
             1. 若 _succeeded_ 为 *false* 且 _V_.[[Strict]] 为 *true*，抛出 *TypeError* 异常。
             1. 返回 ~unused~。
           1. 否则，
             1. 令 _base_ 为 _V_.[[Base]]。
             1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.SetMutableBinding</emu-meta>(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
+            1. 返回 ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
         </emu-alg>
         <emu-note>
           <p>步骤 <emu-xref href="#step-putvalue-toobject"></emu-xref> 可能创建的对象仅在上述抽象操作和普通对象 [[Set]] 内部方法中可访问。实现可选择避免实际创建该对象。</p>
@@ -5770,7 +5769,7 @@
         <dd>用于判断是否可向 _O_ 添加额外属性。</dd>
       </dl>
       <emu-alg>
-        1. 返回 ? <emu-meta effects="user-code">_O_.[[IsExtensible]]</emu-meta>()。
+        1. 返回 ? <emu-meta effects="user-code">_O_.[[IsExtensible]]()</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -6073,7 +6072,7 @@
         <dd>用于获取对象特定属性的值。</dd>
       </dl>
       <emu-alg>
-        1. 返回 ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _O_)。
+        1. 返回 ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _O_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -6090,7 +6089,7 @@
       </dl>
       <emu-alg>
         1. 令 _O_ 为 ? ToObject(_V_)。
-        1. 返回 ? <emu-meta effects="user-code">_O_.[[Get]]</emu-meta>(_P_, _V_)。
+        1. 返回 ? <emu-meta effects="user-code">_O_.[[Get]](_P_, _V_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -6108,7 +6107,7 @@
         <dd>设置对象特定属性的值，_V_ 是新值。</dd>
       </dl>
       <emu-alg>
-        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[Set]]</emu-meta>(_P_, _V_, _O_)。
+        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[Set]](_P_, _V_, _O_)</emu-meta>。
         1. 若 _success_ 为 *false* 且 _Throw_ 为 *true*，抛出 *TypeError*。
         1. 返回 ~unused~。
       </emu-alg>
@@ -6128,7 +6127,7 @@
       </dl>
       <emu-alg>
         1. 令 _newDesc_ 为 PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }。
-        1. 返回 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _newDesc_)。
+        1. 返回 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _newDesc_)</emu-meta>。
       </emu-alg>
       <emu-note>
         <p>此操作创建的属性特性与语言赋值运算符新建属性时的默认特性相同。通常该属性不存在；若已存在且不可配置，或 _O_ 不可扩展，则 [[DefineOwnProperty]] 返回 *false*。</p>
@@ -6193,7 +6192,7 @@
         <dd>以会在失败时抛出 *TypeError* 的方式调用对象的 [[DefineOwnProperty]]。</dd>
       </dl>
       <emu-alg>
-        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]]</emu-meta>(_P_, _desc_)。
+        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[DefineOwnProperty]](_P_, _desc_)</emu-meta>。
         1. 若 _success_ 为 *false*，抛出 *TypeError*。
         1. 返回 ~unused~。
       </emu-alg>
@@ -6211,7 +6210,7 @@
         <dd>移除对象的指定自身属性；若属性不可配置则抛出异常。</dd>
       </dl>
       <emu-alg>
-        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[Delete]]</emu-meta>(_P_)。
+        1. 令 _success_ 为 ? <emu-meta effects="user-code">_O_.[[Delete]](_P_)</emu-meta>。
         1. 若 _success_ 为 *false*，抛出 *TypeError*。
         1. 返回 ~unused~。
       </emu-alg>
@@ -6248,7 +6247,7 @@
         <dd>判断对象是否具有指定键的属性（自身或继承）。</dd>
       </dl>
       <emu-alg>
-        1. 返回 ? <emu-meta effects="user-code">_O_.[[HasProperty]]</emu-meta>(_P_)。
+        1. 返回 ? <emu-meta effects="user-code">_O_.[[HasProperty]](_P_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -6264,7 +6263,7 @@
         <dd>判断对象是否具有指定键的自身属性。</dd>
       </dl>
       <emu-alg>
-        1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 如果 _desc_ 是 *undefined*，返回 *false*。
         1. 返回 *true*。
       </emu-alg>
@@ -6285,7 +6284,7 @@
       <emu-alg>
         1. 若 _argumentsList_ 不存在，设其为新空 List。
         1. 若 IsCallable(_F_) 为 *false*，抛出 *TypeError*。
-        1. 返回 ? <emu-meta effects="user-code">_F_.[[Call]]</emu-meta>(_V_, _argumentsList_)。
+        1. 返回 ? <emu-meta effects="user-code">_F_.[[Call]](_V_, _argumentsList_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -6304,7 +6303,7 @@
       <emu-alg>
         1. 若 _newTarget_ 不存在，设为 _F_。
         1. 若 _argumentsList_ 不存在，设为新空 List。
-        1. 返回 ? <emu-meta effects="user-code">_F_.[[Construct]]</emu-meta>(_argumentsList_, _newTarget_)。
+        1. 返回 ? <emu-meta effects="user-code">_F_.[[Construct]](_argumentsList_, _newTarget_)</emu-meta>。
       </emu-alg>
       <emu-note>
         <p>若 _newTarget_ 不存在，等价于：`new F(...argumentsList)`。</p>
@@ -6332,7 +6331,7 @@
         1. 否则，
           1. 断言：_level_ 为 ~frozen~。
           1. 对 _keys_ 中每个 _k_：
-            1. 令 _currentDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_)。
+            1. 令 _currentDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta>。
             1. 若 _currentDesc_ 不为 *undefined*，则
               1. 如果 IsAccessorDescriptor(_currentDesc_) 为 *true*，
                 1. 令 _desc_ 为 PropertyDescriptor { [[Configurable]]: *false* }。
@@ -6360,7 +6359,7 @@
         1. NOTE: 若对象可扩展，不检查属性。
         1. 令 _keys_ 为 ? _O_.[[OwnPropertyKeys]]()。
         1. 对 _keys_ 中每个 _k_：
-          1. 令 _currentDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_k_)。
+          1. 令 _currentDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_k_)</emu-meta>。
           1. 若 _currentDesc_ 不为 *undefined*，则
             1. 若 _currentDesc_.[[Configurable]] 为 *true*，返回 *false*。
             1. 若 _level_ 为 ~frozen~ 且 IsDataDescriptor(_currentDesc_) 为 *true*，则
@@ -6478,7 +6477,7 @@
         1. 令 _P_ 为 ? Get(_C_, *"prototype"*)。
         1. 若 _P_ 不是 Object，抛出 *TypeError*。
         1. 循环：
-          1. 设 _O_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()。
+          1. 设 _O_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
           1. 若 _O_ 是 *null*，返回 *false*。
           1. 若 SameValue(_P_, _O_) 为 *true*，返回 *true*。
       </emu-alg>
@@ -6516,11 +6515,11 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _ownKeys_ 为 ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]</emu-meta>()。
+        1. 令 _ownKeys_ 为 ? <emu-meta effects="user-code">_O_.[[OwnPropertyKeys]]()</emu-meta>。
         1. 令 _results_ 为新空 List。
         1. 对 _ownKeys_ 中每个 _key_：
           1. 如果 _key_ 是 String，则
-            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_)。
+            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta>。
             1. 若 _desc_ 不为 *undefined* 且 _desc_.[[Enumerable]] 为 *true*，则
               1. 如果 _kind_ 为 ~key~，
                 1. 将 _key_ 加入 _results_。
@@ -6575,14 +6574,14 @@
       <emu-alg>
         1. 如果 _source_ 是 *undefined* 或 *null*，返回 ~unused~。
         1. 令 _from_ 为 ! ToObject(_source_)。
-        1. 令 _keys_ 为 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]</emu-meta>()。
+        1. 令 _keys_ 为 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>。
         1. 对 _keys_ 中每个 _nextKey_：
           1. 令 _excluded_ 为 *false*。
           1. 对 _excludedItems_ 中每个 _e_：
             1. 若 SameValue(_e_, _nextKey_) 为 *true*，
               1. 设 _excluded_ 为 *true*。
           1. 若 _excluded_ 为 *false*，则
-            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_)。
+            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>。
             1. 若 _desc_ 不为 *undefined* 且 _desc_.[[Enumerable]] 为 *true*，
               1. 令 _propValue_ 为 ? Get(_from_, _nextKey_)。
               1. 执行 ! CreateDataPropertyOrThrow(_target_, _nextKey_, _propValue_)。
@@ -10471,7 +10470,7 @@
             <dd>将名称为 _N_ 的当前绑定的值设为 _V_。</dd>
           </dl>
           <emu-alg>
-            1. 执行 ? <emu-meta effects="user-code">_envRec_.SetMutableBinding</emu-meta>(_N_, _V_, *false*)。
+            1. 执行 ? <emu-meta effects="user-code">_envRec_.SetMutableBinding(_N_, _V_, *false*)</emu-meta>。
             1. 返回 ~unused~。
           </emu-alg>
           <emu-note>
@@ -10541,7 +10540,7 @@
           </dl>
           <emu-alg>
             1. 令 _bindingObject_ 为 _envRec_.[[BindingObject]]。
-            1. 返回 ? <emu-meta effects="user-code">_bindingObject_.[[Delete]]</emu-meta>(_N_)。
+            1. 返回 ? <emu-meta effects="user-code">_bindingObject_.[[Delete]](_N_)</emu-meta>。
           </emu-alg>
         </emu-clause>
 
@@ -10846,7 +10845,7 @@
             1. 令 _DclRec_ 为 _envRec_.[[DeclarativeRecord]]。
             1. 若 ! _DclRec_.HasBinding(_N_) 为 *true*，返回 *true*。
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
-            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.HasBinding</emu-meta>(_N_)。
+            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.HasBinding(_N_)</emu-meta>。
           </emu-alg>
         </emu-clause>
 
@@ -10912,7 +10911,7 @@
               1. 返回 ! _DclRec_.InitializeBinding(_N_, _V_)。
             1. 断言：若存在绑定则位于 Object Environment Record 中。
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
-            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, _V_)。
+            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, _V_)</emu-meta>。
           </emu-alg>
         </emu-clause>
 
@@ -10936,7 +10935,7 @@
             1. 若 ! _DclRec_.HasBinding(_N_) 为 *true*，则
               1. 返回 ? _DclRec_.SetMutableBinding(_N_, _V_, _S_)。
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
-            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding</emu-meta>(_N_, _V_, _S_)。
+            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.SetMutableBinding(_N_, _V_, _S_)</emu-meta>。
           </emu-alg>
         </emu-clause>
 
@@ -10959,7 +10958,7 @@
             1. 若 ! _DclRec_.HasBinding(_N_) 为 *true*，则
               1. 返回 ? _DclRec_.GetBindingValue(_N_, _S_)。
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
-            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue</emu-meta>(_N_, _S_)。
+            1. 返回 ? <emu-meta effects="user-code">_ObjRec_.GetBindingValue(_N_, _S_)</emu-meta>。
           </emu-alg>
         </emu-clause>
 
@@ -10984,7 +10983,7 @@
             1. 令 _globalObject_ 为 _ObjRec_.[[BindingObject]]。
             1. 令 _existingProp_ 为 ? HasOwnProperty(_globalObject_, _N_)。
             1. 若 _existingProp_ 为 *true*，则
-              1. 返回 ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding</emu-meta>(_N_)。
+              1. 返回 ? <emu-meta effects="user-code">_ObjRec_.DeleteBinding(_N_)</emu-meta>。
             1. 返回 *true*。
           </emu-alg>
         </emu-clause>
@@ -11070,7 +11069,7 @@
           <emu-alg>
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
             1. 令 _globalObject_ 为 _ObjRec_.[[BindingObject]]。
-            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)。
+            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>。
             1. 若 _existingProp_ 为 *undefined*，返回 *false*。
             1. 若 _existingProp_.[[Configurable]] 为 *true*，返回 *false*。
             1. 返回 *true*。
@@ -11114,7 +11113,7 @@
           <emu-alg>
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
             1. 令 _globalObject_ 为 _ObjRec_.[[BindingObject]]。
-            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)。
+            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>。
             1. 若 _existingProp_ 为 *undefined*，返回 ? IsExtensible(_globalObject_)。
             1. 若 _existingProp_.[[Configurable]] 为 *true*，返回 *true*。
             1. 若 IsDataDescriptor(_existingProp_) 为 *true* 且 _existingProp_ 具属性 { [[Writable]]: *true*, [[Enumerable]]: *true* }，返回 *true*。
@@ -11140,8 +11139,8 @@
             1. 令 _hasProperty_ 为 ? HasOwnProperty(_globalObject_, _N_)。
             1. 令 _extensible_ 为 ? IsExtensible(_globalObject_)。
             1. 若 _hasProperty_ 为 *false* 且 _extensible_ 为 *true*，则
-              1. 执行 ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding</emu-meta>(_N_, _D_)。
-              1. 执行 ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding</emu-meta>(_N_, *undefined*)。
+              1. 执行 ? <emu-meta effects="user-code">_ObjRec_.CreateMutableBinding(_N_, _D_)</emu-meta>。
+              1. 执行 ? <emu-meta effects="user-code">_ObjRec_.InitializeBinding(_N_, *undefined*)</emu-meta>。
             1. 返回 ~unused~。
           </emu-alg>
         </emu-clause>
@@ -11162,7 +11161,7 @@
           <emu-alg>
             1. 令 _ObjRec_ 为 _envRec_.[[ObjectRecord]]。
             1. 令 _globalObject_ 为 _ObjRec_.[[BindingObject]]。
-            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]]</emu-meta>(_N_)。
+            1. 令 _existingProp_ 为 ? <emu-meta effects="user-code">_globalObject_.[[GetOwnProperty]](_N_)</emu-meta>。
             1. 若 _existingProp_ 为 *undefined* 或其 [[Configurable]] 为 *true*，则
               1. 令 _desc_ 为 PropertyDescriptor { [[Value]]: _V_, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: _D_ }。
             1. 否则，
@@ -11225,7 +11224,7 @@
               1. 令 _M_ 与 _N2_ 为创建该绑定时提供的间接值。
               1. 令 _targetEnv_ 为 _M_.[[Environment]]。
               1. 若 _targetEnv_ 为 ~empty~，抛 *ReferenceError*。
-              1. 返回 ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue</emu-meta>(_N2_, *true*)。
+              1. 返回 ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta>。
             1. 若 _envRec_ 中 _N_ 的绑定为未初始化，抛 *ReferenceError*。
             1. 返回当前绑定于 _N_ 的值。
           </emu-alg>
@@ -11307,7 +11306,7 @@
         <emu-alg>
           1. 若 _env_ 为 *null*，则
             1. 返回 Reference Record { [[Base]]: ~unresolvable~, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ }。
-          1. 令 _exists_ 为 ? <emu-meta effects="user-code">_env_.HasBinding</emu-meta>(_name_)。
+          1. 令 _exists_ 为 ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta>。
           1. 若 _exists_ 为 *true*，则
             1. 返回 Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ }。
           1. 否则，
@@ -12655,7 +12654,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _current_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _current_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 令 _extensible_ 为 ? IsExtensible(_O_)。
           1. 返回 ValidateAndApplyPropertyDescriptor(_O_, _P_, _extensible_, _Desc_, _current_)。
         </emu-alg>
@@ -12753,11 +12752,11 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _hasOwn_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _hasOwn_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 若 _hasOwn_ 不为 *undefined*，返回 *true*。
-          1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()。
+          1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
           1. 若 _parent_ 不为 *null*，则
-            1. 返回 ? <emu-meta effects="user-code">_parent_.[[HasProperty]]</emu-meta>(_P_)。
+            1. 返回 ? <emu-meta effects="user-code">_parent_.[[HasProperty]](_P_)</emu-meta>。
           1. 返回 *false*。
         </emu-alg>
       </emu-clause>
@@ -12791,11 +12790,11 @@
         </dl>
 
         <emu-alg>
-          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 若 _desc_ 为 *undefined*，则
-            1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()。
+            1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
             1. 若 _parent_ 为 *null*，返回 *undefined*。
-            1. 返回 ? <emu-meta effects="user-code">_parent_.[[Get]]</emu-meta>(_P_, _Receiver_)。
+            1. 返回 ? <emu-meta effects="user-code">_parent_.[[Get]](_P_, _Receiver_)</emu-meta>。
           1. 若 IsDataDescriptor(_desc_) 为 *true*，返回 _desc_.[[Value]]。
           1. 断言：IsAccessorDescriptor(_desc_) 为 *true*。
           1. 令 _getter_ 为 _desc_.[[Get]]。
@@ -12834,7 +12833,7 @@
         </dl>
 
         <emu-alg>
-          1. 令 _ownDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _ownDesc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 返回 ? OrdinarySetWithOwnDescriptor(_O_, _P_, _V_, _Receiver_, _ownDesc_)。
         </emu-alg>
       </emu-clause>
@@ -12854,20 +12853,20 @@
 
         <emu-alg>
           1. 若 _ownDesc_ 为 *undefined*，则
-            1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()。
+            1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
             1. 若 _parent_ 不为 *null*，则
-              1. 返回 ? <emu-meta effects="user-code">_parent_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_)。
+              1. 返回 ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta>。
             1. 否则，
               1. 将 _ownDesc_ 设为 PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }。
           1. 若 IsDataDescriptor(_ownDesc_) 为 *true*，则
             1. 若 _ownDesc_.[[Writable]] 为 *false*，返回 *false*。
             1. 若 _Receiver_ 不是 Object，返回 *false*。
-            1. 令 _existingDescriptor_ 为 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]]</emu-meta>(_P_)。
+            1. 令 _existingDescriptor_ 为 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta>。
             1. 若 _existingDescriptor_ 不为 *undefined*，则
               1. 若 IsAccessorDescriptor(_existingDescriptor_) 为 *true*，返回 *false*。
               1. 若 _existingDescriptor_.[[Writable]] 为 *false*，返回 *false*。
               1. 令 _valueDesc_ 为 PropertyDescriptor { [[Value]]: _V_ }。
-              1. 返回 ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]]</emu-meta>(_P_, _valueDesc_)。
+              1. 返回 ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta>。
             1. 否则，
               1. 断言：_Receiver_ 目前没有属性 _P_。
               1. 返回 ? CreateDataProperty(_Receiver_, _P_, _V_)。
@@ -12904,7 +12903,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 若 _desc_ 为 *undefined*，返回 *true*。
           1. 若 _desc_.[[Configurable]] 为 *true*，则
             1. 从 _O_ 中移除名为 _P_ 的自身属性。
@@ -14019,16 +14018,16 @@
           <dd>用于指定创建新的绑定函数特异对象。</dd>
         </dl>
         <emu-alg>
-          1. 令 _proto_ 为 ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]</emu-meta>()。
-          1. 令 _internalSlotsList_ 为 « [[Prototype]], [[Extensible]] » 与 <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref> 中内部槽列表的连接。
+          1. 令 _proto_ 为 ? <emu-meta effects="user-code">_targetFunction_.[[GetPrototypeOf]]()</emu-meta>。
+          1. 令 _internalSlotsList_ 为 « [[Prototype]], [[Extensible]] » 与 <emu-xref href="#table-internal-slots-of-bound-function-exotic-objects"></emu-xref> 中列出的内部槽的列表拼接。
           1. 令 _obj_ 为 MakeBasicObject(_internalSlotsList_)。
-          1. 将 _obj_.[[Prototype]] 设为 _proto_。
-          1. 按 <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref> 所述设置 _obj_.[[Call]]。
-          1. 若 IsConstructor(_targetFunction_) 为 *true*，则
-            1. 按 <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref> 所述设置 _obj_.[[Construct]]。
-          1. 将 _obj_.[[BoundTargetFunction]] 设为 _targetFunction_。
-          1. 将 _obj_.[[BoundThis]] 设为 _boundThis_。
-          1. 将 _obj_.[[BoundArguments]] 设为 _boundArgs_。
+          1. 设置 _obj_.[[Prototype]] 为 _proto_。
+          1. 设置 _obj_.[[Call]]，如 <emu-xref href="#sec-bound-function-exotic-objects-call-thisargument-argumentslist"></emu-xref> 所述。
+          1. 如果 IsConstructor(_targetFunction_) 为 *true*，则
+            1. 按 <emu-xref href="#sec-bound-function-exotic-objects-construct-argumentslist-newtarget"></emu-xref> 规定设置 _obj_.[[Construct]]。
+          1. 设置 _obj_.[[BoundTargetFunction]] 为 _targetFunction_。
+          1. 设置 _obj_.[[BoundThis]] 为 _boundThis_。
+          1. 设置 _obj_.[[BoundArguments]] 为 _boundArgs_。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -15285,7 +15284,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _current_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]</emu-meta>()。
+          1. 令 _current_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
           1. 若 SameValue(_V_, _current_) 为 *true*，返回 *true*。
           1. 返回 *false*。
         </emu-alg>
@@ -15435,12 +15434,12 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"getPrototypeOf"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>()。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>。
         1. 令 _handlerProto_ 为 ? Call(_trap_, _handler_, « _target_ »)。
         1. 若 _handlerProto_ 既不是 Object 且也不是 *null*，抛出 *TypeError* 异常。
         1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
         1. 若 _extensibleTarget_ 为 *true*，返回 _handlerProto_。
-        1. 令 _targetProto_ 为 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>()。
+        1. 令 _targetProto_ 为 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>。
         1. 若 SameValue(_handlerProto_, _targetProto_) 为 *false*，抛出 *TypeError* 异常。
         1. 返回 _handlerProto_。
       </emu-alg>
@@ -15474,12 +15473,12 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"setPrototypeOf"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_V_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_V_)</emu-meta>。
         1. 令 _booleanTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _V_ »))。
         1. 若 _booleanTrapResult_ 为 *false*，返回 *false*。
         1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
         1. 若 _extensibleTarget_ 为 *true*，返回 *true*。
-        1. 令 _targetProto_ 为 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]</emu-meta>()。
+        1. 令 _targetProto_ 为 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>。
         1. 若 SameValue(_V_, _targetProto_) 为 *false*，抛出 *TypeError* 异常。
         1. 返回 *true*。
       </emu-alg>
@@ -15578,10 +15577,10 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"getOwnPropertyDescriptor"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 令 _trapResultObj_ 为 ? Call(_trap_, _handler_, « _target_, _P_ »)。
         1. 若 _trapResultObj_ 不是 Object 且也不是 *undefined*，抛出 *TypeError* 异常。
-        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 若 _trapResultObj_ 为 *undefined*，则
           1. 若 _targetDesc_ 为 *undefined*，返回 *undefined*。
           1. 若 _targetDesc_.[[Configurable]] 为 *false*，抛出 *TypeError* 异常。
@@ -15644,11 +15643,11 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"defineProperty"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_P_, _Desc_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_P_, _Desc_)</emu-meta>。
         1. 令 _descObj_ 为 FromPropertyDescriptor(_Desc_)。
         1. 令 _booleanTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _descObj_ »))。
         1. 若 _booleanTrapResult_ 为 *false*，返回 *false*。
-        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
         1. 若 _Desc_ 含 [[Configurable]] 且 _Desc_.[[Configurable]] 为 *false*，则
           1. 令 _settingConfigFalse_ 为 *true*。
@@ -15703,10 +15702,10 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"has"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_P_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[HasProperty]](_P_)</emu-meta>。
         1. 令 _booleanTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »))。
         1. 若 _booleanTrapResult_ 为 *false*，则
-          1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 若 _targetDesc_ 不为 *undefined*，则
             1. 若 _targetDesc_.[[Configurable]] 为 *false*，抛出 *TypeError* 异常。
             1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
@@ -15747,9 +15746,9 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"get"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_P_, _Receiver_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[Get]](_P_, _Receiver_)</emu-meta>。
         1. 令 _trapResult_ 为 ? Call(_trap_, _handler_, « _target_, _P_, _Receiver_ »)。
-        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 若 _targetDesc_ 不为 *undefined* 且 _targetDesc_.[[Configurable]] 为 *false*，则
           1. 若 IsDataDescriptor(_targetDesc_) 为 *true* 且 _targetDesc_.[[Writable]] 为 *false*，则
             1. 若 SameValue(_trapResult_, _targetDesc_.[[Value]]) 为 *false*，抛出 *TypeError* 异常。
@@ -15789,10 +15788,10 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"set"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_P_, _V_, _Receiver_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[Set]](_P_, _V_, _Receiver_)</emu-meta>。
         1. 令 _booleanTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_, _V_, _Receiver_ »))。
         1. 若 _booleanTrapResult_ 为 *false*，返回 *false*。
-        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 若 _targetDesc_ 不为 *undefined* 且 _targetDesc_.[[Configurable]] 为 *false*，则
           1. 若 IsDataDescriptor(_targetDesc_) 为 *true* 且 _targetDesc_.[[Writable]] 为 *false*，则
             1. 若 SameValue(_V_, _targetDesc_.[[Value]]) 为 *false*，抛出 *TypeError* 异常。
@@ -15833,10 +15832,10 @@
         1. 断言：_handler_ 是一个 Object。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"deleteProperty"*)。
         1. 若 _trap_ 为 *undefined*，则
-          1. 返回 ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_P_)。
+          1. 返回 ? <emu-meta effects="user-code">_target_.[[Delete]](_P_)</emu-meta>。
         1. 令 _booleanTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _P_ »))。
         1. 若 _booleanTrapResult_ 为 *false*，返回 *false*。
-        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_P_)。
+        1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_P_)</emu-meta>。
         1. 若 _targetDesc_ 为 *undefined*，返回 *true*。
         1. 若 _targetDesc_.[[Configurable]] 为 *false*，抛出 *TypeError* 异常。
         1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
@@ -15883,7 +15882,7 @@
         1. 令 _targetConfigurableKeys_ 为新空列表。
         1. 令 _targetNonconfigurableKeys_ 为新空列表。
         1. 对 _targetKeys_ 中每个元素 _key_：
-          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_)。
+          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta>。
           1. 若 _desc_ 不为 *undefined* 且 _desc_.[[Configurable]] 为 *false*，则
             1. 将 _key_ 追加至 _targetNonconfigurableKeys_。
           1. 否则，
@@ -18616,7 +18615,7 @@
             1. 令 _propValue_ 为 ? GetValue(_exprValueRef_)。
           1. 若 _isProtoSetter_ 为 *true*，则
             1. 若 _propValue_ 是 Object 或 _propValue_ 为 *null*，则
-              1. 执行 ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]]</emu-meta>(_propValue_)。
+              1. 执行 ! <emu-meta effects="user-code">_object_.[[SetPrototypeOf]](_propValue_)</emu-meta>。
             1. 返回 ~unused~。
           1. 断言：_object_ 是普通、可扩展且无不可配置属性的对象。
           1. 执行 ! CreateDataPropertyOrThrow(_object_, _propKey_, _propValue_)。
@@ -19679,7 +19678,7 @@
             1. 令 _evaluatePromise_ 为 _module_.Evaluate()。
             1. 令 _fulfilledClosure_ 为无参数、捕获 _module_ 与 _promiseCapability_ 的新抽象闭包，调用时执行：
               1. 令 _namespace_ 为 GetModuleNamespace(_module_)。
-              1. 执行 ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ »)。
+              1. 执行 ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _namespace_ »)</emu-meta>。
               1. 返回 NormalCompletion(*undefined*)。
             1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_fulfilledClosure_, 0, *""*, « »)。
             1. 执行 PerformPromiseThen(_evaluatePromise_, _onFulfilled_, _onRejected_)。
@@ -19956,13 +19955,13 @@
             1. [id="step-delete-operator-toobject"] 令 _baseObj_ 为 ? ToObject(_ref_.[[Base]])。
             1. 若 _ref_.[[ReferencedName]] 不是属性键，则
               1. 设 _ref_.[[ReferencedName]] 为 ? ToPropertyKey(_ref_.[[ReferencedName]])。
-            1. 令 _deleteStatus_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Delete]]</emu-meta>(_ref_.[[ReferencedName]])。
+            1. 令 _deleteStatus_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta>。
             1. 若 _deleteStatus_ 为 *false* 且 _ref_.[[Strict]] 为 *true*，抛出 *TypeError* 异常。
             1. 返回 _deleteStatus_。
           1. 否则，
             1. 令 _base_ 为 _ref_.[[Base]]。
             1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.DeleteBinding</emu-meta>(_ref_.[[ReferencedName]])。
+            1. 返回 ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta>。
         </emu-alg>
         <emu-note>
           <p>在严格模式代码中出现的 `delete` 运算符，如果其 |UnaryExpression| 是对变量、函数参数或函数名的直接引用，则抛出 *SyntaxError*；另外，若删除的属性具有 { [[Configurable]]: *false* }（或以其他方式不可删除），则抛出 *TypeError*。</p>
@@ -22425,7 +22424,7 @@
                   1. 令 _r_ 为首元素。
                   1. 移除之。
                   1. 若 _O_.[[VisitedKeys]] 不含 _r_：
-                    1. 令 _desc_ = ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]]</emu-meta>(_r_)。
+                    1. 令 _desc_ = ? <emu-meta effects="user-code">_object_.[[GetOwnProperty]](_r_)</emu-meta>。
                     1. 若 _desc_ 非 *undefined*：
                       1. 追加 _r_ 至 _O_.[[VisitedKeys]]。
                       1. 若 _desc_.[[Enumerable]] 为 *true*，返回 CreateIteratorResultObject(_r_, *false*)。
@@ -24522,7 +24521,7 @@
       <emu-alg>
         1. 令 _list_ 为 |ClassElementList| 的 NonConstructorElements。
         1. 若 |ClassElement| 的 ClassElementKind 为 ~non-constructor-method~，则
-          1. 将 |ClassElement| 追加至 _list_ 末尾。
+          1. 将 |ClassElement| 追加至 _list_ 。
         1. 返回 _list_。
       </emu-alg>
     </emu-clause>
@@ -25990,7 +25989,7 @@
                       1. 令 _gEnv_ 为正在运行的执行上下文的 VariableEnvironment。
                       1. 令 _bEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
                       1. 令 _fObj_ 为 ! _bEnv_.GetBindingValue(_F_, *false*)。
-                      1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*)。
+                      1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta>。
                       1. 返回 ~unused~。
         1. 令 _lexDeclarations_ 为 _script_ 的 LexicallyScopedDeclarations。
         1. 令 _privateEnv_ 为 *null*。
@@ -25998,15 +25997,15 @@
           1. 注：词法声明的名称仅在此实例化但不初始化。
           1. 对 _d_ 的 BoundNames 的每个元素 _dn_：
             1. 若 IsConstantDeclaration(_d_) 为 *true*，则
-              1. 执行 ? <emu-meta effects="user-code">_env_.CreateImmutableBinding</emu-meta>(_dn_, *true*)。
+              1. 执行 ? <emu-meta effects="user-code">_env_.CreateImmutableBinding(_dn_, *true*)</emu-meta>。
             1. 否则，
-              1. 执行 ? <emu-meta effects="user-code">_env_.CreateMutableBinding</emu-meta>(_dn_, *false*)。
+              1. 执行 ? <emu-meta effects="user-code">_env_.CreateMutableBinding(_dn_, *false*)</emu-meta>。
         1. 对 _functionsToInitialize_ 的每个解析节点 _f_：
           1. 令 _fn_ 为 _f_ 的 BoundNames 的唯一元素。
           1. 令 _fo_ 为 InstantiateFunctionObject(_f_, _env_, _privateEnv_)。
-          1. 执行 ? <emu-meta effects="user-code">CreateGlobalFunctionBinding</emu-meta>(_env_, _fn_, _fo_, *false*)。
+          1. 执行 ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_env_, _fn_, _fo_, *false*)</emu-meta>。
         1. 对 _declaredVarNames_ 的每个字符串 _vn_：
-          1. 执行 ? <emu-meta effects="user-code">CreateGlobalVarBinding</emu-meta>(_env_, _vn_, *false*)。
+          1. 执行 ? <emu-meta effects="user-code">CreateGlobalVarBinding(_env_, _vn_, *false*)</emu-meta>。
         1. 返回 ~unused~。
       </emu-alg>
       <emu-note>
@@ -27039,7 +27038,7 @@
                   1. 返回 NormalCompletion(*undefined*)。
                 1. 令 _onRejected_ = CreateBuiltinFunction(_rejectedClosure_, 0, *""*, « »)。
                 1. 执行 PerformPromiseThen(_capability_.[[Promise]], _onFulfilled_, _onRejected_)。
-                1. 执行 ! <emu-meta effects="user-code">_module_.ExecuteModule</emu-meta>(_capability_)。
+                1. 执行 ! <emu-meta effects="user-code">_module_.ExecuteModule(_capability_)</emu-meta>。
                 1. 返回 ~unused~。
               </emu-alg>
             </emu-clause>
@@ -29466,7 +29465,7 @@
                     1. 令 _gEnv_ 为正在运行执行上下文的 VariableEnvironment。
                     1. 令 _bEnv_ 为正在运行执行上下文的 LexicalEnvironment。
                     1. 令 _fObj_ 为 ! _bEnv_.GetBindingValue(_F_, *false*)。
-                    1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding</emu-meta>(_F_, _fObj_, *false*)。
+                    1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_F_, _fObj_, *false*)</emu-meta>。
                     1. 返回 ~unused~。
           1. [id="step-evaldeclarationinstantiation-post-validation"] 注：除非 _varEnv_ 为 Global Environment Record 且全局对象为 Proxy 异域对象，此后不再出现异常终止。
           1. 令 _lexDeclarations_ 为 _body_ 的 LexicallyScopedDeclarations。
@@ -30042,7 +30041,7 @@
               1. 令 _from_ 为 ! ToObject(_nextSource_)。
               1. 令 _keys_ 为 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>。
               1. 对 _keys_ 中每个元素 _nextKey_，执行
-                1. 令 _desc_ 为 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]]</emu-meta>(_nextKey_)。
+                1. 令 _desc_ 为 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>。
                 1. 如果 _desc_ 不为 *undefined* 且 _desc_.[[Enumerable]] 为 *true*，则
                   1. 令 _propValue_ 为 ? Get(_from_, _nextKey_)。
                   1. 执行 ? Set(_to_, _nextKey_, _propValue_, *true*)。
@@ -30087,7 +30086,7 @@
             1. 令 _keys_ 为 ? <emu-meta effects="user-code">_props_.[[OwnPropertyKeys]]()</emu-meta>。
             1. 令 _descriptors_ 为一个新的空列表。
             1. 对 _keys_ 中每个元素 _nextKey_，执行
-              1. 令 _propDesc_ 为 ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]]</emu-meta>(_nextKey_)。
+              1. 令 _propDesc_ 为 ? <emu-meta effects="user-code">_props_.[[GetOwnProperty]](_nextKey_)</emu-meta>。
               1. 如果 _propDesc_ 不为 *undefined* 且 _propDesc_.[[Enumerable]] 为 *true*，则
                 1. 令 _descObj_ 为 ? Get(_props_, _nextKey_)。
                 1. 令 _desc_ 为 ? ToPropertyDescriptor(_descObj_)。
@@ -30158,7 +30157,7 @@
         <emu-alg>
           1. 令 _obj_ 为 ? ToObject(_O_)。
           1. 令 _key_ 为 ? ToPropertyKey(_P_)。
-          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_)。
+          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]](_key_)</emu-meta>。
           1. 返回 FromPropertyDescriptor(_desc_)。
         </emu-alg>
       </emu-clause>
@@ -30171,7 +30170,7 @@
           1. 令 _ownKeys_ 为 ? <emu-meta effects="user-code">_obj_.[[OwnPropertyKeys]]()</emu-meta>。
           1. 令 _descriptors_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 对 _ownKeys_ 中每个元素 _key_，执行
-            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]]</emu-meta>(_key_)。
+            1. 令 _desc_ 为 ? <emu-meta effects="user-code">_obj_.[[GetOwnProperty]](_key_)</emu-meta>。
             1. 令 _descriptor_ 为 FromPropertyDescriptor(_desc_)。
             1. 如果 _descriptor_ 不为 *undefined*，执行 ! CreateDataPropertyOrThrow(_descriptors_, _key_, _descriptor_)。
           1. 返回 _descriptors_。
@@ -30331,7 +30330,7 @@
           1. 执行 ? RequireObjectCoercible(_O_)。
           1. 如果 _proto_ 不是 Object 且 _proto_ 不是 *null*，抛出 *TypeError* 异常。
           1. 如果 _O_ 不是 Object，返回 _O_。
-          1. 令 _status_ 为 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_)。
+          1. 令 _status_ 为 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta>。
           1. 如果 _status_ 为 *false*，抛出 *TypeError* 异常。
           1. 返回 _O_。
         </emu-alg>
@@ -30398,7 +30397,7 @@
         <emu-alg>
           1. [id="step-propertyisenumerable-topropertykey"] 令 _P_ 为 ? ToPropertyKey(_V_)。
           1. [id="step-propertyisenumerable-toobject"] 令 _O_ 为 ? ToObject(*this* value)。
-          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_P_)。
+          1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_P_)</emu-meta>。
           1. 如果 _desc_ 是 *undefined*，返回 *false*。
           1. 返回 _desc_.[[Enumerable]]。
         </emu-alg>
@@ -30482,7 +30481,7 @@
             1. 执行 ? RequireObjectCoercible(_O_)。
             1. 如果 _proto_ 不是 Object 且 _proto_ 不是 *null*，返回 *undefined*。
             1. 如果 _O_ 不是 Object，返回 *undefined*。
-            1. 令 _status_ 为 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]]</emu-meta>(_proto_)。
+            1. 令 _status_ 为 ? <emu-meta effects="user-code">_O_.[[SetPrototypeOf]](_proto_)</emu-meta>。
             1. 如果 _status_ 为 *false*，抛出 *TypeError* 异常。
             1. 返回 *undefined*。
           </emu-alg>
@@ -30525,7 +30524,7 @@
             1. 令 _O_ 为 ? ToObject(*this* value)。
             1. 令 _key_ 为 ? ToPropertyKey(_P_)。
             1. 重复，
-              1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_)。
+              1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta>。
               1. 如果 _desc_ 不为 *undefined*，则
                 1. 如果 IsAccessorDescriptor(_desc_) 为 *true*，返回 _desc_.[[Get]]。
                 1. 返回 *undefined*。
@@ -30541,7 +30540,7 @@
             1. 令 _O_ 为 ? ToObject(*this* value)。
             1. 令 _key_ 为 ? ToPropertyKey(_P_)。
             1. 重复，
-              1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]]</emu-meta>(_key_)。
+              1. 令 _desc_ 为 ? <emu-meta effects="user-code">_O_.[[GetOwnProperty]](_key_)</emu-meta>。
               1. 如果 _desc_ 不为 *undefined*，则
                 1. 如果 IsAccessorDescriptor(_desc_) 为 *true*，返回 _desc_.[[Set]]。
                 1. 返回 *undefined*。
@@ -46297,7 +46296,7 @@ THH:mm:ss.sss
                 1. 令 _prop_ 为 ! ToString(𝔽(_I_))。
                 1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _prop_, _reviver_)。
                 1. 若 _newElement_ 为 *undefined*，则
-                  1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_prop_)。
+                  1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta>。
                 1. 否则，
                   1. 执行 ? CreateDataProperty(_val_, _prop_, _newElement_)。
                 1. 设 _I_ 为 _I_ + 1。
@@ -46306,7 +46305,7 @@ THH:mm:ss.sss
               1. 对 _keys_ 的每个 String _P_，执行
                 1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _P_, _reviver_)。
                 1. 若 _newElement_ 为 *undefined*，则
-                  1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]]</emu-meta>(_P_)。
+                  1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta>。
                 1. 否则，
                   1. 执行 ? CreateDataProperty(_val_, _P_, _newElement_)。
           1. 返回 ? Call(_reviver_, _holder_, « _name_, _val_ »)。
@@ -47840,7 +47839,7 @@ THH:mm:ss.sss
             1. IfAbruptRejectPromise(_return_, _promiseCapability_)。
             1. 若 _return_ 为 *undefined*，则
               1. 令 _iteratorResult_ 为 CreateIteratorResultObject(_value_, *true*)。
-              1. 执行 ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)。
+              1. 执行 ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta>。
               1. 返回 _promiseCapability_.[[Promise]]。
             1. 若 _value_ 存在，则
               1. 令 _result_ 为 Completion(Call(_return_, _syncIterator_, « _value_ »))。
@@ -48111,79 +48110,47 @@ THH:mm:ss.sss
         </emu-table>
       </emu-clause>
 
-      <emu-clause id="sec-createresolvingfunctions" type="abstract operation">
+      <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
-          CreateResolvingFunctions (
-            _promise_: a Promise,
-          ): 一个具有字段 [[Resolve]] (函数对象) 与 [[Reject]] (函数对象) 的 Record
+          创建解析函数 (
+            _promise_: 一个 Promise,
+          ): 一个包含字段 [[Resolve]]（函数对象）和 [[Reject]]（函数对象）的记录
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _alreadyResolved_ 为 Record { [[Value]]: *false* }。
-          1. 令 _stepsResolve_ 为 <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> 中定义的算法步骤。
-          1. 令 _lengthResolve_ 为 <emu-xref href="#sec-promise-resolve-functions" title></emu-xref> 中函数定义的非可选参数数量。
-          1. 令 _resolve_ 为 CreateBuiltinFunction(_stepsResolve_, _lengthResolve_, *""*, « [[Promise]], [[AlreadyResolved]] »)。
-          1. 设 _resolve_.[[Promise]] 为 _promise_。
-          1. 设 _resolve_.[[AlreadyResolved]] 为 _alreadyResolved_。
-          1. 令 _stepsReject_ 为 <emu-xref href="#sec-promise-reject-functions" title></emu-xref> 中定义的算法步骤。
-          1. 令 _lengthReject_ 为 <emu-xref href="#sec-promise-reject-functions" title></emu-xref> 中函数定义的非可选参数数量。
-          1. 令 _reject_ 为 CreateBuiltinFunction(_stepsReject_, _lengthReject_, *""*, « [[Promise]], [[AlreadyResolved]] »)。
-          1. 设 _reject_.[[Promise]] 为 _promise_。
-          1. 设 _reject_.[[AlreadyResolved]] 为 _alreadyResolved_。
-          1. 返回 Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }。
-        </emu-alg>
-
-        <emu-clause id="sec-promise-reject-functions">
-          <h1>Promise Reject 函数</h1>
-          <p>Promise reject 函数是一个匿名内置函数，具有 [[Promise]] 与 [[AlreadyResolved]] 内部槽。</p>
-          <p>当以参数 _reason_ 调用一个 promise reject 函数时，执行以下步骤：</p>
-          <emu-alg>
-            1. 令 _F_ 为活动函数对象。
-            1. 断言：_F_ 具有一个值为 Object 的 [[Promise]] 内部槽。
-            1. 令 _promise_ 为 _F_.[[Promise]]。
-            1. 令 _alreadyResolved_ 为 _F_.[[AlreadyResolved]]。
-            1. 若 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
-            1. 设 _alreadyResolved_.[[Value]] 为 *true*。
-            1. 执行 RejectPromise(_promise_, _reason_)。
-            1. 返回 *undefined*。
-          </emu-alg>
-          <p>Promise reject 函数的 *"length"* 属性为 *1*<sub>𝔽</sub>。</p>
-        </emu-clause>
-
-        <emu-clause id="sec-promise-resolve-functions">
-          <h1>Promise Resolve 函数</h1>
-          <p>Promise resolve 函数是一个匿名内置函数，具有 [[Promise]] 与 [[AlreadyResolved]] 内部槽。</p>
-          <p>当以参数 _resolution_ 调用一个 promise resolve 函数时，执行以下步骤：</p>
-          <emu-alg>
-            1. 令 _F_ 为活动函数对象。
-            1. 断言：_F_ 具有一个值为 Object 的 [[Promise]] 内部槽。
-            1. 令 _promise_ 为 _F_.[[Promise]]。
-            1. 令 _alreadyResolved_ 为 _F_.[[AlreadyResolved]]。
-            1. 若 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
-            1. 设 _alreadyResolved_.[[Value]] 为 *true*。
-            1. 若 SameValue(_resolution_, _promise_) 为 *true*，则
-              1. 令 _selfResolutionError_ 为一个新建的 *TypeError* 对象。
+          1. 让 _alreadyResolved_ 为记录 { [[Value]]: *false* }。
+          1. 让 _resolveSteps_ 为一个带参数 (_resolution_) 的新抽象闭包，捕获 _promise_ 和 _alreadyResolved_，被调用时执行以下步骤：
+            1. 如果 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
+            1. 设置 _alreadyResolved_.[[Value]] 为 *true*。
+            1. 如果 SameValue(_resolution_, _promise_) 为 *true*，则
+              1. 让 _selfResolutionError_ 为新建的 *TypeError* 对象。
               1. 执行 RejectPromise(_promise_, _selfResolutionError_)。
               1. 返回 *undefined*。
-            1. 若 _resolution_ 不是一个 Object，则
+            1. 如果 _resolution_ 不是对象，则
               1. 执行 FulfillPromise(_promise_, _resolution_)。
               1. 返回 *undefined*。
-            1. 令 _then_ 为 Completion(Get(_resolution_, *"then"*))。
-            1. 若 _then_ 是一个 abrupt completion，则
+            1. 让 _then_ 为 Completion(Get(_resolution_, *"then"*))。
+            1. 如果 _then_ 是突变完成，则
               1. 执行 RejectPromise(_promise_, _then_.[[Value]])。
               1. 返回 *undefined*。
-            1. 令 _thenAction_ 为 _then_.[[Value]]。
-            1. 若 IsCallable(_thenAction_) 为 *false*，则
+            1. 让 _thenAction_ 为 _then_.[[Value]]。
+            1. 如果 IsCallable(_thenAction_) 为 *false*，则
               1. 执行 FulfillPromise(_promise_, _resolution_)。
               1. 返回 *undefined*。
-            1. 令 _thenJobCallback_ 为 HostMakeJobCallback(_thenAction_)。
-            1. 令 _job_ 为 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)。
+            1. 让 _thenJobCallback_ 为 HostMakeJobCallback(_thenAction_)。
+            1. 让 _job_ 为 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)。
             1. 执行 HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])。
             1. 返回 *undefined*。
-          </emu-alg>
-          <p>Promise resolve 函数的 *"length"* 属性为 *1*<sub>𝔽</sub>。</p>
-        </emu-clause>
+          1. 让 _resolve_ 为 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)。
+          1. 让 _rejectSteps_ 为一个带参数 (_reason_) 的新抽象闭包，捕获 _promise_ 和 _alreadyResolved_，被调用时执行以下步骤：
+            1. 如果 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
+            1. 设置 _alreadyResolved_.[[Value]] 为 *true*。
+            1. 执行 RejectPromise(_promise_, _reason_)。
+            1. 返回 *undefined*。
+          1. 让 _reject_ 为 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)。
+          1. 返回记录 { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-fulfillpromise" type="abstract operation">
@@ -49427,7 +49394,7 @@ THH:mm:ss.sss
           1. 执行 ? RequireInternalSlot(_generator_, [[GeneratorState]])。
           1. 执行 ? RequireInternalSlot(_generator_, [[GeneratorBrand]])。
           1. 如果 _generator_.[[GeneratorBrand]] 不等于 _generatorBrand_，抛出 *TypeError* 异常。
-          1. 断言：_generator_ 也有 [[GeneratorContext]] 内部槽。
+          1. 断言：_generator_ 有 [[GeneratorContext]] 内部槽。
           1. 令 _state_ 为 _generator_.[[GeneratorState]]。
           1. 如果 _state_ 是 ~executing~，抛出 *TypeError* 异常。
           1. 返回 _state_。
@@ -49609,7 +49576,7 @@ THH:mm:ss.sss
           1. 令 _state_ 为 _generator_.[[AsyncGeneratorState]]。
           1. 如果 _state_ 是 ~completed~，则
             1. 令 _iteratorResult_ 为 CreateIteratorResultObject(*undefined*, *true*)。
-            1. 执行 ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)。
+            1. 执行 ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta>。
             1. 返回 _promiseCapability_.[[Promise]]。
           1. 令 _completion_ 为 NormalCompletion(_value_)。
           1. 执行 AsyncGeneratorEnqueue(_generator_, _completion_, _promiseCapability_)。
@@ -49838,7 +49805,7 @@ THH:mm:ss.sss
               1. 将正在运行的执行上下文的 Realm 设回 _oldRealm_。
             1. 否则，
               1. 令 _iteratorResult_ 为 CreateIteratorResultObject(_value_, _done_)。
-            1. 执行 ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)。
+            1. 执行 ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _iteratorResult_ »)</emu-meta>。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -50127,7 +50094,7 @@ THH:mm:ss.sss
             1. 如果 _result_ 是一个 normal completion，则
               1. 执行 ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)。
             1. 否则如果 _result_ 是一个 return completion，则
-              1. 执行 ! <emu-meta effects="user-code">Call</emu-meta>(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)。
+              1. 执行 ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta>。
             1. 否则，
               1. 断言：_result_ 是一个 throw completion。
               1. 执行 ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)。
@@ -50187,20 +50154,20 @@ THH:mm:ss.sss
     <h1>Reflect 对象</h1>
     <p>Reflect 对象：</p>
     <ul>
-      <li>是 <dfn>%Reflect%</dfn>。</li>
+      <li>即 <dfn>%Reflect%</dfn>。</li>
       <li>是全局对象 *"Reflect"* 属性的初始值。</li>
       <li>是一个普通对象。</li>
-      <li>具有值为 %Object.prototype% 的 [[Prototype]] 内部槽。</li>
+      <li>具有其值为 %Object.prototype% 的 [[Prototype]] 内部槽。</li>
       <li>不是函数对象。</li>
-      <li>没有 [[Construct]] 内部方法；不能用 `new` 作为构造函数调用。</li>
-      <li>没有 [[Call]] 内部方法；不能当作函数调用。</li>
+      <li>没有 [[Construct]] 内部方法；无法通过 `new` 运算符作为构造函数使用。</li>
+      <li>没有 [[Call]] 内部方法；无法作为函数调用。</li>
     </ul>
 
     <emu-clause id="sec-reflect.apply">
       <h1>Reflect.apply ( _target_, _thisArgument_, _argumentsList_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 IsCallable(_target_) 为 *false*，抛出 *TypeError* 异常。
+        1. 如果 IsCallable(_target_) 是 *false*，抛出 *TypeError* 异常。
         1. 令 _args_ 为 ? CreateListFromArrayLike(_argumentsList_)。
         1. 执行 PrepareForTailCall()。
         1. 返回 ? Call(_target_, _thisArgument_, _args_)。
@@ -50211,9 +50178,9 @@ THH:mm:ss.sss
       <h1>Reflect.construct ( _target_, _argumentsList_ [ , _newTarget_ ] )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 IsConstructor(_target_) 为 *false*，抛出 *TypeError* 异常。
-        1. 如果 _newTarget_ 不存在，将 _newTarget_ 设为 _target_。
-        1. 否则如果 IsConstructor(_newTarget_) 为 *false*，抛出 *TypeError* 异常。
+        1. 如果 IsConstructor(_target_) 是 *false*，抛出 *TypeError* 异常。
+        1. 如果 _newTarget_ 不存在，则设 _newTarget_ 为 _target_。
+        1. 否则如果 IsConstructor(_newTarget_) 是 *false*，抛出 *TypeError* 异常。
         1. 令 _args_ 为 ? CreateListFromArrayLike(_argumentsList_)。
         1. 返回 ? Construct(_target_, _args_, _newTarget_)。
       </emu-alg>
@@ -50223,10 +50190,10 @@ THH:mm:ss.sss
       <h1>Reflect.defineProperty ( _target_, _propertyKey_, _attributes_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
         1. 令 _desc_ 为 ? ToPropertyDescriptor(_attributes_)。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]]</emu-meta>(_key_, _desc_)。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_key_, _desc_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -50234,9 +50201,9 @@ THH:mm:ss.sss
       <h1>Reflect.deleteProperty ( _target_, _propertyKey_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[Delete]]</emu-meta>(_key_)。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[Delete]](_key_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -50244,11 +50211,11 @@ THH:mm:ss.sss
       <h1>Reflect.get ( _target_, _propertyKey_ [ , _receiver_ ] )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
         1. 如果 _receiver_ 不存在，则
-          1. 将 _receiver_ 设为 _target_。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[Get]]</emu-meta>(_key_, _receiver_)。
+          1. 设 _receiver_ 为 _target_。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[Get]](_key_, _receiver_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -50256,9 +50223,9 @@ THH:mm:ss.sss
       <h1>Reflect.getOwnPropertyDescriptor ( _target_, _propertyKey_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
-        1. 令 _desc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]]</emu-meta>(_key_)。
+        1. 令 _desc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_key_)</emu-meta>。
         1. 返回 FromPropertyDescriptor(_desc_)。
       </emu-alg>
     </emu-clause>
@@ -50267,7 +50234,7 @@ THH:mm:ss.sss
       <h1>Reflect.getPrototypeOf ( _target_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 返回 ? <emu-meta effects="user-code">_target_.[[GetPrototypeOf]]()</emu-meta>。
       </emu-alg>
     </emu-clause>
@@ -50276,9 +50243,9 @@ THH:mm:ss.sss
       <h1>Reflect.has ( _target_, _propertyKey_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[HasProperty]]</emu-meta>(_key_)。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[HasProperty]](_key_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -50286,7 +50253,7 @@ THH:mm:ss.sss
       <h1>Reflect.isExtensible ( _target_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 返回 ? <emu-meta effects="user-code">_target_.[[IsExtensible]]()</emu-meta>。
       </emu-alg>
     </emu-clause>
@@ -50295,7 +50262,7 @@ THH:mm:ss.sss
       <h1>Reflect.ownKeys ( _target_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _keys_ 为 ? <emu-meta effects="user-code">_target_.[[OwnPropertyKeys]]()</emu-meta>。
         1. 返回 CreateArrayFromList(_keys_)。
       </emu-alg>
@@ -50305,7 +50272,7 @@ THH:mm:ss.sss
       <h1>Reflect.preventExtensions ( _target_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 返回 ? <emu-meta effects="user-code">_target_.[[PreventExtensions]]()</emu-meta>。
       </emu-alg>
     </emu-clause>
@@ -50314,11 +50281,11 @@ THH:mm:ss.sss
       <h1>Reflect.set ( _target_, _propertyKey_, _V_ [ , _receiver_ ] )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
         1. 令 _key_ 为 ? ToPropertyKey(_propertyKey_)。
         1. 如果 _receiver_ 不存在，则
-          1. 将 _receiver_ 设为 _target_。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[Set]]</emu-meta>(_key_, _V_, _receiver_)。
+          1. 设 _receiver_ 为 _target_。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[Set]](_key_, _V_, _receiver_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
@@ -50326,30 +50293,30 @@ THH:mm:ss.sss
       <h1>Reflect.setPrototypeOf ( _target_, _proto_ )</h1>
       <p>该函数被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 如果 _target_ 不是一个 Object，抛出 *TypeError* 异常。
-        1. 如果 _proto_ 不是一个 Object 且 _proto_ 不为 *null*，抛出 *TypeError* 异常。
-        1. 返回 ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]]</emu-meta>(_proto_)。
+        1. 如果 _target_ 不是对象，抛出 *TypeError* 异常。
+        1. 如果 _proto_ 不是对象且也不是 *null*，抛出 *TypeError* 异常。
+        1. 返回 ? <emu-meta effects="user-code">_target_.[[SetPrototypeOf]](_proto_)</emu-meta>。
       </emu-alg>
     </emu-clause>
 
     <emu-clause oldids="sec-reflect-@@tostringtag" id="sec-reflect-%symbol.tostringtag%">
       <h1>Reflect [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% 属性的初始值是字符串 *"Reflect"*。</p>
-      <p>该属性具有 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
+      <p>%Symbol.toStringTag% 属性的初始值为字符串 *"Reflect"*。</p>
+      <p>该属性的特性为 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-proxy-objects">
-    <h1>Proxy 对象</h1>
+    <h1>代理对象</h1>
 
     <emu-clause id="sec-proxy-constructor">
       <h1>Proxy 构造函数</h1>
       <p>Proxy 构造函数：</p>
       <ul>
-        <li>是 <dfn>%Proxy%</dfn>。</li>
+        <li>即 <dfn>%Proxy%</dfn>。</li>
         <li>是全局对象 *"Proxy"* 属性的初始值。</li>
         <li>作为构造函数调用时创建并初始化一个新的 Proxy 对象。</li>
-        <li>不应作为普通函数调用；若以此方式调用将抛出异常。</li>
+        <li>不应作为函数调用，若以该方式调用将抛出异常。</li>
       </ul>
 
       <emu-clause id="sec-proxy-target-handler">
@@ -50366,8 +50333,8 @@ THH:mm:ss.sss
       <h1>Proxy 构造函数的属性</h1>
       <p>Proxy 构造函数：</p>
       <ul>
-        <li>有一个 [[Prototype]] 内部槽，其值为 %Function.prototype%。</li>
-        <li>没有 *"prototype"* 属性，因为 Proxy 对象没有需要初始化的 [[Prototype]] 内部槽。</li>
+        <li>具有其值为 %Function.prototype% 的 [[Prototype]] 内部槽。</li>
+        <li>没有 *"prototype"* 属性，因为 Proxy 对象不需要初始化 [[Prototype]] 内部槽。</li>
         <li>具有以下属性：</li>
       </ul>
 
@@ -50377,18 +50344,18 @@ THH:mm:ss.sss
         <p>被调用时执行以下步骤：</p>
         <emu-alg>
           1. 令 _proxy_ 为 ? ProxyCreate(_target_, _handler_)。
-          1. 令 _revokerClosure_ 为一个无参数的新抽象闭包（不捕获任何东西），调用时执行：
+          1. 令 _revokerClosure_ 为一个无参数、无捕获的新抽象闭包，被调用时执行以下步骤：
             1. 令 _F_ 为活动函数对象。
             1. 令 _p_ 为 _F_.[[RevocableProxy]]。
             1. 如果 _p_ 为 *null*，返回 NormalCompletion(*undefined*)。
-            1. 将 _F_.[[RevocableProxy]] 设为 *null*。
-            1. 断言：_p_ 是一个 Proxy 奇异对象。
-            1. 将 _p_.[[ProxyTarget]] 设为 *null*。
-            1. 将 _p_.[[ProxyHandler]] 设为 *null*。
+            1. 设置 _F_.[[RevocableProxy]] 为 *null*。
+            1. 断言：_p_ 是 Proxy 异常对象。
+            1. 设置 _p_.[[ProxyTarget]] 为 *null*。
+            1. 设置 _p_.[[ProxyHandler]] 为 *null*。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _revoker_ 为 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)。
-          1. 将 _revoker_.[[RevocableProxy]] 设为 _proxy_。
-            1. 令 _result_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+          1. 设置 _revoker_.[[RevocableProxy]] 为 _proxy_。
+          1. 令 _result_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)。
           1. 执行 ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)。
           1. 返回 _result_。
@@ -50399,13 +50366,13 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-module-namespace-objects">
     <h1>模块命名空间对象</h1>
-    <p>模块命名空间对象是一种模块命名空间奇异对象，提供在运行时以属性方式访问模块导出绑定的机制。没有用于模块命名空间对象的构造函数。相反，对每个由包含 |NameSpaceImport| 的 |ImportDeclaration| 导入的模块创建这样的对象。</p>
-    <p>除 <emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref> 指定的属性外，每个模块命名空间对象还有以下自有属性：</p>
+    <p>模块命名空间对象是一个模块命名空间异构对象，为模块的导出绑定提供基于属性的运行时访问。没有模块命名空间对象的构造函数。相反，对于每个被 |ImportDeclaration| 并且包含 |NameSpaceImport| 导入的模块，都创建这样的对象。</p>
+    <p>除了 <emu-xref href="#sec-module-namespace-exotic-objects"></emu-xref> 中指定的属性外，每个模块命名空间对象还有如下自有属性：</p>
 
     <emu-clause oldids="sec-@@tostringtag" id="sec-%symbol.tostringtag%">
       <h1>%Symbol.toStringTag%</h1>
-      <p>%Symbol.toStringTag% 属性的初始值是字符串 *"Module"*。</p>
-      <p>该属性具有 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
+      <p>%Symbol.toStringTag% 属性的初始值为字符串 *"Module"*。</p>
+      <p>该属性的特性为 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>
