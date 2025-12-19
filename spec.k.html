@@ -7211,6 +7211,20 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
+      <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
+      <p>IfAbruptCloseAsyncIterator는 Iterator Record를 사용하는 일련의 알고리즘 단계를 위한 축약형입니다. 다음과 같은 알고리즘 단계:</p>
+      <emu-alg>
+        1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
+      </emu-alg>
+      <p>은 다음과 동일한 의미입니다:</p>
+      <emu-alg>
+        1. Assert: _value_는 Completion Record이다.
+        1. _value_가 abrupt completion이면, ? AsyncIteratorClose(_iteratorRecord_, _value_)를 반환한다.
+        1. 그렇지 않으면, _value_를 ! _value_로 설정한다.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-createiterresultobject" type="abstract operation">
       <h1>
         CreateIteratorResultObject (
@@ -39092,7 +39106,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-array.from">
         <h1>Array.from ( _items_ [ , _mapper_ [ , _thisArg_ ] ] )</h1>
-        <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
+        <p>이 함수는 호출될 때 다음 단계를 수행합니다:</p>
         <emu-alg>
           1. _C_ 를 *this* 값으로 둔다.
           1. _mapper_ 가 *undefined* 이면
