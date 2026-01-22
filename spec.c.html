@@ -1178,7 +1178,8 @@
       <p>如 +、×、=、≥ 等数值运算符，具体操作取决于操作数类型。用于数学值时为常规数学运算，扩展数学值时为扩展实数运算（不定义不定型，规范中出现为编辑错误），用于 Number 时为 IEEE 754-2019 运算，BigInt 时为 BigInt 的数学值运算。混合类型操作数（如 Number 与数学值）不定义，规范中出现为编辑错误。</p>
       <p>数学值与 Number 或 BigInt 间转换均为显式。数学值或扩展数学值 _x_ 转 Number 表示为“_x_ 的 Number 值”或 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>，见 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>。整数 _x_ 转 BigInt 表示为“_x_ 的 <dfn id="bigint-value-for">BigInt 值</dfn>”或 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>。Number 或 BigInt _x_ 转数学值表示为“_x_ 的 <dfn id="mathematical-value-of">数学值</dfn>”或 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>。*+0*<sub>𝔽</sub> 和 *-0*<sub>𝔽</sub> 的数学值为 0，非有限值的数学值不定义。<dfn id="extended-mathematical-value-of">_x_ 的扩展数学值</dfn> 对于有限值为数学值，*+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 分别为 +∞ 和 -∞，*NaN* 不定义。</p>
       <p>数学函数 <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn> 返回 _x_ 的绝对值，即当 _x_ &lt; 0 时为 <emu-eqn>-_x_</emu-eqn>，否则为 _x_。</p>
-      <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 取 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中最小值，<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 取最大值，定义域和值域为扩展数学值。</p>
+        <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> 生成 _x_ 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> 生成以 10 为底的 _x_ 的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> 生成以 2 为底的 _x_ 的对数。</p>
+        <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 取 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中最小值，<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 取最大值，定义域和值域为扩展数学值。</p>
       <p>记号“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ 模 _y_</emu-eqn>”（_y_ 必须为有限且非零）计算与 _y_ 同号或为零的值 _k_，满足 <emu-eqn>abs(_k_) &lt; abs(_y_) 且 _x_ - _k_ = _q_ × _y_</emu-eqn>，其中 _q_ 为整数。</p>
       <p>“将 _x_ 限制在 _lower_ 与 _upper_ 之间”（_x_ 为扩展数学值，_lower_ 和 _upper_ 为满足 _lower_ ≤ _upper_ 的数学值）表示若 _x_ &lt; _lower_，则取 _lower_，若 _x_ > _upper_，则取 _upper_，否则取 _x_。</p>
       <p>数学函数 <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn> 返回不大于 _x_ 的最大整数（最接近 +∞）。</p>
@@ -32550,7 +32551,7 @@
           1. 如果 _n_ 是 *1*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
           1. 如果 _n_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>。
           1. 如果 _n_ &lt; *-0*<sub>𝔽</sub>，返回 *NaN*。
-          1. 返回一个实现近似的 Number，表示 ℝ(_n_) 的自然对数。
+          1. 返回一个实现近似的 Number，表示 ln(ℝ(_n_))。
         </emu-alg>
       </emu-clause>
 
@@ -32563,7 +32564,7 @@
           1. 如果 _n_ 是 *NaN*、*+0*<sub>𝔽</sub>、* -0*<sub>𝔽</sub> 或 *+∞*<sub>𝔽</sub> 之一，返回 _n_。
           1. 如果 _n_ 是 *-1*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>。
           1. 如果 _n_ &lt; *-1*<sub>𝔽</sub>，返回 *NaN*。
-          1. 返回一个实现近似的 Number，表示 1 + ℝ(_n_) 的自然对数。
+          1. 返回一个实现近似的 Number，表示 ln(1 + ℝ(_n_))。
         </emu-alg>
       </emu-clause>
 
@@ -32577,7 +32578,7 @@
           1. 如果 _n_ 是 *1*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
           1. 如果 _n_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>。
           1. 如果 _n_ &lt; *-0*<sub>𝔽</sub>，返回 *NaN*。
-          1. 返回一个实现近似的 Number，表示 ℝ(_n_) 的以 10 为底的对数。
+          1. 返回一个实现近似的 Number，表示 log10(ℝ(_n_))。
         </emu-alg>
       </emu-clause>
 
@@ -32591,7 +32592,7 @@
           1. 如果 _n_ 是 *1*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
           1. 如果 _n_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>。
           1. 如果 _n_ &lt; *-0*<sub>𝔽</sub>，返回 *NaN*。
-          1. 返回一个实现近似的 Number，表示 ℝ(_n_) 的以 2 为底的对数。
+          1. 返回一个实现近似的 Number，表示 log2(ℝ(_n_))。
         </emu-alg>
       </emu-clause>
 
@@ -42825,6 +42826,43 @@ THH:mm:ss.sss
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-map.prototype.getorinsert">
+        <h1>Map.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>调用此方法时会执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _M_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_M_, [[MapData]])。
+          1. 将 _key_ 设置为 CanonicalizeKeyedCollectionKey(_key_)。
+          1. 对 _M_.[[MapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则返回 _p_.[[Value]]。
+          1. 令 _p_ 为记录 { [[Key]]: _key_, [[Value]]: _value_ }。
+          1. 将 _p_ 追加到 _M_.[[MapData]]。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-map.prototype.getorinsertcomputed">
+        <h1>Map.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>调用此方法时会执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _M_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_M_, [[MapData]])。
+          1. 如果 IsCallable(_callback_) 为 *false*，则抛出 *TypeError* 异常。
+          1. 将 _key_ 设置为 CanonicalizeKeyedCollectionKey(_key_)。
+          1. 对 _M_.[[MapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则返回 _p_.[[Value]]。
+          1. 令 _value_ 为 ? Call(_callback_, *undefined*, « _key_ »)。
+          1. 注意：在执行 _callback_ 期间，Map 可能已被修改。
+          1. 对 _M_.[[MapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则
+              1. 将 _p_.[[Value]] 设置为 _value_。
+              1. 返回 _value_。
+          1. 令 _p_ 为记录 { [[Key]]: _key_, [[Value]]: _value_ }。
+          1. 将 _p_ 追加到 _M_.[[MapData]]。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-map.prototype.has">
         <h1>Map.prototype.has ( _key_ )</h1>
         <p>该方法被调用时执行以下步骤：</p>
@@ -43668,6 +43706,43 @@ THH:mm:ss.sss
           1. 对 _M_.[[WeakMapData]] 中每个 Record { [[Key]], [[Value]] } _p_：
             1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，返回 _p_.[[Value]]。
           1. 返回 *undefined*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsert">
+        <h1>WeakMap.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>调用此方法时执行下列步骤：</p>
+        <emu-alg>
+          1. 令 _M_ 为 *this* 值.
+          1. 执行 ? RequireInternalSlot(_M_, [[WeakMapData]]).
+          1. 如果 CanBeHeldWeakly(_key_) 为 *false*，则抛出 *TypeError* 异常.
+          1. 对 _M_.[[WeakMapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则返回 _p_.[[Value]].
+          1. 令 _p_ 为记录 { [[Key]]: _key_, [[Value]]: _value_ }.
+          1. 将 _p_ 附加到 _M_.[[WeakMapData]].
+          1. 返回 _value_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsertcomputed">
+        <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>调用此方法时执行下列步骤：</p>
+        <emu-alg>
+          1. 令 _M_ 为 *this* 值.
+          1. 执行 ? RequireInternalSlot(_M_, [[WeakMapData]]).
+          1. 如果 CanBeHeldWeakly(_key_) 为 *false*，则抛出 *TypeError* 异常.
+          1. 如果 IsCallable(_callback_) 为 *false*，则抛出 *TypeError* 异常.
+          1. 对 _M_.[[WeakMapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则返回 _p_.[[Value]].
+          1. 令 _value_ 为 ? Call(_callback_, *undefined*, « _key_ »).
+          1. 注意：在执行 _callback_ 期间，WeakMap 可能已被修改.
+          1. 对 _M_.[[WeakMapData]] 中的每个记录 { [[Key]], [[Value]] } _p_，执行
+            1. 如果 _p_.[[Key]] 不是 ~empty~ 且 SameValue(_p_.[[Key]], _key_) 为 *true*，则
+              1. 将 _p_.[[Value]] 设为 _value_.
+              1. 返回 _value_.
+          1. 令 _p_ 为记录 { [[Key]]: _key_, [[Value]]: _value_ }.
+          1. 将 _p_ 附加到 _M_.[[WeakMapData]].
+          1. 返回 _value_.
         </emu-alg>
       </emu-clause>
 

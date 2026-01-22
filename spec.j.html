@@ -1178,7 +1178,8 @@
       <p>数値演算子（+, ×, =, ≥など）は、オペランドの型に応じた演算を指します。数学値に適用すれば通常の数学演算、拡張数学値なら拡張実数上の演算（未定義形は定義しないので仕様に現れたら編集誤り）、NumberならIEEE 754-2019の演算、BigIntならBigIntの数学値への演算です。型の異なるオペランドへの数値演算子の適用（例: Numberと数学値）は未定義であり、仕様書に現れたら編集誤りです。</p>
       <p>数学値とNumberやBigInt間の変換は常に明示的です。数学値または拡張数学値_x_からNumberへの変換は「_x_のNumber値」または<emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>と記述され、<emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>で定義されます。整数_x_からBigIntへの変換は「_x_の<dfn id="bigint-value-for">BigInt値</dfn>」または<emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>と記述されます。NumberやBigInt_x_から数学値への変換は「_x_の<dfn id="mathematical-value-of">数学値</dfn>」または<emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>と記述されます。*+0*<sub>𝔽</sub>と*-0*<sub>𝔽</sub>の数学値は数学値0です。非有限値の数学値は定義されません。<dfn id="extended-mathematical-value-of">拡張数学値</dfn>は有限値に対しては数学値、*+∞*<sub>𝔽</sub>と*-∞*<sub>𝔽</sub>に対してはそれぞれ+∞と-∞、*NaN*には定義されません。</p>
       <p>数学関数<emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn>は_x_の絶対値（_x_ &lt; 0なら- _x_、それ以外は_x_）を返します。</p>
-      <p>数学関数<emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>は<emu-eqn>_x1_</emu-eqn>から<emu-eqn>_xN_</emu-eqn>までの最小値、<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>は最大値を返します。これらの関数の定義域と値域は拡張数学値です。</p>
+       <p>数学関数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> は _x_ の自然対数を生成します。数学関数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> は _x_ の底10の対数を生成します。数学関数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> は _x_ の底2の対数を生成します。</p>
+        <p>数学関数<emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>は<emu-eqn>_x1_</emu-eqn>から<emu-eqn>_xN_</emu-eqn>までの最小値、<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>は最大値を返します。これらの関数の定義域と値域は拡張数学値です。</p>
       <p>記法「<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>」（_y_は有限かつ非零）は、_y_と同じ符号（または0）で絶対値が_y_未満になる値_k_を計算し、<emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>（_q_は整数）を満たします。</p>
       <p>「_x_を_lower_から_upper_の間で<dfn id="clamping">クランプする</dfn>」という句（_x_は拡張数学値、_lower_と_upper_は_lower_ ≤ _upper_な数学値）は、_x_ &lt; _lower_なら_lower_、_x_ > _upper_なら_upper_、それ以外は_x_を返します。</p>
       <p>数学関数<emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn>は_x_以下で最大の整数（+∞に最も近いもの）を返します。</p>
@@ -32835,7 +32836,7 @@
           1. _n_ が *1*<sub>𝔽</sub> なら *+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> なら *-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> なら *NaN* を返す。
-          1. ℝ(_n_) の自然対数を表す実装近似 Number 値を返す。
+          1. ln(ℝ(_n_))を表す実装近似 Number 値を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32848,7 +32849,7 @@
           1. _n_ が *NaN*, *+0*<sub>𝔽</sub>, *-0*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> のいずれかなら _n_ を返す。
           1. _n_ が *-1*<sub>𝔽</sub> なら *-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-1*<sub>𝔽</sub> なら *NaN* を返す。
-          1. 1 + ℝ(_n_) の自然対数を表す実装近似 Number 値を返す。
+          1. ln(1 + ℝ(_n_))を表す実装近似 Number 値を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32862,7 +32863,7 @@
           1. _n_ が *1*<sub>𝔽</sub> なら *+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> なら *-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> なら *NaN* を返す。
-          1. ℝ(_n_) の常用対数を表す実装近似 Number 値を返す。
+          1. log10(ℝ(_n_))を表す実装近似 Number 値を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32876,7 +32877,7 @@
           1. _n_ が *1*<sub>𝔽</sub> なら *+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> なら *-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> なら *NaN* を返す。
-          1. ℝ(_n_) の底 2 対数を表す実装近似 Number 値を返す。
+          1. log2(ℝ(_n_))を表す実装近似 Number 値を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43353,6 +43354,43 @@ THH:mm:ss.sss
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-map.prototype.getorinsert">
+        <h1>Map.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>このメソッドは呼び出されたときに次の手順を実行します：</p>
+        <emu-alg>
+          1. _M_ を *this* 値とします。
+          1. ? RequireInternalSlot(_M_, [[MapData]]) を実行します。
+          1. _key_ を CanonicalizeKeyedCollectionKey(_key_) に設定します。
+          1. _M_.[[MapData]] の各 Record { [[Key]], [[Value]] } _p_ に対して、次を行います：
+            1. もし _p_.[[Key]] が ~empty~ でなく、かつ SameValue(_p_.[[Key]], _key_) が *true* であれば、_p_.[[Value]] を返します。
+          1. _p_ を Record { [[Key]]: _key_, [[Value]]: _value_ } とします。
+          1. _p_ を _M_.[[MapData]] に追加します。
+          1. _value_ を返します。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-map.prototype.getorinsertcomputed">
+        <h1>Map.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>このメソッドは呼び出されたときに次の手順を実行します：</p>
+        <emu-alg>
+          1. _M_ を *this* 値とします。
+          1. ? RequireInternalSlot(_M_, [[MapData]]) を実行します。
+          1. もし IsCallable(_callback_) が *false* であれば、*TypeError* 例外をスローします。
+          1. _key_ を CanonicalizeKeyedCollectionKey(_key_) に設定します。
+          1. _M_.[[MapData]] の各 Record { [[Key]], [[Value]] } _p_ に対して、次を行います：
+            1. もし _p_.[[Key]] が ~empty~ でなく、かつ SameValue(_p_.[[Key]], _key_) が *true* であれば、_p_.[[Value]] を返します。
+          1. _value_ を ? Call(_callback_, *undefined*, « _key_ ») に設定します。
+          1. 注：_callback_ の実行中に Map が変更されている可能性があります。
+          1. _M_.[[MapData]] の各 Record { [[Key]], [[Value]] } _p_ に対して、次を行います：
+            1. もし _p_.[[Key]] が ~empty~ でなく、かつ SameValue(_p_.[[Key]], _key_) が *true* であれば：
+              1. _p_.[[Value]] を _value_ に設定します。
+              1. _value_ を返します。
+          1. _p_ を Record { [[Key]]: _key_, [[Value]]: _value_ } とします。
+          1. _p_ を _M_.[[MapData]] に追加します。
+          1. _value_ を返します。
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-map.prototype.has">
         <h1>Map.prototype.has ( _key_ )</h1>
         <p>このメソッドは呼び出し時に次を行う:</p>
@@ -44224,6 +44262,43 @@ THH:mm:ss.sss
           1. 各 Record { [[Key]], [[Value]] } _p_ ∈ _M_.[[WeakMapData]] について
             1. _p_.[[Key]] が ~empty~ でなく SameValue(_p_.[[Key]], _key_) が *true* なら _p_.[[Value]] を返す。
           1. *undefined* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsert">
+        <h1>WeakMap.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>このメソッドは呼び出された際、以下の手順を実行します：</p>
+        <emu-alg>
+          1. _M_ を *this* の値とする。
+          1. ? RequireInternalSlot(_M_, [[WeakMapData]]) を実行する。
+          1. CanBeHeldWeakly(_key_) が *false* の場合、*TypeError* 例外を投げる。
+          1. _M_.[[WeakMapData]] の各 Record { [[Key]], [[Value]] } _p_ について、
+            1. _p_.[[Key]] が ~empty~ ではなく、SameValue(_p_.[[Key]], _key_) が *true* の場合、_p_.[[Value]] を返す。
+          1. _p_ を Record { [[Key]]: _key_, [[Value]]: _value_ } とする。
+          1. _p_ を _M_.[[WeakMapData]] に追加する。
+          1. _value_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsertcomputed">
+        <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>このメソッドは呼び出された際、以下の手順を実行します：</p>
+        <emu-alg>
+          1. _M_ を *this* の値とする。
+          1. ? RequireInternalSlot(_M_, [[WeakMapData]]) を実行する。
+          1. CanBeHeldWeakly(_key_) が *false* の場合、*TypeError* 例外を投げる。
+          1. IsCallable(_callback_) が *false* の場合、*TypeError* 例外を投げる。
+          1. _M_.[[WeakMapData]] の各 Record { [[Key]], [[Value]] } _p_ について、
+            1. _p_.[[Key]] が ~empty~ ではなく、SameValue(_p_.[[Key]], _key_) が *true* の場合、_p_.[[Value]] を返す。
+          1. _value_ を ? Call(_callback_, *undefined*, « _key_ ») に設定する。
+          1. 注：WeakMapは _callback_ の実行中に変更されている可能性があります。
+          1. _M_.[[WeakMapData]] の各 Record { [[Key]], [[Value]] } _p_ について、
+            1. _p_.[[Key]] が ~empty~ ではなく、SameValue(_p_.[[Key]], _key_) が *true* の場合：
+              1. _p_.[[Value]] を _value_ に設定する。
+              1. _value_ を返す。
+          1. _p_ を Record { [[Key]]: _key_, [[Value]]: _value_ } とする。
+          1. _p_ を _M_.[[WeakMapData]] に追加する。
+          1. _value_ を返す。
         </emu-alg>
       </emu-clause>
 

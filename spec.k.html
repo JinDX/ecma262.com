@@ -1178,7 +1178,8 @@
       <p>+, ×, =, ≥ 등 숫자 연산자는 피연산자의 타입에 따라 연산이 결정됩니다. 수학적 값에 적용하면 일반 수학 연산을, 확장 수학적 값에 적용하면 확장 실수에 대한 연산을 의미합니다. 정의되지 않은 형태는 사용해서는 안 되며, 명세서에 사용되면 편집 오류입니다. Numbers에 적용하면 IEEE 754-2019에 따른 연산을, BigInts에 적용하면 BigInt의 수학적 값에 대한 연산을 의미합니다. 타입이 혼합된(예: Number와 수학적 값) 피연산자에 대한 숫자 연산은 정의되지 않으며, 명세서에서 사용되면 편집 오류입니다.</p>
       <p>수학적 값과 Number 또는 BigInt 간의 변환은 항상 명시적으로 나타납니다. 수학적 값 또는 확장 수학적 값 _x_를 Number로 변환하면 "the Number value for _x_" 또는 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>로 표기하며, <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>에서 정의됩니다. 정수 _x_를 BigInt로 변환하면 "the <dfn id="bigint-value-for">BigInt value for</dfn> _x_" 또는 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>로 표기합니다. Number 또는 BigInt _x_를 수학적 값으로 변환하면 "the <dfn id="mathematical-value-of">mathematical value of</dfn> _x_" 또는 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>로 표기합니다. *+0*<sub>𝔽</sub>와 *-0*<sub>𝔽</sub>의 수학적 값은 0입니다. 비유한 값의 수학적 값은 정의되지 않습니다. <dfn id="extended-mathematical-value-of">extended mathematical value of</dfn> _x_는 유한 값에는 수학적 값, *+∞*<sub>𝔽</sub>와 *-∞*<sub>𝔽</sub>에는 각각 +∞, -∞가 되며, *NaN*에는 정의되지 않습니다.</p>
       <p>수학 함수 <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn>는 _x_의 절댓값을 반환하며, _x_ &lt; 0이면 <emu-eqn>-_x_</emu-eqn>, 그렇지 않으면 _x_ 자체입니다.</p>
-      <p>수학 함수 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>은 <emu-eqn>_x1_</emu-eqn> ~ <emu-eqn>_xN_</emu-eqn> 중 가장 작은 값을 반환합니다. <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>은 가장 큰 값을 반환합니다. 이 수학 함수의 정의역과 값의 범위는 확장 수학적 값입니다.</p>
+       <p>수학 함수 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn>는 _x_의 자연로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn>는 _x_의 밑이 10인 로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn>는 _x_의 밑이 2인 로그를 생성한다.</p>
+        <p>수학 함수 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>은 <emu-eqn>_x1_</emu-eqn> ~ <emu-eqn>_xN_</emu-eqn> 중 가장 작은 값을 반환합니다. <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>은 가장 큰 값을 반환합니다. 이 수학 함수의 정의역과 값의 범위는 확장 수학적 값입니다.</p>
       <p>“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>”(_y_는 유한하고 0이 아니어야 함)은 _y_와 같은 부호(또는 0)를 가진 값 _k_를 계산하며, <emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>를 만족하는 정수 _q_가 존재합니다.</p>
       <p>"the result of <dfn id="clamping">clamping</dfn> _x_ between _lower_ and _upper_"(_x_는 확장 수학적 값, _lower_, _upper_는 _lower_ ≤ _upper_인 수학적 값)란, _x_ &lt; _lower_면 _lower_, _x_ > _upper_면 _upper_, 아니면 _x_를 반환합니다.</p>
       <p>수학 함수 <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn>는 _x_보다 크지 않은 가장 큰 정수(가장 +∞에 가까운)를 반환합니다.</p>
@@ -32379,7 +32380,7 @@
           1. _n_ = *1*<sub>𝔽</sub> 이면 *+0*<sub>𝔽</sub> 반환.
           1. _n_ 이 ±0 이면 *-∞*<sub>𝔽</sub> 반환.
           1. _n_ &lt; *-0*<sub>𝔽</sub> 이면 *NaN* 반환.
-          1. ℝ(_n_) 의 자연로그를 나타내는 구현 근사 Number 값 반환.
+          1. ln(ℝ(_n_))를 나타내는 구현 근사 Number 값 반환.
         </emu-alg>
       </emu-clause>
 
@@ -32392,7 +32393,7 @@
           1. _n_ 이 *NaN*, *+0*<sub>𝔽</sub>, *-0*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> 중 하나이면 _n_ 반환.
           1. _n_ = *-1*<sub>𝔽</sub> 이면 *-∞*<sub>𝔽</sub> 반환.
           1. _n_ &lt; *-1*<sub>𝔽</sub> 이면 *NaN* 반환.
-          1. 1 + ℝ(_n_) 의 자연로그를 나타내는 구현 근사 Number 값 반환.
+          1. ln(1 + ℝ(_n_))를 나타내는 구현 근사 Number 값 반환.
         </emu-alg>
       </emu-clause>
 
@@ -32406,7 +32407,7 @@
           1. _n_ = *1*<sub>𝔽</sub> 이면 *+0*<sub>𝔽</sub> 반환.
           1. _n_ 이 ±0 이면 *-∞*<sub>𝔽</sub> 반환.
           1. _n_ &lt; *-0*<sub>𝔽</sub> 이면 *NaN* 반환.
-          1. ℝ(_n_) 의 밑 10 로그 구현 근사 값 반환.
+          1. log10(ℝ(_n_))를 나타내는 구현 근사 Number 값 반환.
         </emu-alg>
       </emu-clause>
 
@@ -32420,7 +32421,7 @@
           1. _n_ = *1*<sub>𝔽</sub> 이면 *+0*<sub>𝔽</sub> 반환.
           1. _n_ 이 ±0 이면 *-∞*<sub>𝔽</sub> 반환.
           1. _n_ &lt; *-0*<sub>𝔽</sub> 이면 *NaN* 반환.
-          1. ℝ(_n_) 의 밑 2 로그 구현 근사 값 반환.
+          1. log2(ℝ(_n_))를 나타내는 구현 근사 Number 값 반환.
         </emu-alg>
       </emu-clause>
 
@@ -42898,6 +42899,43 @@ THH:mm:ss.sss
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-map.prototype.getorinsert">
+        <h1>Map.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _M_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_M_, [[MapData]])를 수행한다.
+          1. _key_를 CanonicalizeKeyedCollectionKey(_key_)로 설정한다.
+          1. _M_.[[MapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면, _p_.[[Value]]를 반환한다.
+          1. _p_를 Record { [[Key]]: _key_, [[Value]]: _value_ }로 둔다.
+          1. _p_를 _M_.[[MapData]]에 추가한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-map.prototype.getorinsertcomputed">
+        <h1>Map.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _M_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_M_, [[MapData]])를 수행한다.
+          1. 만약 IsCallable(_callback_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _key_를 CanonicalizeKeyedCollectionKey(_key_)로 설정한다.
+          1. _M_.[[MapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면, _p_.[[Value]]를 반환한다.
+          1. _value_를 ? Call(_callback_, *undefined*, « _key_ »)의 결과로 둔다.
+          1. 참고: _callback_의 실행 중에 Map이 수정되었을 수 있다.
+          1. _M_.[[MapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면,
+              1. _p_.[[Value]]를 _value_로 설정한다.
+              1. _value_를 반환한다.
+          1. _p_를 Record { [[Key]]: _key_, [[Value]]: _value_ }로 둔다.
+          1. _p_를 _M_.[[MapData]]에 추가한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-map.prototype.has">
         <h1>Map.prototype.has ( _key_ )</h1>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
@@ -43771,6 +43809,43 @@ THH:mm:ss.sss
           1. _M_.[[WeakMapData]] 의 각 Record { [[Key]], [[Value]] } _p_ 에 대해
             1. _p_.[[Key]] ≠ ~empty~ 그리고 SameValue(_p_.[[Key]], _key_) = *true* 이면 _p_.[[Value]] 반환.
           1. *undefined* 반환.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsert">
+        <h1>WeakMap.prototype.getOrInsert ( _key_, _value_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _M_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_M_, [[WeakMapData]])를 수행한다.
+          1. 만약 CanBeHeldWeakly(_key_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _M_.[[WeakMapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면, _p_.[[Value]]를 반환한다.
+          1. _p_를 Record { [[Key]]: _key_, [[Value]]: _value_ }로 둔다.
+          1. _p_를 _M_.[[WeakMapData]]에 추가한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-weakmap.prototype.getorinsertcomputed">
+        <h1>WeakMap.prototype.getOrInsertComputed ( _key_, _callback_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _M_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_M_, [[WeakMapData]])를 수행한다.
+          1. 만약 CanBeHeldWeakly(_key_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. 만약 IsCallable(_callback_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _M_.[[WeakMapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면, _p_.[[Value]]를 반환한다.
+          1. _value_를 ? Call(_callback_, *undefined*, « _key_ »)의 결과로 둔다.
+          1. 참고: _callback_의 실행 중에 WeakMap이 수정되었을 수 있다.
+          1. _M_.[[WeakMapData]]의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다
+            1. 만약 _p_.[[Key]]가 ~empty~가 아니고 SameValue(_p_.[[Key]], _key_)가 *true*이면, 그러면
+              1. _p_.[[Value]]를 _value_로 설정한다.
+              1. _value_를 반환한다.
+          1. _p_를 Record { [[Key]]: _key_, [[Value]]: _value_ }로 둔다.
+          1. _p_를 _M_.[[WeakMapData]]에 추가한다.
+          1. _value_를 반환한다.
         </emu-alg>
       </emu-clause>
 
