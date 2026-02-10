@@ -1178,8 +1178,8 @@
       <p>+, ×, =, ≥ 등 숫자 연산자는 피연산자의 타입에 따라 연산이 결정됩니다. 수학적 값에 적용하면 일반 수학 연산을, 확장 수학적 값에 적용하면 확장 실수에 대한 연산을 의미합니다. 정의되지 않은 형태는 사용해서는 안 되며, 명세서에 사용되면 편집 오류입니다. Numbers에 적용하면 IEEE 754-2019에 따른 연산을, BigInts에 적용하면 BigInt의 수학적 값에 대한 연산을 의미합니다. 타입이 혼합된(예: Number와 수학적 값) 피연산자에 대한 숫자 연산은 정의되지 않으며, 명세서에서 사용되면 편집 오류입니다.</p>
       <p>수학적 값과 Number 또는 BigInt 간의 변환은 항상 명시적으로 나타납니다. 수학적 값 또는 확장 수학적 값 _x_를 Number로 변환하면 "the Number value for _x_" 또는 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>로 표기하며, <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>에서 정의됩니다. 정수 _x_를 BigInt로 변환하면 "the <dfn id="bigint-value-for">BigInt value for</dfn> _x_" 또는 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>로 표기합니다. Number 또는 BigInt _x_를 수학적 값으로 변환하면 "the <dfn id="mathematical-value-of">mathematical value of</dfn> _x_" 또는 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>로 표기합니다. *+0*<sub>𝔽</sub>와 *-0*<sub>𝔽</sub>의 수학적 값은 0입니다. 비유한 값의 수학적 값은 정의되지 않습니다. <dfn id="extended-mathematical-value-of">extended mathematical value of</dfn> _x_는 유한 값에는 수학적 값, *+∞*<sub>𝔽</sub>와 *-∞*<sub>𝔽</sub>에는 각각 +∞, -∞가 되며, *NaN*에는 정의되지 않습니다.</p>
       <p>수학 함수 <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn>는 _x_의 절댓값을 반환하며, _x_ &lt; 0이면 <emu-eqn>-_x_</emu-eqn>, 그렇지 않으면 _x_ 자체입니다.</p>
-       <p>수학 함수 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn>는 _x_의 자연로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn>는 _x_의 밑이 10인 로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn>는 _x_의 밑이 2인 로그를 생성한다.</p>
-        <p>수학 함수 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>은 <emu-eqn>_x1_</emu-eqn> ~ <emu-eqn>_xN_</emu-eqn> 중 가장 작은 값을 반환합니다. <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>은 가장 큰 값을 반환합니다. 이 수학 함수의 정의역과 값의 범위는 확장 수학적 값입니다.</p>
+      <p>수학 함수 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn>는 _x_의 자연로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn>는 _x_의 밑이 10인 로그를 생성한다. 수학 함수 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn>는 _x_의 밑이 2인 로그를 생성한다.</p>
+      <p>수학 함수 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>은 <emu-eqn>_x1_</emu-eqn> ~ <emu-eqn>_xN_</emu-eqn> 중 가장 작은 값을 반환합니다. <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>은 가장 큰 값을 반환합니다. 이 수학 함수의 정의역과 값의 범위는 확장 수학적 값입니다.</p>
       <p>“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>”(_y_는 유한하고 0이 아니어야 함)은 _y_와 같은 부호(또는 0)를 가진 값 _k_를 계산하며, <emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>를 만족하는 정수 _q_가 존재합니다.</p>
       <p>"the result of <dfn id="clamping">clamping</dfn> _x_ between _lower_ and _upper_"(_x_는 확장 수학적 값, _lower_, _upper_는 _lower_ ≤ _upper_인 수학적 값)란, _x_ &lt; _lower_면 _lower_, _x_ > _upper_면 _upper_, 아니면 _x_를 반환합니다.</p>
       <p>수학 함수 <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn>는 _x_보다 크지 않은 가장 큰 정수(가장 +∞에 가까운)를 반환합니다.</p>
@@ -10099,96 +10099,163 @@
       </ul>
 
       <p>Environment Record 추상 클래스는 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>에 정의된 추상 명세 메서드를 포함한다. 이 추상 메서드들은 각 구체 하위 클래스마다 구별되는 구체 알고리즘을 가진다.</p>
-      <emu-table id="table-abstract-methods-of-environment-records" caption="Environment Record의 추상 메서드(Abstract Methods of Environment Records)" oldids="table-15">
+      <emu-table id="table-abstract-methods-of-environment-records" type="abstract methods" of="Environment Records" oldids="table-15,table-17,table-19,table-20,table-additional-methods-of-function-environment-records,table-additional-methods-of-global-environment-records,table-additional-methods-of-module-environment-records">
         <table>
           <thead>
             <tr>
               <th>
-                메서드(Method)
+                메서드
               </th>
               <th>
-                목적(Purpose)
+                목적
+              </th>
+              <th>
+                정의
               </th>
             </tr>
           </thead>
-          <tr>
+          <tr id="abstract-hasbinding">
             <td>
-              HasBinding(N)
+              HasBinding (
+              _N_: 문자열,
+              ): 불리언 값을 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
-              Environment Record가 문자열 값 _N_에 대한 바인딩을 가지는지 결정한다. 있다면 *true*, 없으면 *false*를 반환.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              CreateMutableBinding(N, D)
+              Environment Record가 _N_에 대한 바인딩을 가지고 있는지 확인합니다.
             </td>
             <td>
-              Environment Record에 새이지만 아직 초기화되지 않은 변경 가능(mutable) 바인딩을 생성한다. 문자열 값 _N_은 바운드 이름 텍스트다. Boolean 인자 _D_가 *true*이면 해당 바인딩은 이후 삭제될 수 있다.
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="HasBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createmutablebinding">
             <td>
-              CreateImmutableBinding(N, S)
+              CreateMutableBinding (
+              _N_: 문자열,
+              _D_: 불리언,
+              ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
-              Environment Record에 새이지만 아직 초기화되지 않은 변경 불가능(immutable) 바인딩을 생성한다. 문자열 값 _N_은 바운드 이름 텍스트다. _S_가 *true*이면 초기화 후 설정하려는 모든 시도는 (참조하는 연산의 strict 모드 설정과 무관하게) 항상 예외를 던진다.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              InitializeBinding(N, V)
+              Environment Record에 새롭지만 초기화되지 않은 변경 가능한 바인딩을 생성합니다. _N_은 바운드 이름의 텍스트를 나타냅니다. _D_가 *true*이면 이후에 해당 바인딩을 삭제할 수 있습니다.
             </td>
             <td>
-              Environment Record 내 이미 존재하지만 초기화되지 않은 바인딩의 값을 설정한다. 문자열 값 _N_은 바운드 이름 텍스트. _V_는 바인딩에 대한 값이며 임의의 ECMAScript 언어 타입 값이다.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              SetMutableBinding(N, V, S)
-            </td>
-            <td>
-              이미 존재하는 mutable 바인딩의 값을 설정한다. 문자열 값 _N_은 바운드 이름 텍스트, _V_는 값, _S_는 Boolean 플래그. _S_가 *true*이고 바인딩을 설정할 수 없다면 *TypeError* 예외를 던진다.
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="CreateMutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createimmutablebinding">
             <td>
-              GetBindingValue(N, S)
+              CreateImmutableBinding (
+              _N_: 문자열,
+              _S_: 불리언,
+              ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
-              이미 존재하는 바인딩의 값을 반환한다. 문자열 값 _N_은 바운드 이름 텍스트. _S_는 strict 모드 코드에서 기원했거나 strict 모드 참조语 의미를 요구하는지 식별하는 데 사용된다. _S_가 *true*이고 바인딩이 존재하지 않으면 *ReferenceError*를 던진다. 바인딩이 존재하지만 초기화되지 않았다면 _S_ 값과 무관하게 *ReferenceError*를 던진다.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              DeleteBinding(N)
+              Environment Record에 새롭지만 초기화되지 않은 변경 불가능한 바인딩을 생성합니다. _N_은 바운드 이름의 텍스트를 의미합니다. _S_가 *true*이면 초기화 후 해당 바인딩을 설정하려 시도할 때 엄격 모드 설정과 관계없이 항상 예외가 발생합니다.
             </td>
             <td>
-              바인딩을 삭제한다. 문자열 값 _N_은 바운드 이름 텍스트. _N_에 대한 바인딩이 존재하면 제거하고 *true* 반환. 존재하지만 제거 불가하면 *false* 반환. 존재하지 않으면 *true* 반환.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              HasThisBinding()
-            </td>
-            <td>
-              Environment Record가 `this` 바인딩을 설정하는지 결정. 그렇다면 *true*, 아니면 *false*.
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="CreateImmutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-initializebinding">
             <td>
-              HasSuperBinding()
+              InitializeBinding (
+              _N_: 문자열,
+              _V_: ECMAScript 언어 값,
+              ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
-              Environment Record가 `super` 메서드 바인딩을 설정하는지 결정. 그렇다면 *true*, 아니면 *false*. *true*이면 해당 Environment Record는 Function Environment Record임을 시사하지만, 그 역은 성립하지 않는다.
+              이미 존재하지만 초기화되지 않은 Environment Record의 바인딩 값 설정합니다. _N_은 바운드 이름의 텍스트, _V_는 바인딩 값입니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="InitializeBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-setmutablebinding">
             <td>
-              WithBaseObject()
+              SetMutableBinding (
+              _N_: 문자열,
+              _V_: ECMAScript 언어 값,
+              _S_: 불리언,
+              ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
-              이 Environment Record가 `with` 문과 연관되면 with 객체를 반환. 아니면 *undefined* 반환.
+              이미 존재하는 변경 가능한 바인딩의 값을 설정합니다. _N_은 바운드 이름의 텍스트, _V_는 바인딩 값입니다. _S_가 *true*이고 바인딩을 설정할 수 없으면 *TypeError* 예외를 발생시킵니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="SetMutableBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getbindingvalue">
+            <td>
+              GetBindingValue (
+              _N_: 문자열,
+              _S_: 불리언,
+              ): ECMAScript 언어 값을 포함한 정상 완료 또는 throw 완료
+            </td>
+            <td>
+              이미 존재하는 바인딩의 값을 반환합니다. _N_은 바운드 이름의 텍스트, _S_는 strict 모드 코드에서 발생한 참조인지 또는 strict 모드 참조 의미를 요구하는 참조인지를 식별하는 데 사용됩니다. _S_가 *true*이고 바인딩이 존재하지 않으면 *ReferenceError* 예외가 발생합니다. 바인딩이 존재하지만 초기화되지 않은 경우 *ReferenceError*가, _S_의 값과 무관하게 발생합니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="GetBindingValue"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-deletebinding">
+            <td>
+              DeleteBinding (
+              _N_: 문자열,
+              ): 불리언 값을 포함한 정상 완료 또는 throw 완료
+            </td>
+            <td>
+              Environment Record에서 바인딩을 삭제합니다. _N_은 바운드 이름의 텍스트입니다. _N_의 바인딩이 존재하면 바인딩을 제거하고 *true*를 반환합니다. 존재하지만 제거할 수 없으면 *false*를 반환합니다. 바인딩이 없으면 *true*를 반환합니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="DeleteBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hasthisbinding">
+            <td>HasThisBinding ( ): 불리언</td>
+            <td>
+              Environment Record가 `this` 바인딩을 가지는지 확인합니다. 가지면 *true*, 없으면 *false*를 반환합니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="HasThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getthisbinding">
+            <td>GetThisBinding ( ): ECMAScript 언어 값을 포함한 정상 완료 또는 throw 완료</td>
+            <td>
+              이 Environment Record의 `this` 바인딩 값을 반환합니다. `this` 바인딩이 초기화되지 않았다면 *ReferenceError*를 발생시킵니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="GetThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hassuperbinding">
+            <td>HasSuperBinding ( ): 불리언</td>
+            <td>
+              Environment Record가 `super` 메서드 바인딩을 가지는지 확인합니다. 가지면 *true*, 없으면 *false*를 반환합니다. *true*를 반환한다면 이는 Environment Record가 Function Environment Record 임을 의미하지만, 그 역은 반드시 성립하지 않습니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="HasSuperBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-withbaseobject">
+            <td>WithBaseObject ( ): 객체 또는 *undefined*</td>
+            <td>
+              이 Environment Record가 `with` 문과 연관되어 있다면 with 객체를 반환합니다. 그렇지 않으면 *undefined*를 반환합니다.
+            </td>
+            <td>
+              다음 타입에서 구체 정의를 가집니다:
+              <emu-concrete-method-dfns for="WithBaseObject"></emu-concrete-method-dfns>
             </td>
           </tr>
         </table>
@@ -10371,6 +10438,14 @@
           <emu-note>
             <p>일반 Declarative Environment Record(즉 Function Environment Record나 Module Environment Record가 아닌 것)는 `this` 바인딩을 제공하지 않는다.</p>
           </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-declarative-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>
+            선언적 환경 레코드(Declarative Environment Record)의
+            GetThisBinding 구체 메서드는 이 명세 내에서 절대 사용되지 않는다.
+          </p>
         </emu-clause>
 
         <emu-clause id="sec-declarative-environment-records-hassuperbinding" type="concrete method">
@@ -10602,6 +10677,15 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-object-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>
+            객체 환경 레코드(Object Environment Record)의
+            GetThisBinding 구체 메서드는 이 명세 내에서
+            절대 사용되지 않는다.
+          </p>
+        </emu-clause>
+
         <emu-clause id="sec-object-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -10694,29 +10778,11 @@
             </tr>
           </table>
         </emu-table>
-        <p>Function Environment Record는 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>에 나열된 모든 Declarative Environment Record 메서드를 지원하고 HasThisBinding 및 HasSuperBinding을 제외한 명세는 동일하다. 추가로 <emu-xref href="#table-additional-methods-of-function-environment-records"></emu-xref>에 나열된 메서드를 지원한다:</p>
-        <emu-table id="table-additional-methods-of-function-environment-records" caption="Function Environment Record의 추가 메서드(Additional Methods of Function Environment Records)" oldids="table-17">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  메서드
-                </th>
-                <th>
-                  목적
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                이 Environment Record의 `this` 바인딩 값을 반환. 초기화되지 않았으면 *ReferenceError*.
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <p>
+          함수 환경 레코드(Function Environment Records)는
+          <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>에 나열된 모든 선언적 환경 레코드(Declarative Environment Record) 메서드를 지원하며,
+          HasThisBinding, GetThisBinding, HasSuperBinding을 제외한 모든 메서드에 대해 동일한 명세를 공유합니다.
+        </p>
 
         <emu-clause id="sec-bindthisvalue" type="abstract operation">
           <h1>
@@ -10749,57 +10815,57 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
-          <h1>HasSuperBinding ( ): Boolean</h1>
+        <emu-clause id="sec-function-environment-records-getthisbinding" type="concrete method">
+          <h1>GetThisBinding ( ): ECMAScript 언어 값을 포함한 정상 완료 또는 throw 완료</h1>
           <dl class="header">
             <dt>for</dt>
-            <dd>Function Environment Record _envRec_</dd>
+            <dd>함수 환경 레코드(Function Environment Record) _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면 *false* 반환.
-            1. _envRec_.[[FunctionObject]].[[HomeObject]]가 *undefined*이면 *false*, 아니면 *true* 반환.
+            1. Assert: _envRec_.[[ThisBindingStatus]]가 ~lexical~이 아님을 확인한다.
+            1. _envRec_.[[ThisBindingStatus]]가 ~uninitialized~이면, *ReferenceError* 예외를 throw 한다.
+            1. _envRec_.[[ThisValue]]를 반환한다.
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-function-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): ECMAScript 언어 값 또는 throw completion</h1>
+        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
+          <h1>HasSuperBinding ( ): 불리언</h1>
           <dl class="header">
             <dt>for</dt>
-            <dd>Function Environment Record _envRec_</dd>
+            <dd>함수 환경 레코드(Function Environment Record) _envRec_</dd>
           </dl>
           <emu-alg>
-            1. 단언: _envRec_.[[ThisBindingStatus]]는 ~lexical~이 아니다.
-            1. _envRec_.[[ThisBindingStatus]]가 ~uninitialized~이면 *ReferenceError* 예외.
-            1. _envRec_.[[ThisValue]] 반환.
+            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면, *false*를 반환한다.
+            1. _envRec_.[[FunctionObject]].[[HomeObject]]가 *undefined*이면, *false*를 반환한다. 그렇지 않으면 *true*를 반환한다.
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-getsuperbase" type="abstract operation">
           <h1>
             GetSuperBase (
-              _envRec_: Function Environment Record,
-            ): Object, *null*, 또는 *undefined*
+              _envRec_: 함수 환경 레코드(Function Environment Record),
+            ): 객체, *null*, 또는 *undefined*
           </h1>
           <dl class="header">
-            <dt>description</dt>
-            <dd>_envRec_에 바인딩된 `super` 프로퍼티 접근의 기반 객체를 반환한다. *undefined* 값은 그러한 접근이 런타임 오류를 낼 것임을 나타낸다.</dd>
+            <dt>설명</dt>
+            <dd>_envRec_에 바인딩된 `super` 프로퍼티 접근의 기반이 되는 객체를 반환한다. 값이 *undefined*라면, 해당 접근은 런타임 에러를 발생시킨다.</dd>
           </dl>
           <emu-alg>
             1. _home_을 _envRec_.[[FunctionObject]].[[HomeObject]]로 둔다.
-            1. _home_이 *undefined*이면 *undefined* 반환.
-            1. 단언: _home_은 ordinary object.
-            1. ! _home_.[[GetPrototypeOf]]() 반환.
+            1. _home_이 *undefined*이면, *undefined*를 반환한다.
+            1. Assert: _home_은 ordinary 객체이다.
+            1. ! _home_.[[GetPrototypeOf]]()를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-global-environment-records" oldids="global-environment">
-        <h1>Global Environment Record</h1>
-        <p><dfn variants="Global Environment Records">Global Environment Record</dfn>는 공통 realm에서 처리되는 모든 ECMAScript |Script| 요소가 공유하는 가장 바깥 스코프를 나타낸다. Global Environment Record는 내장(global) 전역(<emu-xref href="#sec-global-object"></emu-xref> 절), 전역 객체의 프로퍼티 및 |Script| 내 모든 최상위 선언(<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>)의 바인딩을 제공한다.</p>
-        <p>Global Environment Record는 논리적으로 단일 레코드이지만 Object Environment Record와 Declarative Environment Record를 캡슐화한 합성체로 명세된다. Object Environment Record는 관련 Realm Record의 전역 객체를 기본 객체로 가진다. 이 전역 객체는 Global Environment Record의 GetThisBinding 구체 메서드가 반환하는 값이다. Global Environment Record의 Object Environment Record 구성 요소는 모든 내장 전역(<emu-xref href="#sec-global-object"></emu-xref>)과 전역 코드에 포함된 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableStatement|이 도입한 바인딩을 포함한다. 전역 코드의 다른 ECMAScript 선언에 대한 바인딩은 Global Environment Record의 Declarative Environment Record 구성 요소에 들어 있다.</p>
-        <p>프로퍼티는 전역 객체에 직접 생성될 수 있다. 따라서 Global Environment Record의 Object Environment Record 구성 요소는 선언에 의해 명시적으로 생성된 바인딩과 전역 객체의 프로퍼티로 암묵적으로 생성된 바인딩을 모두 포함할 수 있다. 어느 바인딩이 선언을 통해 명시적으로 생성되었는지 식별하기 위해 Global Environment Record는 CreateGlobalVarBinding 및 CreateGlobalFunctionBinding 추상 연산을 사용해 바인딩된 이름 목록을 유지한다.</p>
-        <p>Global Environment Record는 <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>에 나열된 추가 필드와 <emu-xref href="#table-additional-methods-of-global-environment-records"></emu-xref>에 나열된 추가 메서드를 가진다.</p>
-        <emu-table id="table-additional-fields-of-global-environment-records" caption="Global Environment Record의 추가 필드(Additional Fields of Global Environment Records)" oldids="table-18">
+        <h1>글로벌 환경 레코드(Global Environment Records)</h1>
+        <p><dfn variants="Global Environment Records">글로벌 환경 레코드</dfn>는 동일한 Realm에서 처리되는 모든 ECMAScript |Script| 요소가 공유하는 가장 바깥쪽 스코프를 나타내는 데 사용된다. 글로벌 환경 레코드는 내장 글로벌(clause <emu-xref href="#sec-global-object"></emu-xref>), 글로벌 객체의 프로퍼티, 그리고 |Script| 내에서 발생하는 모든 최상위 선언(<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>)에 대한 바인딩을 제공한다.</p>
+        <p>글로벌 환경 레코드는 논리적으로 하나의 레코드이지만, 객체 환경 레코드(Object Environment Record)와 선언적 환경 레코드(Declarative Environment Record)를 캡슐화하는 복합 구조로 지정된다. 객체 환경 레코드의 기반 객체는 연관된 Realm 레코드의 글로벌 객체이다. 이 글로벌 객체는 글로벌 환경 레코드의 GetThisBinding 구체 메서드가 반환하는 값이다. 글로벌 환경 레코드의 객체 환경 레코드 구성 요소는 해당 Realm의 글로벌 코드에서 내장 글로벌(clause <emu-xref href="#sec-global-object"></emu-xref>)과 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableStatement|로 도입된 모든 바인딩을 포함한다. 글로벌 코드 내의 그 외 ECMAScript 선언에 대한 바인딩은 글로벌 환경 레코드의 선언적 환경 레코드 구성 요소에 포함된다.</p>
+        <p>프로퍼티는 글로벌 객체에 직접 생성될 수 있다. 따라서 글로벌 환경 레코드의 객체 환경 레코드 구성 요소에는 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 선언에 의해 명시적으로 생성된 바인딩과 글로벌 객체의 프로퍼티로 암시적으로 생성된 바인딩이 모두 포함될 수 있다. 어떤 바인딩이 선언을 사용해 명시적으로 생성되었는지 식별하기 위해 글로벌 환경 레코드는 CreateGlobalVarBinding 및 CreateGlobalFunctionBinding 추상 연산을 사용해 바인딩된 이름의 목록을 유지한다.</p>
+        <p>글로벌 환경 레코드는 <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>에 나열된 추가 필드를 가진다.</p>
+        <emu-table id="table-additional-fields-of-global-environment-records" caption="글로벌 환경 레코드의 추가 필드" oldids="table-18">
           <table>
             <thead>
               <tr>
@@ -10819,10 +10885,10 @@
                 [[ObjectRecord]]
               </td>
               <td>
-                Object Environment Record
+                객체 환경 레코드(Object Environment Record)
               </td>
               <td>
-                바인딩 객체는 전역 객체. 관련 realm의 전역 코드 내 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 바인딩과 전역 내장 바인딩을 포함.
+                바인딩 객체는 글로벌 객체이다. 이는 해당 Realm의 글로벌 코드에서 내장 글로벌 및 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 바인딩을 포함한다.
               </td>
             </tr>
             <tr>
@@ -10830,10 +10896,10 @@
                 [[GlobalThisValue]]
               </td>
               <td>
-                Object
+                객체(Object)
               </td>
               <td>
-                전역 스코프에서 `this`가 반환하는 값. 호스트는 임의의 ECMAScript Object 값을 제공할 수 있다.
+                글로벌 스코프에서 `this`가 반환하는 값이다. 호스트는 임의의 ECMAScript 객체 값을 제공할 수 있다.
               </td>
             </tr>
             <tr>
@@ -10841,32 +10907,10 @@
                 [[DeclarativeRecord]]
               </td>
               <td>
-                Declarative Environment Record
+                선언적 환경 레코드(Declarative Environment Record)
               </td>
               <td>
-                <emu-not-ref>Contains</emu-not-ref> 전역 코드 선언 중 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration|을 제외한 모든 선언 바인딩.
-              </td>
-            </tr>
-          </table>
-        </emu-table>
-        <emu-table id="table-additional-methods-of-global-environment-records" caption="Global Environment Record의 추가 메서드(Additional Methods of Global Environment Records)" oldids="table-19">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  메서드
-                </th>
-                <th>
-                  목적
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                이 Environment Record의 `this` 바인딩 값을 반환.
+                <emu-not-ref>해당 Realm 코드의 글로벌 코드 내에서 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 바인딩을 제외한 모든 선언에 대한 바인딩을 포함한다.</emu-not-ref>
               </td>
             </tr>
           </table>
@@ -11046,6 +11090,17 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
+          <h1>GetThisBinding ( ): 객체를 포함한 정상 완료</h1>
+          <dl class="header">
+            <dt>대상</dt>
+            <dd>글로벌 환경 레코드(Global Environment Record) _envRec_</dd>
+          </dl>
+          <emu-alg>
+            1. _envRec_.[[GlobalThisValue]]를 반환한다.
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-global-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -11068,17 +11123,6 @@
           </dl>
           <emu-alg>
             1. *undefined* 반환.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): Object를 담는 normal completion</h1>
-          <dl class="header">
-            <dt>for</dt>
-            <dd>Global Environment Record _envRec_</dd>
-          </dl>
-          <emu-alg>
-            1. _envRec_.[[GlobalThisValue]] 반환.
           </emu-alg>
         </emu-clause>
 
@@ -11221,113 +11265,91 @@
       </emu-clause>
 
       <emu-clause id="sec-module-environment-records" oldids="module-environment">
-        <h1>Module Environment Record</h1>
-        <p><dfn variants="Module Environment Records">Module Environment Record</dfn>는 ECMAScript |Module|의 바깥 스코프를 나타내는 Declarative Environment Record이며, 일반 mutable/immutable 바인딩 외에 다른 Environment Record에 존재하는 대상 바인딩에 간접 접근을 제공하는 immutable import 바인딩도 제공한다.</p>
-        <p>Module Environment Record는 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>에 나열된 모든 Declarative Environment Record 메서드를 지원하며 GetBindingValue, DeleteBinding, HasThisBinding, GetThisBinding을 제외하고 동일한 명세를 공유한다. 추가로 <emu-xref href="#table-additional-methods-of-module-environment-records"></emu-xref>에 나열된 메서드를 지원한다:</p>
-        <emu-table id="table-additional-methods-of-module-environment-records" caption="Module Environment Record의 추가 메서드(Additional Methods of Module Environment Records)" oldids="table-20">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  메서드
-                </th>
-                <th>
-                  목적
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                이 Environment Record의 `this` 바인딩 값을 반환.
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <h1>모듈 환경 레코드(Module Environment Records)</h1>
+        <p><dfn variants="Module Environment Records">모듈 환경 레코드</dfn>는 ECMAScript |Module|의 외부 스코프를 나타내는 데 사용되는 선언적 환경 레코드(Declarative Environment Record)입니다. 일반적인 변경 가능 및 변경 불가능 바인딩 외에도, 모듈 환경 레코드는 불변의 import 바인딩(다른 환경 레코드에 존재하는 대상 바인딩에 간접적으로 접근 가능하게 해 주는 바인딩)도 제공합니다.</p>
+        <p>모듈 환경 레코드는 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>에 나열된 모든 선언적 환경 레코드 메서드를 지원하며, GetBindingValue, DeleteBinding, HasThisBinding, GetThisBinding을 제외한 모든 메서드에 대해 동일한 명세를 공유합니다.</p>
 
         <emu-clause id="sec-module-environment-records-getbindingvalue-n-s" type="concrete method">
           <h1>
             GetBindingValue (
-              _N_: String,
-              _S_: Boolean,
-            ): ECMAScript 언어 값 또는 throw completion
+              _N_: 문자열,
+              _S_: 불리언,
+            ): ECMAScript 언어 값을 포함한 정상 완료 또는 throw 완료
           </h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>대상</dt>
+            <dd>모듈 환경 레코드(Module Environment Record) _envRec_</dd>
 
-            <dt>description</dt>
-            <dd>이름 _N_인 바인딩된 식별자 값을 반환. 간접 바인딩이면 대상 바인딩 값을 반환. 바인딩이 존재하지만 초기화되지 않았으면 *ReferenceError*.</dd>
+            <dt>설명</dt>
+            <dd>_N_이라는 이름을 가진 바인딩 식별자의 값을 반환합니다. 다만, 그 바인딩이 간접 바인딩이면 대상 바인딩의 값을 반환합니다. 바인딩이 존재하지만 초기화되지 않은 경우 *ReferenceError*가 발생합니다.</dd>
           </dl>
           <emu-alg>
-            1. 단언: _S_는 *true*.
-            1. 단언: _envRec_은 _N_ 바인딩을 가진다.
-            1. _N_에 대한 바인딩이 간접 바인딩이면
-              1. 이 _N_ 바인딩 생성 시 제공된 간접 값 _M_, _N2_를 둔다.
+            1. Assert: _S_는 *true*이다.
+            1. Assert: _envRec_에 _N_에 대한 바인딩이 존재한다.
+            1. _N_에 대한 바인딩이 간접 바인딩(indirect binding)이면,
+              1. _M_과 _N2_를 _N_의 바인딩이 생성될 때 제공된 간접 참조 값으로 둔다.
               1. _targetEnv_를 _M_.[[Environment]]로 둔다.
-              1. _targetEnv_가 ~empty~이면 *ReferenceError* 예외.
-              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta> 반환.
-            1. _envRec_의 _N_ 바인딩이 초기화되지 않았으면 *ReferenceError* 예외.
-            1. 현재 _envRec_에 _N_으로 바인딩된 값을 반환.
+              1. _targetEnv_가 ~empty~이면, *ReferenceError* 예외를 throw 한다.
+              1. Return ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta>.
+            1. _envRec_에서 _N_에 대한 바인딩이 초기화되지 않은(uninitialized) 바인딩이면, *ReferenceError* 예외를 throw 한다.
+            1. _envRec_ 내 현재 _N_에 바인딩된 값을 반환한다.
           </emu-alg>
           <emu-note>
-            <p>_S_는 항상 *true*인데 |Module|은 항상 strict 모드 코드이기 때문이다.</p>
+            <p>_S_는 항상 *true*입니다. 왜냐하면 |Module|은 항상 strict 모드 코드이기 때문입니다.</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-deletebinding-n">
           <h1>DeleteBinding ( _N_ )</h1>
-          <p>Module Environment Record의 DeleteBinding 구체 메서드는 이 명세 내에서 사용되지 않는다.</p>
+          <p>모듈 환경 레코드의 DeleteBinding 구체 메서드는 이 명세 내에서 사용되지 않습니다.</p>
           <emu-note>
-            <p>Module Environment Record는 strict 코드 내에서만 사용되고 초기 에러 규칙이 strict 코드에서 delete 연산자가 Module Environment Record 바인딩으로 해석될 Reference Record에 적용되는 것을 방지한다. <emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref> 참조.</p>
+            <p>모듈 환경 레코드는 strict 코드 내에서만 사용되며, strict 코드에서는 delete 연산자가 모듈 환경 레코드 바인딩을 해제하도록 적용되는 것을 방지하는 초기 에러 규칙이 있습니다. <emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref>를 참고하세요.</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-hasthisbinding" type="concrete method">
           <h1>HasThisBinding ( ): *true*</h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>대상</dt>
+            <dd>모듈 환경 레코드(Module Environment Record) _envRec_</dd>
           </dl>
           <emu-alg>
-            1. *true* 반환.
+            1. *true*를 반환한다.
           </emu-alg>
           <emu-note>
-            <p>Module Environment Record는 항상 `this` 바인딩을 제공한다.</p>
+            <p>모듈 환경 레코드는 항상 `this` 바인딩을 제공합니다.</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): *undefined*를 담는 normal completion</h1>
+          <h1>GetThisBinding ( ): *undefined*를 포함한 정상 완료</h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>대상</dt>
+            <dd>모듈 환경 레코드(Module Environment Record) _envRec_</dd>
           </dl>
           <emu-alg>
-            1. *undefined* 반환.
+            1. *undefined*를 반환한다.
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-createimportbinding" type="abstract operation">
           <h1>
             CreateImportBinding (
-              _envRec_: Module Environment Record,
-              _N_: String,
-              _M_: Module Record,
-              _N2_: String,
+              _envRec_: 모듈 환경 레코드(Module Environment Record),
+              _N_: 문자열,
+              _M_: 모듈 레코드(Module Record),
+              _N2_: 문자열,
             ): ~unused~
           </h1>
           <dl class="header">
-            <dt>description</dt>
-            <dd>이름 _N_에 대한 새로 초기화된 immutable 간접 바인딩을 생성. _envRec_에 _N_ 바인딩이 이미 존재해서는 안 됨. _N2_는 _M_의 Module Environment Record에 존재하는 바인딩 이름. 새 바인딩의 값 접근은 대상 바인딩 값을 간접적으로 접근.</dd>
+            <dt>설명</dt>
+            <dd>_N_ 이름에 대해 새로 초기화된 불변의 간접 바인딩을 생성합니다. _envRec_ 내에 이미 _N_에 대한 바인딩이 존재하면 안 됩니다. _N2_는 _M_의 모듈 환경 레코드에 존재하는 바인딩의 이름입니다. 새 바인딩 값에 접근하면 대상 바인딩의 값에 간접적으로 접근하게 됩니다.</dd>
           </dl>
           <emu-alg>
-            1. 단언: _envRec_은 이미 _N_ 바인딩을 갖지 않는다.
-            1. 단언: _M_.[[Environment]]가 인스턴스화될 때 _N2_에 대한 direct 바인딩을 가진다.
-            1. _envRec_에 _N_ immutable 간접 바인딩을 생성하여 _M_, _N2_를 대상 바인딩으로 참조하고 초기화되었음을 기록.
-            1. ~unused~ 반환.
+            1. Assert: _envRec_에 이미 _N_에 대한 바인딩이 존재하지 않음을 확인한다.
+            1. Assert: _M_.[[Environment]]가 인스턴스화될 때 _N2_에 대한 직접 바인딩을 갖게 됨을 확인한다.
+            1. _envRec_에 _N_ 대신 _M_과 _N2_를 대상 바인딩(target binding)으로 참조하고, 해당 바인딩을 초기화된 상태로 기록하는 불변의 간접 바인딩을 생성한다.
+            1. ~unused~를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -19951,70 +19973,65 @@
     </emu-grammar>
 
     <emu-clause id="sec-equality-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>런타임 의미론: 평가(Runtime Semantics: Evaluation)</h1>
+      <h1>런타임 의미론: 평가</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ 를 |EqualityExpression| 의 Evaluation 결과 (?) 로 둔다.
-        1. _lVal_ 를 ? GetValue(_lRef_) 로 둔다.
-        1. _rRef_ 를 |RelationalExpression| 의 Evaluation 결과 (?) 로 둔다.
-        1. _rVal_ 를 ? GetValue(_rRef_) 로 둔다.
-        1. ? IsLooselyEqual(_rVal_, _lVal_) 반환.
+        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
+        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
+        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
+        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
+        1. ? IsLooselyEqual(_rVal_, _lVal_)을 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. _r_ 를 ? IsLooselyEqual(_rVal_, _lVal_) 로 둔다.
-        1. _r_ 가 *true* 이면 *false* 반환; 그렇지 않으면 *true* 반환.
+        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
+        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
+        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
+        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
+        1. _r_을 ? IsLooselyEqual(_rVal_, _lVal_)로 둔다.
+        1. _r_이 *true*이면 *false*를, 그렇지 않으면 *true*를 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. IsStrictlyEqual(_rVal_, _lVal_) 반환.
+        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
+        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
+        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
+        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
+        1. IsStrictlyEqual(_rVal_, _lVal_)을 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. _r_ 를 IsStrictlyEqual(_rVal_, _lVal_) 로 둔다.
-        1. _r_ 가 *true* 이면 *false* 반환; 그렇지 않으면 *true* 반환.
+        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
+        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
+        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
+        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
+        1. _r_을 IsStrictlyEqual(_rVal_, _lVal_)로 둔다.
+        1. _r_이 *true*이면 *false*를, 그렇지 않으면 *true*를 반환한다.
       </emu-alg>
-      <emu-note>
-        <p>위 동등성 정의에 따라:</p>
-        <ul>
-          <li>
-            문자열 비교를 강제하려면: <code>\`${a}\` == \`${b}\`</code>.
-          </li>
-          <li>
-            수치 비교를 강제하려면: <code>+a == +b</code>.
-          </li>
-          <li>
-            Boolean 비교를 강제하려면: <code>!a == !b</code>.
-          </li>
-        </ul>
-      </emu-note>
       <emu-note>
         <p>동등 연산자는 다음 불변식을 유지한다:</p>
         <ul>
           <li>
-            <code>A != B</code> 는 <code>!(A == B)</code> 와 동등하다.
+            `A != B`는 `!(A == B)`와 동등하다.
           </li>
           <li>
-            <code>A == B</code> 는 (평가 순서 제외) <code>B == A</code> 와 동등하다.
+            `A == B`는 `B == A`와 동등하나, `A`와 `B`의 평가 순서는 다르다.
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>동등 연산자는 항상 추이적(transitive)이지는 않다. 예를 들어 동일한 String 값을 나타내는 서로 다른 두 String 객체가 있을 수 있고, 각 객체는 `==` 연산자에 의해 그 String 값과는 같지만 서로는 같지 않을 수 있다. 예:</p>
+        <p>동등 연산자는 항상 추이적이지는 않다. 예를 들어, 동일한 문자열 값을 나타내는 두 개의 구별되는 String 객체가 있을 수 있다. 각각의 String 객체는 `==` 연산자에 의해 해당 문자열 값과는 같다고 간주되지만, 두 String 객체끼리는 서로 같지 않다. 예:</p>
         <ul>
           <li>
-            <code>new String("a") == "a"</code> 및 <code>"a" == new String("a")</code> 는 둘 다 *true*.
+            `new String("a") == "a"` 및 `"a" == new String("a")`는 모두 *true*이다.
           </li>
           <li>
-            <code>new String("a") == new String("a")</code> 는 *false*.
+            `new String("a") == new String("a")`는 *false*이다.
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>문자열 비교는 코드 유닛 값 시퀀스의 단순 동등성 검사만을 사용한다. 유니코드 명세에 정의된 더 복잡하고 의미 지향적인 문자/문자열 동등성 또는 정렬 순서를 사용하지 않는다. 따라서 유니코드 표준에 따라 정규적으로 동등한 String 값이라도 서로 다르다고 나올 수 있다. 사실상 이 알고리즘은 두 String 이 이미 정규화(normalized)되어 있다고 가정한다.</p>
+        <p>문자열 비교는 코드 유닛 값 시퀀스에 대한 단순 동등성 검사를 사용한다. 유니코드 명세에서 정의하는 문자 또는 문자열 동등성 및 정렬 순서의 복잡하고 의미론 중심의 정의는 사용하지 않는다. 따라서 유니코드 표준에 따라 정규적으로 동등한 String 값이라도 같지 않다고 판정될 수 있다. 즉, 이 알고리즘은 두 String이 모두 정규화된 형태라고 간주한다.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -26028,7 +26045,7 @@
             </tr>
           </table>
         </emu-table>
-        <emu-table id="table-abstract-methods-of-module-records" caption="모듈 레코드의 추상 메서드" oldids="table-37">
+        <emu-table id="table-abstract-methods-of-module-records" type="abstract methods" of="Module Records" oldids="table-37">
           <table>
             <thead>
               <tr>
@@ -26038,51 +26055,84 @@
                 <th>
                   목적
                 </th>
+                <th>
+                  정의
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-loadrequestedmodules">
               <td>
-                LoadRequestedModules([_hostDefined_])
+                LoadRequestedModules (
+                optional _hostDefined_: any 값,
+                ): 프라미스(Promise)
               </td>
               <td>
-                <p>모든 의존성을 재귀적으로 로드하여 모듈을 링킹을 위해 준비하고 프로미스를 반환한다.</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                GetExportedNames([_exportStarSet_])
+                <p>모듈의 모든 의존성을 재귀적으로 로드하여 링크 준비를 수행합니다.</p>
               </td>
               <td>
-                <p>이 모듈에서 직접 또는 간접적으로 내보내지는 모든 이름의 리스트를 반환한다.</p>
-                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 한다.</p>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="LoadRequestedModules"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-getexportednames">
               <td>
-                ResolveExport(_exportName_ [, _resolveSet_])
+                GetExportedNames (
+                optional _exportStarSet_: 소스 텍스트 모듈 레코드(Source Text Module Records) 리스트,
+                ): 문자열 리스트
               </td>
               <td>
-                <p>이 모듈에서 내보낸 이름의 바인딩을 반환한다. 바인딩은 { [[Module]]: Module Record, [[BindingName]]: String | ~namespace~ } 형태의 <dfn id="resolvedbinding-record" variants="ResolvedBinding Records">ResolvedBinding Record</dfn>로 표현된다. 내보내기가 어떤 모듈에서도 직접 바인딩이 없는 Module Namespace Object인 경우 [[BindingName]]은 ~namespace~로 설정된다. 이름을 해결할 수 없으면 *null*을, 여러 바인딩이 발견되면 ~ambiguous~를 반환한다.</p>
-                <p>특정 _exportName_, _resolveSet_ 쌍을 인수로 이 연산을 호출할 때마다 동일한 결과를 반환해야 한다.</p>
-                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 한다.</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Link()
+                <p>이 모듈에서 직접 또는 간접적으로 export되는 모든 이름의 리스트를 반환합니다.</p>
+                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 합니다.</p>
               </td>
               <td>
-                <p>모든 모듈 의존성을 전이적으로 해결하고 Module Environment Record를 생성하여 모듈을 평가를 위해 준비한다.</p>
-                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 한다.</p>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="GetExportedNames"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-resolveexport">
               <td>
-                Evaluate()
+                ResolveExport (
+                _exportName_: 문자열,
+                optional _resolveSet_: 레코드 리스트(필드 [[Module]]: 모듈 레코드, [[ExportName]]: 문자열),
+                ): ResolvedBinding 레코드, *null*, 또는 ~ambiguous~
               </td>
               <td>
-                <p>이 모듈과 그 의존성의 평가에 대한 프로미스를 반환하며, 성공적인 평가 시 또는 이미 성공적으로 평가된 경우 해결되고, 평가 오류 시 또는 이미 성공적이지 않게 평가된 경우 거부된다. 프로미스가 거부되면 호스트는 프로미스 거부를 처리하고 평가 오류를 다시 던질 것으로 예상된다.</p>
-                <p>이 메서드를 호출하기 전에 Link가 성공적으로 완료되어야 한다.</p>
+                <p>이 모듈에 의해 export된 이름의 바인딩을 반환합니다. 바인딩은 { [[Module]]: 모듈 레코드, [[BindingName]]: 문자열 | ~namespace~ } 형태의 <dfn id="resolvedbinding-record" variants="ResolvedBinding Records">ResolvedBinding 레코드</dfn>로 표현됩니다. export가 어떤 모듈에도 직접 바인딩이 없는 모듈 네임스페이스 객체라면 [[BindingName]]이 ~namespace~로 설정됨. 이름을 확인할 수 없으면 *null*을, 여러 바인딩이 발견되면 ~ambiguous~를 반환합니다.</p>
+                <p>이 연산이 특정 _exportName_, _resolveSet_ 쌍으로 호출될 때마다 동일한 결과를 반환해야 합니다.</p>
+                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 합니다.</p>
+              </td>
+              <td>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="ResolveExport"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-link">
+              <td>Link ( ): ~unused~를 포함한 정상 완료 또는 throw 완료</td>
+              <td>
+                <p>모든 모듈 의존성을 추이적으로 해결하고 모듈 환경 레코드를 생성하여, 평가(Evaluation) 준비를 합니다.</p>
+                <p>이 메서드를 호출하기 전에 LoadRequestedModules가 성공적으로 완료되어야 합니다.</p>
+              </td>
+              <td>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="Link"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-evaluate">
+              <td>Evaluate ( ): 프라미스(Promise)</td>
+              <td>
+                <p>
+                  이 모듈과 그 의존성의 평가에 대한 프라미스를 반환하며,
+                  평가가 성공적이거나 이미 성공적으로 평가된 경우 resolve되고,
+                  평가 오류가 발생하거나 이미 평가에 실패한 경우 reject된다.
+                  프라미스가 reject되면, 호스트가 프라미스 거부 처리를 담당해야
+                  하며 평가 오류를 다시 throw해야 한다. 이 모듈이 순환 모듈 레코드가
+                  아닌 한, 반환된 프라미스는 이미 settle된 상태여야 한다.
+                </p>
+                <p>이 메서드를 호출하기 전에 Link가 성공적으로 완료되어야 합니다.</p>
+              </td>
+              <td>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="Evaluate"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -26254,8 +26304,8 @@
             </tr>
           </table>
         </emu-table>
-        <p><emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> 에 정의된 메서드들에 더해 Cyclic Module Record 는 <emu-xref href="#table-cyclic-module-methods"></emu-xref> 에 나열된 추가 메서드를 가진다.</p>
-        <emu-table id="table-cyclic-module-methods" caption="Cyclic Module Record 의 추가 추상 메서드">
+        <p><emu-xref href="#table-abstract-methods-of-module-records"></emu-xref>에서 정의된 메서드 외에도 순환 모듈 레코드(Cyclic Module Records)는 <emu-xref href="#table-cyclic-module-methods"></emu-xref>에 나열된 추가 메서드를 가진다:</p>
+        <emu-table id="table-cyclic-module-methods" type="abstract methods" of="Cyclic Module Records" caption="순환 모듈 레코드의 추가 추상 메서드">
           <table>
             <thead>
               <tr>
@@ -26265,22 +26315,33 @@
                 <th>
                   목적
                 </th>
+                <th>
+                  정의
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-initializeenvironment">
+              <td>InitializeEnvironment ( ): ~unused~를 포함한 정상 완료 또는 throw 완료</td>
               <td>
-                InitializeEnvironment()
+                모듈의 Environment Record를 초기화하며, 모든 import 바인딩을 해결하고 모듈의 실행 컨텍스트를 생성한다.
               </td>
               <td>
-                모든 import 된 바인딩을 해석하고 모듈의 Environment Record 를 초기화하며 실행 컨텍스트를 생성한다.
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="InitializeEnvironment"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-executemodule">
               <td>
-                ExecuteModule([_promiseCapability_])
+                ExecuteModule (
+                optional _capability_: PromiseCapability 레코드,
+                ): ~unused~를 포함한 정상 완료 또는 throw 완료
               </td>
               <td>
-                모듈의 실행 컨텍스트 내에서 코드 평가. 이 모듈이 [[HasTLA]] 가 *true* 이면 PromiseCapability Record 가 인수로 전달되며 메서드는 해당 capability 를 resolve 또는 reject 해야 한다. 이 경우 예외를 throw 하지 말고 필요 시 PromiseCapability Record 를 reject 해야 한다.
+                모듈의 코드를 그 실행 컨텍스트 내에서 평가한다. 이 모듈의 [[HasTLA]]가 *true*인 경우, PromiseCapability 레코드를 인자로 전달하며, 메서드는 주어진 capability를 resolve 또는 reject해야 한다. 이 경우, 메서드는 예외를 throw하지 않고, 필요한 경우 PromiseCapability 레코드를 reject해야 한다.
+              </td>
+              <td>
+                이 명세 내에서 다음 타입에 대한 정의가 있다. 호스트는 자체 정의를 가진 추가 타입을 제공할 수 있다:
+                <emu-concrete-method-dfns for="ExecuteModule"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -26729,8 +26790,7 @@
                   1. Else if _m_.[[HasTLA]] 가 *true* 이면
                     1. ExecuteAsyncModule(_m_) 수행.
                   1. Else
-                    1. _result_ = <emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta>.
-                    1. _result_ 가 abrupt completion 이면
+                    1. _result_를 Completion(<emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta>)로 둔다. 1. _result_ 가 abrupt completion 이면
                       1. AsyncModuleExecutionRejected(_m_, _result_.[[Value]]) 수행.
                     1. Else
                       1. _m_.[[AsyncEvaluationOrder]] = ~done~.
@@ -28102,103 +28162,115 @@
             1. 단언: _module_.[[ExportNames]] 가 _exportName_ 포함.
             1. _envRec_ = _module_.[[Environment]].
             1. 단언: _envRec_ ≠ ~empty~.
-            1. _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*) 수행.
+            1. ! _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*) 수행.
             1. ~unused~ 반환.
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-smr-module-record-methods">
-          <h1>Module Record 추상 메서드 구현</h1>
+          <h1>모듈 레코드 추상 메서드의 구현</h1>
 
-          <p><emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> 에 정의된 Module Record 추상 메서드를 구현하는 Synthetic Module Record 의 구체 메서드.</p>
+          <p>다음은 <emu-xref href="#table-abstract-methods-of-module-records"></emu-xref>에 정의된 해당 모듈 레코드 추상 메서드를 구현하는 Synthetic Module Record의 구체 메서드들이다.</p>
 
           <emu-clause id="sec-smr-LoadRequestedModules" type="concrete method">
-            <h1>LoadRequestedModules ( ): Promise</h1>
+            <h1>
+              LoadRequestedModules (
+                optional _hostDefined_: 임의 값,
+              ): 프라미스(Promise)
+            </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>대상</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. ! PromiseResolve(%Promise%, *undefined*) 반환.
+              1. 주: 이 LoadRequestedModules 구현은 _hostDefined_를 사용하지 않는다.
+              1. ! PromiseResolve(%Promise%, *undefined*)를 반환한다.
             </emu-alg>
 
             <emu-note>
-              Synthetic Module Record 는 의존성이 없다.
+              Synthetic Module Record는 의존성이 없다.
             </emu-note>
           </emu-clause>
 
           <emu-clause id="sec-smr-getexportednames" type="concrete method">
-            <h1>GetExportedNames ( ): 문자열 리스트</h1>
+            <h1>
+              GetExportedNames (
+                optional _exportStarSet_: 소스 텍스트 모듈 레코드(Source Text Module Records) 리스트,
+              ): 문자열 리스트
+            </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>대상</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _module_.[[ExportNames]] 반환.
+              1. 주: 이 GetExportedNames 구현은 _exportStarSet_을 사용하지 않는다.
+              1. _module_.[[ExportNames]]를 반환한다.
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-resolveexport" type="concrete method">
             <h1>
               ResolveExport (
-                _exportName_: String,
-              ): ResolvedBinding Record 또는 *null*
+                _exportName_: 문자열,
+                optional _resolveSet_: 레코드 리스트(필드 [[Module]]: 모듈 레코드, [[ExportName]]: 문자열),
+              ): ResolvedBinding 레코드, *null*, 또는 ~ambiguous~
             </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>대상</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _module_.[[ExportNames]] 가 _exportName_ 포함하지 않으면 *null* 반환.
-              1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _exportName_ } 반환.
+              1. 주: 이 ResolveExport 구현은 _resolveSet_을 사용하지 않는다.
+              1. _module_.[[ExportNames]]에 _exportName_이 없으면 *null*을 반환한다.
+              1. ResolvedBinding 레코드 { [[Module]]: _module_, [[BindingName]]: _exportName_ }을 반환한다.
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-Link" type="concrete method">
-            <h1>Link ( ): ~unused~ 를 담은 정상 completion</h1>
+            <h1>Link ( ): ~unused~를 포함한 정상 완료</h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>대상</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _realm_ = _module_.[[Realm]].
-              1. _env_ = NewModuleEnvironment(_realm_.[[GlobalEnv]]).
-              1. _module_.[[Environment]] = _env_.
-              1. _module_.[[ExportNames]] 의 각 String _exportName_ 에 대해
-                1. ! _env_.CreateMutableBinding(_exportName_, *false*).
-                1. ! _env_.InitializeBinding(_exportName_, *undefined*).
-              1. NormalCompletion(~unused~) 반환.
+              1. _realm_을 _module_.[[Realm]]으로 둔다.
+              1. _env_를 NewModuleEnvironment(_realm_.[[GlobalEnv]])로 둔다.
+              1. _module_.[[Environment]]에 _env_를 설정한다.
+              1. _module_.[[ExportNames]]의 각 문자열 _exportName_에 대해, 다음을 수행한다:
+                1. ! _env_.CreateMutableBinding(_exportName_, *false*)를 수행한다.
+                1. ! _env_.InitializeBinding(_exportName_, *undefined*)를 수행한다.
+              1. NormalCompletion(~unused~)을 반환한다.
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-Evaluate" type="concrete method">
-            <h1>Evaluate ( ): Promise</h1>
+            <h1>Evaluate ( ): 프라미스(Promise)</h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>대상</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _moduleContext_ = 새 ECMAScript 코드 실행 컨텍스트.
-              1. _moduleContext_.Function = *null*.
-              1. _moduleContext_.Realm = _module_.[[Realm]].
-              1. _moduleContext_.ScriptOrModule = _module_.
-              1. _moduleContext_.VariableEnvironment = _module_.[[Environment]].
-              1. _moduleContext_.LexicalEnvironment = _module_.[[Environment]].
-              1. 실행 중 컨텍스트 suspend.
-              1. _moduleContext_ push → 실행 중 컨텍스트.
-              1. _steps_ = _module_.[[EvaluationSteps]].
-              1. _result_ = Completion(_steps_(_module_)).
-              1. _moduleContext_ suspend 및 스택에서 제거.
-              1. 최상위 컨텍스트 resume.
-              1. _pc_ = ! NewPromiseCapability(%Promise%).
-              1. IfAbruptRejectPromise(_result_, _pc_).
-              1. ! Call(_pc_.[[Resolve]], *undefined*, « *undefined* ») 수행.
-              1. _pc_.[[Promise]] 반환.
+              1. _moduleContext_를 새 ECMAScript 코드 실행 컨텍스트로 둔다.
+              1. _moduleContext_의 Function을 *null*로 설정한다.
+              1. _moduleContext_의 Realm을 _module_.[[Realm]]으로 설정한다.
+              1. _moduleContext_의 ScriptOrModule에 _module_을 설정한다.
+              1. _moduleContext_의 VariableEnvironment에 _module_.[[Environment]]를 설정한다.
+              1. _moduleContext_의 LexicalEnvironment에 _module_.[[Environment]]를 설정한다.
+              1. 실행 컨텍스트를 중단한다.
+              1. _moduleContext_를 실행 컨텍스트 스택에 푸시한다; 이제 _moduleContext_가 실행 중인 컨텍스트이다.
+              1. _steps_를 _module_.[[EvaluationSteps]]로 둔다.
+              1. _result_를 Completion(_steps_(_module_))으로 둔다.
+              1. _moduleContext_를 중단하고 실행 컨텍스트 스택에서 제거한다.
+              1. 이제 실행 컨텍스트 스택 맨 위에 있는 컨텍스트를 실행 중인 컨텍스트로 재개한다.
+              1. _pc_를 ! NewPromiseCapability(%Promise%)로 둔다.
+              1. IfAbruptRejectPromise(_result_, _pc_)를 수행한다.
+              1. ! Call(_pc_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
+              1. _pc_.[[Promise]]를 반환한다.
             </emu-alg>
           </emu-clause>
         </emu-clause>

@@ -1178,8 +1178,8 @@
       <p>数値演算子（+, ×, =, ≥など）は、オペランドの型に応じた演算を指します。数学値に適用すれば通常の数学演算、拡張数学値なら拡張実数上の演算（未定義形は定義しないので仕様に現れたら編集誤り）、NumberならIEEE 754-2019の演算、BigIntならBigIntの数学値への演算です。型の異なるオペランドへの数値演算子の適用（例: Numberと数学値）は未定義であり、仕様書に現れたら編集誤りです。</p>
       <p>数学値とNumberやBigInt間の変換は常に明示的です。数学値または拡張数学値_x_からNumberへの変換は「_x_のNumber値」または<emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>と記述され、<emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>で定義されます。整数_x_からBigIntへの変換は「_x_の<dfn id="bigint-value-for">BigInt値</dfn>」または<emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>と記述されます。NumberやBigInt_x_から数学値への変換は「_x_の<dfn id="mathematical-value-of">数学値</dfn>」または<emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>と記述されます。*+0*<sub>𝔽</sub>と*-0*<sub>𝔽</sub>の数学値は数学値0です。非有限値の数学値は定義されません。<dfn id="extended-mathematical-value-of">拡張数学値</dfn>は有限値に対しては数学値、*+∞*<sub>𝔽</sub>と*-∞*<sub>𝔽</sub>に対してはそれぞれ+∞と-∞、*NaN*には定義されません。</p>
       <p>数学関数<emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn>は_x_の絶対値（_x_ &lt; 0なら- _x_、それ以外は_x_）を返します。</p>
-       <p>数学関数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> は _x_ の自然対数を生成します。数学関数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> は _x_ の底10の対数を生成します。数学関数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> は _x_ の底2の対数を生成します。</p>
-        <p>数学関数<emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>は<emu-eqn>_x1_</emu-eqn>から<emu-eqn>_xN_</emu-eqn>までの最小値、<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>は最大値を返します。これらの関数の定義域と値域は拡張数学値です。</p>
+      <p>数学関数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> は _x_ の自然対数を生成します。数学関数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> は _x_ の底10の対数を生成します。数学関数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> は _x_ の底2の対数を生成します。</p>
+      <p>数学関数<emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn>は<emu-eqn>_x1_</emu-eqn>から<emu-eqn>_xN_</emu-eqn>までの最小値、<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn>は最大値を返します。これらの関数の定義域と値域は拡張数学値です。</p>
       <p>記法「<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>」（_y_は有限かつ非零）は、_y_と同じ符号（または0）で絶対値が_y_未満になる値_k_を計算し、<emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>（_q_は整数）を満たします。</p>
       <p>「_x_を_lower_から_upper_の間で<dfn id="clamping">クランプする</dfn>」という句（_x_は拡張数学値、_lower_と_upper_は_lower_ ≤ _upper_な数学値）は、_x_ &lt; _lower_なら_lower_、_x_ > _upper_なら_upper_、それ以外は_x_を返します。</p>
       <p>数学関数<emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn>は_x_以下で最大の整数（+∞に最も近いもの）を返します。</p>
@@ -10075,96 +10075,163 @@
       </ul>
 
       <p>Environment Record 抽象クラスは、<emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> に定義される抽象仕様メソッドを含む。これらの抽象メソッドは、各具象サブクラスに固有の具体的アルゴリズムを持つ。</p>
-      <emu-table id="table-abstract-methods-of-environment-records" caption="環境レコードの抽象メソッド (Abstract Methods of Environment Records)" oldids="table-15">
+      <emu-table id="table-abstract-methods-of-environment-records" type="abstract methods" of="Environment Records" oldids="table-15,table-17,table-19,table-20,table-additional-methods-of-function-environment-records,table-additional-methods-of-global-environment-records,table-additional-methods-of-module-environment-records">
         <table>
           <thead>
             <tr>
               <th>
-                メソッド (Method)
+                メソッド
               </th>
               <th>
-                目的 (Purpose)
+                目的
+              </th>
+              <th>
+                定義
               </th>
             </tr>
           </thead>
-          <tr>
+          <tr id="abstract-hasbinding">
             <td>
-              HasBinding(N)
+              HasBinding (
+              _N_: 文字列,
+              ): ブール値を含む正常完了または throw 完了
             </td>
             <td>
-              Environment Record が文字列値 _N_ の束縛を持つか判定する。持つなら *true*、持たないなら *false* を返す。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              CreateMutableBinding(N, D)
+              Environment Record が _N_ のバインディングを持っているかどうかを判定する。
             </td>
             <td>
-              Environment Record に新しい未初期化の可変束縛を作成する。文字列値 _N_ は束縛名のテキスト。Boolean 引数 _D_ が *true* の場合、その束縛は後で削除可能。
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="HasBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createmutablebinding">
             <td>
-              CreateImmutableBinding(N, S)
+              CreateMutableBinding (
+              _N_: 文字列,
+              _D_: ブール値,
+              ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
-              Environment Record に新しい未初期化の不変束縛を作成する。文字列値 _N_ は束縛名のテキスト。_S_ が *true* の場合、初期化後に設定しようとすると、参照する操作の strict モード設定に関わらず常に例外を投げる。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              InitializeBinding(N, V)
+              新しいが未初期化のミュータブルバインディングを Environment Record に作成する。_N_ はバインドされる名前のテキスト。_D_ が *true* の場合、そのバインディングは後で削除できる。
             </td>
             <td>
-              既に存在し未初期化の束縛の値を設定する。文字列値 _N_ は束縛名のテキスト。_V_ は任意の ECMAScript 言語型の値。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              SetMutableBinding(N, V, S)
-            </td>
-            <td>
-              既存の可変束縛の値を設定する。_N_ は束縛名。_V_ は任意の ECMAScript 言語型の値。_S_ が *true* で束縛を設定できない場合 *TypeError* を投げる。
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="CreateMutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createimmutablebinding">
             <td>
-              GetBindingValue(N, S)
+              CreateImmutableBinding (
+              _N_: 文字列,
+              _S_: ブール値,
+              ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
-              既存束縛の値を返す。_N_ は束縛名。_S_ は strict モードコード（または strict セマンティクスが必要な参照）を識別する。_S_ が *true* で束縛が存在しないなら *ReferenceError*。束縛が存在するが未初期化なら _S_ に関係なく *ReferenceError* を投げる。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              DeleteBinding(N)
+              新しいが未初期化のイミュータブルバインディングを Environment Record に作成する。_N_ はバインドされる名前のテキスト。_S_ が *true* の場合、初期化後に設定を試みると、ストリクトモードかどうかにかかわらず常に例外をスローする。
             </td>
             <td>
-              束縛を削除する。存在し削除成功なら *true*、削除できなければ *false*。存在しないなら *true*。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              HasThisBinding()
-            </td>
-            <td>
-              `this` 束縛を確立するか判定。確立するなら *true*、しないなら *false*。
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="CreateImmutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-initializebinding">
             <td>
-              HasSuperBinding()
+              InitializeBinding (
+              _N_: 文字列,
+              _V_: ECMAScript 言語値,
+              ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
-              `super` メソッド束縛を確立するか判定。確立するなら *true*、しないなら *false*。*true* の場合、その Environment Record は Function Environment Record であることを含意する（逆は必ずしも成立しない）。
+              既存だが未初期化のバインディングの値を Environment Record 内で設定する。_N_ はバインドされる名前のテキスト。_V_ はバインディングの値。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="InitializeBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-setmutablebinding">
             <td>
-              WithBaseObject()
+              SetMutableBinding (
+              _N_: 文字列,
+              _V_: ECMAScript 言語値,
+              _S_: ブール値,
+              ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
-              この Environment Record が `with` 文に関連付くなら with オブジェクトを返し、それ以外は *undefined* を返す。
+              既存のミュータブルバインディングの値を Environment Record 内で設定する。_N_ はバインドされる名前のテキスト。_V_ はバインディングの値。_S_ が *true* でバインディングが設定できない場合、*TypeError* 例外がスローされる。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="SetMutableBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getbindingvalue">
+            <td>
+              GetBindingValue (
+              _N_: 文字列,
+              _S_: ブール値,
+              ): ECMAScript 言語値を含む正常完了または throw 完了
+            </td>
+            <td>
+              既存バインディングの値を Environment Record から返す。_N_ はバインドされる名前のテキスト。_S_ は、ストリクトモードコードやストリクト参照セマンティクスが必要な参照を識別する。_S_ が *true* でバインディングが存在しない場合、*ReferenceError* 例外をスローする。バインディングは存在するが未初期化の場合、_S_ の値関係なく *ReferenceError* がスローされる。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="GetBindingValue"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-deletebinding">
+            <td>
+              DeleteBinding (
+              _N_: 文字列,
+              ): ブール値を含む正常完了または throw 完了
+            </td>
+            <td>
+              バインディングを Environment Record から削除する。_N_ はバインドされる名前のテキスト。_N_ のバインディングが存在すれば削除して *true* を返す。存在するが削除できない場合は *false* を返す。存在しない場合は *true* を返す。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="DeleteBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hasthisbinding">
+            <td>HasThisBinding ( ): ブール値</td>
+            <td>
+              Environment Record が `this` バインディングを確立するかどうかを判定する。確立する場合は *true*、そうでない場合は *false* を返す。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="HasThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getthisbinding">
+            <td>GetThisBinding ( ): ECMAScript 言語値を含む正常完了または throw 完了</td>
+            <td>
+              この Environment Record の `this` バインディング値を返す。`this` バインディングが初期化されていない場合、*ReferenceError* をスローする。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="GetThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hassuperbinding">
+            <td>HasSuperBinding ( ): ブール値</td>
+            <td>
+              Environment Record が `super` メソッドバインディングを確立するかどうかを判定する。確立する場合は *true*、そうでない場合は *false* を返す。*true* の場合、その Environment Record は Function Environment Record であることを意味するが、逆は成り立たない。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="HasSuperBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-withbaseobject">
+            <td>WithBaseObject ( ): オブジェクトまたは *undefined*</td>
+            <td>
+              この Environment Record が `with` 文に関連付けられている場合、その with オブジェクトを返す。そうでなければ *undefined* を返す。
+            </td>
+            <td>
+              次の型に具体的な定義がある：
+              <emu-concrete-method-dfns for="WithBaseObject"></emu-concrete-method-dfns>
             </td>
           </tr>
         </table>
@@ -10348,6 +10415,11 @@
           <emu-note>
             <p>通常の Declarative Environment Record（Function Environment Record でも Module Environment Record でもないもの）は `this` 束縛を提供しない。</p>
           </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-declarative-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>宣言的 Environment Record の GetThisBinding 具体メソッドは、本仕様内では決して使用されない。</p>
         </emu-clause>
 
         <emu-clause id="sec-declarative-environment-records-hassuperbinding" type="concrete method">
@@ -10579,6 +10651,11 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-object-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>オブジェクト Environment Record の GetThisBinding 具体メソッドは、本仕様内では決して使用されない。</p>
+        </emu-clause>
+
         <emu-clause id="sec-object-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -10671,29 +10748,7 @@
             </tr>
           </table>
         </emu-table>
-        <p>Function Environment Record は <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> に挙げる Declarative Environment Record メソッドすべてをサポートし、HasThisBinding と HasSuperBinding を除き同一の仕様を共有する。さらに <emu-xref href="#table-additional-methods-of-function-environment-records"></emu-xref> に示すメソッドをサポートする:</p>
-        <emu-table id="table-additional-methods-of-function-environment-records" caption="Function Environment Record の追加メソッド (Additional Methods of Function Environment Records)" oldids="table-17">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  メソッド (Method)
-                </th>
-                <th>
-                  目的 (Purpose)
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                この Environment Record の `this` 束縛の値を返す。未初期化なら *ReferenceError* を投げる。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <p>関数 Environment Record は、<emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> に記載されたすべての宣言的 Environment Record のメソッドをサポートし、HasThisBinding、GetThisBinding、HasSuperBinding を除くすべてのメソッドについて、同じ仕様を共有する。</p>
 
         <emu-clause id="sec-bindthisvalue" type="abstract operation">
           <h1>
@@ -10726,68 +10781,68 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
-          <h1>HasSuperBinding ( ): Boolean</h1>
-          <dl class="header">
-            <dt>for</dt>
-            <dd>Function Environment Record _envRec_</dd>
-          </dl>
-          <emu-alg>
-            1. _envRec_.[[ThisBindingStatus]] が ~lexical~ なら *false* を返す。
-            1. _envRec_.[[FunctionObject]].[[HomeObject]] が *undefined* なら *false*、そうでなければ *true* を返す。
-          </emu-alg>
-        </emu-clause>
-
         <emu-clause id="sec-function-environment-records-getthisbinding" type="concrete method">
           <h1>GetThisBinding ( ): ECMAScript 言語値を含む正常完了または throw 完了</h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Function Environment Record _envRec_</dd>
+            <dt>対象</dt>
+            <dd>関数 Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. アサート: _envRec_.[[ThisBindingStatus]] は ~lexical~ ではない。
-            1. _envRec_.[[ThisBindingStatus]] が ~uninitialized~ なら *ReferenceError* 例外を投げる。
+            1. _envRec_.[[ThisBindingStatus]] が ~lexical~ でないことを保証する（アサート）。
+            1. もし _envRec_.[[ThisBindingStatus]] が ~uninitialized~ なら、*ReferenceError* 例外をスローする。
             1. _envRec_.[[ThisValue]] を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
+          <h1>HasSuperBinding ( ): ブール値</h1>
+          <dl class="header">
+            <dt>対象</dt>
+            <dd>関数 Environment Record _envRec_</dd>
+          </dl>
+          <emu-alg>
+            1. もし _envRec_.[[ThisBindingStatus]] が ~lexical~ なら、*false* を返す���
+            1. もし _envRec_.[[FunctionObject]].[[HomeObject]] が *undefined* なら、*false* を返す。それ以外の場合は *true* を返す。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-getsuperbase" type="abstract operation">
           <h1>
             GetSuperBase (
-              _envRec_: Function Environment Record,
-            ): Object, *null*, または *undefined*
+              _envRec_: 関数 Environment Record,
+            ): オブジェクト、*null*、または *undefined*
           </h1>
           <dl class="header">
-            <dt>description</dt>
-            <dd>_envRec_ に束縛された `super` プロパティアクセスの基底オブジェクトを返す。値 *undefined* はそうしたアクセスが実行時エラーになることを示す。</dd>
+            <dt>説明</dt>
+            <dd>_envRec_ で束縛された `super` プロパティアクセスの基準となるオブジェクトを返す。*undefined* の場合、そのようなアクセスは実行時エラーになる。</dd>
           </dl>
           <emu-alg>
             1. _home_ を _envRec_.[[FunctionObject]].[[HomeObject]] とする。
-            1. _home_ が *undefined* なら *undefined* を返す。
-            1. アサート: _home_ は ordinary object。
+            1. もし _home_ が *undefined* なら、*undefined* を返す。
+            1. _home_ は通常のオブジェクトであることをアサートする。
             1. ! _home_.[[GetPrototypeOf]]() を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-global-environment-records" oldids="global-environment">
-        <h1>グローバル環境レコード (Global Environment Records)</h1>
-        <p><dfn variants="Global Environment Records">Global Environment Record</dfn> は、共通の realm で処理されるすべての ECMAScript |Script| 要素に共有される最も外側のスコープを表す。Global Environment Record は組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref>）、グローバルオブジェクトのプロパティ、および |Script| 内に現れるすべてのトップレベル宣言（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）に束縛を提供する。</p>
-        <p>Global Environment Record は論理的には単一のレコードだが、Object Environment Record と Declarative Environment Record を包含する合成体として仕様化される。Object Environment Record の基底オブジェクトは関連する Realm Record のグローバルオブジェクトであり、これは Global Environment Record の GetThisBinding 具体メソッドが返す値である。Global Environment Record の Object Environment Record 部分は、すべての組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref>）およびグローバルコード内の |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableStatement| によって導入される束縛を含む。それ以外のグローバルコード内の ECMAScript 宣言による束縛は Global Environment Record の Declarative Environment Record 部分に含まれる。</p>
-        <p>プロパティはグローバルオブジェクト上に直接作成され得る。したがって Global Environment Record の Object Environment Record 部分は、宣言（|FunctionDeclaration| 等）によって明示的に作成された束縛と、グローバルオブジェクトのプロパティとして暗黙に作成された束縛の両方を含み得る。どの束縛が宣言によって明示的に作成されたものか識別するため、Global Environment Record は CreateGlobalVarBinding と CreateGlobalFunctionBinding 抽象操作で束縛された名前のリストを保持する。</p>
-        <p>Global Environment Record は <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> に挙げる追加フィールドおよび <emu-xref href="#table-additional-methods-of-global-environment-records"></emu-xref> に挙げる追加メソッドを持つ。</p>
-        <emu-table id="table-additional-fields-of-global-environment-records" caption="Global Environment Record の追加フィールド (Additional Fields of Global Environment Records)" oldids="table-18">
+        <h1>グローバル Environment Record</h1>
+        <p><dfn variants="Global Environment Records">グローバル Environment Record</dfn> は、共通の Realm で処理されるすべての ECMAScript |Script| 要素が共有する最も外側のスコープを表すのに使用される。グローバル Environment Record は、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）、グローバルオブジェクトのプロパティ、そして |Script| 内で発生するすべてのトップレベル宣言（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）のバインディングを提供する。</p>
+        <p>グローバル Environment Record は論理的には単一のレコードであるが、オブジェクト Environment Record と宣言的 Environment Record をカプセル化した複合体として仕様化される。オブジェクト Environment Record は関連する Realm Record のグローバルオブジェクトをベースオブジェクトとする。このグローバルオブジェクトは、グローバル Environment Record の GetThisBinding 具体メソッドで返される値でもある。グローバル Environment Record のオブジェクト Environment Record 部分には、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）およびグローバルコード内の |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableStatement| によって導入されたすべてのバインディングが含まれる。グローバルコード中の他の ECMAScript 宣言用のバインディングは、グローバル Environment Record の宣言的 Environment Record 部分に保持される。</p>
+        <p>プロパティはグローバルオブジェクトに直接作成されることもある。そのため、グローバル Environment Record のオブジェクト Environment Record 部分に���、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 宣言で明示的に作成されたバインディングと、グローバルオブジェクトのプロパティとして暗黙的に作成されたバインディングが両方含まれている可能性がある。どのバインディングが明示的な宣言によって作成されたかを特定するため、グローバル Environment Record は CreateGlobalVarBinding および CreateGlobalFunctionBinding 抽象操作で束縛された名前のリストを保持している。</p>
+        <p>グローバル Environment Record は、<emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> に記載された追加フィールドを持つ。</p>
+        <emu-table id="table-additional-fields-of-global-environment-records" caption="グローバル Environment Record の追加フィールド" oldids="table-18">
           <table>
             <thead>
               <tr>
                 <th>
-                  フィールド名 (Field Name)
+                  フィールド名
                 </th>
                 <th>
-                  値 (Value)
+                  値
                 </th>
                 <th>
-                  意味 (Meaning)
+                  意味
                 </th>
               </tr>
             </thead>
@@ -10796,10 +10851,10 @@
                 [[ObjectRecord]]
               </td>
               <td>
-                Object Environment Record
+                オブジェクト Environment Record
               </td>
               <td>
-                Binding object はグローバルオブジェクト。組み込みグローバルの束縛と、グローバルコード内の |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 束縛を含む。
+                バインドされるオブジェクトはグローバルオブジェクトである。関連する realm のグローバルコード内での組み込みグローバルのバインディング、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| バインディングが含まれる。
               </td>
             </tr>
             <tr>
@@ -10807,10 +10862,10 @@
                 [[GlobalThisValue]]
               </td>
               <td>
-                Object
+                オブジェクト
               </td>
               <td>
-                グローバルスコープで `this` が返す値。ホストは任意の ECMAScript Object を提供可能。
+                グローバルスコープで `this` から返される値。ホストは任意の ECMAScript オブジェクト値を指定できる。
               </td>
             </tr>
             <tr>
@@ -10818,32 +10873,10 @@
                 [[DeclarativeRecord]]
               </td>
               <td>
-                Declarative Environment Record
+                宣言的 Environment Record
               </td>
               <td>
-                <emu-not-ref>Contains</emu-not-ref> グローバルコード内の全宣言（ただし |FunctionDeclaration| など一部を除く）の束縛。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
-        <emu-table id="table-additional-methods-of-global-environment-records" caption="Global Environment Record の追加メソッド (Additional Methods of Global Environment Records)" oldids="table-19">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  メソッド (Method)
-                </th>
-                <th>
-                  目的 (Purpose)
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                この Environment Record の `this` 束縛値を返す。
+                <emu-not-ref>関連する realm コードのグローバルコード中のすべての宣言のバインディングを含む。ただし |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| バインディングは除く。</emu-not-ref>
               </td>
             </tr>
           </table>
@@ -11023,6 +11056,17 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
+          <h1>GetThisBinding ( ): オブジェクトを含む正常完了</h1>
+          <dl class="header">
+            <dt>対象</dt>
+            <dd>グローバル Environment Record _envRec_</dd>
+          </dl>
+          <emu-alg>
+            1. _envRec_.[[GlobalThisValue]] を返す。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-global-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -11045,17 +11089,6 @@
           </dl>
           <emu-alg>
             1. *undefined* を返す。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): Object を含む正常完了</h1>
-          <dl class="header">
-            <dt>for</dt>
-            <dd>Global Environment Record _envRec_</dd>
-          </dl>
-          <emu-alg>
-            1. _envRec_.[[GlobalThisValue]] を返す。
           </emu-alg>
         </emu-clause>
 
@@ -11198,89 +11231,66 @@
       </emu-clause>
 
       <emu-clause id="sec-module-environment-records" oldids="module-environment">
-        <h1>モジュール環境レコード (Module Environment Records)</h1>
-        <p><dfn variants="Module Environment Records">Module Environment Record</dfn> は ECMAScript |Module| の外側スコープを表す Declarative Environment Record である。通常の可変・不変束縛に加え、他の Environment Record に存在する対象束縛への間接アクセスを提供する不変の import 束縛も提供する。</p>
-        <p>Module Environment Record は <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> に挙げる Declarative Environment Record メソッドのすべてをサポートし、GetBindingValue, DeleteBinding, HasThisBinding, GetThisBinding を除き同じ仕様を共有する。さらに <emu-xref href="#table-additional-methods-of-module-environment-records"></emu-xref> に示すメソッドをサポートする:</p>
-        <emu-table id="table-additional-methods-of-module-environment-records" caption="Module Environment Record の追加メソッド (Additional Methods of Module Environment Records)" oldids="table-20">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  メソッド (Method)
-                </th>
-                <th>
-                  目的 (Purpose)
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                この Environment Record の `this` 束縛値を返す。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <h1>モジュール Environment Record</h1>
+        <p><dfn variants="Module Environment Records">モジュール Environment Record</dfn> は、ECMAScript |Module| の外側スコープを表現するために使用される宣言的 Environment Record である。通常のミュータブルおよびイミュータブルバインディングに加えて、モジュール Environment Record は間接的に他の Environment Record に存在するターゲットバインディングへアクセスするためのイミュータブルな import バインディングも提供する。</p>
+        <p>モジュール Environment Record は、<emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> に記載されているすべての宣言的 Environment Record のメソッドをサポートし、GetBindingValue、DeleteBinding、HasThisBinding、GetThisBinding 以外のすべてのメソッドについては同一の仕様を共有する。</p>
 
         <emu-clause id="sec-module-environment-records-getbindingvalue-n-s" type="concrete method">
           <h1>
             GetBindingValue (
-              _N_: String,
-              _S_: Boolean,
+              _N_: 文字列,
+              _S_: ブール値,
             ): ECMAScript 言語値を含む正常完了または throw 完了
           </h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
-
-            <dt>description</dt>
-            <dd>名前 _N_ の束縛値を返す。ただし束縛が間接束縛なら対象束縛値を返す。束縛が未初期化なら *ReferenceError* を投げる。</dd>
+            <dt>対象</dt>
+            <dd>モジュール Environment Record _envRec_</dd>
+            <dt>説明</dt>
+            <dd>名前が _N_ の束縛された識別子の値を返す。ただし、そのバインディングが間接バインディングの場合はターゲットバインディングの値を返す。バインディングが未初期化の場合は *ReferenceError* がスローされる。</dd>
           </dl>
           <emu-alg>
-            1. アサート: _S_ は *true*。
-            1. アサート: _envRec_ は _N_ の束縛を持つ。
-            1. _N_ の束縛が間接束縛なら
-              1. _M_ と _N2_ をこの束縛作成時に提供された間接化値とする。
+            1. _S_ が *true* であることをアサートする。
+            1. _envRec_ が _N_ のバインディングを持つことをアサートする。
+            1. もし _N_ のバインディングが間接バインディングなら：
+              1. _M_ および _N2_ を、この _N_ のバインディング作成時に指定された間接値とする。
               1. _targetEnv_ を _M_.[[Environment]] とする。
-              1. _targetEnv_ が ~empty~ なら *ReferenceError* 例外を投げる。
+              1. もし _targetEnv_ が ~empty~ なら、*ReferenceError* 例外をスローする。
               1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta> を返す。
-            1. _envRec_ における _N_ の束縛が未初期化なら *ReferenceError* 例外を投げる。
-            1. 現在 _envRec_ で _N_ に束縛されている値を返す。
+            1. もし _envRec_ における _N_ のバインディングが未初期化であれば、*ReferenceError* 例外をスローする。
+            1. _envRec_ で現在 _N_ に束縛されている値を返す。
           </emu-alg>
           <emu-note>
-            <p>_S_ は常に *true*。|Module| は常に strict モードコードだからである。</p>
+            <p>_S_ は常に *true* になる。なぜなら |Module| は常に strict mode コードであるためである。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-deletebinding-n">
           <h1>DeleteBinding ( _N_ )</h1>
-          <p>Module Environment Record の DeleteBinding 具体メソッドは本仕様では使用されない。</p>
+          <p>モジュール Environment Record の DeleteBinding 具体メソッドは、本仕様内では決して使用されない。</p>
           <emu-note>
-            <p>Module Environment Record は strict コード内のみで使用され、strict コードでは delete 演算子が Module Environment Record 束縛へ解決される Reference Record に適用されることを早期エラー規則が防ぐ。<emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref> 参照。</p>
+            <p>モジュール Environment Record はストリクトコード内でのみ使われ、ストリクトコード内で delete 演算子がモジュール Environment Record バインディングに解決される Reference Record に適用されることを早期エラー規則で防いでいる。 <emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref> を参照せよ。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-hasthisbinding" type="concrete method">
           <h1>HasThisBinding ( ): *true*</h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>対象</dt>
+            <dd>モジュール Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
             1. *true* を返す。
           </emu-alg>
           <emu-note>
-            <p>Module Environment Record は常に `this` 束縛を提供する。</p>
+            <p>モジュール Environment Record は常に `this` バインディングを提供する。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-getthisbinding" type="concrete method">
           <h1>GetThisBinding ( ): *undefined* を含む正常完了</h1>
           <dl class="header">
-            <dt>for</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>対象</dt>
+            <dd>モジュール Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
             1. *undefined* を返す。
@@ -11290,20 +11300,20 @@
         <emu-clause id="sec-createimportbinding" type="abstract operation">
           <h1>
             CreateImportBinding (
-              _envRec_: Module Environment Record,
-              _N_: String,
+              _envRec_: モジュール Environment Record,
+              _N_: 文字列,
               _M_: Module Record,
-              _N2_: String,
+              _N2_: 文字列,
             ): ~unused~
           </h1>
           <dl class="header">
-            <dt>description</dt>
-            <dd>名前 _N_ の新しい初期化済み不変間接束縛を作成する。_envRec_ に _N_ の束縛は存在してはならない。_N2_ は _M_ の Module Environment Record に存在する束縛名。新束縛の値へのアクセスは対象束縛値を間接的にアクセスする。</dd>
+            <dt>説明</dt>
+            <dd>名前 _N_ 用の新たな初期化済みイミュータブル間接バインディングを作成する。_envRec_ に _N_ のバインディングはまだ存在してはならない。_N2_ は _M_ の Module Environment Record に存在するバインディングの名前である。新しいバインディングの値へのアクセスは、ターゲットバインディングの値へのアクセスを間接的に行うことになる。</dd>
           </dl>
           <emu-alg>
-            1. アサート: _envRec_ はまだ _N_ の束縛を持たない。
-            1. アサート: _M_.[[Environment]] のインスタンス化時、_N2_ の直接束縛を持つ。
-            1. _envRec_ に _M_, _N2_ を対象とする _N_ の不変間接束縛を（初期化済みとして）作成する。
+            1. _envRec_ がすでに _N_ のバインディングを持たないことをアサートする。
+            1. _M_.[[Environment]] がインスタンス化されるとき、_N2_ の直接バインディングを持つことをアサートする。
+            1. _envRec_ に _M_ および _N2_ をターゲットバインディングとする _N_ のイミュータブル間接バインディングを作成し、そのバインディングが初期化済みであることを記録する。
             1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
@@ -20347,67 +20357,65 @@
     </emu-grammar>
 
     <emu-clause id="sec-equality-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>実行時セマンティクス: 評価 (Runtime Semantics: Evaluation)</h1>
+      <h1>ランタイムセマンティクス: 評価</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
+        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
         1. ? IsLooselyEqual(_rVal_, _lVal_) を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
-        1. _r_ を ? IsLooselyEqual(_rVal_, _lVal_)。
-        1. _r_ が *true* なら *false*、それ以外 *true*。
+        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _r_ を ? IsLooselyEqual(_rVal_, _lVal_) とする。
+        1. もし _r_ が *true* なら *false* を返す。それ以外なら *true* を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
+        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
         1. IsStrictlyEqual(_rVal_, _lVal_) を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
-        1. _r_ を IsStrictlyEqual(_rVal_, _lVal_)。
-        1. _r_ が *true* なら *false*、それ以外 *true*。
+        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _r_ を IsStrictlyEqual(_rVal_, _lVal_) とする。
+        1. もし _r_ が *true* なら *false* を返す。それ以外なら *true* を返す。
       </emu-alg>
       <emu-note>
-        <p>上記定義に関して:</p>
+        <p>等価演算子は次の不変条件を維持する：</p>
         <ul>
           <li>
-            文字列比較は: <code>\`${a}\` == \`${b}\`</code> により強制できる。
+            `A != B` は `!(A == B)` と等価である。
           </li>
           <li>
-            数値比較は: <code>+a == +b</code> により強制できる。
-          </li>
-          <li>
-            Boolean 比較は: <code>!a == !b</code> により強制できる。
+            `A == B` は、`A` と `B` の評価順を除いて `B == A` と等価である。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>等価演算子は次の不変条件を保持する:</p>
+        <p>等価演算子は常に推移律を満たすとは限らない。たとえば、同じ文字列値を表すが異なる String オブジェクトが存在する場合、それぞれの String オブジェクトは `==` 演算子によりその文字列値と等しいとみなされるが、２つの String オブジェクト同士は等しくない。例：</p>
         <ul>
           <li>
-            <code>A != B</code> は <code>!(A == B)</code> と同値。
+            `new String("a") == "a"` と `"a" == new String("a")` はどちらも *true*。
           </li>
           <li>
-            <code>A == B</code> は評価順序を除き <code>B == A</code> と同値。
+            `new String("a") == new String("a")` は *false*。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>等価演算子は常に推移的とは限らない。例えば同じ String 値を表す異なる 2 つの String オブジェクトは、それぞれがリテラル文字列とは <code>==</code> で等しいが、互いには等しくない:</p>
-        <ul>
-          <li>
-            <code>new String("a") == "a"</code> および <code>"a" == new String("a")</code> は *true*。
-          </li>
-          <li>
-            <code>new String("a") == new String("a")</code> は *false*。
-          </li>
-        </ul>
-      </emu-note>
-      <emu-note>
-        <p>文字列比較はコードユニット列の単純な同値判定であり、Unicode 仕様の正規等価や照合順序は考慮されない。Unicode の正規等価な String が不等と判定され得る。両 String は既に正規化されているものとみなす。</p>
+        <p>文字列の比較はコード単位値列に対する単純な等価テストを用いる。Unicode 仕様で定義されるような、より複雑な意味的な文字や文字列の等価性、照合順序の定義は用いられない。そのため、Unicode Standard において正規同等とみなされる Strings 値でも、不等と判定される場合がある。実質的に、このアルゴリズムは両方の文字列がすでに正規化済みであることを前提としている。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -26489,7 +26497,7 @@
             </tr>
           </table>
         </emu-table>
-        <emu-table id="table-abstract-methods-of-module-records" caption="Module Record の抽象メソッド" oldids="table-37">
+        <emu-table id="table-abstract-methods-of-module-records" type="abstract methods" of="Module Records" oldids="table-37">
           <table>
             <thead>
               <tr>
@@ -26499,51 +26507,77 @@
                 <th>
                   目的
                 </th>
+                <th>
+                  定義
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-loadrequestedmodules">
               <td>
-                LoadRequestedModules([_hostDefined_])
+                LoadRequestedModules (
+                optional _hostDefined_: 任意の型,
+                ): Promise
               </td>
               <td>
-                <p>すべての依存関係を再帰的にロードしてモジュールをリンキング用に準備し、プロミスを返す。</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                GetExportedNames([_exportStarSet_])
+                <p>モジュールのすべての依存関係を再帰的にロードし、リンクの準備を行う。</p>
               </td>
               <td>
-                <p>このモジュールから直接または間接的にエクスポートされるすべての名前のリストを返す。</p>
-                <p>このメソッドを呼び出す前に LoadRequestedModules が正常に完了している必要がある。</p>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="LoadRequestedModules"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-getexportednames">
               <td>
-                ResolveExport(_exportName_ [, _resolveSet_])
+                GetExportedNames (
+                optional _exportStarSet_: ソーステキストモジュールレコードのリスト,
+                ): 文字列のリスト
               </td>
               <td>
-                <p>このモジュールによってエクスポートされる名前の束縛を返す。束縛は { [[Module]]: Module Record, [[BindingName]]: String | ~namespace~ } の形式の <dfn id="resolvedbinding-record" variants="ResolvedBinding Records">ResolvedBinding Record</dfn> で表される。エクスポートが任意のモジュールに直接束縛を持たない Module Namespace Object の場合、[[BindingName]] は ~namespace~ に設定される。名前を解決できない場合は *null* を返し、複数の束縛が見つかった場合は ~ambiguous~ を返す。</p>
-                <p>この操作が特定の _exportName_, _resolveSet_ ペアを引数として呼び出されるたびに、同じ結果を返さなければならない。</p>
-                <p>このメソッドを呼び出す前に LoadRequestedModules が正常に完了している必要がある。</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Link()
+                <p>このモジュールから直接的または間接的にエクスポートされるすべての名前のリストを返す。</p>
+                <p>このメソッドの呼び出し前に LoadRequestedModules が正常終了している必要がある。</p>
               </td>
               <td>
-                <p>すべてのモジュール依存関係を遷移的に解決し、Module Environment Record を作成してモジュールを評価用に準備する。</p>
-                <p>このメソッドを呼び出す前に LoadRequestedModules が正常に完了している必要がある。</p>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="GetExportedNames"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-resolveexport">
               <td>
-                Evaluate()
+                ResolveExport (
+                _exportName_: 文字列,
+                optional _resolveSet_: [[Module]]（モジュールレコード）と [[ExportName]]（文字列）フィールドを持つレコードのリスト,
+                ): ResolvedBinding レコード、*null*、または ~ambiguous~
               </td>
               <td>
-                <p>このモジュールとその依存関係の評価のプロミスを返す。評価が成功した場合または既に正常に評価されている場合は解決し、評価エラーまたは既に評価に失敗している場合は拒否する。プロミスが拒否された場合、ホストはプロミス拒否を処理し、評価エラーを再スローすることが期待される。</p>
-                <p>このメソッドを呼び出す前に Link が正常に完了している必要がある。</p>
+                <p>このモジュールによってエクスポートされる名前のバインディングを返す。バインディングは <dfn id="resolvedbinding-record" variants="ResolvedBinding Records">ResolvedBinding レコード</dfn> として表され、形式は { [[Module]]: モジュールレコード, [[BindingName]]: 文字列 | ~namespace~ } である。もしエクスポートがどのモジュールにも直接バインディングされないモジュール名前空間オブジェクトの場合、[[BindingName]] は ~namespace~ となる。解決できない場合は *null*、複数のバインディングが見つかった場合は ~ambiguous~ を返す。</p>
+                <p>この操作が特定の _exportName_, _resolveSet_ の組み合わせで呼ばれるたびに、常に同じ結果を返さなければならない。</p>
+                <p>このメソッドの呼び出し前に LoadRequestedModules が正常終了している必要がある。</p>
+              </td>
+              <td>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="ResolveExport"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-link">
+              <td>Link ( ): ~unused~ を含む正常完了または throw 完了</td>
+              <td>
+                <p>すべてのモジュール依存関係を推移的に解決し、モジュール Environment Record を作成して評価の準備を行う。</p>
+                <p>このメソッドの呼び出し前に LoadRequestedModules が正常終了している必要がある。</p>
+              </td>
+              <td>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="Link"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-evaluate">
+              <td>Evaluate ( ): Promise</td>
+              <td>
+                <p>このモジュールおよびその依存関係の評価に対するプロミスを返す。正常に評価が完了した場合や、すでに正常に評価済みの場合は resolve され、評価エラーの場合や、すでに評価に失敗している場合には reject される。プロミスが reject された場合、ホストはその拒否を処理し、評価エラーを再スローすることが求められる。このモジュールが循環モジュールレコードでない限り、返されるプロミスはすでに settle 済みでなければならない。</p>
+                <p>このメソッドの呼び出し前に Link が正常終了している必要がある。</p>
+              </td>
+              <td>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="Evaluate"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -26715,8 +26749,8 @@
             </tr>
           </table>
         </emu-table>
-        <p><emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> で定義されたメソッドに加えて、Cyclic Module Record は <emu-xref href="#table-cyclic-module-methods"></emu-xref> に列挙される追加抽象メソッドを持つ。</p>
-        <emu-table id="table-cyclic-module-methods" caption="Cyclic Module Record の追加抽象メソッド">
+        <p><emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> に定義されたメソッドに加えて、循環モジュールレコードは <emu-xref href="#table-cyclic-module-methods"></emu-xref> に列挙された追加のメソッドを持つ：</p>
+        <emu-table id="table-cyclic-module-methods" type="abstract methods" of="Cyclic Module Records" caption="Additional Abstract Methods of Cyclic Module Records">
           <table>
             <thead>
               <tr>
@@ -26726,22 +26760,33 @@
                 <th>
                   目的
                 </th>
+                <th>
+                  定義
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-initializeenvironment">
+              <td>InitializeEnvironment ( ): ~unused~ を含む正常完了または throw 完了</td>
               <td>
-                InitializeEnvironment()
+                モジュールの Environment Record を初期化し、すべての import バインディングの解決を含め、モジュールの実行コンテキストを作成する。
               </td>
               <td>
-                すべてのインポート束縛解決を含めモジュールの Environment Record を初期化し、実行コンテキストを作成する。
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="InitializeEnvironment"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-executemodule">
               <td>
-                ExecuteModule([_promiseCapability_])
+                ExecuteModule (
+                optional _capability_: a PromiseCapability Record,
+                ): ~unused~ を含む正常完了または throw 完了
               </td>
               <td>
-                モジュールのコードをその実行コンテキスト内で評価。[[HasTLA]] が *true* の場合は PromiseCapability Record が引数で渡され、その capability を resolve / reject する責務を持つ。この場合メソッドは例外を throw せず、必要なら PromiseCapability Record を reject しなければならない。
+                モジュールのコードをその実行コンテキスト内で評価する。もしこのモジュールの [[HasTLA]] が *true* であれば、PromiseCapability レコードが引数として渡され、メソッドは与えられた capability を解決または拒否することが期待される。この場合、メソッドは例外をスローしてはならず、必要に応じて PromiseCapability レコードを拒否しなければならない。
+              </td>
+              <td>
+                本仕様では以下の型に定義がある。ホストは独自の型および定義を追加してもよい：
+                <emu-concrete-method-dfns for="ExecuteModule"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -27189,8 +27234,7 @@
                   1. Else if _m_.[[HasTLA]] が *true* なら
                     1. ExecuteAsyncModule(_m_) を実行。
                   1. Else
-                    1. _result_ を <emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta> とする。
-                    1. もし _result_ が abrupt completion なら
+                    1. _result_ を Completion(<emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta>) とする。 1. もし _result_ が abrupt completion なら
                       1. AsyncModuleExecutionRejected(_m_, _result_.[[Value]]) を実行。
                     1. それ以外
                       1. _m_.[[AsyncEvaluationOrder]] を ~done~ に。
@@ -28559,40 +28603,50 @@
             1. Assert: _module_.[[ExportNames]] は _exportName_ を含む。
             1. _envRec_ を _module_.[[Environment]]。
             1. Assert: _envRec_ は ~empty~ でない。
-            1. _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*) を実行。
+            1. ! _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*) を実行。
             1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-smr-module-record-methods">
-          <h1>Module Record 抽象メソッドの実装 (Synthetic)</h1>
+          <h1>モジュールレコード抽象メソッドの実装</h1>
 
-          <p>以下は Synthetic Module Record の Module Record 抽象メソッド具象実装。</p>
+          <p>以下は <emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> で定義された対応するモジュールレコード抽象メソッドを実装する、Synthetic Module Record の具体メソッドである。</p>
 
           <emu-clause id="sec-smr-LoadRequestedModules" type="concrete method">
-            <h1>LoadRequestedModules ( ): Promise</h1>
+            <h1>
+              LoadRequestedModules (
+                optional _hostDefined_: 任意の型,
+              ): Promise
+            </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>対象</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
+              1. 注：この LoadRequestedModules の実装では _hostDefined_ を使用しない。
               1. ! PromiseResolve(%Promise%, *undefined*) を返す。
             </emu-alg>
 
             <emu-note>
-              Synthetic Module Record に依存はない。
+              Synthetic Module Record には依存関係がない。
             </emu-note>
           </emu-clause>
 
           <emu-clause id="sec-smr-getexportednames" type="concrete method">
-            <h1>GetExportedNames ( ): 文字列リスト</h1>
+            <h1>
+              GetExportedNames (
+                optional _exportStarSet_: ソーステキストモジュールレコードのリスト,
+              ): 文字列のリスト
+            </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>対象</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
+              1. 注：この GetExportedNames の実装では _exportStarSet_ を使用しない。
               1. _module_.[[ExportNames]] を返す。
             </emu-alg>
           </emu-clause>
@@ -28601,33 +28655,35 @@
             <h1>
               ResolveExport (
                 _exportName_: 文字列,
-              ): ResolvedBinding Record または *null*
+                optional _resolveSet_: [[Module]]（モジュールレコード）および [[ExportName]]（文字列）フィールドを持つレコードのリスト,
+              ): ResolvedBinding レコード、*null*、または ~ambiguous~
             </h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>対象</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. もし _module_.[[ExportNames]] が _exportName_ を含まなければ *null*。
-              1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _exportName_ } を返す。
+              1. 注：この ResolveExport の実装では _resolveSet_ を使用しない。
+              1. もし _module_.[[ExportNames]] が _exportName_ を含まないなら、*null* を返す。
+              1. ResolvedBinding レコード { [[Module]]: _module_, [[BindingName]]: _exportName_ } を返す。
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-Link" type="concrete method">
-            <h1>Link ( ): ~unused~ を含む通常完了</h1>
+            <h1>Link ( ): ~unused~ を含む正常完了</h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>対象</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _realm_ を _module_.[[Realm]]。
-              1. _env_ を NewModuleEnvironment(_realm_.[[GlobalEnv]])。
-              1. _module_.[[Environment]] を _env_ に。
-              1. _module_.[[ExportNames]] の各文字列 _exportName_ について
-                1. ! _env_.CreateMutableBinding(_exportName_, *false*)。
-                1. ! _env_.InitializeBinding(_exportName_, *undefined*)。
+              1. _realm_ を _module_.[[Realm]] とする。
+              1. _env_ を NewModuleEnvironment(_realm_.[[GlobalEnv]]) とする。
+              1. _module_.[[Environment]] に _env_ を設定する。
+              1. _module_.[[ExportNames]] の各文字列 _exportName_ について、次を行う
+                1. ! _env_.CreateMutableBinding(_exportName_, *false*) を実行する。
+                1. ! _env_.InitializeBinding(_exportName_, *undefined*) を実行する。
               1. NormalCompletion(~unused~) を返す。
             </emu-alg>
           </emu-clause>
@@ -28635,25 +28691,26 @@
           <emu-clause id="sec-smr-Evaluate" type="concrete method">
             <h1>Evaluate ( ): Promise</h1>
             <dl class="header">
-              <dt>for</dt>
+              <dt>対象</dt>
               <dd>Synthetic Module Record _module_</dd>
             </dl>
 
             <emu-alg>
-              1. _moduleContext_ を新 ECMAScript 実行コンテキスト。
-              1. Function を *null*。
-              1. Realm を _module_.[[Realm]]。
-              1. ScriptOrModule を _module_。
-              1. VariableEnvironment / LexicalEnvironment を _module_.[[Environment]]。
-              1. 実行中コンテキストを中断。
-              1. _moduleContext_ をスタックに push。
-              1. _steps_ を _module_.[[EvaluationSteps]]。
-              1. _result_ を Completion(_steps_(_module_))。
-              1. _moduleContext_ を中断・除去。
-              1. 上位コンテキストを再開。
-              1. _pc_ を ! NewPromiseCapability(%Promise%)。
-              1. IfAbruptRejectPromise(_result_, _pc_)。
-              1. ! Call(_pc_.[[Resolve]], *undefined*, « *undefined* »)。
+              1. _moduleContext_ を新しい ECMAScript コード実行コンテキストとする。
+              1. _moduleContext_ の Function を *null* に設定する。
+              1. _moduleContext_ の Realm を _module_.[[Realm]] に設定する。
+              1. _moduleContext_ の ScriptOrModule を _module_ に設定する。
+              1. _moduleContext_ の VariableEnvironment を _module_.[[Environment]] に設定する。
+              1. _moduleContext_ の LexicalEnvironment を _module_.[[Environment]] に設定する。
+              1. 現在実行中の実行コンテキストをサスペンドする。
+              1. 実行コンテキストスタックに _moduleContext_ をプッシュし、_moduleContext_ を現在の実行中の実行コンテキストとする。
+              1. _steps_ を _module_.[[EvaluationSteps]] とする。
+              1. _result_ を Completion(_steps_(_module_)) とする。
+              1. _moduleContext_ をサスペンドし、実行コンテキストスタックから取り除く。
+              1. 実行コンテキストスタックの最上位にあるコンテキストを、再び実行中の実行コンテキストとする。
+              1. _pc_ を ! NewPromiseCapability(%Promise%) とする。
+              1. IfAbruptRejectPromise(_result_, _pc_) を実行する。
+              1. ! Call(_pc_.[[Resolve]], *undefined*, « *undefined* ») を実行する。
               1. _pc_.[[Promise]] を返す。
             </emu-alg>
           </emu-clause>
@@ -53279,3 +53336,4 @@ THH:mm:ss.sss
   <p>この仕様は <a href="https://github.com/tc39/ecma262">GitHub</a> 上で <a href="https://github.com/bterlson/ecmarkup">Ecmarkup</a> と呼ばれるプレーンテキストソース形式で作成される。Ecmarkup はこの文書の編集上の慣習に従う完全な HTML レンダリングへ仕様を処理するためのフレームワークおよびツールセットを提供する HTML と Markdown の方言である。Ecmarkup は構文定義に <a href="https://github.com/rbuckton/grammarkdown">Grammarkdown</a>、アルゴリズム手順記述に <a href="https://github.com/domenic/ecmarkdown">Ecmarkdown</a> など複数のフォーマットおよび技術を統合している。この仕様の PDF レンダリングは CSS Paged Media 仕様を利用する印刷スタイルシートを用いて生成され <a href="https://www.princexml.com/">PrinceXML</a> で変換される。</p>
   <p>以前の版は Word を用いて作成されており、本版の基盤となった Ecmarkup ソーステキストは ECMAScript 2015 の Word ドキュメントを自動変換ツールで Ecmarkup へ変換して得られた。</p>
 </emu-annex>
+</emu-clause>

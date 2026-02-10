@@ -1178,8 +1178,8 @@
       <p>如 +、×、=、≥ 等数值运算符，具体操作取决于操作数类型。用于数学值时为常规数学运算，扩展数学值时为扩展实数运算（不定义不定型，规范中出现为编辑错误），用于 Number 时为 IEEE 754-2019 运算，BigInt 时为 BigInt 的数学值运算。混合类型操作数（如 Number 与数学值）不定义，规范中出现为编辑错误。</p>
       <p>数学值与 Number 或 BigInt 间转换均为显式。数学值或扩展数学值 _x_ 转 Number 表示为“_x_ 的 Number 值”或 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>，见 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>。整数 _x_ 转 BigInt 表示为“_x_ 的 <dfn id="bigint-value-for">BigInt 值</dfn>”或 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>。Number 或 BigInt _x_ 转数学值表示为“_x_ 的 <dfn id="mathematical-value-of">数学值</dfn>”或 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>。*+0*<sub>𝔽</sub> 和 *-0*<sub>𝔽</sub> 的数学值为 0，非有限值的数学值不定义。<dfn id="extended-mathematical-value-of">_x_ 的扩展数学值</dfn> 对于有限值为数学值，*+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 分别为 +∞ 和 -∞，*NaN* 不定义。</p>
       <p>数学函数 <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn> 返回 _x_ 的绝对值，即当 _x_ &lt; 0 时为 <emu-eqn>-_x_</emu-eqn>，否则为 _x_。</p>
-        <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> 生成 _x_ 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> 生成以 10 为底的 _x_ 的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> 生成以 2 为底的 _x_ 的对数。</p>
-        <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 取 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中最小值，<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 取最大值，定义域和值域为扩展数学值。</p>
+      <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> 生成 _x_ 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> 生成以 10 为底的 _x_ 的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> 生成以 2 为底的 _x_ 的对数。</p>
+      <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 取 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中最小值，<emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 取最大值，定义域和值域为扩展数学值。</p>
       <p>记号“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ 模 _y_</emu-eqn>”（_y_ 必须为有限且非零）计算与 _y_ 同号或为零的值 _k_，满足 <emu-eqn>abs(_k_) &lt; abs(_y_) 且 _x_ - _k_ = _q_ × _y_</emu-eqn>，其中 _q_ 为整数。</p>
       <p>“将 _x_ 限制在 _lower_ 与 _upper_ 之间”（_x_ 为扩展数学值，_lower_ 和 _upper_ 为满足 _lower_ ≤ _upper_ 的数学值）表示若 _x_ &lt; _lower_，则取 _lower_，若 _x_ > _upper_，则取 _upper_，否则取 _x_。</p>
       <p>数学函数 <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn> 返回不大于 _x_ 的最大整数（最接近 +∞）。</p>
@@ -10069,7 +10069,7 @@
       </ul>
 
       <p>Environment Record 抽象类包含 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> 中定义的抽象规范方法。这些抽象方法在各具体子类上有不同的具体算法。</p>
-      <emu-table id="table-abstract-methods-of-environment-records" caption="Environment Record 的抽象方法" oldids="table-15">
+      <emu-table id="table-abstract-methods-of-environment-records" type="abstract methods" of="Environment Records" oldids="table-15,table-17,table-19,table-20,table-additional-methods-of-function-environment-records,table-additional-methods-of-global-environment-records,table-additional-methods-of-module-environment-records">
         <table>
           <thead>
             <tr>
@@ -10079,86 +10079,153 @@
               <th>
                 目的
               </th>
+              <th>
+                定义
+              </th>
             </tr>
           </thead>
-          <tr>
+          <tr id="abstract-hasbinding">
             <td>
-              HasBinding(N)
+              HasBinding (
+              _N_: 一个字符串,
+              ): 返回一个包含布尔值的正常完成或抛出完成
             </td>
             <td>
-              判断 Environment Record 是否存在字符串值 _N_ 的绑定；存在返回 *true*，否则返回 *false*。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              CreateMutableBinding(N, D)
+              判断环境记录是否拥有名为 _N_ 的绑定。
             </td>
             <td>
-              创建一个新的、未初始化的可变绑定。字符串 _N_ 为名称文本。若布尔参数 _D_ 为 *true*，该绑定之后可删除。
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="HasBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createmutablebinding">
             <td>
-              CreateImmutableBinding(N, S)
+              CreateMutableBinding (
+              _N_: 一个字符串,
+              _D_: 一个布尔值,
+              ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
-              创建新的、未初始化的不可变绑定。字符串 _N_ 为名称文本。若 _S_ 为 *true*，初始化后再设置将始终抛出异常（与引用该绑定的操作是否严格模式无关）。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              InitializeBinding(N, V)
+              在环境记录中创建一个新的但未初始化的可变绑定。_N_ 是绑定名文本。如果 _D_ 为 *true*，该绑定随后可以被删除。
             </td>
             <td>
-              为已存在但未初始化的绑定设置值。_N_ 为名称文本，_V_ 为任意 ECMAScript 语言类型的值。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              SetMutableBinding(N, V, S)
-            </td>
-            <td>
-              为已存在的可变绑定设置值 _V_。_S_ 为布尔标记；若 _S_ 为 *true* 且绑定无法被设置则抛出 *TypeError*。
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="CreateMutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-createimmutablebinding">
             <td>
-              GetBindingValue(N, S)
+              CreateImmutableBinding (
+              _N_: 一个字符串,
+              _S_: 一个布尔值,
+              ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
-              返回已存在绑定的值。_S_ 标记引用是否源自严格模式（或需要严格语义）。若 _S_ 为 *true* 且绑定不存在抛 *ReferenceError*。若绑定存在但未初始化，无论 _S_ 值为何都抛 *ReferenceError*。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              DeleteBinding(N)
+              在环境记录中创建一个新的但未初始化的不可变绑定。_N_ 是绑定名文本。如果 _S_ 为 *true*，则在初始化后尝试设置值总会抛出异常，无论引用该绑定的操作是否处于严格模式。
             </td>
             <td>
-              删除名称为 _N_ 的绑定。存在则移除并返回 *true*；存在但不可移除返回 *false*；不存在返回 *true*。
-            </td>
-          </tr>
-          <tr>
-            <td>
-              HasThisBinding()
-            </td>
-            <td>
-              判断是否建立 `this` 绑定；是返回 *true*，否则 *false*。
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="CreateImmutableBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-initializebinding">
             <td>
-              HasSuperBinding()
+              InitializeBinding (
+              _N_: 一个字符串,
+              _V_: 一个 ECMAScript 语言值,
+              ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
-              判断是否建立 `super` 方法绑定；是返回 *true*，否则 *false*。若返回 *true* 则表明该记录是 Function Environment Record（反之不一定）。
+              设置环境记录中已存在但未初始化绑定的值。_N_ 是绑定名文本；_V_ 是绑定的值。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="InitializeBinding"></emu-concrete-method-dfns>
             </td>
           </tr>
-          <tr>
+          <tr id="abstract-setmutablebinding">
             <td>
-              WithBaseObject()
+              SetMutableBinding (
+              _N_: 一个字符串,
+              _V_: 一个 ECMAScript 语言值,
+              _S_: 一个布尔值,
+              ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
-              若该 Environment Record 与 `with` 语句关联则返回其对象；否则返回 *undefined*。
+              设置环境记录中已存在可变绑定的值。_N_ 是绑定名文本；_V_ 是绑定的值。如果 _S_ 为 *true* 且该绑定不可赋值，将抛出 *TypeError* 异常。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="SetMutableBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getbindingvalue">
+            <td>
+              GetBindingValue (
+              _N_: 一个字符串,
+              _S_: 一个布尔值,
+              ): 返回一个包含 ECMAScript 语言值的正常完成或抛出完成
+            </td>
+            <td>
+              返回环境记录中已存在绑定的值。_N_ 是绑定名文本；_S_ 用于标记来自严格模式代码的引用，或需要严格模式引用语义的情况。如果 _S_ 为 *true* 且绑定不存在，将抛出 *ReferenceError*，如果绑定存在但未初始化，无论 _S_ 的值都会抛出 *ReferenceError*。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="GetBindingValue"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-deletebinding">
+            <td>
+              DeleteBinding (
+              _N_: 一个字符串,
+              ): 返回一个包含布尔值的正常完成或抛出完成
+            </td>
+            <td>
+              从环境记录中删除一个绑定。_N_ 是绑定名文本。如果存在名为 _N_ 的绑定，则移除该绑定并返回 *true*；如果绑定存在但不能被移除，则返回 *false*；如果绑定不存在，则返回 *true*。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="DeleteBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hasthisbinding">
+            <td>HasThisBinding ( ): 一个布尔值</td>
+            <td>
+              判断环境记录是否建立了 `this` 绑定。若建立则返回 *true*，否则返回 *false*。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="HasThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-getthisbinding">
+            <td>GetThisBinding ( ): 返回一个包含 ECMAScript 语言值的正常完成或抛出完成</td>
+            <td>
+              返回此环境记录的 `this` 绑定值。如果 `this` 绑定未初始化，则抛出 *ReferenceError*。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="GetThisBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-hassuperbinding">
+            <td>HasSuperBinding ( ): 一个布尔值</td>
+            <td>
+              判断环境记录是否建立了 `super` 方法绑定。若建立则返回 *true*，否则返回 *false*。若返回 *true*，则说明该环境记录属于函数环境记录，反之不成立。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="HasSuperBinding"></emu-concrete-method-dfns>
+            </td>
+          </tr>
+          <tr id="abstract-withbaseobject">
+            <td>WithBaseObject ( ): 一个对象或 *undefined*</td>
+            <td>
+              如果此环境记录与 `with` 语句关联，则返回 with 对象，否则返回 *undefined*。
+            </td>
+            <td>
+              在下列类型中有具体定义：
+              <emu-concrete-method-dfns for="WithBaseObject"></emu-concrete-method-dfns>
             </td>
           </tr>
         </table>
@@ -10342,6 +10409,11 @@
           <emu-note>
             <p>普通 Declarative Environment Record（即既不是 Function 也不是 Module Environment Record）不提供 `this` 绑定。</p>
           </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-declarative-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>在本规范中，声明式环境记录的 GetThisBinding 具体方法从未被使用。</p>
         </emu-clause>
 
         <emu-clause id="sec-declarative-environment-records-hassuperbinding" type="concrete method">
@@ -10573,6 +10645,11 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-object-environment-records-getthisbinding">
+          <h1>GetThisBinding ( )</h1>
+          <p>在本规范中，对象环境记录的 GetThisBinding 具体方法从未被使用。</p>
+        </emu-clause>
+
         <emu-clause id="sec-object-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -10665,29 +10742,7 @@
             </tr>
           </table>
         </emu-table>
-        <p>Function Environment Record 支持 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> 中列出的所有 Declarative Environment Record 方法，除 HasThisBinding 与 HasSuperBinding 外与其规范相同；另外支持 <emu-xref href="#table-additional-methods-of-function-environment-records"></emu-xref> 中列出的方法：</p>
-        <emu-table id="table-additional-methods-of-function-environment-records" caption="Function Environment Record 的附加方法" oldids="table-17">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  方法
-                </th>
-                <th>
-                  目的
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                返回该 Environment Record 的 `this` 绑定值，若尚未初始化则抛 *ReferenceError*。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <p>函数环境记录支持<emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>中列出的所有声明式环境记录方法，并且这些方法的规范除 HasThisBinding、GetThisBinding 和 HasSuperBinding 以外均相同。</p>
 
         <emu-clause id="sec-bindthisvalue" type="abstract operation">
           <h1>
@@ -10720,44 +10775,44 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
-          <h1>HasSuperBinding ( ): 一个 Boolean</h1>
-          <dl class="header">
-            <dt>适用于</dt>
-            <dd>Function Environment Record _envRec_</dd>
-          </dl>
-          <emu-alg>
-            1. 若 _envRec_.[[ThisBindingStatus]] 为 ~lexical~，返回 *false*。
-            1. 若 _envRec_.[[FunctionObject]].[[HomeObject]] 为 *undefined*，返回 *false*；否则返回 *true*。
-          </emu-alg>
-        </emu-clause>
-
         <emu-clause id="sec-function-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): 一个包含 ECMAScript 语言值的正常完成或抛出完成</h1>
+          <h1>GetThisBinding ( ): 返回一个包含 ECMAScript 语言值的正常完成或抛出完成</h1>
           <dl class="header">
-            <dt>适用于</dt>
-            <dd>Function Environment Record _envRec_</dd>
+            <dt>适用对象</dt>
+            <dd>函数环境记录 _envRec_</dd>
           </dl>
           <emu-alg>
             1. 断言：_envRec_.[[ThisBindingStatus]] 不为 ~lexical~。
-            1. 若 _envRec_.[[ThisBindingStatus]] 为 ~uninitialized~，抛 *ReferenceError*。
+            1. 如果 _envRec_.[[ThisBindingStatus]] 为 ~uninitialized~，抛出 *ReferenceError* 异常。
             1. 返回 _envRec_.[[ThisValue]]。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-function-environment-records-hassuperbinding" type="concrete method">
+          <h1>HasSuperBinding ( ): 一个布尔值</h1>
+          <dl class="header">
+            <dt>适用对象</dt>
+            <dd>函数环境记录 _envRec_</dd>
+          </dl>
+          <emu-alg>
+            1. 如果 _envRec_.[[ThisBindingStatus]] 为 ~lexical~，返回 *false*。
+            1. 如果 _envRec_.[[FunctionObject]].[[HomeObject]] 为 *undefined*，返回 *false*；否则返回 *true*。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-getsuperbase" type="abstract operation">
           <h1>
             GetSuperBase (
-              _envRec_: 一个 Function Environment Record,
-            ): 一个 Object、*null* 或 *undefined*
+              _envRec_: 一个函数环境记录,
+            ): 一个对象、*null* 或 *undefined*
           </h1>
           <dl class="header">
-            <dt>描述</dt>
-            <dd>返回在 _envRec_ 中绑定 `super` 属性访问的基对象。若为 *undefined*，表示该访问将产生运行时错误。</dd>
+            <dt>说明</dt>
+            <dd>返回作为 _envRec_ 中绑定 super 属性访问的基础对象。值 *undefined* 表示此类访问将导致运行时错误。</dd>
           </dl>
           <emu-alg>
-            1. 令 _home_ 为 _envRec_.[[FunctionObject]].[[HomeObject]]。
-            1. 若 _home_ 为 *undefined*，返回 *undefined*。
+            1. 让 _home_ 为 _envRec_.[[FunctionObject]].[[HomeObject]]。
+            1. 如果 _home_ 为 *undefined*，返回 *undefined*。
             1. 断言：_home_ 是普通对象。
             1. 返回 ! _home_.[[GetPrototypeOf]]()。
           </emu-alg>
@@ -10765,12 +10820,12 @@
       </emu-clause>
 
       <emu-clause id="sec-global-environment-records" oldids="global-environment">
-        <h1>全局环境记录 (Global Environment Records)</h1>
-        <p><dfn variants="Global Environment Records">Global Environment Record</dfn> 表示在同一 realm 中处理的所有 ECMAScript |Script| 元素共享的最外层作用域。提供内置全局（<emu-xref href="#sec-global-object"></emu-xref>）、全局对象属性以及所有顶层声明（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>，<emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）的绑定。</p>
-        <p>Global Environment Record 在逻辑上是单一记录，但被描述为封装一个 Object Environment Record 和一个 Declarative Environment Record 的复合体。Object Environment Record 的基对象为关联 Realm Record 的全局对象。该全局对象是其 GetThisBinding 具体方法返回的值。Object 组件包含内置全局与由 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableStatement| 引入的全局代码绑定；其余声明的绑定位于 Declarative 组件。</p>
-        <p>可以直接在全局对象上创建属性，因此 Object 组件可能同时包含通过声明显式创建的绑定与作为全局对象属性隐式创建的绑定。为区分通过声明显式创建的绑定，Global Environment Record 维护使用 CreateGlobalVarBinding 与 CreateGlobalFunctionBinding 创建的名称列表。</p>
-        <p>Global Environment Record 具有 <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> 中的附加字段和 <emu-xref href="#table-additional-methods-of-global-environment-records"></emu-xref> 中的附加方法。</p>
-        <emu-table id="table-additional-fields-of-global-environment-records" caption="Global Environment Record 的附加字段" oldids="table-18">
+        <h1>全局环境记录</h1>
+        <p><dfn variants="全局环境记录">全局环境记录</dfn>用于表示由所有在同一领域（realm）中处理的 ECMAScript |Script| 元素共享的最外层作用域。全局环境记录为内置全局对象（见 <emu-xref href="#sec-global-object"></emu-xref>）、全局对象的属性以及所有出现在 |Script| 中的顶级声明（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>、<emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）提供绑定。</p>
+        <p>全局环境记录在逻辑上是一个单独的记录，但规范上被描述为封装了对象环境记录和声明式环境记录的复合体。对象环境记录的基础对象是相关领域记录（Realm Record）的全局对象。该全局对象是全局环境记录的 GetThisBinding 具体方法返回的值。全局环境记录的对象环境记录部分包含所有内置全局绑定（见 <emu-xref href="#sec-global-object"></emu-xref>）以及所有在全局代码中通过 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableStatement| 引入的绑定。全局代码中的所有其他 ECMAScript 声明的绑定包含在全局环境记录的声明式环境记录部分。</p>
+        <p>属性可以直接在全局对象上创建。因此，全局环境记录的对象环境记录部分可能包含通过 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableDeclaration| 显式创建的绑定，也可能包含作为全局对象属性隐式创建的绑定。为了标识哪些绑定是通过声明显式创建的，全局环境记录维护一个使用 CreateGlobalVarBinding 和 CreateGlobalFunctionBinding 抽象操作绑定的名称列表。</p>
+        <p>全局环境记录具有<emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>中列出的附加字段。</p>
+        <emu-table id="table-additional-fields-of-global-environment-records" caption="全局环境记录的附加字段" oldids="table-18">
           <table>
             <thead>
               <tr>
@@ -10790,10 +10845,10 @@
                 [[ObjectRecord]]
               </td>
               <td>
-                一个 Object Environment Record
+                一个对象环境记录
               </td>
               <td>
-                绑定对象是全局对象，包含全局内置绑定以及全局代码中 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 的绑定。
+                绑定对象为全局对象。它包含该领域全局代码中的内置全局绑定以及 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 的绑定。
               </td>
             </tr>
             <tr>
@@ -10801,10 +10856,10 @@
                 [[GlobalThisValue]]
               </td>
               <td>
-                一个 Object
+                一个对象
               </td>
               <td>
-                全局作用域中 `this` 返回的值；宿主可提供任意 ECMAScript Object。
+                在全局作用域下 `this` 返回的值。宿主可以提供任意 ECMAScript 对象值。
               </td>
             </tr>
             <tr>
@@ -10812,32 +10867,10 @@
                 [[DeclarativeRecord]]
               </td>
               <td>
-                一个 Declarative Environment Record
+                一个声明式环境记录
               </td>
               <td>
-                <emu-not-ref>包含</emu-not-ref> 全局代码中除 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 外所有声明的绑定。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
-        <emu-table id="table-additional-methods-of-global-environment-records" caption="Global Environment Record 的附加方法" oldids="table-19">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  方法
-                </th>
-                <th>
-                  目的
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                返回该 Environment Record 的 `this` 绑定。
+                <emu-not-ref>包含</emu-not-ref>该领域的全局代码中除 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 及 |VariableDeclaration| 绑定之外所有声明的绑定。
               </td>
             </tr>
           </table>
@@ -11017,6 +11050,17 @@
           </emu-note>
         </emu-clause>
 
+        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
+          <h1>GetThisBinding ( ): 返回一个包含对象的正常完成</h1>
+          <dl class="header">
+            <dt>适用对象</dt>
+            <dd>全局环境记录 _envRec_</dd>
+          </dl>
+          <emu-alg>
+            1. 返回 _envRec_.[[GlobalThisValue]]。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-global-environment-records-hassuperbinding" type="concrete method">
           <h1>HasSuperBinding ( ): *false*</h1>
           <dl class="header">
@@ -11039,17 +11083,6 @@
           </dl>
           <emu-alg>
             1. 返回 *undefined*。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-global-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): 一个包含 Object 的正常完成</h1>
-          <dl class="header">
-            <dt>适用于</dt>
-            <dd>Global Environment Record _envRec_</dd>
-          </dl>
-          <emu-alg>
-            1. 返回 _envRec_.[[GlobalThisValue]]。
           </emu-alg>
         </emu-clause>
 
@@ -11192,89 +11225,67 @@
       </emu-clause>
 
       <emu-clause id="sec-module-environment-records" oldids="module-environment">
-        <h1>模块环境记录 (Module Environment Records)</h1>
-        <p><dfn variants="Module Environment Records">Module Environment Record</dfn> 是一个 Declarative Environment Record，用于表示 ECMAScript |Module| 的外层作用域。除普通可变与不可变绑定外，还提供不可变的 import 绑定，这些绑定间接访问另一个 Environment Record 中的目标绑定。</p>
-        <p>Module Environment Record 支持 <emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref> 中列出的所有 Declarative Environment Record 方法，除 GetBindingValue、DeleteBinding、HasThisBinding 与 GetThisBinding 外与其规范相同；另外支持 <emu-xref href="#table-additional-methods-of-module-environment-records"></emu-xref> 中的方法：</p>
-        <emu-table id="table-additional-methods-of-module-environment-records" caption="Module Environment Record 的附加方法" oldids="table-20">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  方法
-                </th>
-                <th>
-                  目的
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                GetThisBinding()
-              </td>
-              <td>
-                返回该 Environment Record 的 `this` 绑定值。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
+        <h1>模块环境记录</h1>
+        <p><dfn variants="模块环境记录">模块环境记录</dfn>是一种用于表示 ECMAScript |Module| 外部作用域的声明式环境记录。除了普通的可变和不可变绑定外，模块环境记录还提供不可变的导入绑定，这种绑定为存在于其他环境记录中的目标绑定提供间接访问。</p>
+        <p>模块环境记录支持<emu-xref href="#table-abstract-methods-of-environment-records"></emu-xref>中列出的所有声明式环境记录方法，并且这些方法的规范除 GetBindingValue、DeleteBinding、HasThisBinding 和 GetThisBinding 以外均相同。</p>
 
         <emu-clause id="sec-module-environment-records-getbindingvalue-n-s" type="concrete method">
           <h1>
             GetBindingValue (
-              _N_: 一个 String,
-              _S_: 一个 Boolean,
-            ): 一个包含 ECMAScript 语言值的正常完成或抛出完成
+              _N_: 一个字符串,
+              _S_: 一个布尔值,
+            ): 返回一个包含 ECMAScript 语言值的正常完成或抛出完成
           </h1>
           <dl class="header">
-            <dt>适用于</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>适用对象</dt>
+            <dd>模块环境记录 _envRec_</dd>
 
-            <dt>描述</dt>
-            <dd>返回名称为 _N_ 的绑定值；若为间接绑定则返回目标绑定的值。若存在但未初始化抛 *ReferenceError*。</dd>
+            <dt>说明</dt>
+            <dd>返回名称为 _N_ 的绑定标识符的值。但如果该绑定为间接绑定，则返回目标绑定的值。如果绑定存在但未初始化，则抛出 *ReferenceError*。</dd>
           </dl>
           <emu-alg>
             1. 断言：_S_ 为 *true*。
-            1. 断言：_envRec_ 有 _N_ 绑定。
-            1. 若 _N_ 的绑定是间接绑定，则
-              1. 令 _M_ 与 _N2_ 为创建该绑定时提供的间接值。
-              1. 令 _targetEnv_ 为 _M_.[[Environment]]。
-              1. 若 _targetEnv_ 为 ~empty~，抛 *ReferenceError*。
+            1. 断言：_envRec_ 存在名为 _N_ 的绑定。
+            1. 如果 _N_ 的绑定为间接绑定，则
+              1. 让 _M_ 和 _N2_ 为创建此绑定时提供的间接绑定值。
+              1. 让 _targetEnv_ 为 _M_.[[Environment]]。
+              1. 如果 _targetEnv_ 为 ~empty~，抛出 *ReferenceError* 异常。
               1. 返回 ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_N2_, *true*)</emu-meta>。
-            1. 若 _envRec_ 中 _N_ 的绑定为未初始化，抛 *ReferenceError*。
-            1. 返回当前绑定于 _N_ 的值。
+            1. 如果 _envRec_ 中 _N_ 的绑定为未初始化绑定，抛出 *ReferenceError* 异常。
+            1. 返回 _envRec_ 当前绑定到 _N_ 的值。
           </emu-alg>
           <emu-note>
-            <p>_S_ 始终为 *true*，因为 |Module| 总是严格模式。</p>
+            <p>_S_ 总是 *true*，因为 |Module| 永远是严格模式代码。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-deletebinding-n">
           <h1>DeleteBinding ( _N_ )</h1>
-          <p>Module Environment Record 的 DeleteBinding 具体方法在本规范中从未使用。</p>
+          <p>在本规范中，模块环境记录的 DeleteBinding 具体方法从未被使用。</p>
           <emu-note>
-            <p>Module Environment Record 仅用于严格代码，并且早期错误规则阻止在严格代码中对解析到模块环境绑定的 Reference Record 使用 delete。见 <emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref>。</p>
+            <p>模块环境记录只在严格代码下使用，并且有一条早期错误规则禁止在严格模式下将 delete 操作符应用于会解析为模块环境记录绑定的引用记录。见 <emu-xref href="#sec-delete-operator-static-semantics-early-errors"></emu-xref>。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-hasthisbinding" type="concrete method">
           <h1>HasThisBinding ( ): *true*</h1>
           <dl class="header">
-            <dt>适用于</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>适用对象</dt>
+            <dd>模块环境记录 _envRec_</dd>
           </dl>
           <emu-alg>
             1. 返回 *true*。
           </emu-alg>
           <emu-note>
-            <p>Module Environment Record 始终提供 `this` 绑定。</p>
+            <p>模块环境记录总是提供 `this` 绑定。</p>
           </emu-note>
         </emu-clause>
 
         <emu-clause id="sec-module-environment-records-getthisbinding" type="concrete method">
-          <h1>GetThisBinding ( ): 一个包含 *undefined* 的正常完成</h1>
+          <h1>GetThisBinding ( ): 返回一个包含 *undefined* 的正常完成</h1>
           <dl class="header">
-            <dt>适用于</dt>
-            <dd>Module Environment Record _envRec_</dd>
+            <dt>适用对象</dt>
+            <dd>模块环境记录 _envRec_</dd>
           </dl>
           <emu-alg>
             1. 返回 *undefined*。
@@ -11284,20 +11295,20 @@
         <emu-clause id="sec-createimportbinding" type="abstract operation">
           <h1>
             CreateImportBinding (
-              _envRec_: 一个 Module Environment Record,
-              _N_: 一个 String,
-              _M_: 一个 Module Record,
-              _N2_: 一个 String,
+              _envRec_: 一个模块环境记录,
+              _N_: 一个字符串,
+              _M_: 一个模块记录,
+              _N2_: 一个字符串,
             ): ~unused~
           </h1>
           <dl class="header">
-            <dt>描述</dt>
-            <dd>创建名称为 _N_ 的新已初始化不可变间接绑定；不得已存在。_N2_ 是 _M_ 的 Module Environment Record 中存在的绑定名。访问该新绑定的值将间接访问目标绑定的值。</dd>
+            <dt>说明</dt>
+            <dd>为名称 _N_ 创建一个新的已初始化不可变间接绑定。_envRec_ 中不得已存在 _N_ 的绑定。_N2_ 是 _M_ 的模块环境记录中存在的绑定名。对新绑定的值的访问将间接访问目标绑定的绑定值。</dd>
           </dl>
           <emu-alg>
-            1. 断言：_envRec_ 尚无 _N_ 绑定。
-            1. 断言：当 _M_.[[Environment]] 实例化时会有 _N2_ 的直接绑定。
-            1. 在 _envRec_ 中创建引用 _M_ 与 _N2_ 的不可变间接绑定并记录其已初始化。
+            1. 断言：_envRec_ 中尚不存在对 _N_ 的绑定。
+            1. 断言：当 _M_.[[Environment]] 被实例化时，它将拥有对 _N2_ 的直接绑定。
+            1. 在 _envRec_ 中为 _N_ 创建一个不可变的间接绑定，引用 _M_ 和 _N2_ 作为其目标绑定，并记录该绑定已初始化。
             1. 返回 ~unused~。
           </emu-alg>
         </emu-clause>
@@ -20381,65 +20392,65 @@
     </emu-grammar>
 
     <emu-clause id="sec-equality-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>运行时语义：求值 (Runtime Semantics: Evaluation)</h1>
+      <h1>运行时语义：求值</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |EqualityExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
+        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
+        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
         1. 返回 ? IsLooselyEqual(_rVal_, _lVal_)。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |EqualityExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 ? IsLooselyEqual(_rVal_, _lVal_)。<br>
-        1. 若 _r_ 为 *true*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
+        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
+        1. 令 _r_ 为 ? IsLooselyEqual(_rVal_, _lVal_)。
+        1. 如果 _r_ 为 *true*，返回 *false*；否则返回 *true*。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |EqualityExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
+        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
+        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
         1. 返回 IsStrictlyEqual(_rVal_, _lVal_)。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |EqualityExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 IsStrictlyEqual(_rVal_, _lVal_)。<br>
-        1. 若 _r_ 为 *true*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
+        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
+        1. 令 _r_ 为 IsStrictlyEqual(_rVal_, _lVal_)。
+        1. 如果 _r_ 为 *true*，返回 *false*；否则返回 *true*。
       </emu-alg>
       <emu-note>
-        <p>基于上述定义：</p>
+        <p>相等运算符保持以下不变量：</p>
         <ul>
-          <li>可通过 `\`${a}\` == \`${b}\`` 强制字符串比较。</li>
-          <li>可通过 `+a == +b` 强制数值比较。</li>
-          <li>可通过 `!a == !b` 强制布尔比较。</li>
+          <li>
+            `A != B` 等价于 `!(A == B)`。
+          </li>
+          <li>
+            `A == B` 等价于 `B == A`，但 `A` 和 `B` 的求值顺序除外。
+          </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>相等运算符保持以下不变式：</p>
+        <p>相等运算符并非总是具有传递性。例如，可能存在两个不同的 String 对象，每个都表示相同的字符串值；每个 String 对象与字符串值使用 `==` 运算符时都为相等，但这两个 String 对象彼此并不相等。例如：</p>
         <ul>
-          <li>`A != B` 等价于 `!(A == B)`。</li>
-          <li>`A == B` 等价于 `B == A`，除求值顺序外。</li>
+          <li>
+            `new String("a") == "a"` 与 `"a" == new String("a")` 都为 *true*。
+          </li>
+          <li>
+            `new String("a") == new String("a")` 为 *false*。
+          </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>相等运算符并非总是传递。例如可能存在两个不同的 String 对象，各表示相同的字符串值；它们分别与该字符串字面值 `==` 为 *true*，但二者彼此 `==` 为 *false*。示例：</p>
-        <ul>
-          <li>`new String("a") == "a"` 与 `"a" == new String("a")` 均为 *true*。</li>
-          <li>`new String("a") == new String("a")` 为 *false*。</li>
-        </ul>
-      </emu-note>
-      <emu-note>
-        <p>字符串比较对代码单元序列执行简单相等测试，不使用 Unicode 规范中更复杂的语义性字符/字符串等价与排序定义。故按 Unicode 标准正则等价的字符串值可能测试为不等；此算法假设两者已规范化。</p>
+        <p>字符串的比较仅对码元值序列使用简单的相等测试。不尝试使用 Unicode 规范中定义的更复杂、更有语义的字符或字符串相等与排序定义。因此，即便字符串根据 Unicode 标准为规范等价，也可能测试为不等。实际上，本算法假设两个字符串已处于规范化形式。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -26418,7 +26429,7 @@
             </tr>
           </table>
         </emu-table>
-        <emu-table id="table-abstract-methods-of-module-records" caption="Module Record 的抽象方法" oldids="table-37">
+        <emu-table id="table-abstract-methods-of-module-records" type="abstract methods" of="Module Records" oldids="table-37">
           <table>
             <thead>
               <tr>
@@ -26428,51 +26439,77 @@
                 <th>
                   目的
                 </th>
+                <th>
+                  定义
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-loadrequestedmodules">
               <td>
-                LoadRequestedModules([_hostDefined_])
+                LoadRequestedModules (
+                可选 _hostDefined_: 任意类型,
+                ): 一个 Promise
               </td>
               <td>
-                <p>通过递归加载所有依赖项来准备模块以进行链接，并返回一个 promise。</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                GetExportedNames([_exportStarSet_])
+                <p>通过递归加载所有依赖模块，为模块做链接准备。</p>
               </td>
               <td>
-                <p>返回从此模块直接或间接导出的所有名称的列表。</p>
-                <p>在调用此方法之前，LoadRequestedModules 必须已成功完成。</p>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="LoadRequestedModules"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-getexportednames">
               <td>
-                ResolveExport(_exportName_ [, _resolveSet_])
+                GetExportedNames (
+                可选 _exportStarSet_: 源文本模块记录的列表,
+                ): 字符串列表
               </td>
               <td>
-                <p>返回此模块导出的名称的绑定。绑定由 <dfn id="resolvedbinding-record" variants="ResolvedBinding Records">ResolvedBinding Record</dfn> 表示，形式为 { [[Module]]: Module Record, [[BindingName]]: String | ~namespace~ }。如果导出是没有任何模块中直接绑定的 Module Namespace Object，[[BindingName]] 将设置为 ~namespace~。如果名称无法解析则返回 *null*，如果找到多个绑定则返回 ~ambiguous~。</p>
-                <p>每次使用特定 _exportName_、_resolveSet_ 对作为参数调用此操作时，必须返回相同结果。</p>
-                <p>在调用此方法之前，LoadRequestedModules 必须已成功完成。</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Link()
+                <p>返回从本模块中直接或间接导出的所有名称组成的列表。</p>
+                <p>必须在调用此方法前成功完成 LoadRequestedModules。</p>
               </td>
               <td>
-                <p>通过传递性地解析所有模块依赖项并创建 Module Environment Record 来准备模块以进行求值。</p>
-                <p>在调用此方法之前，LoadRequestedModules 必须已成功完成。</p>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="GetExportedNames"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-resolveexport">
               <td>
-                Evaluate()
+                ResolveExport (
+                _exportName_: 一个字符串,
+                可选 _resolveSet_: 具有字段 [[Module]]（模块记录）和 [[ExportName]]（字符串）的记录列表,
+                ): 一个 ResolvedBinding 记录、*null* 或 ~ambiguous~
               </td>
               <td>
-                <p>返回此模块及其依赖项求值的 promise，在成功求值或已成功求值时解决，在求值错误或已求值失败时拒绝。如果 promise 被拒绝，期望宿主处理 promise 拒绝并重新抛出求值错误。</p>
-                <p>在调用此方法之前，Link 必须已成功完成。</p>
+                <p>返回模块导出名称的绑定。绑定用<dfn id="resolvedbinding-record" variants="ResolvedBinding 记录">ResolvedBinding 记录</dfn>表示，形式为 { [[Module]]: 模块记录, [[BindingName]]: 字符串 | ~namespace~ }。如果导出的是没有任何模块中的直接绑定的模块命名空间对象，则 [[BindingName]] 设为 ~namespace~。若无法解析名称则返回 *null*，若找到多个绑定则返回 ~ambiguous~。</p>
+                <p>每次以相同 _exportName_ 和 _resolveSet_ 调用该操作，都必须返回相同结果。</p>
+                <p>必须在调用此方法前成功完成 LoadRequestedModules。</p>
+              </td>
+              <td>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="ResolveExport"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-link">
+              <td>Link ( ): 返回一个包含 ~unused~ 的正常完成或抛出完成</td>
+              <td>
+                <p>通过传递性地解析所有模块依赖并创建模块环境记录，为模块求值做准备。</p>
+                <p>必须在调用此方法前成功完成 LoadRequestedModules。</p>
+              </td>
+              <td>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="Link"></emu-concrete-method-dfns>
+              </td>
+            </tr>
+            <tr id="abstract-evaluate">
+              <td>Evaluate ( ): 一个 Promise</td>
+              <td>
+                <p>它返回一个用于该模块及其依赖项求值的 Promise，在求值成功或已经成功求值时 resolve，在求值出错或之前已经求值失败时 reject。如果 Promise 被 reject，宿主应当处理此 Promise 的拒绝并重新抛出求值错误。除非该模块是循环模块记录，否则返回的 Promise 必须是已决状态。</p>
+                <p>必须在调用此方法前成功完成 Link。</p>
+              </td>
+              <td>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="Evaluate"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -26644,33 +26681,44 @@
             </tr>
           </table>
         </emu-table>
-        <p>除 <emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> 中的方法外，循环模块记录还具有 <emu-xref href="#table-cyclic-module-methods"></emu-xref> 中列出的附加抽象方法。</p>
-        <emu-table id="table-cyclic-module-methods" caption="循环模块记录的附加抽象方法 (Additional Abstract Methods of Cyclic Module Records)">
+        <p>除了<emu-xref href="#table-abstract-methods-of-module-records"></emu-xref>中定义的方法外，循环模块记录还具有<emu-xref href="#table-cyclic-module-methods"></emu-xref>中列出的附加方法：</p>
+        <emu-table id="table-cyclic-module-methods" type="abstract methods" of="Cyclic Module Records" caption="循环模块记录的附加抽象方法">
           <table>
             <thead>
               <tr>
                 <th>
-                  方法 (Method)
+                  方法
                 </th>
                 <th>
-                  目的 (Purpose)
+                  目的
+                </th>
+                <th>
+                  定义
                 </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="abstract-initializeenvironment">
+              <td>InitializeEnvironment ( ): 返回一个包含 ~unused~ 的正常完成或抛出完成</td>
               <td>
-                InitializeEnvironment()
+                初始化模块的环境记录，包括解析所有导入绑定，并创建模块的执行上下文。
               </td>
               <td>
-                初始化模块的 Environment Record（包括解析全部导入绑定）并创建模块的执行上下文。
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="InitializeEnvironment"></emu-concrete-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="abstract-executemodule">
               <td>
-                ExecuteModule([_promiseCapability_])
+                ExecuteModule (
+                可选 _capability_: 一个 PromiseCapability 记录,
+                ): 返回一个包含 ~unused~ 的正常完成或抛出完成
               </td>
               <td>
-                在其执行上下文内求值模块代码。若模块 [[HasTLA]] 为 *true*，则传入 PromiseCapability Record，方法应 resolve 或 reject 该能力；此时不得抛出异常，需通过 reject 处理。
+                在模块的执行上下文内对模块代码求值。如果该模块的 [[HasTLA]] 为 *true*，则会以 PromiseCapability 记录作为参数，并期望该方法 resolve 或 reject 指定的 capability。在这种情况下，方法不得抛出异常，而必须在必要时 reject 该 PromiseCapability 记录。
+              </td>
+              <td>
+                在本规范中于下列类型中有定义；宿主可提供包含自定义定义的其他类型：
+                <emu-concrete-method-dfns for="ExecuteModule"></emu-concrete-method-dfns>
               </td>
             </tr>
           </table>
@@ -27113,8 +27161,7 @@
                   1. 若 _m_.[[Status]] 为 ~evaluated~，断言其 [[EvaluationError]] 非 ~empty~。
                   1. 否则若 _m_.[[HasTLA]] 为 *true*，执行 ExecuteAsyncModule(_m_)。
                   1. 否则，
-                    1. 令 _result_ = <emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta>。
-                    1. 若 _result_ 为突然完成，执行 AsyncModuleExecutionRejected(_m_, _result_.[[Value]])。
+                    1. 让 _result_ 为 Completion(<emu-meta effects="user-code">_m_.ExecuteModule()</emu-meta>)。 1. 若 _result_ 为突然完成，执行 AsyncModuleExecutionRejected(_m_, _result_.[[Value]])。
                     1. 否则，
                       1. 设 _m_.[[AsyncEvaluationOrder]] = ~done~。
                       1. 设 _m_.[[Status]] = ~evaluated~。
@@ -28286,40 +28333,54 @@
             1. 断言：_module_.[[ExportNames]] 含 _exportName_。
             1. 令 _envRec_ = _module_.[[Environment]]。
             1. 断言：_envRec_ 非 ~empty~。
-            1. 执行 _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*)。
+            1. 执行 ! _envRec_.SetMutableBinding(_exportName_, _exportValue_, *true*)。
             1. 返回 ~unused~。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-smr-module-record-methods">
-          <h1>模块记录抽象方法实现 (Implementation of Module Record Abstract Methods)</h1>
+          <h1>模块记录抽象方法的实现</h1>
 
-          <p>以下为合成模块记录对 <emu-xref href="#table-abstract-methods-of-module-records"></emu-xref> 抽象方法的实现。</p>
+          <p>
+            以下是合成模块记录（Synthetic Module Record）实现
+            <emu-xref href="#table-abstract-methods-of-module-records"></emu-xref>中对应
+            模块记录抽象方法的具体方法。
+          </p>
 
           <emu-clause id="sec-smr-LoadRequestedModules" type="concrete method">
-            <h1>LoadRequestedModules ( ): Promise</h1>
+            <h1>
+              LoadRequestedModules (
+              可选 _hostDefined_: 任意,
+              ): 一个 Promise
+            </h1>
             <dl class="header">
-              <dt>for</dt>
-              <dd>Synthetic Module Record _module_</dd>
+              <dt>适用对象</dt>
+              <dd>合成模块记录 _module_</dd>
             </dl>
 
             <emu-alg>
+              1. 注：该 LoadRequestedModules 实现不会使用 _hostDefined_。
               1. 返回 ! PromiseResolve(%Promise%, *undefined*)。
             </emu-alg>
 
             <emu-note>
-              合成模块记录无依赖。
+              合成模块记录没有依赖。
             </emu-note>
           </emu-clause>
 
           <emu-clause id="sec-smr-getexportednames" type="concrete method">
-            <h1>GetExportedNames ( ): 字符串列表</h1>
+            <h1>
+              GetExportedNames (
+              可选 _exportStarSet_: 源文本模块记录的列表,
+              ): 字符串列表
+            </h1>
             <dl class="header">
-              <dt>for</dt>
-              <dd>Synthetic Module Record _module_</dd>
+              <dt>适用对象</dt>
+              <dd>合成模块记录 _module_</dd>
             </dl>
 
             <emu-alg>
+              1. 注：该 GetExportedNames 实现不会使用 _exportStarSet_。
               1. 返回 _module_.[[ExportNames]]。
             </emu-alg>
           </emu-clause>
@@ -28327,51 +28388,61 @@
           <emu-clause id="sec-smr-resolveexport" type="concrete method">
             <h1>
               ResolveExport (
-                _exportName_: String,
-              ): ResolvedBinding Record 或 *null*
+              _exportName_: 一个字符串,
+              可选 _resolveSet_: 具有 [[Module]]（模块记录）和 [[ExportName]]（字符串）字段的记录列表,
+              ): 一个 ResolvedBinding 记录、*null* 或 ~ambiguous~
             </h1>
             <dl class="header">
-              <dt>for</dt>
-              <dd>Synthetic Module Record _module_</dd>
+              <dt>适用对象</dt>
+              <dd>合成模块记录 _module_</dd>
             </dl>
 
             <emu-alg>
-              1. 若不含 _exportName_，返回 *null*。
-              1. 返回 { [[Module]]: _module_, [[BindingName]]: _exportName_ }。
+              1. 注：该 ResolveExport 实现不会使用 _resolveSet_。
+              1. 如果 _module_.[[ExportNames]] 不包含 _exportName_，返回 *null*。
+              1. 返回 ResolvedBinding 记录 { [[Module]]: _module_, [[BindingName]]: _exportName_ }。
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-Link" type="concrete method">
-            <h1>Link ( ): 正常完成（含 ~unused~）</h1>
+            <h1>Link ( ): 返回一个包含 ~unused~ 的正常完成</h1>
             <dl class="header">
-              <dt>for</dt>
-              <dd>Synthetic Module Record _module_</dd>
+              <dt>适用对象</dt>
+              <dd>合成模块记录 _module_</dd>
             </dl>
 
             <emu-alg>
-              1. 令 _realm_ = _module_.[[Realm]]。
-              1. 令 _env_ = NewModuleEnvironment(_realm_.[[GlobalEnv]])。
-              1. 设 _module_.[[Environment]] = _env_。
-              1. 对 _module_.[[ExportNames]] 每个 _exportName_：
-                1. ! CreateMutableBinding + InitializeBinding(_exportName_, *undefined*)。
+              1. 令 _realm_ 为 _module_.[[Realm]]。
+              1. 令 _env_ 为 NewModuleEnvironment(_realm_.[[GlobalEnv]])。
+              1. 设置 _module_.[[Environment]] 为 _env_。
+              1. 对于 _module_.[[ExportNames]] 的每个字符串 _exportName_，执行
+                1. 执行 ! _env_.CreateMutableBinding(_exportName_, *false*)。
+                1. 执行 ! _env_.InitializeBinding(_exportName_, *undefined*)。
               1. 返回 NormalCompletion(~unused~)。
             </emu-alg>
           </emu-clause>
 
           <emu-clause id="sec-smr-Evaluate" type="concrete method">
-            <h1>Evaluate ( ): Promise</h1>
+            <h1>Evaluate ( ): 一个 Promise</h1>
             <dl class="header">
-              <dt>for</dt>
-              <dd>Synthetic Module Record _module_</dd>
+              <dt>适用对象</dt>
+              <dd>合成模块记录 _module_</dd>
             </dl>
 
             <emu-alg>
-              1. 创建执行上下文 _moduleContext_ 并关联环境。
-              1. 暂停当前执行上下文并推入 _moduleContext_。
-              1. 令 _steps_ = _module_.[[EvaluationSteps]]。
-              1. 令 _result_ = Completion(_steps_(_module_))。
-              1. 弹出 _moduleContext_ 并恢复。
-              1. 令 _pc_ = ! NewPromiseCapability(%Promise%)。
+              1. 令 _moduleContext_ 为一个新的 ECMAScript 代码执行上下文。
+              1. 设置 _moduleContext_ 的 Function 为 *null*。
+              1. 设置 _moduleContext_ 的 Realm 为 _module_.[[Realm]]。
+              1. 设置 _moduleContext_ 的 ScriptOrModule 为 _module_。
+              1. 设置 _moduleContext_ 的 VariableEnvironment 为 _module_.[[Environment]]。
+              1. 设置 _moduleContext_ 的 LexicalEnvironment 为 _module_.[[Environment]]。
+              1. 挂起正在运行的执行上下文。
+              1. 将 _moduleContext_ 推入执行上下文栈；此时 _moduleContext_ 成为正在运行的执行上下文。
+              1. 令 _steps_ 为 _module_.[[EvaluationSteps]]。
+              1. 令 _result_ 为 Completion(_steps_(_module_))。
+              1. 挂起 _moduleContext_ 并将其移出执行上下文栈。
+              1. 恢复此时位于执行上下文栈顶部的上下文作为正在运行的执行上下文。
+              1. 令 _pc_ 为 ! NewPromiseCapability(%Promise%)。
               1. IfAbruptRejectPromise(_result_, _pc_)。
               1. 执行 ! Call(_pc_.[[Resolve]], *undefined*, « *undefined* »)。
               1. 返回 _pc_.[[Promise]]。
@@ -52717,3 +52788,4 @@ THH:mm:ss.sss
   <p>本规范在 <a href="https://github.com/tc39/ecma262">GitHub</a> 上以一种称为 <a href="https://github.com/bterlson/ecmarkup">Ecmarkup</a> 的纯文本源格式编写。Ecmarkup 是一种 HTML 与 Markdown 方言，提供框架与工具集，用于以纯文本编写 Ecma 规范，并将其处理为遵循本文档编辑惯例的全功能 HTML 呈现。Ecmarkup 构建并集成了多种其他格式与技术，包括用于定义语法的 <a href="https://github.com/rbuckton/grammarkdown">Grammarkdown</a> 与用于编写算法步骤的 <a href="https://github.com/domenic/ecmarkdown">Ecmarkdown</a>。本规范的 PDF 呈现使用一个打印样式表生成，该样式表利用 CSS 分页媒体规范，并使用 <a href="https://www.princexml.com/">PrinceXML</a> 转换。</p>
   <p>之前版本的本规范使用 Word 编写——构成本版本基础的 Ecmarkup 源文本是通过自动转换工具将 ECMAScript 2015 的 Word 文档转换为 Ecmarkup 生成的。</p>
 </emu-annex>
+</emu-clause>
