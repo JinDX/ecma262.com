@@ -27825,34 +27825,35 @@
             <dd>_sourceText_ 를 |Module| 로 파싱한 결과에 기반하여 Source Text Module Record 생성.</dd>
           </dl>
           <emu-alg>
-            1. _body_ = ParseText(_sourceText_, |Module|).
-            1. _body_ 가 오류 리스트이면 _body_ 반환.
-            1. _requestedModules_ = ModuleRequests(_body_).
-            1. _importEntries_ = ImportEntries(_body_).
-            1. _importedBoundNames_ = ImportedLocalNames(_importEntries_).
-            1. _indirectExportEntries_ = 새 빈 리스트.
-            1. _localExportEntries_ = 새 빈 리스트.
-            1. _starExportEntries_ = 새 빈 리스트.
-            1. _exportEntries_ = ExportEntries(_body_).
-            1. 각 ExportEntry Record _ee_ ∈ _exportEntries_ 에 대해
-              1. _ee_.[[ModuleRequest]] 가 *null* 이면
-                1. _importedBoundNames_ 가 _ee_.[[LocalName]] 포함하지 않으면
-                  1. _ee_ 를 _localExportEntries_ 에 추가.
-                1. Else
-                  1. _ie_ = [[LocalName]] 가 _ee_.[[LocalName]] 인 _importEntries_ 요소.
-                  1. _ie_.[[ImportName]] 가 ~namespace-object~ 이면
-                    1. 참고: import 된 모듈 네임스페이스 객체 재export.
-                    1. _ee_ 를 _localExportEntries_ 에 추가.
-                  1. Else
-                    1. 참고: 단일 이름 재export.
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 를 _indirectExportEntries_ 에 추가.
-              1. Else if _ee_.[[ImportName]] 가 ~all-but-default~ 이면
-                1. 단언: _ee_.[[ExportName]] 는 *null*.
-                1. _ee_ 를 _starExportEntries_ 에 추가.
-              1. Else
-                1. _ee_ 를 _indirectExportEntries_ 에 추가.
-            1. _async_ = _body_ Contains `await`.
-            1. Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ } 반환.
+            1. _body_를 ParseText(_sourceText_, |Module|)의 결과로 둔다.
+            1. _body_가 오류들의 List라면, _body_를 반환한다.
+            1. _requestedModules_를 _body_의 ModuleRequests로 둔다.
+            1. _importEntries_를 _body_의 ImportEntries로 둔다.
+            1. _importedBoundNames_를 ImportedLocalNames(_importEntries_)로 둔다.
+            1. _indirectExportEntries_를 새로운 빈 List로 둔다.
+            1. _localExportEntries_를 새로운 빈 List로 둔다.
+            1. _starExportEntries_를 새로운 빈 List로 둔다.
+            1. _exportEntries_를 _body_의 ExportEntries로 둔다.
+            1. _exportEntries_의 각 ExportEntry Record _ee_에 대해, 다음을 수행한다
+              1. _ee_.[[ModuleRequest]]가 *null*이면, 그때
+                1. _importedBoundNames_가 _ee_.[[LocalName]]을 포함하지 않으면, 그때
+                  1. _ee_를 _localExportEntries_에 추가한다.
+                1. 그렇지 않으면,
+                  1. NOTE: 다른 모듈에서 원래 import되었던 바인딩 또는 네임스페이스 객체를 export할 때, ExportEntry Record는 해당 바인딩 또는 네임스페이스 객체가 import된 다음 export된 것이 아니라, 원래 모듈에서 직접 re-export되었을 경우의 형태와 일치하도록 다시 작성된다. 이는 `export * from`을 통해 같은 이름으로 동일한 바인딩 또는 네임스페이스를 두 번 export함으로써 발생하는 충돌이, Source Text Module Records의 <emu-xref href="#sec-resolveexport">ResolveExport 구체 메서드</emu-xref>의 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 단계에서 모호한 것으로 취급되는 대신 무시될 수 있게 한다.
+                  1. _ie_를 [[LocalName]]이 _ee_.[[LocalName]]인 _importEntries_의 요소로 둔다.
+                  1. _ie_.[[ImportName]]이 ~namespace-object~이면, 그때
+                    1. NOTE: 이는 import된 모듈 네임스페이스 객체의 re-export이다.
+                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
+                  1. 그렇지 않으면,
+                    1. NOTE: 이는 단일 이름의 re-export이다.
+                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
+              1. 그렇지 않고 _ee_.[[ImportName]]이 ~all-but-default~이면, 그때
+                1. Assert: _ee_.[[ExportName]]은 *null*이다.
+                1. _ee_를 _starExportEntries_에 추가한다.
+              1. 그렇지 않으면,
+                1. _ee_를 _indirectExportEntries_에 추가한다.
+            1. _async_를 _body_ Contains `await`로 둔다.
+            1. Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ }를 반환한다.
           </emu-alg>
           <emu-note>
             <p>구현은 ParseModule 평가 이전에 소스 텍스트를 파싱하고 Early Error 분석을 수행할 수 있으나 오류 보고는 실제 ParseModule 수행 시점까지 지연해야 한다.</p>
@@ -27959,7 +27960,7 @@
                   1. 단언: _resolution_은 ResolvedBinding Record이다.
                   1. _starResolution_이 *null*이면,
                     1. _starResolution_을 _resolution_으로 설정한다.
-                  1. 아니면,
+                  1. [id="step-resolveexport-conflict"] 아니면,
                     1. 단언: 요청된 이름을 포함하는 `*` export가 둘 이상이다.
                     1. _resolution_.[[Module]]과 _starResolution_.[[Module]]이 동일한 Module Record가 아니라면 ~ambiguous~를 반환한다.
                     1. _resolution_.[[BindingName]]이 _starResolution_.[[BindingName]]과 다르면 ~ambiguous~를 반환한다.

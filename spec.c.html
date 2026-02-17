@@ -28042,30 +28042,35 @@
             <dd>将 _sourceText_ 以 |Module| 解析并创建 Source Text Module Record。</dd>
           </dl>
           <emu-alg>
-            1. 令 _body_ = ParseText(_sourceText_, |Module|)。
-            1. 若 _body_ 为错误列表，返回之。
-            1. 令 _requestedModules_ = ModuleRequests(_body_)。
-            1. 令 _importEntries_ = ImportEntries(_body_)。
-            1. 令 _importedBoundNames_ = ImportedLocalNames(_importEntries_)。
-            1. 令 _indirectExportEntries_、_localExportEntries_、_starExportEntries_ 各为新空列表。
-            1. 令 _exportEntries_ = ExportEntries(_body_)。
-            1. 对 _exportEntries_ 每个 ExportEntry Record _ee_：
-              1. 若 _ee_.[[ModuleRequest]] 为 *null*，则
-                1. 若 _importedBoundNames_ 不含 _ee_.[[LocalName]]，追加 _ee_ 至 _localExportEntries_。
+            1. 令 _body_ 为 ParseText(_sourceText_, |Module|)。
+            1. 如果 _body_ 是一个错误列表，则返回 _body_。
+            1. 令 _requestedModules_ 为 _body_ 的 ModuleRequests。
+            1. 令 _importEntries_ 为 _body_ 的 ImportEntries。
+            1. 令 _importedBoundNames_ 为 ImportedLocalNames(_importEntries_)。
+            1. 令 _indirectExportEntries_ 为一个新的空列表。
+            1. 令 _localExportEntries_ 为一个新的空列表。
+            1. 令 _starExportEntries_ 为一个新的空列表。
+            1. 令 _exportEntries_ 为 _body_ 的 ExportEntries。
+            1. 对于 _exportEntries_ 中的每个 ExportEntry 记录 _ee_，执行
+              1. 如果 _ee_.[[ModuleRequest]] 为 *null*，则
+                1. 如果 _importedBoundNames_ 不包含 _ee_.[[LocalName]]，则
+                  1. 将 _ee_ 添加到 _localExportEntries_。
                 1. 否则，
-                  1. 令 _ie_ 为 _importEntries_ 中 [[LocalName]] 等于该名的元素。
-                  1. 若 _ie_.[[ImportName]] 为 ~namespace-object~，
-                    1. 注：重导出模块命名空间对象。
-                    1. 追加 _ee_ 至 _localExportEntries_。
-                  1. 否则：
-                    1. 注：重导出单一名称。
-                    1. 追加 ExportEntry { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 至 _indirectExportEntries_。
-              1. 否则若 _ee_.[[ImportName]] 为 ~all-but-default~：
+                  1. 注：当导出一个最初从其他模块导入的绑定或命名空间对象时，ExportEntry 记录会被重写为与直接从原始模块重新导出时的形式一致。这允许通过 `export * from` 在同一名称下多次导出相同绑定或命名空间时产生的冲突，在 <emu-xref href="#sec-resolveexport">Source Text Module Records 的 ResolveExport 具体方法</emu-xref> 的 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 步骤中被忽略，而不是被视为歧义。
+                  1. 令 _ie_ 为 _importEntries_ 中 [[LocalName]] 等于 _ee_.[[LocalName]] 的元素。
+                  1. 如果 _ie_.[[ImportName]] 为 ~namespace-object~，则
+                    1. 注：这是对导入模块命名空间对象的再导出。
+                    1. 将 ExportEntry 记录 { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 添加到 _indirectExportEntries_。
+                  1. 否则，
+                    1. 注：这是对单一名称的再导出。
+                    1. 将 ExportEntry 记录 { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 添加到 _indirectExportEntries_。
+              1. 否则如果 _ee_.[[ImportName]] 为 ~all-but-default~，则
                 1. 断言：_ee_.[[ExportName]] 为 *null*。
-                1. 追加 _ee_ 至 _starExportEntries_。
-              1. 否则追加 _ee_ 至 _indirectExportEntries_。
-            1. 令 _async_ = _body_ Contains `await`。
-            1. 返回 Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ }。
+                1. 将 _ee_ 添加到 _starExportEntries_。
+              1. 否则，
+                1. 将 _ee_ 添加到 _indirectExportEntries_。
+            1. 令 _async_ 为 _body_ 是否包含 `await`。
+            1. 返回 Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « » , [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « » , [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ }。
           </emu-alg>
           <emu-note>
             <p>实现可提前解析并检查早期错误，但错误报告需延迟到实际调用 ParseModule 时。</p>
@@ -28169,7 +28174,7 @@
                   1. 断言：_resolution_ 是一个 ResolvedBinding Record。
                   1. 如果 _starResolution_ 为 *null*，则
                     1. 设置 _starResolution_ 为 _resolution_。
-                  1. 否则，
+                  1. [id="step-resolveexport-conflict"] 否则，
                     1. 断言：有多个 `*` 导出包含了被请求的名字。
                     1. 如果 _resolution_.[[Module]] 和 _starResolution_.[[Module]] 不是同一个模块记录，则返回 ~ambiguous~。
                     1. 如果 _resolution_.[[BindingName]] 不等于 _starResolution_.[[BindingName]]，则返回 ~ambiguous~。

@@ -28269,34 +28269,35 @@
             <dd>_sourceText_ を |Module| としてパースした結果に基づき Source Text Module Record を生成。</dd>
           </dl>
           <emu-alg>
-            1. _body_ を ParseText(_sourceText_, |Module|) とする。
-            1. _body_ がエラーのリストなら _body_ を返す。
+            1. _body_ を ParseText(_sourceText_, |Module|) の結果とする。
+            1. もし _body_ がエラーの List であれば、_body_ を返す。
             1. _requestedModules_ を _body_ の ModuleRequests とする。
             1. _importEntries_ を _body_ の ImportEntries とする。
             1. _importedBoundNames_ を ImportedLocalNames(_importEntries_) とする。
-            1. _indirectExportEntries_ を空リスト。
-            1. _localExportEntries_ を空リスト。
-            1. _starExportEntries_ を空リスト。
+            1. _indirectExportEntries_ を新たな空の List とする。
+            1. _localExportEntries_ を新たな空の List とする。
+            1. _starExportEntries_ を新たな空の List とする。
             1. _exportEntries_ を _body_ の ExportEntries とする。
-            1. 各 ExportEntry Record _ee_ について
-              1. もし _ee_.[[ModuleRequest]] が *null* なら
-                1. もし _importedBoundNames_ が _ee_.[[LocalName]] を含まないなら
-                  1. _ee_ を _localExportEntries_ に追加。
-                1. それ以外
-                  1. _ie_ を [[LocalName]] = _ee_.[[LocalName]] の _importEntries_ 要素とする。
-                  1. もし _ie_.[[ImportName]] が ~namespace-object~ なら
-                    1. 注: インポートされたモジュール namespace オブジェクトの再エクスポート。
-                    1. _ee_ を _localExportEntries_ に追加。
-                  1. それ以外
-                    1. 注: 単一名の再エクスポート。
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加。
-              1. それ以外で _ee_.[[ImportName]] が ~all-but-default~ なら
-                1. Assert: _ee_.[[ExportName]] は *null*。
-                1. _ee_ を _starExportEntries_ に追加。
-              1. それ以外
-                1. _ee_ を _indirectExportEntries_ に追加。
-            1. _async_ を _body_ Contains `await` とする。
-            1. Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ } を返す。
+            1. 各 ExportEntry Record _ee_ ∈ _exportEntries_ について，次を行う
+              1. もし _ee_.[[ModuleRequest]] が *null* なら，
+                1. もし _importedBoundNames_ が _ee_.[[LocalName]] を含まないなら，
+                  1. _ee_ を _localExportEntries_ に追加する。
+                1. そうでなければ，
+                  1. 注記: 別のモジュールから元々インポートされた束縛または名前空間オブジェクトをエクスポートする場合，その ExportEntry Record は，「インポートしてからエクスポート」した形ではなく，「元のモジュールから直接再エクスポート」した形に一致するように書き換えられる。これにより，`export * from` を通じて同じ束縛または名前空間を同じ名前で 2 回エクスポートしたことから生じる衝突は，<emu-xref href="#sec-resolveexport">Source Text Module Records の ResolveExport 具象メソッド</emu-xref> の <emu-xref href="#step-resolveexport-conflict"></emu-xref> の段階であいまいとして扱われるのではなく，無視される。
+                  1. _ie_ を，[[LocalName]] が _ee_.[[LocalName]] である _importEntries_ の要素とする。
+                  1. もし _ie_.[[ImportName]] が ~namespace-object~ なら，
+                    1. 注記: これはインポートされたモジュール名前空間オブジェクトの再エクスポートである。
+                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加する。
+                  1. そうでなければ，
+                    1. 注記: これは単一の名前の再エクスポートである。
+                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加する。
+              1. そうでなく，かつ _ee_.[[ImportName]] が ~all-but-default~ なら，
+                1. Assert: _ee_.[[ExportName]] は *null* である。
+                1. _ee_ を _starExportEntries_ に追加する。
+              1. それ以外の場合，
+                1. _ee_ を _indirectExportEntries_ に追加する。
+            1. _async_ を，「_body_ が `await` を含むかどうか」とする。
+            1. 次の Source Text Module Record を返す: { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ }.
           </emu-alg>
           <emu-note>
             <p>実装は ParseModule 評価前にモジュールソースをパースし早期エラー解析を行ってもよいが、エラー報告は仕様が実際に ParseModule を行う時点まで遅延しなければならない。</p>
@@ -28403,7 +28404,7 @@
                   1. アサート: _resolution_ は ResolvedBinding Record である。
                   1. _starResolution_ が *null* の場合、
                     1. _starResolution_ に _resolution_ を設定する。
-                  1. それ以外の場合、
+                  1. [id="step-resolveexport-conflict"] それ以外の場合、
                     1. アサート: 要求された名前を含む `*` エクスポートが複数存在する。
                     1. _resolution_.[[Module]] と _starResolution_.[[Module]] が同じ Module Record でない場合、~ambiguous~ を返す。
                     1. _resolution_.[[BindingName]] が _starResolution_.[[BindingName]] でない場合、~ambiguous~ を返す。
