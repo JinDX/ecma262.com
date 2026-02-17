@@ -10801,7 +10801,7 @@
             <dd>関数 Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. もし _envRec_.[[ThisBindingStatus]] が ~lexical~ なら、*false* を返す���
+            1. もし _envRec_.[[ThisBindingStatus]] が ~lexical~ なら、*false* を返す。
             1. もし _envRec_.[[FunctionObject]].[[HomeObject]] が *undefined* なら、*false* を返す。それ以外の場合は *true* を返す。
           </emu-alg>
         </emu-clause>
@@ -10829,7 +10829,7 @@
         <h1>グローバル Environment Record</h1>
         <p><dfn variants="Global Environment Records">グローバル Environment Record</dfn> は、共通の Realm で処理されるすべての ECMAScript |Script| 要素が共有する最も外側のスコープを表すのに使用される。グローバル Environment Record は、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）、グローバルオブジェクトのプロパティ、そして |Script| 内で発生するすべてのトップレベル宣言（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）のバインディングを提供する。</p>
         <p>グローバル Environment Record は論理的には単一のレコードであるが、オブジェクト Environment Record と宣言的 Environment Record をカプセル化した複合体として仕様化される。オブジェクト Environment Record は関連する Realm Record のグローバルオブジェクトをベースオブジェクトとする。このグローバルオブジェクトは、グローバル Environment Record の GetThisBinding 具体メソッドで返される値でもある。グローバル Environment Record のオブジェクト Environment Record 部分には、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）およびグローバルコード内の |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableStatement| によって導入されたすべてのバインディングが含まれる。グローバルコード中の他の ECMAScript 宣言用のバインディングは、グローバル Environment Record の宣言的 Environment Record 部分に保持される。</p>
-        <p>プロパティはグローバルオブジェクトに直接作成されることもある。そのため、グローバル Environment Record のオブジェクト Environment Record 部分に���、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 宣言で明示的に作成されたバインディングと、グローバルオブジェクトのプロパティとして暗黙的に作成されたバインディングが両方含まれている可能性がある。どのバインディングが明示的な宣言によって作成されたかを特定するため、グローバル Environment Record は CreateGlobalVarBinding および CreateGlobalFunctionBinding 抽象操作で束縛された名前のリストを保持している。</p>
+        <p>プロパティはグローバルオブジェクトに直接作成されることもある。そのため、グローバル Environment Record のオブジェクト Environment Record 部分には、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 宣言で明示的に作成されたバインディングと、グローバルオブジェクトのプロパティとして暗黙的に作成されたバインディングが両方含まれている可能性がある。どのバインディングが明示的な宣言によって作成されたかを特定するため、グローバル Environment Record は CreateGlobalVarBinding および CreateGlobalFunctionBinding 抽象操作で束縛された名前のリストを保持している。</p>
         <p>グローバル Environment Record は、<emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> に記載された追加フィールドを持つ。</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="グローバル Environment Record の追加フィールド" oldids="table-18">
           <table>
