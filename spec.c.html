@@ -2015,34 +2015,38 @@
           </dl>
           <emu-alg>
             1. 如果 _exponent_ 是 *NaN*，返回 *NaN*。
-            1. 如果 _exponent_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *1*<sub>𝔽</sub>。
+            1. 如果 _exponent_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *1*<sub>𝔽</sub>。
             1. 如果 _base_ 是 *NaN*，返回 *NaN*。
-            1. 如果 _base_ 是 *+∞*<sub>𝔽</sub>：
-              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，返回 *+∞*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。
-            1. 如果 _base_ 是 *-∞*<sub>𝔽</sub>：
-              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>：
-                1. 如果 _exponent_ 是奇数整数 Number，返回 *-∞*<sub>𝔽</sub>；否则返回 *+∞*<sub>𝔽</sub>。
-              1. 否则：
-                1. 如果 _exponent_ 是奇数整数 Number，返回 *-0*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。
-            1. 如果 _base_ 是 *+0*<sub>𝔽</sub>：
-              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>；否则返回 *+∞*<sub>𝔽</sub>。
-            1. 如果 _base_ 是 *-0*<sub>𝔽</sub>：
-              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>：
-                1. 如果 _exponent_ 是奇数整数 Number，返回 *-0*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。
-              1. 否则：
-                1. 如果 _exponent_ 是奇数整数 Number，返回 *-∞*<sub>𝔽</sub>；否则返回 *+∞*<sub>𝔽</sub>。
-            1. 断言：_base_ 是有限值且不是 *+0*<sub>𝔽</sub> 也不是 *-0*<sub>𝔽</sub>。
-            1. 如果 _exponent_ 是 *+∞*<sub>𝔽</sub>：
+            1. 如果 _base_ 是 *+∞*<sub>𝔽</sub>，则
+              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，返回 *+∞*<sub>𝔽</sub>。
+              1. 返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _base_ 是 *-∞*<sub>𝔽</sub>，则
+              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，则
+                1. 如果 _exponent_ 是奇整数 Number，返回 *-∞*<sub>𝔽</sub>。
+                1. 返回 *+∞*<sub>𝔽</sub>。
+              1. 如果 _exponent_ 是奇整数 Number，返回 *-0*<sub>𝔽</sub>。
+              1. 返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _base_ 是 *+0*<sub>𝔽</sub>，则
+              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
+              1. 返回 *+∞*<sub>𝔽</sub>。
+            1. 如果 _base_ 是 *-0*<sub>𝔽</sub>，则
+              1. 如果 _exponent_ > *+0*<sub>𝔽</sub>，则
+                1. 如果 _exponent_ 是奇整数 Number，返回 *-0*<sub>𝔽</sub>。
+                1. 返回 *+0*<sub>𝔽</sub>。
+              1. 如果 _exponent_ 是奇整数 Number，返回 *-∞*<sub>𝔽</sub>。
+              1. 返回 *+∞*<sub>𝔽</sub>。
+            1. 断言: _base_ 是有限的，且既不是 *+0*<sub>𝔽</sub> 也不是 *-0*<sub>𝔽</sub>。
+            1. 如果 _exponent_ 是 *+∞*<sub>𝔽</sub>，则
               1. 如果 abs(ℝ(_base_)) > 1，返回 *+∞*<sub>𝔽</sub>。
               1. 如果 abs(ℝ(_base_)) = 1，返回 *NaN*。
-              1. 如果 abs(ℝ(_base_)) &lt; 1，返回 *+0*<sub>𝔽</sub>。
-            1. 如果 _exponent_ 是 *-∞*<sub>𝔽</sub>：
+              1. 返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _exponent_ 是 *-∞*<sub>𝔽</sub>，则
               1. 如果 abs(ℝ(_base_)) > 1，返回 *+0*<sub>𝔽</sub>。
               1. 如果 abs(ℝ(_base_)) = 1，返回 *NaN*。
-              1. 如果 abs(ℝ(_base_)) &lt; 1，返回 *+∞*<sub>𝔽</sub>。
-            1. 断言：_exponent_ 是有限值且不是 *+0*<sub>𝔽</sub> 也不是 *-0*<sub>𝔽</sub>。
+              1. 返回 *+∞*<sub>𝔽</sub>。
+            1. 断言: _exponent_ 是有限的，且既不是 *+0*<sub>𝔽</sub> 也不是 *-0*<sub>𝔽</sub>。
             1. 如果 _base_ &lt; *-0*<sub>𝔽</sub> 且 _exponent_ 不是整数 Number，返回 *NaN*。
-            1. 返回一个实现近似的 Number 值，表示 ℝ(_base_) 的 ℝ(_exponent_) 次幂。
+            1. 返回一个由实现近似的 Number 值，表示将 ℝ(_base_) 提升到 ℝ(_exponent_) 幂的结果。
           </emu-alg>
           <emu-note>
             <p>当 _base_ 为 *1*<sub>𝔽</sub> 或 *-1*<sub>𝔽</sub>，且 _exponent_ 为 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，或当 _base_ 为 *1*<sub>𝔽</sub> 且 _exponent_ 为 *NaN* 时，_base_ `**` _exponent_ 的结果与 IEEE 754-2019 不同。ECMAScript 第一版规定此操作结果为 *NaN*，而后续 IEEE 754 修订版规定为 *1*<sub>𝔽</sub>。此处保留 ECMAScript 历史行为以兼容。</p>
@@ -2061,21 +2065,21 @@
             <dd>按 IEEE 754-2019 双精度算术规则执行乘法，得到 _x_ 和 _y_ 的乘积。</dd>
           </dl>
           <emu-alg>
-            1. 如果 _x_ 或 _y_ 是 *NaN*，返回 *NaN*。
-            1. 如果 _x_ 是 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>：
-              1. 如果 _y_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
+            1. 如果 _x_ 是 *NaN* 或 _y_ 是 *NaN*，返回 *NaN*。
+            1. 如果 _x_ 为 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，则
+              1. 如果 _y_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
               1. 如果 _y_ > *+0*<sub>𝔽</sub>，返回 _x_。
               1. 返回 -_x_。
-            1. 如果 _y_ 是 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>：
-              1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
+            1. 如果 _y_ 为 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，则
+              1. 如果 _x_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
               1. 如果 _x_ > *+0*<sub>𝔽</sub>，返回 _y_。
               1. 返回 -_y_。
-            1. 如果 _x_ 是 *-0*<sub>𝔽</sub>：
+            1. 如果 _x_ 是 *-0*<sub>𝔽</sub>，则
               1. 如果 _y_ 是 *-0*<sub>𝔽</sub> 或 _y_ &lt; *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-              1. 否则，返回 *-0*<sub>𝔽</sub>。
-            1. 如果 _y_ 是 *-0*<sub>𝔽</sub>：
+              1. 返回 *-0*<sub>𝔽</sub>。
+            1. 如果 _y_ 是 *-0*<sub>𝔽</sub>，则
               1. 如果 _x_ &lt; *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-              1. 否则，返回 *-0*<sub>𝔽</sub>。
+              1. 返回 *-0*<sub>𝔽</sub>。
             1. 返回 𝔽(ℝ(_x_) × ℝ(_y_))。
           </emu-alg>
           <emu-note>
@@ -2095,24 +2099,28 @@
             <dd>按 IEEE 754-2019 双精度算术规则执行除法，得到 _x_ 除以 _y_ 的商，其中 _x_ 为被除数，_y_ 为除数。</dd>
           </dl>
           <emu-alg>
-            1. 如果 _x_ 或 _y_ 是 *NaN*，返回 *NaN*。
-            1. 如果 _x_ 是 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>：
-              1. 如果 _y_ 是 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，返回 *NaN*。
+            1. 如果 _x_ 是 *NaN* 或 _y_ 是 *NaN*，返回 *NaN*。
+            1. 如果 _x_ 为 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，则
+              1. 如果 _y_ 为 *+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub>，返回 *NaN*。
               1. 如果 _y_ 是 *+0*<sub>𝔽</sub> 或 _y_ > *+0*<sub>𝔽</sub>，返回 _x_。
               1. 返回 -_x_。
-            1. 如果 _y_ 是 *+∞*<sub>𝔽</sub>：
-              1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 _x_ > *+0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>；否则返回 *-0*<sub>𝔽</sub>。
-            1. 如果 _y_ 是 *-∞*<sub>𝔽</sub>：
-              1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 _x_ > *+0*<sub>𝔽</sub>，返回 *-0*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。
-            1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>：
-              1. 如果 _y_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
+            1. 如果 _y_ 是 *+∞*<sub>𝔽</sub>，则
+              1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 _x_ > *+0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
+              1. 返回 *-0*<sub>𝔽</sub>。
+            1. 如果 _y_ 是 *-∞*<sub>𝔽</sub>，则
+              1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 _x_ > *+0*<sub>𝔽</sub>，返回 *-0*<sub>𝔽</sub>。
+              1. 返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _x_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，则
+              1. 如果 _y_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *NaN*。
               1. 如果 _y_ > *+0*<sub>𝔽</sub>，返回 _x_。
               1. 返回 -_x_。
-            1. 如果 _y_ 是 *+0*<sub>𝔽</sub>：
-              1. 如果 _x_ > *+0*<sub>𝔽</sub>，返回 *+∞*<sub>𝔽</sub>；否则返回 *-∞*<sub>𝔽</sub>。
-            1. 如果 _y_ 是 *-0*<sub>𝔽</sub>：
-              1. 如果 _x_ > *+0*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>；否则返回 *+∞*<sub>𝔽</sub>。
-            1. 返回 𝔽(ℝ(_x_) / ℝ(_y_))。
+            1. 如果 _y_ 是 *+0*<sub>𝔽</sub>，则
+              1. 如果 _x_ > *+0*<sub>𝔽</sub>，返回 *+∞*<sub>𝔽</sub>。
+              1. 返回 *-∞*<sub>𝔽</sub>。
+            1. 如果 _y_ 是 *-0*<sub>𝔽</sub>，则
+              1. 如果 _x_ > *+0*<sub>𝔽</sub>，返回 *-∞*<sub>𝔽</sub>。
+              1. 返回 *+∞*<sub>𝔽</sub>。
+            1. 返回 𝔽(ℝ(_x_) / ℝ(_y_)).
           </emu-alg>
         </emu-clause>
 
@@ -2254,15 +2262,16 @@
           <emu-alg>
             1. 如果 _x_ 是 *NaN*，返回 *undefined*。
             1. 如果 _y_ 是 *NaN*，返回 *undefined*。
-            1. 如果 _x_ 等于 _y_，返回 *false*。
+            1. 如果 _x_ 是 _y_，返回 *false*。
             1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 且 _y_ 是 *-0*<sub>𝔽</sub>，返回 *false*。
             1. 如果 _x_ 是 *-0*<sub>𝔽</sub> 且 _y_ 是 *+0*<sub>𝔽</sub>，返回 *false*。
             1. 如果 _x_ 是 *+∞*<sub>𝔽</sub>，返回 *false*。
             1. 如果 _y_ 是 *+∞*<sub>𝔽</sub>，返回 *true*。
             1. 如果 _y_ 是 *-∞*<sub>𝔽</sub>，返回 *false*。
             1. 如果 _x_ 是 *-∞*<sub>𝔽</sub>，返回 *true*。
-            1. 断言：_x_ 和 _y_ 都是有限值。
-            1. 如果 ℝ(_x_) &lt; ℝ(_y_)，返回 *true*；否则返回 *false*。
+            1. 断言: _x_ 和 _y_ 是有限的。
+            1. 如果 ℝ(_x_) &lt; ℝ(_y_)，返回 *true*。
+            1. 返回 *false*。
           </emu-alg>
         </emu-clause>
 
@@ -2402,46 +2411,45 @@
           </dl>
           <emu-alg>
             1. 如果 _x_ 是 *NaN*，返回 *"NaN"*。
-            1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *"0"*。
-            1. 如果 _x_ &lt; *-0*<sub>𝔽</sub>，返回 *"-"* 与 Number::toString(-_x_, _radix_) 的拼接字符串。
+            1. 如果 _x_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *"0"*。
+            1. 如果 _x_ &lt; *-0*<sub>𝔽</sub>，返回 *"-"* 与 Number::toString(-_x_, _radix_) 的字符串连接。
             1. 如果 _x_ 是 *+∞*<sub>𝔽</sub>，返回 *"Infinity"*。
-            1. [id="step-number-tostring-intermediate-values"] 令 _n_、_k_、_s_ 为整数，满足 _k_ ≥ 1，_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>，𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) 为 _x_，且 _k_ 尽可能小。注意 _k_ 是用基数 _radix_ 表示 _s_ 时的位数，_s_ 不能被 _radix_ 整除，且最低位未必唯一。
-            1. 如果 _radix_ ≠ 10 或 _n_ 在 -5 到 21 的区间内：
-              1. 如果 _n_ ≥ _k_：
-                1. 返回拼接字符串：
-                  * 用基数 _radix_ 表示 _s_ 的 _k_ 位数字
-                  * _n_ - _k_ 个 0x0030（数字零）码位
-              1. 否则如 _n_ > 0：
-                1. 返回拼接字符串：
-                  * 用基数 _radix_ 表示 _s_ 的最高 _n_ 位数字
-                  * 0x002E（英文句点）
-                  * 剩余 _k_ - _n_ 位数字
-              1. 否则：
-                1. 断言：_n_ ≤ 0。
-                1. 返回拼接字符串：
-                  * 0x0030（数字零）码位
-                  * 0x002E（英文句点）
-                  * -_n_ 个 0x0030（数字零）码位
-                  * 用基数 _radix_ 表示 _s_ 的 _k_ 位数字
-            1. 注意：此时输入会用科学 E 记数法表示，如 `1.2e+3`。
-            1. 断言：_radix_ 为 10。
-            1. 如果 _n_ &lt; 0：
-              1. 令 _exponentSign_ 为 0x002D（减号）。
-            1. 否则：
-              1. 令 _exponentSign_ 为 0x002B（加号）。
-            1. 如果 _k_ = 1：
-              1. 返回拼接字符串：
-                * _s_ 的单一数字码位
-                * 0x0065（小写字母 e）
+            1. [id="step-number-tostring-intermediate-values"] 令 _n_、_k_ 和 _s_ 为整数，使得 _k_ ≥ 1，_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>，𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) 为 _x_，且 _k_ 尽可能小。注意 _k_ 是使用基数 _radix_ 表示 _s_ 时的位数，_s_ 不能被 _radix_ 整除，并且 _s_ 的最低有效位不一定由这些条件唯一确定。
+            1. 如果 _radix_ ≠ 10 或者 _n_ 在包含端点的区间 -5 到 21 内，则
+              1. 如果 _n_ ≥ _k_，则
+                1. 返回由以下各项连接的字符串：
+                  * 使用基数 _radix_ 表示 _s_ 的 _k_ 位数字的代码单元
+                  * _n_ - _k_ 个代码单元 0x0030 (DIGIT ZERO)
+              1. 如果 _n_ > 0，则
+                1. 返回由以下各项连接的字符串：
+                  * 使用基数 _radix_ 表示 _s_ 的最重要的 _n_ 位数字的代码单元
+                  * 代码单元 0x002E (FULL STOP)
+                  * 使用基数 _radix_ 表示 _s_ 的其余 _k_ - _n_ 位数字的代码单元
+              1. 断言: _n_ ≤ 0。
+              1. 返回由以下各项连接的字符串：
+                * 代码单元 0x0030 (DIGIT ZERO)
+                * 代码单元 0x002E (FULL STOP)
+                * -_n_ 个代码单元 0x0030 (DIGIT ZERO)
+                * 使用基数 _radix_ 表示 _s_ 的 _k_ 位数字的代码单元
+            1. 注：在这种情况下，输入将使用科学计数法的 E 表示法来表示，例如 `1.2e+3`。
+            1. 断言: _radix_ 为 10。
+            1. 如果 _n_ &lt; 0，则
+              1. 令 _exponentSign_ 为代码单元 0x002D (HYPHEN-MINUS)。
+            1. 否则，
+              1. 令 _exponentSign_ 为代码单元 0x002B (PLUS SIGN)。
+            1. 如果 _k_ = 1，则
+              1. 返回由以下各项连接的字符串：
+                * _s_ 的单个数字的代码单元
+                * 代码单元 0x0065 (LATIN SMALL LETTER E)
                 * _exponentSign_
-                * abs(_n_ - 1) 的十进制表示码位
-            1. 返回拼接字符串：
-              * _s_ 十进制表示的最高位数字码位
-              * 0x002E（英文句点）
-              * _s_ 十进制表示的剩余 _k_ - 1 位码位
-              * 0x0065（小写字母 e）
+                * abs(_n_ - 1) 的十进制表示的代码单元
+            1. 返回由以下各项连接的字符串：
+              * _s_ 的十进制表示中最高有效数字的代码单元
+              * 代码单元 0x002E (FULL STOP)
+              * _s_ 的十进制表示中剩余的 _k_ - 1 位数字的代码单元
+              * 代码单元 0x0065 (LATIN SMALL LETTER E)
               * _exponentSign_
-              * abs(_n_ - 1) 的十进制表示码位
+              * abs(_n_ - 1) 的十进制表示的代码单元
           </emu-alg>
           <emu-note>
             <p>以下观察可为实现提供参考，但不是标准的规范要求：</p>
@@ -2654,7 +2662,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 如果 ℝ(_x_) &lt; ℝ(_y_)，返回 *true*；否则返回 *false*。
+            1. 如果 ℝ(_x_) &lt; ℝ(_y_)，返回 *true*。
+            1. 返回 *false*。
           </emu-alg>
         </emu-clause>
 
@@ -2668,7 +2677,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 如果 ℝ(_x_) = ℝ(_y_)，返回 *true*；否则返回 *false*。
+            1. 如果 ℝ(_x_) = ℝ(_y_)，返回 *true*。
+            1. 返回 *false*。
           </emu-alg>
         </emu-clause>
 
@@ -2683,7 +2693,7 @@
           </dl>
           <emu-alg>
             1. 如果 _x_ = 1 且 _y_ = 1，返回 1。
-            1. 否则，返回 0。
+            1. 返回 0。
           </emu-alg>
         </emu-clause>
 
@@ -2698,7 +2708,7 @@
           </dl>
           <emu-alg>
             1. 如果 _x_ = 1 或 _y_ = 1，返回 1。
-            1. 否则，返回 0。
+            1. 返回 0。
           </emu-alg>
         </emu-clause>
 
@@ -2713,8 +2723,8 @@
           </dl>
           <emu-alg>
             1. 如果 _x_ = 1 且 _y_ = 0，返回 1。
-            1. 否则如果 _x_ = 0 且 _y_ = 1，返回 1。
-            1. 否则，返回 0。
+            1. 如果 _x_ = 0 且 _y_ = 1，返回 1。
+            1. 返回 0。
           </emu-alg>
         </emu-clause>
 
@@ -4375,146 +4385,149 @@
       <emu-clause id="sec-ispropertyreference" type="abstract operation" oldids="ao-ispropertyreference">
         <h1>
           IsPropertyReference (
-            _V_: 一个 Reference Record,
-          ): 布尔值
+            _V_: 一个 引用记录,
+          ): 一个 布尔值
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_.[[Base]] 为 ~unresolvable~，返回 *false*。
-          1. 若 _V_.[[Base]] 为 Environment Record，返回 *false*；否则返回 *true*。
+          1. 如果 _V_.[[Base]] 是 ~unresolvable~，返回 *false*。
+          1. 如果 _V_.[[Base]] 是 一个 环境记录，返回 *false*。
+          1. 返回 *true*。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isunresolvablereference" type="abstract operation" oldids="ao-isunresolvablereference">
         <h1>
           IsUnresolvableReference (
-            _V_: 一个 Reference Record,
-          ): 布尔值
+            _V_: 一个 引用记录,
+          ): 一个 布尔值
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_.[[Base]] 为 ~unresolvable~，返回 *true*；否则返回 *false*。
+          1. 如果 _V_.[[Base]] 是 ~unresolvable~，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-issuperreference" type="abstract operation" oldids="ao-issuperreference">
         <h1>
           IsSuperReference (
-            _V_: 一个 Reference Record,
-          ): 布尔值
+            _V_: 一个 引用记录,
+          ): 一个 布尔值
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_.[[ThisValue]] 非 ~empty~，返回 *true*；否则返回 *false*。
+          1. 如果 _V_.[[ThisValue]] 是 ~empty~，返回 *false*。
+          1. 返回 *true*。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isprivatereference" type="abstract operation">
         <h1>
           IsPrivateReference (
-            _V_: 一个 Reference Record,
-          ): 布尔值
+            _V_: 一个 引用记录,
+          ): 一个 布尔值
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_.[[ReferencedName]] 是 Private Name，返回 *true*；否则返回 *false*。
+          1. 如果 _V_.[[ReferencedName]] 是 一个 私有 名称，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-getvalue" type="abstract operation">
         <h1>
           GetValue (
-            _V_: 一个 Reference Record 或 ECMAScript 语言值,
-          ): 返回包含 ECMAScript 语言值的正常完成或异常完成
+            _V_: 一个 引用记录 或 一个 ECMAScript 语言值,
+          ): 要么 是 包含 一个 ECMAScript 语言值 的正常完成，要么 是 一个 中断 完成
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_ 不是 Reference Record，返回 _V_。
-          1. 若 IsUnresolvableReference(_V_) 为 *true*，抛出 *ReferenceError* 异常。
-          1. 若 IsPropertyReference(_V_) 为 *true*，
+          1. 如果 _V_ 不是 引��记录，返回 _V_。
+          1. 如果 IsUnresolvableReference(_V_) 为 *true*，抛出 *ReferenceError* 异常。
+          1. 如果 IsPropertyReference(_V_) 为 *true*，则
             1. [id="step-getvalue-toobject"] 令 _baseObj_ 为 ? ToObject(_V_.[[Base]])。
-            1. 若 IsPrivateReference(_V_) 为 *true*，
+            1. 如果 IsPrivateReference(_V_) 为 *true*，则
               1. 返回 ? PrivateGet(_baseObj_, _V_.[[ReferencedName]])。
-            1. 若 _V_.[[ReferencedName]] 不是属性键，
-              1. 令 _V_.[[ReferencedName]] 为 ? ToPropertyKey(_V_.[[ReferencedName]])。
+            1. 如果 _V_.[[ReferencedName]] 不是 属性 键，则
+              1. 将 _V_.[[ReferencedName]] 设为 ? ToPropertyKey(_V_.[[ReferencedName]])。
             1. 返回 ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>。
-          1. 否则，
-            1. 令 _base_ 为 _V_.[[Base]]。
-            1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
+          1. 令 _base_ 为 _V_.[[Base]]。
+          1. 断言: _base_ 是 一个 环境记录。
+          1. 返回 ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta> (参见 <emu-xref href="#sec-environment-records"></emu-xref>)。
         </emu-alg>
         <emu-note>
-          <p>步骤 <emu-xref href="#step-getvalue-toobject"></emu-xref> 可能创建的对象仅在上述抽象操作和普通对象 [[Get]] 内部方法中可访问。实现可选择避免实际创建该对象。</p>
+          <p>步骤 <emu-xref href="#step-getvalue-toobject"></emu-xref> 中可能创建的对象在上述抽象操作和普通对象的 [[Get]] 内部方法之外不可访问。实现可以选择避免实际创建该对象。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-putvalue" type="abstract operation">
         <h1>
           PutValue (
-            _V_: 一个 Reference Record 或 ECMAScript 语言值,
+            _V_: 一个 引用记录 或 一个 ECMAScript 语言值,
             _W_: 一个 ECMAScript 语言值,
-          ): 返回包含 ~unused~ 的正常完成或异常完成
+          ): 要么 是 包含 ~unused~ 的正常完成，要么 是 一个 中断 完成
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _V_ 不是 Reference Record，抛出 *ReferenceError* 异常。
-          1. 若 IsUnresolvableReference(_V_) 为 *true*，
-            1. 若 _V_.[[Strict]] 为 *true*，抛出 *ReferenceError* 异常。
+          1. 如果 _V_ 不是 引用记录，抛出 *ReferenceError* 异常。
+          1. 如果 IsUnresolvableReference(_V_) 为 *true*，则
+            1. 如果 _V_.[[Strict]] 为 *true*，抛出 *ReferenceError* 异常。
             1. 令 _globalObj_ 为 GetGlobalObject()。
             1. 执行 ? Set(_globalObj_, _V_.[[ReferencedName]], _W_, *false*)。
             1. 返回 ~unused~。
-          1. 若 IsPropertyReference(_V_) 为 *true*，
+          1. 如果 IsPropertyReference(_V_) 为 *true*，则
             1. [id="step-putvalue-toobject"] 令 _baseObj_ 为 ? ToObject(_V_.[[Base]])。
-            1. 若 IsPrivateReference(_V_) 为 *true*，
+            1. 如果 IsPrivateReference(_V_) 为 *true*，则
               1. 返回 ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_)。
-            1. 若 _V_.[[ReferencedName]] 不是属性键，
-              1. 令 _V_.[[ReferencedName]] 为 ? ToPropertyKey(_V_.[[ReferencedName]])。
+            1. 如果 _V_.[[ReferencedName]] 不是 属性 键，则
+              1. 将 _V_.[[ReferencedName]] 设为 ? ToPropertyKey(_V_.[[ReferencedName)])。
             1. 令 _succeeded_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>。
-            1. 若 _succeeded_ 为 *false* 且 _V_.[[Strict]] 为 *true*，抛出 *TypeError* 异常。
+            1. 如果 _succeeded_ 为 *false* 且 _V_.[[Strict]] 为 *true*，抛出 *TypeError* 异常。
             1. 返回 ~unused~。
-          1. 否则，
-            1. 令 _base_ 为 _V_.[[Base]]。
-            1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>（参见 <emu-xref href="#sec-environment-records"></emu-xref>）。
+          1. 令 _base_ 为 _V_.[[Base]]。
+          1. 断言: _base_ 是 一个 环境记录。
+          1. 返回 ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta> (参见 <emu-xref href="#sec-environment-records"></emu-xref>)。
         </emu-alg>
         <emu-note>
-          <p>步骤 <emu-xref href="#step-putvalue-toobject"></emu-xref> 可能创建的对象仅在上述抽象操作和普通对象 [[Set]] 内部方法中可访问。实现可选择避免实际创建该对象。</p>
+          <p>步骤 <emu-xref href="#step-putvalue-toobject"></emu-xref> 中可能创建的对象在上述抽象操作和普通对象的 [[Set]] 内部方法之外不可访问。实现可以选择避免实际创建该对象。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-getthisvalue" type="abstract operation">
         <h1>
           GetThisValue (
-            _V_: 一个 Reference Record,
+            _V_: 一个 引用记录,
           ): 一个 ECMAScript 语言值
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：IsPropertyReference(_V_) 为 *true*。
-          1. 若 IsSuperReference(_V_) 为 *true*，返回 _V_.[[ThisValue]]；否则返回 _V_.[[Base]]。
+          1. 断言: IsPropertyReference(_V_) 为 *true*。
+          1. 如果 IsSuperReference(_V_) 为 *true*，返回 _V_.[[ThisValue]]。
+          1. 返回 _V_.[[Base]]。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-initializereferencedbinding" type="abstract operation">
         <h1>
           InitializeReferencedBinding (
-            _V_: 一个 Reference Record,
+            _V_: 一个 引用记录,
             _W_: 一个 ECMAScript 语言值,
-          ): 返回包含 ~unused~ 的正常完成或异常完成
+          ): 要么 是 包含 ~unused~ 的正常完成，要么 是 一个 中断 完成
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：IsUnresolvableReference(_V_) 为 *false*。
+          1. 断言: IsUnresolvableReference(_V_) 为 *false*。
           1. 令 _base_ 为 _V_.[[Base]]。
-          1. 断言：_base_ 是 Environment Record。
+          1. 断言: _base_ 是 一个 环境记录。
           1. 返回 ? _base_.InitializeBinding(_V_.[[ReferencedName]], _W_)。
         </emu-alg>
       </emu-clause>
@@ -4523,16 +4536,16 @@
         <h1>
           MakePrivateReference (
             _baseValue_: 一个 ECMAScript 语言值,
-            _privateIdentifier_: 字符串,
-          ): 一个 Reference Record
+            _privateIdentifier_: 一个 字符串,
+          ): 一个 引用记录
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-          1. 断言：_privateEnv_ 不为 *null*。
+          1. 令 _privateEnv_ 为 正在运行的执行上下文 的 PrivateEnvironment。
+          1. 断言: _privateEnv_ 不为 *null*。
           1. 令 _privateName_ 为 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)。
-          1. 返回 Reference Record { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ }。
+          1. 返回 引用记录 { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ }。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -5138,11 +5151,11 @@
         </emu-clause>
 
         <emu-clause id="sec-runtime-semantics-stringnumericvalue" type="sdo" oldids="sec-runtime-semantics-mv-s">
-          <h1>运行时语义：StringNumericValue ( ): 一个 Number</h1>
+          <h1>运行时语义：StringNumericValue ( ): 一个数字</h1>
           <dl class="header">
           </dl>
           <emu-note>
-            <p>将 |StringNumericLiteral| 转换为 Number 值的整体过程与确定 |NumericLiteral| 的 NumericValue 类似（参见 <emu-xref href="#sec-literals-numeric-literals"></emu-xref>），但细节有所不同。</p>
+            <p>|StringNumericLiteral| 转换为数字值的过程总体上类似于 |NumericLiteral| 的 NumericValue 判定（参见 <emu-xref href="#sec-literals-numeric-literals"></emu-xref>），但部分细节有所不同。</p>
           </emu-note>
           <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
           <emu-alg>
@@ -5169,26 +5182,26 @@
           <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
           <emu-alg>
             1. 令 _a_ 为第一个 |DecimalDigits| 的 MV。
-            1. 如果第二个 |DecimalDigits| 存在，则
+            1. 如果存在第二个 |DecimalDigits|，则
               1. 令 _b_ 为第二个 |DecimalDigits| 的 MV。
-              1. 令 _n_ 为第二个 |DecimalDigits| 的码点数量。
+              1. 令 _n_ 为第二个 |DecimalDigits| 的码位数。
             1. 否则，
               1. 令 _b_ 为 0。
               1. 令 _n_ 为 0。
-            1. 如果 |ExponentPart| 存在，令 _e_ 为其 MV；否则令 _e_ 为 0。
+            1. 如果存在 |ExponentPart|，令 _e_ 为 |ExponentPart| 的 MV；否则令 _e_ 为 0。
             1. 返回 RoundMVResult((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>)。
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
           <emu-alg>
             1. 令 _b_ 为 |DecimalDigits| 的 MV。
-            1. 如果 |ExponentPart| 存在，令 _e_ 为其 MV；否则令 _e_ 为 0。
-            1. 令 _n_ 为 |DecimalDigits| 的码点数量。
+            1. 如果存在 |ExponentPart|，令 _e_ 为 |ExponentPart| 的 MV；否则令 _e_ 为 0。
+            1. 令 _n_ 为 |DecimalDigits| 的码位数。
             1. 返回 RoundMVResult(_b_ × 10<sup>_e_ - _n_</sup>)。
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
           <emu-alg>
             1. 令 _a_ 为 |DecimalDigits| 的 MV。
-            1. 如果 |ExponentPart| 存在，令 _e_ 为其 MV；否则令 _e_ 为 0。
+            1. 如果存在 |ExponentPart|，令 _e_ 为 |ExponentPart| 的 MV；否则令 _e_ 为 0。
             1. 返回 RoundMVResult(_a_ × 10<sup>_e_</sup>)。
           </emu-alg>
         </emu-clause>
@@ -5248,10 +5261,11 @@
       </dl>
       <emu-alg>
         1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
+        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int_ 为 truncate(ℝ(_number_))。
-        1. 令 _int32bit_ 为 _int_ modulo 2<sup>32</sup>。
-        1. 如果 _int32bit_ ≥ 2<sup>31</sup>，返回 𝔽(_int32bit_ - 2<sup>32</sup>)；否则返回 𝔽(_int32bit_)。
+        1. 令 _int32bit_ 为 _int_ 模 2<sup>32</sup>。
+        1. 如果 _int32bit_ ≥ 2<sup>31</sup>，返回 𝔽(_int32bit_ - 2<sup>32</sup>)。
+        1. 返回 𝔽(_int32bit_)。
       </emu-alg>
       <emu-note>
         <p>基于上述定义：</p>
@@ -5303,10 +5317,11 @@
       </dl>
       <emu-alg>
         1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
+        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int_ 为 truncate(ℝ(_number_))。
-        1. 令 _int16bit_ 为 _int_ modulo 2<sup>16</sup>。
-        1. 如果 _int16bit_ ≥ 2<sup>15</sup>，返回 𝔽(_int16bit_ - 2<sup>16</sup>)；否则返回 𝔽(_int16bit_)。
+        1. 令 _int16bit_ 为 _int_ 模 2<sup>16</sup>。
+        1. 如果 _int16bit_ ≥ 2<sup>15</sup>，返回 𝔽(_int16bit_ - 2<sup>16</sup>)。
+        1. 返回 𝔽(_int16bit_)。
       </emu-alg>
     </emu-clause>
 
@@ -5348,10 +5363,11 @@
       </dl>
       <emu-alg>
         1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
+        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int_ 为 truncate(ℝ(_number_))。
-        1. 令 _int8bit_ 为 _int_ modulo 2<sup>8</sup>。
-        1. 如果 _int8bit_ ≥ 2<sup>7</sup>，返回 𝔽(_int8bit_ - 2<sup>8</sup>)；否则返回 𝔽(_int8bit_)。
+        1. 令 _int8bit_ 为 _int_ 模 2<sup>8</sup>。
+        1. 如果 _int8bit_ ≥ 2<sup>7</sup>，返回 𝔽(_int8bit_ - 2<sup>8</sup>)。
+        1. 返回 𝔽(_int8bit_)。
       </emu-alg>
     </emu-clause>
 
@@ -5388,11 +5404,12 @@
         1. 令 _number_ 为 ? ToNumber(_argument_)。
         1. 如果 _number_ 是 *NaN*，返回 *+0*<sub>𝔽</sub>。
         1. 令 _mv_ 为 _number_ 的扩展数学值。
-        1. 令 _clamped_ 为 _mv_ 在 0 与 255 之间钳制的结果。
+        1. 令 _clamped_ 为把 _mv_ 限定在 0 到 255 之间的结果。
         1. 令 _f_ 为 floor(_clamped_)。
         1. 如果 _clamped_ &lt; _f_ + 0.5，返回 𝔽(_f_)。
         1. 如果 _clamped_ > _f_ + 0.5，返回 𝔽(_f_ + 1)。
-        1. 如果 _f_ 是偶数，返回 𝔽(_f_)；否则返回 𝔽(_f_ + 1)。
+        1. 如果 _f_ 为偶数，返回 𝔽(_f_)。
+        1. 返回 𝔽(_f_ + 1)。
       </emu-alg>
       <emu-note>
         <p>不同于大多数整数转换操作，ToUint8Clamp 会四舍五入而不是截断非整数值，它使用“round half to even”平分舍入规则，不同于 <emu-xref href="#sec-math.round">`Math.round`</emu-xref> 的“round half up”。</p>
@@ -5545,8 +5562,9 @@
       </dl>
       <emu-alg>
         1. 令 _n_ 为 ? ToBigInt(_argument_)。
-        1. 令 _int64bit_ 为 ℝ(_n_) modulo 2<sup>64</sup>。
-        1. 如果 _int64bit_ ≥ 2<sup>63</sup>，返回 ℤ(_int64bit_ - 2<sup>64</sup>)；否则返回 ℤ(_int64bit_)。
+        1. 令 _int64bit_ 为 ℝ(_n_) 模 2<sup>64</sup>。
+        1. 如果 _int64bit_ ≥ 2<sup>63</sup>，返回 ℤ(_int64bit_ - 2<sup>64</sup>)。
+        1. 返回 ℤ(_int64bit_)。
       </emu-alg>
     </emu-clause>
 
@@ -5891,15 +5909,18 @@
       </dl>
       <emu-alg>
         1. 断言：SameType(_x_, _y_) 为 *true*。
-        1. 如果 _x_ 是 *undefined* 或 *null*，返回 *true*。
+        1. 如果 _x_ 为 *undefined* 或 *null*，返回 *true*。
         1. 如果 _x_ 是 BigInt，则
           1. 返回 BigInt::equal(_x_, _y_)。
-        1. 如果 _x_ 是 String，则
-          1. 如果 _x_ 与 _y_ 长度相同且相同位置的代码单元相同，返回 *true*；否则返回 *false*。
-        1. 如果 _x_ 是 Boolean，则
-          1. 若都为 *true* 或都为 *false*，返回 *true*；否则返回 *false*。
-        1. NOTE: 其他 ECMAScript 语言值按身份比较。
-        1. 如果 _x_ 是 _y_，返回 *true*；否则返回 *false*。
+        1. 如果 _x_ 是字符串，则
+          1. 如果 _x_ 和 _y_ 长度相同且对应位置的代码单元也相同，返回 *true*。
+          1. 返回 *false*。
+        1. 如果 _x_ 是布尔值，则
+          1. 如果 _x_ 和 _y_ 同为 *true* 或同为 *false*，返回 *true*。
+          1. 返回 *false*。
+        1. 注：所有其它 ECMAScript 语言值都按标识比较。
+        1. 如果 _x_ 与 _y_ 相同，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
       <emu-note>
         为了阐述目的，本算法中一些分支被单独列出，即便不是必须。
@@ -5926,41 +5947,40 @@
           1. 令 _px_ 为 ? ToPrimitive(_x_, ~number~)。
           1. 令 _py_ 为 ? ToPrimitive(_y_, ~number~)。
         1. 否则，
-          1. NOTE: 需反转求值顺序以保持自左向右求值。
+          1. 注：需要反转求值顺序以保持从左到右的求值顺序。
           1. 令 _py_ 为 ? ToPrimitive(_y_, ~number~)。
           1. 令 _px_ 为 ? ToPrimitive(_x_, ~number~)。
-        1. [id="step-arc-string-check"] 如果 _px_ 是 String 且 _py_ 是 String，则
+        1. [id="step-arc-string-check"] 如果 _px_ 和 _py_ 都是字符串，则
           1. 令 _lx_ 为 _px_ 的长度。
           1. 令 _ly_ 为 _py_ 的长度。
-          1. 对每个整数 _i_，0 ≤ _i_ &lt; min(_lx_, _ly_) 递增：
-            1. 令 _cx_ 为 _px_ 索引 _i_ 的代码单元数值。
-            1. 令 _cy_ 为 _py_ 索引 _i_ 的代码单元数值。
+          1. 对于每个整数 _i_，满足 0 ≤ _i_ &lt; min(_lx_, _ly_)，按升序进行
+            1. 令 _cx_ 为 _px_ 中索引为 _i_ 的代码单元的数值。
+            1. 令 _cy_ 为 _py_ 中索引为 _i_ 的代码单元的数值。
             1. 如果 _cx_ &lt; _cy_，返回 *true*。
             1. 如果 _cx_ > _cy_，返回 *false*。
-          1. 如果 _lx_ &lt; _ly_，返回 *true*；否则返回 *false*。
-        1. 否则，
-          1. 如果 _px_ 是 BigInt 且 _py_ 是 String，则
-            1. 令 _ny_ 为 StringToBigInt(_py_)。
-            1. 如果 _ny_ 是 *undefined*，返回 *undefined*。
-            1. 返回 BigInt::lessThan(_px_, _ny_)。
-          1. 如果 _px_ 是 String 且 _py_ 是 BigInt，则
-            1. 令 _nx_ 为 StringToBigInt(_px_)。
-            1. 如果 _nx_ 是 *undefined*，返回 *undefined*。
-            1. 返回 BigInt::lessThan(_nx_, _py_)。
-          1. NOTE: 因 _px_ 与 _py_ 是原始值，求值顺序无关。
-          1. 令 _nx_ 为 ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta>。
-          1. 令 _ny_ 为 ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta>。
-          1. 如果 SameType(_nx_, _ny_) 为 *true*，则
-            1. 如果 _nx_ 是 Number，
-              1. 返回 Number::lessThan(_nx_, _ny_)。
-            1. 否则，
-              1. 断言：_nx_ 是 BigInt。
-              1. 返回 BigInt::lessThan(_nx_, _ny_)。
-          1. 断言：_nx_ 是 BigInt 且 _ny_ 是 Number，或 _nx_ 是 Number 且 _ny_ 是 BigInt。
-          1. 如果 _nx_ 或 _ny_ 是 *NaN*，返回 *undefined*。
-          1. 如果 _nx_ 是 *-∞*<sub>𝔽</sub> 或 _ny_ 是 *+∞*<sub>𝔽</sub>，返回 *true*。
-          1. 如果 _nx_ 是 *+∞*<sub>𝔽</sub> 或 _ny_ 是 *-∞*<sub>𝔽</sub>，返回 *false*。
-          1. 如果 ℝ(_nx_) &lt; ℝ(_ny_)，返回 *true*；否则返回 *false*。
+          1. 如果 _lx_ &lt; _ly_，返回 *true*。
+          1. 返回 *false*。
+        1. 如果 _px_ 是 BigInt 且 _py_ 是字符串，则
+          1. 令 _ny_ 为 StringToBigInt(_py_)。
+          1. 如果 _ny_ 为 *undefined*，返回 *undefined*。
+          1. 返回 BigInt::lessThan(_px_, _ny_)。
+        1. 如果 _px_ 是字符串且 _py_ 是 BigInt，则
+          1. 令 _nx_ 为 StringToBigInt(_px_)。
+          1. 如果 _nx_ 为 *undefined*，返回 *undefined*。
+          1. 返回 BigInt::lessThan(_nx_, _py_)。
+        1. 注：因为 _px_ 和 _py_ 是原始值，求值顺序无关紧要。
+        1. 令 _nx_ 为 ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta>。
+        1. 令 _ny_ 为 ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta>。
+        1. 如果 SameType(_nx_, _ny_) 为 *true*，则
+          1. 如果 _nx_ 是数字，返回 Number::lessThan(_nx_, _ny_)。
+          1. 断言：_nx_ 为 BigInt。
+          1. 返回 BigInt::lessThan(_nx_, _ny_)。
+        1. 断言：_nx_ 为 BigInt 且 _ny_ 为数字，或 _nx_ 为数字且 _ny_ 为 BigInt。
+        1. 如果 _nx_ 或 _ny_ 为 *NaN*，返回 *undefined*。
+        1. 如果 _nx_ 为 *-∞*<sub>𝔽</sub> 或 _ny_ 为 *+∞*<sub>𝔽</sub>，返回 *true*。
+        1. 如果 _nx_ 为 *+∞*<sub>𝔽</sub> 或 _ny_ 为 *-∞*<sub>𝔽</sub>，返回 *false*。
+        1. 如果 ℝ(_nx_) &lt; ℝ(_ny_)，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
       <emu-note>
         <p>步骤 <emu-xref href="#step-arc-string-check"></emu-xref> 与加法运算符 `+` 算法 (<emu-xref href="#sec-applystringornumericbinaryoperator"></emu-xref>) 中的步骤 <emu-xref href="#step-binary-op-string-check"></emu-xref> 不同之处在于这里使用逻辑与，而非逻辑或。</p>
@@ -5986,23 +6006,24 @@
           1. 返回 IsStrictlyEqual(_x_, _y_)。
         1. 如果 _x_ 是 *null* 且 _y_ 是 *undefined*，返回 *true*。
         1. 如果 _x_ 是 *undefined* 且 _y_ 是 *null*，返回 *true*。
-        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] 若宿主是 web 浏览器或支持 <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref>：
-          1. 若 _x_ 是 Object、具有 [[IsHTMLDDA]] 且 _y_ 是 *undefined* 或 *null*，返回 *true*。
-          1. 若 _x_ 是 *undefined* 或 *null*，_y_ 是具有 [[IsHTMLDDA]] 的 Object，返回 *true*。
-        1. 如果 _x_ 是 Number 且 _y_ 是 String，返回 ! IsLooselyEqual(_x_, ! ToNumber(_y_))。
-        1. 如果 _x_ 是 String 且 _y_ 是 Number，返回 ! IsLooselyEqual(! ToNumber(_x_), _y_)。
-        1. 如果 _x_ 是 BigInt 且 _y_ 是 String，则
+        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] 如果宿主是网页浏览器或支持 <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref>，
+          1. 如果 _x_ 是对象，_x_ 有 [[IsHTMLDDA]] 内部槽，且 _y_ 是 *undefined* 或 *null*，返回 *true*。
+          1. 如果 _x_ 是 *undefined* 或 *null*，_y_ 是对象，且 _y_ 有 [[IsHTMLDDA]] 内部槽，返回 *true*。
+        1. 如果 _x_ 是数字且 _y_ 是字符串，返回 ! IsLooselyEqual(_x_, ! ToNumber(_y_))。
+        1. 如果 _x_ 是字符串且 _y_ 是数字，返回 ! IsLooselyEqual(! ToNumber(_x_), _y_)。
+        1. 如果 _x_ 是 BigInt 且 _y_ 是字符串，则
           1. 令 _n_ 为 StringToBigInt(_y_)。
-          1. 如果 _n_ 是 *undefined*，返回 *false*。
+          1. 如果 _n_ 为 *undefined*，返回 *false*。
           1. 返回 ! IsLooselyEqual(_x_, _n_)。
-        1. 如果 _x_ 是 String 且 _y_ 是 BigInt，返回 ! IsLooselyEqual(_y_, _x_)。
-        1. 如果 _x_ 是 Boolean，返回 ! IsLooselyEqual(! ToNumber(_x_), _y_)。
-        1. 如果 _y_ 是 Boolean，返回 ! IsLooselyEqual(_x_, ! ToNumber(_y_))。
-        1. 如果 _x_ 是 String / Number / BigInt / Symbol 且 _y_ 是 Object，返回 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))。
-        1. 如果 _x_ 是 Object 且 _y_ 是 String / Number / BigInt / Symbol，返回 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)。
-        1. 如果 (_x_ BigInt 且 _y_ Number) 或 (_x_ Number 且 _y_ BigInt)，则
-          1. 若 _x_ 非有限或 _y_ 非有限，返回 *false*。
-          1. 若 ℝ(_x_) = ℝ(_y_)，返回 *true*；否则返回 *false*。
+        1. 如果 _x_ 是字符串且 _y_ 是 BigInt，返回 ! IsLooselyEqual(_y_, _x_)。
+        1. 如果 _x_ 是布尔值，返回 ! IsLooselyEqual(! ToNumber(_x_), _y_)。
+        1. 如果 _y_ 是布尔值，返回 ! IsLooselyEqual(_x_, ! ToNumber(_y_))。
+        1. 如果 _x_ 为字符串、数字、BigInt 或符号，且 _y_ 是对象，返回 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))。
+        1. 如果 _x_ 是对象且 _y_ 为字符串、数字、BigInt 或符号，返回 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)。
+        1. 如果 _x_ 是 BigInt 且 _y_ 是数字，或者 _x_ 是数字且 _y_ 是 BigInt，则
+          1. 如果 _x_ 不是有限值或 _y_ 不是有限值，返回 *false*。
+          1. 如果 ℝ(_x_) = ℝ(_y_)，返回 *true*。
+          1. 返回 *false*。
         1. 返回 *false*。
       </emu-alg>
     </emu-clause>
@@ -6703,15 +6724,14 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _entry_ 为 PrivateElementFind(_O_, _P_)。
-        1. 若 _entry_ 是 ~empty~，抛出 *TypeError*。
-        1. 若 _entry_.[[Kind]] 是 ~field~，则
-          1. 设 _entry_.[[Value]] 为 _value_。
-        1. 否则如果 _entry_.[[Kind]] 是 ~method~，
-          1. 抛出 *TypeError*。
+        1. 令 _entry_ 为 PrivateElementFind(_O_, _P_) 的结果。
+        1. 如果 _entry_ 是 ~empty~，抛出 *TypeError* 异常。
+        1. 如果 _entry_.[[Kind]] 为 ~method~，抛出 *TypeError* 异常。
+        1. 如果 _entry_.[[Kind]] 为 ~field~，则
+          1. 设置 _entry_.[[Value]] 为 _value_。
         1. 否则，
-          1. 断言：_entry_.[[Kind]] 是 ~accessor~。
-          1. 若 _entry_.[[Set]] 是 *undefined*，抛出 *TypeError*。
+          1. 断言：_entry_.[[Kind]] 为 ~accessor~。
+          1. 如果 _entry_.[[Set]] 为 *undefined*，抛出 *TypeError* 异常。
           1. 令 _setter_ 为 _entry_.[[Set]]。
           1. 执行 ? Call(_setter_, _O_, « _value_ »)。
         1. 返回 ~unused~。
@@ -7153,9 +7173,9 @@
       </emu-alg>
       <p>等价于：</p>
       <emu-alg>
-        1. 断言：_value_ 是 Completion Record。
-        1. 若 _value_ 是 abrupt completion，返回 ? IteratorClose(_iteratorRecord_, _value_)。
-        1. 否则，设 _value_ 为 ! _value_。
+        1. 断言：_value_ 是 Completion Record（完成记录）。
+        1. 如果 _value_ 是突发完成，返回 ? IteratorClose(_iteratorRecord_, _value_)。
+        1. 设置 _value_ 为 ! _value_。
       </emu-alg>
     </emu-clause>
 
@@ -7194,9 +7214,9 @@
       </emu-alg>
       <p>等价于：</p>
       <emu-alg>
-        1. 断言：_value_ 是一个 Completion Record。
-        1. 如果 _value_ 是一个 abrupt completion，返回 ? AsyncIteratorClose(_iteratorRecord_, _value_)。
-        1. 否则，设置 _value_ 为 ! _value_。
+        1. 断言：_value_ 是一个 Completion Record（完成记录）。
+        1. 如果 _value_ 是中断完成，返回 ? AsyncIteratorClose(_iteratorRecord_, _value_)。
+        1. 设置 _value_ 为 ! _value_。
       </emu-alg>
     </emu-clause>
 
@@ -8690,8 +8710,8 @@
       </emu-alg>
       <emu-grammar>BreakStatement : `break` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. 若 _labelSet_ 不包含 |LabelIdentifier| 的 StringValue，返回 *true*。
-        1. 返回 *false*。
+        1. 如果 _labelSet_ 包含 |LabelIdentifier| 的 StringValue，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -8879,8 +8899,8 @@
       </emu-alg>
       <emu-grammar>ContinueStatement : `continue` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. 若 _iterationSet_ 不包含 |LabelIdentifier| 的 StringValue，返回 *true*。
-        1. 返回 *false*。
+        1. 如果 _iterationSet_ 包含 |LabelIdentifier| 的 StringValue，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -9355,10 +9375,11 @@
       <emu-alg>
         1. 如果 _symbol_ 是 |ClassBody|，返回 *true*。
         1. 如果 _symbol_ 是 |ClassHeritage|，则
-          1. 若 |ClassHeritage| 存在，返回 *true*；否则返回 *false*。
-        1. 若 |ClassHeritage| 存在，则
-          1. 若 |ClassHeritage| Contains _symbol_ 为 *true*，返回 *true*。
-        1. 返回 |ClassBody| 的 ComputedPropertyContains（参数 _symbol_）结果。
+          1. 如果 |ClassHeritage| 存在，返回 *true*。
+          1. 返回 *false*。
+        1. 如果 |ClassHeritage| 存在，则
+          1. 如果 |ClassHeritage| Contains _symbol_ 为 *true*，返回 *true*。
+        1. 返回 |ClassBody| 的 ComputedPropertyContains，参数为 _symbol_ 的结果。
       </emu-alg>
       <emu-note>
         <p>依赖子结构的静态语义规则通常不会深入类主体，除了 |PropertyName|。</p>
@@ -9623,9 +9644,8 @@
           1. 如果 _environment_ 不为 *undefined*，则
             1. 执行 ! _environment_.InitializeBinding(_name_, _value_)。
             1. 返回 ~unused~。
-          1. 否则，
-            1. 令 _lhs_ 为 ? ResolveBinding(_name_)。
-            1. 返回 ? PutValue(_lhs_, _value_)。
+          1. 令 _lhs_ 为 ? ResolveBinding(_name_)。
+          1. 返回 ? PutValue(_lhs_, _value_)。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -10606,8 +10626,9 @@
           <emu-alg>
             1. 令 _bindingObject_ 为 _envRec_.[[BindingObject]]。
             1. 令 _value_ 为 ? HasProperty(_bindingObject_, _N_)。
-            1. 若 _value_ 为 *false*，则
-              1. 若 _S_ 为 *false*，返回 *undefined*；否则抛 *ReferenceError*。
+            1. 如果 _value_ 为 *false*，则
+              1. 如果 _S_ 为 *false*，返回 *undefined*。
+              1. 抛出 *ReferenceError* 异常。
             1. 返回 ? Get(_bindingObject_, _N_)。
           </emu-alg>
         </emu-clause>
@@ -10671,8 +10692,8 @@
             <dd>Object Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. 若 _envRec_.[[IsWithEnvironment]] 为 *true*，返回 _envRec_.[[BindingObject]]。
-            1. 否则返回 *undefined*。
+            1. 如果 _envRec_.[[IsWithEnvironment]] 为 *true*，返回 _envRec_.[[BindingObject]]。
+            1. 返回 *undefined*。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -10771,7 +10792,8 @@
             <dd>Function Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. 若 _envRec_.[[ThisBindingStatus]] 为 ~lexical~，返回 *false*；否则返回 *true*。
+            1. 如果 _envRec_.[[ThisBindingStatus]] 为 ~lexical~，返回 *false*。
+            1. 返回 *true*。
           </emu-alg>
         </emu-clause>
 
@@ -10796,7 +10818,8 @@
           </dl>
           <emu-alg>
             1. 如果 _envRec_.[[ThisBindingStatus]] 为 ~lexical~，返回 *false*。
-            1. 如果 _envRec_.[[FunctionObject]].[[HomeObject]] 为 *undefined*，返回 *false*；否则返回 *true*。
+            1. 如果 _envRec_.[[FunctionObject]].[[HomeObject]] 为 *undefined*，返回 *false*。
+            1. 返回 *true*。
           </emu-alg>
         </emu-clause>
 
@@ -11335,9 +11358,8 @@
           1. 令 _exists_ 为 ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta>。
           1. 若 _exists_ 为 *true*，则
             1. 返回 Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ }。
-          1. 否则，
-            1. 令 _outer_ 为 _env_.[[OuterEnv]]。
-            1. 返回 ? GetIdentifierReference(_outer_, _name_, _strict_)。
+          1. 令 _outer_ 为 _env_.[[OuterEnv]]。
+          1. 返回 ? GetIdentifierReference(_outer_, _name_, _strict_)。
         </emu-alg>
       </emu-clause>
 
@@ -11659,8 +11681,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 将 _realmRec_.[[Intrinsics]] 设为一个新的 Record。
-        1. [declared="steps,name,length,slots,prototype,async"] 用 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> 中列出的值设置 _realmRec_.[[Intrinsics]] 的各字段。字段名为该表第一列中列出的名称。每个字段的值是根据本规范中每个对象在 <emu-xref href="#sec-global-object"></emu-xref> 到 <emu-xref href="#sec-reflection"></emu-xref> 条款定义的属性值，完全并递归地填充的新对象值。所有的对象属性值都是新创建的对象值。所有为内建函数对象的值，都通过执行 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_) 创建，其中 _steps_ 是本规范定义的该函数的实现，_name_ 是该函数 *"name"* 属性的初始值，_length_ 是该函数 *"length"* 属性的初始值，_slots_ 是该函数指定的内部槽名称（如有），_prototype_ 是指定的 [[Prototype]] 内部槽的值，_async_ 若该函数被描述为 “async” 则为 *true*，否则为 *false*。内建对象及其属性的创建顺序必须避免依赖尚未创建的对象。
+        1. 设置 _realmRec_.[[Intrinsics]] 为一个新记录。
+        1. [declared="steps,name,length,slots,prototype,async"] 用 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> 表中列出的值设置 _realmRec_.[[Intrinsics]] 的字段。字段名称为表中“Intrinsic Name”栏列出的名称。每个字段的值是一个按照本规范在 <emu-xref href="#sec-global-object"></emu-xref> 到 <emu-xref href="#sec-reflection"></emu-xref> 子句定义，完全递归赋予所有属性值的新对象。所有对象属性值都是新创建的对象。如果值是内建函数对象，则通过执行 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_) 创建，其中 _steps_ 是该规范提供的函数定义，_name_ 是函数 *"name"* 属性的初始值，_length_ 是函数 *"length"* 属性的初始值，_slots_ 是该函数指定的内部槽名称列表（如有），_prototype_ 是函数 [[Prototype]] 内部槽的指定值，_async_ 表示函数被描述为“async”则为 *true*，否则为 *false*。创建内在对象及其属性时，必须按顺序执行，以避免任何依赖尚未创建对象的情况。
         1. 执行 AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)。
         1. 返回 ~unused~。
       </emu-alg>
@@ -11812,9 +11834,10 @@
       </dl>
 
       <emu-alg>
-        1. 若执行上下文栈为空，返回 *null*。
-        1. 令 _ec_ 为执行上下文栈顶端第一个其 ScriptOrModule 组成部分不为 *null* 的执行上下文。
-        1. 若不存在此执行上下文，返回 *null*；否则返回 _ec_ 的 ScriptOrModule。
+        1. 如果执行上下文栈为空，返回 *null*。
+        1. 令 _ec_ 为执行上下文栈中最顶层且 ScriptOrModule 组件不为 *null* 的执行上下文。
+        1. 如果不存在这样的执行上下文，返回 *null*。
+        1. 返回 _ec_ 的 ScriptOrModule。
       </emu-alg>
     </emu-clause>
 
@@ -12878,27 +12901,24 @@
         </dl>
 
         <emu-alg>
-          1. 若 _ownDesc_ 为 *undefined*，则
+          1. 如果 _ownDesc_ 为 *undefined*，则
             1. 令 _parent_ 为 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>。
-            1. 若 _parent_ 不为 *null*，则
-              1. 返回 ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta>。
-            1. 否则，
-              1. 将 _ownDesc_ 设为 PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }。
-          1. 若 IsDataDescriptor(_ownDesc_) 为 *true*，则
-            1. 若 _ownDesc_.[[Writable]] 为 *false*，返回 *false*。
-            1. 若 _Receiver_ 不是 Object，返回 *false*。
+            1. 如果 _parent_ 不为 *null*，返回 ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta>。
+            1. 设置 _ownDesc_ 为属性描述符 { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }。
+          1. 如果 IsDataDescriptor(_ownDesc_) 为 *true*，则
+            1. 如果 _ownDesc_.[[Writable]] 为 *false*，返回 *false*。
+            1. 如果 _Receiver_ 不是对象，返回 *false*。
             1. 令 _existingDescriptor_ 为 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta>。
-            1. 若 _existingDescriptor_ 不为 *undefined*，则
-              1. 若 IsAccessorDescriptor(_existingDescriptor_) 为 *true*，返回 *false*。
-              1. 若 _existingDescriptor_.[[Writable]] 为 *false*，返回 *false*。
-              1. 令 _valueDesc_ 为 PropertyDescriptor { [[Value]]: _V_ }。
-              1. 返回 ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta>。
-            1. 否则，
+            1. 如果 _existingDescriptor_ 为 *undefined*，则
               1. 断言：_Receiver_ 目前没有属性 _P_。
               1. 返回 ? CreateDataProperty(_Receiver_, _P_, _V_)。
+            1. 如果 IsAccessorDescriptor(_existingDescriptor_) 为 *true*，返回 *false*。
+            1. 如果 _existingDescriptor_.[[Writable]] 为 *false*，返回 *false*。
+            1. 令 _valueDesc_ 为属性描述符 { [[Value]]: _V_ }。
+            1. 返回 ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta>。
           1. 断言：IsAccessorDescriptor(_ownDesc_) 为 *true*。
           1. 令 _setter_ 为 _ownDesc_.[[Set]]。
-          1. 若 _setter_ 为 *undefined*，返回 *false*。
+          1. 如果 _setter_ 为 *undefined*，返回 *false*。
           1. 执行 ? Call(_setter_, _Receiver_, « _V_ »)。
           1. 返回 *true*。
         </emu-alg>
@@ -13604,14 +13624,12 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 断言：_homeObject_ 是一个普通、可扩展对象。
-        1. 若 _key_ 是一个 Private Name，则
-          1. 返回 PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ }。
-        1. 否则，
-          1. 令 _desc_ 为 PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
-          1. 执行 ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_)。
-          1. NOTE: DefinePropertyOrThrow 只有在尝试定义 _key_ 为 *"prototype"* 的类静态方法时才会返回一个 abrupt completion。
-          1. 返回 ~unused~。
+        1. 断言：_homeObject_ 是一个普通的、可扩展的对象。
+        1. 如果 _key_ 是私有名称，返回 PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ }。
+        1. 令 _desc_ 为属性描述符 { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
+        1. 执行 ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_)。
+        1. 注：DefinePropertyOrThrow 仅在尝试定义 _key_ 为 *"prototype"* 的类静态方法时会返回中断完成。
+        1. 返回 ~unused~。
       </emu-alg>
     </emu-clause>
 
@@ -13872,18 +13890,27 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 令 _callerContext_ 为正在运行的执行上下文。
-        1. 若 _callerContext_ 尚未被挂起，则挂起 _callerContext_。
+        1. 令 _callerContext_ 为当前正在运行的执行上下文。
+        1. 如果 _callerContext_ 尚未挂起，挂起 _callerContext_。
         1. 令 _calleeContext_ 为一个新的执行上下文。
-        1. 将 _calleeContext_ 的 Function 设为 _F_。
+        1. 设置 _calleeContext_ 的 Function 为 _F_。
         1. 令 _calleeRealm_ 为 _F_.[[Realm]]。
-        1. 将 _calleeContext_ 的 Realm 设为 _calleeRealm_。
-        1. 将 _calleeContext_ 的 ScriptOrModule 设为 *null*。
-        1. 执行任何实现定义的、对 _calleeContext_ 必要的初始化。
-        1. 将 _calleeContext_ 压入执行上下文栈；_calleeContext_ 现在为运行执行上下文。
-        1. [id="step-call-builtin-function-result"] 令 _result_ 为 <emu-meta effects="user-code">对 _F_ 的求值</emu-meta> 且符合其规范描述的完成记录结果。若 _thisArgument_ 为 ~uninitialized~，则 *this* 值未初始化；否则由 _thisArgument_ 提供 *this* 值。_argumentsList_ 提供具名参数。_newTarget_ 提供 NewTarget 值。
-        1. 注：若 _F_ 在本文档中定义，其“规范描述”即通过算法步骤或其他方式给出的行为。
-        1. 将 _calleeContext_ 自执行上下文栈移除并恢复 _callerContext_ 为运行执行上下文。
+        1. 设置 _calleeContext_ 的 Realm 为 _calleeRealm_。
+        1. 设置 _calleeContext_ 的 ScriptOrModule 为 *null*。
+        1. 执行针对 _calleeContext_ 所需的实现定义初始化操作。
+        1. 将 _calleeContext_ 压入执行上下文栈；_calleeContext_ 现在是正在运行的执行上下文。
+        1. 如果 _F_.[[Async]] 为 *true*，则
+          1. 令 _promiseCapability_ 为 ! NewPromiseCapability(%Promise%)。
+          1. 令 _resultsClosure_ 为新的抽象闭包，无参数，捕获 _F_、_thisArgument_、_argumentsList_ 和 _newTarget_，并在被调用时执行以下步骤：
+            1. 令 _result_ 为 Completion Record，其值为 <emu-meta effects="user-code">以符合规范的方式对</emu-meta> _F_ 求值的结果。如果 _thisArgument_ 为 ~uninitialized~，则 *this* 值为未初始化；否则 _thisArgument_ 提供 *this* 值。_argumentsList_ 提供命名参数。_newTarget_ 提供 NewTarget 值。
+            1. 注：如果 _F_ 在本文档定义，“规范”即通过算法步骤或其它方式所指定的行为。
+            1. 返回 Completion(_result_)。
+          1. 执行 AsyncFunctionStart(_promiseCapability_, _resultsClosure_)。
+          1. 从执行上下文栈移除 _calleeContext_ 并恢复 _callerContext_ 为正在运行的执行上下文。
+          1. 返回 _promiseCapability_.[[Promise]]。
+        1. [id="step-call-builtin-function-result"] 令 _result_ 为 Completion Record，其值为 <emu-meta effects="user-code">以符合规范的方式对</emu-meta> _F_ 求值的结果。如果 _thisArgument_ 为 ~uninitialized~，则 *this* 值为未初始化；否则 _thisArgument_ 提供 *this* 值。_argumentsList_ 提供命名参数。_newTarget_ 提供 NewTarget 值。
+        1. 注：如果 _F_ 在本文档定义，“规范”即通过算法步骤或其它方式所指定的行为。
+        1. 从执行上下文栈移除 _calleeContext_ 并恢复 _callerContext_ 为正在运行的执行上下文。
         1. 返回 ? _result_。
       </emu-alg>
       <emu-note>
@@ -14077,22 +14104,21 @@
           <dd>数组特异对象 _A_</dd>
         </dl>
         <emu-alg>
-          1. 若 _P_ 为 *"length"*，则
-            1. 返回 ? ArraySetLength(_A_, _Desc_)。
-          1. 否则若 _P_ 是数组索引，则
-            1. 令 _lengthDesc_ 为 OrdinaryGetOwnProperty(_A_, *"length"*)。
+          1. 如果 _P_ 是 *"length"*，返回 ? ArraySetLength(_A_, _Desc_)。
+          1. 如果 _P_ 是数组索引，则
+            1. 令 _lengthDesc_ 为 OrdinaryGetOwnProperty(_A_, *"length"*) 的结果。
             1. 断言：_lengthDesc_ 不为 *undefined*。
             1. 断言：IsDataDescriptor(_lengthDesc_) 为 *true*。
             1. 断言：_lengthDesc_.[[Configurable]] 为 *false*。
             1. 令 _length_ 为 _lengthDesc_.[[Value]]。
-            1. 断言：_length_ 是非负整数 Number。
+            1. 断言：_length_ 是非负整数类型 Number。
             1. 令 _index_ 为 ! ToUint32(_P_)。
-            1. 若 _index_ ≥ _length_ 且 _lengthDesc_.[[Writable]] 为 *false*，返回 *false*。
+            1. 如果 _index_ ≥ _length_ 且 _lengthDesc_.[[Writable]] 为 *false*，返回 *false*。
             1. 令 _succeeded_ 为 ! OrdinaryDefineOwnProperty(_A_, _P_, _Desc_)。
-            1. 若 _succeeded_ 为 *false*，返回 *false*。
-            1. 若 _index_ ≥ _length_，则
-              1. 将 _lengthDesc_.[[Value]] 设为 _index_ + *1*<sub>𝔽</sub>。
-              1. 将 _succeeded_ 设为 ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_)。
+            1. 如果 _succeeded_ 为 *false*，返回 *false*。
+            1. 如果 _index_ ≥ _length_，则
+              1. 设置 _lengthDesc_.[[Value]] 为 _index_ + *1*<sub>𝔽</sub>。
+              1. 设置 _succeeded_ 为 ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_)。
               1. 断言：_succeeded_ 为 *true*。
             1. 返回 *true*。
           1. 返回 ? OrdinaryDefineOwnProperty(_A_, _P_, _Desc_)。
@@ -14415,11 +14441,9 @@
         <emu-alg>
           1. 令 _map_ 为 _args_.[[ParameterMap]]。
           1. 令 _isMapped_ 为 ! HasOwnProperty(_map_, _P_)。
-          1. 若 _isMapped_ 为 *false*，则
-            1. 返回 ? OrdinaryGet(_args_, _P_, _Receiver_)。
-          1. 否则，
-            1. 断言：_map_ 包含 _P_ 的形式参数映射。
-            1. 返回 ! Get(_map_, _P_)。
+          1. 如果 _isMapped_ 为 *false*，返回 ? OrdinaryGet(_args_, _P_, _Receiver_)。
+          1. 断言：_map_ 包含 _P_ 的形式参数映射。
+          1. 返回 ! Get(_map_, _P_)。
         </emu-alg>
       </emu-clause>
 
@@ -14723,10 +14747,11 @@
           <dd>TypedArray _O_</dd>
         </dl>
         <emu-alg>
-          1. 若 _P_ 是 String，则
+          1. 如果 _P_ 是字符串，则
             1. 令 _numericIndex_ 为 CanonicalNumericIndexString(_P_)。
-            1. 若 _numericIndex_ 不为 *undefined*，则
-              1. 若 IsValidIntegerIndex(_O_, _numericIndex_) 为 *false*，返回 *true*；否则返回 *false*。
+            1. 如果 _numericIndex_ 不为 *undefined*，则
+              1. 如果 IsValidIntegerIndex(_O_, _numericIndex_) 为 *false*，返回 *true*。
+              1. 返回 *false*。
           1. 返回 ! OrdinaryDelete(_O_, _P_)。
         </emu-alg>
       </emu-clause>
@@ -16188,10 +16213,10 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 若 _sourceText_ 是 String，则将 _sourceText_ 设为 StringToCodePoints(_sourceText_)。
-        1. 试图以 _goalSymbol_ 为目标符号解析 _sourceText_，并分析解析结果中的任何提前错误 (early error) 条件。解析与提前错误检测可按实现自定义方式交错进行。
-        1. 若解析成功且未发现提前错误，返回解析生成的 parse tree 根部的 Parse Node（_goalSymbol_ 的一个实例）。
-        1. 否则，返回一个包含一个或多个 *SyntaxError* 对象的 List，表示语法错误和/或提前错误。若存在多个错误，其数量与顺序由实现定义，但至少要有一个。
+        1. 如果 _sourceText_ 是字符串，则将 _sourceText_ 设为 StringToCodePoints(_sourceText_)。
+        1. 尝试使用 _goalSymbol_ 作为目标符号解析 _sourceText_，并分析解析结果中所有提前错误条件。解析与提前错误检测可按实现自定义方式交替进行。
+        1. 如果解析成功且未发现提前错误，则返回解析树根节点对应的 Parse Node（一个 _goalSymbol_ 的实例）。
+        1. 返回一个包含一个或多个 *SyntaxError* 对象的列表，表示解析错误和/或提前错误。如果有多个解析错误或提前错误，列表中的错误对象数量和顺序由具体实现定义，但至少要有一个错误对象。
       </emu-alg>
       <emu-note>
         <p>考虑某段文本在某处有一个提前错误，在其后又有语法错误。一个先解析后检测提前错误的实现可能只报告语法错误而未继续提前错误阶段。一个交错实现可能报告提前错误而不再寻找语法错误。第三种实现可能两者都报告。以上行为都符合规范。</p>
@@ -16278,7 +16303,8 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _node_ 匹配的源码文本是严格模式代码，返回 *true*；否则返回 *false*。
+          1. 如果被 _node_ 匹配的源文本是严格模式代码，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -18691,15 +18717,16 @@
         </dl>
         <emu-alg>
           1. 令 _flags_ 为 _literal_ 的 FlagText。
-          1. 若 _flags_ 含有除 `d`、`g`、`i`、`m`、`s`、`u`、`v`、`y` 之外任意码点，或某码点出现多次，返回 *false*。
-          1. 若 _flags_ 含 `u`，设 _u_ 为 *true*；否则 *false*。
-          1. 若 _flags_ 含 `v`，设 _v_ 为 *true*；否则 *false*。
+          1. 如果 _flags_ 包含除 `d`、`g`、`i`、`m`、`s`、`u`、`v` 或 `y` 之外的任何码位，或 _flags_ 中某个码位出现多于一次，则返回 *false*。
+          1. 如果 _flags_ 包含 `u`，令 _u_ 为 *true*；否则令 _u_ 为 *false*。
+          1. 如果 _flags_ 包含 `v`，令 _v_ 为 *true*；否则令 _v_ 为 *false*。
           1. 令 _patternText_ 为 _literal_ 的 BodyText。
-          1. 若 _u_ 为 *false* 且 _v_ 为 *false*，则
+          1. 如果 _u_ 为 *false* 且 _v_ 为 *false*，则
             1. 令 _stringValue_ 为 CodePointsToString(_patternText_)。
-            1. 将 _patternText_ 设为解释 _stringValue_ 的每个 16 位元素为 Unicode BMP 码点后的码点序列（不执行 UTF-16 解码组合）。
-          1. 令 _parseResult_ 为 ParsePattern(_patternText_, _u_, _v_)。
-          1. 若 _parseResult_ 是 Parse Node，返回 *true*；否则返回 *false*。
+            1. 设置 _patternText_ 为将 _stringValue_ 的每个 16 位元素都解释为 Unicode BMP 码位后得到的码位序列。不会对这些元素进行 UTF-16 解码。
+          1. 令 _parseResult_ 为 ParsePattern(_patternText_, _u_, _v_) 的结果。
+          1. 如果 _parseResult_ 是 Parse Node，则返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
@@ -19766,9 +19793,8 @@
             1. 执行 HostFinalizeImportMeta(_importMeta_, _module_)。
             1. 将 _module_.[[ImportMeta]] 设为 _importMeta_。
             1. 返回 _importMeta_。
-          1. 否则，
-            1. 断言：_importMeta_ 是一个 Object。
-            1. 返回 _importMeta_。
+          1. 断言：_importMeta_ 是一个 Object。
+          1. 返回 _importMeta_。
         </emu-alg>
 
         <emu-clause id="sec-hostgetimportmetaproperties" type="host-defined abstract operation">
@@ -19984,10 +20010,9 @@
             1. 令 _deleteStatus_ 为 ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta>。
             1. 若 _deleteStatus_ 为 *false* 且 _ref_.[[Strict]] 为 *true*，抛出 *TypeError* 异常。
             1. 返回 _deleteStatus_。
-          1. 否则，
-            1. 令 _base_ 为 _ref_.[[Base]]。
-            1. 断言：_base_ 是 Environment Record。
-            1. 返回 ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta>。
+          1. 令 _base_ 为 _ref_.[[Base]]。
+          1. 断言：_base_ 是 Environment Record。
+          1. 返回 ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta>。
         </emu-alg>
         <emu-note>
           <p>在严格模式代码中出现的 `delete` 运算符，如果其 |UnaryExpression| 是对变量、函数参数或函数名的直接引用，则抛出 *SyntaxError*；另外，若删除的属性具有 { [[Configurable]]: *false* }（或以其他方式不可删除），则抛出 *TypeError*。</p>
@@ -20059,40 +20084,36 @@
     </emu-clause>
 
     <emu-clause id="sec-unary-minus-operator">
-      <h1>一元 `-` 运算符 (Unary `-` Operator)</h1>
+      <h1>一元 `-` 运算符</h1>
       <emu-note>
-        <p>一元 `-` 运算符将其操作数先转换为数值再取相反数。对 *+0*<sub>𝔽</sub> 取负得到 *-0*<sub>𝔽</sub>；对 *-0*<sub>𝔽</sub> 取负得到 *+0*<sub>𝔽</sub>。</p>
+        <p>一元 `-` 运算符会将其操作数转换为数值类型，然后进行取负。对 *+0*<sub>𝔽</sub> 取负会得到 *-0*<sub>𝔽</sub>，对 *-0*<sub>𝔽</sub> 取负会得到 *+0*<sub>𝔽</sub>。</p>
       </emu-note>
 
       <emu-clause id="sec-unary-minus-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>运行时语义：求值 (Runtime Semantics: Evaluation)</h1>
+        <h1>运行时语义：求值</h1>
         <emu-grammar>UnaryExpression : `-` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. 令 _expr_ 为 ? Evaluation of |UnaryExpression|。<br>
-          1. 令 _oldValue_ 为 ? ToNumeric(? GetValue(_expr_))。<br>
-          1. 若 _oldValue_ 是 Number，则
-            1. 返回 Number::unaryMinus(_oldValue_)。
-          1. 否则，
-            1. 断言：_oldValue_ 为 BigInt。
-            1. 返回 BigInt::unaryMinus(_oldValue_)。
+          1. 令 _expr_ 为 ? 对 |UnaryExpression| 的求值结果。
+          1. 令 _oldValue_ 为 ? ToNumeric(? GetValue(_expr_)) 的结果。
+          1. 如果 _oldValue_ 是 Number，则返回 Number::unaryMinus(_oldValue_)。
+          1. 断言：_oldValue_ 是 BigInt。
+          1. 返回 BigInt::unaryMinus(_oldValue_)。
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-bitwise-not-operator">
-      <h1>按位取反运算符 (Bitwise NOT Operator `~`)</h1>
+      <h1>按位非运算符（ `~` ）</h1>
 
       <emu-clause id="sec-bitwise-not-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>运行时语义：求值 (Runtime Semantics: Evaluation)</h1>
+        <h1>运行时语义：求值</h1>
         <emu-grammar>UnaryExpression : `~` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. 令 _expr_ 为 ? Evaluation of |UnaryExpression|。<br>
-          1. 令 _oldValue_ 为 ? ToNumeric(? GetValue(_expr_))。<br>
-          1. 若 _oldValue_ 是 Number，则
-            1. 返回 Number::bitwiseNOT(_oldValue_)。
-          1. 否则，
-            1. 断言：_oldValue_ 为 BigInt。
-            1. 返回 BigInt::bitwiseNOT(_oldValue_)。
+          1. 令 _expr_ 为 ? 对 |UnaryExpression| 的求值结果。
+          1. 令 _oldValue_ 为 ? ToNumeric(? GetValue(_expr_)) 的结果。
+          1. 如果 _oldValue_ 是 Number，则返回 Number::bitwiseNOT(_oldValue_)。
+          1. 断言：_oldValue_ 是 BigInt。
+          1. 返回 BigInt::bitwiseNOT(_oldValue_)。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -20283,71 +20304,75 @@
     </emu-note>
 
     <emu-clause id="sec-relational-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>运行时语义：求值 (Runtime Semantics: Evaluation)</h1>
+      <h1>运行时语义：求值</h1>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 ? IsLessThan(_lVal_, _rVal_, *true*)。<br>
-        1. 若 _r_ 为 *undefined*，返回 *false*；否则返回 _r_。
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 ? IsLessThan(_lVal_, _rVal_, *true*) 的结果。
+        1. 如果 _r_ 为 *undefined*，返回 *false*。
+        1. 返回 _r_。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 ? IsLessThan(_rVal_, _lVal_, *false*)。<br>
-        1. 若 _r_ 为 *undefined*，返回 *false*；否则返回 _r_。
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 ? IsLessThan(_rVal_, _lVal_, *false*) 的结果。
+        1. 如果 _r_ 为 *undefined*，返回 *false*。
+        1. 返回 _r_。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 ? IsLessThan(_rVal_, _lVal_, *false*)。<br>
-        1. 若 _r_ 为 *true* 或 *undefined*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 ? IsLessThan(_rVal_, _lVal_, *false*) 的结果。
+        1. 如果 _r_ 为 *true* 或 *undefined*，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 令 _r_ 为 ? IsLessThan(_lVal_, _rVal_, *true*)。<br>
-        1. 若 _r_ 为 *true* 或 *undefined*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 ? IsLessThan(_lVal_, _rVal_, *true*) 的结果。
+        1. 如果 _r_ 为 *true* 或 *undefined*，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `instanceof` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
         1. 返回 ? InstanceofOperator(_lVal_, _rVal_)。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `in` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |RelationalExpression|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 若 _rVal_ 不是 Object，抛出 *TypeError* 异常。<br>
-        1. 返回 ? HasProperty(_rVal_, ? ToPropertyKey(_lVal_))。
+        1. 令 _lRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 如果 _rVal_ 不是对象，抛出一个 *TypeError* 异常。
+        1. 返回 ? HasProperty(_rVal_, ? ToPropertyKey(_lVal_)) 的结果。
       </emu-alg>
       <emu-grammar>RelationalExpression : PrivateIdentifier `in` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 令 _privateIdentifier_ 为 |PrivateIdentifier| 的 StringValue。<br>
-        1. 令 _rRef_ 为 ? Evaluation of |ShiftExpression|。<br>
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。<br>
-        1. 若 _rVal_ 不是 Object，抛出 *TypeError* 异常。<br>
-        1. 令 _privateEnv_ 为正在运行的执行上下文的 PrivateEnvironment。<br>
-        1. 断言：_privateEnv_ 非 *null*。<br>
-        1. 令 _privateName_ 为 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)。<br>
-        1. 若 PrivateElementFind(_rVal_, _privateName_) 非 ~empty~，返回 *true*。<br>
-        1. 返回 *false*。
+        1. 令 _privateIdentifier_ 为 |PrivateIdentifier| 的 StringValue。
+        1. 令 _rRef_ 为 ? 对 |ShiftExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 如果 _rVal_ 不是对象，抛出一个 *TypeError* 异常。
+        1. 令 _privateEnv_ 为正在运行执行上下文的 PrivateEnvironment。
+        1. 断言：_privateEnv_ 不为 *null*。
+        1. 令 _privateName_ 为 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_) 的结果。
+        1. 如果 PrivateElementFind(_rVal_, _privateName_) 为 ~empty~，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
     </emu-clause>
 
@@ -20395,62 +20420,64 @@
       <h1>运行时语义：求值</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
-        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
+        1. 令 _lRef_ 为 ? 对 |EqualityExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
         1. 返回 ? IsLooselyEqual(_rVal_, _lVal_)。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
-        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
-        1. 令 _r_ 为 ? IsLooselyEqual(_rVal_, _lVal_)。
-        1. 如果 _r_ 为 *true*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为 ? 对 |EqualityExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 ? IsLooselyEqual(_rVal_, _lVal_) 的结果。
+        1. 如果 _r_ 是 *true*，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
-        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
+        1. 令 _lRef_ 为 ? 对 |EqualityExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
         1. 返回 IsStrictlyEqual(_rVal_, _lVal_)。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为对 |EqualityExpression| 的求值结果 ?。
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。
-        1. 令 _rRef_ 为对 |RelationalExpression| 的求值结果 ?。
-        1. 令 _rVal_ 为 ? GetValue(_rRef_)。
-        1. 令 _r_ 为 IsStrictlyEqual(_rVal_, _lVal_)。
-        1. 如果 _r_ 为 *true*，返回 *false*；否则返回 *true*。
+        1. 令 _lRef_ 为 ? 对 |EqualityExpression| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 令 _rRef_ 为 ? 对 |RelationalExpression| 的求值结果。
+        1. 令 _rVal_ 为 ? GetValue(_rRef_) 的结果。
+        1. 令 _r_ 为 IsStrictlyEqual(_rVal_, _lVal_) 的结果。
+        1. 如果 _r_ 是 *true*，返回 *false*。
+        1. 返回 *true*。
       </emu-alg>
       <emu-note>
-        <p>相等运算符保持以下不变量：</p>
+        <p>等号运算符维持如下不变式：</p>
         <ul>
           <li>
             `A != B` 等价于 `!(A == B)`。
           </li>
           <li>
-            `A == B` 等价于 `B == A`，但 `A` 和 `B` 的求值顺序除外。
+            `A == B` 等价于 `B == A`，除了 `A` 和 `B` 的求值顺序不同外。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>相等运算符并非总是具有传递性。例如，可能存在两个不同的 String 对象，每个都表示相同的字符串值；每个 String 对象与字符串值使用 `==` 运算符时都为相等，但这两个 String 对象彼此并不相等。例如：</p>
+        <p>等于运算符并不总是具有传递性。例如，可能存在两个独立的字符串对象，每个对象表示相同的字符串值；每个字符串对象与该字符串值通过 `==` 运算符将被认为相等，但这两个字符串对象互相并不相等。例如：</p>
         <ul>
           <li>
-            `new String("a") == "a"` 与 `"a" == new String("a")` 都为 *true*。
+            `new String("a") == "a"` 和 `"a" == new String("a")` 都是 *true*。
           </li>
           <li>
-            `new String("a") == new String("a")` 为 *false*。
+            `new String("a") == new String("a")` 是 *false*。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>字符串的比较仅对码元值序列使用简单的相等测试。不尝试使用 Unicode 规范中定义的更复杂、更有语义的字符或字符串相等与排序定义。因此，即便字符串根据 Unicode 标准为规范等价，也可能测试为不等。实际上，本算法假设两个字符串已处于规范化形式。</p>
+        <p>字符串的比较只对码元值序列进行简单的相等性测试。不会使用 Unicode 规范中定义的更复杂、语义化的字符或字符串等价以及排序顺序。因此，即使根据 Unicode 标准规范化后相等的字符串值，也可能被判定为不相等。实际上，该算法认为两个字符串已经处于归一化形式。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -20536,13 +20563,11 @@
       </emu-alg>
       <emu-grammar>CoalesceExpression : CoalesceExpressionHead `??` BitwiseORExpression</emu-grammar>
       <emu-alg>
-        1. 令 _lRef_ 为 ? Evaluation of |CoalesceExpressionHead|。<br>
-        1. 令 _lVal_ 为 ? GetValue(_lRef_)。<br>
-        1. 若 _lVal_ 为 *undefined* 或 *null*，则
-          1. 令 _rRef_ 为 ? Evaluation of |BitwiseORExpression|。
-          1. 返回 ? GetValue(_rRef_)。
-        1. 否则，
-          1. 返回 _lVal_。
+        1. 令 _lRef_ 为 ? 对 |CoalesceExpressionHead| 的求值结果。
+        1. 令 _lVal_ 为 ? GetValue(_lRef_) 的结果。
+        1. 如果 _lVal_ 既不是 *undefined* 也不是 *null*，返回 _lVal_。
+        1. 令 _rRef_ 为 ? 对 |BitwiseORExpression| 的求值结果。
+        1. 返回 ? GetValue(_rRef_) 的结果。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -20568,9 +20593,8 @@
         1. 若 _lVal_ 为 *true*，则
           1. 令 _trueRef_ 为 ? Evaluation of 第一个 |AssignmentExpression|。<br>
           1. 返回 ? GetValue(_trueRef_)。<br>
-        1. 否则，
-          1. 令 _falseRef_ 为 ? Evaluation of 第二个 |AssignmentExpression|。<br>
-          1. 返回 ? GetValue(_falseRef_)。
+        1. 令 _falseRef_ 为 ? Evaluation of 第二个 |AssignmentExpression|。<br>
+        1. 返回 ? GetValue(_falseRef_)。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21738,12 +21762,11 @@
       </emu-alg>
       <emu-grammar>IfStatement : `if` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 令 _exprRef_ 为 ? Evaluation of |Expression|。
-        1. 令 _exprValue_ 为 ToBoolean(? GetValue(_exprRef_))。
-        1. 若 _exprValue_ 为 *false*，返回 *undefined*。
-        1. 否则，
-          1. 令 _stmtCompletion_ 为 Completion(Evaluation of |Statement|)。
-          1. 返回 ? UpdateEmpty(_stmtCompletion_, *undefined*)。
+        1. 令 _exprRef_ 为 ? 对 |Expression| 的求值结果。
+        1. 令 _exprValue_ 为 ToBoolean(? GetValue(_exprRef_)) 的结果。
+        1. 如果 _exprValue_ 为 *false*，返回 *undefined*。
+        1. 令 _stmtCompletion_ 为 Completion(对 |Statement| 的求值结果)。
+        1. 返回 ? UpdateEmpty(_stmtCompletion_, *undefined*) 的结果。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21929,37 +21952,41 @@
         <dl class="header"></dl>
         <emu-grammar>ForStatement : `for` `(` Expression? `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 若首个 |Expression| 存在，令 _exprRef_ 为其求值；执行 ? GetValue(_exprRef_)。
-          1. 若第二个存在，令 _test_ 为该表达式，否则 ~empty~。
-          1. 若第三个存在，令 _increment_ 为该表达式，否则 ~empty~。
+          1. 如果第一个 |Expression| 存在，则
+            1. 令 _exprRef_ 为对第一个 |Expression| 的求值结果。
+            1. 执行 ? GetValue(_exprRef_)。
+          1. 如果第二个 |Expression| 存在，令 _test_ 为第二个 |Expression|；否则令 _test_ 为 ~empty~。
+          1. 如果第三个 |Expression| 存在，令 _increment_ 为第三个 |Expression|；否则令 _increment_ 为 ~empty~。
           1. 返回 ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_)。
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` `var` VariableDeclarationList `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 执行 ? Evaluation of |VariableDeclarationList|。
-          1. 若首个 |Expression| 存在令 _test_ = 它，否则 ~empty~。
-          1. 若第二个 |Expression| 存在令 _increment_ = 它，否则 ~empty~。
+          1. 执行 ? 对 |VariableDeclarationList| 的求值。
+          1. 如果第一个 |Expression| 存在，令 _test_ 为第一个 |Expression|；否则令 _test_ 为 ~empty~。
+          1. 如果第二个 |Expression| 存在，令 _increment_ 为第二个 |Expression|；否则令 _increment_ 为 ~empty~。
           1. 返回 ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_)。
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 令 _oldEnv_ 为当前执行上下文的 LexicalEnvironment。
+          1. 令 _oldEnv_ 为当前运行执行上下文的 LexicalEnvironment。
           1. 令 _loopEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
-          1. 令 _isConst_ 为 |LexicalDeclaration| 的 IsConstantDeclaration。
+          1. 令 _isConst_ 为 |LexicalDeclaration| 是否为常量声明。
           1. 令 _boundNames_ 为 |LexicalDeclaration| 的 BoundNames。
-          1. 对 _boundNames_ 中每个 _dn_：
-            1. 若 _isConst_ 为 *true*，执行 ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)。
-            1. 否则执行 ! _loopEnv_.CreateMutableBinding(_dn_, *false*)。
-          1. 设置当前执行上下文 LexicalEnvironment 为 _loopEnv_。
-          1. 令 _forDcl_ 为 Completion(Evaluation of |LexicalDeclaration|)。
-          1. 若 _forDcl_ 为突然完成：
-            1. 恢复 LexicalEnvironment 为 _oldEnv_。
+          1. 对 _boundNames_ 的每个元素 _dn_，执行
+            1. 如果 _isConst_ 为 *true*，
+              1. 执行 ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)。
+            1. 否则，
+              1. 执行 ! _loopEnv_.CreateMutableBinding(_dn_, *false*)。
+          1. 设置当前运行执行上下文的 LexicalEnvironment 为 _loopEnv_。
+          1. 令 _forDcl_ 为 Completion(对 |LexicalDeclaration| 的求值结果)。
+          1. 如果 _forDcl_ 是中断完成，则
+            1. 设置当前运行执行上下文的 LexicalEnvironment 为 _oldEnv_。
             1. 返回 ? _forDcl_。
-          1. 若 _isConst_ 为 *false*，令 _perIterationLets_ = _boundNames_；否则为空列表。
-          1. 若首个 |Expression| 存在令 _test_ 为其，否则 ~empty~。
-          1. 若第二个 |Expression| 存在令 _increment_ 为其，否则 ~empty~。
+          1. 如果 _isConst_ 为 *false*，令 _perIterationLets_ 为 _boundNames_；否则令 _perIterationLets_ 为一个新的空列表。
+          1. 如果第一个 |Expression| 存在，令 _test_ 为第一个 |Expression|；否则令 _test_ 为 ~empty~。
+          1. 如果第二个 |Expression| 存在，令 _increment_ 为第二个 |Expression|；否则令 _increment_ 为 ~empty~。
           1. 令 _bodyResult_ 为 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))。
-          1. 恢复 LexicalEnvironment 为 _oldEnv_。
+          1. 设置当前运行执行上下文的 LexicalEnvironment 为 _oldEnv_。
           1. 返回 ? _bodyResult_。
         </emu-alg>
       </emu-clause>
@@ -22252,10 +22279,9 @@
             1. 令 _iterator_ = EnumerateObjectProperties(_obj_)。
             1. 令 _nextMethod_ = ! GetV(_iterator_, *"next"*)。
             1. 返回 Iterator Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }。
-          1. 否则：
-            1. 断言 _iterationKind_ 为 ~iterate~ 或 ~async-iterate~。
-            1. 若为 ~async-iterate~ 则 _iteratorKind_ = ~async~ 否则 ~sync~。
-            1. 返回 ? GetIterator(_exprValue_, _iteratorKind_)。
+          1. 断言 _iterationKind_ 为 ~iterate~ 或 ~async-iterate~。
+          1. 若为 ~async-iterate~ 则 _iteratorKind_ = ~async~ 否则 ~sync~。
+          1. 返回 ? GetIterator(_exprValue_, _iteratorKind_)。
         </emu-alg>
       </emu-clause>
 
@@ -22273,32 +22299,32 @@
         </h1>
         <dl class="header"></dl>
         <emu-alg>
-          1. 如果未提供 _iteratorKind_，则将 _iteratorKind_ 设为 ~sync~。
+          1. 如果 _iteratorKind_ 不存在，则将 _iteratorKind_ 设为 ~sync~。
           1. 令 _oldEnv_ 为当前运行执行上下文的 LexicalEnvironment。
           1. 令 _V_ 为 *undefined*。
-          1. 令 _destructuring_ 为 _lhs_ 的 IsDestructuring。
-          1. 如果 _destructuring_ 为 *true* 且 _lhsKind_ 为 ~assignment~，则
+          1. 令 _destructuring_ 为 _lhs_ 是否构造赋值（IsDestructuring）。
+          1. 如果 _destructuring_ 为 *true* 并且 _lhsKind_ 为 ~assignment~，则
             1. 断言：_lhs_ 是 |LeftHandSideExpression|。
             1. 令 _assignmentPattern_ 为 _lhs_ 所涵盖的 |AssignmentPattern|。
-          1. 重复，
+          1. 重复执行，
             1. 令 _nextResult_ 为 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])。
             1. 如果 _iteratorKind_ 为 ~async~，则将 _nextResult_ 设为 ? Await(_nextResult_)。
-            1. 如果 _nextResult_ 不是一个对象，则抛出 *TypeError* 异常。
+            1. 如果 _nextResult_ 不是对象，抛出 *TypeError* 异常。
             1. 令 _done_ 为 ? IteratorComplete(_nextResult_)。
             1. 如果 _done_ 为 *true*，返回 _V_。
             1. 令 _nextValue_ 为 ? IteratorValue(_nextResult_)。
             1. 如果 _lhsKind_ 为 ~assignment~ 或 ~var-binding~，则
               1. 如果 _destructuring_ 为 *true*，则
                 1. 如果 _lhsKind_ 为 ~assignment~，则
-                  1. 令 _status_ 为 Completion(DestructuringAssignmentEvaluation of _assignmentPattern_ with argument _nextValue_)。
+                  1. 令 _status_ 为 Completion(带参数 _nextValue_ 的 DestructuringAssignmentEvaluation(_assignmentPattern_))。
                 1. 否则，
                   1. 断言：_lhsKind_ 为 ~var-binding~。
                   1. 断言：_lhs_ 是 |ForBinding|。
-                  1. 令 _status_ 为 Completion(BindingInitialization of _lhs_ with arguments _nextValue_ 和 *undefined*)。
+                  1. 令 _status_ 为 Completion(带参数 _nextValue_ 和 *undefined* 的 BindingInitialization(_lhs_))。
               1. 否则，
-                1. 令 _lhsRef_ 为 Completion(Evaluation of _lhs_)。（它可能会被重复求值。）
-                1. 如果 _lhsKind_ 为 ~assignment~ 且 _lhs_ 的 AssignmentTargetType 为 ~web-compat~，则抛出 *ReferenceError* 异常。
-                1. 如果 _lhsRef_ 是一个 abrupt completion，则
+                1. 令 _lhsRef_ 为 Completion(Evaluation(_lhs_))。（可能会重复执行求值。）
+                1. 如果 _lhsKind_ 为 ~assignment~ 且 AssignmentTargetType(_lhs_) 为 ~web-compat~，抛出 *ReferenceError* 异常。
+                1. 如果 _lhsRef_ 是中断完成，则
                   1. 令 _status_ 为 _lhsRef_。
                 1. 否则，
                   1. 令 _status_ 为 Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))。
@@ -22306,34 +22332,30 @@
               1. 断言：_lhsKind_ 为 ~lexical-binding~。
               1. 断言：_lhs_ 是 |ForDeclaration|。
               1. 令 _iterationEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
-              1. 执行 ForDeclarationBindingInstantiation of _lhs_ with argument _iterationEnv_。
-              1. 设置当前运行执行上下文的 LexicalEnvironment 为 _iterationEnv_。
+              1. 执行 ForDeclarationBindingInstantiation(_lhs_, _iterationEnv_)。
+              1. 将当前运行执行上下文的 LexicalEnvironment 设为 _iterationEnv_。
               1. 如果 _destructuring_ 为 *true*，则
-                1. 令 _status_ 为 Completion(ForDeclarationBindingInitialization of _lhs_ with arguments _nextValue_ 和 _iterationEnv_)。
+                1. 令 _status_ 为 Completion(ForDeclarationBindingInitialization(_lhs_, _nextValue_, _iterationEnv_))。
               1. 否则，
-                1. 断言：_lhs_ 只绑定了一个名字。
+                1. 断言：_lhs_ 只绑定了一个名称。
                 1. 令 _lhsName_ 为 _lhs_ 的 BoundNames 唯一元素。
                 1. 令 _lhsRef_ 为 ! ResolveBinding(_lhsName_)。
                 1. 令 _status_ 为 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))。
-            1. 如果 _status_ 是 abrupt completion，则
-              1. 设置当前运行执行上下文的 LexicalEnvironment 为 _oldEnv_。
-              1. 如果 _iterationKind_ 为 ~enumerate~，则
-                1. 返回 ? _status_。
-              1. 否则，
-                1. 断言：_iterationKind_ 为 ~iterate~。
-                1. 如果 _iteratorKind_ 为 ~async~，返回 ? AsyncIteratorClose(_iteratorRecord_, _status_)。
-                1. 返回 ? IteratorClose(_iteratorRecord_, _status_)。
-            1. 令 _result_ 为 Completion(Evaluation of _stmt_)。
-            1. 设置当前运行执行上下文的 LexicalEnvironment 为 _oldEnv_。
+            1. 如果 _status_ 是中断完成，则
+              1. 将当前运行执行上下文的 LexicalEnvironment 设为 _oldEnv_。
+              1. 如果 _iterationKind_ 为 ~enumerate~，返回 ? _status_。
+              1. 断言：_iterationKind_ 为 ~iterate~。
+              1. 如果 _iteratorKind_ 为 ~async~，返回 ? AsyncIteratorClose(_iteratorRecord_, _status_)。
+              1. 返回 ? IteratorClose(_iteratorRecord_, _status_)。
+            1. 令 _result_ 为 Completion(Evaluation(_stmt_))。
+            1. 将当前运行执行上下文的 LexicalEnvironment 设为 _oldEnv_。
             1. 如果 LoopContinues(_result_, _labelSet_) 为 *false*，则
               1. 设置 _status_ 为 Completion(UpdateEmpty(_result_, _V_))。
-              1. 如果 _iterationKind_ 为 ~enumerate~，则
-                1. 返回 ? _status_。
-              1. 否则，
-                1. 断言：_iterationKind_ 为 ~iterate~。
-                1. 如果 _iteratorKind_ 为 ~async~，返回 ? AsyncIteratorClose(_iteratorRecord_, _status_)。
-                1. 返回 ? IteratorClose(_iteratorRecord_, _status_)。
-            1. 如果 _result_.[[Value]] 不是 ~empty~，则将 _V_ 设为 _result_.[[Value]]。
+              1. 如果 _iterationKind_ 为 ~enumerate~，返回 ? _status_。
+              1. 断言：_iterationKind_ 为 ~iterate~。
+              1. 如果 _iteratorKind_ 为 ~async~，返回 ? AsyncIteratorClose(_iteratorRecord_, _status_)。
+              1. 返回 ? IteratorClose(_iteratorRecord_, _status_)。
+            1. 如果 _result_.[[Value]] 不为 ~empty~，则将 _V_ 设为 _result_.[[Value]]。
         </emu-alg>
       </emu-clause>
 
@@ -23029,7 +23051,7 @@
         1. 若实现定义的调试设施可用且启用：
           1. 执行实现定义调试动作。
           1. 返回实现定义的新 Completion Record。
-        1. 否则返回 ~empty~。
+        1. 返回 ~empty~。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -23420,7 +23442,8 @@
       </dl>
       <emu-grammar>FunctionBody : FunctionStatementList</emu-grammar>
       <emu-alg>
-        1. 若 |FunctionBody| 的指令序言 (Directive Prologue) 含有 Use Strict 指令，返回 *true*；否则返回 *false*。
+        1. 如果 |FunctionBody| 的指令序言（Directive Prologue）包含 Use Strict 指令，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
     </emu-clause>
 
@@ -23811,10 +23834,9 @@
         1. 执行 SetFunctionName(_closure_, _propKey_, *"get"*)。
         1. 若 _propKey_ 是 Private Name，则
           1. 返回 PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: _closure_, [[Set]]: *undefined* }。
-        1. 否则，
-          1. 令 _desc_ 为 PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
-          1. 执行 ? DefinePropertyOrThrow(_object_, _propKey_, _desc_)。
-          1. 返回 ~unused~。
+        1. 令 _desc_ 为 PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
+        1. 执行 ? DefinePropertyOrThrow(_object_, _propKey_, _desc_)。
+        1. 返回 ~unused~。
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -23827,10 +23849,9 @@
         1. 执行 SetFunctionName(_closure_, _propKey_, *"set"*)。
         1. 若 _propKey_ 是 Private Name，则
           1. 返回 PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: *undefined*, [[Set]]: _closure_ }。
-        1. 否则，
-          1. 令 _desc_ 为 PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
-          1. 执行 ? DefinePropertyOrThrow(_object_, _propKey_, _desc_)。
-          1. 返回 ~unused~。
+        1. 令 _desc_ 为 PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
+        1. 执行 ? DefinePropertyOrThrow(_object_, _propKey_, _desc_)。
+        1. 返回 ~unused~。
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25813,7 +25834,8 @@
       </dl>
       <emu-grammar>Script : ScriptBody?</emu-grammar>
       <emu-alg>
-        1. 若 |ScriptBody| 存在且 |ScriptBody| 的指令序言包含 Use Strict 指令，返回 *true*；否则返回 *false*。
+        1. 如果 |ScriptBody| 存在且其指令序言（Directive Prologue）包含 Use Strict 指令，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
     </emu-clause>
 
@@ -27024,51 +27046,54 @@
               </dl>
 
               <emu-alg>
-                1. 若 _module_ 非 Cyclic Module Record，则
+                1. 如果 _module_ 不是循环模块记录，则
                   1. 执行 ? EvaluateModuleSync(_module_)。
                   1. 返回 _index_。
-                1. 若 _module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~，则
-                  1. 若 [[EvaluationError]] 为 ~empty~，返回 _index_。
-                  1. 否则返回 ? _module_.[[EvaluationError]]。
-                1. 若 _module_.[[Status]] 为 ~evaluating~，返回 _index_。
+                1. 如果 _module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~，则
+                  1. 如果 _module_.[[EvaluationError]] 为 ~empty~，返回 _index_。
+                  1. 返回 ? _module_.[[EvaluationError]]。
+                1. 如果 _module_.[[Status]] 为 ~evaluating~，返回 _index_。
                 1. 断言：_module_.[[Status]] 为 ~linked~。
-                1. 设 _module_.[[Status]] = ~evaluating~。
-                1. 令 _moduleIndex_ = _index_。
-                1. 设 _module_.[[DFSAncestorIndex]] = _index_。
-                1. 设 _module_.[[PendingAsyncDependencies]] = 0。
-                1. 设 _index_ = _index_ + 1。
-                1. 将 _module_ 追加至 _stack_。
-                1. 对 _module_.[[RequestedModules]] 每个 ModuleRequest Record _request_：
-                  1. 令 _requiredModule_ = GetImportedModule(_module_, _request_)。
-                  1. 设 _index_ = ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)。
-                  1. 若 _requiredModule_ 为 Cyclic Module Record，则
-                    1. 断言：其 [[Status]] 属于 ~evaluating~, ~evaluating-async~, ~evaluated~。
-                    1. 断言：当且仅当 _stack_ 含其时状态为 ~evaluating~。
-                    1. 若为 ~evaluating~，设 _module_.[[DFSAncestorIndex]] = min(两者索引)。
+                1. 设置 _module_.[[Status]] 为 ~evaluating~。
+                1. 令 _moduleIndex_ 为 _index_。
+                1. 设置 _module_.[[DFSAncestorIndex]] 为 _index_。
+                1. 设置 _module_.[[PendingAsyncDependencies]] 为 0。
+                1. 设置 _index_ 为 _index_ + 1。
+                1. 将 _module_ 添加到 _stack_。
+                1. 对 _module_.[[RequestedModules]] 中的每个 ModuleRequest 记录 _request_，执行
+                  1. 令 _requiredModule_ 为 GetImportedModule(_module_, _request_)。
+                  1. 设置 _index_ 为 ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)。
+                  1. 如果 _requiredModule_ 是循环模块记录，则
+                    1. 断言：_requiredModule_.[[Status]] 是 ~evaluating~、~evaluating-async~ 或 ~evaluated~ 之一。
+                    1. 断言：仅当 _stack_ 包含 _requiredModule_ 时，_requiredModule_.[[Status]] 为 ~evaluating~。
+                    1. 如果 _requiredModule_.[[Status]] 为 ~evaluating~，则
+                      1. 设置 _module_.[[DFSAncestorIndex]] 为 min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]])。
                     1. 否则，
-                      1. 设 _requiredModule_ = _requiredModule_.[[CycleRoot]]。
-                      1. 断言：其 [[Status]] 为 ~evaluating-async~ 或 ~evaluated~。
-                      1. 若其 [[EvaluationError]] 非 ~empty~，返回 ? 该错误。
-                    1. 若 _requiredModule_.[[AsyncEvaluationOrder]] 为整数，则
-                      1. 设 _module_.[[PendingAsyncDependencies]] += 1。
-                      1. 将 _module_ 追加至 _requiredModule_.[[AsyncParentModules]]。
-                1. 若 _module_.[[PendingAsyncDependencies]] > 0 或 [[HasTLA]] 为 *true*，则
+                      1. 设置 _requiredModule_ 为 _requiredModule_.[[CycleRoot]]。
+                      1. 断言：_requiredModule_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~。
+                      1. 如果 _requiredModule_.[[EvaluationError]] 不为 ~empty~，返回 ? _requiredModule_.[[EvaluationError]]。
+                    1. 如果 _requiredModule_.[[AsyncEvaluationOrder]] 是整数，则
+                      1. 设置 _module_.[[PendingAsyncDependencies]] 为 _module_.[[PendingAsyncDependencies]] + 1。
+                      1. 将 _module_ 添加到 _requiredModule_.[[AsyncParentModules]]。
+                1. 如果 _module_.[[PendingAsyncDependencies]] > 0 或 _module_.[[HasTLA]] 为 *true*，则
                   1. 断言：_module_.[[AsyncEvaluationOrder]] 为 ~unset~。
-                  1. 设 _module_.[[AsyncEvaluationOrder]] = IncrementModuleAsyncEvaluationCount()。
-                  1. 若 _module_.[[PendingAsyncDependencies]] = 0，执行 ExecuteAsyncModule(_module_)。
+                  1. 设置 _module_.[[AsyncEvaluationOrder]] 为 IncrementModuleAsyncEvaluationCount()。
+                  1. 如果 _module_.[[PendingAsyncDependencies]] = 0，则执行 ExecuteAsyncModule(_module_)。
                 1. 否则，
                   1. 执行 ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>。
-                1. 断言：_module_ 在 _stack_ 中仅出现一次。
+                1. 断言：_module_ 在 _stack_ 中正好出现一次。
                 1. 断言：_module_.[[DFSAncestorIndex]] ≤ _moduleIndex_。
-                1. 若 _module_.[[DFSAncestorIndex]] = _moduleIndex_，则
-                  1. 令 _done_ = *false*。
-                  1. 当 _done_ 为 *false*：
-                    1. 令 _requiredModule_ 为 _stack_ 最末元素并移除。
-                    1. 断言：其为 Cyclic Module Record。
-                    1. 断言：其 [[AsyncEvaluationOrder]] 为整数或 ~unset~。
-                    1. 若为 ~unset~，设其 [[Status]] = ~evaluated~；否则设为 ~evaluating-async~。
-                    1. 若与 _module_ 相同，设 _done_ = *true*。
-                    1. 设 _requiredModule_.[[CycleRoot]] = _module_。
+                1. 如果 _module_.[[DFSAncestorIndex]] = _moduleIndex_，则
+                  1. 令 _done_ 为 *false*。
+                  1. 当 _done_ 为 *false* 时，重复
+                    1. 令 _requiredModule_ 为 _stack_ 的最后一个元素。
+                    1. 移除 _stack_ 的最后一个元素。
+                    1. 断言：_requiredModule_ 是循环模块记录。
+                    1. 断言：_requiredModule_.[[AsyncEvaluationOrder]] 为整数或 ~unset~。
+                    1. 如果 _requiredModule_.[[AsyncEvaluationOrder]] 为 ~unset~，设置 _requiredModule_.[[Status]] 为 ~evaluated~。
+                    1. 否则，设置 _requiredModule_.[[Status]] 为 ~evaluating-async~。
+                    1. 如果 _requiredModule_ 和 _module_ 是同一个模块记录，设置 _done_ 为 *true*。
+                    1. 设置 _requiredModule_.[[CycleRoot]] 为 _module_。
                 1. 返回 _index_。
               </emu-alg>
               <emu-note>
@@ -28156,10 +28181,9 @@
                   1. 如果 _e_.[[ImportName]] 为 ~all~，则
                     1. 断言：_module_ 不提供此导出的直接绑定。
                     1. 返回 ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }。
-                  1. 否则，
-                    1. 断言：_module_ 导入了此导出的特定绑定。
-                    1. 断言：_e_.[[ImportName]] 是一个字符串。
-                    1. 返回 _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)。
+                  1. 断言：_module_ 导入了此导出的特定绑定。
+                  1. 断言：_e_.[[ImportName]] 是一个字符串。
+                  1. 返回 _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)。
               1. 如果 _exportName_ 为 *"default"*，则
                 1. 断言：此模块未显式定义 `default` 导出。
                 1. 返回 *null*。
@@ -29592,137 +29616,138 @@
     </emu-clause>
 
     <emu-clause id="sec-isfinite-number">
-      <h1>isFinite ( _number_ )</h1>
-      <p>此函数是 <dfn>%isFinite%</dfn> 本源对象。</p>
-      <p>调用时执行：</p>
+      <h1>isFinite（ _number_ ）</h1>
+      <p>该函数是 <dfn>%isFinite%</dfn> 内建对象。</p>
+      <p>其调用时按以下步骤执行：</p>
       <emu-alg>
-        1. 令 _num_ = ? ToNumber(_number_)。
-        1. 若 _num_ 不是有限值，返回 *false*。
-        1. 否则返回 *true*。
+        1. 令 _num_ 为 ? ToNumber(_number_)。
+        1. 如果 _num_ 是有限值，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-isnan-number">
-      <h1>isNaN ( _number_ )</h1>
-      <p>此函数是 <dfn>%isNaN%</dfn> 本源对象。</p>
-      <p>调用时执行：</p>
+      <h1>isNaN（ _number_ ）</h1>
+      <p>该函数是 <dfn>%isNaN%</dfn> 内建对象。</p>
+      <p>其调用时按以下步骤执行：</p>
       <emu-alg>
-        1. 令 _num_ = ? ToNumber(_number_)。
-        1. 若 _num_ 为 *NaN*，返回 *true*。
-        1. 否则返回 *false*。
+        1. 令 _num_ 为 ? ToNumber(_number_)。
+        1. 如果 _num_ 是 *NaN*，返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
       <emu-note>
-        <p>在 ECMAScript 中检测值 `X` 是否为 *NaN* 的可靠方式是 `X !== X`；仅当且仅当 `X` 为 *NaN* 时结果为 *true*。</p>
+        <p>ECMAScript 代码可靠检测值 `X` 是否为 *NaN* 的方法是表达式 `X !== X`。仅当 `X` 是 *NaN* 时结果为 *true*。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parsefloat-string">
-      <h1>parseFloat ( _string_ )</h1>
-      <p>该函数根据对参数 _string_ 内容按十进制字面量的解释产生一个 Number 值。</p>
-      <p>它是 <dfn>%parseFloat%</dfn> 本源对象。</p>
-      <p>调用时执行：</p>
+      <h1>parseFloat（ _string_ ）</h1>
+      <p>该函数根据参数 _string_ 内容按十进制字面量解析，生成 Number 值。</p>
+      <p>它是 <dfn>%parseFloat%</dfn> 内建对象。</p>
+      <p>其调用时按以下步骤执行：</p>
       <emu-alg>
-        1. 令 _inputString_ = ? ToString(_string_)。
-        1. 令 _trimmedString_ = ! TrimString(_inputString_, ~start~)。
-        1. 令 _trimmed_ = StringToCodePoints(_trimmedString_)。
-        1. 令 _trimmedPrefix_ 为 _trimmed_ 的最长前缀，满足 |StrDecimalLiteral| 语法，可能等于 _trimmed_ 本身。若不存在，返回 *NaN*。
-        1. 令 _parsedNumber_ = ParseText(_trimmedPrefix_, |StrDecimalLiteral|)。
-        1. 断言：_parsedNumber_ 为解析节点。
+        1. 令 _inputString_ 为 ? ToString(_string_)。
+        1. 令 _trimmedString_ 为 ! TrimString(_inputString_, ~start~)。
+        1. 令 _trimmed_ 为 StringToCodePoints(_trimmedString_)。
+        1. 令 _trimmedPrefix_ 为满足 |StrDecimalLiteral| 语法的 _trimmed_ 的最长前缀，可能为自身。如无前缀，返回 *NaN*。
+        1. 令 _parsedNumber_ 为 ParseText(_trimmedPrefix_, |StrDecimalLiteral|)。
+        1. 断言：_parsedNumber_ 是 Parse Node。
         1. 返回 _parsedNumber_ 的 StringNumericValue。
       </emu-alg>
       <emu-note>
-        <p>该函数可能仅将 _string_ 的前导部分解释为 Number；忽略无法视为十进制字面量部分的代码单元，且不会指示有代码单元被忽略。</p>
+        <p>该函数可能仅解释 _string_ 的前导部分为 Number 值；它会忽略无法作为十进制字面量标记的码元，且不会提示这些码元被忽略。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parseint-string-radix">
-      <h1>parseInt ( _string_, _radix_ )</h1>
-      <p>该函数依据指定 _radix_ 对 _string_ 内容的解释产生一个整数 Number。忽略 _string_ 前导空白。若 _radix_ 强制为 0（如其为 *undefined*），除非数字表示以 *"0x"* 或 *"0X"* 开头，否则假设为 10；若以其开头则假设为 16。若 _radix_ 为 16，数字表示可选以 *"0x"* 或 *"0X"* 开头。</p>
-      <p>它是 <dfn>%parseInt%</dfn> 本源对象。</p>
-      <p>调用时执行：</p>
+      <h1>parseInt（ _string_ ， _radix_ ）</h1>
+      <p>该函数根据指定 _radix_ 解释 _string_ 内容，生成整数 Number。_string_ 开头空白会被忽略。若 _radix_ 转换为 0（如为 *undefined*），则视为 10，除非数字表示以 *"0x"* 或 *"0X"* 开头，此时为 16。若 _radix_ 为 16，数字表示可以以 *"0x"* 或 *"0X"* 开头。</p>
+      <p>它是 <dfn>%parseInt%</dfn> 内建对象。</p>
+      <p>其调用时按以下步骤执行：</p>
       <emu-alg>
-        1. 令 _inputString_ = ? ToString(_string_)。
-        1. 令 _S_ = ! TrimString(_inputString_, ~start~)。
-        1. 令 _sign_ = 1。
-        1. 若 _S_ 非空且首代码单元为 0x002D，设 _sign_ = -1。
-        1. 若 _S_ 非空且首代码单元为 0x002B 或 0x002D，设 _S_ 为去掉首单元的子串。
-        1. 令 _R_ = ℝ(? ToInt32(_radix_))。
-        1. 令 _stripPrefix_ = *true*。
+        1. 令 _inputString_ 为 ? ToString(_string_)。
+        1. 令 _S_ 为 ! TrimString(_inputString_, ~start~)。
+        1. 令 _sign_ 为 1。
+        1. 若 _S_ 非空且首码元为 0x002D（减号），令 _sign_ 为 -1。
+        1. 若 _S_ 非空且首码元为 0x002B（加号）或 0x002D（减号），令 _S_ 为 _S_ 从索引 1 开始的子串。
+        1. 令 _R_ 为 ℝ(? ToInt32(_radix_))。
+        1. 令 _stripPrefix_ 为 *true*。
         1. 若 _R_ ≠ 0，则
           1. 若 _R_ &lt; 2 或 _R_ > 36，返回 *NaN*。
-          1. 若 _R_ ≠ 16，设 _stripPrefix_ = *false*。
-        1. 否则设 _R_ = 10。
+          1. 若 _R_ ≠ 16，令 _stripPrefix_ 为 *false*。
+        1. 否则，
+          1. 令 _R_ 为 10。
         1. 若 _stripPrefix_ 为 *true*，则
-          1. 若 _S_ 长度 ≥ 2 且前两代码单元为 *"0x"* 或 *"0X"*，则
-            1. 设 _S_ 为从索引 2 起子串。
-            1. 设 _R_ = 16。
-        1. 若 _S_ 含有非基数 _R_ 数字的代码单元，令 _end_ 为首此类代码单元索引；否则 _end_ 为 _S_ 长度。
-        1. 令 _Z_ = _S_ 从 0 到 _end_ 的子串。
+          1. 若 _S_ 长度 ≥ 2 且首两个码元为 *"0x"* 或 *"0X"*，
+            1. 令 _S_ 为 _S_ 从索引 2 开始的子串。
+            1. 令 _R_ 为 16。
+        1. 若 _S_ 包含非 radix-_R_ 数码元，令 _end_ 为第一个出现该码元的位置，否则令 _end_ 为 _S_ 长度。
+        1. 令 _Z_ 为 _S_ 从 0 到 _end_ 的子串。
         1. 若 _Z_ 为空，返回 *NaN*。
-        1. 令 _mathInt_ 为以基数-_R_ 表示 _Z_ 的整数值，使用字母 A-Z / a-z 表示 10 到 35。（但若 _R_ = 10 且 _Z_ 含超过 20 个有效数字，实现可将第 21 位及之后替换为 0；若 _R_ 不在 {2,4,8,10,16,32}，_mathInt_ 可为实现近似值。）
+        1. 令 _mathInt_ 为 _Z_ 按 radix-_R_ 表示的整数值，A-Z 与 a-z 代表 10-35。（若 _R_ = 10 且有效数码超 20，20 后每位可变 0；若 _R_ 不为 2、4、8、10、16、32，_mathInt_ 可为实现近似值。）
         1. 若 _mathInt_ = 0，则
           1. 若 _sign_ = -1，返回 *-0*<sub>𝔽</sub>。
           1. 返回 *+0*<sub>𝔽</sub>。
         1. 返回 𝔽(_sign_ × _mathInt_)。
       </emu-alg>
       <emu-note>
-        <p>该函数可能仅将 _string_ 的前导部分解释为整数；忽略无法视为整数表示的代码单元，且不会给出被忽略的提示。</p>
+        <p>该函数可能仅解释 _string_ 前导部分为整数值；忽略不能作为整数表示的码元，且无提示哪些被忽略。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-uri-handling-functions" oldids="sec-uri-syntax-and-semantics">
-      <h1>URI 处理函数 (URI Handling Functions)</h1>
-      <p>统一资源标识符（URI）是识别资源（如网页或文件）及其访问传输协议（如 HTTP、FTP）的字符串。ECMAScript 语言本身除提供按本节描述进行 URI 编解码的函数外，不提供使用 URI 的支持。`encodeURI` 与 `decodeURI` 针对完整 URI；它们假设保留字符具特殊含义（如作为分隔符），故不编码它们。`encodeURIComponent` 与 `decodeURIComponent` 针对 URI 的各个组成部分；它们假设保留字符代表文本，需编码以在该组成部分成为完整 URI 的一部分时避免特殊含义。</p>
+      <h1>URI 处理函数</h1>
+      <p>统一资源标识符（URI）是在互联网中标识资源（如网页、文件）及用于访问它们的协议（如 HTTP、FTP）的字符串。ECMAScript 语言本身不直接支持 URI，仅提供本节定义的用于编码和解码 URI 的函数。`encodeURI` 和 `decodeURI` 处理完整 URI，假定所有保留字符有特殊含义（如分隔符），不做编码；`encodeURIComponent` 与 `decodeURIComponent` 用于 URI 的各部分，假定保留字符只代表文本，需编码以避免作为完整 URI 时产生特殊含义。</p>
       <emu-note>
-        <p>保留字符集合基于 RFC 2396，未反映较新的 RFC 3986 所引入的变化。</p>
+        <p>保留字符集合以 RFC 2396 为基础，不包含 RFC 3986 的新变化。</p>
       </emu-note>
       <emu-note>
-        <p>许多 ECMAScript 实现提供额外操作网页的函数与方法；这些超出本标准范围。</p>
+        <p>许多 ECMAScript 实现提供了其他用于操作网页的函数和方法，这不在本标准范围。</p>
       </emu-note>
 
       <emu-clause id="sec-decodeuri-encodeduri">
-        <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>此函数计算一个新 URI，将每个可能由 `encodeURI` 引入的转义序列与 UTF-8 编码替换为其表示码点的 UTF-16 编码。`encodeURI` 不会引入的转义序列不会被替换。</p>
-        <p>它是 <dfn>%decodeURI%</dfn> 本源对象。</p>
-        <p>调用时执行：</p>
+        <h1>decodeURI（ _encodedURI_ ）</h1>
+        <p>此函数对 URI 进行处理，将 `encodeURI` 可能生成的每个转义序列和 UTF-8 编码替换为其代表码点的 UTF-16 编码。无法由 `encodeURI` 生成的转义序列不被替换。</p>
+        <p>它是 <dfn>%decodeURI%</dfn> 内建对象。</p>
+        <p>其调用时按以下步骤执行：</p>
         <emu-alg>
-          1. 令 _uriString_ = ? ToString(_encodedURI_)。
-          1. 令 _preserveEscapeSet_ = *";/?:@&=+$,#"*。
+          1. 令 _uriString_ 为 ? ToString(_encodedURI_)。
+          1. 令 _preserveEscapeSet_ 为 *";/?:@&=+$,#"*。
           1. 返回 ? Decode(_uriString_, _preserveEscapeSet_)。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-decodeuricomponent-encodeduricomponent">
-        <h1>decodeURIComponent ( _encodedURIComponent_ )</h1>
-        <p>此函数计算新 URI，将每个可能由 `encodeURIComponent` 引入的转义序列与 UTF-8 编码替换为相应码点的 UTF-16 编码。</p>
-        <p>它是 <dfn>%decodeURIComponent%</dfn> 本源对象。</p>
-        <p>调用时执行：</p>
+        <h1>decodeURIComponent（ _encodedURIComponent_ ）</h1>
+        <p>此函数对 URI 进行处理，将 `encodeURIComponent` 可能生成的每个转义序列和 UTF-8 编码替换为其代表码点的 UTF-16 编码。</p>
+        <p>它是 <dfn>%decodeURIComponent%</dfn> 内建对象。</p>
+        <p>其调用时按以下步骤执行：</p>
         <emu-alg>
-          1. 令 _componentString_ = ? ToString(_encodedURIComponent_)。
+          1. 令 _componentString_ 为 ? ToString(_encodedURIComponent_)。
           1. 令 _preserveEscapeSet_ 为空字符串。
           1. 返回 ? Decode(_componentString_, _preserveEscapeSet_)。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-encodeuri-uri">
-        <h1>encodeURI ( _uri_ )</h1>
-        <p>此函数对一个 UTF-16 编码（<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>）的 URI 进行处理，将特定码点的每个实例替换为表示该码点 UTF-8 编码的一至四个转义序列。</p>
-        <p>它是 <dfn>%encodeURI%</dfn> 本源对象。</p>
-        <p>调用时执行：</p>
+        <h1>encodeURI（ _uri_ ）</h1>
+        <p>此函数处理 UTF-16 编码的 URI（<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>），将某些码点替换为一至四个表示 UTF-8 编码的转义序列。</p>
+        <p>它是 <dfn>%encodeURI%</dfn> 内建对象。</p>
+        <p>其调用时按以下步骤执行：</p>
         <emu-alg>
-          1. 令 _uriString_ = ? ToString(_uri_)。
-          1. 令 _extraUnescaped_ = *";/?:@&=+$,#"*。
+          1. 令 _uriString_ 为 ? ToString(_uri_)。
+          1. 令 _extraUnescaped_ 为 *";/?:@&=+$,#"*。
           1. 返回 ? Encode(_uriString_, _extraUnescaped_)。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-encodeuricomponent-uricomponent">
-        <h1>encodeURIComponent ( _uriComponent_ )</h1>
-        <p>此函数对一个 UTF-16 编码（<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>）的 URI 组成部分处理，将特定码点的每个实例替换为表示该码点 UTF-8 编码的一至四个转义序列。</p>
-        <p>它是 <dfn>%encodeURIComponent%</dfn> 本源对象。</p>
-        <p>调用时执行：</p>
+        <h1>encodeURIComponent（ _uriComponent_ ）</h1>
+        <p>此函数处理 UTF-16 编码的 URI（<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>），将某些码点替换为一至四个表示 UTF-8 编码的转义序列。</p>
+        <p>它是 <dfn>%encodeURIComponent%</dfn> 内建对象。</p>
+        <p>其调用时按以下步骤执行：</p>
         <emu-alg>
-          1. 令 _componentString_ = ? ToString(_uriComponent_)。
+          1. 令 _componentString_ 为 ? ToString(_uriComponent_)。
           1. 令 _extraUnescaped_ 为空字符串。
           1. 返回 ? Encode(_componentString_, _extraUnescaped_)。
         </emu-alg>
@@ -29733,35 +29758,35 @@
           Encode (
             _string_: 字符串,
             _extraUnescaped_: 字符串,
-          ): 正常完成（含字符串）或 throw completion
+          ): 返回字符串或抛出异常完成
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>执行 URI 编码与转义，将 _string_ 视为 <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> 所述的 UTF-16 编码码点序列。若字符在 RFC 2396 标记为未保留或出现在 _extraUnescaped_ 中，则不转义。</dd>
+          <dd>执行 URI 编码和转义，将 _string_ 视为 <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> 中描述的 UTF-16 编码码点序列。如某字符被 RFC 2396 判定为未保留或出现在 _extraUnescaped_ 中，则不编码。</dd>
         </dl>
         <emu-alg>
           1. 令 _len_ 为 _string_ 长度。
           1. 令 _R_ 为空字符串。
-          1. 令 _alwaysUnescaped_ 为 ASCII 单词字符与 *"-.!~\*'()"* 的串联。
-          1. 令 _unescapedSet_ = _alwaysUnescaped_ 与 _extraUnescaped_ 的串联。
-          1. 令 _k_ = 0。
-          1. 重复，条件：_k_ &lt; _len_：
-            1. 令 _C_ 为 _string_ 索引 _k_ 的代码单元。
-            1. 若 _unescapedSet_ 包含 _C_，则
-              1. _k_ ← _k_ + 1。
-              1. _R_ ← _R_ 与 _C_ 串联。
+          1. 令 _alwaysUnescaped_ 为 ASCII 字符与 *"-.!~\*'()"* 的串联。
+          1. 令 _unescapedSet_ 为 _alwaysUnescaped_ 与 _extraUnescaped_ 的串联。
+          1. 令 _k_ 为 0。
+          1. 当 _k_ &lt; _len_ 时，重复：
+            1. 令 _C_ 为 _string_ 索引 _k_ 的码元。
+            1. 若 _unescapedSet_ 包含 _C_，
+              1. 令 _k_ 为 _k_ + 1。
+              1. 令 _R_ 为 _R_ 和 _C_ 的串联。
             1. 否则，
-              1. 令 _cp_ = CodePointAt(_string_, _k_)。
-              1. 若 _cp_.[[IsUnpairedSurrogate]] 为 *true*，抛 *URIError*。
-              1. _k_ ← _k_ + _cp_.[[CodeUnitCount]]。
-              1. 令 _Octets_ 为将 _cp_.[[CodePoint]] 进行 UTF-8 转换得到的八位组列表。
-              1. 对 _Octets_ 每个 _octet_：
-                1. 令 _hex_ 为 _octet_ 的大写十六进制字符串。
-                1. _R_ ← _R_ 与 *"%"* 及 StringPad(_hex_, 2, *"0"*, ~start~) 串联。
+              1. 令 _cp_ 为 CodePointAt(_string_, _k_)。
+              1. 若 _cp_.[[IsUnpairedSurrogate]] 为 *true*，抛出 *URIError* 异常。
+              1. 令 _k_ 为 _k_ + _cp_.[[CodeUnitCount]]。
+              1. 令 _Octets_ 为应用 UTF-8 转换到 _cp_.[[CodePoint]] 的字节列表。
+              1. 对每个 _octet_ 属于 _Octets_，
+                1. 令 _hex_ 为 _octet_ 的字符串表示，格式为大写十六进制数。
+                1. 令 _R_ 为 _R_、*"%"* 和 StringPad(_hex_, 2, *"0"*, ~start~) 的串联。
           1. 返回 _R_。
         </emu-alg>
         <emu-note>
-          <p>因百分号编码表示单个八位组，一个码点可能由多个连续转义序列（其 UTF-8 各字节）表示。</p>
+          <p>因百分号编码用于表示单字节，一个码点可能被多个连续转义序列表达（每个 8 位 UTF-8 字节一个转义）。</p>
         </emu-note>
       </emu-clause>
 
@@ -29770,52 +29795,52 @@
           Decode (
             _string_: 字符串,
             _preserveEscapeSet_: 字符串,
-          ): 正常完成（含字符串）或 throw completion
+          ): 返回字符串或抛出异常完成
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>执行 URI 反转义与解码，保留对应 _preserveEscapeSet_ 中基本拉丁字符的转义序列。</dd>
+          <dd>执行 URI 反转义和解码，保留与 _preserveEscapeSet_ 基本拉丁字符对应的转义序列。</dd>
         </dl>
         <emu-alg>
           1. 令 _len_ 为 _string_ 长度。
           1. 令 _R_ 为空字符串。
-          1. 令 _k_ = 0。
-          1. 重复，条件：_k_ &lt; _len_：
-            1. 令 _C_ 为 _string_ 索引 _k_ 的代码单元。
-            1. 令 _S_ = _C_。
-            1. 若 _C_ 为 0x0025，则
-              1. 若 _k_ + 3 > _len_，抛 *URIError*。
-              1. 令 _escape_ 为从 _k_ 到 _k_ + 3 的子串。
-              1. 令 _B_ = ParseHexOctet(_string_, _k_ + 1)。
-              1. 若 _B_ 非整数，抛 *URIError*。
-              1. _k_ ← _k_ + 2。
-              1. 令 _n_ 为 _B_ 中前导 1 比特数。
-              1. 若 _n_ = 0，则
-                1. 令 _asciiChar_ 为数值 _B_ 的代码单元。
-                1. 若 _preserveEscapeSet_ 包含 _asciiChar_，设 _S_ = _escape_；否则 _S_ = _asciiChar_。
+          1. 令 _k_ 为 0。
+          1. 当 _k_ &lt; _len_ 时，重复：
+            1. 令 _C_ 为 _string_ 索引 _k_ 的码元。
+            1. 令 _S_ 为 _C_。
+            1. 若 _C_ 为码元 0x0025（%），则
+              1. 若 _k_ + 3 > _len_，抛出 *URIError* 异常。
+              1. 令 _escape_ 为 _string_ 从 _k_ 到 _k_ + 3 的子串。
+              1. 令 _B_ 为 ParseHexOctet(_string_, _k_ + 1)。
+              1. 若 _B_ 非整数，抛出 *URIError* 异常。
+              1. 令 _k_ 为 _k_ + 2。
+              1. 令 _n_ 为 _B_ 的高位 1 数量。
+              1. 若 _n_ = 0，
+                1. 令 _asciiChar_ 为数值为 _B_ 的码元。
+                1. 若 _preserveEscapeSet_ 包含 _asciiChar_，令 _S_ 为 _escape_；否则令 _S_ 为 _asciiChar_。
               1. 否则，
-                1. 若 _n_ = 1 或 _n_ > 4，抛 *URIError*。
-                1. 令 _Octets_ = « _B_ »。
-                1. 令 _j_ = 1。
-                1. 重复，条件：_j_ &lt; _n_：
-                  1. _k_ ← _k_ + 1。
-                  1. 若 _k_ + 3 > _len_，抛 *URIError*。
-                  1. 若索引 _k_ 代码单元不是 0x0025，抛 *URIError*。
-                  1. 令 _continuationByte_ = ParseHexOctet(_string_, _k_ + 1)。
-                  1. 若其非整数，抛 *URIError*。
-                  1. 追加 _continuationByte_ 至 _Octets_。
-                  1. _k_ ← _k_ + 2。
-                  1. _j_ ← _j_ + 1。
+                1. 若 _n_ = 1 或 _n_ > 4，抛出 *URIError* 异常。
+                1. 令 _Octets_ 为 « _B_ »。
+                1. 令 _j_ 为 1。
+                1. 当 _j_ &lt; _n_ 时，重复：
+                  1. 令 _k_ 为 _k_ + 1。
+                  1. 若 _k_ + 3 > _len_，抛出 *URIError* 异常。
+                  1. 若 _string_ 索引 _k_ 的码元不是 0x0025（%），抛出 *URIError* 异常。
+                  1. 令 _continuationByte_ 为 ParseHexOctet(_string_, _k_ + 1)。
+                  1. 若 _continuationByte_ 非整数，抛出 *URIError* 异常。
+                  1. 向 _Octets_ 追加 _continuationByte_。
+                  1. 令 _k_ 为 _k_ + 2。
+                  1. 令 _j_ 为 _j_ + 1。
                 1. 断言：_Octets_ 长度为 _n_。
-                1. 若 _Octets_ 不含有效 UTF-8 编码，抛 *URIError*。
-                1. 令 _V_ 为对 _Octets_ 应用 UTF-8 转换得到的码点。
-                1. 设 _S_ = UTF16EncodeCodePoint(_V_)。
-            1. _R_ ← _R_ 与 _S_ 串联。
-            1. _k_ ← _k_ + 1。
+                1. 若 _Octets_ 非法 UTF-8 编码码点，抛出 *URIError* 异常。
+                1. 令 _V_ 为对 _Octets_ 应用 UTF-8 转换所得码点（字节列表转 21 位值）。
+                1. 令 _S_ 为 UTF16EncodeCodePoint(_V_)。
+            1. 令 _R_ 为 _R_ 和 _S_ 的串联。
+            1. 令 _k_ 为 _k_ + 1。
           1. 返回 _R_。
         </emu-alg>
         <emu-note>
-          <p>RFC 3629 禁止解码无效 UTF-8 序列。例如，无效序列 0xC0 0x80 不得解码为 0x0000。Decode 算法的实现遇到此类无效序列必须抛 *URIError*。</p>
+          <p>RFC 3629 禁止解码无效 UTF-8 字节序列。例如无效序列 0xC0 0x80 不可解码为码元 0x0000。Decode 实现遇到此类无效序列须抛 *URIError*。</p>
         </emu-note>
       </emu-clause>
 
@@ -29824,20 +29849,20 @@
           ParseHexOctet (
             _string_: 字符串,
             _position_: 非负整数,
-          ): 非负整数或非空 *SyntaxError* 对象列表
+          ): 返回非负整数或 *SyntaxError* 对象非空列表
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>解析 _string_ 中 _position_ 位置的两个十六进制字符序列为无符号 8 位整数。</dd>
+          <dd>解析 _string_ 指定位置的两个十六进制字符为无符号 8 位整数。</dd>
         </dl>
         <emu-alg>
           1. 令 _len_ 为 _string_ 长度。
           1. 断言：_position_ + 2 ≤ _len_。
-          1. 令 _hexDigits_ 为从 _position_ 到 _position_ + 2 的子串。
-          1. 令 _parseResult_ = ParseText(_hexDigits_, |HexDigits[~Sep]|)。
-          1. 若 _parseResult_ 不是解析节点，返回 _parseResult_。
+          1. 令 _hexDigits_ 为 _string_ 从 _position_ 到 _position_ + 2 的子串。
+          1. 令 _parseResult_ 为 ParseText(_hexDigits_, |HexDigits[~Sep]|)。
+          1. 若 _parseResult_ 非 Parse Node，返回 _parseResult_。
           1. 令 _n_ 为 _parseResult_ 的 MV。
-          1. 断言：_n_ 在 [0,255] 范围。
+          1. 断言：_n_ 在 0 到 255（含）之间。
           1. 返回 _n_。
         </emu-alg>
       </emu-clause>
@@ -31032,8 +31057,9 @@
         <h1>Boolean.prototype.toString ( )</h1>
         <p>该方法被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _b_ 为 ? ThisBooleanValue(*this* value)。
-          1. 如果 _b_ 为 *true*，返回 *"true"*；否则返回 *"false"*。
+          1. 令 _b_ 为 ? ThisBooleanValue(*this* 值)。
+          1. 如果 _b_ 为 *true*，返回 *"true"*。
+          1. 返回 *"false"*。
         </emu-alg>
       </emu-clause>
 
@@ -31754,7 +31780,7 @@
         <emu-alg>
           1. 如果 _number_ 不是 Number，返回 *false*。
           1. 如果 _number_ 不是有限值，返回 *false*。
-          1. 否则，返回 *true*。
+          1. 返回 *true*。
         </emu-alg>
       </emu-clause>
 
@@ -31773,7 +31799,7 @@
         <emu-alg>
           1. 如果 _number_ 不是 Number，返回 *false*。
           1. 如果 _number_ 是 *NaN*，返回 *true*。
-          1. 否则，返回 *false*。
+          1. 返回 *false*。
         </emu-alg>
         <emu-note>
           <p>该函数不同于全局 isNaN 函数 (<emu-xref href="#sec-isnan-number"></emu-xref>)，因为它在判断是否为 *NaN* 前不会将其参数转换为 Number。</p>
@@ -32090,7 +32116,7 @@
           1. 如果 NewTarget 不为 *undefined*，抛出 *TypeError* 异常。
           1. 令 _prim_ 为 ? ToPrimitive(_value_, ~number~)。
           1. 如果 _prim_ 是 Number，返回 ? NumberToBigInt(_prim_)。
-          1. 否则，返回 ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta>。
+          1. 返回 ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta>。
         </emu-alg>
 
         <emu-clause id="sec-numbertobigint" type="abstract operation">
@@ -32124,7 +32150,8 @@
           1. 将 _bits_ 设为 ? ToIndex(_bits_)。
           1. 将 _bigint_ 设为 ? ToBigInt(_bigint_)。
           1. 令 _mod_ 为 ℝ(_bigint_) 对 2<sup>_bits_</sup> 取模的结果。
-          1. 如果 _mod_ ≥ 2<sup>_bits_ - 1</sup>，返回 ℤ(_mod_ - 2<sup>_bits_</sup>)；否则返回 ℤ(_mod_)。
+          1. 如果 _mod_ ≥ 2<sup>_bits_ - 1</sup>，返回 ℤ(_mod_ - 2<sup>_bits_</sup>)。
+          1. 返回 ℤ(_mod_)。
         </emu-alg>
       </emu-clause>
 
@@ -32613,7 +32640,8 @@
           1. 令 _a_ 为 ℝ(? ToUint32(_x_))。
           1. 令 _b_ 为 ℝ(? ToUint32(_y_))。
           1. 令 _product_ 为 (_a_ × _b_) 对 2<sup>32</sup> 取模的结果。
-          1. 如果 _product_ ≥ 2<sup>31</sup>，返回 𝔽(_product_ - 2<sup>32</sup>)；否则返回 𝔽(_product_)。
+          1. 如果 _product_ ≥ 2<sup>31</sup>，返回 𝔽(_product_ - 2<sup>32</sup>)。
+          1. 返回 𝔽(_product_)。
         </emu-alg>
       </emu-clause>
 
@@ -33046,7 +33074,8 @@
           <dd>若 _t_ 属于闰年则返回 *1*<sub>𝔽</sub>，否则返回 *+0*<sub>𝔽</sub>。</dd>
         </dl>
         <emu-alg>
-          1. 若 DaysInYear(YearFromTime(_t_)) 为 *366*<sub>𝔽</sub>，则返回 *1*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。
+          1. 如果 DaysInYear(YearFromTime(_t_)) 为 *366*<sub>𝔽</sub>，返回 *1*<sub>𝔽</sub>。
+          1. 返回 *+0*<sub>𝔽</sub>。
         </emu-alg>
       </emu-clause>
 
@@ -34223,9 +34252,9 @@ THH:mm:ss.sss
           1. 执行 ? RequireInternalSlot(_dateObject_, [[DateValue]])。
           1. 令 _t_ 为 _dateObject_.[[DateValue]]。
           1. 令 _y_ 为 ? ToNumber(_year_)。
-          1. 如果 _t_ 为 *NaN*，设置 _t_ 为 *+0*<sub>𝔽</sub>；否则设置 _t_ 为 LocalTime(_t_)。
-          1. 如果 _month_ 未传入，令 _m_ 为 MonthFromTime(_t_)；否则令 _m_ 为 ? ToNumber(_month_)。
-          1. 如果 _date_ 未传入，令 _dt_ 为 DateFromTime(_t_)；否则令 _dt_ 为 ? ToNumber(_date_)。
+          1. 如果 _t_ 是 *NaN*，则设 _t_ 为 *+0*<sub>𝔽</sub>；否则设 _t_ 为 LocalTime(_t_)。
+          1. 如果 _month_ 存在，令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 MonthFromTime(_t_)。
+          1. 如果 _date_ 存在，令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 DateFromTime(_t_)。
           1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))。
           1. 令 _u_ 为 TimeClip(UTC(_newDate_))。
           1. 设置 _dateObject_.[[DateValue]] 为 _u_。
@@ -34388,10 +34417,10 @@ THH:mm:ss.sss
           1. 令 _dateObject_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObject_, [[DateValue]])。
           1. 令 _t_ 为 _dateObject_.[[DateValue]]。
-          1. 如果 _t_ 为 *NaN*，设置 _t_ 为 *+0*<sub>𝔽</sub>。
+          1. 如果 _t_ 是 *NaN*，则设 _t_ 为 *+0*<sub>𝔽</sub>。
           1. 令 _y_ 为 ? ToNumber(_year_)。
-          1. 如果 _month_ 未传入，令 _m_ 为 MonthFromTime(_t_)；否则令 _m_ 为 ? ToNumber(_month_)。
-          1. 如果 _date_ 未传入，令 _dt_ 为 DateFromTime(_t_)；否则令 _dt_ 为 ? ToNumber(_date_)。
+          1. 如果 _month_ 存在，令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 MonthFromTime(_t_)。
+          1. 如果 _date_ 存在，令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 DateFromTime(_t_)。
           1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))。
           1. 令 _v_ 为 TimeClip(_newDate_)。
           1. 设置 _dateObject_.[[DateValue]] 为 _v_。
@@ -35438,7 +35467,7 @@ THH:mm:ss.sss
             1. 令 _fillLen_ 为 _maxLength_ - _stringLength_。
             1. 令 _truncatedStringFiller_ 为由重复拼接 _fillString_ 直至截断到长度 _fillLen_ 得到的字符串。
             1. 若 _placement_ 为 ~start~，返回 _truncatedStringFiller_ 与 _S_ 的字符串拼接。
-            1. 否则，返回 _S_ 与 _truncatedStringFiller_ 的字符串拼接。
+            1. 返回 _S_ 与 _truncatedStringFiller_ 的字符串拼接。
           </emu-alg>
           <emu-note>
             <p>参数 _maxLength_ 会被钳制，使其不小于 _S_ 的长度。</p>
@@ -37258,15 +37287,14 @@ THH:mm:ss.sss
                   1. 断言：_y_ 是 MatchState。
                   1. 返回 _m2_(_y_, _c_)。
                 1. 返回 _m1_(_x_, _d_)。
-            1. 否则，
-              1. 断言：_direction_ 为 ~backward~。
-              1. 返回新的 Matcher，参数 (_x_, _c_)，捕获 _m1_、_m2_，执行：
-                1. 断言：_x_ 是 MatchState。
-                1. 断言：_c_ 是 MatcherContinuation。
-                1. 令 _d_ 为新的 MatcherContinuation，参数 (_y_)，捕获 _c_、_m1_，执行：
-                  1. 断言：_y_ 是 MatchState。
-                  1. 返回 _m1_(_y_, _c_)。
-                1. 返回 _m2_(_x_, _d_)。
+            1. 断言：_direction_ 为 ~backward~。
+            1. 返回新的 Matcher，参数 (_x_, _c_)，捕获 _m1_、_m2_，执行：
+              1. 断言：_x_ 是 MatchState。
+              1. 断言：_c_ 是 MatcherContinuation。
+              1. 令 _d_ 为新的 MatcherContinuation，参数 (_y_)，捕获 _c_、_m1_，执行：
+                1. 断言：_y_ 是 MatchState。
+                1. 返回 _m1_(_y_, _c_)。
+              1. 返回 _m2_(_x_, _d_)。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -38074,8 +38102,7 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 若 _rer_.[[Unicode]] 为 *true* 或 _rer_.[[UnicodeSets]] 为 *true*，
-              1. 返回 *true*。
+            1. 如果 _rer_.[[Unicode]] 为 *true* 或 _rer_.[[UnicodeSets]] 为 *true*，返回 *true*。
             1. 返回 *false*。
           </emu-alg>
         </emu-clause>
@@ -38109,12 +38136,11 @@ THH:mm:ss.sss
             <dd>依据正则标志返回“全部字符”集合。</dd>
           </dl>
           <emu-alg>
-            1. 若 _rer_.[[UnicodeSets]] 为 *true* 且 _rer_.[[IgnoreCase]] 为 *true*，则
-              1. [declared="c"] 返回含所有 Unicode 代码点 _c_ 且其 <a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">Simple Case Folding</a> 映射为空（scf(_c_) = _c_）的 CharSet。
-            1. 否则若 HasEitherUnicodeFlag(_rer_) 为 *true*，
-              1. 返回含所有代码点值的 CharSet。
-            1. 否则，
-              1. 返回含所有代码单元值的 CharSet。
+            1. 如果 _rer_.[[UnicodeSets]] 为 *true* 且 _rer_.[[IgnoreCase]] 为 *true*，则
+              1. [declared="c"] 返回包含所有没有<a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">简单大小写折叠</a>映射（即 scf(_c_)=_c_）的 Unicode 码点 _c_ 的 CharSet。
+            1. 如果 HasEitherUnicodeFlag(_rer_) 为 *true*，则
+              1. 返回包含所有码点值的 CharSet。
+            1. 返回包含所有码元值的 CharSet。
           </emu-alg>
         </emu-clause>
 
@@ -38430,21 +38456,21 @@ THH:mm:ss.sss
           </dl>
 
           <emu-alg>
-            1. 如果 _cp_ 被 |SyntaxCharacter| 匹配或 _cp_ 是 U+002F (SOLIDUS)，则
-              1. 返回 0x005C (REVERSE SOLIDUS) 与 UTF16EncodeCodePoint(_cp_) 的字符串拼接。
-            1. 否则如果 _cp_ 是 <emu-xref href="#table-controlescape-code-point-values"></emu-xref> “Code Point” 列所列出的代码点，则
-              1. 返回 0x005C (REVERSE SOLIDUS) 与该行 “ControlEscape” 列中字符串的拼接。
-            1. 令 _otherPunctuators_ 为 *",-=&lt;>#&amp;!%:;@~'`"* 与代码单元 0x0022 (QUOTATION MARK) 的字符串拼接。
+            1. 如果 _cp_ 能匹配 |SyntaxCharacter| 或 _cp_ 是 U+002F（斜杠），则
+              1. 返回 0x005C（反斜杠）与 UTF16EncodeCodePoint(_cp_) 的串联字符串。
+            1. 如果 _cp_ 是 <emu-xref href="#table-controlescape-code-point-values"></emu-xref> “Code Point” 列中列出的码点，则
+              1. 返回 0x005C（反斜杠）与所在行 “ControlEscape” 列字符串的串联（该行 “Code Point” 包含 _cp_）。
+            1. 令 _otherPunctuators_ 为 *",-=&lt;>#&amp;!%:;@~'`"* 与码元 0x0022（双引号）的串联字符串。
             1. 令 _toEscape_ 为 StringToCodePoints(_otherPunctuators_)。
-            1. 如果 _toEscape_ 包含 _cp_，或 _cp_ 被 |WhiteSpace| 或 |LineTerminator| 匹配，或 _cp_ 数值与前导代理或尾随代理相同，则
+            1. 如果 _toEscape_ 包含 _cp_，或 _cp_ 能匹配 |WhiteSpace| 或 |LineTerminator|，或 _cp_ 的数值等于领先代理或尾随代理，则
               1. 令 _cpNum_ 为 _cp_ 的数值。
               1. 如果 _cpNum_ ≤ 0xFF，则
-                1. 令 _hex_ 为 Number::toString(𝔽(_cpNum_), 16)。
-                1. 返回 代码单元 0x005C (REVERSE SOLIDUS)、*"x"* 与 StringPad(_hex_, 2, *"0"*, ~start~) 的字符串拼接。
+                1. 令 _hex_ 为 Number::toString(𝔽(_cpNum_), 16) 的结果。
+                1. 返回 码元 0x005C（反斜杠）、*"x"* 和 StringPad(_hex_, 2, *"0"*, ~start~) 的串联。
               1. 令 _escaped_ 为空字符串。
               1. 令 _codeUnits_ 为 UTF16EncodeCodePoint(_cp_)。
-              1. 对 _codeUnits_ 中的每个代码单元 _cu_，执行
-                1. 设 _escaped_ 为 _escaped_ 与 UnicodeEscape(_cu_) 的字符串拼接。
+              1. 对 _codeUnits_ 的每个码元 _cu_，执行
+                1. 将 _escaped_ 设为 _escaped_ 与 UnicodeEscape(_cu_) 的串联。
               1. 返回 _escaped_。
             1. 返回 UTF16EncodeCodePoint(_cp_)。
           </emu-alg>
@@ -38549,7 +38575,7 @@ THH:mm:ss.sss
             1. 如果 _R_ 不是对象，抛出 *TypeError* 异常。
             1. 如果 _R_ 没有 [[OriginalFlags]] 内部槽，则
               1. 如果 SameValue(_R_, %RegExp.prototype%) 为 *true*，返回 *undefined*。
-              1. 否则，抛出 *TypeError* 异常。
+              1. 抛出 *TypeError* 异常。
             1. 令 _flags_ 为 _R_.[[OriginalFlags]]。
             1. 如果 _flags_ 包含 _codeUnit_，返回 *true*。
             1. 返回 *false*。
@@ -38595,26 +38621,23 @@ THH:mm:ss.sss
           1. 如果 _rx_ 不是对象，抛出 *TypeError* 异常。
           1. 令 _S_ 为 ? ToString(_string_)。
           1. 令 _flags_ 为 ? ToString(? Get(_rx_, *"flags"*))。
-          1. 如果 _flags_ 不包含 *"g"*，则
-            1. 返回 ? RegExpExec(_rx_, _S_)。
-          1. 否则，
-            1. 如果 _flags_ 包含 *"u"* 或 _flags_ 包含 *"v"*，令 _fullUnicode_ 为 *true*；否则令 _fullUnicode_ 为 *false*。
-            1. 执行 ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)。
-            1. 令 _A_ 为 ! ArrayCreate(0)。
-            1. 令 _n_ 为 0。
-            1. 重复，
-              1. 令 _result_ 为 ? RegExpExec(_rx_, _S_)。
-              1. 如果 _result_ 为 *null*，则
-                1. 如果 _n_ = 0，返回 *null*。
-                1. 返回 _A_。
-              1. 否则，
-                1. 令 _matchStr_ 为 ? ToString(? Get(_result_, *"0"*))。
-                1. 执行 ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_)。
-                1. 如果 _matchStr_ 为空字符串，则
-                  1. 令 _thisIndex_ 为 ℝ(? ToLength(? Get(_rx_, *"lastIndex"*)))。
-                  1. 令 _nextIndex_ 为 AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_)。
-                  1. 执行 ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*)。
-                1. 设 _n_ 为 _n_ + 1。
+          1. 如果 _flags_ 不包含 *"g"*，返回 ? RegExpExec(_rx_, _S_)。
+          1. 如果 _flags_ 包含 *"u"* 或包含 *"v"*，则令 _fullUnicode_ 为 *true*；否则令 _fullUnicode_ 为 *false*。
+          1. 执行 ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)。
+          1. 令 _A_ 为 ! ArrayCreate(0)。
+          1. 令 _n_ 为 0。
+          1. 重复执行：
+            1. 令 _result_ 为 ? RegExpExec(_rx_, _S_)。
+            1. 如果 _result_ 为 *null*，则
+              1. 如果 _n_ = 0，返回 *null*。
+              1. 返回 _A_。
+            1. 令 _matchStr_ 为 ? ToString(? Get(_result_, *"0"*))。
+            1. 执行 ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_)。
+            1. 如果 _matchStr_ 是空字符串，则
+              1. 令 _thisIndex_ 为 ℝ(? ToLength(? Get(_rx_, *"lastIndex"*)))。
+              1. 令 _nextIndex_ 为 AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_)。
+              1. 执行 ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*)。
+            1. 设置 _n_ 为 _n_ + 1。
         </emu-alg>
         <p>该方法的 *"name"* 属性值为 *"[Symbol.match]"*。</p>
         <emu-note>
@@ -38755,8 +38778,8 @@ THH:mm:ss.sss
           1. 如果 _R_ 不是对象，抛出 *TypeError* 异常。
           1. 如果 _R_ 没有 [[OriginalSource]] 内部槽，则
             1. 如果 SameValue(_R_, %RegExp.prototype%) 为 *true*，返回 *"(?:)"*。
-            1. 否则，抛出 *TypeError* 异常。
-          1. 断言：_R_ 具有 [[OriginalFlags]] 内部槽。
+            1. 抛出 *TypeError* 异常。
+          1. 断言：_R_ 拥有 [[OriginalFlags]] 内部槽。
           1. 令 _src_ 为 _R_.[[OriginalSource]]。
           1. 令 _flags_ 为 _R_.[[OriginalFlags]]。
           1. 返回 EscapeRegExpPattern(_src_, _flags_)。
@@ -38879,7 +38902,8 @@ THH:mm:ss.sss
           1. 如果 _R_ 不是对象，抛出 *TypeError* 异常。
           1. 令 _string_ 为 ? ToString(_S_)。
           1. 令 _match_ 为 ? RegExpExec(_R_, _string_)。
-          1. 如果 _match_ 不为 *null*，返回 *true*；否则返回 *false*。
+          1. 如果 _match_ 为 *null*，返回 *false*。
+          1. 返回 *true*。
         </emu-alg>
       </emu-clause>
 
@@ -39333,33 +39357,31 @@ THH:mm:ss.sss
         <h1>Array ( ..._values_ )</h1>
         <p>此函数被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 若 NewTarget 为 *undefined*，令 _newTarget_ 为活动函数对象；否则令 _newTarget_ 为 NewTarget。
+          1. 如果 NewTarget 为 *undefined*，令 _newTarget_ 为当前活动函数对象；否则令 _newTarget_ 为 NewTarget。
           1. 令 _proto_ 为 ? GetPrototypeFromConstructor(_newTarget_, *"%Array.prototype%"*)。
           1. 令 _numberOfArgs_ 为 _values_ 中元素的数量。
-          1. 若 _numberOfArgs_ = 0，则
-            1. 返回 ! ArrayCreate(0, _proto_)。
-          1. 否则若 _numberOfArgs_ = 1，则
+          1. 如果 _numberOfArgs_ = 0，返回 ! ArrayCreate(0, _proto_)。
+          1. 如果 _numberOfArgs_ = 1，则
             1. 令 _len_ 为 _values_[0]。
             1. 令 _array_ 为 ! ArrayCreate(0, _proto_)。
-            1. 若 _len_ 不是 Number，则
+            1. 如果 _len_ 不是 Number，则
               1. 执行 ! CreateDataPropertyOrThrow(_array_, *"0"*, _len_)。
               1. 令 _intLen_ 为 *1*<sub>𝔽</sub>。
             1. 否则，
               1. 令 _intLen_ 为 ! ToUint32(_len_)。
-              1. 若 SameValueZero(_intLen_, _len_) 为 *false*，抛出 *RangeError* 异常。
+              1. 如果 SameValueZero(_intLen_, _len_) 为 *false*，抛出 *RangeError* 异常。
             1. 执行 ! Set(_array_, *"length"*, _intLen_, *true*)。
             1. 返回 _array_。
-          1. 否则，
-            1. 断言：_numberOfArgs_ ≥ 2。
-            1. 令 _array_ 为 ? ArrayCreate(_numberOfArgs_, _proto_)。
-            1. 令 _k_ 为 0。
-            1. 当 _k_ &lt; _numberOfArgs_ 时重复，
-              1. 令 _Pk_ 为 ! ToString(𝔽(_k_))。
-              1. 令 _itemK_ 为 _values_[_k_]。
-              1. 执行 ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_)。
-              1. 令 _k_ = _k_ + 1。
-            1. 断言：_array_ 的 *"length"* 属性数学值为 _numberOfArgs_。
-            1. 返回 _array_。
+          1. 断言：_numberOfArgs_ ≥ 2。
+          1. 令 _array_ 为 ? ArrayCreate(_numberOfArgs_, _proto_)。
+          1. 令 _k_ 为 0。
+          1. 当 _k_ &lt; _numberOfArgs_ 时，重复：
+            1. 令 _Pk_ 为 ! ToString(𝔽(_k_))。
+            1. 令 _itemK_ 为 _values_[_k_]。
+            1. 执行 ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_)。
+            1. 令 _k_ 为 _k_ + 1。
+          1. 断言：_array_ 的 *"length"* 属性的数学值为 _numberOfArgs_。
+          1. 返回 _array_。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -39913,17 +39935,22 @@ THH:mm:ss.sss
         </emu-note>
         <p>步骤：</p>
         <emu-alg>
-          1. _O_ = ? ToObject(*this* value)。
-          1. _len_ = ? LengthOfArrayLike(_O_)。
-          1. 若 _len_ = 0 返回 *false*。
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：若 _fromIndex_ 为 *undefined*，_n_ = 0。
-          1. 若 _n_ = +∞ 返回 *false*；若 _n_ = -∞ 令 _n_ = 0。
-          1. 若 _n_ ≥ 0：_k_ = _n_；否则 _k_ = _len_ + _n_，若 _k_ &lt; 0 则 _k_ = 0。
-          1. 当 _k_ &lt; _len_：
-            1. _elementK_ = ? Get(_O_, ! ToString(𝔽(_k_)))。
-            1. 若 SameValueZero(_searchElement_, _elementK_) 为 *true* 返回 *true*。
-            1. _k_++。
+          1. 令 _O_ 为 ? ToObject(*this* 值)。
+          1. 令 _len_ 为 ? LengthOfArrayLike(_O_)。
+          1. 如果 _len_ = 0，返回 *false*。
+          1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
+          1. 断言：如果 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
+          1. 如果 _n_ = +∞，返回 *false*。
+          1. 如果 _n_ = -∞，将 _n_ 设为 0。
+          1. 如果 _n_ ≥ 0，则
+            1. 令 _k_ 为 _n_。
+          1. 否则，
+            1. 令 _k_ 为 _len_ + _n_。
+            1. 如果 _k_ &lt; 0，将 _k_ 设为 0。
+          1. 当 _k_ &lt; _len_ 时重复，
+            1. 令 _elementK_ 为 ? Get(_O_, ! ToString(𝔽(_k_)))。
+            1. 如果 SameValueZero(_searchElement_, _elementK_) 为 *true*，返回 *true*。
+            1. 令 _k_ 为 _k_ + 1。
           1. 返回 *false*。
         </emu-alg>
         <emu-note>
@@ -39942,20 +39969,25 @@ THH:mm:ss.sss
         </emu-note>
         <p>步骤：</p>
         <emu-alg>
-          1. _O_ = ? ToObject(*this* value)。
-          1. _len_ = ? LengthOfArrayLike(_O_)。
-          1. 若 _len_ = 0 返回 *-1*<sub>𝔽</sub>。
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：_fromIndex_ 为 *undefined* 时 _n_ = 0。
-          1. 若 _n_ = +∞ 返回 *-1*<sub>𝔽</sub>；若 _n_ = -∞ 置 0。
-          1. 若 _n_ ≥ 0：_k_ = _n_；否则 _k_ = _len_ + _n_，若 _k_ &lt; 0 则 0。
-          1. 当 _k_ &lt; _len_：
-            1. _Pk_ = ! ToString(𝔽(_k_))。
-            1. _kPresent_ = ? HasProperty(_O_, _Pk_)。
-            1. 若 _kPresent_：
-              1. _elementK_ = ? Get(_O_, _Pk_)。
-              1. 若 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true* 返回 𝔽(_k_)。
-            1. _k_++。
+          1. 令 _O_ 为 ? ToObject(*this* 值)。
+          1. 令 _len_ 为 ? LengthOfArrayLike(_O_)。
+          1. 如果 _len_ = 0，返回 *-1*<sub>𝔽</sub>。
+          1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
+          1. 断言：如果 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
+          1. 如果 _n_ = +∞，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _n_ = -∞，将 _n_ 设为 0。
+          1. 如果 _n_ ≥ 0，则
+            1. 令 _k_ 为 _n_。
+          1. 否则，
+            1. 令 _k_ 为 _len_ + _n_。
+            1. 如果 _k_ &lt; 0，将 _k_ 设为 0。
+          1. 当 _k_ &lt; _len_ 时重复，
+            1. 令 _Pk_ 为 ! ToString(𝔽(_k_))。
+            1. 令 _kPresent_ 为 ? HasProperty(_O_, _Pk_)。
+            1. 如果 _kPresent_ 为 *true*，则
+              1. 令 _elementK_ 为 ? Get(_O_, _Pk_)。
+              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
+            1. 令 _k_ 为 _k_ + 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <emu-note>
@@ -40061,13 +40093,12 @@ THH:mm:ss.sss
           1. 若 _len_ = 0：
             1. ? Set(_O_, *"length"*, *+0*<sub>𝔽</sub>, *true*)。
             1. 返回 *undefined*。
-          1. 否则：
-            1. 令 _newLen_ = 𝔽(_len_ - 1)。
-            1. _index_ = ! ToString(_newLen_)。
-            1. _element_ = ? Get(_O_, _index_)。
-            1. ? DeletePropertyOrThrow(_O_, _index_)。
-            1. ? Set(_O_, *"length"*, _newLen_, *true*)。
-            1. 返回 _element_。
+          1. 令 _newLen_ = 𝔽(_len_ - 1)。
+          1. _index_ = ! ToString(_newLen_)。
+          1. _element_ = ? Get(_O_, _index_)。
+          1. ? DeletePropertyOrThrow(_O_, _index_)。
+          1. ? Set(_O_, *"length"*, _newLen_, *true*)。
+          1. 返回 _element_。
         </emu-alg>
         <emu-note>
           <p>泛型。</p>
@@ -41303,20 +41334,20 @@ THH:mm:ss.sss
           1. 令 _O_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_O_, ~seq-cst~)。
           1. 令 _len_ 为 TypedArrayLength(_taRecord_)。
-          1. 若 _len_ = 0，返回 *false*。
+          1. 如果 _len_ = 0，返回 *false*。
           1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：若 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
-          1. 若 _n_ = +∞，返回 *false*。
-          1. 否则若 _n_ = -∞，设 _n_ = 0。
-          1. 若 _n_ ≥ 0，则
-            1. 令 _k_ = _n_。
+          1. 断言：如果 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
+          1. 如果 _n_ = +∞，返回 *false*。
+          1. 如果 _n_ = -∞，将 _n_ 设为 0。
+          1. 如果 _n_ ≥ 0，则
+            1. 令 _k_ 为 _n_。
           1. 否则，
-            1. 令 _k_ = _len_ + _n_。
-            1. 若 _k_ &lt; 0，设 _k_ = 0。
-          1. 当 _k_ &lt; _len_ 重复，
+            1. 令 _k_ 为 _len_ + _n_。
+            1. 如果 _k_ &lt; 0，将 _k_ 设为 0。
+          1. 当 _k_ &lt; _len_ 时重复，
             1. 令 _elementK_ 为 ! Get(_O_, ! ToString(𝔽(_k_)))。
-            1. 若 SameValueZero(_searchElement_, _elementK_) 为 *true*，返回 *true*。
-            1. 设 _k_ = _k_ + 1。
+            1. 如果 SameValueZero(_searchElement_, _elementK_) 为 *true*，返回 *true*。
+            1. 令 _k_ 为 _k_ + 1。
           1. 返回 *false*。
         </emu-alg>
         <p>该方法不是泛型。*this* 值必须为具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -41330,23 +41361,23 @@ THH:mm:ss.sss
           1. 令 _O_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_O_, ~seq-cst~)。
           1. 令 _len_ 为 TypedArrayLength(_taRecord_)。
-          1. 若 _len_ = 0，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _len_ = 0，返回 *-1*<sub>𝔽</sub>。
           1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：若 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
-          1. 若 _n_ = +∞，返回 *-1*<sub>𝔽</sub>。
-          1. 否则若 _n_ = -∞，设 _n_ = 0。
-          1. 若 _n_ ≥ 0，则
-            1. 令 _k_ = _n_。
+          1. 断言：如果 _fromIndex_ 为 *undefined*，则 _n_ 为 0。
+          1. 如果 _n_ = +∞，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _n_ = -∞，将 _n_ 设为 0。
+          1. 如果 _n_ ≥ 0，则
+            1. 令 _k_ 为 _n_。
           1. 否则，
-            1. 令 _k_ = _len_ + _n_。
-            1. 若 _k_ &lt; 0，设 _k_ = 0。
-          1. 当 _k_ &lt; _len_ 重复，
-            1. 令 _Pk_ = ! ToString(𝔽(_k_))。
-            1. 令 _kPresent_ = ! HasProperty(_O_, _Pk_)。
-            1. 若 _kPresent_ 为 *true*，则
-              1. 令 _elementK_ = ! Get(_O_, _Pk_)。
-              1. 若 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
-            1. 设 _k_ = _k_ + 1。
+            1. 令 _k_ 为 _len_ + _n_。
+            1. 如果 _k_ &lt; 0，将 _k_ 设为 0。
+          1. 当 _k_ &lt; _len_ 时重复，
+            1. 令 _Pk_ 为 ! ToString(𝔽(_k_))。
+            1. 令 _kPresent_ 为 ! HasProperty(_O_, _Pk_)。
+            1. 如果 _kPresent_ 为 *true*，则
+              1. 令 _elementK_ 为 ! Get(_O_, _Pk_)。
+              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
+            1. 令 _k_ 为 _k_ + 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <p>该方法不是泛型。*this* 值必须为具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -42034,36 +42065,33 @@ THH:mm:ss.sss
         <h1>_TypedArray_ ( ..._args_ )</h1>
         <p>每个 _TypedArray_ 构造函数被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 若 NewTarget 为 *undefined*，抛出 *TypeError* 异常。
-          1. 令 _constructorName_ 为此 <var>TypedArray</var> 构造函数在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中指定的构造函数名称的字符串值。
+          1. 如果 NewTarget 为 *undefined*，抛出 *TypeError* 异常。
+          1. 令 _constructorName_ 为在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中为该 <var>TypedArray</var> 构造函数指定的 Constructor Name 的字符串值。
           1. 令 _proto_ 为 <code>"%<var>TypedArray</var>.prototype%"</code>。
           1. 令 _numberOfArgs_ 为 _args_ 中元素的数量。
-          1. 若 _numberOfArgs_ = 0，则
-            1. 返回 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0)。
-          1. 否则，
-            1. 令 _firstArgument_ = _args_[0]。
-            1. 若 _firstArgument_ 是对象，则
-              1. 令 _O_ 为 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_)。
-              1. 若 _firstArgument_ 具有 [[TypedArrayName]] 内部槽，则
-                1. 执行 ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_)。
-              1. 否则若 _firstArgument_ 具有 [[ArrayBufferData]] 内部槽，则
-                1. 若 _numberOfArgs_ > 1，令 _byteOffset_ = _args_[1]；否则 _byteOffset_ = *undefined*。
-                1. 若 _numberOfArgs_ > 2，令 _length_ = _args_[2]；否则 _length_ = *undefined*。
-                1. 执行 ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_)。
-              1. 否则，
-                1. 断言：_firstArgument_ 是对象且不具有 [[TypedArrayName]] 或 [[ArrayBufferData]]。
-                1. 令 _usingIterator_ = ? GetMethod(_firstArgument_, %Symbol.iterator%)。
-                1. 若 _usingIterator_ 不为 *undefined*，则
-                  1. 令 _values_ = ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_))。
-                  1. 执行 ? InitializeTypedArrayFromList(_O_, _values_)。
-                1. 否则，
-                  1. 注：_firstArgument_ 不是可迭代对象，因此假定其已为类数组对象。
-                  1. 执行 ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_)。
-              1. 返回 _O_。
+          1. 如果 _numberOfArgs_ = 0，返回 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0)。
+          1. 令 _firstArgument_ 为 _args_[0]。
+          1. 如果 _firstArgument_ 是对象，则
+            1. 令 _O_ 为 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_)。
+            1. 如果 _firstArgument_ 有 [[TypedArrayName]] 内部槽，则
+              1. 执行 ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_)。
+            1. 否则如果 _firstArgument_ 有 [[ArrayBufferData]] 内部槽，则
+              1. 如果 _numberOfArgs_ > 1，令 _byteOffset_ 为 _args_[1]；否则令 _byteOffset_ 为 *undefined*。
+              1. 如果 _numberOfArgs_ > 2，令 _length_ 为 _args_[2]；否则令 _length_ 为 *undefined*。
+              1. 执行 ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_)。
             1. 否则，
-              1. 断言：_firstArgument_ 不是对象。
-              1. 令 _elementLength_ = ? ToIndex(_firstArgument_)。
-              1. 返回 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_)。
+              1. 断言：_firstArgument_ 是对象且没有 [[TypedArrayName]] 或 [[ArrayBufferData]] 内部槽。
+              1. 令 _usingIterator_ 为 ? GetMethod(_firstArgument_, %Symbol.iterator%)。
+              1. 如果 _usingIterator_ 不为 *undefined*，则
+                1. 令 _values_ 为 ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_))。
+                1. 执行 ? InitializeTypedArrayFromList(_O_, _values_)。
+              1. 否则，
+                1. 注：_firstArgument_ 不是可迭代对象，因此假定它已有类数组结构。
+                1. 执行 ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_)。
+            1. 返回 _O_。
+          1. 断言：_firstArgument_ 不是对象。
+          1. 令 _elementLength_ 为 ? ToIndex(_firstArgument_)。
+          1. 返回 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_)。
         </emu-alg>
 
         <emu-clause id="sec-allocatetypedarray" type="abstract operation">
@@ -42533,19 +42561,16 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _chunkLength_ 为 _chunk_ 的长度。
           1. 如果 _chunkLength_ = 2，则
-            1. 将 _chunk_ 设为 _chunk_ 与 *"AA"* 的字符串拼接。
+            1. 将 _chunk_ 设为 _chunk_ 与 *"AA"* 的串联。
           1. 否则，
             1. 断言：_chunkLength_ 为 3。
-            1. 将 _chunk_ 设为 _chunk_ 与 *"A"* 的字符串拼接。
+            1. 将 _chunk_ 设为 _chunk_ 与 *"A"* 的串联。
           1. 令 _bytes_ 为 DecodeFullLengthBase64Chunk(_chunk_)。
           1. 如果 _chunkLength_ = 2，则
-            1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[1] ≠ 0，则
-              1. 抛出 *SyntaxError* 异常。
+            1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[1] ≠ 0，抛出 *SyntaxError* 异常。
             1. 返回 « _bytes_[0] »。
-          1. 否则，
-            1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[2] ≠ 0，则
-              1. 抛出 *SyntaxError* 异常。
-            1. 返回 « _bytes_[0], _bytes_[1] »。
+          1. 如果 _throwOnExtraBits_ 为 *true* 且 _bytes_[2] ≠ 0，抛出 *SyntaxError* 异常。
+          1. 返回 « _bytes_[0], _bytes_[1] »。
         </emu-alg>
       </emu-clause>
 
@@ -42576,14 +42601,14 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 如果 _maxLength_ 未传入，则
+          1. 如果 _maxLength_ 未被指定，则
             1. 将 _maxLength_ 设为 2<sup>53</sup> - 1。
-            1. 注：由于输入是字符串，字符串长度被限制为 2<sup>53</sup> - 1 个字符，且输出所需字节数不会超过输入字符数，因此此限制实际无法达到。但编辑上便于使用有限值。
-          1. 注：下述算法中的校验和解码顺序是不可观测的。实现可以按最高效的顺序执行校验和解码，甚至可以交错进行。
+            1. 注：因为输入是字符串，字符串的长度限制为 2<sup>53</sup> - 1 个字符，且输出所需字节数不会超过输入字符数，这一限制无法达到。但在编辑上采用有限值会更方便。
+          1. 注：下方算法中的校验顺序与解码顺序不可观察。鼓励实现按最高效率自行决定顺序，甚至交错校验与解码操作。
           1. 如果 _maxLength_ = 0，则
             1. 返回记录 { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ }。
           1. 令 _read_ 为 0。
-          1. 令 _bytes_ 为一个新的空列表。
+          1. 令 _bytes_ 为新建的空列表。
           1. 令 _chunk_ 为空字符串。
           1. 令 _chunkLength_ 为 0。
           1. 令 _index_ 为 0。
@@ -42592,17 +42617,16 @@ THH:mm:ss.sss
             1. 将 _index_ 设为 SkipAsciiWhitespace(_string_, _index_)。
             1. 如果 _index_ = _length_，则
               1. 如果 _chunkLength_ > 0，则
-                1. 如果 _lastChunkHandling_ 为 *"stop-before-partial"*，则
+                1. 如果 _lastChunkHandling_ 是 *"stop-before-partial"*，则
                   1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
-                1. 否则如果 _lastChunkHandling_ 为 *"loose"*，则
-                  1. 如果 _chunkLength_ = 1，则
-                    1. 令 _error_ 为新建的 *SyntaxError* 对象。
-                    1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
-                  1. 将 _bytes_ 设为 _bytes_ 与 ! DecodeFinalBase64Chunk(_chunk_, *false*) 的列表拼接。
-                1. 否则，
-                  1. 断言：_lastChunkHandling_ 为 *"strict"*。
+                1. 如果 _lastChunkHandling_ 是 *"strict"*，则
                   1. 令 _error_ 为新建的 *SyntaxError* 对象。
                   1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+                1. 断言：_lastChunkHandling_ 为 *"loose"*。
+                1. 如果 _chunkLength_ = 1，则
+                  1. 令 _error_ 为新建的 *SyntaxError* 对象。
+                  1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
+                1. 将 _bytes_ 设为 _bytes_ 与 ! DecodeFinalBase64Chunk(_chunk_, *false*) 的列表串联。
               1. 返回记录 { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
             1. 令 _char_ 为 _string_ 从 _index_ 到 _index_ + 1 的子串。
             1. 将 _index_ 设为 _index_ + 1。
@@ -42613,7 +42637,7 @@ THH:mm:ss.sss
               1. 将 _index_ 设为 SkipAsciiWhitespace(_string_, _index_)。
               1. 如果 _chunkLength_ = 2，则
                 1. 如果 _index_ = _length_，则
-                  1. 如果 _lastChunkHandling_ 为 *"stop-before-partial"*，则
+                  1. 如果 _lastChunkHandling_ 是 *"stop-before-partial"*，则
                     1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
                   1. 令 _error_ 为新建的 *SyntaxError* 对象。
                   1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
@@ -42628,30 +42652,30 @@ THH:mm:ss.sss
               1. 如果 _decodeResult_ 是异常完成，则
                 1. 令 _error_ 为 _decodeResult_.[[Value]]。
                 1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
-              1. 将 _bytes_ 设为 _bytes_ 与 ! _decodeResult_ 的列表拼接。
+              1. 将 _bytes_ 设为 _bytes_ 与 ! _decodeResult_ 的列表串联。
               1. 返回记录 { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
             1. 如果 _alphabet_ 为 *"base64url"*，则
-              1. 如果 _char_ 是 *"+"* 或 *"/"*，则
+              1. 如果 _char_ 为 *"+"* 或 *"/"*，则
                 1. 令 _error_ 为新建的 *SyntaxError* 对象。
                 1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
               1. 否则如果 _char_ 为 *"-"*，则
                 1. 将 _char_ 设为 *"+"*。
               1. 否则如果 _char_ 为 *"_"*，则
                 1. 将 _char_ 设为 *"/"*。
-            1. 如果 _char_ 的唯一码元不是标准 base64 字母表的元素，则
+            1. 如果 _char_ 的唯一码元不是标准 base64 字符集的元素，则
               1. 令 _error_ 为新建的 *SyntaxError* 对象。
               1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }。
-            1. 令 _remaining_ 为 _maxLength_ - _bytes_ 的元素数量。
+            1. 令 _remaining_ 为 _maxLength_ 减去 _bytes_ 的元素数量。
             1. 如果 _remaining_ = 1 且 _chunkLength_ = 2，或 _remaining_ = 2 且 _chunkLength_ = 3，则
               1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
-            1. 将 _chunk_ 设为 _chunk_ 与 _char_ 的字符串拼接。
+            1. 将 _chunk_ 设为 _chunk_ 与 _char_ 的串联。
             1. 将 _chunkLength_ 设为 _chunk_ 的长度。
             1. 如果 _chunkLength_ = 4，则
-              1. 将 _bytes_ 设为 _bytes_ 与 DecodeFullLengthBase64Chunk(_chunk_) 的列表拼接。
+              1. 将 _bytes_ 设为 _bytes_ 与 DecodeFullLengthBase64Chunk(_chunk_) 的列表串联。
               1. 将 _chunk_ 设为空字符串。
               1. 将 _chunkLength_ 设为 0。
               1. 将 _read_ 设为 _index_。
-              1. 如果 _bytes_ 的元素数量 = _maxLength_，则
+              1. 如果 _bytes_ 的元素数量等于 _maxLength_，则
                 1. 返回记录 { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }。
         </emu-alg>
       </emu-clause>
@@ -44318,22 +44342,26 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 指定的元素大小值。
-          1. 若 _isLittleEndian_ 为 *false*，反转 _rawBytes_ 的元素顺序。
-          1. 若 _type_ 为 ~float16~，则
-            1. 令 _value_ 为将 _rawBytes_ 字节元素拼接并按 IEEE 754-2019 binary16 小端位串编码解释的结果。
-            1. 若 _value_ 是 NaN，返回 *NaN*。
+          1. 令 _elementSize_ 为在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中针对元素类型 _type_ 所指定的元素大小值。
+          1. 如果 _isLittleEndian_ 为 *false*，将 _rawBytes_ 的元素顺序反转。
+          1. 如果 _type_ 为 ~float16~，则
+            1. 令 _value_ 为 _rawBytes_ 的字节元素串联并按 IEEE 754-2019 binary16 值以小端比特串解释。
+            1. 如果 _value_ 是 NaN，返回 *NaN*。
             1. 返回与 _value_ 对应的 Number 值。
-          1. 若 _type_ 为 ~float32~，则
-            1. 同上以 binary32 方式处理。
-          1. 若 _type_ 为 ~float64~，则
-            1. 同上以 binary64 方式处理。
-          1. 若 IsUnsignedElementType(_type_) 为 *true*，则
-            1. 令 _intValue_ 为 _rawBytes_ 按小端无符号二进制数的位串编码解释的结果。
+          1. 如果 _type_ 为 ~float32~，则
+            1. 令 _value_ 为 _rawBytes_ 的字节元素串联并按 IEEE 754-2019 binary32 值以小端比特串解释。
+            1. 如果 _value_ 是 NaN，返回 *NaN*。
+            1. 返回与 _value_ 对应的 Number 值。
+          1. 如果 _type_ 为 ~float64~，则
+            1. 令 _value_ 为 _rawBytes_ 的字节元素串联并按 IEEE 754-2019 binary64 值以小端比特串解释。
+            1. 如果 _value_ 是 NaN，返回 *NaN*。
+            1. 返回与 _value_ 对应的 Number 值。
+          1. 如果 IsUnsignedElementType(_type_) 为 *true*，则
+            1. 令 _intValue_ 为 _rawBytes_ 的字节元素串联并按无符号小端二进制数的位串解释。
           1. 否则，
-            1. 令 _intValue_ 为 _rawBytes_ 按小端二补数、位长 _elementSize_ × 8 的位串编码解释的结果。
-          1. 若 IsBigIntElementType(_type_) 为 *true*，返回与 _intValue_ 对应的 BigInt。
-          1. 否则，返回与 _intValue_ 对应的 Number。
+            1. 令 _intValue_ 为 _rawBytes_ 的字节元素串联并按 _elementSize_ × 8 位长度的小端二进制补码数的位串解释。
+          1. 如果 IsBigIntElementType(_type_) 为 *true*，返回与 _intValue_ 对应的 BigInt 值。
+          1. 返回与 _intValue_ 对应的 Number 值。
         </emu-alg>
       </emu-clause>
 
@@ -44350,13 +44378,13 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _elementSize_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中针对元素类型 _type_ 所指定的元素大小（Element Size）值。
-          1. 令 _AR_ 为当前 agent 的 Agent Record。
+          1. 令 _elementSize_ 为在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中针对元素类型 _type_ 所指定的元素大小值。
+          1. 令 _AR_ 为所属 Agent 的 Agent Record。
           1. 令 _execution_ 为 _AR_.[[CandidateExecution]]。
-          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中其 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
-          1. 如果 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，则令 _noTear_ 为 *true*；否则令 _noTear_ 为 *false*。
-          1. 令 _rawValue_ 为一个长度为 _elementSize_ 的 List，其元素是非确定性选取的字节值。
-          1. 注：在实际实现中，_rawValue_ 是底层硬件上非原子或原子读取指令的结果。该非确定性描述了弱一致性硬件的可观察行为，这是内存模型的语义规定。
+          1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 等于 AgentSignifier() 的 Agent Events Record。
+          1. 如果 _isTypedArray_ 为 *true* 且 IsNoTearConfiguration(_type_, _order_) 为 *true*，令 _noTear_ 为 *true*；否则令 _noTear_ 为 *false*。
+          1. 令 _rawValue_ 为一个长度为 _elementSize_ 的列表，其元素为非确定性选择的字节值。
+          1. 注：在实现中，_rawValue_ 是硬件底层的非原子或原子读取指令结果。非确定性是在内存模型下描述弱一致性硬件可观察行为的语义要求。
           1. 令 _readEvent_ 为 ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }。
           1. 将 _readEvent_ 添加到 _eventsRecord_.[[EventList]]。
           1. 将 Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } 添加到 _execution_.[[ChosenValues]]。
@@ -44406,19 +44434,21 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 若 _type_ 为 ~float16~，则
-            1. 令 _rawBytes_ 为长度 2 的 List，为将 _value_ 以 roundTiesToEven 模式转换为 IEEE 754-2019 binary16 格式的结果字节（小端序）。若 _value_ 为 *NaN*，_rawBytes_ 可为实现选择的任一 binary16 NaN 编码；实现对每个可区分 *NaN* 必须始终选择同一编码。
-          1. Else if _type_ 为 ~float32~，同理生成 4 字节（binary32）。
-          1. Else if _type_ 为 ~float64~，同理生成 8 字节（binary64）。
+          1. 如果 _type_ 是 ~float16~，则
+            1. 令 _rawBytes_ 为一个列表，其元素是将 _value_ 转为 IEEE 754-2019 binary16 格式并采用 roundTiesToEven 模式后得到的 2 个字节。这些字节以小端序排列。如果 _value_ 是 *NaN*，_rawBytes_ 可以设为实现选定的 IEEE 754-2019 binary16 格式的 NaN 编码。对于可区分的每一个 *NaN* 值，实现必须始终选择相同的编码。
+          1. 否则如果 _type_ 是 ~float32~，则
+            1. 令 _rawBytes_ 为一个列表，其元素是将 _value_ 转为 IEEE 754-2019 binary32 格式并采用 roundTiesToEven 模式后得到的 4 个字节。这些字节以小端序排列。如果 _value_ 是 *NaN*，_rawBytes_ 可以设为实现选定的 IEEE 754-2019 binary32 格式的 NaN 编码。对于可区分的每一个 *NaN* 值，实现必须始终选择相同的编码。
+          1. 否则如果 _type_ 是 ~float64~，则
+            1. 令 _rawBytes_ 为一个列表，其元素是 _value_ 的 IEEE 754-2019 binary64 格式编码的 8 个字节。这些字节以小端序排列。如果 _value_ 是 *NaN*，_rawBytes_ 可以设为实现选定的 IEEE 754-2019 binary64 格式的 NaN 编码。对于可区分的每一个 *NaN* 值，实现必须始终选择相同的编码。
           1. 否则，
-            1. 令 _n_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中元素类型 _type_ 的元素大小值。
-            1. 令 _conversionOperation_ 为同表中该元素类型的 Conversion Operation 列命名的抽象操作。
+            1. 令 _n_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中针对元素类型 _type_ 指定的元素大小值。
+            1. 令 _conversionOperation_ 为 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> “Conversion Operation” 栏中针对元素类型 _type_ 指定的抽象操作名称。
             1. 令 _intValue_ 为 ℝ(! _conversionOperation_(_value_))。
-            1. 若 _intValue_ ≥ 0，则
-              1. 令 _rawBytes_ 为按小端序排列的 _intValue_ 的 _n_ 字节二进制编码。
+            1. 如果 _intValue_ ≥ 0，则
+              1. 令 _rawBytes_ 为一个以小端序排列的 _intValue_ 的 _n_ 字节二进制编码的列表。
             1. 否则，
-              1. 令 _rawBytes_ 为按小端序排列的 _intValue_ 的 _n_ 字节二进制二补数编码。
-          1. 若 _isLittleEndian_ 为 *false*，反转 _rawBytes_ 的元素顺序。
+              1. 令 _rawBytes_ 为一个以小端序排列的 _intValue_ 的 _n_ 字节二进制补码编码的列表。
+          1. 如果 _isLittleEndian_ 为 *false*，反转 _rawBytes_ 的元素顺序。
           1. 返回 _rawBytes_。
         </emu-alg>
       </emu-clause>
@@ -44618,7 +44648,8 @@ THH:mm:ss.sss
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_O_, [[ArrayBufferData]])。
           1. 若 IsSharedArrayBuffer(_O_) 为 *true*，抛出 *TypeError* 异常。
-          1. 若 IsFixedLengthArrayBuffer(_O_) 为 *false*，返回 *true*；否则返回 *false*。
+          1. 若 IsFixedLengthArrayBuffer(_O_) 为 *false*，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
@@ -44959,7 +44990,8 @@ THH:mm:ss.sss
           1. 令 _O_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_O_, [[ArrayBufferData]])。
           1. 若 IsSharedArrayBuffer(_O_) 为 *false*，抛出 *TypeError* 异常。
-          1. 若 IsFixedLengthArrayBuffer(_O_) 为 *false*，返回 *true*；否则返回 *false*。
+          1. 若 IsFixedLengthArrayBuffer(_O_) 为 *false*，返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
@@ -45984,11 +46016,13 @@ THH:mm:ss.sss
           1. 如果 _arrayTypeName_ 为 *"BigInt64Array"*，令 _v_ 为 ? ToBigInt64(_value_)。
           1. 否则，令 _v_ 为 ? ToInt32(_value_)。
           1. 令 _q_ 为 ? ToNumber(_timeout_)。
-          1. 如果 _q_ 为 *NaN* 或 *+∞*<sub>𝔽</sub>，则令 _t_ 为 +∞；否则如果 _q_ 为 *-∞*<sub>𝔽</sub>，令 _t_ 为 0；否则令 _t_ 为 max(ℝ(_q_), 0)。
+          1. 如果 _q_ 是 *NaN* 或 *+∞*<sub>𝔽</sub>，令 _t_ 为 +∞。
+          1. 否则如果 _q_ 是 *-∞*<sub>𝔽</sub>，令 _t_ 为 0。
+          1. 否则，令 _t_ 为 max(ℝ(_q_), 0)。
           1. 如果 _mode_ 为 ~sync~ 且 AgentCanSuspend() 为 *false*，抛出 *TypeError* 异常。
           1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
           1. 令 _WL_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
-          1. 如果 _mode_ 为 ~sync~，那么
+          1. 如果 _mode_ 为 ~sync~，则
             1. 令 _promiseCapability_ 为 ~blocking~。
             1. 令 _resultObject_ 为 *undefined*。
           1. 否则，
@@ -45997,28 +46031,28 @@ THH:mm:ss.sss
           1. 执行 EnterCriticalSection(_WL_)。
           1. 令 _elementType_ 为 TypedArrayElementType(_typedArray_)。
           1. 令 _w_ 为 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)。
-          1. 如果 _v_ ≠ _w_，那么
+          1. 如果 _v_ ≠ _w_，则
             1. 执行 LeaveCriticalSection(_WL_)。
             1. 如果 _mode_ 为 ~sync~，返回 *"not-equal"*。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*)。
             1. 返回 _resultObject_。
-          1. 如果 _t_ = 0 且 _mode_ 为 ~async~，那么
-            1. 注：同步的立即超时没有特殊处理。异步的立即超时有特殊处理，以便快速失败并避免不必要的 Promise 任务。
+          1. 如果 _t_ = 0 且 _mode_ 为 ~async~，则
+            1. 注：同步即时超时无特殊处理。异步即时超时有特殊处理，以便快速失败并避免不必要的 Promise 任务。
             1. 执行 LeaveCriticalSection(_WL_)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*)。
             1. 返回 _resultObject_。
           1. 令 _thisAgent_ 为 AgentSignifier()。
-          1. 令 _now_ 为标识当前时间的时间值（UTC）。
+          1. 令 _now_ 为当前时间值 (UTC)。
           1. 令 _additionalTimeout_ 为实现定义的非负数学值。
           1. 令 _timeoutTime_ 为 ℝ(_now_) + _t_ + _additionalTimeout_。
           1. 注：当 _t_ 为 +∞ 时，_timeoutTime_ 也是 +∞。
-          1. 令 _waiterRecord_ 为一个新的 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
+          1. 令 _waiterRecord_ 为新 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
           1. 执行 AddWaiter(_WL_, _waiterRecord_)。
-          1. 如果 _mode_ 为 ~sync~，那么
+          1. 如果 _mode_ 为 ~sync~，则
             1. 执行 SuspendThisAgent(_WL_, _waiterRecord_)。
-          1. 否则如果 _timeoutTime_ 是有限的，那么
+          1. 否则如果 _timeoutTime_ 是有限值，则
             1. 执行 EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_)。
           1. 执行 LeaveCriticalSection(_WL_)。
           1. 如果 _mode_ 为 ~sync~，返回 _waiterRecord_.[[Result]]。
@@ -46397,13 +46431,11 @@ THH:mm:ss.sss
       <emu-alg>
         1. 令 _jsonString_ 为 ? ToString(_text_)。
         1. 令 _unfiltered_ 为 ? ParseJSON(_jsonString_)。
-        1. 若 IsCallable(_reviver_) 为 *true*，则
-          1. 令 _root_ 为 OrdinaryObjectCreate(%Object.prototype%)。
-          1. 令 _rootName_ 为空字符串。
-          1. 执行 ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_)。
-          1. 返回 ? InternalizeJSONProperty(_root_, _rootName_, _reviver_)。
-        1. 否则，
-          1. 返回 _unfiltered_。
+        1. 如果 IsCallable(_reviver_) 为 *false*，返回 _unfiltered_。
+        1. 令 _root_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+        1. 令 _rootName_ 为空字符串。
+        1. 执行 ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_)。
+        1. 返回 ? InternalizeJSONProperty(_root_, _rootName_, _reviver_)。
       </emu-alg>
       <p>该函数的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
 
@@ -48213,8 +48245,7 @@ THH:mm:ss.sss
             1. 若 _value_ 是一个 abrupt completion，则
               1. 执行 ? Call(_capability_.[[Reject]], *undefined*, « _value_.[[Value]] »)。
               1. 返回 _capability_.[[Promise]]。
-            1. 否则，
-              1. 设 _value_ 为 ! _value_。
+            1. 设 _value_ 为 ! _value_。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -48491,8 +48522,7 @@ THH:mm:ss.sss
             1. 断言：_promiseCapability_ 是一个 PromiseCapability Record。
             1. 如果 _handlerResult_ 是一个 abrupt completion，则
               1. 返回 ? Call(_promiseCapability_.[[Reject]], *undefined*, « _handlerResult_.[[Value]] »)。
-            1. 否则，
-              1. 返回 ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] »)。
+            1. 返回 ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] »)。
           1. 令 _handlerRealm_ 为 *null*。
           1. 如果 _reaction_.[[Handler]] 不为 ~empty~，则
             1. 令 _getHandlerRealmResult_ 为 Completion(GetFunctionRealm(_reaction_.[[Handler]].[[Callback]]))。
@@ -49066,8 +49096,8 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. 断言：IsPromise(_promise_) 为 *true*。
-            1. 如果 _resultCapability_ 未传入，则
-              1. 将 _resultCapability_ 设为 *undefined*。
+            1. 如果未提供 _resultCapability_，则
+              1. 设置 _resultCapability_ 为 *undefined*。
             1. 如果 IsCallable(_onFulfilled_) 为 *false*，则
               1. 令 _onFulfilledJobCallback_ 为 ~empty~。
             1. 否则，
@@ -49076,26 +49106,24 @@ THH:mm:ss.sss
               1. 令 _onRejectedJobCallback_ 为 ~empty~。
             1. 否则，
               1. 令 _onRejectedJobCallback_ 为 HostMakeJobCallback(_onRejected_)。
-            1. 令 _fulfillReaction_ 为 PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ }。
-            1. 令 _rejectReaction_ 为 PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ }。
-            1. 如果 _promise_.[[PromiseState]] 是 ~pending~，则
-              1. 将 _fulfillReaction_ 追加到 _promise_.[[PromiseFulfillReactions]]。
-              1. 将 _rejectReaction_ 追加到 _promise_.[[PromiseRejectReactions]]。
-            1. 否则如果 _promise_.[[PromiseState]] 是 ~fulfilled~，则
+            1. 令 _fulfillReaction_ 为 PromiseReaction 记录 { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ }。
+            1. 令 _rejectReaction_ 为 PromiseReaction 记录 { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ }。
+            1. 如果 _promise_.[[PromiseState]] 为 ~pending~，则
+              1. 将 _fulfillReaction_ 添加到 _promise_.[[PromiseFulfillReactions]]。
+              1. 将 _rejectReaction_ 添加到 _promise_.[[PromiseRejectReactions]]。
+            1. 否则如果 _promise_.[[PromiseState]] 为 ~fulfilled~，则
               1. 令 _value_ 为 _promise_.[[PromiseResult]]。
               1. 令 _fulfillJob_ 为 NewPromiseReactionJob(_fulfillReaction_, _value_)。
               1. 执行 HostEnqueuePromiseJob(_fulfillJob_.[[Job]], _fulfillJob_.[[Realm]])。
             1. 否则，
-              1. 断言：_promise_.[[PromiseState]] 是 ~rejected~。
+              1. 断言：_promise_.[[PromiseState]] 为 ~rejected~。
               1. 令 _reason_ 为 _promise_.[[PromiseResult]]。
               1. 如果 _promise_.[[PromiseIsHandled]] 为 *false*，执行 HostPromiseRejectionTracker(_promise_, *"handle"*)。
               1. 令 _rejectJob_ 为 NewPromiseReactionJob(_rejectReaction_, _reason_)。
               1. 执行 HostEnqueuePromiseJob(_rejectJob_.[[Job]], _rejectJob_.[[Realm]])。
-            1. 将 _promise_.[[PromiseIsHandled]] 设为 *true*。
-            1. 如果 _resultCapability_ 是 *undefined*，则
-              1. 返回 *undefined*。
-            1. 否则，
-              1. 返回 _resultCapability_.[[Promise]]。
+            1. 设置 _promise_.[[PromiseIsHandled]] 为 *true*。
+            1. 如果 _resultCapability_ 为 *undefined*，返回 *undefined*。
+            1. 返回 _resultCapability_.[[Promise]]。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -49632,7 +49660,7 @@ THH:mm:ss.sss
           1. 如果 _genContext_ 没有 Generator 组件，返回 ~non-generator~。
           1. 令 _generator_ 为 _genContext_ 的 Generator 组件。
           1. 如果 _generator_ 具有 [[AsyncGeneratorState]] 内部槽，返回 ~async~。
-          1. 否则，返回 ~sync~。
+          1. 返回 ~sync~。
         </emu-alg>
       </emu-clause>
 
@@ -49671,7 +49699,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _generatorKind_ 为 GetGeneratorKind()。
           1. 如果 _generatorKind_ 是 ~async~，返回 ? AsyncGeneratorYield(? Await(_value_))。
-          1. 否则，返回 ? GeneratorYield(CreateIteratorResultObject(_value_, *false*))。
+          1. 返回 ? GeneratorYield(CreateIteratorResultObject(_value_, *false*))。
         </emu-alg>
       </emu-clause>
 
@@ -50039,13 +50067,12 @@ THH:mm:ss.sss
             1. 令 _toYield_ 为 _queue_ 的第一个元素。
             1. 令 _resumptionValue_ 为 Completion(_toYield_.[[Completion]])。
             1. 返回 ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
-          1. 否则，
-            1. 将 _generator_.[[AsyncGeneratorState]] 设为 ~suspended-yield~。
-            1. 将 _genContext_ 从执行上下文栈移除并恢复栈顶执行上下文为正在运行的执行上下文。
-            1. 令 _callerContext_ 为正在运行的执行上下文。
-            1. 恢复 _callerContext_，传入 *undefined*。如果 _genContext_ 之后再次被恢复，令 _resumptionValue_ 为恢复时使用的 Completion Record。
-            1. 断言：若控制流到达此处，则 _genContext_ 再次成为正在运行的执行上下文。
-            1. 返回 ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
+          1. 将 _generator_.[[AsyncGeneratorState]] 设为 ~suspended-yield~。
+          1. 将 _genContext_ 从执行上下文栈移除并恢复栈顶执行上下文为正在运行的执行上下文。
+          1. 令 _callerContext_ 为正在运行的执行上下文。
+          1. 恢复 _callerContext_，传入 *undefined*。如果 _genContext_ 之后再次被恢复，令 _resumptionValue_ 为恢复时使用的 Completion Record。
+          1. 断言：若控制流到达此处，则 _genContext_ 再次成为正在运行的执行上下文。
+          1. 返回 ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
         </emu-alg>
       </emu-clause>
 
@@ -50109,10 +50136,9 @@ THH:mm:ss.sss
             1. 如果 _completion_ 是一个 return completion，则
               1. 执行 AsyncGeneratorAwaitReturn(_generator_)。
               1. 返回 ~unused~。
-            1. 否则，
-              1. 如果 _completion_ 是一个 normal completion，则
-                1. 将 _completion_ 设为 NormalCompletion(*undefined*)。
-              1. 执行 AsyncGeneratorCompleteStep(_generator_, _completion_, *true*)。
+            1. 如果 _completion_ 是一个 normal completion，则
+              1. 将 _completion_ 设为 NormalCompletion(*undefined*)。
+            1. 执行 AsyncGeneratorCompleteStep(_generator_, _completion_, *true*)。
           1. 将 _generator_.[[AsyncGeneratorState]] 设为 ~completed~。
           1. 返回 ~unused~。
         </emu-alg>

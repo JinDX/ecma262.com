@@ -2014,35 +2014,39 @@
             <dd>_base_에 _exponent_ 제곱을 한 결과를 구현에 따라 근사한 값을 반환한다.</dd>
           </dl>
           <emu-alg>
-            1. _exponent_가 *NaN*이면, *NaN*을 반환한다.
-            1. _exponent_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면, *1*<sub>𝔽</sub>을 반환한다.
-            1. _base_가 *NaN*이면, *NaN*을 반환한다.
-            1. _base_가 *+∞*<sub>𝔽</sub>이면,
-              1. _exponent_ > *+0*<sub>𝔽</sub>이면 *+∞*<sub>𝔽</sub> 반환; 그렇지 않으면 *+0*<sub>𝔽</sub> 반환.
-            1. _base_가 *-∞*<sub>𝔽</sub>이면,
-              1. _exponent_ > *+0*<sub>𝔽</sub>이면,
-                1. _exponent_가 홀수 정수 Number이면 *-∞*<sub>𝔽</sub> 반환; 아니면 *+∞*<sub>𝔽</sub> 반환.
-              1. 그렇지 않으면,
-                1. _exponent_가 홀수 정수 Number이면 *-0*<sub>𝔽</sub> 반환; 아니면 *+0*<sub>𝔽</sub> 반환.
-            1. _base_가 *+0*<sub>𝔽</sub>이면,
-              1. _exponent_ > *+0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub> 반환; 아니면 *+∞*<sub>𝔽</sub> 반환.
-            1. _base_가 *-0*<sub>𝔽</sub>이면,
-              1. _exponent_ > *+0*<sub>𝔽</sub>이면,
-                1. _exponent_가 홀수 정수 Number이면 *-0*<sub>𝔽</sub> 반환; 아니면 *+0*<sub>𝔽</sub> 반환.
-              1. 그렇지 않으면,
-                1. _exponent_가 홀수 정수 Number이면 *-∞*<sub>𝔽</sub> 반환; 아니면 *+∞*<sub>𝔽</sub> 반환.
-            1. 단언: _base_는 유한하며 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>가 아니다.
-            1. _exponent_가 *+∞*<sub>𝔽</sub>이면,
-              1. abs(ℝ(_base_)) > 1이면 *+∞*<sub>𝔽</sub> 반환.
-              1. abs(ℝ(_base_)) = 1이면 *NaN* 반환.
-              1. abs(ℝ(_base_)) &lt; 1이면 *+0*<sub>𝔽</sub> 반환.
-            1. _exponent_가 *-∞*<sub>𝔽</sub>이면,
-              1. abs(ℝ(_base_)) > 1이면 *+0*<sub>𝔽</sub> 반환.
-              1. abs(ℝ(_base_)) = 1이면 *NaN* 반환.
-              1. abs(ℝ(_base_)) &lt; 1이면 *+∞*<sub>𝔽</sub> 반환.
-            1. 단언: _exponent_는 유한하며 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>가 아니다.
-            1. _base_ &lt; *-0*<sub>𝔽</sub>이고 _exponent_가 정수 Number가 아니면 *NaN* 반환.
-            1. ℝ(_base_)의 ℝ(_exponent_) 제곱을 구현에 따라 근사한 Number 값으로 반환.
+            1. 만약 _exponent_가 *NaN*이면 *NaN*을 반환한다.
+            1. 만약 _exponent_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *1*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _base_가 *NaN*이면 *NaN*을 반환한다.
+            1. 만약 _base_가 *+∞*<sub>𝔽</sub>이면
+              1. 만약 _exponent_ > *+0*<sub>𝔽</sub>이면 *+∞*<sub>𝔽</sub>를 반환한다.
+              1. *+0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _base_가 *-∞*<sub>𝔽</sub>이면
+              1. 만약 _exponent_ > *+0*<sub>𝔽</sub>이면
+                1. 만약 _exponent_가 홀수 정수(Number)이면 *-∞*<sub>𝔽</sub>를 반환한다.
+                1. *+∞*<sub>𝔽</sub>를 반환한다.
+              1. 만약 _exponent_가 홀수 정수(Number)이면 *-0*<sub>𝔽</sub>를 반환한다.
+              1. *+0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _base_가 *+0*<sub>𝔽</sub>이면
+              1. 만약 _exponent_ > *+0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+              1. *+∞*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _base_가 *-0*<sub>𝔽</sub>이면
+              1. 만약 _exponent_ > *+0*<sub>𝔽</sub>이면
+                1. 만약 _exponent_가 홀수 정수(Number)이면 *-0*<sub>𝔽</sub>를 반환한다.
+                1. *+0*<sub>𝔽</sub>를 반환한다.
+              1. 만약 _exponent_가 홀수 정수(Number)이면 *-∞*<sub>𝔽</sub>를 반환한다.
+              1. *+∞*<sub>𝔽</sub>를 반환한다.
+            1. 단언: _base_는 유한하며 *+0*<sub>𝔽</sub>도 *-0*<sub>𝔽</sub>도 아니다.
+            1. 만약 _exponent_가 *+∞*<sub>𝔽</sub>이면
+              1. 만약 abs(ℝ(_base_)) > 1이면 *+∞*<sub>𝔽</sub>를 반환한다.
+              1. 만약 abs(ℝ(_base_)) = 1이면 *NaN*을 반환한다.
+              1. *+0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _exponent_가 *-∞*<sub>𝔽</sub>이면
+              1. 만약 abs(ℝ(_base_)) > 1이면 *+0*<sub>𝔽</sub>를 반환한다.
+              1. 만약 abs(ℝ(_base_)) = 1이면 *NaN*을 반환한다.
+              1. *+∞*<sub>𝔽</sub>를 반환한다.
+            1. 단언: _exponent_는 유한하며 *+0*<sub>𝔽</sub>도 *-0*<sub>𝔽</sub>도 아니다.
+            1. 만약 _base_ &lt; *-0*<sub>𝔽</sub>이고 _exponent_가 정수(Number)가 아니면 *NaN*을 반환한다.
+            1. ℝ(_base_)를 ℝ(_exponent_) 거듭제곱한 결과를 나타내는 구현체 근사의 Number 값을 반환한다.
           </emu-alg>
           <emu-note>
             <p>_base_가 *1*<sub>𝔽</sub> 또는 *-1*<sub>𝔽</sub>이고 _exponent_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>일 때, 혹은 _base_가 *1*<sub>𝔽</sub>이고 _exponent_가 *NaN*일 때, _base_ `**` _exponent_의 결과는 IEEE 754-2019와 다릅니다. ECMAScript 1판은 이 연산에 대해 *NaN* 결과를 명시했으나, 이후 IEEE 754 개정판은 *1*<sub>𝔽</sub>을 명시했습니다. 호환성을 위해 기존 ECMAScript 동작을 유지합니다.</p>
@@ -2061,22 +2065,22 @@
             <dd>IEEE 754-2019 배정밀도 이진 산술 규칙에 따라 곱셈을 수행하며, _x_와 _y_의 곱을 생성합니다.</dd>
           </dl>
           <emu-alg>
-            1. _x_ 또는 _y_가 *NaN*이면 *NaN* 반환.
-            1. _x_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면,
-              1. _y_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN* 반환.
-              1. _y_ > *+0*<sub>𝔽</sub>이면 _x_ 반환.
-              1. -_x_ 반환.
-            1. _y_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면,
-              1. _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN* 반환.
-              1. _x_ > *+0*<sub>𝔽</sub>이면 _y_ 반환.
-              1. -_y_ 반환.
-            1. _x_가 *-0*<sub>𝔽</sub>이면,
-              1. _y_가 *-0*<sub>𝔽</sub> 또는 _y_ &lt; *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub> 반환.
-              1. 아니면 *-0*<sub>𝔽</sub> 반환.
-            1. _y_가 *-0*<sub>𝔽</sub>이면,
-              1. _x_ &lt; *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub> 반환.
-              1. 아니면 *-0*<sub>𝔽</sub> 반환.
-            1. 𝔽(ℝ(_x_) × ℝ(_y_)) 반환.
+            1. 만약 _x_가 *NaN*이거나 _y_가 *NaN*이면 *NaN*을 반환한다.
+            1. 만약 _x_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면
+              1. 만약 _y_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN*을 반환한다.
+              1. 만약 _y_ > *+0*<sub>𝔽</sub>이면 _x_를 반환한다.
+              1. -_x_를 반환한다.
+            1. 만약 _y_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면
+              1. 만약 _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN*을 반환한다.
+              1. 만약 _x_ > *+0*<sub>𝔽</sub>이면 _y_를 반환한다.
+              1. -_y_를 반환한다.
+            1. 만약 _x_가 *-0*<sub>𝔽</sub>이면
+              1. 만약 _y_가 *-0*<sub>𝔽</sub>이거나 _y_ &lt; *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+              1. *-0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _y_가 *-0*<sub>𝔽</sub>이면
+              1. 만약 _x_ &lt; *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+              1. *-0*<sub>𝔽</sub>를 반환한다.
+            1. 𝔽(ℝ(_x_) × ℝ(_y_))를 반환한다.
           </emu-alg>
           <emu-note>
             <p>유한 정밀 곱셈은 교환법칙은 성립하지만 항상 결합법칙이 성립하지는 않습니다.</p>
@@ -2095,24 +2099,28 @@
             <dd>IEEE 754-2019 배정밀도 이진 산술 규칙에 따라 나눗셈을 수행하며, _x_는 피제수, _y_는 제수로써 몫을 생성합니다.</dd>
           </dl>
           <emu-alg>
-            1. _x_ 또는 _y_가 *NaN*이면 *NaN* 반환.
-            1. _x_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면,
-              1. _y_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면 *NaN* 반환.
-              1. _y_가 *+0*<sub>𝔽</sub> 또는 _y_ > *+0*<sub>𝔽</sub>이면 _x_ 반환.
-              1. -_x_ 반환.
-            1. _y_가 *+∞*<sub>𝔽</sub>이면,
-              1. _x_가 *+0*<sub>𝔽</sub> 또는 _x_ > *+0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub> 반환; 아니면 *-0*<sub>𝔽</sub> 반환.
-            1. _y_가 *-∞*<sub>𝔽</sub>이면,
-              1. _x_가 *+0*<sub>𝔽</sub> 또는 _x_ > *+0*<sub>𝔽</sub>이면 *-0*<sub>𝔽</sub> 반환; 아니면 *+0*<sub>𝔽</sub> 반환.
-            1. _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면,
-              1. _y_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN* 반환.
-              1. _y_ > *+0*<sub>𝔽</sub>이면 _x_ 반환.
-              1. -_x_ 반환.
-            1. _y_가 *+0*<sub>𝔽</sub>이면,
-              1. _x_ > *+0*<sub>𝔽</sub>이면 *+∞*<sub>𝔽</sub> 반환; 아니면 *-∞*<sub>𝔽</sub> 반환.
-            1. _y_가 *-0*<sub>𝔽</sub>이면,
-              1. _x_ > *+0*<sub>𝔽</sub>이면 *-∞*<sub>𝔽</sub> 반환; 아니면 *+∞*<sub>𝔽</sub> 반환.
-            1. 𝔽(ℝ(_x_) / ℝ(_y_)) 반환.
+            1. 만약 _x_가 *NaN*이거나 _y_가 *NaN*이면 *NaN*을 반환한다.
+            1. 만약 _x_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면
+              1. 만약 _y_가 *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub>이면 *NaN*을 반환한다.
+              1. 만약 _y_가 *+0*<sub>𝔽</sub>이거나 _y_ > *+0*<sub>𝔽</sub>이면 _x_를 반환한다.
+              1. -_x_를 반환한다.
+            1. 만약 _y_가 *+∞*<sub>𝔽</sub>이면
+              1. 만약 _x_가 *+0*<sub>𝔽</sub>이거나 _x_ > *+0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+              1. *-0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _y_가 *-∞*<sub>𝔽</sub>이면
+              1. 만약 _x_가 *+0*<sub>𝔽</sub>이거나 _x_ > *+0*<sub>𝔽</sub>이면 *-0*<sub>𝔽</sub>를 반환한다.
+              1. *+0*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면
+              1. 만약 _y_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *NaN*을 반환한다.
+              1. 만약 _y_ > *+0*<sub>𝔽</sub>이면 _x_를 반환한다.
+              1. -_x_를 반환한다.
+            1. 만약 _y_가 *+0*<sub>𝔽</sub>이면
+              1. 만약 _x_ > *+0*<sub>𝔽</sub>이면 *+∞*<sub>𝔽</sub>를 반환한다.
+              1. *-∞*<sub>𝔽</sub>를 반환한다.
+            1. 만약 _y_가 *-0*<sub>𝔽</sub>이면
+              1. 만약 _x_ > *+0*<sub>𝔽</sub>이면 *-∞*<sub>𝔽</sub>를 반환한다.
+              1. *+∞*<sub>𝔽</sub>를 반환한다.
+            1. 𝔽(ℝ(_x_) / ℝ(_y_))를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2252,17 +2260,18 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_가 *NaN*이면 *undefined* 반환.
-            1. _y_가 *NaN*이면 *undefined* 반환.
-            1. _x_가 _y_와 같으면 *false* 반환.
-            1. _x_가 *+0*<sub>𝔽</sub>이고 _y_가 *-0*<sub>𝔽</sub>이면 *false* 반환.
-            1. _x_가 *-0*<sub>𝔽</sub>이고 _y_가 *+0*<sub>𝔽</sub>이면 *false* 반환.
-            1. _x_가 *+∞*<sub>𝔽</sub>이면 *false* 반환.
-            1. _y_가 *+∞*<sub>𝔽</sub>이면 *true* 반환.
-            1. _y_가 *-∞*<sub>𝔽</sub>이면 *false* 반환.
-            1. _x_가 *-∞*<sub>𝔽</sub>이면 *true* 반환.
+            1. 만약 _x_가 *NaN*이면 *undefined*를 반환한다.
+            1. 만약 _y_가 *NaN*이면 *undefined*를 반환한다.
+            1. 만약 _x_가 _y_이면 *false*를 반환한다.
+            1. 만약 _x_가 *+0*<sub>𝔽</sub>이고 _y_가 *-0*<sub>𝔽</sub>이면 *false*를 반환한다.
+            1. 만약 _x_가 *-0*<sub>𝔽</sub>이고 _y_가 *+0*<sub>𝔽</sub>이면 *false*를 반환한다.
+            1. 만약 _x_가 *+∞*<sub>𝔽</sub>이면 *false*를 반환한다.
+            1. 만약 _y_가 *+∞*<sub>𝔽</sub>이면 *true*를 반환한다.
+            1. 만약 _y_가 *-∞*<sub>𝔽</sub>이면 *false*를 반환한다.
+            1. 만약 _x_가 *-∞*<sub>𝔽</sub>이면 *true*를 반환한다.
             1. 단언: _x_와 _y_는 유한하다.
-            1. ℝ(_x_) &lt; ℝ(_y_)이면 *true* 반환; 아니면 *false* 반환.
+            1. 만약 ℝ(_x_) &lt; ℝ(_y_)이면 *true*를 반환한다.
+            1. *false*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2401,47 +2410,46 @@
             <dd>_x_를 진법 _radix_를 사용한 위치 기수 체계로 문자열로 표현합니다. 진법 _r_을 사용할 때 사용되는 숫자들은 *"0123456789abcdefghijklmnopqrstuvwxyz"*의 앞에서 _r_개 코드 유닛을 차례로 사용합니다. 크기가 *1*<sub>𝔽</sub> 이상인 숫자의 표현에는 결코 앞에 0이 포함되지 않습니다.</dd>
           </dl>
           <emu-alg>
-            1. _x_가 *NaN*이면 *"NaN"* 반환.
-            1. _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *"0"* 반환.
-            1. _x_ &lt; *-0*<sub>𝔽</sub>이면 *"-"*와 Number::toString(-_x_, _radix_)를 연결한 문자열 반환.
-            1. _x_가 *+∞*<sub>𝔽</sub>이면 *"Infinity"* 반환.
-            1. [id="step-number-tostring-intermediate-values"] _n_, _k_, _s_를 다음 조건을 만족하는 정수로 한다: _k_ ≥ 1, _radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>, 𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>)가 _x_이고, _k_가 가능한 한 작다. _k_는 _s_의 _radix_ 표현에서 자릿수이고, _s_는 _radix_로 나누어떨어지지 않으며, 최소 자리수가 반드시 결정되는 것은 아니다.
-            1. _radix_ ≠ 10이거나 _n_이 -5에서 21 사이이면,
-              1. _n_ ≥ _k_이면,
-                1. 다음을 연결한 문자열 반환:
-                  * _s_의 _radix_ 표현에서 _k_개의 자릿수
-                  * _n_ - _k_번 반복된 코드 유닛 0x0030(DIGIT ZERO)
-              1. _n_ > 0이면,
-                1. 다음을 연결한 문자열 반환:
-                  * _s_의 _radix_ 표현에서 가장 높은 _n_개의 자릿수
-                  * 코드 유닛 0x002E(FULL STOP)
-                  * 남은 _k_ - _n_개의 자릿수
-              1. 그렇지 않으면,
-                1. 단언: _n_ ≤ 0이다.
-                1. 다음을 연결한 문자열 반환:
-                  * 코드 유닛 0x0030(DIGIT ZERO)
-                  * 코드 유닛 0x002E(FULL STOP)
-                  * -_n_번 반복된 코드 유닛 0x0030(DIGIT ZERO)
-                  * _s_의 _radix_ 표현에서 _k_개의 자릿수
-            1. 참고: 이 경우 입력은 과학적 E 표기법으로 표현됩니다(예: `1.2e+3`).
+            1. 만약 _x_가 *NaN*이면 *"NaN"*을 반환한다.
+            1. 만약 _x_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *"0"*을 반환한다.
+            1. 만약 _x_ &lt; *-0*<sub>𝔽</sub>이면 *"-"*와 Number::toString(-_x_, _radix_)의 문자열 결합을 반환한다.
+            1. 만약 _x_가 *+∞*<sub>𝔽</sub>이면 *"Infinity"*를 반환한다.
+            1. [id="step-number-tostring-intermediate-values"] 정수 _n_, _k_, _s_를 택하여 _k_ ≥ 1, _radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>, 𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>)가 _x_이고, _k_가 가능한 한 작도록 한다. 여기서 _k_는 진법 _radix_로 표현한 _s_의 자리수이며, _s_는 _radix_로 나누어떨어지지 않으며, _s_의 최하위 숫자는 이 조건들로 반드시 유일하게 결정되는 것이 아님에 유의한다.
+            1. 만약 _radix_ ≠ 10이거나 _n_이 -5에서 21까지의 포함 구간에 있으면,
+              1. 만약 _n_ ≥ _k_이면,
+                1. 다음을 문자열로 결합하여 반환한다:
+                  * 진법 _radix_를 사용하여 표현한 _s_의 _k_ 자리 숫자들의 코드 유닛
+                  * 코드 유닛 0x0030 (DIGIT ZERO)의 _n_ - _k_ 회 반복
+              1. 만약 _n_ > 0이면,
+                1. 다음을 문자열로 결합하여 반환한다:
+                  * 진법 _radix_를 사용하여 표현한 _s_의 최상위 _n_ 자리 숫자들의 코드 유닛
+                  * 코드 유닛 0x002E (FULL STOP)
+                  * 진법 _radix_를 사용하여 표현한 _s_의 나머지 _k_ - _n_ 자리 숫자들의 코드 유닛
+              1. 단언: _n_ ≤ 0.
+              1. 다음을 문자열로 결합하여 반환한다:
+                * 코드 유닛 0x0030 (DIGIT ZERO)
+                * 코드 유닛 0x002E (FULL STOP)
+                * 코드 유닛 0x0030 (DIGIT ZERO)의 -_n_ 회 반복
+                * 진법 _radix_를 사용하여 표현한 _s_의 _k_ 자리 숫자들의 코드 유닛
+            1. 참고: 이 경우 입력은 `1.2e+3`과 같은 과학적 E 표기법으로 표현된다.
             1. 단언: _radix_는 10이다.
-            1. _n_ &lt; 0이면,
-              1. _exponentSign_을 코드 유닛 0x002D(HYPHEN-MINUS)로 한다.
+            1. 만약 _n_ &lt; 0이면,
+              1. _exponentSign_을 코드 유닛 0x002D (HYPHEN-MINUS)로 한다.
             1. 그렇지 않으면,
-              1. _exponentSign_을 코드 유닛 0x002B(PLUS SIGN)로 한다.
-            1. _k_ = 1이면,
-              1. 다음을 연결한 문자열 반환:
-                * _s_의 한 자릿수 코드 유닛
-                * 코드 유닛 0x0065(LATIN SMALL LETTER E)
+              1. _exponentSign_을 코드 유닛 0x002B (PLUS SIGN)로 한다.
+            1. 만약 _k_ = 1이면,
+              1. 다음을 문자열로 결합하여 반환한다:
+                * _s_의 단일 자리 숫자의 코드 유닛
+                * 코드 유닛 0x0065 (LATIN SMALL LETTER E)
                 * _exponentSign_
-                * abs(_n_ - 1)의 10진수 표현 코드 유닛
-            1. 다음을 연결한 문자열 반환:
-              * _s_의 10진수 표현에서 가장 높은 자릿수 코드 유닛
-              * 코드 유닛 0x002E(FULL STOP)
-              * 남은 _k_ - 1개의 10진수 표현 코드 유닛
-              * 코드 유닛 0x0065(LATIN SMALL LETTER E)
+                * abs(_n_ - 1)의 십진 표현의 코드 유닛들
+            1. 다음을 문자열로 결합하여 반환한다:
+              * _s_의 십진 표현에서 최상위 자리 숫자의 코드 유닛
+              * 코드 유닛 0x002E (FULL STOP)
+              * _s_의 십진 표현에서 나머지 _k_ - 1 자리 숫자들의 코드 유닛
+              * 코드 유닛 0x0065 (LATIN SMALL LETTER E)
               * _exponentSign_
-              * abs(_n_ - 1)의 10진수 표현 코드 유닛
+              * abs(_n_ - 1)의 십진 표현의 코드 유닛들
           </emu-alg>
           <emu-note>
             <p>다음 관찰은 구현 지침으로 유용할 수 있으나, 본 표준의 규범적 요구 사항은 아닙니다:</p>
@@ -2654,7 +2662,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. ℝ(_x_) &lt; ℝ(_y_)이면 *true* 반환; 아니면 *false* 반환.
+            1. 만약 ℝ(_x_) &lt; ℝ(_y_)이면 *true*를 반환한다.
+            1. *false*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2668,7 +2677,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. ℝ(_x_) = ℝ(_y_)이면 *true* 반환; 아니면 *false* 반환.
+            1. 만약 ℝ(_x_) = ℝ(_y_)이면 *true*를 반환한다.
+            1. *false*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2682,8 +2692,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1이고 _y_ = 1이면 1을 반환한다.
-            1. 아니면 0을 반환한다.
+            1. 만약 _x_ = 1이고 _y_ = 1이면 1을 반환한다.
+            1. 0을 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2697,8 +2707,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1이거나 _y_ = 1이면 1을 반환한다.
-            1. 아니면 0을 반환한다.
+            1. 만약 _x_ = 1 또는 _y_ = 1이면 1을 반환한다.
+            1. 0을 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -2712,9 +2722,9 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1이고 _y_ = 0이면 1을 반환한다.
-            1. 아니면 _x_ = 0이고 _y_ = 1이면 1을 반환한다.
-            1. 아니면 0을 반환한다.
+            1. 만약 _x_ = 1이고 _y_ = 0이면 1을 반환한다.
+            1. 만약 _x_ = 0이고 _y_ = 1이면 1을 반환한다.
+            1. 0을 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -4381,67 +4391,71 @@
       <emu-clause id="sec-ispropertyreference" type="abstract operation" oldids="ao-ispropertyreference">
         <h1>
           IsPropertyReference (
-            _V_: Reference Record,
-          ): Boolean
+            _V_: 참조 레코드,
+          ): 불리언
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[Base]]가 ~unresolvable~이면 *false* 반환.
-          1. _V_.[[Base]]가 Environment Record이면 *false* 반환; 아니면 *true* 반환.
+          1. _V_.[[Base]]가 ~unresolvable~이면 *false*를 반환한다.
+          1. _V_.[[Base]]가 환경 레코드(Environment Record)이면 *false*를 반환한다.
+          1. *true*를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isunresolvablereference" type="abstract operation" oldids="ao-isunresolvablereference">
         <h1>
           IsUnresolvableReference (
-            _V_: Reference Record,
-          ): Boolean
+            _V_: 참조 레코드,
+          ): 불리언
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[Base]]가 ~unresolvable~이면 *true* 반환; 아니면 *false* 반환.
+          1. _V_.[[Base]]가 ~unresolvable~이면 *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-issuperreference" type="abstract operation" oldids="ao-issuperreference">
         <h1>
           IsSuperReference (
-            _V_: Reference Record,
-          ): Boolean
+            _V_: 참조 레코드,
+          ): 불리언
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[ThisValue]]가 ~empty~가 아니면 *true* 반환; 아니면 *false* 반환.
+          1. _V_.[[ThisValue]]가 ~empty~이면 *false*를 반환한다.
+          1. *true*를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isprivatereference" type="abstract operation">
         <h1>
           IsPrivateReference (
-            _V_: Reference Record,
-          ): Boolean
+            _V_: 참조 레코드,
+          ): 불리언
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[ReferencedName]]이 Private Name이면 *true* 반환; 아니면 *false* 반환.
+          1. _V_.[[ReferencedName]]가 Private Name이면 *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-getvalue" type="abstract operation">
         <h1>
           GetValue (
-            _V_: Reference Record 또는 ECMAScript 언어 값,
-          ): ECMAScript 언어 값을 담는 normal completion 또는 abrupt completion
+            _V_: 참조 레코드 또는 ECMAScript 언어 값,
+          ): ECMAScript 언어 값을 포함하는 정상 완료 또는 비정상 완료
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_가 Reference Record가 아니면 _V_를 반환한다.
-          1. IsUnresolvableReference(_V_)가 *true*이면 *ReferenceError* 예외를 throw한다.
+          1. _V_가 참조 레코드가 아니면 _V_를 반환한다.
+          1. IsUnresolvableReference(_V_)가 *true*이면 *ReferenceError* 예외를 발생시킨다.
           1. IsPropertyReference(_V_)가 *true*이면,
             1. [id="step-getvalue-toobject"] _baseObj_를 ? ToObject(_V_.[[Base]])로 한다.
             1. IsPrivateReference(_V_)가 *true*이면,
@@ -4449,29 +4463,28 @@
             1. _V_.[[ReferencedName]]이 프로퍼티 키가 아니면,
               1. _V_.[[ReferencedName]]을 ? ToPropertyKey(_V_.[[ReferencedName]])로 설정한다.
             1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>를 반환한다.
-          1. 아니면,
-            1. _base_를 _V_.[[Base]]로 한다.
-            1. 단언: _base_는 Environment Record이다.
-            1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
+          1. _base_를 _V_.[[Base]]로 한다.
+          1. 단언: _base_는 환경 레코드(Environment Record)이다.
+          1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>를 반환한다 (<emu-xref href="#sec-environment-records"></emu-xref> 참고).
         </emu-alg>
         <emu-note>
-          <p><emu-xref href="#step-getvalue-toobject"></emu-xref> 단계에서 생성되는 객체는 위 추상 연산과 ordinary object [[Get]] 내부 메소드 외부에서는 접근할 수 없습니다. 구현에서는 실제 객체 생성을 생략할 수 있습니다.</p>
+          <p><emu-xref href="#step-getvalue-toobject"></emu-xref> 단계에서 생성될 수 있는 객체는 위의 추상 연산과 일반 객체 [[Get]] 내부 메소드 외에는 접근할 수 없다. 구현에서는 실제 객체 생성을 피할 수 있다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-putvalue" type="abstract operation">
         <h1>
           PutValue (
-            _V_: Reference Record 또는 ECMAScript 언어 값,
+            _V_: 참조 레코드 또는 ECMAScript 언어 값,
             _W_: ECMAScript 언어 값,
-          ): ~unused~을 담는 normal completion 또는 abrupt completion
+          ): ~unused~를 포함하는 정상 완료 또는 비정상 완료
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_가 Reference Record가 아니면 *ReferenceError* 예외를 throw한다.
+          1. _V_가 참조 레코드가 아니면 *ReferenceError* 예외를 발생시킨다.
           1. IsUnresolvableReference(_V_)가 *true*이면,
-            1. _V_.[[Strict]]가 *true*이면 *ReferenceError* 예외를 throw한다.
+            1. _V_.[[Strict]]가 *true*이면 *ReferenceError* 예외를 발생시킨다.
             1. _globalObj_를 GetGlobalObject()로 한다.
             1. ? Set(_globalObj_, _V_.[[ReferencedName]], _W_, *false*)를 수행한다.
             1. ~unused~를 반환한다.
@@ -4482,45 +4495,45 @@
             1. _V_.[[ReferencedName]]이 프로퍼티 키가 아니면,
               1. _V_.[[ReferencedName]]을 ? ToPropertyKey(_V_.[[ReferencedName]])로 설정한다.
             1. _succeeded_를 ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>로 한다.
-            1. _succeeded_가 *false*이고 _V_.[[Strict]]가 *true*이면 *TypeError* 예외를 throw한다.
+            1. _succeeded_가 *false*이고 _V_.[[Strict]]가 *true*이면 *TypeError* 예외를 발생시킨다.
             1. ~unused~를 반환한다.
-          1. 아니면,
-            1. _base_를 _V_.[[Base]]로 한다.
-            1. 단언: _base_는 Environment Record이다.
-            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>를 반환한다(<emu-xref href="#sec-environment-records"></emu-xref> 참조).
+          1. _base_를 _V_.[[Base]]로 한다.
+          1. 단언: _base_는 환경 레코드(Environment Record)이다.
+          1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>를 반환한다 (<emu-xref href="#sec-environment-records"></emu-xref> 참고).
         </emu-alg>
         <emu-note>
-          <p><emu-xref href="#step-putvalue-toobject"></emu-xref> 단계에서 생성되는 객체는 위 추상 연산과 ordinary object [[Set]] 내부 메소드 외부에서는 접근할 수 없습니다. 구현에서는 실제 객체 생성을 생략할 수 있습니다.</p>
+          <p><emu-xref href="#step-putvalue-toobject"></emu-xref> 단계에서 생성될 수 있는 객체는 위의 추상 연산과 일반 객체 [[Set]] 내부 메소드 외에는 접근할 수 없다. 구현에서는 실제로 해당 객체 생성 과정을 생략할 수 있다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-getthisvalue" type="abstract operation">
         <h1>
           GetThisValue (
-            _V_: Reference Record,
+            _V_: 참조 레코드,
           ): ECMAScript 언어 값
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 단언: IsPropertyReference(_V_)는 *true*이다.
-          1. IsSuperReference(_V_)가 *true*이면 _V_.[[ThisValue]] 반환; 아니면 _V_.[[Base]] 반환.
+          1. 단언: IsPropertyReference(_V_)가 *true*이다.
+          1. IsSuperReference(_V_)가 *true*이면 _V_.[[ThisValue]]를 반환한다.
+          1. _V_.[[Base]]를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-initializereferencedbinding" type="abstract operation">
         <h1>
           InitializeReferencedBinding (
-            _V_: Reference Record,
+            _V_: 참조 레코드,
             _W_: ECMAScript 언어 값,
-          ): ~unused~을 담는 normal completion 또는 abrupt completion
+          ): ~unused~를 포함하는 정상 완료 또는 비정상 완료
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 단언: IsUnresolvableReference(_V_)는 *false*이다.
+          1. 단언: IsUnresolvableReference(_V_)가 *false*이다.
           1. _base_를 _V_.[[Base]]로 한다.
-          1. 단언: _base_는 Environment Record이다.
+          1. 단언: _base_는 환경 레코드(Environment Record)이다.
           1. ? _base_.InitializeBinding(_V_.[[ReferencedName]], _W_)를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -4530,15 +4543,15 @@
           MakePrivateReference (
             _baseValue_: ECMAScript 언어 값,
             _privateIdentifier_: 문자열,
-          ): Reference Record
+          ): 참조 레코드
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _privateEnv_를 실행 중인 실행 컨텍스트의 PrivateEnvironment로 한다.
+          1. _privateEnv_를 현재 실행 컨텍스트의 PrivateEnvironment로 한다.
           1. 단언: _privateEnv_는 *null*이 아니다.
           1. _privateName_을 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)로 한다.
-          1. Reference Record { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ }를 반환한다.
+          1. 참조 레코드 { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ }을 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -5164,15 +5177,15 @@
         </emu-clause>
 
         <emu-clause id="sec-runtime-semantics-stringnumericvalue" type="sdo" oldids="sec-runtime-semantics-mv-s">
-          <h1>런타임 의미론: StringNumericValue ( ): Number</h1>
+          <h1>런타임 의미론: StringNumericValue ( ): 숫자</h1>
           <dl class="header">
           </dl>
           <emu-note>
-            <p>|StringNumericLiteral|을 Number 값으로 변환하는 과정은 전반적으로 |NumericLiteral|의 NumericValue 결정(<emu-xref href="#sec-literals-numeric-literals"></emu-xref>)과 유사하지만 일부 세부 사항은 다릅니다.</p>
+            <p>|StringNumericLiteral|을 숫자 값으로 변환하는 과정은 전반적으로 |NumericLiteral|의 NumericValue 결정과 비슷하지만( <emu-xref href="#sec-literals-numeric-literals"></emu-xref> 참고), 일부 세부 사항은 다릅니다.</p>
           </emu-note>
           <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
           <emu-alg>
-            1. *+0*<sub>𝔽</sub>을 반환한다.
+            1. *+0*<sub>𝔽</sub>를 반환한다.
           </emu-alg>
           <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
           <emu-alg>
@@ -5180,12 +5193,12 @@
           </emu-alg>
           <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
           <emu-alg>
-            1. 𝔽(MV of |NonDecimalIntegerLiteral|)을 반환한다.
+            1. 𝔽(|NonDecimalIntegerLiteral|의 MV)를 반환한다.
           </emu-alg>
           <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
           <emu-alg>
-            1. _a_를 |StrUnsignedDecimalLiteral|의 StringNumericValue로 둔다.
-            1. _a_가 *+0*<sub>𝔽</sub>이면 *-0*<sub>𝔽</sub>을 반환한다.
+            1. _a_를 |StrUnsignedDecimalLiteral|의 StringNumericValue로 한다.
+            1. _a_가 *+0*<sub>𝔽</sub>이면 *-0*<sub>𝔽</sub>를 반환한다.
             1. -_a_를 반환한다.
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
@@ -5194,27 +5207,27 @@
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
           <emu-alg>
-            1. _a_를 첫 번째 |DecimalDigits|의 MV로 둔다.
+            1. _a_를 첫 번째 |DecimalDigits|의 MV로 한다.
             1. 두 번째 |DecimalDigits|가 존재하면,
-              1. _b_를 두 번째 |DecimalDigits|의 MV로 둔다.
-              1. _n_을 두 번째 |DecimalDigits|의 코드 포인트 수로 둔다.
-            1. Else,
-              1. _b_를 0으로 둔다.
-              1. _n_을 0으로 둔다.
-            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로, 아니면 _e_를 0으로 둔다.
+              1. _b_를 두 번째 |DecimalDigits|의 MV로 한다.
+              1. _n_을 두 번째 |DecimalDigits|의 코드 포인트 수로 한다.
+            1. 그렇지 않으면,
+              1. _b_를 0으로 한다.
+              1. _n_을 0으로 한다.
+            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로 하고, 그렇지 않으면 _e_를 0으로 한다.
             1. RoundMVResult((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>)를 반환한다.
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
           <emu-alg>
-            1. _b_를 |DecimalDigits|의 MV로 둔다.
-            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로, 아니면 _e_를 0으로 둔다.
-            1. _n_을 |DecimalDigits|의 코드 포인트 수로 둔다.
+            1. _b_를 |DecimalDigits|의 MV로 한다.
+            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로 하고, 그렇지 않으면 _e_를 0으로 한다.
+            1. _n_을 |DecimalDigits|의 코드 포인트 수로 한다.
             1. RoundMVResult(_b_ × 10<sup>_e_ - _n_</sup>)를 반환한다.
           </emu-alg>
           <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
           <emu-alg>
-            1. _a_를 |DecimalDigits|의 MV로 둔다.
-            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로, 아니면 _e_를 0으로 둔다.
+            1. _a_를 |DecimalDigits|의 MV로 한다.
+            1. |ExponentPart|가 존재하면 _e_를 |ExponentPart|의 MV로 하고, 그렇지 않으면 _e_를 0으로 한다.
             1. RoundMVResult(_a_ × 10<sup>_e_</sup>)를 반환한다.
           </emu-alg>
         </emu-clause>
@@ -5273,11 +5286,12 @@
         <dd>_argument_를 𝔽(-2<sup>31</sup>)부터 𝔽(2<sup>31</sup> - 1)까지(포함) 2<sup>32</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
-        1. _int32bit_를 _int_ modulo 2<sup>32</sup>로 둔다.
-        1. _int32bit_ ≥ 2<sup>31</sup>이면 𝔽(_int32bit_ - 2<sup>32</sup>)을, 아니면 𝔽(_int32bit_)을 반환한다.
+        1. _number_ を ? ToNumber(_argument_) とする。
+        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
+        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int32bit_ を _int_ を 2<sup>32</sup> で割った余りとする。
+        1. _int32bit_ ≥ 2<sup>31</sup> の場合、𝔽(_int32bit_ - 2<sup>32</sup>) を返す。
+        1. 𝔽(_int32bit_) を返す。
       </emu-alg>
       <emu-note>
         <p>위 정의에 따른 ToInt32의 성질:</p>
@@ -5328,11 +5342,12 @@
         <dd>_argument_를 𝔽(-2<sup>15</sup>)부터 𝔽(2<sup>15</sup> - 1)까지(포함) 2<sup>16</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
-        1. _int16bit_를 _int_ modulo 2<sup>16</sup>으로 둔다.
-        1. _int16bit_ ≥ 2<sup>15</sup>이면 𝔽(_int16bit_ - 2<sup>16</sup>)을, 아니면 𝔽(_int16bit_)을 반환한다.
+        1. _number_를 ? ToNumber(_argument_)로 한다.
+        1. _number_가 유한하지 않거나 _number_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+        1. _int_를 truncate(ℝ(_number_))로 한다.
+        1. _int16bit_를 _int_ modulo 2<sup>16</sup>로 한다.
+        1. _int16bit_ ≥ 2<sup>15</sup>이면 𝔽(_int16bit_ - 2<sup>16</sup>)를 반환한다.
+        1. 𝔽(_int16bit_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -5373,11 +5388,12 @@
         <dd>_argument_를 *-128*<sub>𝔽</sub>에서 *127*<sub>𝔽</sub>까지(포함) 2<sup>8</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
-        1. _int8bit_를 _int_ modulo 2<sup>8</sup>로 둔다.
-        1. _int8bit_ ≥ 2<sup>7</sup>이면 𝔽(_int8bit_ - 2<sup>8</sup>)을, 아니면 𝔽(_int8bit_)을 반환한다.
+        1. _number_를 ? ToNumber(_argument_)로 한다.
+        1. _number_가 유한하지 않거나 _number_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
+        1. _int_를 truncate(ℝ(_number_))로 한다.
+        1. _int8bit_를 _int_ modulo 2<sup>8</sup>로 한다.
+        1. _int8bit_ ≥ 2<sup>7</sup>이면 𝔽(_int8bit_ - 2<sup>8</sup>)를 반환한다.
+        1. 𝔽(_int8bit_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -5411,14 +5427,15 @@
         <dd>_argument_를 *+0*<sub>𝔽</sub>에서 *255*<sub>𝔽</sub>까지(포함) 2<sup>8</sup>개의 적분 Number 값 중 하나로 클램프(clamp)하고 반올림합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 *NaN*이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _mv_를 _number_의 확장된 수학적 값으로 둔다.
-        1. _clamped_를 _mv_를 0과 255 사이로 클램프한 결과로 둔다.
-        1. _f_를 floor(_clamped_)로 둔다.
+        1. _number_를 ? ToNumber(_argument_)로 한다.
+        1. _number_가 *NaN*이면 *+0*<sub>𝔽</sub>를 반환한다.
+        1. _mv_를 _number_의 확장된 수학적 값으로 한다.
+        1. _clamped_를 _mv_를 0과 255 사이로 조정(clamp)한 결과로 한다.
+        1. _f_를 floor(_clamped_)로 한다.
         1. _clamped_ &lt; _f_ + 0.5이면 𝔽(_f_)를 반환한다.
         1. _clamped_ > _f_ + 0.5이면 𝔽(_f_ + 1)을 반환한다.
-        1. _f_가 짝수이면 𝔽(_f_)를; 아니면 𝔽(_f_ + 1)을 반환한다.
+        1. _f_가 짝수이면 𝔽(_f_)를 반환한다.
+        1. 𝔽(_f_ + 1)을 반환한다.
       </emu-alg>
       <emu-note>
         <p>대부분 다른 ECMAScript 정수 변환 연산과 달리 ToUint8Clamp는 비정수 값을 절단(truncate)하지 않고 반올림합니다. 또한 “round half up”을 사용하는 <emu-xref href="#sec-math.round">`Math.round`</emu-xref>와 달리 “round half to even” 절충 규칙을 사용합니다.</p>
@@ -5570,9 +5587,10 @@
         <dd>_argument_를 ℤ(-2<sup>63</sup>)부터 ℤ(2<sup>63</sup> - 1)까지(포함) 2<sup>64</sup>개의 BigInt 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _n_을 ? ToBigInt(_argument_)로 둔다.
-        1. _int64bit_를 ℝ(_n_) modulo 2<sup>64</sup>로 둔다.
-        1. _int64bit_ ≥ 2<sup>63</sup>이면 ℤ(_int64bit_ - 2<sup>64</sup>)을, 아니면 ℤ(_int64bit_)을 반환한다.
+        1. _n_을 ? ToBigInt(_argument_)로 한다.
+        1. _int64bit_를 ℝ(_n_) modulo 2<sup>64</sup>로 한다.
+        1. _int64bit_ ≥ 2<sup>63</sup>이면 ℤ(_int64bit_ - 2<sup>64</sup>)를 반환한다.
+        1. ℤ(_int64bit_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -5916,16 +5934,19 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 단언: SameType(_x_, _y_)는 *true*이다.
+        1. 단언: SameType(_x_, _y_)가 *true*이다.
         1. _x_가 *undefined* 또는 *null*이면 *true*를 반환한다.
-        1. _x_가 BigInt이면
+        1. _x_가 BigInt이면,
           1. BigInt::equal(_x_, _y_)를 반환한다.
-        1. _x_가 String이면
-          1. _x_와 _y_가 동일 길이이며 같은 위치에 동일 코드 유닛을 가지면 *true*, 아니면 *false*를 반환한다.
-        1. _x_가 Boolean이면
-          1. _x_와 _y_가 모두 *true* 또는 모두 *false*이면 *true*, 아니면 *false*를 반환한다.
-        1. 주: 다른 모든 ECMAScript 언어 값은 동일성(identity)으로 비교된다.
-        1. _x_가 _y_이면 *true*, 아니면 *false*를 반환한다.
+        1. _x_가 문자열(String)이면,
+          1. _x_와 _y_의 길이가 같고 동일 위치의 코드 유닛도 같으면 *true*를 반환한다.
+          1. *false*를 반환한다.
+        1. _x_가 불리언(Boolean)이면,
+          1. _x_와 _y_가 모두 *true*이거나 모두 *false*이면 *true*를 반환한다.
+          1. *false*를 반환한다.
+        1. 참고: 그 밖의 ECMAScript 언어 값들은 동일성(identity) 비교를 한다.
+        1. _x_가 _y_이면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
       <emu-note>
         설명을 위해 일부 경우는 필요 없더라도 별도로 다룹니다.
@@ -5949,44 +5970,43 @@
       </dl>
       <emu-alg>
         1. _LeftFirst_가 *true*이면,
-          1. _px_를 ? ToPrimitive(_x_, ~number~)로 둔다.
-          1. _py_를 ? ToPrimitive(_y_, ~number~)로 둔다.
-        1. Else,
-          1. 주: 좌→우 평가를 보존하기 위해 평가 순서를 반전해야 한다.
-          1. _py_를 ? ToPrimitive(_y_, ~number~)로 둔다.
-          1. _px_를 ? ToPrimitive(_x_, ~number~)로 둔다.
-        1. [id="step-arc-string-check"] _px_가 String이고 _py_가 String이면,
-          1. _lx_를 _px_의 길이로 둔다.
-          1. _ly_를 _py_의 길이로 둔다.
+          1. _px_를 ? ToPrimitive(_x_, ~number~)로 한다.
+          1. _py_를 ? ToPrimitive(_y_, ~number~)로 한다.
+        1. 아니면,
+          1. 참고: 평가 순서를 뒤집어 좌에서 우 평가를 보존해야 한다.
+          1. _py_를 ? ToPrimitive(_y_, ~number~)로 한다.
+          1. _px_를 ? ToPrimitive(_x_, ~number~)로 한다.
+        1. [id="step-arc-string-check"] _px_와 _py_가 모두 문자열(String)이면,
+          1. _lx_를 _px_의 길이로 한다.
+          1. _ly_를 _py_의 길이로 한다.
           1. 0 ≤ _i_ &lt; min(_lx_, _ly_)인 각 정수 _i_에 대해 오름차순으로,
-            1. _cx_를 _px_의 인덱스 _i_ 위치 코드 유닛의 숫자 값으로 둔다.
-            1. _cy_를 _py_의 인덱스 _i_ 위치 코드 유닛의 숫자 값으로 둔다.
+            1. _cx_를 _px_의 인덱스 _i_에 있는 코드 유닛의 숫자 값으로 한다.
+            1. _cy_를 _py_의 인덱스 _i_에 있는 코드 유닛의 숫자 값으로 한다.
             1. _cx_ &lt; _cy_이면 *true*를 반환한다.
             1. _cx_ > _cy_이면 *false*를 반환한다.
-          1. _lx_ &lt; _ly_이면 *true*, 아니면 *false*를 반환한다.
-        1. Else,
-          1. _px_가 BigInt이고 _py_가 String이면,
-            1. _ny_를 StringToBigInt(_py_)로 둔다.
-            1. _ny_가 *undefined*이면 *undefined*를 반환한다.
-            1. BigInt::lessThan(_px_, _ny_)를 반환한다.
-          1. _px_가 String이고 _py_가 BigInt이면,
-            1. _nx_를 StringToBigInt(_px_)로 둔다.
-            1. _nx_가 *undefined*이면 *undefined*를 반환한다.
-            1. BigInt::lessThan(_nx_, _py_)를 반환한다.
-          1. 주: _px_, _py_는 원시 값이므로 평가 순서는 중요하지 않다.
-          1. _nx_를 ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta>로 둔다.
-          1. _ny_를 ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta>로 둔다.
-          1. SameType(_nx_, _ny_)가 *true*이면,
-            1. _nx_가 Number이면
-              1. Number::lessThan(_nx_, _ny_)를 반환한다.
-            1. Else,
-              1. 단언: _nx_는 BigInt이다.
-              1. BigInt::lessThan(_nx_, _ny_)를 반환한다.
-          1. 단언: _nx_는 BigInt이고 _ny_는 Number, 또는 _nx_는 Number이고 _ny_는 BigInt.
-          1. _nx_ 또는 _ny_가 *NaN*이면 *undefined*를 반환한다.
-          1. _nx_가 *-∞*<sub>𝔽</sub>이거나 _ny_가 *+∞*<sub>𝔽</sub>이면 *true*를 반환한다.
-          1. _nx_가 *+∞*<sub>𝔽</sub>이거나 _ny_가 *-∞*<sub>𝔽</sub>이면 *false*를 반환한다.
-          1. ℝ(_nx_) &lt; ℝ(_ny_)이면 *true*, 아니면 *false*를 반환한다.
+          1. _lx_ &lt; _ly_이면 *true*를 반환한다.
+          1. *false*를 반환한다.
+        1. _px_가 BigInt이고 _py_가 문자열(String)이면,
+          1. _ny_를 StringToBigInt(_py_)로 한다.
+          1. _ny_가 *undefined*이면 *undefined*를 반환한다.
+          1. BigInt::lessThan(_px_, _ny_)를 반환한다.
+        1. _px_가 문자열(String)이고 _py_가 BigInt이면,
+          1. _nx_를 StringToBigInt(_px_)로 한다.
+          1. _nx_가 *undefined*이면 *undefined*를 반환한다.
+          1. BigInt::lessThan(_nx_, _py_)를 반환한다.
+        1. 참고: _px_와 _py_가 원시 값(primitive)이므로 평가 순서는 중요하지 않다.
+        1. _nx_를 ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta>로 한다.
+        1. _ny_를 ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta>로 한다.
+        1. SameType(_nx_, _ny_)가 *true*이면,
+          1. _nx_가 숫자(Number)면 Number::lessThan(_nx_, _ny_)를 반환한다.
+          1. 단언: _nx_는 BigInt이다.
+          1. BigInt::lessThan(_nx_, _ny_)를 반환한다.
+        1. 단언: _nx_와 _ny_ 중 하나는 BigInt이고 다른 하나는 숫자(Number)이다.
+        1. _nx_ 또는 _ny_가 *NaN*이면 *undefined*를 반환한다.
+        1. _nx_가 *-∞*<sub>𝔽</sub>이거나 _ny_가 *+∞*<sub>𝔽</sub>이면 *true*를 반환한다.
+        1. _nx_가 *+∞*<sub>𝔽</sub>이거나 _ny_가 *-∞*<sub>𝔽</sub>이면 *false*를 반환한다.
+        1. ℝ(_nx_) &lt; ℝ(_ny_)이면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
       <emu-note>
         <p><emu-xref href="#step-arc-string-check"></emu-xref> 단계는 덧셈 연산자 `+`를 처리하는 알고리즘(<emu-xref href="#sec-applystringornumericbinaryoperator"></emu-xref>)의 <emu-xref href="#step-binary-op-string-check"></emu-xref> 단계와 논리 OR 대신 논리 AND를 사용하는 점에서 다릅니다.</p>
@@ -6012,23 +6032,24 @@
           1. IsStrictlyEqual(_x_, _y_)를 반환한다.
         1. _x_가 *null*이고 _y_가 *undefined*이면 *true*를 반환한다.
         1. _x_가 *undefined*이고 _y_가 *null*이면 *true*를 반환한다.
-        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] 호스트가 웹 브라우저이거나 <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref>를 지원하면,
-          1. _x_가 Object이고 _x_가 [[IsHTMLDDA]] 내부 슬롯을 가지며 _y_가 *undefined* 또는 *null*이면 *true*를 반환한다.
-          1. _x_가 *undefined* 또는 *null*이고 _y_가 Object이며 _y_가 [[IsHTMLDDA]] 내부 슬롯을 가지면 *true*를 반환한다.
-        1. _x_가 Number이고 _y_가 String이면 ! IsLooselyEqual(_x_, ! ToNumber(_y_))를 반환한다.
-        1. _x_가 String이고 _y_가 Number이면 ! IsLooselyEqual(! ToNumber(_x_), _y_)를 반환한다.
-        1. _x_가 BigInt이고 _y_가 String이면,
-          1. _n_을 StringToBigInt(_y_)로 둔다.
+        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] 호스트가 웹 브라우저이거나 <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref>를 지원하는 경우,
+          1. _x_가 객체이고, _x_에 [[IsHTMLDDA]] 내부 슬롯이 있으며, _y_가 *undefined* 또는 *null*이면 *true*를 반환한다.
+          1. _x_가 *undefined* 또는 *null*이고, _y_가 객체이며, _y_에 [[IsHTMLDDA]] 내부 슬롯이 있으면 *true*를 반환한다.
+        1. _x_가 숫자(Number)이고 _y_가 문자열(String)이면 ! IsLooselyEqual(_x_, ! ToNumber(_y_))를 반환한다.
+        1. _x_가 문자열(String)이고 _y_가 숫자(Number)면 ! IsLooselyEqual(! ToNumber(_x_), _y_)를 반환한다.
+        1. _x_가 BigInt이고 _y_가 문자열(String)이면,
+          1. _n_을 StringToBigInt(_y_)로 한다.
           1. _n_이 *undefined*이면 *false*를 반환한다.
-          1. ! IsLooselyEqual(_x_, _n_)을 반환한다.
-        1. _x_가 String이고 _y_가 BigInt이면 ! IsLooselyEqual(_y_, _x_)를 반환한다.
-        1. _x_가 Boolean이면 ! IsLooselyEqual(! ToNumber(_x_), _y_)를 반환한다.
-        1. _y_가 Boolean이면 ! IsLooselyEqual(_x_, ! ToNumber(_y_))를 반환한다.
-        1. _x_가 String, Number, BigInt, Symbol 중 하나이고 _y_가 Object이면 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))를 반환한다.
-        1. _x_가 Object이고 _y_가 String, Number, BigInt, Symbol 중 하나이면 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)를 반환한다.
-        1. _x_가 BigInt이고 _y_가 Number이거나 _x_가 Number이고 _y_가 BigInt이면,
-          1. _x_ 또는 _y_가 유한이 아니면 *false*를 반환한다.
-          1. ℝ(_x_) = ℝ(_y_)이면 *true*, 아니면 *false*를 반환한다.
+          1. ! IsLooselyEqual(_x_, _n_)를 반환한다.
+        1. _x_가 문자열(String)이고 _y_가 BigInt이면 ! IsLooselyEqual(_y_, _x_)를 반환한다.
+        1. _x_가 불리언(Boolean)이면 ! IsLooselyEqual(! ToNumber(_x_), _y_)를 반환한다.
+        1. _y_가 불리언(Boolean)이면 ! IsLooselyEqual(_x_, ! ToNumber(_y_))를 반환한다.
+        1. _x_가 문자열, 숫자, BigInt 또는 심볼(Symbol)이고 _y_가 객체이면 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))를 반환한다.
+        1. _x_가 객체이고 _y_가 문자열, 숫자, BigInt 또는 심볼(Symbol)이면 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)를 반환한다.
+        1. _x_가 BigInt이고 _y_가 숫자인 경우 또는 _x_가 숫자이고 _y_가 BigInt인 경우,
+          1. _x_가 유한하지 않거나 _y_가 유한하지 않으면 *false*를 반환한다.
+          1. ℝ(_x_) = ℝ(_y_)이면 *true*를 반환한다.
+          1. *false*를 반환한다.
         1. *false*를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -6729,16 +6750,15 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _entry_를 PrivateElementFind(_O_, _P_)로 둔다.
-        1. _entry_가 ~empty~이면 *TypeError* 예외를 던진다.
-        1. _entry_.[[Kind]]가 ~field~이면
+        1. _entry_를 PrivateElementFind(_O_, _P_)로 한다.
+        1. _entry_가 ~empty~이면 *TypeError* 예외를 throw한다.
+        1. _entry_.[[Kind]]가 ~method~이면 *TypeError* 예외를 throw한다.
+        1. _entry_.[[Kind]]가 ~field~이면,
           1. _entry_.[[Value]]를 _value_로 설정한다.
-        1. Else if _entry_.[[Kind]]가 ~method~이면
-          1. *TypeError* 예외를 던진다.
-        1. Else,
-          1. 단언: _entry_.[[Kind]]는 ~accessor~.
-          1. _entry_.[[Set]]이 *undefined*이면 *TypeError* 예외를 던진다.
-          1. _setter_를 _entry_.[[Set]]으로 둔다.
+        1. 그렇지 않으면,
+          1. 단언: _entry_.[[Kind]]는 ~accessor~이다.
+          1. _entry_.[[Set]]가 *undefined*이면 *TypeError* 예외를 throw한다.
+          1. _setter_를 _entry_.[[Set]]로 한다.
           1. ? Call(_setter_, _O_, « _value_ »)를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -7181,7 +7201,7 @@
       <emu-alg>
         1. 단언: _value_는 Completion Record이다.
         1. _value_가 abrupt completion이면 ? IteratorClose(_iteratorRecord_, _value_)를 반환한다.
-        1. Else, _value_를 ! _value_로 설정한다.
+        1. _value_를 ! _value_로 설정한다.
       </emu-alg>
     </emu-clause>
 
@@ -7220,9 +7240,9 @@
       </emu-alg>
       <p>은 다음과 동일한 의미입니다:</p>
       <emu-alg>
-        1. Assert: _value_는 Completion Record이다.
-        1. _value_가 abrupt completion이면, ? AsyncIteratorClose(_iteratorRecord_, _value_)를 반환한다.
-        1. 그렇지 않으면, _value_를 ! _value_로 설정한다.
+        1. 단언: _value_는 Completion Record이다.
+        1. _value_가 abrupt completion이면 ? AsyncIteratorClose(_iteratorRecord_, _value_)를 반환한다.
+        1. _value_를 ! _value_로 설정한다.
       </emu-alg>
     </emu-clause>
 
@@ -8724,8 +8744,8 @@
       </emu-alg>
       <emu-grammar>BreakStatement : `break` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. _labelSet_이 |LabelIdentifier|의 StringValue를 포함하지 않으면 *true*를 반환한다.
-        1. *false*를 반환한다.
+        1. _labelSet_에 |LabelIdentifier|의 StringValue가 포함되어 있으면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -8913,8 +8933,8 @@
       </emu-alg>
       <emu-grammar>ContinueStatement : `continue` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. _iterationSet_이 |LabelIdentifier|의 StringValue를 포함하지 않으면 *true*를 반환한다.
-        1. *false*를 반환한다.
+        1. _iterationSet_에 |LabelIdentifier|의 StringValue가 포함되어 있으면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -9388,11 +9408,12 @@
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody `}`</emu-grammar>
       <emu-alg>
         1. _symbol_이 |ClassBody|이면 *true*를 반환한다.
-        1. _symbol_이 |ClassHeritage|이면
-          1. |ClassHeritage|가 존재하면 *true*, 아니면 *false*를 반환한다.
-        1. |ClassHeritage|가 존재하면
+        1. _symbol_이 |ClassHeritage|이면,
+          1. |ClassHeritage|가 존재하면 *true*를 반환한다.
+          1. *false*를 반환한다.
+        1. |ClassHeritage|가 존재하면,
           1. |ClassHeritage| Contains _symbol_이 *true*이면 *true*를 반환한다.
-        1. |ClassBody|에 대해 _symbol_ 인수를 사용한 ComputedPropertyContains 결과를 반환한다.
+        1. |ClassBody|에 인수 _symbol_로 ComputedPropertyContains의 결과를 반환한다.
       </emu-alg>
       <emu-note>
         <p>부분 구조에 의존하는 정적 의미 규칙은 일반적으로 |PropertyName|을 제외하고 클래스 본문 내부를 들여다보지 않는다.</p>
@@ -9657,9 +9678,8 @@
           1. _environment_가 *undefined*가 아니면
             1. ! _environment_.InitializeBinding(_name_, _value_)를 수행한다.
             1. ~unused~를 반환한다.
-          1. Else,
-            1. _lhs_를 ? ResolveBinding(_name_)으로 둔다.
-            1. ? PutValue(_lhs_, _value_)를 반환한다.
+          1. _lhs_를 ? ResolveBinding(_name_)으로 둔다.
+          1. ? PutValue(_lhs_, _value_)를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -10636,11 +10656,12 @@
             <dd>binding object의 이름 _N_ 프로퍼티 값을 반환. 존재하지 않을 경우 _S_에 따라 결과 결정.</dd>
           </dl>
           <emu-alg>
-            1. _bindingObject_를 _envRec_.[[BindingObject]]로 둔다.
-            1. _value_를 ? HasProperty(_bindingObject_, _N_)로 둔다.
-            1. _value_가 *false*이면
-              1. _S_가 *false*이면 *undefined* 반환; 아니면 *ReferenceError* 예외.
-            1. ? Get(_bindingObject_, _N_) 반환.
+            1. _bindingObject_를 _envRec_.[[BindingObject]]로 한다.
+            1. _value_를 ? HasProperty(_bindingObject_, _N_)로 한다.
+            1. _value_가 *false*이면,
+              1. _S_가 *false*이면 *undefined*를 반환한다.
+              1. *ReferenceError* 예외를 throw한다.
+            1. ? Get(_bindingObject_, _N_)를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -10707,8 +10728,8 @@
             <dd>Object Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[IsWithEnvironment]]가 *true*이면 _envRec_.[[BindingObject]] 반환.
-            1. 아니면 *undefined* 반환.
+            1. _envRec_.[[IsWithEnvironment]]가 *true*이면 _envRec_.[[BindingObject]]를 반환한다.
+            1. *undefined*를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -10811,7 +10832,8 @@
             <dd>Function Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면 *false*, 아니면 *true* 반환.
+            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면 *false*를 반환한다.
+            1. *true*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -10835,8 +10857,9 @@
             <dd>함수 환경 레코드(Function Environment Record) _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면, *false*를 반환한다.
-            1. _envRec_.[[FunctionObject]].[[HomeObject]]가 *undefined*이면, *false*를 반환한다. 그렇지 않으면 *true*를 반환한다.
+            1. _envRec_.[[ThisBindingStatus]]가 ~lexical~이면 *false*를 반환한다.
+            1. _envRec_.[[FunctionObject]].[[HomeObject]]가 *undefined*이면 *false*를 반환한다.
+            1. *true*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -11375,9 +11398,8 @@
           1. _exists_를 ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta>로 둔다.
           1. _exists_가 *true*이면
             1. Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } 반환.
-          1. Else
-            1. _outer_를 _env_.[[OuterEnv]]로 둔다.
-            1. ? GetIdentifierReference(_outer_, _name_, _strict_) 반환.
+          1. _outer_를 _env_.[[OuterEnv]]로 둔다.
+          1. ? GetIdentifierReference(_outer_, _name_, _strict_) 반환.
         </emu-alg>
       </emu-clause>
 
@@ -11699,8 +11721,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _realmRec_.[[Intrinsics]]를 새로운 Record로 설정한다.
-        1. [declared="steps,name,length,slots,prototype,async"] _realmRec_.[[Intrinsics]]의 필드들을 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>에 나열된 값들로 설정한다. 필드 이름은 표의 첫 번째 열에 나열된 이름들이다. 각 필드의 값은, <emu-xref href="#sec-global-object"></emu-xref>부터 <emu-xref href="#sec-reflection"></emu-xref>까지 각 객체의 명세에 따라 완전히 재귀적으로 프로퍼티 값들로 채워진 새로운 객체 값이다. 모든 객체 프로퍼티 값은 새롭게 생성된 객체 값이다. 내장 함수 객체인 값들은 모두 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_)을 수행하여 생성된다. 여기서 _steps_는 명세에서 지정된 그 함수의 정의이며, _name_은 함수 *"name"* 프로퍼티의 초기값, _length_는 함수 *"length"* 프로퍼티의 초기값, _slots_는 함수에 지정된 내부 슬롯의 이름 리스트(있을 경우), _prototype_은 함수의 [[Prototype]] 내부 슬롯의 지정된 값, _async_는 함수가 “async”로 기술된 경우 *true*, 그렇지 않으면 *false*이다. 내재 객체 및 그 프로퍼티의 생성 순서는 아직 생성되지 않은 객체에 대한 의존성이 없도록 해야 한다.
+        1. _realmRec_.[[Intrinsics]]를 새 레코드로 설정한다.
+        1. [declared="steps,name,length,slots,prototype,async"] <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>에 나열된 값으로 _realmRec_.[[Intrinsics]]의 필드를 설정한다. 필드 이름은 표의 "Intrinsic Name" 열에 있는 이름이다. 각 필드의 값은 <emu-xref href="#sec-global-object"></emu-xref>부터 <emu-xref href="#sec-reflection"></emu-xref>까지 조항에서 각 객체의 명세에 따라 프로퍼티 값들이 완전히 재귀적으로 채워진 새 객체 값이다. 모든 객체 프로퍼티 값은 새로 생성된 객체 값이다. 내장 함수 객체인 모든 값은 CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_)를 수행하여 생성한다. 여기서 _steps_는 본 명세에서 제공하는 해당 함수 정의이며, _name_은 함수의 *"name"* 프로퍼티 초기값, _length_는 함수의 *"length"* 프로퍼티 초기값, _slots_는 함수의 명시된 내부 슬롯 이름(있을 경우) 리스트, _prototype_은 함수의 [[Prototype]] 내부 슬롯의 명시값, _async_는 해당 함수가 "async"로 기술된 경우 *true*, 아니면 *false*이다. 본질 객체와 그 프로퍼티의 생성 순서는 아직 생성되지 않은 객체에 대한 의존성을 피하도록 정렬해야 한다.
         1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -11852,9 +11874,10 @@
       </dl>
 
       <emu-alg>
-        1. 실행 컨텍스트 스택이 비어 있으면 *null*을 반환한다.
-        1. _ec_를 실행 컨텍스트 스택의 최상단에서 ScriptOrModule 구성 요소가 *null*이 아닌 실행 컨텍스트로 둔다.
-        1. 그러한 실행 컨텍스트가 없으면 *null*을 반환하고; 그렇지 않으면 _ec_의 ScriptOrModule을 반환한다.
+        1. 실행 콘텍스트 스택이 비어 있으면 *null*을 반환한다.
+        1. _ec_를 실행 콘텍스트 스택에서 ScriptOrModule 구성 요소가 *null*이 아닌 가장 위의 실행 콘텍스트로 한다.
+        1. 해당 실행 콘텍스트가 존재하지 않으면 *null*을 반환한다.
+        1. _ec_의 ScriptOrModule을 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -12919,29 +12942,26 @@
         </dl>
 
         <emu-alg>
-          1. _ownDesc_ 가 *undefined* 이면
-            1. _parent_ 를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> 로 둔다.
-            1. _parent_ 가 *null* 이 아니면
-              1. ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> 를 반환한다.
-            1. 그렇지 않으면
-              1. _ownDesc_ 를 PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } 로 설정한다.
-          1. IsDataDescriptor(_ownDesc_) 가 *true* 이면
-            1. _ownDesc_.[[Writable]] 이 *false* 이면 *false* 반환.
-            1. _Receiver_ 가 객체가 아니면 *false* 반환.
-            1. _existingDescriptor_ 를 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta> 로 둔다.
-            1. _existingDescriptor_ 가 *undefined* 가 아니면
-              1. IsAccessorDescriptor(_existingDescriptor_) 가 *true* 이면 *false* 반환.
-              1. _existingDescriptor_.[[Writable]] 이 *false* 이면 *false* 반환.
-              1. _valueDesc_ 를 PropertyDescriptor { [[Value]]: _V_ } 로 둔다.
-              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta> 를 반환한다.
-            1. 그렇지 않으면
-              1. 단언: _Receiver_ 는 현재 프로퍼티 _P_ 를 갖지 않는다.
-              1. ? CreateDataProperty(_Receiver_, _P_, _V_) 를 반환한다.
-          1. 단언: IsAccessorDescriptor(_ownDesc_) 는 *true* 이다.
-          1. _setter_ 를 _ownDesc_.[[Set]] 로 둔다.
-          1. _setter_ 가 *undefined* 이면 *false* 반환.
-          1. ? Call(_setter_, _Receiver_, « _V_ ») 를 수행한다.
-          1. *true* 반환.
+          1. _ownDesc_가 *undefined*이면,
+            1. _parent_를 ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta>로 한다.
+            1. _parent_가 *null*이 아니면, ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta>를 반환한다.
+            1. _ownDesc_를 PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* }로 설정한다.
+          1. IsDataDescriptor(_ownDesc_)가 *true*이면,
+            1. _ownDesc_.[[Writable]]가 *false*이면 *false*를 반환한다.
+            1. _Receiver_가 객체가 아니면 *false*를 반환한다.
+            1. _existingDescriptor_를 ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta>로 한다.
+            1. _existingDescriptor_가 *undefined*이면,
+              1. 단언: _Receiver_는 현재 프로퍼티 _P_를 갖고 있지 않다.
+              1. ? CreateDataProperty(_Receiver_, _P_, _V_)를 반환한다.
+            1. IsAccessorDescriptor(_existingDescriptor_)가 *true*이면 *false*를 반환한다.
+            1. _existingDescriptor_.[[Writable]]가 *false*이면 *false*를 반환한다.
+            1. _valueDesc_를 PropertyDescriptor { [[Value]]: _V_ }로 한다.
+            1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta>를 반환한다.
+          1. 단언: IsAccessorDescriptor(_ownDesc_)가 *true*이다.
+          1. _setter_를 _ownDesc_.[[Set]]로 한다.
+          1. _setter_가 *undefined*이면 *false*를 반환한다.
+          1. ? Call(_setter_, _Receiver_, « _V_ »)를 수행한다.
+          1. *true*를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -13534,14 +13554,12 @@
       </h1>
       <dl class="header"></dl>
       <emu-alg>
-        1. 단언: _homeObject_ 는 ordinary 이며 extensible 한 객체.
-        1. _key_ 가 Private Name 이면
-          1. PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ } 를 반환.
-        1. 그렇지 않으면
-          1. _desc_ 를 PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } 로 둔다.
-          1. ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_) 수행.
-          1. NOTE: _key_ 가 *"prototype"* 인 class static method 정의 시에만 abrupt completion 반환 가능.
-          1. ~unused~ 반환.
+        1. 단언: _homeObject_는 일반적이고 확장 가능한 객체이다.
+        1. _key_가 프라이빗 이름(Private Name)이면 PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ }를 반환한다.
+        1. _desc_를 PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }로 한다.
+        1. ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_)를 수행한다.
+        1. 참고: DefinePropertyOrThrow는 _key_가 *"prototype"*인 클래스 정적 메서드를 정의하려고 할 때만 abrupt completion을 반환한다.
+        1. ~unused~를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -13801,19 +13819,28 @@
       </h1>
       <dl class="header"></dl>
       <emu-alg>
-        1. _callerContext_ 를 실행 중 실행 컨텍스트로 둔다.
-        1. _callerContext_ 가 아직 suspend 되어 있지 않다면 suspend 한다.
-        1. _calleeContext_ 를 새 실행 컨텍스트로 둔다.
-        1. _calleeContext_ 의 Function 을 _F_ 로 설정한다.
-        1. _calleeRealm_ 을 _F_.[[Realm]] 로 둔다.
-        1. _calleeContext_ 의 Realm 을 _calleeRealm_ 로 설정한다.
-        1. _calleeContext_ 의 ScriptOrModule 을 *null* 로 설정한다.
-        1. 구현 정의된 필요 초기화를 _calleeContext_ 에 수행한다.
-        1. _calleeContext_ 를 실행 컨텍스트 스택에 push; 이제 _calleeContext_ 가 실행 중 실행 컨텍스트이다.
-        1. [id="step-call-builtin-function-result"] _result_ 를 _F_ 의 명세에 부합하는 방식으로 _F_ 를 평가하여 얻은 Completion Record 로 둔다. _thisArgument_ 가 ~uninitialized~ 이면 *this* 값은 초기화되지 않은 상태이며; 그렇지 않으면 _thisArgument_ 가 *this* 값을 제공한다. _argumentsList_ 는 명명된 매개변수들을 제공한다. _newTarget_ 은 NewTarget 값을 제공한다.
-        1. NOTE: _F_ 가 이 문서에서 정의된 경우 “the specification of _F_” 는 알고리즘 단계 등으로 기술된 그 동작을 의미한다.
-        1. 실행 컨텍스트 스택에서 _calleeContext_ 를 제거하고 _callerContext_ 를 실행 중 실행 컨텍스트로 복원한다.
-        1. ? _result_ 를 반환한다.
+        1. _callerContext_를 현재 실행 콘텍스트로 한다.
+        1. _callerContext_가 이미 중단(suspended)되어 있지 않으면, _callerContext_를 중단한다.
+        1. _calleeContext_를 새로운 실행 콘텍스트로 한다.
+        1. _calleeContext_의 Function을 _F_로 설정한다.
+        1. _calleeRealm_을 _F_.[[Realm]]으로 한다.
+        1. _calleeContext_의 Realm을 _calleeRealm_으로 설정한다.
+        1. _calleeContext_의 ScriptOrModule을 *null*로 설정한다.
+        1. _calleeContext_에 필요한 구현체 정의 초기화를 수행한다.
+        1. _calleeContext_를 실행 콘텍스트 스택에 푸시한다; 이제 _calleeContext_가 실행 중인 콘텍스트가 된다.
+        1. _F_.[[Async]]가 *true*이면,
+          1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 한다.
+          1. _resultsClosure_를 _F_, _thisArgument_, _argumentsList_, _newTarget_를 캡처하는 파라미터 없는 새로운 추상 클로저(Abstract Closure)로 하고, 호출될 때 다음 단계를 수행한다:
+            1. _result_를 <emu-meta effects="user-code">_F_의 사양에 따라 평가</emu-meta>한 Completion Record로 한다. _thisArgument_가 ~uninitialized~이면 *this* 값이 미초기화 상태이고, 그렇지 않으면 _thisArgument_가 *this* 값을 제공한다. _argumentsList_가 명명된 파라미터를, _newTarget_이 NewTarget 값을 제공한다.
+            1. 참고: _F_가 본 문서에서 정의된 경우, “_F_의 사양”은 알고리즘 단계 또는 기타 수단으로 지정된 동작이다.
+            1. Completion(_result_)를 반환한다.
+          1. AsyncFunctionStart(_promiseCapability_, _resultsClosure_)를 수행한다.
+          1. 실행 콘텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 콘텍스트로 복원한다.
+          1. _promiseCapability_.[[Promise]]를 반환한다.
+        1. [id="step-call-builtin-function-result"] _result_를 <emu-meta effects="user-code">_F_의 사양에 따라 평가</emu-meta>한 Completion Record로 한다. _thisArgument_가 ~uninitialized~이면 *this* 값이 미초기화 상태이고, 그렇지 않으면 _thisArgument_가 *this* 값을 제공한다. _argumentsList_가 명명된 파라미터를, _newTarget_이 NewTarget 값을 제공한다.
+        1. 참고: _F_가 본 문서에서 정의된 경우, “_F_의 사양”은 알고리즘 단계 또는 기타 수단으로 지정된 동작이다.
+        1. 실행 콘텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 콘텍스트로 복원한다.
+        1. ? _result_를 반환한다.
       </emu-alg>
       <emu-note>
         <p>_calleeContext_ 가 실행 컨텍스트 스택에서 제거될 때 접근 가능한 Generator 에 의해 suspend 및 보존되어 후속 재개가 예정된 경우 파괴되어서는 안 된다.</p>
@@ -13982,25 +14009,24 @@
           <dd>Array 이그조틱 객체 _A_</dd>
         </dl>
         <emu-alg>
-          1. _P_ 가 *"length"* 이면
-            1. ? ArraySetLength(_A_, _Desc_) 를 반환한다.
-          1. Else if _P_ 가 배열 인덱스이면
-            1. _lengthDesc_ 를 OrdinaryGetOwnProperty(_A_, *"length"*) 로 둔다.
-            1. 단언: _lengthDesc_ 는 *undefined* 가 아님.
-            1. 단언: IsDataDescriptor(_lengthDesc_) 는 *true*.
-            1. 단언: _lengthDesc_.[[Configurable]] 는 *false*.
-            1. _length_ 를 _lengthDesc_.[[Value]] 로 둔다.
-            1. 단언: _length_ 는 0 이상 정수 Number.
-            1. _index_ 를 ! ToUint32(_P_) 로 둔다.
-            1. _index_ ≥ _length_ 이고 _lengthDesc_.[[Writable]] 이 *false* 이면 *false* 반환.
-            1. _succeeded_ 를 ! OrdinaryDefineOwnProperty(_A_, _P_, _Desc_) 로 둔다.
-            1. _succeeded_ 가 *false* 이면 *false* 반환.
-            1. _index_ ≥ _length_ 이면
-              1. _lengthDesc_.[[Value]] 를 _index_ + *1*<sub>𝔽</sub> 로 설정.
-              1. _succeeded_ 를 ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_) 로 설정.
-              1. 단언: _succeeded_ 는 *true*.
-            1. *true* 반환.
-          1. ? OrdinaryDefineOwnProperty(_A_, _P_, _Desc_) 를 반환한다.
+          1. _P_가 *"length"*이면, ? ArraySetLength(_A_, _Desc_)를 반환한다.
+          1. _P_가 배열 인덱스(array index)면,
+            1. _lengthDesc_를 OrdinaryGetOwnProperty(_A_, *"length"*)로 한다.
+            1. 단언: _lengthDesc_는 *undefined*가 아니다.
+            1. 단언: IsDataDescriptor(_lengthDesc_)가 *true*이다.
+            1. 단언: _lengthDesc_.[[Configurable]]가 *false*이다.
+            1. _length_를 _lengthDesc_.[[Value]]로 한다.
+            1. 단언: _length_는 음수가 아닌 정수(Number)이다.
+            1. _index_를 ! ToUint32(_P_)로 한다.
+            1. _index_ ≥ _length_이고 _lengthDesc_.[[Writable]]가 *false*이면 *false*를 반환한다.
+            1. _succeeded_를 ! OrdinaryDefineOwnProperty(_A_, _P_, _Desc_)로 한다.
+            1. _succeeded_가 *false*면 *false*를 반환한다.
+            1. _index_ ≥ _length_이면,
+              1. _lengthDesc_.[[Value]]를 _index_ + *1*<sub>𝔽</sub>로 설정한다.
+              1. _succeeded_를 ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_)로 한다.
+              1. 단언: _succeeded_가 *true*이다.
+            1. *true*를 반환한다.
+          1. ? OrdinaryDefineOwnProperty(_A_, _P_, _Desc_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -14316,13 +14342,11 @@
           <dd>arguments 이그조틱 객체 _args_</dd>
         </dl>
         <emu-alg>
-          1. _map_ 을 _args_.[[ParameterMap]] 로 둔다.
-          1. _isMapped_ 를 ! HasOwnProperty(_map_, _P_) 로 둔다.
-          1. _isMapped_ 가 *false* 이면
-            1. ? OrdinaryGet(_args_, _P_, _Receiver_) 반환.
-          1. Else
-            1. 단언: _map_ 은 _P_ 에 대한 형식 매개변수 매핑을 포함.
-            1. ! Get(_map_, _P_) 반환.
+          1. _map_을 _args_.[[ParameterMap]]로 한다.
+          1. _isMapped_를 ! HasOwnProperty(_map_, _P_)로 한다.
+          1. _isMapped_가 *false*이면 ? OrdinaryGet(_args_, _P_, _Receiver_)를 반환한다.
+          1. 단언: _map_은 _P_에 대한 형식 매개변수 매핑을 포함한다.
+          1. ! Get(_map_, _P_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -14624,11 +14648,12 @@
           <dd>TypedArray _O_</dd>
         </dl>
         <emu-alg>
-          1. _P_ 가 String 이면
-            1. _numericIndex_ 를 CanonicalNumericIndexString(_P_) 로 둔다.
-            1. _numericIndex_ 가 *undefined* 가 아니면
-              1. IsValidIntegerIndex(_O_, _numericIndex_) 가 *false* 이면 *true* 반환; else *false* 반환.
-          1. ! OrdinaryDelete(_O_, _P_) 반환.
+          1. _P_가 문자열(String)이면,
+            1. _numericIndex_를 CanonicalNumericIndexString(_P_)로 한다.
+            1. _numericIndex_가 *undefined*가 아니면,
+              1. IsValidIntegerIndex(_O_, _numericIndex_)가 *false*이면 *true*를 반환한다.
+              1. *false*를 반환한다.
+          1. ! OrdinaryDelete(_O_, _P_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -15974,10 +15999,10 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _sourceText_ 가 String 이면 _sourceText_ 를 StringToCodePoints(_sourceText_) 로 설정한다.
-        1. _goalSymbol_ 을 목표 심볼(goal symbol)로 사용하여 _sourceText_ 를 파싱하고, 파싱 결과를 조기 오류(early error) 조건이 있는지 분석한다. 파싱과 조기 오류 검출은 구현 정의 방식으로 상호 교차(interleaved)될 수 있다.
-        1. 파싱이 성공했고 조기 오류가 발견되지 않았다면, 파싱에서 생성된 파스 트리의 루트에 있는 Parse Node ( _goalSymbol_ 의 인스턴스) 를 반환한다.
-        1. 그렇지 않으면, 파싱 오류 및/또는 조기 오류를 나타내는 하나 이상의 *SyntaxError* 객체들의 List 를 반환한다. 둘 이상의 파싱 오류 또는 조기 오류가 있을 경우, 리스트 내 오류 객체의 수와 순서는 구현 정의이지만 최소 하나는 있어야 한다.
+        1. _sourceText_가 문자열(String)이면, _sourceText_를 StringToCodePoints(_sourceText_)로 설정한다.
+        1. _goalSymbol_을 목표 기호로 하여 _sourceText_를 구문 분석(parse)하고, 파싱 결과에서 조기 오류 조건(early error conditions)이 있는지 분석한다. 파싱과 조기 오류 감지는 구현체 정의 방식에 따라 병행될 수 있다.
+        1. 파싱이 성공했고 조기 오류가 발견되지 않으면, 파싱 결과로 생성된 파싱 트리의 루트에 있는 Parse Node(_goalSymbol_의 인스턴스)를 반환한다.
+        1. 파싱 오류 및/또는 조기 오류를 나타내는 하나 이상의 *SyntaxError* 객체의 리스트를 반환한다. 파싱 오류나 조기 오류가 둘 이상 있을 경우, 리스트 내 오류 객체의 수와 순서는 구현체 정의에 따르나, 최소 하나는 포함되어 있어야 한다.
       </emu-alg>
       <emu-note>
         <p>특정 지점에 조기 오류가 있고 이후 지점에 구문 오류가 있는 텍스트를 생각해보자. 파싱 후 조기 오류 패스를 수행하는 구현은 구문 오류를 보고하고 조기 오류 패스로 진행하지 않을 수 있다. 두 활동을 교차 수행하는 구현은 조기 오류를 보고하고 구문 오류 탐지를 진행하지 않을 수 있다. 세 번째 구현은 두 오류를 모두 보고할 수 있다. 이 모든 동작은 적합하다.</p>
@@ -16064,7 +16089,8 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _node_ 가 매치한 소스 텍스트가 strict mode code 이면 *true* 반환; 그렇지 않으면 *false* 반환.
+          1. _node_에 의해 매칭된 소스 텍스트가 strict 모드 코드라면 *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -18286,16 +18312,19 @@
           <dd>인수가 유효한 정규 표현식 리터럴인지 판정한다.</dd>
         </dl>
         <emu-alg>
-          1. _flags_ 를 _literal_ 의 FlagText 로 둔다.
-          1. _flags_ 가 `d`, `g`, `i`, `m`, `s`, `u`, `v`, `y` 이외 코드 포인트를 포함하거나 동일 코드 포인트를 중복 포함하면 *false* 반환.
-          1. _flags_ 가 `u` 포함하면 _u_ = *true*, 아니면 *false*.
-          1. _flags_ 가 `v` 포함하면 _v_ = *true*, 아니면 *false*.
-          1. _patternText_ 를 _literal_ 의 BodyText 로 둔다.
-          1. _u_ 가 *false* 이고 _v_ 가 *false* 이면
-            1. _stringValue_ 를 CodePointsToString(_patternText_) 로 둔다.
-            1. _stringValue_ 의 16비트 요소 각각을 유니코드 BMP 코드 포인트로 해석한 코드 포인트 시퀀스로 _patternText_ 재설정 (UTF-16 디코딩 미적용).
-          1. _parseResult_ 를 ParsePattern(_patternText_, _u_, _v_) 로 둔다.
-          1. _parseResult_ 가 Parse Node 이면 *true* 반환; 아니면 *false* 반환.
+          1. _flags_를 _literal_의 FlagText로 한다.
+          1. _flags_에 `d`, `g`, `i`, `m`, `s`, `u`, `v`, `y` 이외의 코드 포인트가 하나라도 포함되어 있거나,
+            _flags_에 동일한 코드 포인트가 한 번 이상 포함되어 있으면 *false*를 반환한다.
+          1. _flags_에 `u`가 포함되어 있으면 _u_를 *true*로, 아니면 *false*로 한다.
+          1. _flags_에 `v`가 포함되어 있으면 _v_를 *true*로, 아니면 *false*로 한다.
+          1. _patternText_를 _literal_의 BodyText로 한다.
+          1. _u_와 _v_가 모두 *false*이면,
+            1. _stringValue_를 CodePointsToString(_patternText_)로 한다.
+            1. _patternText_를 _stringValue_의 각 16비트 요소를 유니코드 BMP 코드 포인트로 해석하여 얻어진 코드 포인트 시퀀스로 설정한다.
+              (요소에 대해 UTF-16 디코딩은 적용되지 않는다.)
+          1. _parseResult_를 ParsePattern(_patternText_, _u_, _v_)로 한다.
+          1. _parseResult_가 Parse Node이면 *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -19362,9 +19391,8 @@
             1. HostFinalizeImportMeta(_importMeta_, _module_) 수행.
             1. _module_.[[ImportMeta]] 에 _importMeta_ 설정.
             1. _importMeta_ 반환.
-          1. Else,
-            1. 단언: _importMeta_ 는 Object.
-            1. _importMeta_ 반환.
+          1. 단언: _importMeta_ 는 Object.
+          1. _importMeta_ 반환.
         </emu-alg>
 
         <emu-clause id="sec-hostgetimportmetaproperties" type="host-defined abstract operation">
@@ -19580,10 +19608,9 @@
             1. _deleteStatus_ 를 ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta> 로 둔다.
             1. _deleteStatus_ 가 *false* 이고 _ref_.[[Strict]] 가 *true* 이면 *TypeError* 예외 throw.
             1. _deleteStatus_ 반환.
-          1. 그렇지 않으면
-            1. _base_ 를 _ref_.[[Base]] 로 둔다.
-            1. 단언: _base_ 는 Environment Record.
-            1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> 반환.
+          1. _base_ 를 _ref_.[[Base]] 로 둔다.
+          1. 단언: _base_ 는 Environment Record.
+          1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> 반환.
         </emu-alg>
         <emu-note>
           <p>`delete` 연산자가 strict 모드 코드 안에 나타나고 그 |UnaryExpression| 이 변수, 함수 인자, 함수 이름에 대한 직접 참조이면 *SyntaxError* 예외가 발생한다. 또한 strict 모드 코드에서 `delete` 가 발생하고 삭제하려는 프로퍼티가 { [[Configurable]]: *false* } 속성을 가지거나(또는 삭제 불가) 하면 *TypeError* 예외가 발생한다.</p>
@@ -19655,40 +19682,36 @@
     </emu-clause>
 
     <emu-clause id="sec-unary-minus-operator">
-      <h1>단항 `-` 연산자(Unary `-` Operator)</h1>
+      <h1>단항 `-` 연산자</h1>
       <emu-note>
-        <p>단항 `-` 연산자는 피연산자를 수치 값으로 변환한 뒤 부호를 반전한다. *+0*<sub>𝔽</sub> 을 부정하면 *-0*<sub>𝔽</sub>, *-0*<sub>𝔽</sub> 을 부정하면 *+0*<sub>𝔽</sub> 이 된다.</p>
+        <p>단항 `-` 연산자는 피연산자를 숫자 값으로 변환한 뒤 부호를 반전시킨다. *+0*<sub>𝔽</sub>을 반전시키면 *-0*<sub>𝔽</sub>이 되고, *-0*<sub>𝔽</sub>을 반전시키면 *+0*<sub>𝔽</sub>이 된다.</p>
       </emu-note>
 
       <emu-clause id="sec-unary-minus-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>런타임 의미론: 평가(Runtime Semantics: Evaluation)</h1>
+        <h1>런타임 의미론: 평가</h1>
         <emu-grammar>UnaryExpression : `-` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. _expr_ 를 |UnaryExpression| 의 Evaluation 결과 (?) 로 둔다.
-          1. _oldValue_ 를 ? ToNumeric(? GetValue(_expr_)) 로 둔다.
-          1. _oldValue_ 가 Number 이면
-            1. Number::unaryMinus(_oldValue_) 반환.
-          1. 그렇지 않으면
-            1. 단언: _oldValue_ 는 BigInt.
-            1. BigInt::unaryMinus(_oldValue_) 반환.
+          1. _expr_를 |UnaryExpression|의 평가 결과(?)로 한다.
+          1. _oldValue_를 ? ToNumeric(? GetValue(_expr_))로 한다.
+          1. _oldValue_가 숫자(Number)이면 Number::unaryMinus(_oldValue_)를 반환한다.
+          1. 단언: _oldValue_는 BigInt이다.
+          1. BigInt::unaryMinus(_oldValue_)를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-bitwise-not-operator">
-      <h1>비트 NOT 연산자(Bitwise NOT Operator) ( `~` )</h1>
+      <h1>비트 NOT 연산자 ( `~` )</h1>
 
       <emu-clause id="sec-bitwise-not-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>런타임 의미론: 평가(Runtime Semantics: Evaluation)</h1>
+        <h1>런타임 의미론: 평가</h1>
         <emu-grammar>UnaryExpression : `~` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. _expr_ 를 |UnaryExpression| 의 Evaluation 결과 (?) 로 둔다.
-          1. _oldValue_ 를 ? ToNumeric(? GetValue(_expr_)) 로 둔다.
-          1. _oldValue_ 가 Number 이면
-            1. Number::bitwiseNOT(_oldValue_) 반환.
-          1. 그렇지 않으면
-            1. 단언: _oldValue_ 는 BigInt.
-            1. BigInt::bitwiseNOT(_oldValue_) 반환.
+          1. _expr_를 |UnaryExpression|의 평가 결과(?)로 한다.
+          1. _oldValue_를 ? ToNumeric(? GetValue(_expr_))로 한다.
+          1. _oldValue_가 숫자(Number)이면 Number::bitwiseNOT(_oldValue_)를 반환한다.
+          1. 단언: _oldValue_는 BigInt이다.
+          1. BigInt::bitwiseNOT(_oldValue_)를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -19879,56 +19902,75 @@
     </emu-note>
 
     <emu-clause id="sec-relational-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>런타임 의미론: 평가(Runtime Semantics: Evaluation)</h1>
+      <h1>런타임 의미론: 평가</h1>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ 를 |RelationalExpression| 의 Evaluation 결과 (?) 로 둔다.
-        1. _lVal_ 를 ? GetValue(_lRef_) 로 둔다.
-        1. _rRef_ 를 |ShiftExpression| 의 Evaluation 결과 (?) 로 둔다.
-        1. _rVal_ 를 ? GetValue(_rRef_) 로 둔다.
-        1. _r_ 를 ? IsLessThan(_lVal_, _rVal_, *true*) 로 둔다.
-        1. _r_ 가 *undefined* 이면 *false* 반환; 그렇지 않으면 _r_ 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 ? IsLessThan(_lVal_, _rVal_, *true*)로 한다.
+        1. _r_가 *undefined*이면 *false*를 반환한다.
+        1. _r_를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 위와 같이 얻는다.
-        1. _r_ 를 ? IsLessThan(_rVal_, _lVal_, *false*) 로 둔다.
-        1. _r_ 가 *undefined* 이면 *false* 반환; 그렇지 않으면 _r_ 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 ? IsLessThan(_rVal_, _lVal_, *false*)로 한다.
+        1. _r_가 *undefined*이면 *false*를 반환한다.
+        1. _r_를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. _r_ 를 ? IsLessThan(_rVal_, _lVal_, *false*) 로 둔다.
-        1. _r_ 가 *true* 또는 *undefined* 이면 *false* 반환; 그렇지 않으면 *true* 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 ? IsLessThan(_rVal_, _lVal_, *false*)로 한다.
+        1. _r_가 *true* 또는 *undefined*이면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. _r_ 를 ? IsLessThan(_lVal_, _rVal_, *true*) 로 둔다.
-        1. _r_ 가 *true* 또는 *undefined* 이면 *false* 반환; 그렇지 않으면 *true* 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 ? IsLessThan(_lVal_, _rVal_, *true*)로 한다.
+        1. _r_가 *true* 또는 *undefined*이면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `instanceof` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. ? InstanceofOperator(_lVal_, _rVal_) 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. ? InstanceofOperator(_lVal_, _rVal_)를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `in` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ 를 얻는다.
-        1. _rVal_ 가 Object 가 아니면 *TypeError* 예외 throw.
-        1. ? HasProperty(_rVal_, ? ToPropertyKey(_lVal_)) 반환.
+        1. _lRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _rVal_가 객체(Object)가 아니면 *TypeError* 예외를 throw한다.
+        1. ? HasProperty(_rVal_, ? ToPropertyKey(_lVal_))를 반환한다.
       </emu-alg>
       <emu-grammar>RelationalExpression : PrivateIdentifier `in` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _privateIdentifier_ 를 |PrivateIdentifier| 의 StringValue 로 둔다.
-        1. _rRef_ 를 |ShiftExpression| 의 Evaluation 결과 (?) 로 둔다.
-        1. _rVal_ 를 ? GetValue(_rRef_) 로 둔다.
-        1. _rVal_ 가 Object 가 아니면 *TypeError* 예외 throw.
-        1. _privateEnv_ 를 실행 중인 실행 컨텍스트의 PrivateEnvironment 로 둔다.
-        1. 단언: _privateEnv_ 는 *null* 이 아님.
-        1. _privateName_ 을 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_) 로 둔다.
-        1. PrivateElementFind(_rVal_, _privateName_) 이 ~empty~ 가 아니면 *true* 반환.
-        1. *false* 반환.
+        1. _privateIdentifier_를 |PrivateIdentifier|의 StringValue로 한다.
+        1. _rRef_를 |ShiftExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _rVal_가 객체(Object)가 아니면 *TypeError* 예외를 throw한다.
+        1. _privateEnv_를 현재 실행 콘텍스트의 PrivateEnvironment로 한다.
+        1. 단언: _privateEnv_는 *null*이 아니다.
+        1. _privateName_를 ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)로 한다.
+        1. PrivateElementFind(_rVal_, _privateName_)이 ~empty~이면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -19976,62 +20018,64 @@
       <h1>런타임 의미론: 평가</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
-        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
-        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
-        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
-        1. ? IsLooselyEqual(_rVal_, _lVal_)을 반환한다.
+        1. _lRef_를 |EqualityExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. ? IsLooselyEqual(_rVal_, _lVal_)를 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
-        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
-        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
-        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
-        1. _r_을 ? IsLooselyEqual(_rVal_, _lVal_)로 둔다.
-        1. _r_이 *true*이면 *false*를, 그렇지 않으면 *true*를 반환한다.
+        1. _lRef_를 |EqualityExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 ? IsLooselyEqual(_rVal_, _lVal_)로 한다.
+        1. _r_가 *true*이면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
-        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
-        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
-        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
-        1. IsStrictlyEqual(_rVal_, _lVal_)을 반환한다.
+        1. _lRef_를 |EqualityExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. IsStrictlyEqual(_rVal_, _lVal_)를 반환한다.
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_를 ? |EqualityExpression|의 평가로 둔다.
-        1. _lVal_을 ? GetValue(_lRef_)로 둔다.
-        1. _rRef_를 ? |RelationalExpression|의 평가로 둔다.
-        1. _rVal_을 ? GetValue(_rRef_)로 둔다.
-        1. _r_을 IsStrictlyEqual(_rVal_, _lVal_)로 둔다.
-        1. _r_이 *true*이면 *false*를, 그렇지 않으면 *true*를 반환한다.
+        1. _lRef_를 |EqualityExpression|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _rRef_를 |RelationalExpression|의 평가 결과(?)로 한다.
+        1. _rVal_를 ? GetValue(_rRef_)로 한다.
+        1. _r_를 IsStrictlyEqual(_rVal_, _lVal_)로 한다.
+        1. _r_가 *true*이면 *false*를 반환한다.
+        1. *true*를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>동등 연산자는 다음 불변식을 유지한다:</p>
+        <p>동등 연산자는 다음과 같은 불변식을 유지합니다:</p>
         <ul>
           <li>
-            `A != B`는 `!(A == B)`와 동등하다.
+            `A != B`는 `!(A == B)`와 동일하다.
           </li>
           <li>
-            `A == B`는 `B == A`와 동등하나, `A`와 `B`의 평가 순서는 다르다.
+            `A == B`는 `B == A`와 동일하나, `A`와 `B`의 평가 순서만 다르다.
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>동등 연산자는 항상 추이적이지는 않다. 예를 들어, 동일한 문자열 값을 나타내는 두 개의 구별되는 String 객체가 있을 수 있다. 각각의 String 객체는 `==` 연산자에 의해 해당 문자열 값과는 같다고 간주되지만, 두 String 객체끼리는 서로 같지 않다. 예:</p>
+        <p>동등(`==`) 연산자는 항상 추이적(transitive)이지 않습니다. 예를 들어, 같은 문자열 값을 나타내는 두 개의 서로 다른 String 객체가 있을 수 있습니다; 각각의 String 객체는 `==` 연산자로 문자열 값과는 같다고 간주되지만, 두 String 객체끼리는 서로 같지 않습니다. 예를 들어:</p>
         <ul>
           <li>
-            `new String("a") == "a"` 및 `"a" == new String("a")`는 모두 *true*이다.
+            `new String("a") == "a"`와 `"a" == new String("a")`는 모두 *true*입니다.
           </li>
           <li>
-            `new String("a") == new String("a")`는 *false*이다.
+            `new String("a") == new String("a")`는 *false*입니다.
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>문자열 비교는 코드 유닛 값 시퀀스에 대한 단순 동등성 검사를 사용한다. 유니코드 명세에서 정의하는 문자 또는 문자열 동등성 및 정렬 순서의 복잡하고 의미론 중심의 정의는 사용하지 않는다. 따라서 유니코드 표준에 따라 정규적으로 동등한 String 값이라도 같지 않다고 판정될 수 있다. 즉, 이 알고리즘은 두 String이 모두 정규화된 형태라고 간주한다.</p>
+        <p>문자열의 비교는 코드 단위(code unit) 값 시퀀스에 대한 단순 동등 테스트를 사용합니다. 유니코드 명세에 정의된 좀 더 복잡하고 의미 중심적인 문자/문자열 동등성 및 정렬 순서를 사용하지 않습니다. 따라서 유니코드 표준에 따라 정규적으로 같은 값인 두 String이라도 서로 다르다고 판단될 수 있습니다. 사실상 이 알고리즘은 두 문자열이 이미 정규화(normalized)된 상태라고 가정합니다.</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -20117,13 +20161,11 @@
       </emu-alg>
       <emu-grammar>CoalesceExpression : CoalesceExpressionHead `??` BitwiseORExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ 를 |CoalesceExpressionHead| 의 Evaluation 결과 (?) 로 둔다.
-        1. _lVal_ 를 ? GetValue(_lRef_) 로 둔다.
-        1. _lVal_ 이 *undefined* 또는 *null* 이면
-          1. _rRef_ 를 |BitwiseORExpression| 의 Evaluation 결과 (?) 로 둔다.
-          1. ? GetValue(_rRef_) 반환.
-        1. 그렇지 않으면
-          1. _lVal_ 반환.
+        1. _lRef_를 |CoalesceExpressionHead|의 평가 결과(?)로 한다.
+        1. _lVal_를 ? GetValue(_lRef_)로 한다.
+        1. _lVal_가 *undefined*도 아니고 *null*도 아니면 _lVal_를 반환한다.
+        1. _rRef_를 |BitwiseORExpression|의 평가 결과(?)로 한다.
+        1. ? GetValue(_rRef_)를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -20149,9 +20191,8 @@
         1. _lVal_ 이 *true* 이면
           1. _trueRef_ 를 첫 번째 |AssignmentExpression| 의 Evaluation 결과 (?) 로 둔다.
           1. ? GetValue(_trueRef_) 반환.
-        1. 그렇지 않으면
-          1. _falseRef_ 를 두 번째 |AssignmentExpression| 의 Evaluation 결과 (?) 로 둔다.
-          1. ? GetValue(_falseRef_) 반환.
+        1. _falseRef_ 를 두 번째 |AssignmentExpression| 의 Evaluation 결과 (?) 로 둔다.
+        1. ? GetValue(_falseRef_) 반환.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21327,13 +21368,11 @@
       </emu-alg>
       <emu-grammar>IfStatement : `if` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _exprRef_ 를 |Expression| 평가 결과 (?) 로 둔다.
-        1. _exprValue_ 를 ToBoolean(? GetValue(_exprRef_)) 로 둔다.
-        1. _exprValue_ 가 *false* 이면
-          1. *undefined* 반환.
-        1. 그렇지 않으면
-          1. _stmtCompletion_ 를 |Statement| 평가의 Completion 으로 둔다.
-          1. ? UpdateEmpty(_stmtCompletion_, *undefined*) 반환.
+        1. _exprRef_를 |Expression|의 평가 결과(?)로 한다.
+        1. _exprValue_를 ToBoolean(? GetValue(_exprRef_))로 한다.
+        1. _exprValue_가 *false*이면 *undefined*를 반환한다.
+        1. _stmtCompletion_을 |Statement|의 Evaluation의 Completion으로 한다.
+        1. ? UpdateEmpty(_stmtCompletion_, *undefined*)를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21530,40 +21569,42 @@
         </dl>
         <emu-grammar>ForStatement : `for` `(` Expression? `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 첫 번째 |Expression| 존재하면
-            1. _exprRef_ 를 그 평가 결과 (?) 로 둔다.
-            1. ? GetValue(_exprRef_) 수행.
-          1. 두 번째 |Expression| 존재하면 _test_ 를 그 |Expression| 으로, 아니면 ~empty~.
-          1. 세 번째 |Expression| 존재하면 _increment_ 를 그 |Expression| 으로, 아니면 ~empty~.
-          1. ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) 결과를 ? 로 반환.
+          1. 첫 번째 |Expression|이 존재하면,
+            1. _exprRef_를 첫 번째 |Expression|의 평가 결과(?)로 한다.
+            1. ? GetValue(_exprRef_)를 수행한다.
+          1. 두 번째 |Expression|이 존재하면 _test_를 두 번째 |Expression|으로, 존재하지 않으면 _test_를 ~empty~로 한다.
+          1. 세 번째 |Expression|이 존재하면 _increment_를 세 번째 |Expression|으로, 존재하지 않으면 _increment_를 ~empty~로 한다.
+          1. ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_)를 반환한다.
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` `var` VariableDeclarationList `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. |VariableDeclarationList| 평가를 ? 로 수행.
-          1. 첫 번째 |Expression| 존재하면 _test_ 를 그 |Expression|, 아니면 ~empty~.
-          1. 두 번째 |Expression| 존재하면 _increment_ 를 그 |Expression|, 아니면 ~empty~.
-          1. ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) 결과를 ? 로 반환.
+          1. ? |VariableDeclarationList|의 평가를 수행한다.
+          1. 첫 번째 |Expression|이 존재하면 _test_를 첫 번째 |Expression|으로, 존재하지 않으면 _test_를 ~empty~로 한다.
+          1. 두 번째 |Expression|이 존재하면 _increment_를 두 번째 |Expression|으로, 존재하지 않으면 _increment_를 ~empty~로 한다.
+          1. ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_)를 반환한다.
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. _oldEnv_ 를 실행 컨텍스트 LexicalEnvironment 로 둔다.
-          1. _loopEnv_ 를 NewDeclarativeEnvironment(_oldEnv_) 로 둔다.
-          1. _isConst_ 를 |LexicalDeclaration| 의 IsConstantDeclaration 으로 둔다.
-          1. _boundNames_ 를 |LexicalDeclaration| 의 BoundNames 로 둔다.
-          1. 각 _dn_ ∈ _boundNames_ 에 대해
-            1. _isConst_ 가 *true* 이면 ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)
-            1. 아니면 ! _loopEnv_.CreateMutableBinding(_dn_, *false*)
-          1. 실행 컨텍스트 LexicalEnvironment 를 _loopEnv_ 로 설정.
-          1. _forDcl_ 를 |LexicalDeclaration| 평가 Completion 으로 둔다.
-          1. _forDcl_ 이 abrupt 면
-            1. LexicalEnvironment 를 _oldEnv_ 로 복구.
-            1. ? _forDcl_ 반환.
-          1. _isConst_ 가 *false* 이면 _perIterationLets_ = _boundNames_; 아니면 새 빈 List.
-          1. 첫 번째 |Expression| 존재하면 _test_ 그 |Expression|; 아니면 ~empty~.
-          1. 두 번째 |Expression| 존재하면 _increment_ 그 |Expression|; 아니면 ~empty~.
-          1. _bodyResult_ 를 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_)) 로 둔다.
-          1. LexicalEnvironment 를 _oldEnv_ 로 복구.
-          1. ? _bodyResult_ 반환.
+          1. _oldEnv_를 현재 실행 콘텍스트의 LexicalEnvironment로 한다.
+          1. _loopEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 한다.
+          1. _isConst_를 |LexicalDeclaration|의 IsConstantDeclaration으로 한다.
+          1. _boundNames_를 |LexicalDeclaration|의 BoundNames로 한다.
+          1. _boundNames_의 각 요소 _dn_에 대해,
+            1. _isConst_가 *true*이면
+              1. ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+            1. 그렇지 않으면,
+              1. ! _loopEnv_.CreateMutableBinding(_dn_, *false*)를 수행한다.
+          1. 현재 실행 콘텍스트의 LexicalEnvironment를 _loopEnv_로 설정한다.
+          1. _forDcl_를 |LexicalDeclaration|의 평가의 Completion으로 한다.
+          1. _forDcl_가 abrupt completion이면,
+            1. 현재 실행 콘텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+            1. ? _forDcl_를 반환한다.
+          1. _isConst_가 *false*이면 _perIterationLets_를 _boundNames_로, 그렇지 않으면 _perIterationLets_를 새로운 빈 리스트로 한다.
+          1. 첫 번째 |Expression|이 존재하면 _test_를 첫 번째 |Expression|으로, 존재하지 않으면 _test_를 ~empty~로 한다.
+          1. 두 번째 |Expression|이 존재하면 _increment_를 두 번째 |Expression|으로, 존재하지 않으면 _increment_를 ~empty~로 한다.
+          1. _bodyResult_를 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))로 한다.
+          1. 현재 실행 콘텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+          1. ? _bodyResult_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -21871,10 +21912,9 @@
             1. _iterator_ = EnumerateObjectProperties(_obj_)
             1. _nextMethod_ = ! GetV(_iterator_, *"next"*)
             1. Iterator Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* } 반환.
-          1. 그렇지 않으면
-            1. 단언: ~iterate~ 또는 ~async-iterate~
-            1. _iteratorKind_ = (_iterationKind_ 이 ~async-iterate~ 이면 ~async~ 아니면 ~sync~)
-            1. ? GetIterator(_exprValue_, _iteratorKind_) 반환.
+          1. 단언: ~iterate~ 또는 ~async-iterate~
+          1. _iteratorKind_ = (_iterationKind_ 이 ~async-iterate~ 이면 ~async~ 아니면 ~sync~)
+          1. ? GetIterator(_exprValue_, _iteratorKind_) 반환.
         </emu-alg>
       </emu-clause>
 
@@ -21893,67 +21933,63 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_가 존재하지 않으면, _iteratorKind_에 ~sync~를 설정한다.
-          1. _oldEnv_에 현재 실행 컨텍스트의 LexicalEnvironment를 할당한다.
-          1. _V_에 *undefined*를 할당한다.
-          1. _destructuring_에 _lhs_의 IsDestructuring 결과를 할당한다.
+          1. _iteratorKind_가 없으면 ~sync~로 설정한다.
+          1. _oldEnv_를 현재 실행 콘텍스트의 LexicalEnvironment로 한다.
+          1. _V_를 *undefined*로 한다.
+          1. _destructuring_을 _lhs_의 IsDestructuring으로 한다.
           1. _destructuring_이 *true*이고 _lhsKind_가 ~assignment~이면,
             1. 단언: _lhs_는 |LeftHandSideExpression|이다.
-            1. _assignmentPattern_에 _lhs_가 포함하는 |AssignmentPattern|을 할당한다.
+            1. _assignmentPattern_을 _lhs_가 포함하는 |AssignmentPattern|으로 한다.
           1. 반복한다,
-            1. _nextResult_에 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])를 할당한다.
-            1. _iteratorKind_가 ~async~이면, _nextResult_에 ? Await(_nextResult_)를 할당한다.
-            1. _nextResult_가 Object가 아니면, *TypeError* 예외를 throw한다.
-            1. _done_에 ? IteratorComplete(_nextResult_)를 할당한다.
-            1. _done_이 *true*라면, _V_를 반환한다.
-            1. _nextValue_에 ? IteratorValue(_nextResult_)를 할당한다.
+            1. _nextResult_를 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])로 한다.
+            1. _iteratorKind_가 ~async~이면 _nextResult_를 ? Await(_nextResult_)로 한다.
+            1. _nextResult_가 객체가 아니면 *TypeError* 예외를 던진다.
+            1. _done_을 ? IteratorComplete(_nextResult_)로 한다.
+            1. _done_이 *true*이면 _V_를 반환한다.
+            1. _nextValue_를 ? IteratorValue(_nextResult_)로 한다.
             1. _lhsKind_가 ~assignment~ 또는 ~var-binding~이면,
-              1. _destructuring_이 *true*라면,
+              1. _destructuring_이 *true*이면,
                 1. _lhsKind_가 ~assignment~이면,
-                  1. _status_에 Completion(DestructuringAssignmentEvaluation of _assignmentPattern_ with argument _nextValue_)를 할당한다.
-                1. 아니면,
+                  1. _status_를 _assignmentPattern_의 DestructuringAssignmentEvaluation(argument: _nextValue_)의 Completion으로 한다.
+                1. 그렇지 않으면,
                   1. 단언: _lhsKind_는 ~var-binding~이다.
                   1. 단언: _lhs_는 |ForBinding|이다.
-                  1. _status_에 Completion(BindingInitialization of _lhs_ with arguments _nextValue_ and *undefined*)를 할당한다.
-              1. 아니면,
-                1. _lhsRef_에 Completion(Evaluation of _lhs_)를 할당한다. (반복적으로 평가될 수 있다.)
-                1. _lhsKind_가 ~assignment~이고 AssignmentTargetType of _lhs_가 ~web-compat~이면, *ReferenceError* 예외를 throw한다.
+                  1. _status_를 _lhs_의 BindingInitialization(arguments: _nextValue_, *undefined*)의 Completion으로 한다.
+              1. 그렇지 않으면,
+                1. _lhsRef_를 _lhs_의 Evaluation의 Completion으로 한다. (반복적으로 평가될 수 있다.)
+                1. _lhsKind_가 ~assignment~이고 _lhs_의 AssignmentTargetType이 ~web-compat~이면 *ReferenceError* 예외를 던진다.
                 1. _lhsRef_가 abrupt completion이면,
-                  1. _status_에 _lhsRef_를 할당한다.
-                1. 아니면,
-                  1. _status_에 Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))를 할당한다.
-            1. 아니면,
+                  1. _status_를 _lhsRef_로 한다.
+                1. 그렇지 않으면,
+                  1. _status_를 PutValue(_lhsRef_.[[Value]], _nextValue_)의 Completion으로 한다.
+            1. 그렇지 않으면,
               1. 단언: _lhsKind_는 ~lexical-binding~이다.
               1. 단언: _lhs_는 |ForDeclaration|이다.
-              1. _iterationEnv_에 NewDeclarativeEnvironment(_oldEnv_)를 할당한다.
-              1. ForDeclarationBindingInstantiation of _lhs_ with argument _iterationEnv_를 수행한다.
-              1. 현재 실행 컨텍스트의 LexicalEnvironment를 _iterationEnv_로 설정한다.
-              1. _destructuring_이 *true*라면,
-                1. _status_에 Completion(ForDeclarationBindingInitialization of _lhs_ with arguments _nextValue_ and _iterationEnv_)를 할당한다.
-              1. 아니면,
-                1. 단언: _lhs_는 단일 이름만을 바인딩한다.
-                1. _lhsName_에 _lhs_의 BoundNames의 유일한 요소를 할당한다.
-                1. _lhsRef_에 ! ResolveBinding(_lhsName_)을 할당한다.
-                1. _status_에 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))를 할당한다.
+              1. _iterationEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 한다.
+              1. _lhs_의 ForDeclarationBindingInstantiation(argument: _iterationEnv_)를 수행한다.
+              1. 현재 실행 콘텍스트의 LexicalEnvironment를 _iterationEnv_로 설정한다.
+              1. _destructuring_이 *true*이면,
+                1. _status_를 _lhs_의 ForDeclarationBindingInitialization(arguments: _nextValue_, _iterationEnv_)의 Completion으로 한다.
+              1. 그렇지 않으면,
+                1. 단언: _lhs_는 하나의 이름만 바인딩한다.
+                1. _lhsName_을 _lhs_의 BoundNames의 유일한 원소로 한다.
+                1. _lhsRef_를 ! ResolveBinding(_lhsName_)로 한다.
+                1. _status_를 InitializeReferencedBinding(_lhsRef_, _nextValue_)의 Completion으로 한다.
             1. _status_가 abrupt completion이면,
-              1. 현재 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
-              1. _iterationKind_가 ~enumerate~라면,
-                1. ? _status_를 반환한다.
-              1. 아니면,
-                1. 단언: _iterationKind_는 ~iterate~이다.
-                1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
-                1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
-            1. _result_에 Completion(Evaluation of _stmt_)을 할당한다.
-            1. 현재 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
-            1. LoopContinues(_result_, _labelSet_)가 *false*라면,
-              1. _status_에 Completion(UpdateEmpty(_result_, _V_))를 할당한다.
-              1. _iterationKind_가 ~enumerate~라면,
-                1. ? _status_를 반환한다.
-              1. 아니면,
-                1. 단언: _iterationKind_는 ~iterate~이다.
-                1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
-                1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
-            1. _result_.[[Value]]가 ~empty~가 아니면, _V_에 _result_.[[Value]]를 설정한다.
+              1. 현재 실행 콘텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+              1. _iterationKind_가 ~enumerate~이면 ? _status_를 반환한다.
+              1. 단언: _iterationKind_는 ~iterate~이다.
+              1. _iteratorKind_가 ~async~이면 ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
+              1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
+            1. _result_를 _stmt_의 Evaluation의 Completion으로 한다.
+            1. 현재 실행 콘텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+            1. LoopContinues(_result_, _labelSet_)가 *false*이면,
+              1. _status_를 UpdateEmpty(_result_, _V_)의 Completion으로 한다.
+              1. _iterationKind_가 ~enumerate~이면 ? _status_를 반환한다.
+              1. 단언: _iterationKind_는 ~iterate~이다.
+              1. _iteratorKind_가 ~async~이면 ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
+              1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
+            1. _result_.[[Value]]가 ~empty~가 아니면 _V_를 _result_.[[Value]]로 설정한다.
         </emu-alg>
       </emu-clause>
 
@@ -22697,8 +22733,7 @@
         1. 구현 정의 디버깅 기능이 활성화되어 있으면
           1. 구현 정의 디버깅 동작 수행.
           1. 새 구현 정의 Completion Record 반환.
-        1. 그렇지 않으면
-          1. ~empty~ 반환.
+        1. ~empty~ 반환.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -23085,7 +23120,8 @@
       </dl>
       <emu-grammar>FunctionBody : FunctionStatementList</emu-grammar>
       <emu-alg>
-        1. |FunctionBody| 의 Directive Prologue 에 Use Strict Directive 가 포함되어 있으면 *true* 반환; 그렇지 않으면 *false* 반환.
+        1. |FunctionBody|의 Directive Prologue에 Use Strict Directive가 포함되어 있으면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -23479,10 +23515,9 @@
         1. SetFunctionName(_closure_, _propKey_, *"get"*) 수행.
         1. _propKey_ 가 Private Name 이면
           1. PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: _closure_, [[Set]]: *undefined* } 반환.
-        1. 그렇지 않으면
-          1. _desc_ = PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
-          1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) 수행.
-          1. ~unused~ 반환.
+        1. _desc_ = PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
+        1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) 수행.
+        1. ~unused~ 반환.
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -23495,10 +23530,9 @@
         1. SetFunctionName(_closure_, _propKey_, *"set"*) 수행.
         1. _propKey_ 가 Private Name 이면
           1. PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: *undefined*, [[Set]]: _closure_ } 반환.
-        1. 그렇지 않으면
-          1. _desc_ = PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
-          1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) 수행.
-          1. ~unused~ 반환.
+        1. _desc_ = PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }.
+        1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) 수행.
+        1. ~unused~ 반환.
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25429,7 +25463,8 @@
       </dl>
       <emu-grammar>Script : ScriptBody?</emu-grammar>
       <emu-alg>
-        1. |ScriptBody|가 존재하고 |ScriptBody|의 Directive Prologue가 Use Strict Directive를 포함하면 *true*를 반환하고, 그렇지 않으면 *false*를 반환한다.
+        1. |ScriptBody|가 존재하고, |ScriptBody|의 Directive Prologue에 Use Strict Directive가 포함되어 있으면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -26648,55 +26683,55 @@
               </dl>
 
               <emu-alg>
-                1. _module_ 이 Cyclic Module Record 가 아니면
-                  1. ? EvaluateModuleSync(_module_) 수행.
-                  1. _index_ 반환.
-                1. _module_.[[Status]] 가 ~evaluating-async~ 또는 ~evaluated~ 이면
-                  1. _module_.[[EvaluationError]] 가 ~empty~ 이면 _index_ 반환.
-                  1. 아니면 ? _module_.[[EvaluationError]] 반환.
-                1. _module_.[[Status]] 가 ~evaluating~ 이면 _index_ 반환.
-                1. 단언: _module_.[[Status]] 는 ~linked~.
-                1. _module_.[[Status]] 를 ~evaluating~ 으로.
-                1. _moduleIndex_ = _index_.
-                1. _module_.[[DFSAncestorIndex]] = _index_.
-                1. _module_.[[PendingAsyncDependencies]] = 0.
-                1. _index_ = _index_ + 1.
-                1. _module_ 을 _stack_ 에 추가.
-                1. _module_.[[RequestedModules]] 의 각 ModuleRequest Record _request_ 에 대해
-                  1. _requiredModule_ = GetImportedModule(_module_, _request_).
-                  1. _index_ = ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_).
-                  1. _requiredModule_ 이 Cyclic Module Record 이면
-                    1. 단언: _requiredModule_.[[Status]] 는 ~evaluating~, ~evaluating-async~, ~evaluated~ 중 하나.
-                    1. 단언: _requiredModule_.[[Status]] 가 ~evaluating~ 인 것은 _stack_ 이 _requiredModule_ 포함과 동치.
-                    1. _requiredModule_.[[Status]] 가 ~evaluating~ 이면
-                      1. _module_.[[DFSAncestorIndex]] = min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]]).
-                    1. Else,
-                      1. _requiredModule_ = _requiredModule_.[[CycleRoot]].
-                      1. 단언: _requiredModule_.[[Status]] 는 ~evaluating-async~ 또는 ~evaluated~.
-                      1. _requiredModule_.[[EvaluationError]] 가 ~empty~ 가 아니면 ? _requiredModule_.[[EvaluationError]] 반환.
-                    1. _requiredModule_.[[AsyncEvaluationOrder]] 가 정수이면
-                      1. _module_.[[PendingAsyncDependencies]] += 1.
-                      1. _module_ 을 _requiredModule_.[[AsyncParentModules]] 에 추가.
-                1. _module_.[[PendingAsyncDependencies]] > 0 또는 _module_.[[HasTLA]] 가 *true* 이면
-                  1. 단언: _module_.[[AsyncEvaluationOrder]] 는 ~unset~.
-                  1. _module_.[[AsyncEvaluationOrder]] = IncrementModuleAsyncEvaluationCount().
-                  1. _module_.[[PendingAsyncDependencies]] = 0 이면 ExecuteAsyncModule(_module_) 수행.
-                1. Else,
-                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta> 수행.
-                1. 단언: _module_ 은 _stack_ 에 정확히 한 번 등장.
-                1. 단언: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_.
-                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_ 이면
-                  1. _done_ = *false*.
-                  1. 반복 (_done_ 이 *false* 인 동안)
-                    1. _requiredModule_ = _stack_ 마지막 요소.
-                    1. 마지막 요소 제거.
-                    1. 단언: _requiredModule_ 은 Cyclic Module Record.
-                    1. 단언: _requiredModule_.[[AsyncEvaluationOrder]] 는 정수 또는 ~unset~.
-                    1. _requiredModule_.[[AsyncEvaluationOrder]] 가 ~unset~ 이면 _requiredModule_.[[Status]] = ~evaluated~.
-                    1. 아니면 _requiredModule_.[[Status]] = ~evaluating-async~.
-                    1. _requiredModule_ 와 _module_ 이 같으면 _done_ = *true*.
-                    1. _requiredModule_.[[CycleRoot]] = _module_.
-                1. _index_ 반환.
+                1. _module_이 순환 모듈 레코드(Cyclic Module Record)가 아니면,
+                  1. ? EvaluateModuleSync(_module_)를 수행한다.
+                  1. _index_를 반환한다.
+                1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~이면,
+                  1. _module_.[[EvaluationError]]가 ~empty~이면 _index_를 반환한다.
+                  1. ? _module_.[[EvaluationError]]를 반환한다.
+                1. _module_.[[Status]]가 ~evaluating~이면 _index_를 반환한다.
+                1. 단언: _module_.[[Status]]는 ~linked~이다.
+                1. _module_.[[Status]]를 ~evaluating~으로 설정한다.
+                1. _moduleIndex_를 _index_로 한다.
+                1. _module_.[[DFSAncestorIndex]]를 _index_로 설정한다.
+                1. _module_.[[PendingAsyncDependencies]]를 0으로 설정한다.
+                1. _index_를 _index_ + 1로 설정한다.
+                1. _module_을 _stack_에 추가한다.
+                1. _module_.[[RequestedModules]]의 각 ModuleRequest 레코드 _request_에 대해,
+                  1. _requiredModule_을 GetImportedModule(_module_, _request_)로 한다.
+                  1. _index_를 ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)로 설정한다.
+                  1. _requiredModule_이 순환 모듈 레코드인 경우,
+                    1. 단언: _requiredModule_.[[Status]]는 ~evaluating~, ~evaluating-async~, ~evaluated~ 중 하나이다.
+                    1. 단언: _requiredModule_.[[Status]]가 ~evaluating~인 경우에만 _stack_에 _requiredModule_이 포함된다.
+                    1. _requiredModule_.[[Status]]가 ~evaluating~이면,
+                      1. _module_.[[DFSAncestorIndex]]를 min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]])로 설정한다.
+                    1. 그렇지 않으면,
+                      1. _requiredModule_을 _requiredModule_.[[CycleRoot]]로 한다.
+                      1. 단언: _requiredModule_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~이다.
+                      1. _requiredModule_.[[EvaluationError]]가 ~empty~가 아니면, ? _requiredModule_.[[EvaluationError]]를 반환한다.
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 정수이면,
+                      1. _module_.[[PendingAsyncDependencies]]를 _module_.[[PendingAsyncDependencies]] + 1로 설정한다.
+                      1. _module_을 _requiredModule_.[[AsyncParentModules]]에 추가한다.
+                1. _module_.[[PendingAsyncDependencies]] > 0 또는 _module_.[[HasTLA]]가 *true*이면,
+                  1. 단언: _module_.[[AsyncEvaluationOrder]]는 ~unset~이다.
+                  1. _module_.[[AsyncEvaluationOrder]]를 IncrementModuleAsyncEvaluationCount()로 설정한다.
+                  1. _module_.[[PendingAsyncDependencies]] = 0이면 ExecuteAsyncModule(_module_)를 수행한다.
+                1. 그렇지 않으면,
+                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>를 수행한다.
+                1. 단언: _module_은 _stack_에서 정확히 한 번 나타난다.
+                1. 단언: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_이다.
+                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_이면,
+                  1. _done_을 *false*로 한다.
+                  1. _done_이 *false*인 동안 반복한다,
+                    1. _requiredModule_을 _stack_의 마지막 요소로 한다.
+                    1. _stack_에서 마지막 요소를 제거한다.
+                    1. 단언: _requiredModule_은 순환 모듈 레코드이다.
+                    1. 단언: _requiredModule_.[[AsyncEvaluationOrder]]는 정수이거나 ~unset~이다.
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 ~unset~이면, _requiredModule_.[[Status]]를 ~evaluated~로 설정한다.
+                    1. 그렇지 않으면, _requiredModule_.[[Status]]를 ~evaluating-async~로 설정한다.
+                    1. _requiredModule_과 _module_이 동일한 모듈 레코드이면, _done_을 *true*로 한다.
+                    1. _requiredModule_.[[CycleRoot]]를 _module_으로 설정한다.
+                1. _index_를 반환한다.
               </emu-alg>
               <emu-note>
                 <p>모듈은 InnerModuleEvaluation 이 순회 중이면 ~evaluating~ 상태. [[HasTLA]] 가 *true* 이거나 비동기 의존성이 있으면 실행 중 ~evaluating-async~, 완료 시 ~evaluated~.</p>
@@ -27942,10 +27977,9 @@
                   1. _e_.[[ImportName]]이 ~all~이라면,
                     1. 단언: _module_이 이 export에 대한 직접 바인딩을 제공하지 않는다.
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }를 반환한다.
-                  1. 아니면,
-                    1. 단언: _module_이 이 export에 대한 특정 바인딩을 import한다.
-                    1. 단언: _e_.[[ImportName]]은 문자열(String)이다.
-                    1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)을 반환한다.
+                  1. 단언: _module_이 이 export에 대한 특정 바인딩을 import한다.
+                  1. 단언: _e_.[[ImportName]]은 문자열(String)이다.
+                  1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)을 반환한다.
               1. _exportName_이 *"default"*이면,
                 1. 단언: `default` export가 이 모듈에서 명시적으로 정의되지 않았다.
                 1. *null*을 반환한다.
@@ -29420,253 +29454,253 @@
 
     <emu-clause id="sec-isfinite-number">
       <h1>isFinite ( _number_ )</h1>
-      <p>이 함수는 <dfn>%isFinite%</dfn> 고유 객체이다.</p>
-      <p>호출 시 다음 단계를 수행한다:</p>
+      <p>이 함수는 <dfn>%isFinite%</dfn> 내장 객체이다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _num_ = ? ToNumber(_number_).
-        1. _num_ 이 finite 가 아니면 *false* 반환.
-        1. 그렇지 않으면 *true* 반환.
+        1. _num_을 ? ToNumber(_number_)로 한다.
+        1. _num_이 유한한 값(finite)이면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-isnan-number">
       <h1>isNaN ( _number_ )</h1>
-      <p>이 함수는 <dfn>%isNaN%</dfn> 고유 객체이다.</p>
-      <p>호출 시 다음 단계를 수행한다:</p>
+      <p>이 함수는 <dfn>%isNaN%</dfn> 내장 객체이다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _num_ = ? ToNumber(_number_).
-        1. _num_ 이 *NaN* 이면 *true* 반환.
-        1. 그렇지 않으면 *false* 반환.
+        1. _num_을 ? ToNumber(_number_)로 한다.
+        1. _num_이 *NaN*이면 *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>값 `X` 가 *NaN* 인지 신뢰성 있게 시험하는 ECMAScript 표현은 `X !== X` 형태이다. 결과가 *true* 이면 그리고 오직 그때만 `X` 는 *NaN* 이다.</p>
+        <p>ECMAScript 코드에서 어떤 값 `X`가 *NaN*인지 신뢰할 수 있게 판별하려면 `X !== X`와 같은 식을 사용할 수 있다. 결과가 *true*면 오직 `X`가 *NaN*일 때이다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parsefloat-string">
       <h1>parseFloat ( _string_ )</h1>
-      <p>이 함수는 _string_ 인수를 10진 리터럴로 해석한 결과에 따라 Number 값을 생성한다.</p>
-      <p><dfn>%parseFloat%</dfn> 고유 객체이다.</p>
-      <p>호출 시 다음 단계를 수행한다:</p>
+      <p>이 함수는 _string_ 인자의 내용을 10진수 리터럴로 해석한 결과에 따라 Number 값을 생성한다.</p>
+      <p><dfn>%parseFloat%</dfn> 내장 객체이다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _inputString_ = ? ToString(_string_).
-        1. _trimmedString_ = ! TrimString(_inputString_, ~start~).
-        1. _trimmed_ = StringToCodePoints(_trimmedString_).
-        1. _trimmedPrefix_ = |StrDecimalLiteral| 문법을 만족하는(없으면 없음) 가장 긴 접두사. 없다면 *NaN* 반환.
-        1. _parsedNumber_ = ParseText(_trimmedPrefix_, |StrDecimalLiteral|).
-        1. 단언: _parsedNumber_ 는 Parse Node.
-        1. _parsedNumber_ 의 StringNumericValue 반환.
+        1. _inputString_을 ? ToString(_string_)으로 한다.
+        1. _trimmedString_을 ! TrimString(_inputString_, ~start~)으로 한다.
+        1. _trimmed_을 StringToCodePoints(_trimmedString_)으로 한다.
+        1. _trimmedPrefix_를 |StrDecimalLiteral| 문법을 만족하는 _trimmed_의 가장 긴 접두사로 한다; 만약 그런 접두사가 없으면 *NaN*을 반환한다.
+        1. _parsedNumber_를 ParseText(_trimmedPrefix_, |StrDecimalLiteral|)로 한다.
+        1. 단언: _parsedNumber_는 Parse Node이다.
+        1. _parsedNumber_의 StringNumericValue를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>이 함수는 _string_ 의 선두 일부만 Number 로 해석할 수 있고, 10진 표기 일부가 될 수 없는 코드 유닛은 무시하며 무시되었다는 표시를 제공하지 않는다.</p>
+        <p>이 함수는 _string_의 앞부분만을 Number 값으로 해석할 수 있으며, 10진수 리터럴 표기에 포함될 수 없는 코드 유닛들은 무시된다. 무시된 코드 유닛에 관해 어떤 표시도 하지 않는다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parseint-string-radix">
       <h1>parseInt ( _string_, _radix_ )</h1>
-      <p>이 함수는 _radix_ 에 따라 _string_ 내용을 해석하여 정수 Number 값을 생성한다. _string_ 의 선행 공백은 무시된다. _radix_ 가 0 으로 강제될 경우(예: *undefined*) 표현이 *"0x"* 또는 *"0X"* 로 시작하지 않으면 10, 그렇다면 16 으로 간주한다. _radix_ 가 16 이면 표현은 *"0x"* / *"0X"* 로 시작할 수도 있다.</p>
-      <p><dfn>%parseInt%</dfn> 고유 객체이다.</p>
-      <p>호출 시 다음 단계를 수행한다:</p>
+      <p>이 함수는 _string_의 내용을 지정된 _radix_에 따라 해석하여 정수(Number) 값을 생성한다. _string_의 앞에 있는 공백은 무시된다. _radix_가 0으로 변환될 경우(*undefined* 등), 숫자 표기가 *"0x"* 또는 *"0X"*로 시작하지 않는 한 10으로 간주한다. 만약 *"0x"* 또는 *"0X"*로 시작하면 16으로 간주한다. _radix_가 16이면 숫자 표기는 선택적으로 *"0x"* 또는 *"0X"*로 시작할 수 있다.</p>
+      <p><dfn>%parseInt%</dfn> 내장 객체이다.</p>
+      <p>호��될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _inputString_ = ? ToString(_string_).
-        1. _S_ = ! TrimString(_inputString_, ~start~).
-        1. _sign_ = 1.
-        1. _S_ 가 비어 있지 않고 첫 코드 유닛이 0x002D 이면 _sign_ = -1.
-        1. _S_ 가 비어 있지 않고 첫 코드 유닛이 0x002B 또는 0x002D 이면 _S_ = 인덱스 1 부터.
-        1. _R_ = ℝ(? ToInt32(_radix_)).
-        1. _stripPrefix_ = *true*.
-        1. _R_ ≠ 0 이면
-          1. _R_ &lt; 2 또는 _R_ > 36 이면 *NaN* 반환.
-          1. _R_ ≠ 16 이면 _stripPrefix_ = *false*.
-        1. Else
-          1. _R_ = 10.
-        1. _stripPrefix_ *true* 이면
-          1. _S_ 길이 ≥ 2 이고 첫 두 코드 유닛이 *"0x"* 또는 *"0X"* 이면
-            1. _S_ = 인덱스 2 부터.
-            1. _R_ = 16.
-        1. _S_ 가 radix-_R_ 숫자가 아닌 코드 유닛을 포함하면 _end_ = 그 첫 위치, 아니면 길이.
-        1. _Z_ = _S_[0.._end_).
-        1. _Z_ 가 비어 있으면 *NaN* 반환.
-        1. _mathInt_ = _Z_ 가 radix-_R_ 표기에서 나타내는 정수 (규정된 근사 허용).
-        1. _mathInt_ = 0 이면
-          1. _sign_ = -1 이면 *-0*<sub>𝔽</sub> 반환.
-          1. *+0*<sub>𝔽</sub> 반환.
-        1. 𝔽(_sign_ × _mathInt_) 반환.
+        1. _inputString_을 ? ToString(_string_)으로 한다.
+        1. _S_를 ! TrimString(_inputString_, ~start~)으로 한다.
+        1. _sign_을 1로 한다.
+        1. _S_가 비어 있지 않고 첫 번째 코드 유닛이 0x002D(HYPHEN-MINUS)면 _sign_을 -1로 한다.
+        1. _S_가 비어 있지 않고 첫 번째 코드 유닛이 0x002B(PLUS SIGN) 또는 0x002D(HYPHEN-MINUS)이면 _S_를 인덱스 1부터의 부분문자열로 바꾼다.
+        1. _R_을 ℝ(? ToInt32(_radix_))로 한다.
+        1. _stripPrefix_를 *true*로 한다.
+        1. _R_ ≠ 0이면,
+          1. _R_ &lt; 2 또는 _R_ > 36이면 *NaN*을 반환한다.
+          1. _R_ ≠ 16이면 _stripPrefix_를 *false*로 한다.
+        1. 그렇지 않으면,
+          1. _R_을 10으로 한다.
+        1. _stripPrefix_가 *true*이면,
+          1. _S_의 길이 ≥ 2이고, 앞 두 코드 유닛이 *"0x"* 또는 *"0X"*이면,
+            1. _S_를 인덱스 2부터의 부분문자열로 바꾼다.
+            1. _R_을 16으로 한다.
+        1. _S_에 radix-_R_ 숫자가 아닌 코드 유닛이 있다면 그 첫 번째 코드 유닛의 인덱스를 _end_로, 없다면 _end_를 _S_의 길이로 한다.
+        1. _Z_를 _S_의 0부터 _end_까지의 부분문자열로 한다.
+        1. _Z_가 비어 있으면 *NaN*을 반환한다.
+        1. _mathInt_를 _Z_에 대해 radix-_R_ 표기법으로 나타낸 정수 값으로 한다. (단, _R_ = 10이고 _Z_에 의미 있는 숫자가 20개를 넘을 경우, 20번째 이후의 숫자는 구현 선택으로 0으로 대체될 수 있다; _R_이 2, 4, 8, 10, 16, 32 중 하나가 아니면, _mathInt_는 구현체 근사치로 나타낼 수 있다.)
+        1. _mathInt_ = 0이면,
+          1. _sign_ = -1이면 *-0*<sub>𝔽</sub>을 반환한다.
+          1. *+0*<sub>𝔽</sub>을 반환한다.
+        1. 𝔽(_sign_ × _mathInt_)을 반환한다.
       </emu-alg>
       <emu-note>
-        <p>이 함수는 _string_ 의 선두 일부만 정수로 해석할 수 있으며 나머지는 무시되고 무시 사실은 표시되지 않는다.</p>
+        <p>이 함수는 _string_의 앞부분만 정수로 해석할 수 있으며, 정수 표기법에 해석될 수 없는 코드 유닛들은 모두 무시한다. 무시된 코드 유닛에 대해선 아무런 표시도 하지 않는다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-uri-handling-functions" oldids="sec-uri-syntax-and-semantics">
       <h1>URI 처리 함수</h1>
-      <p>Uniform Resource Identifier(URI)는 자원(웹 페이지, 파일 등)과 Internet 상에서 그것에 접근할 전송 프로토콜(HTTP, FTP 등)을 식별하는 String 이다. ECMAScript 자체는 이 절에 기술된 URI 인코딩·디코딩 함수 외에는 URI 사용 지원을 제공하지 않는다. `encodeURI`, `decodeURI` 는 전체 URI 에 사용하도록 의도되며 예약 문자는 특별한 의미(구분자 등)를 가정하므로 인코딩하지 않는다. `encodeURIComponent`, `decodeURIComponent` 는 URI 개별 구성 요소에 사용하도록 의도되며, 예약 문자가 텍스트를 나타낸다고 가정하고 전체 URI 의 일부가 될 때 특별한 의미를 피하기 위해 인코딩해야 한다.</p>
+      <p>Uniform Resource Identifier(URI)는 인터넷상에서 리소스(예: 웹 페이지, 파일)와 접근에 사용되는 전송 프로토콜(예: HTTP, FTP)을 식별하는 문자열(String)이다. ECMAScript 언어 자체는 이 섹션에 기술된 URI 인코딩/디코딩 함수를 제외하고는 URI 사용을 위한 지원을 제공하지 않는다. `encodeURI`와 `decodeURI`는 전체 URI에 대해 동작하며, 예약 문자가 특별한 의미(예: 구분자)로 사용될 것으로 가정하여 인코딩하지 않는다. `encodeURIComponent`와 `decodeURIComponent`는 URI의 구성 요소에 대해 동작하며, 예약 문자가 텍스트를 표현할 경우 전체 URI의 일부가 될 때 특별한 의미를 피하기 위해 인코딩해야 한다고 가정한다.</p>
       <emu-note>
-        <p>예약 문자 집합은 RFC 2396 에 기반하며 최신 RFC 3986 의 변경을 반영하지 않는다.</p>
+        <p>예약 문자 집합은 RFC 2396을 기반으로 하며, 최신 RFC 3986에 도입된 변경 사항을 반영하지 않는다.</p>
       </emu-note>
       <emu-note>
-        <p>많은 ECMAScript 구현은 웹 페이지를 조작하는 추가 함수·메서드를 제공하는데, 이는 표준 범위를 벗어난다.</p>
+        <p>많은 ECMAScript 구현체는 웹 페이지를 다루는 추가 함수와 메서드를 제공한다; 이 함수들은 본 표준의 범위를 벗어난다.</p>
       </emu-note>
 
       <emu-clause id="sec-decodeuri-encodeduri">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>이 함수는 `encodeURI` 가 도입할 수 있는 종류의 각 escape 시퀀스 및 UTF-8 인코딩을 해당 코드 포인트의 UTF-16 인코딩으로 치환한 URI 새 버전을 계산한다. `encodeURI` 가 도입할 수 없었던 escape 시퀀스는 치환하지 않는다.</p>
-        <p><dfn>%decodeURI%</dfn> 고유 객체이다.</p>
-        <p>호출 시 다음 단계를 수행한다:</p>
+        <p>이 함수는 URI의 각 이스케이프 시퀀스와 `encodeURI` 함수가 생성할 수 있는 UTF-8 인코딩을 그 코드 포인트를 나타내는 UTF-16 인코딩으로 바꾼 새로운 URI 버전을 계산한다. `encodeURI`로 생성될 수 없는 이스케이프 시퀀스는 변경되지 않는다.</p>
+        <p><dfn>%decodeURI%</dfn> 내장 객체이다.</p>
+        <p>호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _uriString_ = ? ToString(_encodedURI_).
-          1. _preserveEscapeSet_ = *";/?:@&=+$,#"*.
-          1. Return ? Decode(_uriString_, _preserveEscapeSet_).
+          1. _uriString_을 ? ToString(_encodedURI_)으로 한다.
+          1. _preserveEscapeSet_을 *";/?:@&=+$,#"*로 한다.
+          1. ? Decode(_uriString_, _preserveEscapeSet_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-decodeuricomponent-encodeduricomponent">
         <h1>decodeURIComponent ( _encodedURIComponent_ )</h1>
-        <p>이 함수는 `encodeURIComponent` 가 도입할 수 있는 종류의 각 escape 시퀀스 및 UTF-8 인코딩을 해당 코드 포인트의 UTF-16 인코딩으로 치환한 새 버전을 계산한다.</p>
-        <p><dfn>%decodeURIComponent%</dfn> 고유 객체이다.</p>
-        <p>호출 시 다음 단계를 수행한다:</p>
+        <p>이 함수는 URI의 각 이스케이프 시퀀스와 `encodeURIComponent` 함수가 생성할 수 있는 UTF-8 인코딩을 그 코드 포인트를 나타내는 UTF-16 인코딩으로 바꾼 새로운 URI 버전을 계산한다.</p>
+        <p><dfn>%decodeURIComponent%</dfn> 내장 객체이다.</p>
+        <p>호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _componentString_ = ? ToString(_encodedURIComponent_).
-          1. _preserveEscapeSet_ = 빈 문자열.
-          1. Return ? Decode(_componentString_, _preserveEscapeSet_).
+          1. _componentString_을 ? ToString(_encodedURIComponent_)으로 한다.
+          1. _preserveEscapeSet_을 빈 문자열로 한다.
+          1. ? Decode(_componentString_, _preserveEscapeSet_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-encodeuri-uri">
         <h1>encodeURI ( _uri_ )</h1>
-        <p>이 함수는 UTF-16 인코딩(<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) 된 URI 에서 특정 코드 포인트의 각 출현을 그 코드 포인트의 UTF-8 인코딩을 나타내는 1~4개의 escape 시퀀스로 대체한 새 버전을 계산한다.</p>
-        <p><dfn>%encodeURI%</dfn> 고유 객체이다.</p>
-        <p>호출 시 다음 단계를 수행한다:</p>
+        <p>이 함수는 UTF-16 인코딩된 (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) URI에서 특정 코드 포인트를 하나, 둘, 셋, 넷의 이스케이프 시퀀스로 대체하여 해당 코드 포인트의 UTF-8 인코딩을 나타내는 새로운 버전을 계산한다.</p>
+        <p><dfn>%encodeURI%</dfn> 내장 객체이다.</p>
+        <p>호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _uriString_ = ? ToString(_uri_).
-          1. _extraUnescaped_ = *";/?:@&=+$,#"*.
-          1. Return ? Encode(_uriString_, _extraUnescaped_).
+          1. _uriString_을 ? ToString(_uri_)으로 한다.
+          1. _extraUnescaped_를 *";/?:@&=+$,#"*로 한다.
+          1. ? Encode(_uriString_, _extraUnescaped_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-encodeuricomponent-uricomponent">
         <h1>encodeURIComponent ( _uriComponent_ )</h1>
-        <p>이 함수는 UTF-16 인코딩된 URI 구성 요소에서 특정 코드 포인트의 각 출현을 그 코드 포인트의 UTF-8 인코딩을 나타내는 1~4개의 escape 시퀀스로 대체한 새 버전을 계산한다.</p>
-        <p><dfn>%encodeURIComponent%</dfn> 고유 객체이다.</p>
-        <p>호출 시 다음 단계를 수행한다:</p>
+        <p>이 함수는 UTF-16 인코딩된 (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) URI에서 특정 코드 포인트를 하나, 둘, 셋, 넷의 이스케이프 시퀀스로 대체하여 해당 코드 포인트의 UTF-8 인코딩을 나타내는 새로운 버전을 계산한다.</p>
+        <p><dfn>%encodeURIComponent%</dfn> 내장 객체이다.</p>
+        <p>호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _componentString_ = ? ToString(_uriComponent_).
-          1. _extraUnescaped_ = 빈 문자열.
-          1. Return ? Encode(_componentString_, _extraUnescaped_).
+          1. _componentString_을 ? ToString(_uriComponent_)으로 한다.
+          1. _extraUnescaped_를 빈 문자열로 한다.
+          1. ? Encode(_componentString_, _extraUnescaped_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-encode" type="abstract operation">
         <h1>
           Encode (
-            _string_: String,
-            _extraUnescaped_: String,
-          ): String 을 담은 정상 completion 또는 throw completion
+            _string_: a String,
+            _extraUnescaped_: a String,
+          ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
-          <dt>description</dt>
-          <dd>_string_ 을 <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> 에 기술된 대로 UTF-16 인코딩된 코드 포인트 시퀀스로 해석하여 URI 인코딩·escape 를 수행한다. RFC 2396 에서 unreserved 로 식별되었거나 _extraUnescaped_ 에 등장하는 문자는 escape 하지 않는다.</dd>
+          <dt>설명</dt>
+          <dd>_string_을 <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>에서 설명한 대로 UTF-16 인코딩된 코드 포인트 시퀀스로 해석하여 URI 인코딩 및 이스케이프를 수행한다. 문자가 RFC 2396의 비예약 문자이거나 _extraUnescaped_에 포함되어 있으면 인코딩하지 않는다.</dd>
         </dl>
         <emu-alg>
-          1. _len_ = _string_ 길이.
-          1. _R_ = 빈 문자열.
-          1. _alwaysUnescaped_ = ASCII 단어 문자들과 *"-.!~\*'()"* 의 문자열 연결.
-          1. _unescapedSet_ = _alwaysUnescaped_ + _extraUnescaped_.
-          1. _k_ = 0.
-          1. 반복 (_k_ &lt; _len_)
-            1. _C_ = _string_[_k_] 코드 유닛.
-            1. _unescapedSet_ 이 _C_ 포함하면
-              1. _k_ = _k_ + 1.
-              1. _R_ = _R_ + _C_.
-            1. Else
-              1. _cp_ = CodePointAt(_string_, _k_).
-              1. _cp_.[[IsUnpairedSurrogate]] *true* 이면 *URIError* throw.
-              1. _k_ = _k_ + _cp_.[[CodeUnitCount]].
-              1. _Octets_ = _cp_.[[CodePoint]] 에 UTF-8 변환 적용한 octet 리스트.
-              1. 각 _octet_ ∈ _Octets_ 에 대해
-                1. _hex_ = _octet_ 의 대문자 16진 문자열.
-                1. _R_ = _R_ + *"%"* + StringPad(_hex_, 2, *"0"*, ~start~).
-          1. _R_ 반환.
+          1. _len_을 _string_의 길이로 한다.
+          1. _R_을 빈 문자열로 한다.
+          1. _alwaysUnescaped_를 ASCII 영단어 문자와 *"-.!~\*'()"*을 이어붙인 문자열로 한다.
+          1. _unescapedSet_을 _alwaysUnescaped_와 _extraUnescaped_를 이어붙인 문자열로 한다.
+          1. _k_를 0으로 한다.
+          1. _k_ &lt; _len_인 동안 반복한다,
+            1. _C_를 _string_의 인덱스 _k_에 위치한 코드 유닛으로 한다.
+            1. _unescapedSet_이 _C_를 포함하면,
+              1. _k_를 _k_ + 1로 한다.
+              1. _R_을 _R_과 _C_를 이어붙인 문자열로 한다.
+            1. 그렇지 않으면,
+              1. _cp_를 CodePointAt(_string_, _k_)로 한다.
+              1. _cp_.[[IsUnpairedSurrogate]]가 *true*이면 *URIError* 예외를 던진다.
+              1. _k_를 _k_ + _cp_.[[CodeUnitCount]]로 한다.
+              1. _Octets_를 _cp_.[[CodePoint]]에 UTF-8 변환을 적용해 얻은 octet 리스트로 한다.
+              1. _Octets_의 각 _octet_에 대해,
+                1. _hex_를 _octet_을 대문자 16진수 문자열로 만든 값으로 한다.
+                1. _R_을 _R_, *"%"*, 그리고 StringPad(_hex_, 2, *"0"*, ~start~)를 이어붙인 값으로 한다.
+          1. _R_을 반환한다.
         </emu-alg>
         <emu-note>
-          <p>퍼센트 인코딩은 개별 octet 을 표현하므로 하나의 코드 포인트가 여러 연속 escape 시퀀스(각각 하나의 8비트 UTF-8 코드 유닛)에 의해 표현될 수 있다.</p>
+          <p>퍼센트 인코딩은 개별 octet을 나타내므로 한 코드 포인트가 여러 연속된 이스케이프 시퀀스로 표현될 수 있다(각 8비트 UTF-8 코드 유닛마다 하나씩).</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-decode" type="abstract operation">
         <h1>
           Decode (
-            _string_: String,
-            _preserveEscapeSet_: String,
-          ): String 을 담은 정상 completion 또는 throw completion
+            _string_: a String,
+            _preserveEscapeSet_: a String,
+          ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
-          <dt>description</dt>
-          <dd>_preserveEscapeSet_ 에 포함된 Basic Latin 문자에 대응하는 escape 시퀀스를 보존하면서 URI unescape 및 디코딩을 수행한다.</dd>
+          <dt>설명</dt>
+          <dd>_preserveEscapeSet_에 해당하는 Basic Latin 문자로 나타내는 이스케이프 시퀀스를 보존하며 URI 디코딩 및 이스케이프 해제를 수행한다.</dd>
         </dl>
         <emu-alg>
-          1. _len_ = _string_ 길이.
-          1. _R_ = 빈 문자열.
-          1. _k_ = 0.
-          1. 반복 (_k_ &lt; _len_)
-            1. _C_ = _string_[_k_] 코드 유닛.
-            1. _S_ = _C_.
-            1. _C_ = 0x0025 ( %) 이면
-              1. _k_ + 3 > _len_ 이면 *URIError* throw.
-              1. _escape_ = _string_[_k_ .. _k_+3).
-              1. _B_ = ParseHexOctet(_string_, _k_ + 1).
-              1. _B_ 가 정수가 아니면 *URIError* throw.
-              1. _k_ = _k_ + 2.
-              1. _n_ = _B_ 의 선행 1 비트 개수.
-              1. _n_ = 0 이면
-                1. _asciiChar_ = 값이 _B_ 인 코드 유닛.
-                1. _preserveEscapeSet_ 이 _asciiChar_ 포함하면 _S_ = _escape_, 아니면 _S_ = _asciiChar_.
-              1. Else
-                1. _n_ = 1 또는 _n_ > 4 이면 *URIError* throw.
-                1. _Octets_ = « _B_ ».
-                1. _j_ = 1.
-                1. 반복 (_j_ &lt; _n_)
-                  1. _k_ = _k_ + 1.
-                  1. _k_ + 3 > _len_ 이면 *URIError* throw.
-                  1. _string_[_k_] ≠ 0x0025 이면 *URIError* throw.
-                  1. _continuationByte_ = ParseHexOctet(_string_, _k_ + 1).
-                  1. _continuationByte_ 가 정수가 아니면 *URIError* throw.
-                  1. _Octets_ 에 append(_continuationByte_).
-                  1. _k_ = _k_ + 2.
-                  1. _j_ = _j_ + 1.
-                1. 단언: |Octets| 길이 = _n_.
-                1. _Octets_ 가 유효한 UTF-8 코드 포인트 인코딩이 아니면 *URIError* throw.
-                1. _V_ = UTF-8 변환을 적용해 얻은 코드 포인트.
-                1. _S_ = UTF16EncodeCodePoint(_V_).
-            1. _R_ = _R_ + _S_.
-            1. _k_ = _k_ + 1.
-          1. _R_ 반환.
+          1. _len_을 _string_의 길이로 한다.
+          1. _R_을 빈 문자열로 한다.
+          1. _k_를 0으로 한다.
+          1. _k_ &lt; _len_인 동안 반복한다,
+            1. _C_를 _string_의 인덱스 _k_에 위치한 코드 유닛으로 한다.
+            1. _S_를 _C_로 한다.
+            1. _C_가 코드 유닛 0x0025(PERCENT SIGN)이면,
+              1. _k_ + 3 > _len_이면 *URIError* 예외를 던진다.
+              1. _escape_를 _string_의 _k_에서 _k_ + 3까지의 부분문자열로 한다.
+              1. _B_를 ParseHexOctet(_string_, _k_ + 1)로 한다.
+              1. _B_가 정수가 아니면 *URIError* 예외를 던진다.
+              1. _k_를 _k_ + 2로 한다.
+              1. _B_의 선행 1 비트 개수를 _n_으로 한다.
+              1. _n_ = 0이면,
+                1. _asciiChar_를 숫자값이 _B_인 코드 유닛으로 한다.
+                1. _preserveEscapeSet_에 _asciiChar_가 포함되면 _S_를 _escape_로, 아니면 _S_를 _asciiChar_로 한다.
+              1. 그렇지 않으면,
+                1. _n_ = 1 또는 _n_ > 4이면 *URIError* 예외를 던진다.
+                1. _Octets_를 « _B_ »로 한다.
+                1. _j_를 1로 한다.
+                1. _j_ &lt; _n_인 동안 반복한다,
+                  1. _k_를 _k_ + 1로 한다.
+                  1. _k_ + 3 > _len_이면 *URIError* 예외를 던진다.
+                  1. _string_의 인덱스 _k_의 코드 유닛이 코드 유닛 0x0025(PERCENT SIGN)이 아니면 *URIError* 예외를 던진다.
+                  1. _continuationByte_를 ParseHexOctet(_string_, _k_ + 1)로 한다.
+                  1. _continuationByte_가 정수가 아니면 *URIError* 예외를 던진다.
+                  1. _Octets_에 _continuationByte_를 추가한다.
+                  1. _k_를 _k_ + 2로 한다.
+                  1. _j_를 _j_ + 1로 한다.
+                1. 단언: _Octets_의 길이가 _n_이다.
+                1. _Octets_가 유효한 유니코드 코드 포인트의 UTF-8 인코딩을 포함하지 않으면 *URIError* 예외를 던진다.
+                1. _V_를 _Octets_에 UTF-8 변환을 적용해 얻은 코드 포인트(21비트 값)로 한다.
+                1. _S_를 UTF16EncodeCodePoint(_V_)로 한다.
+            1. _R_을 _R_과 _S_를 이어붙인 값으로 한다.
+            1. _k_를 _k_ + 1로 한다.
+          1. _R_을 반환한다.
         </emu-alg>
         <emu-note>
-          <p>RFC 3629 는 잘못된 UTF-8 옥텟 시퀀스 디코딩을 금지한다. 예: 잘못된 시퀀스 0xC0 0x80 은 0x0000 으로 디코딩되어서는 안 된다. 구현은 그러한 시퀀스를 만나면 *URIError* 를 던져야 한다.</p>
+          <p>RFC 3629는 잘못된 UTF-8 옥텟 시퀀스의 디코딩을 금지한다. 예를 들어, 잘못된 시퀀스 0xC0 0x80은 코드 유닛 0x0000으로 디코딩해서는 안 된다. Decode 알고리즘의 구현은 이런 잘못된 시퀀스를 만났을 때 반드시 *URIError*를 던져야 한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-parsehexoctet" type="abstract operation">
         <h1>
           ParseHexOctet (
-            _string_: String,
-            _position_: 음이 아닌 정수,
-          ): 음이 아닌 정수 또는 비어있지 않은 *SyntaxError* 객체 리스트
+            _string_: a String,
+            _position_: a non-negative integer,
+          ): either a non-negative integer or a non-empty List of *SyntaxError* objects
         </h1>
         <dl class="header">
-          <dt>description</dt>
-          <dd>_string_ 의 _position_ 위치에 있는 두 개 16진 문자를 부호 없는 8비트 정수로 파싱한다.</dd>
+          <dt>설명</dt>
+          <dd>_string_에서 주어진 _position_에 있는 두 개의 16진수 문자를 부호 없는 8비트 정수로 파싱한다.</dd>
         </dl>
         <emu-alg>
-          1. _len_ = _string_ 길이.
-          1. 단언: _position_ + 2 ≤ _len_.
-          1. _hexDigits_ = _string_[_position_ .. _position_+2).
-          1. _parseResult_ = ParseText(_hexDigits_, |HexDigits[~Sep]|).
-          1. _parseResult_ 가 Parse Node 가 아니면 _parseResult_ 반환.
-          1. _n_ = _parseResult_ 의 MV.
-          1. 단언: 0 ≤ _n_ ≤ 255.
-          1. _n_ 반환.
+          1. _len_을 _string_의 길이로 한다.
+          1. 단언: _position_ + 2 ≤ _len_이다.
+          1. _hexDigits_를 _string_의 _position_부터 _position_ + 2까지의 부분문자열로 한다.
+          1. _parseResult_를 ParseText(_hexDigits_, |HexDigits[~Sep]|)로 한다.
+          1. _parseResult_가 Parse Node가 아니면 _parseResult_를 반환한다.
+          1. _n_을 _parseResult_의 MV로 한다.
+          1. 단언: _n_은 0 이상 255 이하의 구간에 있다.
+          1. _n_을 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -30858,8 +30892,9 @@
         <h1>Boolean.prototype.toString ( )</h1>
         <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _b_ 를 ? ThisBooleanValue(*this* value) 로 둔다.
-          1. _b_ 가 *true* 이면 *"true"* 반환; 아니면 *"false"* 반환.
+          1. _b_를 ? ThisBooleanValue(*this* 값)으로 한다.
+          1. _b_가 *true*이면 *"true"*를 반환한다.
+          1. *"false"*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -31580,7 +31615,7 @@
         <emu-alg>
           1. _number_ 가 Number 가 아니면 *false* 반환.
           1. _number_ 가 finite 가 아니면 *false* 반환.
-          1. 그렇지 않으면 *true* 반환.
+          1. *true* 반환.
         </emu-alg>
       </emu-clause>
 
@@ -31599,7 +31634,7 @@
         <emu-alg>
           1. _number_ 가 Number 가 아니면 *false* 반환.
           1. _number_ 가 *NaN* 이면 *true* 반환.
-          1. 그렇지 않으면 *false* 반환.
+          1. *false* 반환.
         </emu-alg>
         <emu-note>
           <p>이 함수는 인수를 *NaN* 인지 판정하기 전에 Number 로 변환한다는 점에서 전역 isNaN 함수(<emu-xref href="#sec-isnan-number"></emu-xref>)와 다르다.</p>
@@ -31916,7 +31951,7 @@
           1. NewTarget 이 *undefined* 가 아니면 *TypeError* 예외를 throw 한다.
           1. _prim_ 을 ? ToPrimitive(_value_, ~number~) 로 둔다.
           1. _prim_ 이 Number 이면 ? NumberToBigInt(_prim_) 를 반환한다.
-          1. 그렇지 않으면 ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta> 를 반환한다.
+          1. ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta> 를 반환한다.
         </emu-alg>
 
         <emu-clause id="sec-numbertobigint" type="abstract operation">
@@ -31947,10 +31982,11 @@
         <h1>BigInt.asIntN ( _bits_, _bigint_ )</h1>
         <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _bits_ 를 ? ToIndex(_bits_) 로 설정한다.
-          1. _bigint_ 를 ? ToBigInt(_bigint_) 로 설정한다.
-          1. _mod_ 를 ℝ(_bigint_) mod 2<sup>_bits_</sup> 로 둔다.
-          1. _mod_ ≥ 2<sup>_bits_ - 1</sup> 이면 ℤ(_mod_ - 2<sup>_bits_</sup>) 를 반환; 그렇지 않으면 ℤ(_mod_) 를 반환한다.
+          1. _bits_를 ? ToIndex(_bits_)로 설정한다.
+          1. _bigint_를 ? ToBigInt(_bigint_)로 설정한다.
+          1. _mod_를 ℝ(_bigint_)를 2<sup>_bits_</sup>로 나눈 나머지로 한다.
+          1. _mod_ ≥ 2<sup>_bits_ - 1</sup>이면, ℤ(_mod_ - 2<sup>_bits_</sup>)를 반환한다.
+          1. ℤ(_mod_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -32436,10 +32472,11 @@
         <h1>Math.imul ( _x_, _y_ )</h1>
         <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _a_ = ℝ(? ToUint32(_x_)).
-          1. _b_ = ℝ(? ToUint32(_y_)).
-          1. _product_ = (_a_ × _b_) mod 2<sup>32</sup>.
-          1. _product_ ≥ 2<sup>31</sup> 이면 𝔽(_product_ - 2<sup>32</sup>) 반환; 아니면 𝔽(_product_) 반환.
+          1. _a_를 ℝ(? ToUint32(_x_))로 한다.
+          1. _b_를 ℝ(? ToUint32(_y_))로 한다.
+          1. _product_를 (_a_ × _b_)를 2<sup>32</sup>로 나눈 나머지로 한다.
+          1. _product_ ≥ 2<sup>31</sup>이면, 𝔽(_product_ - 2<sup>32</sup>)를 반환한다.
+          1. 𝔽(_product_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -32870,7 +32907,8 @@
           <dd>_t_가 윤년 내에 있으면 *1*<sub>𝔽</sub>, 아니면 *+0*<sub>𝔽</sub>을 반환합니다.</dd>
         </dl>
         <emu-alg>
-          1. DaysInYear(YearFromTime(_t_))이 *366*<sub>𝔽</sub>이면 *1*<sub>𝔽</sub>을, 아니면 *+0*<sub>𝔽</sub>을 반환합니다.
+          1. DaysInYear(YearFromTime(_t_))이 *366*<sub>𝔽</sub>이면 *1*<sub>𝔽</sub>을 반환한다.
+          1. *+0*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34045,16 +34083,16 @@ THH:mm:ss.sss
         <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
         <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObject_를 *this* 값으로 설정한다.
+          1. _dateObject_를 *this* 값으로 한다.
           1. ? RequireInternalSlot(_dateObject_, [[DateValue]])를 수행한다.
-          1. _t_를 _dateObject_.[[DateValue]]로 설정한다.
-          1. _y_를 ? ToNumber(_year_)로 설정한다.
-          1. _t_가 *NaN*이면 _t_를 *+0*<sub>𝔽</sub>로 설정하고; 아니면 _t_를 LocalTime(_t_)로 설정한다.
-          1. _month_가 없으면 _m_를 MonthFromTime(_t_)로 설정하고; 있으면 _m_를 ? ToNumber(_month_)로 설정한다.
-          1. _date_가 없으면 _dt_를 DateFromTime(_t_)로 설정하고; 있으면 _dt_를 ? ToNumber(_date_)로 설정한다.
-          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))로 설정한다.
-          1. _u_를 TimeClip(UTC(_newDate_))로 설정한다.
-          1. _dateObject_.[[DateValue]]에 _u_를 설정한다.
+          1. _t_를 _dateObject_.[[DateValue]]로 한다.
+          1. _y_를 ? ToNumber(_year_)로 한다.
+          1. _t_가 *NaN*이면 _t_를 *+0*<sub>𝔽</sub>로; 아니면 _t_를 LocalTime(_t_)로 한다.
+          1. _month_가 있으면 _m_를 ? ToNumber(_month_)로; 아니면 _m_를 MonthFromTime(_t_)로 한다.
+          1. _date_가 있으면 _dt_를 ? ToNumber(_date_)로; 아니면 _dt_를 DateFromTime(_t_)로 한다.
+          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))로 한다.
+          1. _u_를 TimeClip(UTC(_newDate_))로 한다.
+          1. _dateObject_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
         <p>이 메서드의 *"length"* 프로퍼티는 *3*<sub>𝔽</sub>이다.</p>
@@ -34211,16 +34249,16 @@ THH:mm:ss.sss
         <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
         <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObject_를 *this* 값으로 설정한다.
+          1. _dateObject_를 *this* 값으로 한다.
           1. ? RequireInternalSlot(_dateObject_, [[DateValue]])를 수행한다.
-          1. _t_를 _dateObject_.[[DateValue]]로 설정한다.
-          1. _t_가 *NaN*이면 _t_를 *+0*<sub>𝔽</sub>로 설정한다.
-          1. _y_를 ? ToNumber(_year_)로 설정한다.
-          1. _month_가 없으면 _m_를 MonthFromTime(_t_)로 설정하고; 있으면 _m_를 ? ToNumber(_month_)로 설정한다.
-          1. _date_가 없으면 _dt_를 DateFromTime(_t_)로 설정하고; 있으면 _dt_를 ? ToNumber(_date_)로 설정한다.
-          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))로 설정한다.
-          1. _v_를 TimeClip(_newDate_)로 설정한다.
-          1. _dateObject_.[[DateValue]]에 _v_를 설정한다.
+          1. _t_를 _dateObject_.[[DateValue]]로 한다.
+          1. _t_가 *NaN*이면 _t_를 *+0*<sub>𝔽</sub>로 한다.
+          1. _y_를 ? ToNumber(_year_)로 한다.
+          1. _month_가 있으면 _m_를 ? ToNumber(_month_)로; 그렇지 않으면 _m_를 MonthFromTime(_t_)로 한다.
+          1. _date_가 있으면 _dt_를 ? ToNumber(_date_)로; 그렇지 않으면 _dt_를 DateFromTime(_t_)로 한다.
+          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_))로 한다.
+          1. _v_를 TimeClip(_newDate_)로 한다.
+          1. _dateObject_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
         <p>이 메서드의 *"length"* 프로퍼티는 *3*<sub>𝔽</sub>이다.</p>
@@ -35264,7 +35302,7 @@ THH:mm:ss.sss
             1. _fillLen_을 _maxLength_ - _stringLength_로 둔다.
             1. _truncatedStringFiller_를 _fillString_을 반복 결합한 뒤 길이 _fillLen_으로 자른 문자열 값으로 둔다.
             1. _placement_가 ~start~이면 _truncatedStringFiller_와 _S_의 문자열 결합을 반환한다.
-            1. 그렇지 않으면 _S_와 _truncatedStringFiller_의 문자열 결합을 반환한다.
+            1. _S_와 _truncatedStringFiller_의 문자열 결합을 반환한다.
           </emu-alg>
           <emu-note>
             <p>인수 _maxLength_는 _S_의 길이보다 작아질 수 없도록 클램프된다.</p>
@@ -37082,15 +37120,14 @@ THH:mm:ss.sss
                   1. Assert: _y_ 는 MatchState.
                   1. _m2_(_y_, _c_) 를 반환한다.
                 1. _m1_(_x_, _d_) 를 반환한다.
-            1. 그렇지 않으면,
-              1. Assert: _direction_ 은 ~backward~.
-              1. _m1_, _m2_ 를 캡처하고 매개변수 (_x_, _c_) 를 가지며 호출 시 다음을 수행하는 새 Matcher 를 반환한다:
-                1. Assert: _x_ 는 MatchState.
-                1. Assert: _c_ 는 MatcherContinuation.
-                1. _d_ 를 매개변수 (_y_) 를 가지며 _c_, _m1_ 을 캡처하고 호출 시 다음을 수행하는 새 MatcherContinuation 으로 둔다:
-                  1. Assert: _y_ 는 MatchState.
-                  1. _m1_(_y_, _c_) 를 반환한다.
-                1. _m2_(_x_, _d_) 를 반환한다.
+            1. Assert: _direction_ 은 ~backward~.
+            1. _m1_, _m2_ 를 캡처하고 매개변수 (_x_, _c_) 를 가지며 호출 시 다음을 수행하는 새 Matcher 를 반환한다:
+              1. Assert: _x_ 는 MatchState.
+              1. Assert: _c_ 는 MatcherContinuation.
+              1. _d_ 를 매개변수 (_y_) 를 가지며 _c_, _m1_ 을 캡처하고 호출 시 다음을 수행하는 새 MatcherContinuation 으로 둔다:
+                1. Assert: _y_ 는 MatchState.
+                1. _m1_(_y_, _c_) 를 반환한다.
+              1. _m2_(_x_, _d_) 를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -37904,9 +37941,8 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _rer_.[[Unicode]] 가 *true* 이거나 _rer_.[[UnicodeSets]] 가 *true* 이면
-              1. *true* 반환.
-            1. *false* 반환.
+            1. _rer_.[[Unicode]]가 *true*이거나 _rer_.[[UnicodeSets]]가 *true*이면 *true*를 반환한다.
+            1. *false*를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -37939,12 +37975,11 @@ THH:mm:ss.sss
             <dd>정규 표현식 플래그에 따른 “모든 문자” 집합을 반환한다.</dd>
           </dl>
           <emu-alg>
-            1. _rer_.[[UnicodeSets]] *true*, _rer_.[[IgnoreCase]] *true* 이면
-              1. [declared="c"] Simple Case Folding 매핑이 없는(즉 scf(_c_) = _c_) 모든 유니코드 코드 포인트 _c_ 를 포함하는 CharSet 반환.
-            1. Else HasEitherUnicodeFlag(_rer_) *true* 이면
-              1. 모든 코드 포인트 값을 포함하는 CharSet 반환.
-            1. Else
-              1. 모든 코드 유닛 값을 포함하는 CharSet 반환.
+            1. _rer_.[[UnicodeSets]]가 *true*이고 _rer_.[[IgnoreCase]]가 *true*이면
+              1. [declared="c"] <a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">Simple Case Folding</a> 매핑이 없는 모든 유니코드 코드 포인트 _c_ (즉, scf(_c_)=_c_)를 포함하는 CharSet을 반환한다.
+            1. HasEitherUnicodeFlag(_rer_)가 *true*이면
+              1. 모든 코드 포인트 값을 포함하는 CharSet을 반환한다.
+            1. 모든 코드 유닛 값을 포함하는 CharSet을 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -38259,23 +38294,23 @@ THH:mm:ss.sss
           </dl>
 
           <emu-alg>
-            1. _cp_ 가 |SyntaxCharacter| 에 매치되거나 U+002F (SOLIDUS)이면
-              1. 0x005C (REVERSE SOLIDUS) 와 UTF16EncodeCodePoint(_cp_) 의 연결을 반환.
-            1. Else if _cp_ 가 <emu-xref href="#table-controlescape-code-point-values"></emu-xref> “Code Point” 열에 나온 코드 포인트이면
-              1. 0x005C (REVERSE SOLIDUS) 와 해당 행 “ControlEscape” 열의 문자열 연결을 반환.
-            1. _otherPunctuators_ = *",-=&lt;>#&amp;!%:;@~'`"* + 코드 유닛 0x0022 (QUOTATION MARK).
-            1. _toEscape_ = StringToCodePoints(_otherPunctuators_).
-            1. _toEscape_ 가 _cp_ 를 포함하거나, _cp_ 가 |WhiteSpace| 또는 |LineTerminator| 에 매치되거나, _cp_ 가 리드 서러게이트 또는 트레일 서러게이트와 같은 수치 값을 가지면
-              1. _cpNum_ = _cp_ 의 수치 값.
-              1. _cpNum_ ≤ 0xFF 이면
-                1. _hex_ = Number::toString(𝔽(_cpNum_), 16).
-                1. 0x005C (REVERSE SOLIDUS) + *"x"* + StringPad(_hex_, 2, *"0"*, ~start~) 반환.
-              1. _escaped_ = 빈 String.
-              1. _codeUnits_ = UTF16EncodeCodePoint(_cp_).
-              1. 각 코드 유닛 _cu_ 에 대해
-                1. _escaped_ = _escaped_ + UnicodeEscape(_cu_).
-              1. _escaped_ 반환.
-            1. UTF16EncodeCodePoint(_cp_) 반환.
+            1. _cp_가 |SyntaxCharacter|에 매치되거나 U+002F (SOLIDUS)이면,
+              1. 0x005C (역 슬래시)와 UTF16EncodeCodePoint(_cp_)를 이어붙인 문자열을 반환한다.
+            1. _cp_가 <emu-xref href="#table-controlescape-code-point-values"></emu-xref>의 “Code Point” 열에 나열된 코드 포인트이면,
+              1. 0x005C (역 슬래시)와 “Code Point” 열이 _cp_인 행의 “ControlEscape” 열에 있는 문자열을 이어붙인 문자열을 반환한다.
+            1. _otherPunctuators_를 *",-=&lt;>#&amp;!%:;@~'`"*와 코드 유닛 0x0022 (따옴표)를 이어붙인 문자열로 한다.
+            1. _toEscape_를 StringToCodePoints(_otherPunctuators_)로 한다.
+            1. _toEscape_에 _cp_가 포함되어 있거나, _cp_가 |WhiteSpace| 또는 |LineTerminator|에 매치되거나, _cp_가 선행 서러게이트 또는 후행 서러게이트와 같은 숫자 값을 가지면,
+              1. _cpNum_을 _cp_의 숫자 값으로 한다.
+              1. _cpNum_ ≤ 0xFF이면,
+                1. _hex_를 Number::toString(𝔽(_cpNum_), 16)으로 한다.
+                1. 코드 유닛 0x005C (역 슬래시), *"x"*, 그리고 StringPad(_hex_, 2, *"0"*, ~start~)를 이어붙인 문자열을 반환한다.
+              1. _escaped_를 빈 문자열로 한다.
+              1. _codeUnits_를 UTF16EncodeCodePoint(_cp_)로 한다.
+              1. _codeUnits_의 각 코드 유닛 _cu_에 대해,
+                1. _escaped_에 UnicodeEscape(_cu_)를 이어붙인다.
+              1. _escaped_를 반환한다.
+            1. UTF16EncodeCodePoint(_cp_)를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -38378,7 +38413,7 @@ THH:mm:ss.sss
             1. _R_ 이 Object 가 아니면 *TypeError* 예외.
             1. _R_ 이 [[OriginalFlags]] 내부 슬롯을 갖지 않으면
               1. SameValue(_R_, %RegExp.prototype%) 가 *true* 이면 *undefined* 반환.
-              1. 아니면 *TypeError* 예외.
+              1. *TypeError* 예외.
             1. _flags_ = _R_.[[OriginalFlags]].
             1. _flags_ 가 _codeUnit_ 을 포함하면 *true* 반환.
             1. *false* 반환.
@@ -38420,30 +38455,27 @@ THH:mm:ss.sss
         <h1>RegExp.prototype [ %Symbol.match% ] ( _string_ )</h1>
         <p>이 메서드는 호출 시 다음을 수행한다:</p>
         <emu-alg>
-          1. _rx_ = *this* 값.
-          1. _rx_ 가 Object 가 아니면 *TypeError* 예외.
-          1. _S_ = ? ToString(_string_).
-          1. _flags_ = ? ToString(? Get(_rx_, *"flags"*)).
-          1. _flags_ 가 *"g"* 를 포함하지 않으면
-            1. ? RegExpExec(_rx_, _S_) 반환.
-          1. Else
-            1. _flags_ 가 *"u"* 또는 *"v"* 포함하면 _fullUnicode_ = *true*; 아니면 *false*.
-            1. ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*).
-            1. _A_ = ! ArrayCreate(0).
-            1. _n_ = 0.
-            1. 반복:
-              1. _result_ = ? RegExpExec(_rx_, _S_).
-              1. _result_ 가 *null* 이면
-                1. _n_ = 0 이면 *null* 반환.
-                1. _A_ 반환.
-              1. Else
-                1. _matchStr_ = ? ToString(? Get(_result_, *"0"*)).
-                1. ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_).
-                1. _matchStr_ 가 빈 String 이면
-                  1. _thisIndex_ = ℝ(? ToLength(? Get(_rx_, *"lastIndex"*))).
-                  1. _nextIndex_ = AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_).
-                  1. ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*).
-                1. _n_ = _n_ + 1.
+          1. _rx_를 *this* 값으로 한다.
+          1. _rx_가 객체가 아니면 *TypeError* 예외를 던진다.
+          1. _S_를 ? ToString(_string_)으로 한다.
+          1. _flags_를 ? ToString(? Get(_rx_, *"flags"*))으로 한다.
+          1. _flags_에 *"g"*가 포함되지 않으면 ? RegExpExec(_rx_, _S_)를 반환한다.
+          1. _flags_에 *"u"* 또는 *"v"*가 포함되어 있으면 _fullUnicode_를 *true*로; 그렇지 않으면 _fullUnicode_를 *false*로 한다.
+          1. ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)를 수행한다.
+          1. _A_를 ! ArrayCreate(0)으로 한다.
+          1. _n_을 0으로 한다.
+          1. 반복한다,
+            1. _result_를 ? RegExpExec(_rx_, _S_)로 한다.
+            1. _result_가 *null*이면,
+              1. _n_ = 0이면 *null*을 반환한다.
+              1. _A_를 반환한다.
+            1. _matchStr_을 ? ToString(? Get(_result_, *"0"*))로 한다.
+            1. ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_)를 수행한다.
+            1. _matchStr_이 빈 문자열이면,
+              1. _thisIndex_를 ℝ(? ToLength(? Get(_rx_, *"lastIndex"*)))로 한다.
+              1. _nextIndex_를 AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_)로 한다.
+              1. ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*)를 수행한다.
+            1. _n_을 _n_ + 1로 설정한다.
         </emu-alg>
         <p>이 메서드의 *"name"* 프로퍼티 값은 *"[Symbol.match]"* 이다.</p>
         <emu-note>
@@ -38569,15 +38601,15 @@ THH:mm:ss.sss
         <h1>get RegExp.prototype.source</h1>
         <p>`RegExp.prototype.source` 접근자 get 은 다음을 수행한다:</p>
         <emu-alg>
-          1. _R_ = *this*.
-          1. _R_ Object 아니면 *TypeError*.
-          1. _R_ 가 [[OriginalSource]] 슬롯 없으면
-            1. SameValue(_R_, %RegExp.prototype%) *true* 이면 *"(?:)"* 반환.
-            1. 아니면 *TypeError*.
-          1. Assert: _R_ 는 [[OriginalFlags]] 슬롯을 가진다.
-          1. _src_ = _R_.[[OriginalSource]].
-          1. _flags_ = _R_.[[OriginalFlags]].
-          1. EscapeRegExpPattern(_src_, _flags_) 반환.
+          1. _R_을 *this* 값으로 한다.
+          1. _R_이 객체가 아니면 *TypeError* 예외를 던진다.
+          1. _R_에 [[OriginalSource]] 내부 슬롯이 없으면,
+            1. SameValue(_R_, %RegExp.prototype%)가 *true*이면 *"(?:)"*를 반환한다.
+            1. *TypeError* 예외를 던진다.
+          1. 단언: _R_에 [[OriginalFlags]] 내부 슬롯이 있다.
+          1. _src_를 _R_.[[OriginalSource]]로 한다.
+          1. _flags_를 _R_.[[OriginalFlags]]로 한다.
+          1. EscapeRegExpPattern(_src_, _flags_)를 반환한다.
         </emu-alg>
 
         <emu-clause id="sec-escaperegexppattern" type="abstract operation">
@@ -38688,11 +38720,12 @@ THH:mm:ss.sss
         <h1>RegExp.prototype.test ( _S_ )</h1>
         <p>호출 시 다음을 수행한다:</p>
         <emu-alg>
-          1. _R_ = *this*.
-          1. _R_ Object 아니면 *TypeError*.
-          1. _string_ = ? ToString(_S_).
-          1. _match_ = ? RegExpExec(_R_, _string_).
-          1. _match_ ≠ *null* 이면 *true* 반환; 아니면 *false*.
+          1. _R_을 *this* 값으로 한다.
+          1. _R_이 객체가 아니면 *TypeError* 예외를 던진다.
+          1. _string_을 ? ToString(_S_)으로 한다.
+          1. _match_를 ? RegExpExec(_R_, _string_)으로 한다.
+          1. _match_가 *null*이면 *false*를 반환한다.
+          1. *true*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -39138,33 +39171,31 @@ THH:mm:ss.sss
         <h1>Array ( ..._values_ )</h1>
         <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. NewTarget 이 *undefined* 이면 _newTarget_ 을 활성 함수 객체로; 아니면 _newTarget_ = NewTarget.
-          1. _proto_ 를 ? GetPrototypeFromConstructor(_newTarget_, *"%Array.prototype%"*) 로 둔다.
-          1. _numberOfArgs_ 를 _values_ 의 요소 개수로 둔다.
-          1. _numberOfArgs_ = 0 이면
-            1. ! ArrayCreate(0, _proto_) 를 반환.
-          1. Else if _numberOfArgs_ = 1 이면
-            1. _len_ = _values_[0].
-            1. _array_ = ! ArrayCreate(0, _proto_).
-            1. _len_ 이 Number 가 아니면
-              1. ! CreateDataPropertyOrThrow(_array_, *"0"*, _len_) 수행.
-              1. _intLen_ = *1*<sub>𝔽</sub>.
-            1. Else,
-              1. _intLen_ = ! ToUint32(_len_).
-              1. SameValueZero(_intLen_, _len_) 이 *false* 이면 *RangeError* 예외.
-            1. ! Set(_array_, *"length"*, _intLen_, *true*) 수행.
-            1. _array_ 반환.
-          1. Else,
-            1. Assert: _numberOfArgs_ ≥ 2.
-            1. _array_ = ? ArrayCreate(_numberOfArgs_, _proto_).
-            1. _k_ = 0.
-            1. _k_ &lt; _numberOfArgs_ 인 동안 반복
-              1. _Pk_ = ! ToString(𝔽(_k_)).
-              1. _itemK_ = _values_[_k_].
-              1. ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_) 수행.
-              1. _k_ = _k_ + 1.
-            1. Assert: _array_ 의 *"length"* 프로퍼티의 수학적 값은 _numberOfArgs_.
-            1. _array_ 반환.
+          1. NewTarget이 *undefined*이면 _newTarget_을 활성 함수 객체로, 아니면 _newTarget_을 NewTarget으로 한다.
+          1. _proto_를 ? GetPrototypeFromConstructor(_newTarget_, *"%Array.prototype%"*)로 한다.
+          1. _numberOfArgs_를 _values_의 요소 개수로 한다.
+          1. _numberOfArgs_ = 0이면 ! ArrayCreate(0, _proto_)를 반환한다.
+          1. _numberOfArgs_ = 1이면,
+            1. _len_을 _values_[0]로 한다.
+            1. _array_를 ! ArrayCreate(0, _proto_)로 한다.
+            1. _len_이 Number가 아니면,
+              1. ! CreateDataPropertyOrThrow(_array_, *"0"*, _len_)를 수행한다.
+              1. _intLen_을 *1*<sub>𝔽</sub>로 한다.
+            1. 그렇지 않으면,
+              1. _intLen_을 ! ToUint32(_len_)로 한다.
+              1. SameValueZero(_intLen_, _len_)이 *false*이면 *RangeError* 예외를 던진다.
+            1. ! Set(_array_, *"length"*, _intLen_, *true*)를 수행한다.
+            1. _array_를 반환한다.
+          1. 단언: _numberOfArgs_ ≥ 2
+          1. _array_를 ? ArrayCreate(_numberOfArgs_, _proto_)로 한다.
+          1. _k_를 0으로 한다.
+          1. _k_ &lt; _numberOfArgs_인 동안 반복한다,
+            1. _Pk_를 ! ToString(𝔽(_k_))로 한다.
+            1. _itemK_를 _values_[_k_]로 한다.
+            1. ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_)를 수행한다.
+            1. _k_를 _k_ + 1로 한다.
+          1. 단언: _array_의 *"length"* 프로퍼티의 수학적 값은 _numberOfArgs_이다.
+          1. _array_를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -39746,23 +39777,23 @@ THH:mm:ss.sss
         </emu-note>
         <p>호출 시:</p>
         <emu-alg>
-          1. _O_ = ? ToObject(*this* value).
-          1. _len_ = ? LengthOfArrayLike(_O_).
-          1. _len_ = 0 이면 *false* 반환.
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_).
-          1. Assert: _fromIndex_ 가 *undefined* 이면 _n_ = 0.
-          1. _n_ = +∞ 이면 *false* 반환.
-          1. Else if _n_ = -∞ 이면 _n_ = 0.
-          1. _n_ ≥ 0 이면
-            1. _k_ = _n_.
-          1. Else,
-            1. _k_ = _len_ + _n_.
-            1. _k_ &lt; 0 이면 _k_ = 0.
-          1. _k_ &lt; _len_ 동안
-            1. _elementK_ = ? Get(_O_, ! ToString(𝔽(_k_))).
-            1. SameValueZero(_searchElement_, _elementK_) *true* 이면 *true* 반환.
-            1. _k_ = _k_ + 1.
-          1. *false* 반환.
+          1. _O_를 ? ToObject(*this* 값)으로 한다。
+          1. _len_을 ? LengthOfArrayLike(_O_)로 한다。
+          1. _len_ = 0이면 *false*를 반환한다。
+          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 한다。
+          1. 단언: _fromIndex_가 *undefined*이면 _n_은 0이다。
+          1. _n_ = +∞이면 *false*를 반환한다。
+          1. _n_ = -∞이면 _n_을 0으로 설정한다。
+          1. _n_ ≥ 0이면
+            1. _k_를 _n_으로 한다。
+          1. 그렇지 않으면
+            1. _k_를 _len_ + _n_으로 한다。
+            1. _k_ < 0이면 _k_를 0으로 설정한다。
+          1. _k_ < _len_인 동안 반복한다，
+            1. _elementK_를 ? Get(_O_, ! ToString(𝔽(_k_)))로 한다。
+            1. SameValueZero(_searchElement_, _elementK_)가 *true*이면 *true*를 반환한다。
+            1. _k_를 _k_ + 1로 설정한다。
+          1. *false*를 반환한다。
         </emu-alg>
         <emu-note>
           <p>제네릭.</p>
@@ -39780,26 +39811,26 @@ THH:mm:ss.sss
         </emu-note>
         <p>호출 시:</p>
         <emu-alg>
-          1. _O_ = ? ToObject(*this* value).
-          1. _len_ = ? LengthOfArrayLike(_O_).
-          1. _len_ = 0 이면 *-1*<sub>𝔽</sub> 반환.
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_).
-          1. Assert: _fromIndex_ *undefined* ⇒ _n_ = 0.
-          1. _n_ = +∞ 이면 *-1*<sub>𝔽</sub> 반환.
-          1. Else if _n_ = -∞ ⇒ _n_ = 0.
-          1. _n_ ≥ 0 이면
-            1. _k_ = _n_.
-          1. Else
-            1. _k_ = _len_ + _n_.
-            1. _k_ &lt; 0 ⇒ _k_ = 0.
-          1. _k_ &lt; _len_ 동안
-            1. _Pk_ = ! ToString(𝔽(_k_)).
-            1. _kPresent_ = ? HasProperty(_O_, _Pk_).
-            1. _kPresent_ = *true* 이면
-              1. _elementK_ = ? Get(_O_, _Pk_).
-              1. IsStrictlyEqual(_searchElement_, _elementK_) *true* 이면 𝔽(_k_) 반환.
-            1. _k_ = _k_ + 1.
-          1. *-1*<sub>𝔽</sub> 반환.
+          1. _O_를 ? ToObject(*this* 값)으로 한다.
+          1. _len_을 ? LengthOfArrayLike(_O_)로 한다.
+          1. _len_ = 0이면 *-1*<sub>𝔽</sub>을 반환한다.
+          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 한다.
+          1. 단언: _fromIndex_가 *undefined*이면 _n_은 0이다.
+          1. _n_ = +∞이면 *-1*<sub>𝔽</sub>을 반환한다.
+          1. _n_ = -∞이면 _n_을 0으로 설정한다.
+          1. _n_ ≥ 0이면
+            1. _k_를 _n_으로 한다.
+          1. 그렇지 않으면
+            1. _k_를 _len_ + _n_으로 한다.
+            1. _k_ < 0이면 _k_를 0으로 설정한다.
+          1. _k_ < _len_인 동안 반복한다,
+            1. _Pk_를 ! ToString(𝔽(_k_))로 한다.
+            1. _kPresent_를 ? HasProperty(_O_, _Pk_)로 한다.
+            1. _kPresent_가 *true*이면,
+              1. _elementK_를 ? Get(_O_, _Pk_)로 한다.
+              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면 𝔽(_k_)를 반환한다.
+            1. _k_를 _k_ + 1로 설정한다.
+          1. *-1*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
         <emu-note>
           <p>제네릭.</p>
@@ -39913,14 +39944,13 @@ THH:mm:ss.sss
           1. _len_ = 0 이면
             1. ? Set(_O_, *"length"*, *+0*<sub>𝔽</sub>, *true*).
             1. *undefined* 반환.
-          1. Else
-            1. Assert: _len_ > 0.
-            1. _newLen_ = 𝔽(_len_ - 1).
-            1. _index_ = ! ToString(_newLen_).
-            1. _element_ = ? Get(_O_, _index_).
-            1. ? DeletePropertyOrThrow(_O_, _index_).
-            1. ? Set(_O_, *"length"*, _newLen_, *true*).
-            1. _element_ 반환.
+          1. Assert: _len_ > 0.
+          1. _newLen_ = 𝔽(_len_ - 1).
+          1. _index_ = ! ToString(_newLen_).
+          1. _element_ = ? Get(_O_, _index_).
+          1. ? DeletePropertyOrThrow(_O_, _index_).
+          1. ? Set(_O_, *"length"*, _newLen_, *true*).
+          1. _element_ 반환.
         </emu-alg>
         <emu-note>
           <p>제네릭.</p>
@@ -41373,24 +41403,24 @@ THH:mm:ss.sss
         <p>이 메서드의 인자 해석과 사용은 <emu-xref href="#sec-array.prototype.includes"></emu-xref>에 정의된 `Array.prototype.includes` 와 동일하다.</p>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _O_ = *this* 값.
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~).
-          1. _len_ = TypedArrayLength(_taRecord_).
-          1. _len_ = 0 이면 *false* 반환.
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_).
-          1. Assert: _fromIndex_ 가 *undefined* 이면 _n_ = 0.
-          1. _n_ = +∞ 이면 *false* 반환.
-          1. Else if _n_ = -∞ 이면 _n_ = 0.
-          1. _n_ ≥ 0 이면
-            1. _k_ = _n_.
-          1. Else
-            1. _k_ = _len_ + _n_.
-            1. _k_ &lt; 0 이면 _k_ = 0.
-          1. _k_ &lt; _len_ 동안 반복
-            1. _elementK_ = ! Get(_O_, ! ToString(𝔽(_k_))).
-            1. SameValueZero(_searchElement_, _elementK_) *true* 이면 *true* 반환.
-            1. _k_ = _k_ + 1.
-          1. *false* 반환.
+          1. _O_를 *this* 값으로 한다.
+          1. _taRecord_를 ? ValidateTypedArray(_O_, ~seq-cst~)로 한다.
+          1. _len_을 TypedArrayLength(_taRecord_)로 한다.
+          1. _len_ = 0이면 *false*를 반환한다.
+          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 한다.
+          1. 단언: _fromIndex_가 *undefined*이면 _n_은 0이다.
+          1. _n_ = +∞이면 *false*를 반환한다.
+          1. _n_ = -∞이면 _n_을 0으로 설정한다.
+          1. _n_ ≥ 0이면
+            1. _k_를 _n_으로 한다.
+          1. 그렇지 않으면
+            1. _k_를 _len_ + _n_으로 한다.
+            1. _k_ < 0이면 _k_를 0으로 설정한다.
+          1. _k_ < _len_인 동안 반복한다,
+            1. _elementK_를 ! Get(_O_, ! ToString(𝔽(_k_)))로 한다.
+            1. SameValueZero(_searchElement_, _elementK_)가 *true*이면 *true*를 반환한다.
+            1. _k_를 _k_ + 1로 설정한다.
+          1. *false*를 반환한다.
         </emu-alg>
         <p>이 메서드는 제네릭이 아니다. *this* 값은 [[TypedArrayName]] 내부 슬롯을 가진 객체여야 한다.</p>
       </emu-clause>
@@ -41400,27 +41430,27 @@ THH:mm:ss.sss
         <p>이 메서드의 인자 해석과 사용은 <emu-xref href="#sec-array.prototype.indexof"></emu-xref>에 정의된 `Array.prototype.indexOf` 와 동일하다.</p>
         <p>이 메서드는 호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _O_ = *this* 값.
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~).
-          1. _len_ = TypedArrayLength(_taRecord_).
-          1. _len_ = 0 이면 *-1*<sub>𝔽</sub> 반환.
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_).
-          1. Assert: _fromIndex_ *undefined* ⇒ _n_ = 0.
-          1. _n_ = +∞ 이면 *-1*<sub>𝔽</sub> 반환.
-          1. Else if _n_ = -∞ 이면 _n_ = 0.
-          1. _n_ ≥ 0 이면
-            1. _k_ = _n_.
-          1. Else
-            1. _k_ = _len_ + _n_.
-            1. _k_ &lt; 0 이면 _k_ = 0.
-          1. _k_ &lt; _len_ 동안 반복
-            1. _Pk_ = ! ToString(𝔽(_k_)).
-            1. _kPresent_ = ! HasProperty(_O_, _Pk_).
-            1. _kPresent_ = *true* 이면
-              1. _elementK_ = ! Get(_O_, _Pk_).
-              1. IsStrictlyEqual(_searchElement_, _elementK_) *true* 이면 𝔽(_k_) 반환.
-            1. _k_ = _k_ + 1.
-          1. *-1*<sub>𝔽</sub> 반환.
+          1. _O_를 *this* 값으로 한다.
+          1. _taRecord_를 ? ValidateTypedArray(_O_, ~seq-cst~)로 한다.
+          1. _len_을 TypedArrayLength(_taRecord_)로 한다.
+          1. _len_ = 0이면 *-1*<sub>𝔽</sub>을 반환한다.
+          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 한다.
+          1. 단언: _fromIndex_가 *undefined*이면 _n_은 0이다.
+          1. _n_ = +∞이면 *-1*<sub>𝔽</sub>을 반환한다.
+          1. _n_ = -∞이면 _n_을 0으로 설정한다.
+          1. _n_ ≥ 0이면
+            1. _k_를 _n_으로 한다.
+          1. 그렇지 않으면
+            1. _k_를 _len_ + _n_으로 한다.
+            1. _k_ < 0이면 _k_를 0으로 설정한다.
+          1. _k_ < _len_인 동안 반복한다,
+            1. _Pk_를 ! ToString(𝔽(_k_))로 한다.
+            1. _kPresent_를 ! HasProperty(_O_, _Pk_)로 한다.
+            1. _kPresent_가 *true*이면,
+              1. _elementK_를 ! Get(_O_, _Pk_)로 한다.
+              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면 𝔽(_k_)를 반환한다.
+            1. _k_를 _k_ + 1로 설정한다.
+          1. *-1*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
         <p>이 메서드는 제네릭이 아니다. *this* 값은 [[TypedArrayName]] 내부 슬롯을 가진 객체여야 한다.</p>
       </emu-clause>
@@ -42104,36 +42134,33 @@ THH:mm:ss.sss
         <h1>_TypedArray_ ( ..._args_ )</h1>
         <p>각 _TypedArray_ 생성자는 호출 시 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. NewTarget 이 *undefined* 이면 *TypeError* 예외.
-          1. _constructorName_ = 이 <var>TypedArray</var> 생성자에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에 지정된 Constructor Name 값의 String.
-          1. _proto_ = <code>"%<var>TypedArray</var>.prototype%"</code>.
-          1. _numberOfArgs_ = _args_ 의 요소 개수.
-          1. _numberOfArgs_ = 0 이면
-            1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0) 반환.
-          1. Else
-            1. _firstArgument_ = _args_[0].
-            1. _firstArgument_ 가 Object 이면
-              1. _O_ = ? AllocateTypedArray(_constructorName_, NewTarget, _proto_).
-              1. _firstArgument_ 가 [[TypedArrayName]] 내부 슬롯을 가지면
-                1. ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_) 수행.
-              1. Else if _firstArgument_ 가 [[ArrayBufferData]] 내부 슬롯을 가지면
-                1. _numberOfArgs_ > 1 이면 _byteOffset_ = _args_[1]; else _byteOffset_ = *undefined*.
-                1. _numberOfArgs_ > 2 이면 _length_ = _args_[2]; else _length_ = *undefined*.
-                1. ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_) 수행.
-              1. Else
-                1. Assert: _firstArgument_ 는 [[TypedArrayName]] 도 [[ArrayBufferData]] 도 없는 Object.
-                1. _usingIterator_ = ? GetMethod(_firstArgument_, %Symbol.iterator%).
-                1. _usingIterator_ ≠ *undefined* 이면
-                  1. _values_ = ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_)).
-                  1. ? InitializeTypedArrayFromList(_O_, _values_) 수행.
-                1. Else
-                  1. NOTE: _firstArgument_ 는 이터러블이 아니므로 배열 유사 객체로 간주.
-                  1. ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_) 수행.
-              1. _O_ 반환.
-            1. Else
-              1. Assert: _firstArgument_ 는 Object 가 아님.
-              1. _elementLength_ = ? ToIndex(_firstArgument_).
-              1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_) 반환.
+          1. NewTarget이 *undefined*이면 *TypeError* 예외를 던진다.
+          1. _constructorName_을 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 해당 <var>TypedArray</var> 생성자에 지정된 생성자 이름의 문자열 값으로 한다.
+          1. _proto_를 <code>"%<var>TypedArray</var>.prototype%"</code>로 한다.
+          1. _numberOfArgs_를 _args_의 요소 개수로 한다.
+          1. _numberOfArgs_ = 0이면 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0)을 반환한다.
+          1. _firstArgument_를 _args_[0]으로 한다.
+          1. _firstArgument_가 객체이면,
+            1. _O_를 ? AllocateTypedArray(_constructorName_, NewTarget, _proto_)로 한다.
+            1. _firstArgument_에 [[TypedArrayName]] 내부 슬롯이 있으면,
+              1. ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_)를 수행한다.
+            1. 그렇지 않고 _firstArgument_에 [[ArrayBufferData]] 내부 슬롯이 있으면,
+              1. _numberOfArgs_ > 1이면 _byteOffset_을 _args_[1]로, 그렇지 않으면 *undefined*로 한다.
+              1. _numberOfArgs_ > 2이면 _length_를 _args_[2]로, 그렇지 않으면 *undefined*로 한다.
+              1. ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_)를 수행한다.
+            1. 그 밖의 경우,
+              1. 단언: _firstArgument_는 객체이고 [[TypedArrayName]] 또는 [[ArrayBufferData]] 내부 슬롯이 없어야 한다.
+              1. _usingIterator_를 ? GetMethod(_firstArgument_, %Symbol.iterator%)로 한다.
+              1. _usingIterator_가 *undefined*가 아니면,
+                1. _values_를 ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_))로 한다.
+                1. ? InitializeTypedArrayFromList(_O_, _values_)를 수행한다.
+              1. 그렇지 않으면,
+                1. 참고: _firstArgument_는 이터러블 객체가 아니므로, 이미 배열류 객체라고 간주한다.
+                1. ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_)를 수행한다.
+            1. _O_를 반환한다.
+          1. 단언: _firstArgument_는 객체가 아니다.
+          1. _elementLength_를 ? ToIndex(_firstArgument_)로 한다.
+          1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_)를 반환한다.
         </emu-alg>
 
         <emu-clause id="sec-allocatetypedarray" type="abstract operation">
@@ -42601,21 +42628,18 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _chunkLength_를 _chunk_의 길이로 둔다.
+          1. _chunkLength_를 _chunk_의 길이로 한다.
           1. _chunkLength_ = 2이면,
-            1. _chunk_를 _chunk_와 *"AA"*의 문자열 결합 결과로 설정한다.
+            1. _chunk_를 _chunk_와 *"AA"*를 이어붙인 문자열로 설정한다.
           1. 그렇지 않으면,
-            1. Assert: _chunkLength_는 3이다.
-            1. _chunk_를 _chunk_와 *"A"*의 문자열 결합 결과로 설정한다.
-          1. _bytes_를 DecodeFullLengthBase64Chunk(_chunk_)로 둔다.
+            1. 단언: _chunkLength_는 3이다.
+            1. _chunk_를 _chunk_와 *"A"*를 이어붙인 문자열로 설정한다.
+          1. _bytes_를 DecodeFullLengthBase64Chunk(_chunk_)로 한다.
           1. _chunkLength_ = 2이면,
-            1. _throwOnExtraBits_이 *true*이고 _bytes_[1] ≠ 0이면,
-              1. *SyntaxError* 예외를 throw한다.
-            1. « _bytes_[0] »을 반환한다.
-          1. 그렇지 않으면,
-            1. _throwOnExtraBits_이 *true*이고 _bytes_[2] ≠ 0이면,
-              1. *SyntaxError* 예외를 throw한다.
-            1. « _bytes_[0], _bytes_[1] »을 반환한다.
+            1. _throwOnExtraBits_가 *true*이고 _bytes_[1] ≠ 0이면, *SyntaxError* 예외를 던진다.
+            1. « _bytes_[0] »를 반환한다.
+          1. _throwOnExtraBits_가 *true*이고 _bytes_[2] ≠ 0이면, *SyntaxError* 예외를 던진다.
+          1. « _bytes_[0], _bytes_[1] »를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -42646,82 +42670,81 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _maxLength_가 없으면,
+          1. _maxLength_가 없으면
             1. _maxLength_를 2<sup>53</sup> - 1로 설정한다.
-            1. 참고: 입력이 String이므로, String의 길이는 2<sup>53</sup> - 1로 제한되고, 출력은 입력 문자 개수보다 더 많은 바이트가 필요하지 않으므로, 이 한계에 도달할 수 없다. 하지만 편집상 유한 값으로 사용한다.
-          1. 참고: 아래 알고리즘에서 검증과 디코드의 순서는 관찰 불가능하다. 구현체는 효율적인 순서로, 혹은 검증과 디코드를 섞어서 수행할 수 있다.
-          1. _maxLength_ = 0이면,
+            1. 참고: 입력이 문자열이므로 문자열 길이는 2<sup>53</sup> - 1 문자로 제한되고, 출력은 입력 문자 수보다 많은 바이트가 필요하지 않으므로 이 한계에 도달하는 일은 없다. 하지만 편집상 유한한 값을 사용하는 것이 편리하다.
+          1. 참고: 아래 알고리즘의 검증과 디코딩 순서는 관찰되지 않는다. 구현에서는 검증과 디코딩을 가장 효율적인 순서로, 필요하다면 상호교차로 수행할 수 있다.
+          1. _maxLength_ = 0이면
             1. Record { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ }를 반환한다.
-          1. _read_를 0으로 둔다.
-          1. _bytes_를 새 빈 List로 둔다.
-          1. _chunk_를 빈 문자열로 둔다.
-          1. _chunkLength_를 0으로 둔다.
-          1. _index_를 0으로 둔다.
-          1. _length_를 _string_의 길이로 둔다.
+          1. _read_를 0으로 한다.
+          1. _bytes_를 새로운 빈 List로 한다.
+          1. _chunk_를 빈 문자열로 한다.
+          1. _chunkLength_를 0으로 한다.
+          1. _index_를 0으로 한다.
+          1. _length_를 _string_의 길이로 한다.
           1. 반복한다,
             1. _index_를 SkipAsciiWhitespace(_string_, _index_)로 설정한다.
-            1. _index_ = _length_이면,
-              1. _chunkLength_ > 0이면,
-                1. _lastChunkHandling_이 *"stop-before-partial"*이면,
+            1. _index_ = _length_이면
+              1. _chunkLength_ > 0이면
+                1. _lastChunkHandling_이 *"stop-before-partial"*이면
                   1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
-                1. 그렇지 않고 _lastChunkHandling_이 *"loose"*이면,
-                  1. _chunkLength_ = 1이면,
-                    1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
-                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-                  1. _bytes_를 _bytes_와 ! DecodeFinalBase64Chunk(_chunk_, *false*)의 리스트 결합 결과로 설정한다.
-                1. 그렇지 않으면,
-                  1. Assert: _lastChunkHandling_이 *"strict"*임.
-                  1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                1. _lastChunkHandling_이 *"strict"*이면
+                  1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
                   1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+                1. 단언: _lastChunkHandling_은 *"loose"*이다.
+                1. _chunkLength_ = 1이면
+                  1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
+                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
+                1. _bytes_를 _bytes_와 ! DecodeFinalBase64Chunk(_chunk_, *false*)를 리스트로 이어붙인 값으로 설정한다.
               1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
-            1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분 문자열로 둔다.
+            1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분문자열로 한다.
             1. _index_를 _index_ + 1로 설정한다.
-            1. _char_가 *"="*이면,
-              1. _chunkLength_ &lt; 2이면,
-                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+            1. _char_가 *"="*이면
+              1. _chunkLength_ &lt; 2이면
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
               1. _index_를 SkipAsciiWhitespace(_string_, _index_)로 설정한다.
-              1. _chunkLength_ = 2이면,
-                1. _index_ = _length_이면,
-                  1. _lastChunkHandling_이 *"stop-before-partial"*이면,
+              1. _chunkLength_ = 2이면
+                1. _index_ = _length_이면
+                  1. _lastChunkHandling_이 *"stop-before-partial"*이면
                     1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
-                  1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+                  1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
                   1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-                1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분 문자열로 둔다.
-                1. _char_가 *"="*이면,
+                1. _char_를 _string_의 _index_부터 _index_ + 1까지의 부분문자열로 한다.
+                1. _char_가 *"="*이면
                   1. _index_를 SkipAsciiWhitespace(_string_, _index_ + 1)로 설정한다.
-              1. _index_ &lt; _length_이면,
-                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+              1. _index_ &lt; _length_이면
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-              1. _lastChunkHandling_이 *"strict"*이면 _throwOnExtraBits_를 *true*, 아니면 *false*로 둔다.
-              1. _decodeResult_를 Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_))로 둔다.
-              1. _decodeResult_가 abrupt completion이면,
-                1. _error_를 _decodeResult_.[[Value]]로 둔다.
+              1. _lastChunkHandling_이 *"strict"*이면 _throwOnExtraBits_를 *true*로; 아니면 *false*로 한다.
+              1. _decodeResult_를 Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_))로 한다.
+              1. _decodeResult_가 급격한 완료(abrupt completion)라면
+                1. _error_를 _decodeResult_.[[Value]]로 한다.
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-              1. _bytes_를 _bytes_와 ! _decodeResult_의 리스트 결합 결과로 설정한다.
+              1. _bytes_를 _bytes_와 ! _decodeResult_를 리스트로 이어붙인 값으로 설정한다.
               1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
-            1. _alphabet_이 *"base64url"*이면,
-              1. _char_가 *"+"* 또는 *"/"*이면,
-                1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+            1. _alphabet_이 *"base64url"*이면
+              1. _char_가 *"+"* 또는 *"/"*이면
+                1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-              1. 아니고 _char_가 *"-"*이면,
-                1. _char_를 *"+"*로 설정한다.
-              1. 아니고 _char_가 *"_"*이면,
-                1. _char_를 *"/"*로 설정한다.
-            1. _char_의 유일한 코드 유닛이 표준 base64 알파벳에 포함되어 있지 않으면,
-              1. _error_를 새로 생성한 *SyntaxError* 객체로 둔다.
+              1. 그렇지 않고 _char_가 *"-"*면
+                1. _char_를 *"+"*로 한다.
+              1. 그렇지 않고 _char_가 *"_"*면
+                1. _char_를 *"/"*로 한다.
+            1. _char_의 유일한 코드 유닛이 표준 base64 알파벳의 요소가 아니면
+              1. _error_를 새로 생성한 *SyntaxError* 객체로 한다.
               1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환한다.
-            1. _remaining_을 _maxLength_ - _bytes_의 요소 개수로 둔다.
-            1. _remaining_ = 1이고 _chunkLength_ = 2이거나, _remaining_ = 2이고 _chunkLength_ = 3이면,
+            1. _remaining_을 _maxLength_에서 _bytes_의 요소 개수를 뺀 값으로 한다.
+            1. _remaining_ = 1이면서 _chunkLength_ = 2이거나, _remaining_ = 2이면서 _chunkLength_ = 3이면
               1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
-            1. _chunk_를 _chunk_와 _char_의 문자열 결합 결과로 설정한다.
+            1. _chunk_를 _chunk_와 _char_를 이어붙인 문자열로 설정한다.
             1. _chunkLength_를 _chunk_의 길이로 설정한다.
-            1. _chunkLength_ = 4이면,
-              1. _bytes_를 _bytes_와 DecodeFullLengthBase64Chunk(_chunk_)의 리스트 결합 결과로 설정한다.
+            1. _chunkLength_ = 4이면
+              1. _bytes_를 _bytes_와 DecodeFullLengthBase64Chunk(_chunk_)를 리스트로 이어붙인 값으로 설정한다.
               1. _chunk_를 빈 문자열로 설정한다.
               1. _chunkLength_를 0으로 설정한다.
               1. _read_를 _index_로 설정한다.
-              1. _bytes_의 요소 개수 = _maxLength_이면,
+              1. _bytes_의 요소 개수 = _maxLength_이면
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ }를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -44418,47 +44441,51 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 요소 타입 _type_ 에 대해 지정된 Element Size 값.
-          1. _isLittleEndian_ = *false* 이면 _rawBytes_ 요소 순서를 반전.
-          1. _type_ = ~float16~ 이면
-            1. _value_ = _rawBytes_ 바이트들을 이어 붙인 후 little-endian 비트열로 해석한 IEEE 754-2019 binary16 값.
-            1. _value_ 가 NaN 이면 *NaN* 반환.
-            1. _value_ 에 해당하는 Number 값 반환.
-          1. _type_ = ~float32~ 이면
-            1. (동일 절차, binary32) → NaN 처리 동일.
-          1. _type_ = ~float64~ 이면
-            1. (동일 절차, binary64) → NaN 처리 동일.
-          1. IsUnsignedElementType(_type_) = *true* 이면
-            1. _intValue_ = _rawBytes_ 바이트들을 이어 붙여 해석한 unsigned little-endian 이진 수.
-          1. Else
-            1. _intValue_ = _rawBytes_ 바이트들을 이어 붙여 해석한 길이 (_elementSize_ × 8) 비트의 little-endian 2의 보수 이진 수.
-          1. IsBigIntElementType(_type_) = *true* 이면 _intValue_ 에 해당하는 BigInt 반환.
-          1. 그렇지 않으면 _intValue_ 에 해당하는 Number 반환.
+          1. <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 요소 타입 _type_에 지정된 요소 크기 값을 _elementSize_로 한다.
+          1. _isLittleEndian_이 *false*이면 _rawBytes_의 요소 순서를 뒤집는다.
+          1. _type_이 ~float16~이면
+            1. _rawBytes_의 바이트 요소를 연결하여 IEEE 754-2019 binary16 값을 리틀 엔디안 비트 문자열로 해석한 값을 _value_로 한다.
+            1. _value_가 NaN이면 *NaN*을 반환한다.
+            1. _value_에 해당하는 Number 값을 반환한다.
+          1. _type_이 ~float32~이면
+            1. _rawBytes_의 바이트 요소를 연결하여 IEEE 754-2019 binary32 값을 리틀 엔디안 비트 문자열로 해석한 값을 _value_로 한다.
+            1. _value_가 NaN이면 *NaN*을 반환한다.
+            1. _value_에 해당하는 Number 값을 반환한다.
+          1. _type_이 ~float64~이면
+            1. _rawBytes_의 바이트 요소를 연결하여 IEEE 754-2019 binary64 값을 리틀 엔디안 비트 문자열로 해석한 값을 _value_로 한다.
+            1. _value_가 NaN이면 *NaN*을 반환한다.
+            1. _value_에 해당하는 Number 값을 반환한다.
+          1. IsUnsignedElementType(_type_)이 *true*이면
+            1. _rawBytes_의 바이트 요소를 연결하여 부호 없는 리틀 엔디안 이진수 비트 문자열로 해석한 값을 _intValue_로 한다.
+          1. 아니면
+            1. _rawBytes_의 바이트 요소를 연결하여 _elementSize_ × 8 비트 길이의 이진 리틀 엔디안 2의 보수 비트 문자열로 해석한 값을 _intValue_로 한다.
+          1. IsBigIntElementType(_type_)이 *true*이면 _intValue_에 해당하는 BigInt 값을 반환한다.
+          1. _intValue_에 해당하는 Number 값을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-getrawbytesfromsharedblock" type="abstract operation">
         <h1>
           GetRawBytesFromSharedBlock (
-            _block_: a Shared Data Block,
-            _byteIndex_: a non-negative integer,
-            _type_: a TypedArray element type,
-            _isTypedArray_: a Boolean,
-            _order_: ~seq-cst~ or ~unordered~,
-          ): 바이트 값 List
+            _block_: 공유 데이터 블록,
+            _byteIndex_: 0 이상의 정수,
+            _type_: TypedArray 요소 타입,
+            _isTypedArray_: 불리언,
+            _order_: ~seq-cst~ 또는 ~unordered~,
+          ): 바이트 값들의 리스트
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_를 Element Type _type_에 대해 <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 지정된 요소 크기 값으로 설정한다.
-          1. _AR_을 주변 에이전트의 에이전트 레코드로 설정한다.
-          1. _execution_을 _AR_.[[CandidateExecution]]으로 설정한다.
-          1. _eventsRecord_를 _execution_.[[EventsRecords]]의 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드로 설정한다.
-          1. _isTypedArray_가 *true*이고 IsNoTearConfiguration(_type_, _order_)가 *true*이면, _noTear_를 *true*로 설정한다; 그렇지 않으면 _noTear_를 *false*로 설정한다.
-          1. _rawValue_를 길이가 _elementSize_이고 각 요소는 비결정적으로 선택된 바이트 값인 리스트로 설정한다.
-          1. 참고: 실제 구현에서 _rawValue_는 하드웨어의 비원자적 또는 원자적 읽기 명령의 결과이다. 이 비결정성은 약한 일관성을 가진 하드웨어의 관찰 가능한 동작을 설명하는 메모리 모델의 의미적 규정이다.
-          1. _readEvent_를 ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }로 설정한다.
-          1. _readEvent_를 _eventsRecord_.[[EventList]]에 추가한다.
+          1. <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 요소 타입 _type_에 지정된 요소 크기 값을 _elementSize_로 한다.
+          1. 주변 에이전트의 에이전트 레코드를 _AR_로 한다.
+          1. _AR_.[[CandidateExecution]]을 _execution_으로 한다.
+          1. _execution_.[[EventsRecords]] 중 [[AgentSignifier]]가 AgentSignifier()인 에이전트 이벤트 레코드를 _eventsRecord_로 한다.
+          1. _isTypedArray_가 *true*이고 IsNoTearConfiguration(_type_, _order_)가 *true*이면 _noTear_를 *true*로, 아니면 _noTear_를 *false*로 한다.
+          1. _elementSize_ 길이를 가진, 요소가 비결정적으로 선택된 바이트 값들의 리스트를 _rawValue_로 한다.
+          1. 참고: 구현에서는 _rawValue_는 하드웨어에서의 논원자적 또는 원자적 읽기 명령 결과이다. 이 비결정성은 약한 일관성 하드웨어의 관찰 가능한 행위를 기술하기 위한 메모리 모델의 의미적 규정이다.
+          1. ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ }를 _readEvent_로 한다.
+          1. _eventsRecord_.[[EventList]]에 _readEvent_를 추가한다.
           1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ }를 _execution_.[[ChosenValues]]에 추가한다.
           1. _rawValue_를 반환한다.
         </emu-alg>
@@ -44506,22 +44533,22 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _type_ = ~float16~ 이면
-            1. _rawBytes_ = _value_ 를 roundTiesToEven 방식으로 IEEE 754-2019 binary16 형식으로 변환한 2바이트 List (little endian). _value_ 가 *NaN* 이면 구현이 선택한 binary16 NaN 인코딩(구현 구분 가능한 동일 *NaN* 에 대해 항상 동일 인코딩)을 사용.
-          1. Else if _type_ = ~float32~
-            1. (동일, 4바이트 binary32)
-          1. Else if _type_ = ~float64~
-            1. (동일, 8바이트 binary64)
-          1. Else
-            1. _n_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 에서 _type_ 의 Element Size.
-            1. _conversionOperation_ = <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 변환 연산 열의 _type_ 에 해당하는 추상 연산.
-            1. _intValue_ = ℝ(! _conversionOperation_(_value_)).
-            1. _intValue_ ≥ 0 이면
-              1. _rawBytes_ = _intValue_ 의 _n_ 바이트 이진 인코딩 (little endian).
-            1. Else
-              1. _rawBytes_ = _intValue_ 의 _n_ 바이트 2의 보수 이진 인코딩 (little endian).
-          1. _isLittleEndian_ = *false* 이면 _rawBytes_ 순서 반전.
-          1. _rawBytes_ 반환.
+          1. _type_이 ~float16~이면
+            1. _rawBytes_를 roundTiesToEven 모드로 _value_를 IEEE 754-2019 binary16 형식으로 변환한 2바이트 리스트로 한다. 바이트 순서는 리틀 엔디안으로 정렬한다. _value_가 *NaN*이면, _rawBytes_는 구현이 선택한 IEEE 754-2019 binary16 형식 NaN 인코딩으로 설정될 수 있다. 구현은 구현이 구분할 수 있는 *NaN* 값마다 항상 동일한 인코딩을 선택해야 한다.
+          1. 아니고 _type_이 ~float32~이면
+            1. _rawBytes_를 roundTiesToEven 모드로 _value_를 IEEE 754-2019 binary32 형식으로 변환한 4바이트 리스트로 한다. 바이트 순서는 리틀 엔디안으로 정렬한다. _value_가 *NaN*이면, _rawBytes_는 구현이 선택한 IEEE 754-2019 binary32 형식 NaN 인코딩으로 설정될 수 있다. 구현은 구현이 구분할 수 있는 *NaN* 값마다 항상 동일한 인코딩을 선택해야 한다.
+          1. 아니고 _type_이 ~float64~이면
+            1. _rawBytes_를 _value_의 IEEE 754-2019 binary64 형식 인코딩 8바이트 리스트로 한다. 바이트 순서는 리틀 엔디안으로 정렬한다. _value_가 *NaN*이면, _rawBytes_는 구현이 선택한 IEEE 754-2019 binary64 형식 NaN 인코딩으로 설정될 수 있다. 구현은 구현이 구분할 수 있는 *NaN* 값마다 항상 동일한 인코딩을 선택해야 한다.
+          1. 그 밖의 경우
+            1. <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 요소 타입 _type_에 지정된 요소 크기 값을 _n_으로 한다.
+            1. <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 요소 타입 _type_의 “Conversion Operation” 열에 지정된 추상 연산 이름을 _conversionOperation_으로 한다.
+            1. _intValue_를 ℝ(! _conversionOperation_(_value_))로 한다.
+            1. _intValue_ ≥ 0이면
+              1. _rawBytes_를 _intValue_의 _n_바이트 이진 인코딩 값 리스트로 한다. 바이트는 리틀 엔디안 순서로 정렬한다.
+            1. 아니면
+              1. _rawBytes_를 _intValue_의 _n_바이트 이진 2의 보수 인코딩 값 리스트로 한다. 바이트는 리틀 엔디안 순서로 정렬한다.
+          1. _isLittleEndian_이 *false*이면 _rawBytes_의 요소 순서를 뒤집는다.
+          1. _rawBytes_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -44720,7 +44747,8 @@ THH:mm:ss.sss
           1. _O_ = *this* 값.
           1. ? RequireInternalSlot(_O_, [[ArrayBufferData]]) 수행.
           1. IsSharedArrayBuffer(_O_) = *true* 이면 *TypeError* 예외.
-          1. IsFixedLengthArrayBuffer(_O_) = *false* 이면 *true* 반환; 아니면 *false* 반환.
+          1. IsFixedLengthArrayBuffer(_O_) = *false* 이면 *true* 반환.
+          1. *false* 반환.
         </emu-alg>
       </emu-clause>
 
@@ -45061,7 +45089,8 @@ THH:mm:ss.sss
           1. _O_ = *this* 값.
           1. ? RequireInternalSlot(_O_, [[ArrayBufferData]]) 수행.
           1. IsSharedArrayBuffer(_O_) = *false* 이면 *TypeError* 예외.
-          1. IsFixedLengthArrayBuffer(_O_) = *false* 이면 *true* 반환; 아니면 *false* 반환.
+          1. IsFixedLengthArrayBuffer(_O_) = *false* 이면 *true* 반환.
+          1. *false* 반환.
         </emu-alg>
       </emu-clause>
 
@@ -46077,49 +46106,51 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _taRecord_를 ? ValidateIntegerTypedArray(_typedArray_, *true*)로 둔다.
-          1. _buffer_를 _taRecord_.[[Object]].[[ViewedArrayBuffer]]로 둔다.
-          1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *TypeError* 예외를 발생시킨다.
-          1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 둔다.
-          1. _arrayTypeName_을 _typedArray_.[[TypedArrayName]]로 둔다.
-          1. _arrayTypeName_이 *"BigInt64Array"*이면, _v_를 ? ToBigInt64(_value_)로 둔다.
-          1. 그렇지 않으면, _v_를 ? ToInt32(_value_)로 둔다.
-          1. _q_를 ? ToNumber(_timeout_)로 둔다.
-          1. _q_가 *NaN* 또는 *+∞*<sub>𝔽</sub>이면 _t_를 +∞로, _q_가 *-∞*<sub>𝔽</sub>이면 _t_를 0으로, 그렇지 않으면 _t_를 max(ℝ(_q_), 0)으로 둔다.
-          1. _mode_가 ~sync~이고 AgentCanSuspend()가 *false*이면, *TypeError* 예외를 발생시킨다.
-          1. _block_을 _buffer_.[[ArrayBufferData]]로 둔다.
-          1. _WL_을 GetWaiterList(_block_, _byteIndexInBuffer_)로 둔다.
-          1. _mode_가 ~sync~이면,
-            1. _promiseCapability_를 ~blocking~으로 둔다.
-            1. _resultObject_를 *undefined*로 둔다.
-          1. 그렇지 않으면,
-            1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
-            1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+          1. _taRecord_를 ? ValidateIntegerTypedArray(_typedArray_, *true*)로 한다.
+          1. _buffer_를 _taRecord_.[[Object]].[[ViewedArrayBuffer]]로 한다.
+          1. IsSharedArrayBuffer(_buffer_)가 *false*이면 *TypeError* 예외를 던진다.
+          1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 한다.
+          1. _arrayTypeName_을 _typedArray_.[[TypedArrayName]]로 한다.
+          1. _arrayTypeName_이 *"BigInt64Array"*이면 _v_를 ? ToBigInt64(_value_)로 한다.
+          1. 그 밖에는 _v_를 ? ToInt32(_value_)로 한다.
+          1. _q_를 ? ToNumber(_timeout_)으로 한다.
+          1. _q_가 *NaN* 또는 *+∞*<sub>𝔽</sub>이면 _t_를 +∞로 한다.
+          1. 그 밖에 _q_가 *-∞*<sub>𝔽</sub>이면 _t_를 0으로 한다.
+          1. 아니면 _t_를 max(ℝ(_q_), 0)으로 한다.
+          1. _mode_가 ~sync~이고 AgentCanSuspend()가 *false*이면 *TypeError* 예외를 던진다.
+          1. _block_을 _buffer_.[[ArrayBufferData]]로 한다.
+          1. _WL_을 GetWaiterList(_block_, _byteIndexInBuffer_)로 한다.
+          1. _mode_가 ~sync~이면
+            1. _promiseCapability_를 ~blocking~으로 한다.
+            1. _resultObject_를 *undefined*로 한다.
+          1. 아니면
+            1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 한다.
+            1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 한다.
           1. EnterCriticalSection(_WL_)을 수행한다.
-          1. _elementType_을 TypedArrayElementType(_typedArray_)로 둔다.
-          1. _w_를 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)로 둔다.
-          1. _v_ ≠ _w_이면,
+          1. _elementType_을 TypedArrayElementType(_typedArray_)로 한다.
+          1. _w_를 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)로 한다.
+          1. _v_ ≠ _w_이면
             1. LeaveCriticalSection(_WL_)을 수행한다.
             1. _mode_가 ~sync~이면 *"not-equal"*을 반환한다.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)을 수행한다.
-            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*)을 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)를 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*)를 수행한다.
             1. _resultObject_를 반환한다.
-          1. _t_ = 0이고 _mode_가 ~async~이면,
-            1. 주: 동기적 즉각 시간초과는 특별 취급하지 않는다. 비동기적 즉각 시간초과는 Promise job을 불필요하게 생성하지 않고 빠르게 실패하도록 특별 취급이 있다.
+          1. _t_ = 0이고 _mode_가 ~async~이면
+            1. 참고: 동기 즉시 타임아웃은 특별히 다루지 않는다. 비동기 즉시 타임아웃은 빠르게 실패하고 불필요한 프라미스 작업을 피하기 위해 별도의 처리를 한다.
             1. LeaveCriticalSection(_WL_)을 수행한다.
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*)를 수행한다.
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*)을 수행한다.
             1. _resultObject_를 반환한다.
-          1. _thisAgent_를 AgentSignifier()로 둔다.
-          1. _now_를 현재 시각(UTC) 값으로 둔다.
-          1. _additionalTimeout_을 구현 정의된 0 이상의 수학적 값으로 둔다.
-          1. _timeoutTime_을 ℝ(_now_) + _t_ + _additionalTimeout_로 둔다.
-          1. 주: _t_가 +∞일 때, _timeoutTime_도 +∞이다.
-          1. _waiterRecord_를 새로운 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }로 둔다.
+          1. _thisAgent_를 AgentSignifier()로 한다.
+          1. _now_를 현재 시간을 나타내는 시간 값(UTC)으로 한다.
+          1. _additionalTimeout_을 구현 정의된 0 이상의 수학적 값으로 한다.
+          1. _timeoutTime_을 ℝ(_now_) + _t_ + _additionalTimeout_로 한다.
+          1. 참고: _t_가 +∞이면 _timeoutTime_도 +∞이다.
+          1. _waiterRecord_를 새로운 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }로 한다.
           1. AddWaiter(_WL_, _waiterRecord_)를 수행한다.
-          1. _mode_가 ~sync~이면,
+          1. _mode_가 ~sync~이면
             1. SuspendThisAgent(_WL_, _waiterRecord_)를 수행한다.
-          1. 그렇지 않고 _timeoutTime_이 유한이면,
+          1. 그렇지 않고 _timeoutTime_이 유한이면
             1. EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_)를 수행한다.
           1. LeaveCriticalSection(_WL_)을 수행한다.
           1. _mode_가 ~sync~이면 _waiterRecord_.[[Result]]를 반환한다.
@@ -46493,15 +46524,13 @@ THH:mm:ss.sss
       <p>이 함수는 JSON 텍스트(JSON 형식 문자열)를 파싱하여 ECMAScript 언어 값을 생성한다. JSON 형식은 ECMAScript 리터럴, 배열 초기자, 객체 초기자와 유사한 구문으로 리터럴, 배열, 객체를 표현한다. 파싱 후 JSON 객체는 ECMAScript 객체로, JSON 배열은 ECMAScript Array 인스턴스로 실현된다. JSON 문자열, 숫자, 불리언, null 은 ECMAScript String, Number, Boolean 및 *null* 로 실현된다.</p>
       <p>선택적 _reviver_ 매개변수는 _key_, _value_ 두 매개변수를 받는 함수로 결과를 필터/변환할 수 있다. 파싱에서 생성된 각 _key_/_value_ 쌍에 대해 호출되며 반환값이 원래 값 대신 사용된다. 받은 값을 그대로 반환하면 구조는 수정되지 않는다. *undefined* 를 반환하면 그 프로퍼티는 결과에서 삭제된다.</p>
       <emu-alg>
-        1. _jsonString_ = ? ToString(_text_).
-        1. _unfiltered_ = ? ParseJSON(_jsonString_).
-        1. IsCallable(_reviver_) = *true* 이면
-          1. _root_ = OrdinaryObjectCreate(%Object.prototype%).
-          1. _rootName_ = 빈 문자열.
-          1. ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_) 수행.
-          1. Return ? InternalizeJSONProperty(_root_, _rootName_, _reviver_).
-        1. Else
-          1. Return _unfiltered_.
+        1. _jsonString_을 ? ToString(_text_)로 한다.
+        1. _unfiltered_를 ? ParseJSON(_jsonString_)으로 한다.
+        1. IsCallable(_reviver_)가 *false*이면 _unfiltered_를 반환한다.
+        1. _root_를 OrdinaryObjectCreate(%Object.prototype%)로 한다.
+        1. _rootName_을 빈 문자열로 한다.
+        1. ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_)를 수행한다.
+        1. ? InternalizeJSONProperty(_root_, _rootName_, _reviver_)를 반환한다.
       </emu-alg>
       <p>이 함수의 *"length"* 프로퍼티는 *2*<sub>𝔽</sub>이다.</p>
 
@@ -48307,8 +48336,7 @@ THH:mm:ss.sss
             1. _value_ 가 abrupt completion 이면,
               1. ? Call(_capability_.[[Reject]], *undefined*, « _value_.[[Value]] »)를 수행한다.
               1. _capability_.[[Promise]] 를 반환한다.
-            1. 그렇지 않으면,
-              1. _value_ 를 ! _value_ 로 설정한다.
+            1. _value_ 를 ! _value_ 로 설정한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -48585,8 +48613,7 @@ THH:mm:ss.sss
             1. Assert: _promiseCapability_ 는 PromiseCapability Record.
             1. _handlerResult_ 가 abrupt completion 이면,
               1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _handlerResult_.[[Value]] ») 를 반환한다.
-            1. 그렇지 않으면,
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] ») 를 반환한다.
+            1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] ») 를 반환한다.
           1. _handlerRealm_ 을 *null* 로 둔다.
           1. _reaction_.[[Handler]] 가 ~empty~ 가 아니면,
             1. _getHandlerRealmResult_ 를 Completion(GetFunctionRealm(_reaction_.[[Handler]].[[Callback]])) 로 둔다.
@@ -49159,37 +49186,35 @@ THH:mm:ss.sss
             <dd>_promise_ 에 대해 _onFulfilled_ 및 _onRejected_ 를 정착(settlement) 동작으로 사용하여 “then” 연산을 수행한다. _resultCapability_ 가 전달되면 그 promise 를 갱신하여 결과를 저장한다. 전달되지 않은 경우, 결과가 중요하지 않은 명세 내부 연산에 의해 호출된 것이다.</dd>
           </dl>
           <emu-alg>
-            1. Assert: IsPromise(_promise_) 는 *true*.
-            1. _resultCapability_ 가 존재하지 않으면,
-              1. _resultCapability_ 를 *undefined* 로 설정한다.
-            1. IsCallable(_onFulfilled_) 가 *false* 이면
-              1. _onFulfilledJobCallback_ 을 ~empty~ 로 둔다.
-            1. 그렇지 않으면,
-              1. _onFulfilledJobCallback_ 을 HostMakeJobCallback(_onFulfilled_) 로 둔다.
-            1. IsCallable(_onRejected_) 가 *false* 이면
-              1. _onRejectedJobCallback_ 을 ~empty~ 로 둔다.
-            1. 그렇지 않으면,
-              1. _onRejectedJobCallback_ 을 HostMakeJobCallback(_onRejected_) 로 둔다.
-            1. _fulfillReaction_ 을 PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ } 로 둔다.
-            1. _rejectReaction_ 을 PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ } 로 둔다.
-            1. _promise_.[[PromiseState]] 가 ~pending~ 이면,
-              1. _fulfillReaction_ 을 _promise_.[[PromiseFulfillReactions]] 에 추가한다.
-              1. _rejectReaction_ 을 _promise_.[[PromiseRejectReactions]] 에 추가한다.
-            1. 그렇지 않고 _promise_.[[PromiseState]] 가 ~fulfilled~ 이면,
-              1. _value_ 를 _promise_.[[PromiseResult]] 로 둔다.
-              1. _fulfillJob_ 을 NewPromiseReactionJob(_fulfillReaction_, _value_) 로 둔다.
-              1. HostEnqueuePromiseJob(_fulfillJob_.[[Job]], _fulfillJob_.[[Realm]]) 를 수행한다.
-            1. 그렇지 않으면,
-              1. Assert: _promise_.[[PromiseState]] 는 ~rejected~.
-              1. _reason_ 을 _promise_.[[PromiseResult]] 로 둔다.
-              1. _promise_.[[PromiseIsHandled]] 가 *false* 이면 HostPromiseRejectionTracker(_promise_, *"handle"*) 를 수행한다.
-              1. _rejectJob_ 을 NewPromiseReactionJob(_rejectReaction_, _reason_) 로 둔다.
-              1. HostEnqueuePromiseJob(_rejectJob_.[[Job]], _rejectJob_.[[Realm]]) 를 수행한다.
-            1. _promise_.[[PromiseIsHandled]] 를 *true* 로 설정한다.
-            1. _resultCapability_ 가 *undefined* 이면
-              1. *undefined* 를 반환한다.
-            1. 그렇지 않으면
-              1. _resultCapability_.[[Promise]] 를 반환한다.
+            1. 단언: IsPromise(_promise_)가 *true*이다.
+            1. _resultCapability_가 없으면
+              1. _resultCapability_를 *undefined*로 설정한다.
+            1. IsCallable(_onFulfilled_)가 *false*면
+              1. _onFulfilledJobCallback_를 ~empty~로 한다.
+            1. 아니면
+              1. _onFulfilledJobCallback_를 HostMakeJobCallback(_onFulfilled_)로 한다.
+            1. IsCallable(_onRejected_)가 *false*면
+              1. _onRejectedJobCallback_를 ~empty~로 한다.
+            1. 아니면
+              1. _onRejectedJobCallback_를 HostMakeJobCallback(_onRejected_)로 한다.
+            1. _fulfillReaction_을 PromiseReaction 레코드 { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ }로 한다.
+            1. _rejectReaction_을 PromiseReaction 레코드 { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ }로 한다.
+            1. _promise_.[[PromiseState]]가 ~pending~이면
+              1. _promise_.[[PromiseFulfillReactions]]에 _fulfillReaction_을 추가한다.
+              1. _promise_.[[PromiseRejectReactions]]에 _rejectReaction_을 추가한다.
+            1. 아니고 _promise_.[[PromiseState]]가 ~fulfilled~이면
+              1. _value_를 _promise_.[[PromiseResult]]로 한다.
+              1. _fulfillJob_을 NewPromiseReactionJob(_fulfillReaction_, _value_)로 한다.
+              1. HostEnqueuePromiseJob(_fulfillJob_.[[Job]], _fulfillJob_.[[Realm]])을 수행한다.
+            1. 아니면
+              1. 단언: _promise_.[[PromiseState]]는 ~rejected~이다.
+              1. _reason_을 _promise_.[[PromiseResult]]로 한다.
+              1. _promise_.[[PromiseIsHandled]]가 *false*면 HostPromiseRejectionTracker(_promise_, *"handle"*)를 수행한다.
+              1. _rejectJob_을 NewPromiseReactionJob(_rejectReaction_, _reason_)으로 한다.
+              1. HostEnqueuePromiseJob(_rejectJob_.[[Job]], _rejectJob_.[[Realm]])을 수행한다.
+            1. _promise_.[[PromiseIsHandled]]를 *true*로 설정한다.
+            1. _resultCapability_가 *undefined*이면 *undefined*를 반환한다.
+            1. _resultCapability_.[[Promise]]를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -49726,7 +49751,7 @@ THH:mm:ss.sss
           1. _genContext_ 가 Generator 컴포넌트를 가지지 않으면 ~non-generator~ 를 반환한다.
           1. _generator_ 를 _genContext_ 의 Generator 컴포넌트 값으로 둔다.
           1. _generator_ 에 [[AsyncGeneratorState]] 내부 슬롯이 있으면 ~async~ 를 반환한다.
-          1. 아니면 ~sync~ 를 반환한다.
+          1. ~sync~ 를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -49765,7 +49790,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _generatorKind_ 를 GetGeneratorKind() 로 둔다.
           1. _generatorKind_ 가 ~async~ 이면 ? AsyncGeneratorYield(? Await(_value_)) 를 반환한다.
-          1. 그렇지 않으면 ? GeneratorYield(CreateIteratorResultObject(_value_, *false*)) 를 반환한다.
+          1. ? GeneratorYield(CreateIteratorResultObject(_value_, *false*)) 를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -50133,13 +50158,12 @@ THH:mm:ss.sss
             1. _toYield_ 를 _queue_ 의 첫 요소로 둔다.
             1. _resumptionValue_ 를 Completion(_toYield_.[[Completion]]) 로 둔다.
             1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) 를 반환한다.
-          1. 그렇지 않으면,
-            1. _generator_.[[AsyncGeneratorState]] 를 ~suspended-yield~ 로 설정한다.
-            1. _genContext_ 를 실행 컨텍스트 스택에서 제거하고 스택 꼭대기 실행 컨텍스트를 실행 중인 컨텍스트로 복원한다.
-            1. _callerContext_ 를 실행 중인 실행 컨텍스트로 둔다.
-            1. _callerContext_ 를 *undefined* 를 전달하며 재개한다. _genContext_ 가 다시 재개되면 _resumptionValue_ 를 그 재개에 사용된 Completion Record 로 둔다.
-            1. Assert: 여기 도달하면 _genContext_ 가 다시 실행 중인 실행 컨텍스트이다.
-            1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) 를 반환한다.
+          1. _generator_.[[AsyncGeneratorState]] 를 ~suspended-yield~ 로 설정한다.
+          1. _genContext_ 를 실행 컨텍스트 스택에서 제거하고 스택 꼭대기 실행 컨텍스트를 실행 중인 컨텍스트로 복원한다.
+          1. _callerContext_ 를 실행 중인 실행 컨텍스트로 둔다.
+          1. _callerContext_ 를 *undefined* 를 전달하며 재개한다. _genContext_ 가 다시 재개되면 _resumptionValue_ 를 그 재개에 사용된 Completion Record 로 둔다.
+          1. Assert: 여기 도달하면 _genContext_ 가 다시 실행 중인 실행 컨텍스트이다.
+          1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) 를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -50203,10 +50227,9 @@ THH:mm:ss.sss
             1. _completion_ 이 return completion 이면,
               1. AsyncGeneratorAwaitReturn(_generator_) 를 수행한다.
               1. ~unused~ 를 반환한다.
-            1. 그렇지 않으면,
-              1. _completion_ 이 normal completion 이면
-                1. _completion_ 을 NormalCompletion(*undefined*) 로 설정한다.
-              1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) 를 수행한다.
+            1. _completion_ 이 normal completion 이면
+              1. _completion_ 을 NormalCompletion(*undefined*) 로 설정한다.
+            1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) 를 수행한다.
           1. _generator_.[[AsyncGeneratorState]] 를 ~completed~ 로 설정한다.
           1. ~unused~ 를 반환한다.
         </emu-alg>

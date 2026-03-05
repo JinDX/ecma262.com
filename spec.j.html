@@ -2014,35 +2014,39 @@
             <dd>_base_を_exponent_乗した結果を表す実装依存の近似値を返す。</dd>
           </dl>
           <emu-alg>
-            1. _exponent_が*NaN*なら*NaN*を返す。
-            1. _exponent_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら*1*<sub>𝔽</sub>を返す。
-            1. _base_が*NaN*なら*NaN*を返す。
-            1. _base_が*+∞*<sub>𝔽</sub>なら
-              1. _exponent_ > *+0*<sub>𝔽</sub>なら*+∞*<sub>𝔽</sub>、それ以外は*+0*<sub>𝔽</sub>を返す。
-            1. _base_が*-∞*<sub>𝔽</sub>なら
-              1. _exponent_ > *+0*<sub>𝔽</sub>なら
-                1. _exponent_が奇数の整数Numberなら*-∞*<sub>𝔽</sub>、それ以外は*+∞*<sub>𝔽</sub>を返す。
-              1. それ以外なら
-                1. _exponent_が奇数の整数Numberなら*-0*<sub>𝔽</sub>、それ以外は*+0*<sub>𝔽</sub>を返す。
-            1. _base_が*+0*<sub>𝔽</sub>なら
-              1. _exponent_ > *+0*<sub>𝔽</sub>なら*+0*<sub>𝔽</sub>、それ以外は*+∞*<sub>𝔽</sub>を返す。
-            1. _base_が*-0*<sub>𝔽</sub>なら
-              1. _exponent_ > *+0*<sub>𝔽</sub>なら
-                1. _exponent_が奇数の整数Numberなら*-0*<sub>𝔽</sub>、それ以外は*+0*<sub>𝔽</sub>を返す。
-              1. それ以外なら
-                1. _exponent_が奇数の整数Numberなら*-∞*<sub>𝔽</sub>、それ以外は*+∞*<sub>𝔽</sub>を返す。
-            1. （アサート）_base_は有限であり*+0*<sub>𝔽</sub>でも*-0*<sub>𝔽</sub>でもない。
-            1. _exponent_が*+∞*<sub>𝔽</sub>なら
-              1. abs(ℝ(_base_)) > 1なら*+∞*<sub>𝔽</sub>を返す。
-              1. abs(ℝ(_base_)) = 1なら*NaN*を返す。
-              1. abs(ℝ(_base_)) &lt; 1なら*+0*<sub>𝔽</sub>を返す。
-            1. _exponent_が*-∞*<sub>𝔽</sub>なら
-              1. abs(ℝ(_base_)) > 1なら*+0*<sub>𝔽</sub>を返す。
-              1. abs(ℝ(_base_)) = 1なら*NaN*を返す。
-              1. abs(ℝ(_base_)) &lt; 1なら*+∞*<sub>𝔽</sub>を返す。
-            1. （アサート）_exponent_は有限であり*+0*<sub>𝔽</sub>でも*-0*<sub>𝔽</sub>でもない。
-            1. _base_ &lt; *-0*<sub>𝔽</sub>かつ_exponent_が整数Numberでない場合、*NaN*を返す。
-            1. ℝ(_base_)のℝ(_exponent_)乗の結果を表す実装依存の近似Number値を返す。
+            1. _exponent_ が *NaN* の場合、*NaN* を返す.
+            1. _exponent_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかであれば、*1*<sub>𝔽</sub> を返す.
+            1. _base_ が *NaN* の場合、*NaN* を返す.
+            1. _base_ が *+∞*<sub>𝔽</sub> の場合、then
+              1. _exponent_ > *+0*<sub>𝔽</sub> のとき、*+∞*<sub>𝔽</sub> を返す.
+              1. *+0*<sub>𝔽</sub> を返す.
+            1. _base_ が *-∞*<sub>𝔽</sub> の場合、then
+              1. _exponent_ > *+0*<sub>𝔽</sub> のとき、then
+                1. _exponent_ が奇数の整数値であれば、*-∞*<sub>𝔽</sub> を返す.
+                1. *+∞*<sub>𝔽</sub> を返す.
+              1. _exponent_ が奇数の整数値であれば、*-0*<sub>𝔽</sub> を返す.
+              1. *+0*<sub>𝔽</sub> を返す.
+            1. _base_ が *+0*<sub>𝔽</sub> の場合、then
+              1. _exponent_ > *+0*<sub>𝔽</sub> のとき、*+0*<sub>𝔽</sub> を返す.
+              1. *+∞*<sub>𝔽</sub> を返す.
+            1. _base_ が *-0*<sub>𝔽</sub> の場合、then
+              1. _exponent_ > *+0*<sub>𝔽</sub> のとき、then
+                1. _exponent_ が奇数の整数値であれば、*-0*<sub>𝔽</sub> を返す.
+                1. *+0*<sub>𝔽</sub> を返す.
+              1. _exponent_ が奇数の整数値であれば、*-∞*<sub>𝔽</sub> を返す.
+              1. *+∞*<sub>𝔽</sub> を返す.
+            1. Assert: _base_ は有限で、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない.
+            1. _exponent_ が *+∞*<sub>𝔽</sub> の場合、then
+              1. abs(ℝ(_base_)) > 1 のとき、*+∞*<sub>𝔽</sub> を返す.
+              1. abs(ℝ(_base_)) = 1 のとき、*NaN* を返す.
+              1. *+0*<sub>𝔽</sub> を返す.
+            1. _exponent_ が *-∞*<sub>𝔽</sub> の場合、then
+              1. abs(ℝ(_base_)) > 1 のとき、*+0*<sub>𝔽</sub> を返す.
+              1. abs(ℝ(_base_)) = 1 のとき、*NaN* を返す.
+              1. *+∞*<sub>𝔽</sub> を返す.
+            1. Assert: _exponent_ は有限で、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない.
+            1. _base_ &lt; *-0*<sub>𝔽</sub> であり _exponent_ が整数値でない場合、*NaN* を返す.
+            1. ℝ(_base_) を ℝ(_exponent_) 乗した結果を表す、実装で近似された Number 値を返す.
           </emu-alg>
           <emu-note>
             <p>_base_が*1*<sub>𝔽</sub>や*-1*<sub>𝔽</sub>で_exponent_が*+∞*<sub>𝔽</sub>または*-∞*<sub>𝔽</sub>の場合、または_base_が*1*<sub>𝔽</sub>で_exponent_が*NaN*の場合の`**`演算の結果は、IEEE 754-2019とは異なります。ECMAScript第1版ではこの操作の結果を*NaN*と規定していましたが、後のIEEE 754改訂では*1*<sub>𝔽</sub>とされています。互換性のため、従来のECMAScriptの挙動を維持しています。</p>
@@ -2061,22 +2065,22 @@
             <dd>_x_と_y_の積をIEEE 754-2019バイナリ倍精度演算規則に従って計算します。</dd>
           </dl>
           <emu-alg>
-            1. _x_が*NaN*または_y_が*NaN*なら*NaN*を返す。
-            1. _x_が*+∞*<sub>𝔽</sub>または*-∞*<sub>𝔽</sub>なら
-              1. _y_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら*NaN*を返す。
-              1. _y_ > *+0*<sub>𝔽</sub>なら_x_を返す。
-              1. それ以外は-_x_を返す。
-            1. _y_が*+∞*<sub>𝔽</sub>または*-∞*<sub>𝔽</sub>なら
-              1. _x_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら*NaN*を返す。
-              1. _x_ > *+0*<sub>𝔽</sub>なら_y_を返す。
-              1. それ以外は-_y_を返す。
-            1. _x_が*-0*<sub>𝔽</sub>なら
-              1. _y_が*-0*<sub>𝔽</sub>または_y_ &lt; *-0*<sub>𝔽</sub>なら*+0*<sub>𝔽</sub>を返す。
-              1. それ以外は*-0*<sub>𝔽</sub>を返す。
-            1. _y_が*-0*<sub>𝔽</sub>なら
-              1. _x_ &lt; *-0*<sub>𝔽</sub>なら*+0*<sub>𝔽</sub>を返す。
-              1. それ以外は*-0*<sub>𝔽</sub>を返す。
-            1. 𝔽(ℝ(_x_) × ℝ(_y_))を返す。
+            1. _x_ が *NaN* または _y_ が *NaN* の場合、*NaN* を返す.
+            1. _x_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、
+              1. _y_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかであれば、*NaN* を返す.
+              1. _y_ > *+0*<sub>𝔽</sub> の場合、_x_ を返す.
+              1. -_x_ を返す.
+            1. _y_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、
+              1. _x_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかであれば、*NaN* を返す.
+              1. _x_ > *+0*<sub>𝔽</sub> の場合、_y_ を返す.
+              1. -_y_ を返す.
+            1. _x_ が *-0*<sub>𝔽</sub> の場合、
+              1. _y_ が *-0*<sub>𝔽</sub> であるかまたは _y_ &lt; *-0*<sub>𝔽</sub> の場合、*+0*<sub>𝔽</sub> を返す.
+              1. *-0*<sub>𝔽</sub> を返す.
+            1. _y_ が *-0*<sub>𝔽</sub> の場合、
+              1. _x_ &lt; *-0*<sub>𝔽</sub> の場合、*+0*<sub>𝔽</sub> を返す.
+              1. *-0*<sub>𝔽</sub> を返す.
+            1. 𝔽(ℝ(_x_) × ℝ(_y_)) を返す.
           </emu-alg>
           <emu-note>
             <p>有限精度の乗算は可換ですが、常に結合法則が成り立つわけではありません。</p>
@@ -2095,24 +2099,28 @@
             <dd>_x_（被除数）と_y_（除数）の商をIEEE 754-2019バイナリ倍精度演算規則に従って計算します。</dd>
           </dl>
           <emu-alg>
-            1. _x_が*NaN*または_y_が*NaN*なら*NaN*を返す。
-            1. _x_が*+∞*<sub>𝔽</sub>または*-∞*<sub>𝔽</sub>なら
-              1. _y_が*+∞*<sub>𝔽</sub>または*-∞*<sub>𝔽</sub>なら*NaN*を返す。
-              1. _y_が*+0*<sub>𝔽</sub>または_y_ > *+0*<sub>𝔽</sub>なら_x_を返す。
-              1. それ以外は-_x_を返す。
-            1. _y_が*+∞*<sub>𝔽</sub>なら
-              1. _x_が*+0*<sub>𝔽</sub>または_x_ > *+0*<sub>𝔽</sub>なら*+0*<sub>𝔽</sub>、それ以外は*-0*<sub>𝔽</sub>を返す。
-            1. _y_が*-∞*<sub>𝔽</sub>なら
-              1. _x_が*+0*<sub>𝔽</sub>または_x_ > *+0*<sub>𝔽</sub>なら*-0*<sub>𝔽</sub>、それ以外は*+0*<sub>𝔽</sub>を返す。
-            1. _x_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら
-              1. _y_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら*NaN*を返す。
-              1. _y_ > *+0*<sub>𝔽</sub>なら_x_を返す。
-              1. それ以外は-_x_を返す。
-            1. _y_が*+0*<sub>𝔽</sub>なら
-              1. _x_ > *+0*<sub>𝔽</sub>なら*+∞*<sub>𝔽</sub>、それ以外は*-∞*<sub>𝔽</sub>を返す。
-            1. _y_が*-0*<sub>𝔽</sub>なら
-              1. _x_ > *+0*<sub>𝔽</sub>なら*-∞*<sub>𝔽</sub>、それ以外は*+∞*<sub>𝔽</sub>を返す。
-            1. 𝔽(ℝ(_x_) / ℝ(_y_))を返す。
+            1. _x_ が *NaN* または _y_ が *NaN* の場合、*NaN* を返す。
+            1. _x_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、
+              1. _y_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかであれば、*NaN* を返す。
+              1. _y_ が *+0*<sub>𝔽</sub> または _y_ > *+0*<sub>𝔽</sub> の場合、_x_ を返す。
+              1. -_x_ を返す。
+            1. _y_ が *+∞*<sub>𝔽</sub> の場合、
+              1. _x_ が *+0*<sub>𝔽</sub> または _x_ > *+0*<sub>𝔽</sub> の場合、*+0*<sub>𝔽</sub> を返す。
+              1. *-0*<sub>𝔽</sub> を返す。
+            1. _y_ が *-∞*<sub>𝔽</sub> の場合、
+              1. _x_ が *+0*<sub>𝔽</sub> または _x_ > *+0*<sub>𝔽</sub> の場合、*-0*<sub>𝔽</sub> を返す。
+              1. *+0*<sub>𝔽</sub> を返す。
+            1. _x_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、
+              1. _y_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかであれば、*NaN* を返す。
+              1. _y_ > *+0*<sub>𝔽</sub> の場合、_x_ を返す。
+              1. -_x_ を返す。
+            1. _y_ が *+0*<sub>𝔽</sub> の場合、
+              1. _x_ > *+0*<sub>𝔽</sub> の場合、*+∞*<sub>𝔽</sub> を返す。
+              1. *-∞*<sub>𝔽</sub> を返す。
+            1. _y_ が *-0*<sub>𝔽</sub> の場合、
+              1. _x_ > *+0*<sub>𝔽</sub> の場合、*-∞*<sub>𝔽</sub> を返す。
+              1. *+∞*<sub>𝔽</sub> を返す。
+            1. 𝔽(ℝ(_x_) / ℝ(_y_)) を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2252,17 +2260,18 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_が*NaN*なら*undefined*を返す。
-            1. _y_が*NaN*なら*undefined*を返す。
-            1. _x_が_y_と等しいなら*false*を返す。
-            1. _x_が*+0*<sub>𝔽</sub>かつ_y_が*-0*<sub>𝔽</sub>なら*false*を返す。
-            1. _x_が*-0*<sub>𝔽</sub>かつ_y_が*+0*<sub>𝔽</sub>なら*false*を返す。
-            1. _x_が*+∞*<sub>𝔽</sub>なら*false*を返す。
-            1. _y_が*+∞*<sub>𝔽</sub>なら*true*を返す。
-            1. _y_が*-∞*<sub>𝔽</sub>なら*false*を返す。
-            1. _x_が*-∞*<sub>𝔽</sub>なら*true*を返す。
-            1. （アサート）_x_と_y_は有限。
-            1. ℝ(_x_) &lt; ℝ(_y_)なら*true*、それ以外は*false*を返す。
+            1. _x_ が *NaN* の場合、*undefined* を返す。
+            1. _y_ が *NaN* の場合、*undefined* を返す。
+            1. _x_ が _y_ と等しい場合、*false* を返す。
+            1. _x_ が *+0*<sub>𝔽</sub> で _y_ が *-0*<sub>𝔽</sub> の場合、*false* を返す。
+            1. _x_ が *-0*<sub>𝔽</sub> で _y_ が *+0*<sub>𝔽</sub> の場合、*false* を返す。
+            1. _x_ が *+∞*<sub>𝔽</sub> の場合、*false* を返す。
+            1. _y_ が *+∞*<sub>𝔽</sub> の場合、*true* を返す。
+            1. _y_ が *-∞*<sub>𝔽</sub> の場合、*false* を返す。
+            1. _x_ が *-∞*<sub>𝔽</sub> の場合、*true* を返す。
+            1. 断言: _x_ と _y_ は有限である。
+            1. ℝ(_x_) &lt; ℝ(_y_) の場合、*true* を返す。
+            1. *false* を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2400,46 +2409,46 @@
             <dd>_x_を_radix_進法の位置記数法でStringとして表現します。_r_進法での数字は*"0123456789abcdefghijklmnopqrstuvwxyz"*の最初の_r_個のコードユニットが順に用いられます。絶対値が*1*<sub>𝔽</sub>以上の数値の表現は先頭ゼロを含みません。</dd>
           </dl>
           <emu-alg>
-            1. _x_が*NaN*なら*"NaN"*を返す。
-            1. _x_が*+0*<sub>𝔽</sub>または*-0*<sub>𝔽</sub>なら*"0"*を返す。
-            1. _x_ &lt; *-0*<sub>𝔽</sub>なら、文字列連結で*"-"*とNumber::toString(-_x_, _radix_)を返す。
-            1. _x_が*+∞*<sub>𝔽</sub>なら*"Infinity"*を返す。
-            1. [id="step-number-tostring-intermediate-values"] _n_、_k_、_s_を整数として、_k_ ≥ 1、_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>、𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>)が_x_、かつ_k_が可能な限り最小となるようにする。_k_は_radix_進法での_s_の桁数で、_s_は_radix_で割り切れない。最下位桁が一意に決まるとは限らない。
-            1. _radix_ ≠ 10または_n_が-5から21の範囲なら
-              1. _n_ ≥ _k_なら
-                1. 次の文字列連結で返す：
-                  * _s_の_radix_進法表現の_k_桁
-                  * 0x0030（数字ゼロ）のコードユニットを_n_ - _k_回
-              1. それ以外で_n_ > 0なら
-                1. 次の文字列連結で返す：
-                  * _s_の_radix_進法表現の最上位_n_桁
-                  * 0x002E（ピリオド）
-                  * 残り_k_ - _n_桁
-              1. それ以外（_n_ ≤ 0をアサート）
-                1. 次の文字列連結で返す：
-                  * 0x0030（数字ゼロ）
-                  * 0x002E（ピリオド）
-                  * 0x0030（数字ゼロ）を-_n_回
-                  * _s_の_radix_進法表現の_k_桁
-            1. 注：この場合、入力は科学的E表記（例：`1.2e+3`）で表現される。
-            1. （アサート）_radix_は10。
-            1. _n_ &lt; 0なら
-              1. _exponentSign_を0x002D（ハイフンマイナス）とする。
-            1. それ以外
-              1. _exponentSign_を0x002B（プラス記号）とする。
-            1. _k_ = 1なら
-              1. 次の文字列連結で返す：
-                * _s_の1桁目
-                * 0x0065（小文字e）
+            1. _x_ が *NaN* の場合、*"NaN"* を返す。
+            1. _x_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*"0"* を返す。
+            1. _x_ &lt; *-0*<sub>𝔽</sub> の場合、*"-"* と Number::toString(-_x_, _radix_) の文字列連結を返す。
+            1. _x_ が *+∞*<sub>𝔽</sub> の場合、*"Infinity"* を返す。
+            1. [id="step-number-tostring-intermediate-values"] _n_, _k_, _s_ を次を満たす整数とする: _k_ ≥ 1、_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>、𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) が _x_ であり、かつ _k_ は可能な限り小さい。ここで _k_ は基数 _radix_ を用いたときの _s_ の表現における桁数であり、_s_ は _radix_ で割り切れず、_s_ の最下位桁はこれらの条件だけでは一意に定まらない場合があることに注意すること。
+            1. _radix_ ≠ 10 であるか、または _n_ が -5 から 21 の包括区間にある場合、then
+              1. _n_ ≥ _k_ の場合、then
+                1. 次の文字列連結を返す:
+                  * 基数 _radix_ を用いた _s_ の表現の _k_ 桁のコードユニット
+                  * コードユニット 0x0030 (DIGIT ZERO) の _n_ - _k_ 回の繰り返し
+              1. _n_ > 0 の場合、then
+                1. 次の文字列連結を返す:
+                  * 基数 _radix_ を用いた _s_ の表現の上位の _n_ 桁のコードユニット
+                  * コードユニット 0x002E (FULL STOP)
+                  * 基数 _radix_ を用いた _s_ の表現の残りの _k_ - _n_ 桁のコードユニット
+              1. 断言: _n_ ≤ 0。
+              1. 次の文字列連結を返す:
+                * コードユニット 0x0030 (DIGIT ZERO)
+                * コードユニット 0x002E (FULL STOP)
+                * コードユニット 0x0030 (DIGIT ZERO) の -_n_ 回の繰り返し
+                * 基数 _radix_ を用いた _s_ の表現の _k_ 桁のコードユニット
+            1. 注: この場合、入力は `1.2e+3` のような科学的 E 表記で表される。
+            1. 断言: _radix_ は 10 である。
+            1. _n_ &lt; 0 の場合、then
+              1. _exponentSign_ をコードユニット 0x002D (HYPHEN-MINUS) とする。
+            1. それ以外の場合、
+              1. _exponentSign_ をコードユニット 0x002B (PLUS SIGN) とする。
+            1. _k_ = 1 の場合、then
+              1. 次の文字列連結を返す:
+                * _s_ の単一桁のコードユニット
+                * コードユニット 0x0065 (LATIN SMALL LETTER E)
                 * _exponentSign_
-                * abs(_n_ - 1)の10進表現
-            1. 次の文字列連結で返す：
-              * _s_の最上位桁（10進表現）
-              * 0x002E（ピリオド）
-              * 残り_k_ - 1桁（10進表現）
-              * 0x0065（小文字e）
+                * abs(_n_ - 1) の10進表現のコードユニット
+            1. 次の文字列連結を返す:
+              * _s_ の10進表現の最上位桁のコードユニット
+              * コードユニット 0x002E (FULL STOP)
+              * _s_ の10進表現の残りの _k_ - 1 桁のコードユニット
+              * コードユニット 0x0065 (LATIN SMALL LETTER E)
               * _exponentSign_
-              * abs(_n_ - 1)の10進表現
+              * abs(_n_ - 1) の10進表現のコードユニット
           </emu-alg>
           <emu-note>
             <p>次の点は実装の指針となり得ますが、この規格の規範的要件の一部ではありません：</p>
@@ -2652,7 +2661,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. ℝ(_x_) &lt; ℝ(_y_)なら*true*、それ以外は*false*を返す。
+            1. ℝ(_x_) &lt; ℝ(_y_) の場合、*true* を返す。
+            1. *false* を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2666,7 +2676,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. ℝ(_x_) = ℝ(_y_)なら*true*、それ以外は*false*を返す。
+            1. ℝ(_x_) = ℝ(_y_) の場合、*true* を返す。
+            1. *false* を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2680,8 +2691,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1かつ_y_ = 1なら1を返す。
-            1. それ以外は0を返す。
+            1. _x_ = 1 かつ _y_ = 1 の場合、1 を返す。
+            1. 0 を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2695,8 +2706,8 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1または_y_ = 1なら1を返す。
-            1. それ以外は0を返す。
+            1. _x_ = 1 かつ _y_ = 1 の場合、1 を返す。
+            1. 0 を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2710,9 +2721,9 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _x_ = 1かつ_y_ = 0なら1を返す。
-            1. それ以外で_x_ = 0かつ_y_ = 1なら1を返す。
-            1. それ以外は0を返す。
+            1. _x_ = 1 かつ _y_ = 0 の場合、1 を返す。
+            1. _x_ = 0 かつ _y_ = 1 の場合、1 を返す。
+            1. 0 を返す。
           </emu-alg>
         </emu-clause>
 
@@ -4379,164 +4390,167 @@
       <emu-clause id="sec-ispropertyreference" type="abstract operation" oldids="ao-ispropertyreference">
         <h1>
           IsPropertyReference (
-            _V_: Reference Record,
-          ): 真偽値
+            _V_: 参照レコード,
+          ): ブール値
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[Base]]が~unresolvable~なら*false*を返す。
-          1. _V_.[[Base]]がEnvironment Recordなら*false*を返す、そうでなければ*true*を返す。
+          1. _V_.[[Base]] が ~unresolvable~ の場合、*false* を返す。
+          1. _V_.[[Base]] が環境レコードである場合、*false* を返す。
+          1. *true* を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isunresolvablereference" type="abstract operation" oldids="ao-isunresolvablereference">
         <h1>
           IsUnresolvableReference (
-            _V_: Reference Record,
-          ): 真偽値
+            _V_: 参照レコード,
+          ): ブール値
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[Base]]が~unresolvable~なら*true*、そうでなければ*false*を返す。
+          1. _V_.[[Base]] が ~unresolvable~ の場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-issuperreference" type="abstract operation" oldids="ao-issuperreference">
         <h1>
           IsSuperReference (
-            _V_: Reference Record,
-          ): 真偽値
+            _V_: 参照レコード,
+          ): ブール値
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[ThisValue]]が~empty~でないなら*true*、それ以外は*false*を返す。
+          1. _V_.[[ThisValue]] が ~empty~ の場合、*false* を返す。
+          1. *true* を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-isprivatereference" type="abstract operation">
         <h1>
           IsPrivateReference (
-            _V_: Reference Record,
-          ): 真偽値
+            _V_: 参照レコード,
+          ): ブール値
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_.[[ReferencedName]]がPrivate Nameなら*true*、それ以外は*false*を返す。
+          1. _V_.[[ReferencedName]] が Private Name の場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-getvalue" type="abstract operation">
         <h1>
           GetValue (
-            _V_: Reference RecordまたはECMAScript言語値,
-          ): normal completion（ECMAScript言語値含む）またはabrupt completion
+            _V_: 参照レコードまたは ECMAScript 言語値,
+          ): 正常完了なら ECMAScript 言語値を含む完了、あるいは異常完了
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_がReference Recordでなければ_V_を返す。
-          1. IsUnresolvableReference(_V_)が*true*なら*ReferenceError*例外を投げる。
-          1. IsPropertyReference(_V_)が*true*なら
-            1. [id="step-getvalue-toobject"] _baseObj_を? ToObject(_V_.[[Base]])とする。
-            1. IsPrivateReference(_V_)が*true*なら
-              1. ? PrivateGet(_baseObj_, _V_.[[ReferencedName]])を返す。
-            1. _V_.[[ReferencedName]]がプロパティキーでない場合
-              1. _V_.[[ReferencedName]]を? ToPropertyKey(_V_.[[ReferencedName]])に設定する。
-            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta>を返す。
-          1. それ以外の場合
-            1. _base_を_V_.[[Base]]とする。
-            1. アサート：_base_はEnvironment Record。
-            1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta>（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
+          1. _V_ が参照レコードでない場合、_V_ を返す。
+          1. IsUnresolvableReference(_V_) が *true* の場合、*ReferenceError* 例外を投げる。
+          1. IsPropertyReference(_V_) が *true* の場合、then
+            1. [id="step-getvalue-toobject"] _baseObj_ を ? ToObject(_V_.[[Base]]) とする。
+            1. IsPrivateReference(_V_) が *true* の場合、then
+              1. ? PrivateGet(_baseObj_, _V_.[[ReferencedName]]) を返す。
+            1. _V_.[[ReferencedName]] がプロパティキーでない場合、then
+              1. _V_.[[ReferencedName]] を ? ToPropertyKey(_V_.[[ReferencedName]]) に設定する。
+            1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta> を返す。
+          1. _base_ を _V_.[[Base]] とする。
+          1. 断言: _base_ は環境レコードである。
+          1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta> を返す（参照: <emu-xref href="#sec-environment-records"></emu-xref>）。
         </emu-alg>
         <emu-note>
-          <p>step <emu-xref href="#step-getvalue-toobject"></emu-xref>で生成されるオブジェクトは、上記抽象操作および通常オブジェクト[[Get]]内部メソッド以外からはアクセスできません。実装によっては、実際のオブジェクト生成を省略する場合もあります。</p>
+          <p><emu-xref href="#step-getvalue-toobject"></emu-xref> のステップで作成される可能性のあるオブジェクトは、上記の抽象操作および通常のオブジェクトの [[Get]] 内部メソッドの外部からはアクセスできません。実装はそのオブジェクトの実際の作成を回避することを選択する場合があります。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-putvalue" type="abstract operation">
         <h1>
           PutValue (
-            _V_: Reference RecordまたはECMAScript言語値,
-            _W_: ECMAScript言語値,
-          ): normal completion（~unused~含む）またはabrupt completion
+            _V_: 参照レコードまたは ECMAScript 言語値,
+            _W_: ECMAScript 言語値,
+          ): 正常完了なら ~unused~ を含む完了、あるいは異常完了
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _V_がReference Recordでなければ*ReferenceError*例外を投げる。
-          1. IsUnresolvableReference(_V_)が*true*なら
-            1. _V_.[[Strict]]が*true*なら*ReferenceError*例外を投げる。
-            1. _globalObj_をGetGlobalObject()とする。
-            1. ? Set(_globalObj_, _V_.[[ReferencedName]], _W_, *false*)を実行する。
-            1. ~unused~を返す。
-          1. IsPropertyReference(_V_)が*true*なら
-            1. [id="step-putvalue-toobject"] _baseObj_を? ToObject(_V_.[[Base]])とする。
-            1. IsPrivateReference(_V_)が*true*なら
-              1. ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_)を返す。
-            1. _V_.[[ReferencedName]]がプロパティキーでない場合
-              1. _V_.[[ReferencedName]]を? ToPropertyKey(_V_.[[ReferencedName]])に設定する。
-            1. _succeeded_を? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta>とする。
-            1. _succeeded_が*false*かつ_V_.[[Strict]]が*true*なら*TypeError*例外を投げる。
-            1. ~unused~を返す。
-          1. それ以外の場合
-            1. _base_を_V_.[[Base]]とする。
-            1. アサート：_base_はEnvironment Record。
-            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta>（<emu-xref href="#sec-environment-records"></emu-xref>参照）を返す。
+          1. _V_ が参照レコードでない場合、*ReferenceError* 例外を投げる。
+          1. IsUnresolvableReference(_V_) が *true* の場合、then
+            1. _V_.[[Strict]] が *true* の場合、*ReferenceError* 例外を投げる。
+            1. _globalObj_ を GetGlobalObject() とする。
+            1. ? Set(_globalObj_, _V_.[[ReferencedName]], _W_, *false*) を実行する。
+            1. ~unused~ を返す。
+          1. IsPropertyReference(_V_) が *true* の場合、then
+            1. [id="step-putvalue-toobject"] _baseObj_ を ? ToObject(_V_.[[Base]]) とする。
+            1. IsPrivateReference(_V_) が *true* の場合、then
+              1. ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_) を返す。
+            1. _V_.[[ReferencedName]] がプロパティキーでない場合、then
+              1. _V_.[[ReferencedName]] を ? ToPropertyKey(_V_.[[ReferencedName]]) に設定する。
+            1. _succeeded_ を ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta> とする。
+            1. _succeeded_ が *false* かつ _V_.[[Strict]] が *true* の場合、*TypeError* 例外を投げる。
+            1. ~unused~ を返す。
+          1. _base_ を _V_.[[Base]] とする。
+          1. 断言: _base_ は環境レコードである。
+          1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta> を返す（参照: <emu-xref href="#sec-environment-records"></emu-xref>）。
         </emu-alg>
         <emu-note>
-          <p>step <emu-xref href="#step-putvalue-toobject"></emu-xref>で生成されるオブジェクトは、上記抽象操作および通常オブジェクト[[Set]]内部メソッド以外からはアクセスできません。実装によっては、実際のオブジェクト生成を省略する場合もあります。</p>
+          <p><emu-xref href="#step-putvalue-toobject"></emu-xref> のステップで作成される可能性のあるオブジェクトは、上記の抽象操作および通常のオブジェクトの [[Set]] 内部メソッドの外部からはアクセスできません。実装はそのオブジェクトの実際の作成を回避することを選択する場合があります。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-getthisvalue" type="abstract operation">
         <h1>
           GetThisValue (
-            _V_: Reference Record,
-          ): ECMAScript言語値
+            _V_: 参照レコード,
+          ): ECMAScript 言語値
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsPropertyReference(_V_)が*true*であることをアサートする。
-          1. IsSuperReference(_V_)が*true*なら_V_.[[ThisValue]]を返し、そうでなければ_V_.[[Base]]を返す。
+          1. 断言: IsPropertyReference(_V_) は *true* である。
+          1. IsSuperReference(_V_) が *true* の場合、_V_.[[ThisValue]] を返す。
+          1. _V_.[[Base]] を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-initializereferencedbinding" type="abstract operation">
         <h1>
           InitializeReferencedBinding (
-            _V_: Reference Record,
-            _W_: ECMAScript言語値,
-          ): normal completion（~unused~含む）またはabrupt completion
+            _V_: 参照レコード,
+            _W_: ECMAScript 言語値,
+          ): 正常完了なら ~unused~ を含む完了、あるいは異常完了
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsUnresolvableReference(_V_)が*false*であることをアサートする。
-          1. _base_を_V_.[[Base]]とする。
-          1. アサート：_base_はEnvironment Record。
-          1. ? _base_.InitializeBinding(_V_.[[ReferencedName]], _W_)を返す。
+          1. 断言: IsUnresolvableReference(_V_) は *false* である。
+          1. _base_ を _V_.[[Base]] とする。
+          1. 断言: _base_ は環境レコードである。
+          1. ? _base_.InitializeBinding(_V_.[[ReferencedName]], _W_) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-makeprivatereference" type="abstract operation">
         <h1>
           MakePrivateReference (
-            _baseValue_: ECMAScript言語値,
-            _privateIdentifier_: String,
-          ): Reference Record
+            _baseValue_: ECMAScript 言語値,
+            _privateIdentifier_: 文字列,
+          ): 参照レコード
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _privateEnv_を実行中の実行コンテキストのPrivateEnvironmentとする。
-          1. アサート：_privateEnv_は*null*ではない。
-          1. _privateName_をResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)とする。
-          1. Reference Record { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ }を返す。
+          1. _privateEnv_ を実行中の実行コンテキストの PrivateEnvironment とする。
+          1. 断言: _privateEnv_ は *null* ではない。
+          1. _privateName_ を ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_) とする。
+          1. 参照レコード { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ } を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -5161,59 +5175,170 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-runtime-semantics-stringnumericvalue" type="sdo" oldids="sec-runtime-semantics-mv-s">
-          <h1>実行時意味論: StringNumericValue ( ): Number</h1>
+        <emu-clause id="sec-ispropertyreference" type="abstract operation" oldids="ao-ispropertyreference">
+          <h1>
+            IsPropertyReference (
+              _V_: 参照レコード,
+            ): ブール値
+          </h1>
           <dl class="header">
           </dl>
+          <emu-alg>
+            1. _V_.[[Base]] が ~unresolvable~ の場合、*false* を返す。
+            1. _V_.[[Base]] が環境レコードである場合、*false* を返す。
+            1. *true* を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-isunresolvablereference" type="abstract operation" oldids="ao-isunresolvablereference">
+          <h1>
+            IsUnresolvableReference (
+              _V_: 参照レコード,
+            ): ブール値
+          </h1>
+          <dl class="header">
+          </dl>
+          <emu-alg>
+            1. _V_.[[Base]] が ~unresolvable~ の場合、*true* を返す。
+            1. *false* を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-issuperreference" type="abstract operation" oldids="ao-issuperreference">
+          <h1>
+            IsSuperReference (
+              _V_: 参照レコード,
+            ): ブール値
+          </h1>
+          <dl class="header">
+          </dl>
+          <emu-alg>
+            1. _V_.[[ThisValue]] が ~empty~ の場合、*false* を返す。
+            1. *true* を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-isprivatereference" type="abstract operation">
+          <h1>
+            IsPrivateReference (
+              _V_: 参照レコード,
+            ): ブール値
+          </h1>
+          <dl class="header">
+          </dl>
+          <emu-alg>
+            1. _V_.[[ReferencedName]] が Private Name の場合、*true* を返す。
+            1. *false* を返す。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-getvalue" type="abstract operation">
+          <h1>
+            GetValue (
+              _V_: 参照レコードまたは ECMAScript 言語値,
+            ): 正常完了なら ECMAScript 言語値を含む完了、あるいは異常完了
+          </h1>
+          <dl class="header">
+          </dl>
+          <emu-alg>
+            1. _V_ が参照レコードでない場合、_V_ を返す。
+            1. IsUnresolvableReference(_V_) が *true* の場合、*ReferenceError* 例外を投げる。
+            1. IsPropertyReference(_V_) が *true* の場合、then
+              1. [id="step-getvalue-toobject"] _baseObj_ を ? ToObject(_V_.[[Base]]) とする。
+              1. IsPrivateReference(_V_) が *true* の場合、then
+                1. ? PrivateGet(_baseObj_, _V_.[[ReferencedName]]) を返す。
+              1. _V_.[[ReferencedName]] がプロパティキーでない場合、then
+                1. _V_.[[ReferencedName]] を ? ToPropertyKey(_V_.[[ReferencedName]]) に設定する。
+              1. ? <emu-meta effects="user-code">_baseObj_.[[Get]](_V_.[[ReferencedName]], GetThisValue(_V_))</emu-meta> を返す。
+            1. _base_ を _V_.[[Base]] とする。
+            1. 断言: _base_ は環境レコードである。
+            1. ? <emu-meta effects="user-code">_base_.GetBindingValue(_V_.[[ReferencedName]], _V_.[[Strict]])</emu-meta> を返す（参照: <emu-xref href="#sec-environment-records"></emu-xref>）。
+          </emu-alg>
           <emu-note>
-            <p>|StringNumericLiteral| を Number 値へ変換することは、|NumericLiteral| の NumericValue の決定（<emu-xref href="#sec-literals-numeric-literals"></emu-xref> 参照）と全体として類似するが、いくつか詳細は異なる。</p>
+            <p><emu-xref href="#step-getvalue-toobject"></emu-xref> のステップで作成される可能性のあるオブジェクトは、上記の抽象操作および通常のオブジェクトの [[Get]] 内部メソッドの外部からはアクセスできません。実装はそのオブジェクトの実際の作成を回避することを選択する場合があります。</p>
           </emu-note>
-          <emu-grammar>StringNumericLiteral ::: StrWhiteSpace?</emu-grammar>
+        </emu-clause>
+
+        <emu-clause id="sec-putvalue" type="abstract operation">
+          <h1>
+            PutValue (
+              _V_: 参照レコードまたは ECMAScript 言語値,
+              _W_: ECMAScript 言語値,
+            ): 正常完了なら ~unused~ を含む完了、あるいは異常完了
+          </h1>
+          <dl class="header">
+          </dl>
           <emu-alg>
-            1. *+0*<sub>𝔽</sub> を返す。
+            1. _V_ が参照レコードでない場合、*ReferenceError* 例外を投げる。
+            1. IsUnresolvableReference(_V_) が *true* の場合、then
+              1. _V_.[[Strict]] が *true* の場合、*ReferenceError* 例外を投げる。
+              1. _globalObj_ を GetGlobalObject() とする。
+              1. ? Set(_globalObj_, _V_.[[ReferencedName]], _W_, *false*) を実行する。
+              1. ~unused~ を返す。
+            1. IsPropertyReference(_V_) が *true* の場合、then
+              1. [id="step-putvalue-toobject"] _baseObj_ を ? ToObject(_V_.[[Base]]) とする。
+              1. IsPrivateReference(_V_) が *true* の場合、then
+                1. ? PrivateSet(_baseObj_, _V_.[[ReferencedName]], _W_) を返す。
+              1. _V_.[[ReferencedName]] がプロパティキーでない場合、then
+                1. _V_.[[ReferencedName]] を ? ToPropertyKey(_V_.[[ReferencedName]]) に設定する。
+              1. _succeeded_ を ? <emu-meta effects="user-code">_baseObj_.[[Set]](_V_.[[ReferencedName]], _W_, GetThisValue(_V_))</emu-meta> とする。
+              1. _succeeded_ が *false* かつ _V_.[[Strict]] が *true* の場合、*TypeError* 例外を投げる。
+              1. ~unused~ を返す。
+            1. _base_ を _V_.[[Base]] とする。
+            1. 断言: _base_ は環境レコードである。
+            1. ? <emu-meta effects="user-code">_base_.SetMutableBinding(_V_.[[ReferencedName]], _W_, _V_.[[Strict]])</emu-meta> を返す（参照: <emu-xref href="#sec-environment-records"></emu-xref>）。
           </emu-alg>
-          <emu-grammar>StringNumericLiteral ::: StrWhiteSpace? StrNumericLiteral StrWhiteSpace?</emu-grammar>
+          <emu-note>
+            <p><emu-xref href="#step-putvalue-toobject"></emu-xref> のステップで作成される可能性のあるオブジェクトは、上記の抽象操作および通常のオブジェクトの [[Set]] 内部メソッドの外部からはアクセスできません。実装はそのオブジェクトの実際の作成を回避することを選択する場合があります。</p>
+          </emu-note>
+        </emu-clause>
+
+        <emu-clause id="sec-getthisvalue" type="abstract operation">
+          <h1>
+            GetThisValue (
+              _V_: 参照レコード,
+            ): ECMAScript 言語値
+          </h1>
+          <dl class="header">
+          </dl>
           <emu-alg>
-            1. |StrNumericLiteral| の StringNumericValue を返す。
+            1. 断言: IsPropertyReference(_V_) は *true* である。
+            1. IsSuperReference(_V_) が *true* の場合、_V_.[[ThisValue]] を返す。
+            1. _V_.[[Base]] を返す。
           </emu-alg>
-          <emu-grammar>StrNumericLiteral ::: NonDecimalIntegerLiteral</emu-grammar>
+        </emu-clause>
+
+        <emu-clause id="sec-initializereferencedbinding" type="abstract operation">
+          <h1>
+            InitializeReferencedBinding (
+              _V_: 参照レコード,
+              _W_: ECMAScript 言語値,
+            ): 正常完了なら ~unused~ を含む完了、あるいは異常完了
+          </h1>
+          <dl class="header">
+          </dl>
           <emu-alg>
-            1. 𝔽(|NonDecimalIntegerLiteral| の MV) を返す。
+            1. 断言: IsUnresolvableReference(_V_) は *false* である。
+            1. _base_ を _V_.[[Base]] とする。
+            1. 断言: _base_ は環境レコードである。
+            1. ? _base_.InitializeBinding(_V_.[[ReferencedName]], _W_) を返す。
           </emu-alg>
-          <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
+        </emu-clause>
+
+        <emu-clause id="sec-makeprivatereference" type="abstract operation">
+          <h1>
+            MakePrivateReference (
+              _baseValue_: ECMAScript 言語値,
+              _privateIdentifier_: 文字列,
+            ): 参照レコード
+          </h1>
+          <dl class="header">
+          </dl>
           <emu-alg>
-            1. _a_ を |StrUnsignedDecimalLiteral| の StringNumericValue とする。
-            1. _a_ が *+0*<sub>𝔽</sub> なら *-0*<sub>𝔽</sub> を返す。
-            1. -_a_ を返す。
-          </emu-alg>
-          <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
-          <emu-alg>
-            1. *+∞*<sub>𝔽</sub> を返す。
-          </emu-alg>
-          <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
-          <emu-alg>
-            1. _a_ を最初の |DecimalDigits| の MV とする。
-            1. 2番目の |DecimalDigits| が存在するなら
-              1. _b_ を2番目の |DecimalDigits| の MV とする。
-              1. _n_ を2番目の |DecimalDigits| のコードポイント数とする。
-            1. それ以外
-              1. _b_ を 0 とする。
-              1. _n_ を 0 とする。
-            1. |ExponentPart| が存在するなら _e_ を |ExponentPart| の MV とし、そうでなければ _e_ を 0 とする。
-            1. RoundMVResult((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>) を返す。
-          </emu-alg>
-          <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
-          <emu-alg>
-            1. _b_ を |DecimalDigits| の MV とする。
-            1. |ExponentPart| が存在するなら _e_ を |ExponentPart| の MV とし、そうでなければ _e_ を 0 とする。
-            1. _n_ を |DecimalDigits| のコードポイント数とする。
-            1. RoundMVResult(_b_ × 10<sup>_e_ - _n_</sup>) を返す。
-          </emu-alg>
-          <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
-          <emu-alg>
-            1. _a_ を |DecimalDigits| の MV とする。
-            1. |ExponentPart| が存在するなら _e_ を |ExponentPart| の MV とし、そうでなければ _e_ を 0 とする。
-            1. RoundMVResult(_a_ × 10<sup>_e_</sup>) を返す。
+            1. _privateEnv_ を実行中の実行コンテキストの PrivateEnvironment とする。
+            1. 断言: _privateEnv_ は *null* ではない。
+            1. _privateName_ を ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_) とする。
+            1. 参照レコード { [[Base]]: _baseValue_, [[ReferencedName]]: _privateName_, [[Strict]]: *true*, [[ThisValue]]: ~empty~ } を返す。
           </emu-alg>
         </emu-clause>
 
@@ -5272,10 +5397,11 @@
       </dl>
       <emu-alg>
         1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
+        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
         1. _int_ を truncate(ℝ(_number_)) とする。
-        1. _int32bit_ を _int_ modulo 2<sup>32</sup> とする。
-        1. _int32bit_ ≥ 2<sup>31</sup> なら 𝔽(_int32bit_ - 2<sup>32</sup>) を返し、そうでなければ 𝔽(_int32bit_) を返す。
+        1. _int32bit_ を _int_ を 2<sup>32</sup> で割った余りとする。
+        1. _int32bit_ ≥ 2<sup>31</sup> の場合、𝔽(_int32bit_ - 2<sup>32</sup>) を返す。
+        1. 𝔽(_int32bit_) を返す。
       </emu-alg>
       <emu-note>
         <p>上記 ToInt32 定義により:</p>
@@ -5327,10 +5453,11 @@
       </dl>
       <emu-alg>
         1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
+        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
         1. _int_ を truncate(ℝ(_number_)) とする。
-        1. _int16bit_ を _int_ modulo 2<sup>16</sup> とする。
-        1. _int16bit_ ≥ 2<sup>15</sup> なら 𝔽(_int16bit_ - 2<sup>16</sup>) を返し、そうでなければ 𝔽(_int16bit_) を返す。
+        1. _int16bit_ を _int_ を 2<sup>16</sup> で割った余りとする。
+        1. _int16bit_ ≥ 2<sup>15</sup> の場合、𝔽(_int16bit_ - 2<sup>16</sup>) を返す。
+        1. 𝔽(_int16bit_) を返す。
       </emu-alg>
     </emu-clause>
 
@@ -5372,10 +5499,11 @@
       </dl>
       <emu-alg>
         1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
+        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
         1. _int_ を truncate(ℝ(_number_)) とする。
-        1. _int8bit_ を _int_ modulo 2<sup>8</sup> とする。
-        1. _int8bit_ ≥ 2<sup>7</sup> なら 𝔽(_int8bit_ - 2<sup>8</sup>) を返し、そうでなければ 𝔽(_int8bit_) を返す。
+        1. _int8bit_ を _int_ を 2<sup>8</sup> で割った余りとする。
+        1. _int8bit_ ≥ 2<sup>7</sup> の場合、𝔽(_int8bit_ - 2<sup>8</sup>) を返す。
+        1. 𝔽(_int8bit_) を返す。
       </emu-alg>
     </emu-clause>
 
@@ -5410,13 +5538,14 @@
       </dl>
       <emu-alg>
         1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が *NaN* なら *+0*<sub>𝔽</sub> を返す。
-        1. _mv_ を _number_ の拡張数学的値とする。
-        1. _clamped_ を _mv_ を 0 と 255 の間にクランプした結果とする。
+        1. _number_ が *NaN* の場合、*+0*<sub>𝔽</sub> を返す。
+        1. _mv_ を _number_ の拡張された数学的値とする。
+        1. _clamped_ を _mv_ を 0 から 255 の間に制限した結果とする。
         1. _f_ を floor(_clamped_) とする。
-        1. _clamped_ &lt; _f_ + 0.5 なら 𝔽(_f_) を返す。
-        1. _clamped_ > _f_ + 0.5 なら 𝔽(_f_ + 1) を返す。
-        1. _f_ が偶数なら 𝔽(_f_) を返し、そうでなければ 𝔽(_f_ + 1) を返す。
+        1. _clamped_ &lt; _f_ + 0.5 の場合、𝔽(_f_) を返す。
+        1. _clamped_ > _f_ + 0.5 の場合、𝔽(_f_ + 1) を返す。
+        1. _f_ が偶数の場合、𝔽(_f_) を返す。
+        1. 𝔽(_f_ + 1) を返す。
       </emu-alg>
       <emu-note>
         <p>他の多くの整数変換操作と異なり ToUint8Clamp は非整数値を切り捨てではなく丸める。また “round half to even” であり <emu-xref href="#sec-math.round">`Math.round`</emu-xref> の “round half up” とは異なる。</p>
@@ -5569,8 +5698,9 @@
       </dl>
       <emu-alg>
         1. _n_ を ? ToBigInt(_argument_) とする。
-        1. _int64bit_ を ℝ(_n_) modulo 2<sup>64</sup> とする。
-        1. _int64bit_ ≥ 2<sup>63</sup> なら ℤ(_int64bit_ - 2<sup>64</sup>) を返し、そうでなければ ℤ(_int64bit_) を返す。
+        1. _int64bit_ を ℝ(_n_) を 2<sup>64</sup> で割った余りとする。
+        1. _int64bit_ ≥ 2<sup>63</sup> の場合、ℤ(_int64bit_ - 2<sup>64</sup>) を返す。
+        1. ℤ(_int64bit_) を返す。
       </emu-alg>
     </emu-clause>
 
@@ -5914,16 +6044,19 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. アサート: SameType(_x_, _y_) は *true*。
-        1. _x_ が *undefined* または *null* のいずれかなら *true* を返す。
-        1. _x_ が BigInt なら
+        1. 断言: SameType(_x_, _y_) は *true* である。
+        1. _x_ が *undefined* または *null* のいずれかであれば、*true* を返す。
+        1. _x_ が BigInt である場合、
           1. BigInt::equal(_x_, _y_) を返す。
-        1. _x_ が String なら
-          1. _x_ と _y_ が同じ長さで同じ位置に同じコードユニットを持つなら *true* を返し、そうでなければ *false* を返す。
-        1. _x_ が Boolean なら
-          1. _x_ と _y_ がともに *true* またはともに *false* なら *true* を返し、そうでなければ *false* を返す。
-        1. 注: 他の全ての ECMAScript 言語値は同一性で比較される。
-        1. _x_ が _y_ なら *true* を返し、そうでなければ *false* を返す。
+        1. _x_ が文字列 (String) である場合、
+          1. _x_ と _y_ の長さが同じかつ各位置のコードユニットも同じであれば、*true* を返す。
+          1. *false* を返す。
+        1. _x_ がブール値 (Boolean) である場合、
+          1. _x_ と _y_ がともに *true* またはともに *false* であれば、*true* を返す。
+          1. *false* を返す。
+        1. 注: その他の ECMAScript 言語値は同一性で比較される。
+        1. _x_ が _y_ と同じであれば、*true* を返す。
+        1. *false* を返す。
       </emu-alg>
       <emu-note>
         説明のため、一部のケースは必要ではないが個別に扱っている。
@@ -5946,45 +6079,44 @@
         <dd>比較 _x_ &lt; _y_ の意味論を提供し、*true* / *false* / *undefined*（少なくとも一方が *NaN* を示す）を返す。_LeftFirst_ フラグは副作用の可視性を伴う操作の順序を制御するために使われ、ECMAScript が左から右への評価順を規定しているため必要。_LeftFirst_ が *true* のとき _x_ は _y_ より左に現れる式に対応し、*false* のときは逆でその場合操作は _y_ が先に行われる。</dd>
       </dl>
       <emu-alg>
-        1. _LeftFirst_ が *true* なら
+        1. _LeftFirst_ が *true* の場合、
           1. _px_ を ? ToPrimitive(_x_, ~number~) とする。
           1. _py_ を ? ToPrimitive(_y_, ~number~) とする。
-        1. それ以外
-          1. 注: 評価順維持のため順序を反転する必要がある。
+        1. それ以外の場合、
+          1. 注: 左から右への評価順を維持するため、評価順を逆にする必要がある。
           1. _py_ を ? ToPrimitive(_y_, ~number~) とする。
           1. _px_ を ? ToPrimitive(_x_, ~number~) とする。
-        1. [id="step-arc-string-check"] _px_ が String かつ _py_ が String なら
+        1. [id="step-arc-string-check"] _px_ が文字列かつ _py_ も文字列の場合、
           1. _lx_ を _px_ の長さとする。
           1. _ly_ を _py_ の長さとする。
-          1. 0 ≤ _i_ &lt; min(_lx_, _ly_) なる各整数 _i_ について昇順で
-            1. _cx_ を _px_ のインデックス _i_ にあるコードユニットの数値とする。
-            1. _cy_ を _py_ のインデックス _i_ にあるコードユニットの数値とする。
-            1. _cx_ &lt; _cy_ なら *true* を返す。
-            1. _cx_ > _cy_ なら *false* を返す。
-          1. _lx_ &lt; _ly_ なら *true* を返し、そうでなければ *false* を返す。
-        1. それ以外
-          1. _px_ が BigInt かつ _py_ が String なら
-            1. _ny_ を StringToBigInt(_py_) とする。
-            1. _ny_ が *undefined* なら *undefined* を返す。
-            1. BigInt::lessThan(_px_, _ny_) を返す。
-          1. _px_ が String かつ _py_ が BigInt なら
-            1. _nx_ を StringToBigInt(_px_) とする。
-            1. _nx_ が *undefined* なら *undefined* を返す。
-            1. BigInt::lessThan(_nx_, _py_) を返す。
-          1. 注: _px_, _py_ はプリミティブなので評価順は重要でない。
-          1. _nx_ を ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta> とする。
-          1. _ny_ を ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta> とする。
-          1. SameType(_nx_, _ny_) が *true* なら
-            1. _nx_ が Number なら
-              1. Number::lessThan(_nx_, _ny_) を返す。
-            1. それ以外
-              1. アサート: _nx_ は BigInt。
-              1. BigInt::lessThan(_nx_, _ny_) を返す。
-          1. アサート: (_nx_ が BigInt かつ _ny_ が Number) または (_nx_ が Number かつ _ny_ が BigInt)。
-          1. _nx_ または _ny_ が *NaN* なら *undefined* を返す。
-          1. _nx_ が *-∞*<sub>𝔽</sub> または _ny_ が *+∞*<sub>𝔽</sub> なら *true* を返す。
-          1. _nx_ が *+∞*<sub>𝔽</sub> または _ny_ が *-∞*<sub>𝔽</sub> なら *false* を返す。
-          1. ℝ(_nx_) &lt; ℝ(_ny_) なら *true* を返し、そうでなければ *false* を返す。
+          1. 0 ≤ _i_ &lt; min(_lx_, _ly_) となる整数 _i_ それぞれにつき、昇順で次を行う：
+            1. _cx_ を _px_ のインデックス _i_ のコードユニットの数値とする。
+            1. _cy_ を _py_ のインデックス _i_ のコードユニットの数値とする。
+            1. _cx_ &lt; _cy_ の場合、*true* を返す。
+            1. _cx_ > _cy_ の場合、*false* を返す。
+          1. _lx_ &lt; _ly_ の場合、*true* を返す。
+          1. *false* を返す。
+        1. _px_ が BigInt かつ _py_ が文字列の場合、
+          1. _ny_ を StringToBigInt(_py_) とする。
+          1. _ny_ が *undefined* の場合、*undefined* を返す。
+          1. BigInt::lessThan(_px_, _ny_) を返す。
+        1. _px_ が文字列かつ _py_ が BigInt の場合、
+          1. _nx_ を StringToBigInt(_px_) とする。
+          1. _nx_ が *undefined* の場合、*undefined* を返す。
+          1. BigInt::lessThan(_nx_, _py_) を返す。
+        1. 注: _px_ と _py_ はプリミティブ値なので、評価順は重要ではない。
+        1. _nx_ を ? <emu-meta suppress-effects="user-code">ToNumeric(_px_)</emu-meta> とする。
+        1. _ny_ を ? <emu-meta suppress-effects="user-code">ToNumeric(_py_)</emu-meta> とする。
+        1. SameType(_nx_, _ny_) が *true* の場合、
+          1. _nx_ が数値のとき、Number::lessThan(_nx_, _ny_) を返す。
+          1. 断言: _nx_ は BigInt である。
+          1. BigInt::lessThan(_nx_, _ny_) を返す。
+        1. 断言: _nx_ が BigInt かつ _ny_ が数値、または _nx_ が数値かつ _ny_ が BigInt である。
+        1. _nx_ または _ny_ が *NaN* の場合、*undefined* を返す。
+        1. _nx_ が *-∞*<sub>𝔽</sub> かつ _ny_ が *+∞*<sub>𝔽</sub> の場合、*true* を返す。
+        1. _nx_ が *+∞*<sub>𝔽</sub> かつ _ny_ が *-∞*<sub>𝔽</sub> の場合、*false* を返す。
+        1. ℝ(_nx_) &lt; ℝ(_ny_) の場合、*true* を返す。
+        1. *false* を返す。
       </emu-alg>
       <emu-note>
         <p>ステップ <emu-xref href="#step-arc-string-check"></emu-xref> は、加算演算子 `+` を扱うアルゴリズム（<emu-xref href="#sec-applystringornumericbinaryoperator"></emu-xref>）のステップ <emu-xref href="#step-binary-op-string-check"></emu-xref> と、論理和ではなく論理積を用いる点で異なる。</p>
@@ -6006,27 +6138,28 @@
         <dd>`==` 演算子の意味論を提供する。</dd>
       </dl>
       <emu-alg>
-        1. SameType(_x_, _y_) が *true* なら
+        1. SameType(_x_, _y_) が *true* の場合、
           1. IsStrictlyEqual(_x_, _y_) を返す。
-        1. _x_ が *null* かつ _y_ が *undefined* なら *true* を返す。
-        1. _x_ が *undefined* かつ _y_ が *null* なら *true* を返す。
-        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] ホストが Web ブラウザまたは <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref> をサポートする場合
-          1. _x_ が Object で [[IsHTMLDDA]] 内部スロットを持ち、_y_ が *undefined* または *null* なら *true* を返す。
-          1. _x_ が *undefined* または *null* で _y_ が Object かつ [[IsHTMLDDA]] 内部スロットを持つなら *true* を返す。
-        1. _x_ が Number かつ _y_ が String なら ! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
-        1. _x_ が String かつ _y_ が Number なら ! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
-        1. _x_ が BigInt かつ _y_ が String なら
+        1. _x_ が *null* かつ _y_ が *undefined* の場合、*true* を返す。
+        1. _x_ が *undefined* かつ _y_ が *null* の場合、*true* を返す。
+        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] ホストがウェブブラウザまたは <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref> をサポートする場合、
+          1. _x_ が Object かつ _x_ に [[IsHTMLDDA]] 内部スロットがあり、_y_ が *undefined* または *null* のいずれかの場合、*true* を返す。
+          1. _x_ が *undefined* または *null* のいずれかであり、_y_ が Object かつ _y_ に [[IsHTMLDDA]] 内部スロットがある場合、*true* を返す。
+        1. _x_ が数値 (Number) かつ _y_ が文字列の場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
+        1. _x_ が文字列かつ _y_ が数値 (Number) の場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
+        1. _x_ が BigInt かつ _y_ が文字列の場合、
           1. _n_ を StringToBigInt(_y_) とする。
-          1. _n_ が *undefined* なら *false* を返す。
+          1. _n_ が *undefined* の場合、*false* を返す。
           1. ! IsLooselyEqual(_x_, _n_) を返す。
-        1. _x_ が String かつ _y_ が BigInt なら ! IsLooselyEqual(_y_, _x_) を返す。
-        1. _x_ が Boolean なら ! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
-        1. _y_ が Boolean なら ! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
-        1. _x_ が String, Number, BigInt, Symbol のいずれかで _y_ が Object なら ! IsLooselyEqual(_x_, ? ToPrimitive(_y_)) を返す。
-        1. _x_ が Object で _y_ が String, Number, BigInt, Symbol のいずれかなら ! IsLooselyEqual(? ToPrimitive(_x_), _y_) を返す。
-        1. _x_ が BigInt かつ _y_ が Number, または _x_ が Number かつ _y_ が BigInt なら
-          1. _x_ が有限でないまたは _y_ が有限でないなら *false* を返す。
-          1. ℝ(_x_) = ℝ(_y_) なら *true* を返し、そうでなければ *false* を返す。
+        1. _x_ が文字列かつ _y_ が BigInt の場合、! IsLooselyEqual(_y_, _x_) を返す。
+        1. _x_ が真偽値 (Boolean) の場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
+        1. _y_ が真偽値 (Boolean) の場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
+        1. _x_ が文字列、数値、BigInt、またはシンボル (Symbol) のいずれかであり、_y_ が Object の場合、! IsLooselyEqual(_x_, ? ToPrimitive(_y_)) を返す。
+        1. _x_ が Object かつ _y_ が文字列、数値、BigInt、またはシンボル (Symbol) のいずれかの場合、! IsLooselyEqual(? ToPrimitive(_x_), _y_) を返す。
+        1. _x_ が BigInt かつ _y_ が数値、または _x_ が数値かつ _y_ が BigInt の場合、
+          1. _x_ が有限でない、または _y_ が有限でない場合、*false* を返す。
+          1. ℝ(_x_) = ℝ(_y_) の場合、*true* を返す。
+          1. *false* を返す。
         1. *false* を返す。
       </emu-alg>
     </emu-clause>
@@ -6728,14 +6861,13 @@
       </dl>
       <emu-alg>
         1. _entry_ を PrivateElementFind(_O_, _P_) とする。
-        1. _entry_ が ~empty~ なら *TypeError* 例外を投げる。
-        1. _entry_.[[Kind]] が ~field~ なら
-          1. _entry_.[[Value]] を _value_ に設定する。
-        1. それ以外で _entry_.[[Kind]] が ~method~ なら
-          1. *TypeError* 例外を投げる。
-        1. それ以外
-          1. アサート: _entry_.[[Kind]] は ~accessor~。
-          1. _entry_.[[Set]] が *undefined* なら *TypeError* 例外を投げる。
+        1. _entry_ が ~empty~ の場合、*TypeError* 例外を投げる。
+        1. _entry_.[[Kind]] が ~method~ の場合、*TypeError* 例外を投げる。
+        1. _entry_.[[Kind]] が ~field~ の場合、
+          1. _entry_.[[Value]] に _value_ を代入する。
+        1. それ以外の場合、
+          1. 断言: _entry_.[[Kind]] は ~accessor~ である。
+          1. _entry_.[[Set]] が *undefined* の場合、*TypeError* 例外を投げる。
           1. _setter_ を _entry_.[[Set]] とする。
           1. ? Call(_setter_, _O_, « _value_ ») を実行する。
         1. ~unused~ を返す。
@@ -7177,9 +7309,9 @@
       </emu-alg>
       <p>は次と同じ意味を持つ:</p>
       <emu-alg>
-        1. アサート: _value_ は Completion Record。
-        1. _value_ が abrupt completion なら ? IteratorClose(_iteratorRecord_, _value_) を返す。
-        1. それ以外なら _value_ を ! _value_ に設定する。
+        1. 断言: _value_ は完了レコードである。
+        1. _value_ が異常完了の場合、? IteratorClose(_iteratorRecord_, _value_) を返す。
+        1. _value_ を ! _value_ に設定する。
       </emu-alg>
     </emu-clause>
 
@@ -7218,9 +7350,9 @@
       </emu-alg>
       <p>は、次の内容と同じ意味です:</p>
       <emu-alg>
-        1. Assert: _value_ はCompletion Recordである。
-        1. _value_ がabrupt completionの場合、? AsyncIteratorClose(_iteratorRecord_, _value_)を返す。
-        1. それ以外の場合、_value_ に! _value_ を設定する。
+        1. 断言: _value_ は完了レコードである。
+        1. _value_ が異常完了の場合、? AsyncIteratorClose(_iteratorRecord_, _value_) を返す。
+        1. _value_ を ! _value_ に設定する。
       </emu-alg>
     </emu-clause>
 
@@ -8696,8 +8828,8 @@
       </emu-alg>
       <emu-grammar>BreakStatement : `break` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. _labelSet_ が |LabelIdentifier| の StringValue を含まないなら *true* を返す。
-        1. *false* を返す。
+        1. _labelSet_ が |LabelIdentifier| の StringValue を含む場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -8885,8 +9017,8 @@
       </emu-alg>
       <emu-grammar>ContinueStatement : `continue` LabelIdentifier `;`</emu-grammar>
       <emu-alg>
-        1. _iterationSet_ が |LabelIdentifier| の StringValue を含まないなら *true* を返す。
-        1. *false* を返す。
+        1. _iterationSet_ が |LabelIdentifier| の StringValue を含む場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-grammar>WithStatement : `with` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
@@ -9359,12 +9491,13 @@
       </emu-note>
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody `}`</emu-grammar>
       <emu-alg>
-        1. _symbol_ が |ClassBody| なら *true* を返す。<br>
-        1. _symbol_ が |ClassHeritage| なら
-          1. |ClassHeritage| が存在するなら *true*、そうでなければ *false* を返す。
-        1. |ClassHeritage| が存在するなら
-          1. |ClassHeritage| Contains _symbol_ が *true* なら *true* を返す。
-        1. 引数 _symbol_ で |ClassBody| の ComputedPropertyContains の結果を返す。
+        1. _symbol_ が |ClassBody| の場合、*true* を返す。
+        1. _symbol_ が |ClassHeritage| の場合、
+          1. |ClassHeritage| が存在するなら、*true* を返す。
+          1. *false* を返す。
+        1. |ClassHeritage| が存在する場合、
+          1. |ClassHeritage| Contains _symbol_ が *true* なら、*true* を返す。
+        1. |ClassBody| の ComputedPropertyContains の結果を _symbol_ を引数として返す。
       </emu-alg>
       <emu-note>
         <p>部分構造に依存する静的意味規則は一般にクラス本体内部（|PropertyName| 以外）を調べない。</p>
@@ -9629,9 +9762,8 @@
           1. _environment_ が *undefined* でないなら
             1. ! _environment_.InitializeBinding(_name_, _value_) を実行する。
             1. ~unused~ を返す。
-          1. それ以外
-            1. _lhs_ を ? ResolveBinding(_name_) とする。
-            1. ? PutValue(_lhs_, _value_) を返す。
+          1. _lhs_ を ? ResolveBinding(_name_) とする。
+          1. ? PutValue(_lhs_, _value_) を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -10612,8 +10744,9 @@
           <emu-alg>
             1. _bindingObject_ を _envRec_.[[BindingObject]] とする。
             1. _value_ を ? HasProperty(_bindingObject_, _N_) とする。
-            1. _value_ が *false* なら
-              1. _S_ が *false* なら *undefined* を返し、そうでなければ *ReferenceError* 例外を投げる。
+            1. _value_ が *false* の場合、
+              1. _S_ が *false* なら、*undefined* を返す。
+              1. *ReferenceError* 例外を投げる。
             1. ? Get(_bindingObject_, _N_) を返す。
           </emu-alg>
         </emu-clause>
@@ -10677,8 +10810,8 @@
             <dd>Object Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[IsWithEnvironment]] が *true* なら _envRec_.[[BindingObject]] を返す。
-            1. そうでなければ *undefined* を返す。
+            1. _envRec_.[[IsWithEnvironment]] が *true* の場合、_envRec_.[[BindingObject]] を返す。
+            1. *undefined* を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -10777,7 +10910,8 @@
             <dd>Function Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. _envRec_.[[ThisBindingStatus]] が ~lexical~ なら *false*、そうでなければ *true* を返す。
+            1. _envRec_.[[ThisBindingStatus]] が ~lexical~ の場合、*false* を返す。
+            1. *true* を返す。
           </emu-alg>
         </emu-clause>
 
@@ -10801,8 +10935,9 @@
             <dd>関数 Environment Record _envRec_</dd>
           </dl>
           <emu-alg>
-            1. もし _envRec_.[[ThisBindingStatus]] が ~lexical~ なら、*false* を返す。
-            1. もし _envRec_.[[FunctionObject]].[[HomeObject]] が *undefined* なら、*false* を返す。それ以外の場合は *true* を返す。
+            1. _envRec_.[[ThisBindingStatus]] が ~lexical~ の場合、*false* を返す。
+            1. _envRec_.[[FunctionObject]].[[HomeObject]] が *undefined* の場合、*false* を返す。
+            1. *true* を返す。
           </emu-alg>
         </emu-clause>
 
@@ -11340,9 +11475,8 @@
           1. _exists_ を ? <emu-meta effects="user-code">_env_.HasBinding(_name_)</emu-meta> とする。
           1. _exists_ が *true* なら
             1. Reference Record { [[Base]]: _env_, [[ReferencedName]]: _name_, [[Strict]]: _strict_, [[ThisValue]]: ~empty~ } を返す。
-          1. それ以外
-            1. _outer_ を _env_.[[OuterEnv]] とする。
-            1. ? GetIdentifierReference(_outer_, _name_, _strict_) を返す。
+          1. _outer_ を _env_.[[OuterEnv]] とする。
+          1. ? GetIdentifierReference(_outer_, _name_, _strict_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -11664,10 +11798,10 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _realmRec_.[[Intrinsics]]に新しいRecordを設定する。
-        1. [declared="steps,name,length,slots,prototype,async"] <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>に記載されている値で_realmRec_.[[Intrinsics]]のフィールドを設定する。フィールド名は、表の1列目に記載されている名前である。各フィールドの値は、それぞれのオブジェクトの仕様で<emu-xref href="#sec-global-object"></emu-xref>から<emu-xref href="#sec-reflection"></emu-xref>までに定義されているとおり、完全かつ再帰的にプロパティ値で構成された新しいオブジェクト値である。すべてのオブジェクトプロパティ値は新たに作成されたオブジェクト値である。組み込み関数オブジェクトとなる値はすべて、CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_)を実行して作成される。ここで_steps_は本仕様書によって提供されるその関数の定義、_name_は関数の*"name"*プロパティの初期値、_length_は関数の*"length"*プロパティの初期値、_slots_は関数の指定された内部スロット名のリスト（存在する場合）、_prototype_は関数の[[Prototype]]内部スロットの指定値、_async_は関数が「async」として記述されていれば*true*、そうでなければ*false*である。インタリンスィクスとそのプロパティの生成は、まだ作成されていないオブジェクトに依存しないよう順序付けなければならない。
-        1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_)を実行する。
-        1. ~unused~を返す。
+        1. _realmRec_.[[Intrinsics]] に新しい Record を設定する。
+        1. [declared="steps,name,length,slots,prototype,async"] _realmRec_.[[Intrinsics]] の各フィールドに、<emu-xref href="#table-well-known-intrinsic-objects"></emu-xref> に記載されている値を設定する。フィールド名は、表の「Intrinsic Name」列に記載されている名前を使用する。各フィールドの値は、各オブジェクトの仕様が <emu-xref href="#sec-global-object"></emu-xref> から <emu-xref href="#sec-reflection"></emu-xref> までの節で定義されている通り、完全かつ再帰的にプロパティ値で埋められた新しいオブジェクト値とする。すべてのオブジェクトプロパティ値は新たに作成されたオブジェクト値である。ビルトイン関数オブジェクトとなる値は、CreateBuiltinFunction(_steps_, _length_, _name_, _slots_, _realmRec_, _prototype_, _async_) を実行して作成する。ただし _steps_ は本仕様で提供される該当関数の定義、_name_ は関数の *"name"* プロパティの初期値、_length_ は *"length"* プロパティの初期値、_slots_ は関数の指定された内部スロット名リスト（もしあれば）、_prototype_ はその関数の [[Prototype]] 内部スロットの指定値、_async_ は関数が「async」と記述されていれば *true*、そうでなければ *false* とする。intrinsics とそのプロパティの作成順序は、まだ未作成のオブジェクトへの依存を生じないように配慮すること。
+        1. AddRestrictedFunctionProperties(_realmRec_.[[Intrinsics]].[[%Function.prototype%]], _realmRec_) を実行する。
+        1. ~unused~ を返す。
       </emu-alg>
     </emu-clause>
 
@@ -11817,9 +11951,10 @@
       </dl>
 
       <emu-alg>
-        1. 実行コンテキストスタックが空なら *null* を返す。
-        1. _ec_ を、実行コンテキストスタック上で最上位から見て ScriptOrModule コンポーネントが *null* でない最初の実行コンテキストとする。
-        1. そのような実行コンテキストが存在しなければ *null* を返し、存在するなら _ec_ の ScriptOrModule を返す。
+        1. 実行コンテキストスタックが空の場合、*null* を返す。
+        1. 実行コンテキストスタックのうち ScriptOrModule コンポーネントが *null* でない最上位の実行コンテキストを _ec_ とする。
+        1. そのような実行コンテキストが存在しない場合、*null* を返す。
+        1. _ec_ の ScriptOrModule を返す。
       </emu-alg>
     </emu-clause>
 
@@ -12883,27 +13018,24 @@
         </dl>
 
         <emu-alg>
-          1. _ownDesc_ が *undefined* なら
+          1. _ownDesc_ が *undefined* の場合、
             1. _parent_ を ? <emu-meta effects="user-code">_O_.[[GetPrototypeOf]]()</emu-meta> とする。
-            1. _parent_ が *null* でないなら
-              1. ? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> を返す。
-            1. それ以外なら
-              1. _ownDesc_ を PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } に設定する。
-          1. IsDataDescriptor(_ownDesc_) が *true* なら
-            1. _ownDesc_.[[Writable]] が *false* なら *false* を返す。
-            1. _Receiver_ が Object でないなら *false* を返す。
+            1. _parent_ が *null* でない場合、? <emu-meta effects="user-code">_parent_.[[Set]](_P_, _V_, _Receiver_)</emu-meta> を返す。
+            1. _ownDesc_ を PropertyDescriptor { [[Value]]: *undefined*, [[Writable]]: *true*, [[Enumerable]]: *true*, [[Configurable]]: *true* } に設定する。
+          1. IsDataDescriptor(_ownDesc_) が *true* の場合、
+            1. _ownDesc_.[[Writable]] が *false* の場合、*false* を返す。
+            1. _Receiver_ がオブジェクトでない場合、*false* を返す。
             1. _existingDescriptor_ を ? <emu-meta effects="user-code">_Receiver_.[[GetOwnProperty]](_P_)</emu-meta> とする。
-            1. _existingDescriptor_ が *undefined* でないなら
-              1. IsAccessorDescriptor(_existingDescriptor_) が *true* なら *false* を返す。
-              1. _existingDescriptor_.[[Writable]] が *false* なら *false* を返す。
-              1. _valueDesc_ を PropertyDescriptor { [[Value]]: _V_ } とする。
-              1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta> を返す。
-            1. それ以外なら
-              1. アサート: _Receiver_ は現在プロパティ _P_ を持たない。
+            1. _existingDescriptor_ が *undefined* の場合、
+              1. 断言: _Receiver_ は現在プロパティ _P_ を持たない。
               1. ? CreateDataProperty(_Receiver_, _P_, _V_) を返す。
-          1. アサート: IsAccessorDescriptor(_ownDesc_) は *true* である。
+            1. IsAccessorDescriptor(_existingDescriptor_) が *true* の場合、*false* を返す。
+            1. _existingDescriptor_.[[Writable]] が *false* の場合、*false* を返す。
+            1. _valueDesc_ を PropertyDescriptor { [[Value]]: _V_ } とする。
+            1. ? <emu-meta effects="user-code">_Receiver_.[[DefineOwnProperty]](_P_, _valueDesc_)</emu-meta> を返す。
+          1. 断言: IsAccessorDescriptor(_ownDesc_) は *true* である。
           1. _setter_ を _ownDesc_.[[Set]] とする。
-          1. _setter_ が *undefined* なら *false* を返す。
+          1. _setter_ が *undefined* の場合、*false* を返す。
           1. ? Call(_setter_, _Receiver_, « _V_ ») を実行する。
           1. *true* を返す。
         </emu-alg>
@@ -13608,14 +13740,12 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. アサート: _homeObject_ は通常で拡張可能なオブジェクトである。
-        1. _key_ が Private Name なら
-          1. PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ } を返す。
-        1. それ以外
-          1. _desc_ を PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
-          1. ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_) を実行する。
-          1. 注記: DefinePropertyOrThrow は _key_ が *"prototype"* であるクラス static method の定義を試みる場合のみ abrupt completion を返しうる。
-          1. ~unused~ を返す。
+        1. 断言: _homeObject_ は通常の拡張可能なオブジェクトである。
+        1. _key_ がプライベート名の場合、PrivateElement { [[Key]]: _key_, [[Kind]]: ~method~, [[Value]]: _closure_ } を返す。
+        1. _desc_ を PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
+        1. ? DefinePropertyOrThrow(_homeObject_, _key_, _desc_) を実行する。
+        1. 注: DefinePropertyOrThrow は _key_ が *"prototype"* であるクラス静的メソッドの定義を試みる際のみ異常完了を返す。
+        1. ~unused~ を返す。
       </emu-alg>
     </emu-clause>
 
@@ -13876,18 +14006,27 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _callerContext_ を実行中実行コンテキストとする。
-        1. _callerContext_ がまだサスペンドされていないなら _callerContext_ をサスペンドする。
+        1. _callerContext_ を現在実行中の実行コンテキストとする。
+        1. _callerContext_ がまだ一時停止されていなければ、_callerContext_ を一時停止する。
         1. _calleeContext_ を新しい実行コンテキストとする。
         1. _calleeContext_ の Function を _F_ に設定する。
         1. _calleeRealm_ を _F_.[[Realm]] とする。
         1. _calleeContext_ の Realm を _calleeRealm_ に設定する。
         1. _calleeContext_ の ScriptOrModule を *null* に設定する。
-        1. 必要な実装定義の初期化を _calleeContext_ に対して行う。
-        1. 実行コンテキストスタックに _calleeContext_ を push する；_calleeContext_ が実行中実行コンテキストとなる。
-        1. [id="step-call-builtin-function-result"] _result_ を、_F_ の仕様に適合する形で _F_ を評価した結果である Completion Record とする。_thisArgument_ が ~uninitialized~ なら *this* 値は未初期化、それ以外の場合 _thisArgument_ が *this* 値を提供する。_argumentsList_ は名前付き引数を提供し、_newTarget_ は NewTarget 値を提供する。
-        1. 注記: _F_ がこの文書内で定義されている場合、「_F_ の仕様」とはアルゴリズム手順や他の手段で指定されたその挙動である。
-        1. 実行コンテキストスタックから _calleeContext_ を除去し _callerContext_ を実行中実行コンテキストとして復元する。
+        1. _calleeContext_ に必要な実装依存の初期化を行う。
+        1. _calleeContext_ を実行コンテキストスタックにプッシュする; _calleeContext_ が現在の実行コンテキストとなる。
+        1. _F_.[[Async]] が *true* の場合、
+          1. _promiseCapability_ を ! NewPromiseCapability(%Promise%) とする。
+          1. _resultsClosure_ を、パラメータなしで _F_, _thisArgument_, _argumentsList_, _newTarget_ をキャプチャし、呼び出された際に以下の手順を実行する新しい抽象クロージャとする：
+            1. _result_ を、_F_ の仕様に従って _F_ を評価した結果である完了レコードとする。_thisArgument_ が ~uninitialized~ なら *this* の値は未初期化、それ以外は _thisArgument_ が *this* の値を提供する。_argumentsList_ は名前付きパラメータを提供し、_newTarget_ は NewTarget の値を提供する。
+            1. 注: _F_ がこの文書で定義されている場合、“_F_ の仕様”とはアルゴリズム手順等で規定された振る舞いを意味する。
+            1. Completion(_result_) を返す。
+          1. AsyncFunctionStart(_promiseCapability_, _resultsClosure_) を実行する。
+          1. _calleeContext_ を実行コンテキストスタックから除去し、_callerContext_ を現在の実行コンテキストとして復元する。
+          1. _promiseCapability_.[[Promise]] を返す。
+        1. [id="step-call-builtin-function-result"] _result_ を、_F_ の仕様に従って _F_ を評価した結果である完了レコードとする。_thisArgument_ が ~uninitialized~ なら *this* 値は未初期化、それ以外は _thisArgument_ が *this* 値を提供する。_argumentsList_ は名前付きパラメータを、_newTarget_ は NewTarget の値を提供する。
+        1. 注: _F_ がこの文書で定義されている場合、“_F_ の仕様”とはアルゴリズム手順等で規定された振る舞いを意味する。
+        1. _calleeContext_ を実行コンテキストスタックから除去し、_callerContext_ を現在の実行コンテキストとして復元する。
         1. ? _result_ を返す。
       </emu-alg>
       <emu-note>
@@ -14081,23 +14220,22 @@
           <dd>Array エキゾチックオブジェクト _A_</dd>
         </dl>
         <emu-alg>
-          1. _P_ が *"length"* なら
-            1. ? ArraySetLength(_A_, _Desc_) を返す。
-          1. それ以外で _P_ が配列インデックスなら
+          1. _P_ が *"length"* の場合、? ArraySetLength(_A_, _Desc_) を返す。
+          1. _P_ が配列インデックスである場合、
             1. _lengthDesc_ を OrdinaryGetOwnProperty(_A_, *"length"*) とする。
-            1. アサート: _lengthDesc_ は *undefined* ではない。
-            1. アサート: IsDataDescriptor(_lengthDesc_) は *true*。
-            1. アサート: _lengthDesc_.[[Configurable]] は *false*。
+            1. 断言: _lengthDesc_ は *undefined* ではない。
+            1. 断言: IsDataDescriptor(_lengthDesc_) は *true* である。
+            1. 断言: _lengthDesc_.[[Configurable]] は *false* である。
             1. _length_ を _lengthDesc_.[[Value]] とする。
-            1. アサート: _length_ は非負整数的 Number である。
+            1. 断言: _length_ は非負の整数の Number である。
             1. _index_ を ! ToUint32(_P_) とする。
-            1. _index_ ≥ _length_ かつ _lengthDesc_.[[Writable]] が *false* なら *false* を返す。
+            1. _index_ ≥ _length_ かつ _lengthDesc_.[[Writable]] が *false* の場合、*false* を返す。
             1. _succeeded_ を ! OrdinaryDefineOwnProperty(_A_, _P_, _Desc_) とする。
-            1. _succeeded_ が *false* なら *false* を返す。
-            1. _index_ ≥ _length_ なら
-              1. _lengthDesc_.[[Value]] を _index_ + *1*<sub>𝔽</sub> に設定する。
-              1. _succeeded_ を ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_) に設定する。
-              1. アサート: _succeeded_ は *true*。
+            1. _succeeded_ が *false* の場合、*false* を返す。
+            1. _index_ ≥ _length_ の場合、
+              1. _lengthDesc_.[[Value]] に _index_ + *1*<sub>𝔽</sub> を設定する。
+              1. _succeeded_ を ! OrdinaryDefineOwnProperty(_A_, *"length"*, _lengthDesc_) とする。
+              1. 断言: _succeeded_ は *true* である。
             1. *true* を返す。
           1. ? OrdinaryDefineOwnProperty(_A_, _P_, _Desc_) を返す。
         </emu-alg>
@@ -14419,11 +14557,9 @@
         <emu-alg>
           1. _map_ を _args_.[[ParameterMap]] とする。
           1. _isMapped_ を ! HasOwnProperty(_map_, _P_) とする。
-          1. _isMapped_ が *false* なら
-            1. ? OrdinaryGet(_args_, _P_, _Receiver_) を返す。
-          1. それ以外
-            1. アサート: _map_ は _P_ に対する仮引数マッピングを含む。
-            1. ! Get(_map_, _P_) を返す。
+          1. _isMapped_ が *false* の場合、? OrdinaryGet(_args_, _P_, _Receiver_) を返す。
+          1. 断言: _map_ は _P_ に対する形式的なパラメータマッピングを含む。
+          1. ! Get(_map_, _P_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -14727,10 +14863,11 @@
           <dd>TypedArray _O_</dd>
         </dl>
         <emu-alg>
-          1. _P_ が String なら
+          1. _P_ が文字列の場合、
             1. _numericIndex_ を CanonicalNumericIndexString(_P_) とする。
-            1. _numericIndex_ が *undefined* でないなら
-              1. IsValidIntegerIndex(_O_, _numericIndex_) が *false* なら *true* を返す；そうでなければ *false* を返す。
+            1. _numericIndex_ が *undefined* でない場合、
+              1. IsValidIntegerIndex(_O_, _numericIndex_) が *false* の場合、*true* を返す。
+              1. *false* を返す。
           1. ! OrdinaryDelete(_O_, _P_) を返す。
         </emu-alg>
       </emu-clause>
@@ -16083,103 +16220,103 @@
     <emu-clause id="sec-utf16encodecodepoint" type="abstract operation" oldids="sec-utf16encoding,sec-codepointtoutf16codeunits">
       <h1>
         静的セマンティクス: UTF16EncodeCodePoint (
-        _cp_: a Unicode code point,
-        ): a String
+        _cp_: ユニコードコードポイント,
+        ): 文字列
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. Assert: 0 ≤ _cp_ ≤ 0x10FFFF.
-        1. If _cp_ ≤ 0xFFFF, return the String value consisting of the code unit whose numeric value is _cp_.
-        1. Let _cu1_ be the code unit whose numeric value is floor((_cp_ - 0x10000) / 0x400) + 0xD800.
-        1. Let _cu2_ be the code unit whose numeric value is ((_cp_ - 0x10000) modulo 0x400) + 0xDC00.
-        1. Return the string-concatenation of _cu1_ and _cu2_.
+        1. 断言: 0 ≤ _cp_ ≤ 0x10FFFF。
+        1. _cp_ ≤ 0xFFFF の場合、その数値が _cp_ であるコードユニットのみからなる文字列値を返す。
+        1. _cu1_ を floor((_cp_ - 0x10000) / 0x400) + 0xD800 の数値を持つコードユニットとする。
+        1. _cu2_ を ((_cp_ - 0x10000) modulo 0x400) + 0xDC00 の数値を持つコードユニットとする。
+        1. _cu1_ と _cu2_ を連結した文字列を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-codepointstostring" type="abstract operation" oldids="sec-utf16encode">
       <h1>
         静的セマンティクス: CodePointsToString (
-        _text_: a sequence of Unicode code points,
-        ): a String
+        _text_: ユニコードコードポイントの列,
+        ): 文字列
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>_text_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> で述べるように String 値へ変換する。</dd>
+        <dd>_text_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> で述べるように 文字列値へ変換する。</dd>
       </dl>
       <emu-alg>
-        1. Let _result_ be the empty String.
-        1. For each code point _cp_ of _text_, do
-          1. Set _result_ to the string-concatenation of _result_ and UTF16EncodeCodePoint(_cp_).
-        1. Return _result_.
+        1. _result_ を空文字列とする。
+        1. _text_ の各コードポイント _cp_ について、次を行う
+          1. _result_ を _result_ と UTF16EncodeCodePoint(_cp_) を連結した文字列に設定する。
+        1. _result_ を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-utf16decodesurrogatepair" type="abstract operation" oldids="sec-utf16decode,utf16decodesurrogatepair">
       <h1>
         静的セマンティクス: UTF16SurrogatePairToCodePoint (
-        _lead_: a code unit,
-        _trail_: a code unit,
-        ): a code point
+        _lead_: コードユニット,
+        _trail_: コードユニット,
+        ): コードポイント
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>UTF-16 サロゲートペアを形成する 2 つのコードユニットを 1 つのコードポイントへ変換する。</dd>
+        <dd>UTF-16 サロゲートペアを構成する 2 つのコードユニットを 1 つのコードポイントへ変換する。</dd>
       </dl>
       <emu-alg>
-        1. Assert: _lead_ is a leading surrogate and _trail_ is a trailing surrogate.
-        1. Let _cp_ be (_lead_ - 0xD800) × 0x400 + (_trail_ - 0xDC00) + 0x10000.
-        1. Return the code point _cp_.
+        1. 断言: _lead_ はリーディングサロゲート、_trail_ はトレーリングサロゲートである。
+        1. _cp_ を (_lead_ - 0xD800) × 0x400 + (_trail_ - 0xDC00) + 0x10000 とする。
+        1. コードポイント _cp_ を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-codepointat" type="abstract operation">
       <h1>
         静的セマンティクス: CodePointAt (
-        _string_: a String,
-        _position_: a non-negative integer,
-        ): a Record with fields [[CodePoint]] (a code point), [[CodeUnitCount]] (a positive integer), and [[IsUnpairedSurrogate]] (a Boolean)
+        _string_: 文字列,
+        _position_: 非負整数,
+        ): フィールド [[CodePoint]]（コードポイント）、[[CodeUnitCount]]（正の整数）、[[IsUnpairedSurrogate]]（真偽値）を持つレコード
       </h1>
       <dl class="header">
         <dt>description</dt>
         <dd>_string_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> に記述される UTF-16 エンコードされたコードポイント列として解釈し、インデックス _position_ のコードユニットから始まる 1 つのコードポイントを読み取る。</dd>
       </dl>
       <emu-alg>
-        1. Let _size_ be the length of _string_.
-        1. Assert: _position_ ≥ 0 and _position_ &lt; _size_.
-        1. Let _first_ be the code unit at index _position_ within _string_.
-        1. Let _cp_ be the code point whose numeric value is the numeric value of _first_.
-        1. If _first_ is neither a leading surrogate nor a trailing surrogate, then
-          1. Return the Record { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *false* }.
-        1. If _first_ is a trailing surrogate or _position_ + 1 = _size_, then
-          1. Return the Record { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *true* }.
-        1. Let _second_ be the code unit at index _position_ + 1 within _string_.
-        1. If _second_ is not a trailing surrogate, then
-          1. Return the Record { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *true* }.
-        1. Set _cp_ to UTF16SurrogatePairToCodePoint(_first_, _second_).
-        1. Return the Record { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 2, [[IsUnpairedSurrogate]]: *false* }.
+        1. _size_ を _string_ の長さとする。
+        1. 断言: _position_ ≥ 0 かつ _position_ &lt; _size_。
+        1. _first_ を _string_ のインデックス _position_ のコードユニットとする。
+        1. _cp_ を _first_ の数値を持つコードポイントとする。
+        1. _first_ がリーディングサロゲートでもトレーリングサロゲートでもない場合、
+          1. レコード { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *false* } を返す。
+        1. _first_ がトレーリングサロゲートまたは _position_ + 1 = _size_ の場合、
+          1. レコード { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *true* } を返す。
+        1. _second_ を _string_ のインデックス _position_ + 1 のコードユニットとする。
+        1. _second_ がトレーリングサロゲートでない場合、
+          1. レコード { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 1, [[IsUnpairedSurrogate]]: *true* } を返す。
+        1. _cp_ を UTF16SurrogatePairToCodePoint(_first_, _second_) に設定する。
+        1. レコード { [[CodePoint]]: _cp_, [[CodeUnitCount]]: 2, [[IsUnpairedSurrogate]]: *false* } を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-stringtocodepoints" type="abstract operation" oldids="sec-utf16decodestring">
       <h1>
         静的セマンティクス: StringToCodePoints (
-        _string_: a String,
-        ): a List of code points
+        _string_: 文字列,
+        ): コードポイントのリスト
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>_string_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> に記述される UTF-16 エンコードされた Unicode テキストとして解釈した結果得られる Unicode 符号位置列を返す。</dd>
+        <dd>_string_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> に記述される UTF-16 エンコードされたユニコードテキストとして解釈した結果得られるユニコード符号位置列を返す。</dd>
       </dl>
       <emu-alg>
-        1. Let _codePoints_ be a new empty List.
-        1. Let _size_ be the length of _string_.
-        1. Let _position_ be 0.
-        1. Repeat, while _position_ &lt; _size_,
-          1. Let _cp_ be CodePointAt(_string_, _position_).
-          1. Append _cp_.[[CodePoint]] to _codePoints_.
-          1. Set _position_ to _position_ + _cp_.[[CodeUnitCount]].
-        1. Return _codePoints_.
+        1. _codePoints_ を新しい空リストとする。
+        1. _size_ を _string_ の長さとする。
+        1. _position_ を 0 とする。
+        1. _position_ &lt; _size_ の間、繰り返す：
+          1. _cp_ を CodePointAt(_string_, _position_) とする。
+          1. _codePoints_ に _cp_.[[CodePoint]] を追加する。
+          1. _position_ を _position_ + _cp_.[[CodeUnitCount]] に設定する。
+        1. _codePoints_ を返す。
       </emu-alg>
     </emu-clause>
 
@@ -16193,10 +16330,10 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. If _sourceText_ is a String, set _sourceText_ to StringToCodePoints(_sourceText_).
-        1. Attempt to parse _sourceText_ using _goalSymbol_ as the goal symbol, and analyse the parse result for any early error conditions. Parsing and early error detection may be interleaved in an implementation-defined manner.
-        1. If the parse succeeded and no early errors were found, return the Parse Node (an instance of _goalSymbol_) at the root of the parse tree resulting from the parse.
-        1. Otherwise, return a List of one or more *SyntaxError* objects representing the parsing errors and/or early errors. If more than one parsing error or early error is present, the number and ordering of error objects in the list is implementation-defined, but at least one must be present.
+        1. _sourceText_ が文字列の場合、_sourceText_ を StringToCodePoints(_sourceText_) に設定する。
+        1. _goalSymbol_ を目標記号として _sourceText_ の構文解析を試み、構文解析結果について早期エラー条件を解析する。構文解析および早期エラー検出は、実装定義の方法でインターリーブしてもよい。
+        1. 構文解析が成功し、早期エラーが検出されなかった場合、解析によって得られた構文木のルートにある Parse Node（_goalSymbol_ のインスタンス）を返す。
+        1. 構文解析エラーまたは早期エラーを表す一つ以上の *SyntaxError* オブジェクトのリストを返す。構文解析エラーまたは早期エラーが複数ある場合、リスト内のエラーオブジェクトの数や順序は実装定義だが、少なくとも一つは存在しなければならない。
       </emu-alg>
       <emu-note>
         <p>ある箇所に早期エラーが存在し、後続位置に構文エラーが存在するテキストを考える。パース後に早期エラー検査を行う実装は構文エラーを報告し、早期エラー検査へ進まないかもしれない。両者をインターリーブする実装は早期エラーを報告し構文エラー検出を行わないかもしれない。第三の実装は両方のエラーを報告するかもしれない。これらの挙動はいずれも適合である。</p>
@@ -16283,7 +16420,8 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. If the source text matched by _node_ is strict mode code, return *true*; else return *false*.
+          1. _node_ に一致するソーステキストが厳格モードコードである場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -18674,15 +18812,16 @@
         </dl>
         <emu-alg>
           1. _flags_ を _literal_ の FlagText とする。
-          1. _flags_ に `d`, `g`, `i`, `m`, `s`, `u`, `v`, `y` 以外のコードポイントが含まれるか、同一コードポイントが複数回含まれるなら *false* を返す。
-          1. _flags_ が `u` を含むなら _u_ = *true*、そうでなければ *false*。
-          1. _flags_ が `v` を含むなら _v_ = *true*、そうでなければ *false*。
+          1. _flags_ が `d`, `g`, `i`, `m`, `s`, `u`, `v`, `y` 以外のコードポイントを含む場合、またはいずれかのコードポイントを複数回含む場合、*false* を返す。
+          1. _flags_ が `u` を含む場合、_u_ を *true*、そうでなければ *false* とする。
+          1. _flags_ が `v` を含む場合、_v_ を *true*、そうでなければ *false* とする。
           1. _patternText_ を _literal_ の BodyText とする。
-          1. _u_ が *false* かつ _v_ が *false* なら
-            1. _stringValue_ を CodePointsToString(_patternText_)。
-            1. _patternText_ を _stringValue_ の 16-bit 要素を Unicode BMP コードポイントとして逐次解釈した結果のコードポイント列に設定（UTF-16 デコードは行わない）。
-          1. _parseResult_ を ParsePattern(_patternText_, _u_, _v_)。
-          1. _parseResult_ が Parse Node なら *true*、そうでなければ *false* を返す。
+          1. _u_ が *false* かつ _v_ が *false* の場合、
+            1. _stringValue_ を CodePointsToString(_patternText_) とする。
+            1. _patternText_ を _stringValue_ の 16 ビット要素それぞれをユニコード BMP コードポイントとして解釈したときのコードポイント列とする。UTF-16 デコードは適用しない。
+          1. _parseResult_ を ParsePattern(_patternText_, _u_, _v_) とする。
+          1. _parseResult_ が Parse Node の場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -19749,9 +19888,8 @@
             1. HostFinalizeImportMeta(_importMeta_, _module_) を実行。
             1. _module_.[[ImportMeta]] に _importMeta_ を設定。
             1. _importMeta_ を返す。
-          1. それ以外
-            1. 事前条件: _importMeta_ は Object。
-            1. _importMeta_ を返す。
+          1. 事前条件: _importMeta_ は Object。
+          1. _importMeta_ を返す。
         </emu-alg>
 
         <emu-clause id="sec-hostgetimportmetaproperties" type="host-defined abstract operation">
@@ -19967,10 +20105,9 @@
             1. _deleteStatus_ を ? <emu-meta effects="user-code">_baseObj_.[[Delete]](_ref_.[[ReferencedName]])</emu-meta> とする。
             1. _deleteStatus_ が *false* かつ _ref_.[[Strict]] が *true* なら *TypeError* 例外。
             1. _deleteStatus_ を返す。
-          1. そうでなければ
-            1. _base_ を _ref_.[[Base]] とする。
-            1. Assert: _base_ は Environment Record。
-            1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> を返す。
+          1. _base_ を _ref_.[[Base]] とする。
+          1. Assert: _base_ は Environment Record。
+          1. ? <emu-meta effects="user-code">_base_.DeleteBinding(_ref_.[[ReferencedName]])</emu-meta> を返す。
         </emu-alg>
         <emu-note>
           <p>strict mode コード内で `delete` 演算子が出現し、その |UnaryExpression| が変数・引数・関数名への直接参照であると *SyntaxError* 例外となる。さらに strict mode で `delete` の対象プロパティが { [[Configurable]]: *false* }（または削除不能）である場合 *TypeError* 例外となる。</p>
@@ -20042,40 +20179,36 @@
     </emu-clause>
 
     <emu-clause id="sec-unary-minus-operator">
-      <h1>単項 `-` 演算子 (Unary `-` Operator)</h1>
+      <h1>単項 `-` 演算子</h1>
       <emu-note>
-        <p>単項 `-` は被演算子を数値へ変換し符号を反転する。*+0*<sub>𝔽</sub> の反転は *-0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub> の反転は *+0*<sub>𝔽</sub> を生成する。</p>
+        <p>単項 `-` 演算子は、そのオペランドを数値に変換した後、符号反転します。*+0*<sub>𝔽</sub> を反転すると *-0*<sub>𝔽</sub> になり、*-0*<sub>𝔽</sub> を反転すると *+0*<sub>𝔽</sub> になります。</p>
       </emu-note>
 
       <emu-clause id="sec-unary-minus-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>実行時セマンティクス: 評価 (Runtime Semantics: Evaluation)</h1>
+        <h1>実行時セマンティクス: 評価</h1>
         <emu-grammar>UnaryExpression : `-` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. _expr_ を ? |UnaryExpression| の Evaluation とする。
+          1. _expr_ を ? |UnaryExpression| の評価結果とする。
           1. _oldValue_ を ? ToNumeric(? GetValue(_expr_)) とする。
-          1. _oldValue_ が Number なら
-            1. Number::unaryMinus(_oldValue_) を返す。
-          1. そうでなければ
-            1. Assert: _oldValue_ は BigInt。
-            1. BigInt::unaryMinus(_oldValue_) を返す。
+          1. _oldValue_ が数値の場合、Number::unaryMinus(_oldValue_) を返す。
+          1. 断言: _oldValue_ は BigInt である。
+          1. BigInt::unaryMinus(_oldValue_) を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-bitwise-not-operator">
-      <h1>ビット単位 NOT 演算子 ( `~` ) (Bitwise NOT Operator)</h1>
+      <h1>ビットごとの NOT 演算子 ( `~` )</h1>
 
       <emu-clause id="sec-bitwise-not-operator-runtime-semantics-evaluation" type="sdo">
-        <h1>実行時セマンティクス: 評価 (Runtime Semantics: Evaluation)</h1>
+        <h1>実行時セマンティクス: 評価</h1>
         <emu-grammar>UnaryExpression : `~` UnaryExpression</emu-grammar>
         <emu-alg>
-          1. _expr_ を ? |UnaryExpression| の Evaluation とする。
+          1. _expr_ を ? |UnaryExpression| の評価結果とする。
           1. _oldValue_ を ? ToNumeric(? GetValue(_expr_)) とする。
-          1. _oldValue_ が Number なら
-            1. Number::bitwiseNOT(_oldValue_) を返す。
-          1. そうでなければ
-            1. Assert: _oldValue_ は BigInt。
-            1. BigInt::bitwiseNOT(_oldValue_) を返す。
+          1. _oldValue_ が数値の場合、Number::bitwiseNOT(_oldValue_) を返す。
+          1. 断言: _oldValue_ は BigInt である。
+          1. BigInt::bitwiseNOT(_oldValue_) を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -20266,53 +20399,75 @@
     </emu-note>
 
     <emu-clause id="sec-relational-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>実行時セマンティクス: 評価 (Runtime Semantics: Evaluation)</h1>
+      <h1>実行時セマンティクス: 評価</h1>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |RelationalExpression| の Evaluation。
-        1. _lVal_ を ? GetValue(_lRef_)。
-        1. _rRef_ を ? |ShiftExpression| の Evaluation。
-        1. _rVal_ を ? GetValue(_rRef_)。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
         1. _r_ を ? IsLessThan(_lVal_, _rVal_, *true*) とする。
-        1. _r_ が *undefined* なら *false*、そうでなければ _r_ を返す。
+        1. _r_ が *undefined* の場合、*false* を返す。
+        1. _r_ を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_, _lVal_, _rRef_, _rVal_ を上と同様に求める（ただし比較順を反転）。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
         1. _r_ を ? IsLessThan(_rVal_, _lVal_, *false*) とする。
-        1. _r_ が *undefined* なら *false*、そうでなければ _r_。
+        1. _r_ が *undefined* の場合、*false* を返す。
+        1. _r_ を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&lt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _r_ を ? IsLessThan(_rVal_, _lVal_, *false*)。
-        1. _r_ が *true* または *undefined* なら *false*、そうでなければ *true*。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _r_ を ? IsLessThan(_rVal_, _lVal_, *false*) とする。
+        1. _r_ が *true* または *undefined* の場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `&gt;=` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _r_ を ? IsLessThan(_lVal_, _rVal_, *true*)。
-        1. _r_ が *true* または *undefined* なら *false*、そうでなければ *true*。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _r_ を ? IsLessThan(_lVal_, _rVal_, *true*) とする。
+        1. _r_ が *true* または *undefined* の場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `instanceof` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
         1. ? InstanceofOperator(_lVal_, _rVal_) を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : RelationalExpression `in` ShiftExpression</emu-grammar>
       <emu-alg>
-        1. 左右を評価し _lVal_, _rVal_ を得る。
-        1. _rVal_ が Object でなければ *TypeError*。
+        1. _lRef_ を ? |RelationalExpression| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _rVal_ がオブジェクトでない場合、*TypeError* 例外を投げる。
         1. ? HasProperty(_rVal_, ? ToPropertyKey(_lVal_)) を返す。
       </emu-alg>
       <emu-grammar>RelationalExpression : PrivateIdentifier `in` ShiftExpression</emu-grammar>
       <emu-alg>
         1. _privateIdentifier_ を |PrivateIdentifier| の StringValue とする。
-        1. _rRef_, _rVal_ を評価して得る。
-        1. _rVal_ が Object でなければ *TypeError*。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. Assert: _privateEnv_ は *null* でない。
-        1. _privateName_ を ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_)。
-        1. PrivateElementFind(_rVal_, _privateName_) が ~empty~ でなければ *true*。
-        1. *false* を返す。
+        1. _rRef_ を ? |ShiftExpression| の評価結果とする。
+        1. _rVal_ を ? GetValue(_rRef_) とする。
+        1. _rVal_ がオブジェクトでない場合、*TypeError* 例外を投げる。
+        1. _privateEnv_ を現在実行中の実行コンテキストの PrivateEnvironment とする。
+        1. 断言: _privateEnv_ は *null* ではない。
+        1. _privateName_ を ResolvePrivateIdentifier(_privateEnv_, _privateIdentifier_) とする。
+        1. PrivateElementFind(_rVal_, _privateName_) が ~empty~ の場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
     </emu-clause>
 
@@ -20357,65 +20512,67 @@
     </emu-grammar>
 
     <emu-clause id="sec-equality-operators-runtime-semantics-evaluation" type="sdo">
-      <h1>ランタイムセマンティクス: 評価</h1>
+      <h1>実行時セマンティクス: 評価</h1>
       <emu-grammar>EqualityExpression : EqualityExpression `==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lRef_ を ? |EqualityExpression| の評価結果とする。
         1. _lVal_ を ? GetValue(_lRef_) とする。
-        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rRef_ を ? |RelationalExpression| の評価結果とする。
         1. _rVal_ を ? GetValue(_rRef_) とする。
         1. ? IsLooselyEqual(_rVal_, _lVal_) を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!=` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lRef_ を ? |EqualityExpression| の評価結果とする。
         1. _lVal_ を ? GetValue(_lRef_) とする。
-        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rRef_ を ? |RelationalExpression| の評価結果とする。
         1. _rVal_ を ? GetValue(_rRef_) とする。
         1. _r_ を ? IsLooselyEqual(_rVal_, _lVal_) とする。
-        1. もし _r_ が *true* なら *false* を返す。それ以外なら *true* を返す。
+        1. _r_ が *true* の場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `===` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lRef_ を ? |EqualityExpression| の評価結果とする。
         1. _lVal_ を ? GetValue(_lRef_) とする。
-        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rRef_ を ? |RelationalExpression| の評価結果とする。
         1. _rVal_ を ? GetValue(_rRef_) とする。
         1. IsStrictlyEqual(_rVal_, _lVal_) を返す。
       </emu-alg>
       <emu-grammar>EqualityExpression : EqualityExpression `!==` RelationalExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |EqualityExpression| の評価とする。
+        1. _lRef_ を ? |EqualityExpression| の評価結果とする。
         1. _lVal_ を ? GetValue(_lRef_) とする。
-        1. _rRef_ を ? |RelationalExpression| の評価とする。
+        1. _rRef_ を ? |RelationalExpression| の評価結果とする。
         1. _rVal_ を ? GetValue(_rRef_) とする。
         1. _r_ を IsStrictlyEqual(_rVal_, _lVal_) とする。
-        1. もし _r_ が *true* なら *false* を返す。それ以外なら *true* を返す。
+        1. _r_ が *true* の場合、*false* を返す。
+        1. *true* を返す。
       </emu-alg>
       <emu-note>
-        <p>等価演算子は次の不変条件を維持する：</p>
+        <p>等価演算子は以下の不変性を維持します:</p>
         <ul>
           <li>
-            `A != B` は `!(A == B)` と等価である。
+            `A != B` は `!(A == B)` と同値です。
           </li>
           <li>
-            `A == B` は、`A` と `B` の評価順を除いて `B == A` と等価である。
+            `A == B` は `B == A` と同値ですが、`A` と `B` の評価順序は異なります。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>等価演算子は常に推移律を満たすとは限らない。たとえば、同じ文字列値を表すが異なる String オブジェクトが存在する場合、それぞれの String オブジェクトは `==` 演算子によりその文字列値と等しいとみなされるが、２つの String オブジェクト同士は等しくない。例：</p>
+        <p>等価演算子は常に推移的であるとは限りません。例えば、同じ文字列値を表す異なる String オブジェクトが 2 つ存在する場合、それぞれの String オブジェクトは `==` 演算子でその文字列値と等しいとみなされますが、2 つの String オブジェクトは互いに等しくありません。例:</p>
         <ul>
           <li>
-            `new String("a") == "a"` と `"a" == new String("a")` はどちらも *true*。
+            `new String("a") == "a"` および `"a" == new String("a")` はどちらも *true* です。
           </li>
           <li>
-            `new String("a") == new String("a")` は *false*。
+            `new String("a") == new String("a")` は *false* です。
           </li>
         </ul>
       </emu-note>
       <emu-note>
-        <p>文字列の比較はコード単位値列に対する単純な等価テストを用いる。Unicode 仕様で定義されるような、より複雑な意味的な文字や文字列の等価性、照合順序の定義は用いられない。そのため、Unicode Standard において正規同等とみなされる Strings 値でも、不等と判定される場合がある。実質的に、このアルゴリズムは両方の文字列がすでに正規化済みであることを前提としている。</p>
+        <p>文字列の比較はコードユニット値列の単純な等価テストを用います。Unicode仕様で定義されるより複雑かつ意味指向的な文字や文字列の等価性および並び順定義を使用することはありません。そのため、Unicode Standard に従って正規的に等しいとされる Strings 値でも等しくないと判定される場合があります。事実上、このアルゴリズムは両方の String がすでに正規化された形式であることを前提としています。</p>
       </emu-note>
     </emu-clause>
   </emu-clause>
@@ -20501,13 +20658,11 @@
       </emu-alg>
       <emu-grammar>CoalesceExpression : CoalesceExpressionHead `??` BitwiseORExpression</emu-grammar>
       <emu-alg>
-        1. _lRef_ を ? |CoalesceExpressionHead| の Evaluation。
-        1. _lVal_ を ? GetValue(_lRef_)。
-        1. _lVal_ が *undefined* または *null* なら
-          1. _rRef_ を ? |BitwiseORExpression| の Evaluation。
-          1. ? GetValue(_rRef_) を返す。
-        1. そうでなければ
-          1. _lVal_ を返す。
+        1. _lRef_ を ? |CoalesceExpressionHead| の評価結果とする。
+        1. _lVal_ を ? GetValue(_lRef_) とする。
+        1. _lVal_ が *undefined* でも *null* でもない場合、_lVal_ を返す。
+        1. _rRef_ を ? |BitwiseORExpression| の評価結果とする。
+        1. ? GetValue(_rRef_) を返す。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -20533,9 +20688,8 @@
         1. _lVal_ が *true* なら
           1. _trueRef_ を 1 番目の |AssignmentExpression| の Evaluation。
           1. ? GetValue(_trueRef_) を返す。
-        1. そうでなければ
-          1. _falseRef_ を 2 番目の |AssignmentExpression| の Evaluation。
-          1. ? GetValue(_falseRef_) を返す。
+        1. _falseRef_ を 2 番目の |AssignmentExpression| の Evaluation。
+        1. ? GetValue(_falseRef_) を返す。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21694,13 +21848,11 @@
       </emu-alg>
       <emu-grammar>IfStatement : `if` `(` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _exprRef_ を |Expression| の Evaluation を ? 付きで行った結果とする。
+        1. _exprRef_ を ? |Expression| の評価結果とする。
         1. _exprValue_ を ToBoolean(? GetValue(_exprRef_)) とする。
-        1. _exprValue_ が *false* なら:
-          1. *undefined* を返す。
-        1. それ以外:
-          1. _stmtCompletion_ を |Statement| の Evaluation の Completion とする。
-          1. ? UpdateEmpty(_stmtCompletion_, *undefined*) を返す。
+        1. _exprValue_ が *false* の場合、*undefined* を返す。
+        1. _stmtCompletion_ を Completion(|Statement| の評価) とする。
+        1. ? UpdateEmpty(_stmtCompletion_, *undefined*) を返す。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -21897,41 +22049,41 @@
         </dl>
         <emu-grammar>ForStatement : `for` `(` Expression? `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 最初の |Expression| が存在するなら:
-            1. _exprRef_ をその Evaluation を ? 付きで行った結果とする。
-            1. ? GetValue(_exprRef_) を実行。
-          1. 二番目の |Expression| が存在するなら _test_ をそれに、存在しなければ ~empty~ とする。
-          1. 三番目の |Expression| が存在するなら _increment_ をそれに、存在しなければ ~empty~ とする。
-          1. ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) を ? 付きで返す。
+          1. 最初の |Expression| が存在する場合、
+            1. _exprRef_ を最初の |Expression| の評価結果とする。
+            1. ? GetValue(_exprRef_) を実行する。
+          1. 二番目の |Expression| が存在すれば _test_ を二番目の |Expression|、存在しなければ _test_ を ~empty~ とする。
+          1. 三番目の |Expression| が存在すれば _increment_ を三番目の |Expression|、存在しなければ _increment_ を ~empty~ とする。
+          1. ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) を返す。
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` `var` VariableDeclarationList `;` Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. |VariableDeclarationList| の Evaluation を ? 付きで実行。
-          1. 最初の |Expression| が存在するなら _test_ をそれに、存在しなければ ~empty~。
-          1. 二番目の |Expression| が存在するなら _increment_ をそれに、存在しなければ ~empty~。
-          1. ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) を ? 付きで返す。
+          1. ? |VariableDeclarationList| の評価を実行する。
+          1. 最初の |Expression| が存在すれば _test_ を最初の |Expression|、存在しなければ _test_ を ~empty~ とする。
+          1. 二番目の |Expression| が存在すれば _increment_ を二番目の |Expression|、存在しなければ _increment_ を ~empty~ とする。
+          1. ? ForBodyEvaluation(_test_, _increment_, |Statement|, « », _labelSet_) を返す。
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. _oldEnv_ を現在実行中コンテキストの LexicalEnvironment とする。
+          1. _oldEnv_ を現在実行中の実行コンテキストの LexicalEnvironment とする。
           1. _loopEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
           1. _isConst_ を |LexicalDeclaration| の IsConstantDeclaration とする。
           1. _boundNames_ を |LexicalDeclaration| の BoundNames とする。
-          1. _boundNames_ の各 _dn_ について:
-            1. _isConst_ が *true* なら:
-              1. ! _loopEnv_.CreateImmutableBinding(_dn_, *true*) を実行。
-            1. それ以外:
-              1. ! _loopEnv_.CreateMutableBinding(_dn_, *false*) を実行。
-          1. 実行中コンテキストの LexicalEnvironment を _loopEnv_ に設定。
-          1. _forDcl_ を |LexicalDeclaration| の Evaluation の Completion とする。
-          1. _forDcl_ が abrupt completion なら:
-            1. 実行中コンテキストの LexicalEnvironment を _oldEnv_ に戻す。
+          1. _boundNames_ の各要素 _dn_ について、次を行う
+            1. _isConst_ が *true* の場合、
+              1. ! _loopEnv_.CreateImmutableBinding(_dn_, *true*) を実行する。
+            1. それ以外の場合、
+              1. ! _loopEnv_.CreateMutableBinding(_dn_, *false*) を実行する。
+          1. 現在実行中の実行コンテキストの LexicalEnvironment を _loopEnv_ に設定する。
+          1. _forDcl_ を |LexicalDeclaration| の評価結果 (Completion) とする。
+          1. _forDcl_ が異常終了の場合、
+            1. 現在実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
             1. ? _forDcl_ を返す。
-          1. _isConst_ が *false* なら _perIterationLets_ を _boundNames_、そうでなければ新しい空 List とする。
-          1. 最初の |Expression| が存在するなら _test_ をそれに、存在しなければ ~empty~。
-          1. 二番目の |Expression| が存在するなら _increment_ をそれに、存在しなければ ~empty~。
-          1. _bodyResult_ を ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_) の Completion とする。
-          1. 実行中コンテキストの LexicalEnvironment を _oldEnv_ に戻す。
+          1. _isConst_ が *false* なら _perIterationLets_ を _boundNames_ とし、そうでないなら _perIterationLets_ を新しい空リストにする。
+          1. 最初の |Expression| が存在すれば _test_ を最初の |Expression|、存在しなければ _test_ を ~empty~ とする。
+          1. 二番目の |Expression| が存在すれば _increment_ を二番目の |Expression|、存在しなければ _increment_ を ~empty~ とする。
+          1. _bodyResult_ を Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_)) とする。
+          1. 現在実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
           1. ? _bodyResult_ を返す。
         </emu-alg>
       </emu-clause>
@@ -22246,10 +22398,9 @@
             1. _iterator_ を EnumerateObjectProperties(_obj_) とする。
             1. _nextMethod_ を ! GetV(_iterator_, *"next"*) とする。
             1. Iterator Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* } を返す。
-          1. それ以外:
-            1. Assert: _iterationKind_ は ~iterate~ 又は ~async-iterate~。
-            1. _iterationKind_ が ~async-iterate~ なら _iteratorKind_ を ~async~ とする。そうでなければ ~sync~。
-            1. ? GetIterator(_exprValue_, _iteratorKind_) を返す。
+          1. Assert: _iterationKind_ は ~iterate~ 又は ~async-iterate~。
+          1. _iterationKind_ が ~async-iterate~ なら _iteratorKind_ を ~async~ とする。そうでなければ ~sync~。
+          1. ? GetIterator(_exprValue_, _iteratorKind_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -22268,66 +22419,62 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_ が存在しない場合、_iteratorKind_ に ~sync~ を設定する。
-          1. _oldEnv_ を現在実行中の実行コンテキストの LexicalEnvironment とする。
-          1. _V_ に *undefined* を設定する。
-          1. _destructuring_ を _lhs_ の IsDestructuring の結果とする。
+          1. _iteratorKind_ が存在しなければ、_iteratorKind_ に ~sync~ を設定する。
+          1. _oldEnv_ を実行中の実行コンテキストの LexicalEnvironment とする。
+          1. _V_ を *undefined* とする。
+          1. _destructuring_ を _lhs_ の IsDestructuring とする。
           1. _destructuring_ が *true* かつ _lhsKind_ が ~assignment~ の場合、
             1. 断言: _lhs_ は |LeftHandSideExpression| である。
-            1. _assignmentPattern_ を _lhs_ によってカバーされる |AssignmentPattern| とする。
-          1. 次を繰り返す：
+            1. _assignmentPattern_ を _lhs_ がカバーする |AssignmentPattern| とする。
+          1. 次を繰り返す:
             1. _nextResult_ を ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]]) とする。
             1. _iteratorKind_ が ~async~ の場合、_nextResult_ を ? Await(_nextResult_) に設定する。
-            1. _nextResult_ がオブジェクトでない場合、*TypeError* 例外をスローする。
+            1. _nextResult_ がオブジェクトでなければ、*TypeError* 例外を投げる。
             1. _done_ を ? IteratorComplete(_nextResult_) とする。
-            1. _done_ が *true* なら、_V_ を返す。
+            1. _done_ が *true* の場合、_V_ を返す。
             1. _nextValue_ を ? IteratorValue(_nextResult_) とする。
-            1. _lhsKind_ が ~assignment~ または ~var-binding~ のいずれかの場合、
-              1. _destructuring_ が *true* なら、
+            1. _lhsKind_ が ~assignment~ または ~var-binding~ の場合、
+              1. _destructuring_ が *true* の場合、
                 1. _lhsKind_ が ~assignment~ の場合、
-                  1. _status_ を Completion(DestructuringAssignmentEvaluation of _assignmentPattern_ with argument _nextValue_) とする。
+                  1. _status_ を Completion(DestructuringAssignmentEvaluation(_assignmentPattern_, 引数 _nextValue_)) とする。
                 1. それ以外の場合、
                   1. 断言: _lhsKind_ は ~var-binding~ である。
                   1. 断言: _lhs_ は |ForBinding| である。
-                  1. _status_ を Completion(BindingInitialization of _lhs_ with arguments _nextValue_ and *undefined*) とする。
+                  1. _status_ を Completion(BindingInitialization(_lhs_, 引数 _nextValue_ と *undefined*)) とする。
               1. それ以外の場合、
-                1. _lhsRef_ を Completion(Evaluation of _lhs_) とする（繰り返し評価される場合がある）。
-                1. _lhsKind_ が ~assignment~ かつ AssignmentTargetType of _lhs_ が ~web-compat~ なら、*ReferenceError* 例外をスローする。
-                1. _lhsRef_ がアブストラクトコンプリーションの場合、
-                  1. _status_ を _lhsRef_ とする。
+                1. _lhsRef_ を Completion(Evaluation(_lhs_)) とする（繰り返し評価される可能性がある）。
+                1. _lhsKind_ が ~assignment~ かつ AssignmentTargetType(_lhs_) が ~web-compat~ の場合、*ReferenceError* 例外を投げる。
+                1. _lhsRef_ が異常終了の場合、
+                  1. _status_ を _lhsRef_ に設定する。
                 1. それ以外の場合、
-                  1. _status_ を Completion(PutValue(_lhsRef_.[[Value]], _nextValue_)) とする。
+                  1. _status_ を Completion(PutValue(_lhsRef_.[[Value]], _nextValue_)) に設定する。
             1. それ以外の場合、
               1. 断言: _lhsKind_ は ~lexical-binding~ である。
               1. 断言: _lhs_ は |ForDeclaration| である。
               1. _iterationEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
-              1. ForDeclarationBindingInstantiation of _lhs_ with argument _iterationEnv_ を実行する。
+              1. ForDeclarationBindingInstantiation(_lhs_, 引数 _iterationEnv_) を実行する。
               1. 実行中の実行コンテキストの LexicalEnvironment を _iterationEnv_ に設定する。
-              1. _destructuring_ が *true* なら、
-                1. _status_ を Completion(ForDeclarationBindingInitialization of _lhs_ with arguments _nextValue_ and _iterationEnv_) とする。
+              1. _destructuring_ が *true* の場合、
+                1. _status_ を Completion(ForDeclarationBindingInitialization(_lhs_, 引数 _nextValue_, _iterationEnv_)) とする。
               1. それ以外の場合、
-                1. 断言: _lhs_ は単一の名前を束縛する。
-                1. _lhsName_ を BoundNames of _lhs_ の唯一の要素とする。
+                1. 断言: _lhs_ は単一の名前をバインドする。
+                1. _lhsName_ を _lhs_ の BoundNames の唯一の要素とする。
                 1. _lhsRef_ を ! ResolveBinding(_lhsName_) とする。
                 1. _status_ を Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_)) とする。
-            1. _status_ がアブストラクトコンプリーションの場合、
+            1. _status_ が異常終了の場合、
               1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
-              1. _iterationKind_ が ~enumerate~ の場合、
-                1. ? _status_ を返す。
-              1. それ以外の場合、
-                1. 断言: _iterationKind_ は ~iterate~ である。
-                1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
-                1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
-            1. _result_ を Completion(Evaluation of _stmt_) とする。
+              1. _iterationKind_ が ~enumerate~ の場合、? _status_ を返す。
+              1. 断言: _iterationKind_ は ~iterate~ である。
+              1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
+              1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
+            1. _result_ を Completion(Evaluation(_stmt_)) とする。
             1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
             1. LoopContinues(_result_, _labelSet_) が *false* の場合、
               1. _status_ を Completion(UpdateEmpty(_result_, _V_)) に設定する。
-              1. _iterationKind_ が ~enumerate~ の場合、
-                1. ? _status_ を返す。
-              1. それ以外の場合、
-                1. 断言: _iterationKind_ は ~iterate~ である。
-                1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
-                1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
+              1. _iterationKind_ が ~enumerate~ の場合、? _status_ を返す。
+              1. 断言: _iterationKind_ は ~iterate~ である。
+              1. _iteratorKind_ が ~async~ の場合、? AsyncIteratorClose(_iteratorRecord_, _status_) を返す。
+              1. ? IteratorClose(_iteratorRecord_, _status_) を返す。
             1. _result_.[[Value]] が ~empty~ でない場合、_V_ を _result_.[[Value]] に設定する。
         </emu-alg>
       </emu-clause>
@@ -23090,8 +23237,7 @@
         1. 実装定義のデバッグ機能が利用可能かつ有効なら:
           1. 実装定義のデバッグ動作を実行。
           1. 新しい実装定義 Completion Record を返す。
-        1. それ以外:
-          1. ~empty~ を返す。
+        1. ~empty~ を返す。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -23482,7 +23628,8 @@
       </dl>
       <emu-grammar>FunctionBody : FunctionStatementList</emu-grammar>
       <emu-alg>
-        1. |FunctionBody| の Directive Prologue が Use Strict Directive を含むなら *true*、そうでなければ *false* を返す。
+        1. |FunctionBody| の Directive Prologue に Use Strict Directive が含まれている場合、*true* を返す。
+        1. *false* を返す。
       </emu-alg>
     </emu-clause>
 
@@ -23876,10 +24023,9 @@
         1. SetFunctionName(_closure_, _propKey_, *"get"*) を実行。
         1. _propKey_ が Private Name なら:
           1. PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: _closure_, [[Set]]: *undefined* } を返す。
-        1. そうでなければ:
-          1. _desc_ を PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
-          1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) を実行。
-          1. ~unused~ を返す。
+        1. _desc_ を PropertyDescriptor { [[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
+        1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) を実行。
+        1. ~unused~ を返す。
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -23892,10 +24038,9 @@
         1. SetFunctionName(_closure_, _propKey_, *"set"*) を実行。
         1. _propKey_ が Private Name なら:
           1. PrivateElement { [[Key]]: _propKey_, [[Kind]]: ~accessor~, [[Get]]: *undefined*, [[Set]]: _closure_ } を返す。
-        1. そうでなければ:
-          1. _desc_ を PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
-          1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) を実行。
-          1. ~unused~ を返す。
+        1. _desc_ を PropertyDescriptor { [[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
+        1. ? DefinePropertyOrThrow(_object_, _propKey_, _desc_) を実行。
+        1. ~unused~ を返す。
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25881,7 +26026,8 @@
       </dl>
       <emu-grammar>Script : ScriptBody?</emu-grammar>
       <emu-alg>
-        1. |ScriptBody| が存在し、|ScriptBody| の Directive Prologue に Use Strict Directive が含まれている場合は *true* を返し、そうでなければ *false* を返す。
+        1. |ScriptBody| が存在し、かつ |ScriptBody| の Directive Prologue に Use Strict Directive が含まれている場合、*true* を返す。
+        1. *false* を返す。
       </emu-alg>
     </emu-clause>
 
@@ -27092,54 +27238,54 @@
               </dl>
 
               <emu-alg>
-                1. _module_ が Cyclic Module Record でないなら
-                  1. ? EvaluateModuleSync(_module_) を実行。
+                1. _module_ が循環モジュールレコードでない場合、
+                  1. ? EvaluateModuleSync(_module_) を実行する。
                   1. _index_ を返す。
-                1. もし _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ なら
-                  1. もし _module_.[[EvaluationError]] が ~empty~ なら _index_ を返す。
-                  1. それ以外なら ? _module_.[[EvaluationError]] を返す。
-                1. もし _module_.[[Status]] が ~evaluating~ なら _index_ を返す。
-                1. Assert: _module_.[[Status]] は ~linked~。
-                1. _module_.[[Status]] を ~evaluating~ に設定。
+                1. _module_.[[Status]] が ~evaluating-async~ または ~evaluated~ の場合、
+                  1. _module_.[[EvaluationError]] が ~empty~ なら _index_ を返す。
+                  1. ? _module_.[[EvaluationError]] を返す。
+                1. _module_.[[Status]] が ~evaluating~ の場合、_index_ を返す。
+                1. 断言: _module_.[[Status]] は ~linked~ である。
+                1. _module_.[[Status]] を ~evaluating~ に設定する。
                 1. _moduleIndex_ を _index_ とする。
-                1. _module_.[[DFSAncestorIndex]] を _index_ に設定。
-                1. _module_.[[PendingAsyncDependencies]] を 0 に設定。
-                1. _index_ を _index_ + 1 に。
-                1. _module_ を _stack_ に追加。
-                1. _module_.[[RequestedModules]] の各 ModuleRequest Record _request_ について
+                1. _module_.[[DFSAncestorIndex]] を _index_ に設定する。
+                1. _module_.[[PendingAsyncDependencies]] を 0 に設定する。
+                1. _index_ を _index_ + 1 に設定する。
+                1. _module_ を _stack_ に追加する。
+                1. _module_.[[RequestedModules]] の各 ModuleRequest Record _request_ について、
                   1. _requiredModule_ を GetImportedModule(_module_, _request_) とする。
-                  1. _index_ を ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_) に設定。
-                  1. もし _requiredModule_ が Cyclic Module Record なら
-                    1. Assert: _requiredModule_.[[Status]] は ~evaluating~, ~evaluating-async~, ~evaluated~ のいずれか。
-                    1. Assert: _requiredModule_.[[Status]] が ~evaluating~ であることと _stack_ に含まれることは同値。
-                    1. もし _requiredModule_.[[Status]] が ~evaluating~ なら
-                      1. _module_.[[DFSAncestorIndex]] を min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]]) に設定。
-                    1. それ以外
-                      1. _requiredModule_ を _requiredModule_.[[CycleRoot]] に設定。
-                      1. Assert: _requiredModule_.[[Status]] は ~evaluating-async~ または ~evaluated~。
-                      1. もし _requiredModule_.[[EvaluationError]] が ~empty~ でないなら ? _requiredModule_.[[EvaluationError]] を返す。
-                    1. もし _requiredModule_.[[AsyncEvaluationOrder]] が整数なら
-                      1. _module_.[[PendingAsyncDependencies]] を 1 増やす。
-                      1. _requiredModule_.[[AsyncParentModules]] に _module_ を追加。
-                1. もし _module_.[[PendingAsyncDependencies]] > 0 または _module_.[[HasTLA]] が *true* なら
-                  1. Assert: _module_.[[AsyncEvaluationOrder]] は ~unset~。
-                  1. _module_.[[AsyncEvaluationOrder]] を IncrementModuleAsyncEvaluationCount() に設定。
-                  1. もし _module_.[[PendingAsyncDependencies]] = 0 なら ExecuteAsyncModule(_module_) を実行。
-                1. それ以外
-                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta> を実行。
-                1. Assert: _module_ は _stack_ にちょうど 1 回。
-                1. Assert: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_。
-                1. もし _module_.[[DFSAncestorIndex]] = _moduleIndex_ なら
+                  1. _index_ を ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_) に設定する。
+                  1. _requiredModule_ が循環モジュールレコードの場合、
+                    1. 断言: _requiredModule_.[[Status]] は ~evaluating~, ~evaluating-async~, ~evaluated~ のいずれかである。
+                    1. 断言: _requiredModule_.[[Status]] は _stack_ が _requiredModule_ を含む場合のみ ~evaluating~ である。
+                    1. _requiredModule_.[[Status]] が ~evaluating~ の場合、
+                      1. _module_.[[DFSAncestorIndex]] を min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]]) に設定する。
+                    1. それ以外の場合、
+                      1. _requiredModule_ を _requiredModule_.[[CycleRoot]] に設定する。
+                      1. 断言: _requiredModule_.[[Status]] は ~evaluating-async~ または ~evaluated~ である。
+                      1. _requiredModule_.[[EvaluationError]] が ~empty~ でなければ、? _requiredModule_.[[EvaluationError]] を返す。
+                    1. _requiredModule_.[[AsyncEvaluationOrder]] が整数の場合、
+                      1. _module_.[[PendingAsyncDependencies]] を _module_.[[PendingAsyncDependencies]] + 1 に設定する。
+                      1. _module_ を _requiredModule_.[[AsyncParentModules]] に追加する。
+                1. _module_.[[PendingAsyncDependencies]] > 0 または _module_.[[HasTLA]] が *true* の場合、
+                  1. 断言: _module_.[[AsyncEvaluationOrder]] は ~unset~ である。
+                  1. _module_.[[AsyncEvaluationOrder]] を IncrementModuleAsyncEvaluationCount() の値に設定する。
+                  1. _module_.[[PendingAsyncDependencies]] = 0 なら ExecuteAsyncModule(_module_) を実行する。
+                1. それ以外の場合、
+                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta> を実行する。
+                1. 断言: _module_ は _stack_ にちょうど 1 回現れる。
+                1. 断言: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_。
+                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_ の場合、
                   1. _done_ を *false* とする。
-                  1. _done_ が *false* の間
+                  1. _done_ が *false* の間繰り返す:
                     1. _requiredModule_ を _stack_ の最後の要素とする。
-                    1. 最後の要素を _stack_ から除去。
-                    1. Assert: _requiredModule_ は Cyclic Module Record。
-                    1. Assert: _requiredModule_.[[AsyncEvaluationOrder]] は 整数 または ~unset~。
-                    1. もし _requiredModule_.[[AsyncEvaluationOrder]] が ~unset~ なら _requiredModule_.[[Status]] を ~evaluated~ に。
-                    1. それ以外は ~evaluating-async~ に。
-                    1. もし _requiredModule_ と _module_ が同一なら _done_ を *true* に。
-                    1. _requiredModule_.[[CycleRoot]] を _module_ に設定。
+                    1. _stack_ の最後の要素を除去する。
+                    1. 断言: _requiredModule_ は循環モジュールレコードである。
+                    1. 断言: _requiredModule_.[[AsyncEvaluationOrder]] は整数または ~unset~ である。
+                    1. _requiredModule_.[[AsyncEvaluationOrder]] が ~unset~ なら _requiredModule_.[[Status]] を ~evaluated~ に設定する。
+                    1. それ以外の場合 _requiredModule_.[[Status]] を ~evaluating-async~ に設定する。
+                    1. _requiredModule_ と _module_ が同一 Module Record なら _done_ を *true* に設定する。
+                    1. _requiredModule_.[[CycleRoot]] を _module_ に設定する。
                 1. _index_ を返す。
               </emu-alg>
               <emu-note>
@@ -28386,10 +28532,9 @@
                   1. _e_.[[ImportName]] が ~all~ の場合、
                     1. アサート: _module_ はこのエクスポートに対する直接バインディングを提供しない。
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ } を返す。
-                  1. それ以外の場合、
-                    1. アサート: _module_ はこのエクスポートに対する特定のバインディングをインポートする。
-                    1. アサート: _e_.[[ImportName]] は文字列型である。
-                    1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_) を返す。
+                  1. アサート: _module_ はこのエクスポートに対する特定のバインディングをインポートする。
+                  1. アサート: _e_.[[ImportName]] は文字列型である。
+                  1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_) を返す。
               1. _exportName_ が *"default"* の場合、
                 1. アサート: このモジュールによって `default` エクスポートは明示的に定義されていない。
                 1. *null* を返す。
@@ -29861,99 +30006,99 @@
 
     <emu-clause id="sec-isfinite-number">
       <h1>isFinite ( _number_ )</h1>
-      <p>この関数は <dfn>%isFinite%</dfn> 組み込みオブジェクトである。</p>
-      <p>呼び出されたとき次を実行:</p>
+      <p>この関数は <dfn>%isFinite%</dfn> という組み込みオブジェクトです。</p>
+      <p>呼び出されたとき以下の手順を実行します:</p>
       <emu-alg>
         1. _num_ を ? ToNumber(_number_) とする。
-        1. もし _num_ が有限でなければ *false* を返す。
-        1. それ以外 *true* を返す。
+        1. _num_ が有限値なら *true* を返す。
+        1. *false* を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-isnan-number">
       <h1>isNaN ( _number_ )</h1>
-      <p>この関数は <dfn>%isNaN%</dfn> 組み込みオブジェクトである。</p>
-      <p>呼び出されたとき次を実行:</p>
+      <p>この関数は <dfn>%isNaN%</dfn> という組み込みオブジェクトです。</p>
+      <p>呼び出されたとき以下の手順を実行します:</p>
       <emu-alg>
         1. _num_ を ? ToNumber(_number_) とする。
-        1. もし _num_ が *NaN* なら *true* を返す。
-        1. それ以外 *false* を返す。
+        1. _num_ が *NaN* なら *true* を返す。
+        1. *false* を返す。
       </emu-alg>
       <emu-note>
-        <p>値 `X` が *NaN* かどうかを ECMAScript コードで信頼性高く判定する方法は、`X !== X` という形式の式である。結果は `X` が *NaN* のときかつそのときのみ *true* となる。</p>
+        <p>ECMAScriptコードで値 `X` が *NaN* かを判定する確実な方法は `X !== X` という式です。この結果が *true* になるのは `X` が *NaN* の場合のみです。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parsefloat-string">
       <h1>parseFloat ( _string_ )</h1>
-      <p>この関数は _string_ 引数の内容を 10 進リテラルとして解釈した結果により Number 値を生成する。</p>
-      <p>これは <dfn>%parseFloat%</dfn> 組み込みオブジェクトである。</p>
-      <p>呼び出されたとき次を実行:</p>
+      <p>この関数は _string_ 引数の内容を10進リテラルとして解釈することで Number値を生成します。</p>
+      <p>これは <dfn>%parseFloat%</dfn> という組み込みオブジェクトです。</p>
+      <p>呼び出されたとき以下の手順を実行します:</p>
       <emu-alg>
         1. _inputString_ を ? ToString(_string_) とする。
         1. _trimmedString_ を ! TrimString(_inputString_, ~start~) とする。
         1. _trimmed_ を StringToCodePoints(_trimmedString_) とする。
-        1. _trimmedPrefix_ を |StrDecimalLiteral| の構文を満たす最長接頭辞（_trimmed_ 自身の場合もある）とする。存在しなければ *NaN* を返す。
+        1. _trimmed_ のうち |StrDecimalLiteral| の構文を満たす最長のプレフィックスを _trimmedPrefix_ とする（_trimmed_ 自体となる場合もある）。そのようなプレフィックスがなければ *NaN* を返す。
         1. _parsedNumber_ を ParseText(_trimmedPrefix_, |StrDecimalLiteral|) とする。
-        1. Assert: _parsedNumber_ は Parse Node。
+        1. 断言: _parsedNumber_ は Parse Node である。
         1. _parsedNumber_ の StringNumericValue を返す。
       </emu-alg>
       <emu-note>
-        <p>この関数は _string_ の先頭部分のみを Number 値として解釈する場合がある；10 進リテラル記法の一部として解釈できないコード単位は無視され、それらが無視されたことは通知されない。</p>
+        <p>この関数は先頭部分だけを Number値として解釈することがあります。10進記法と解釈できないコードユニットは無視され、無視したかどうかは示されません。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-parseint-string-radix">
       <h1>parseInt ( _string_, _radix_ )</h1>
-      <p>この関数は指定された _radix_ に従って _string_ の内容を解釈した結果により整数 Number を生成する。_string_ 先頭の空白は無視される。_radix_ が 0 に強制変換される（*undefined* など）場合、数表現が *"0x"* または *"0X"* で始まる場合を除き 10 とみなす。その場合は 16 とみなす。_radix_ が 16 の場合、数表現は任意で *"0x"* または *"0X"* で始まり得る。</p>
-      <p>これは <dfn>%parseInt%</dfn> 組み込みオブジェクトである。</p>
-      <p>呼び出されたとき次を実行:</p>
+      <p>この関数は指定された _radix_ の基数で _string_ の内容を解釈し整数の Number値を生成します。_string_ の先頭の空白は無視されます。_radix_ が0（*undefined*等）の場合、 *"0x"* または *"0X"* で始まれば 16、それ以外は 10 になります。_radix_ が 16 の場合、数字表現は *"0x"* や *"0X"* でも可です。</p>
+      <p>これは <dfn>%parseInt%</dfn> という組み込みオブジェクトです。</p>
+      <p>呼び出されたとき以下の手順を実行します:</p>
       <emu-alg>
         1. _inputString_ を ? ToString(_string_) とする。
         1. _S_ を ! TrimString(_inputString_, ~start~) とする。
         1. _sign_ を 1 とする。
-        1. もし _S_ が空でなく先頭コード単位が 0x002D (HYPHEN-MINUS) なら _sign_ を -1 に設定。
-        1. もし _S_ が空でなく先頭コード単位が 0x002B (PLUS SIGN) または 0x002D (HYPHEN-MINUS) なら _S_ を先頭 1 文字除去後の部分文字列に設定。
+        1. _S_ が空でなく最初のコードユニットが 0x002D（ハイフン）なら _sign_ を -1 にする。
+        1. _S_ が空でなく最初のコードユニットが 0x002B（プラス）または 0x002D（ハイフン）なら _S_ を index 1 以降の部分にする。
         1. _R_ を ℝ(? ToInt32(_radix_)) とする。
         1. _stripPrefix_ を *true* とする。
-        1. もし _R_ ≠ 0 なら
-          1. もし _R_ &lt; 2 または _R_ > 36 なら *NaN* を返す。
-          1. もし _R_ ≠ 16 なら _stripPrefix_ を *false* に設定。
-        1. それ以外
-          1. _R_ を 10 に設定。
-        1. もし _stripPrefix_ が *true* なら
-          1. もし _S_ の長さ ≥ 2 で先頭 2 コード単位が *"0x"* または *"0X"* なら
-            1. _S_ をインデックス 2 以降の部分文字列に設定。
-            1. _R_ を 16 に設定。
-        1. もし _S_ が radix-_R_ の数字でないコード単位を含むなら _end_ をその最初の位置、そうでなければ _end_ を _S_ の長さとする。
-        1. _Z_ を _S_ の 0 から _end_ までの部分文字列とする。
-        1. もし _Z_ が空なら *NaN* を返す。
-        1. _mathInt_ を _Z_ が radix-_R_ 表記で表す整数値とする（10〜35 に値を持つ数字には大文字 <b>A</b>〜<b>Z</b> および小文字 <b>a</b>〜<b>z</b> を使用）。（ただし _R_=10 で _Z_ が 20 を超える有効桁を含む場合、20 桁目以降の各有効桁は実装選択で 0 に置き換えてよく、かつ _R_ が 2,4,8,10,16,32 のいずれでもない場合、_mathInt_ は _Z_ の値を表す実装近似整数でよい。）
-        1. もし _mathInt_ = 0 なら
-          1. もし _sign_ = -1 なら *-0*<sub>𝔽</sub> を返す。
+        1. _R_ ≠ 0 の場合、
+          1. _R_ &lt; 2 または _R_ > 36 なら *NaN* を返す。
+          1. _R_ ≠ 16 なら _stripPrefix_ を *false* とする。
+        1. それ以外の場合、
+          1. _R_ を 10 にする。
+        1. _stripPrefix_ が *true* の場合、
+          1. _S_ の長さが 2 以上かつ先頭2コードが *"0x"* または *"0X"* の場合、
+            1. _S_ を index 2 以降にする。
+            1. _R_ を 16 にする。
+        1. _S_ に基数 _R_ の数字でないコードユニットがあればその最初のindexを _end_、なければ _S_ の長さを _end_ とする。
+        1. _Z_ を _S_ の 0 から _end_ までの部分とする。
+        1. _Z_ が空なら *NaN* を返す。
+        1. _mathInt_ を _Z_ を基数 _R_ 表記で表した整数値とする。値10～35には <b>A</b>～<b>Z</b>、<b>a</b>～<b>z</b> を使う（_R_=10 かつ _Z_ が 21 桁以上なら21桁以降は0にしてよい。_R_ が 2,4,8,10,16,32 以外なら実装依存の近似値でもよい）。
+        1. _mathInt_ = 0 の場合、
+          1. _sign_ = -1 なら *-0*<sub>𝔽</sub> を返す。
           1. *+0*<sub>𝔽</sub> を返す。
         1. 𝔽(_sign_ × _mathInt_) を返す。
       </emu-alg>
       <emu-note>
-        <p>この関数は _string_ の先頭部分のみを整数値として解釈する場合がある；整数表記の一部と解釈できないコード単位は無視され、それらが無視されたことは通知されない。</p>
+        <p>この関数は先頭部分だけを整数値として解釈することがあります。整数記法と解釈できないコードユニットは無視され、無視したかどうかは示されません。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-uri-handling-functions" oldids="sec-uri-syntax-and-semantics">
-      <h1>URI 取扱関数</h1>
-      <p>Uniform Resource Identifier (URI) は（ウェブページやファイル等の）リソースや、それへアクセスするための転送プロトコル（HTTP や FTP など）をインターネット上で識別する文字列である。ECMAScript 言語自体は、本節で説明されるように URI をエンコードおよびデコードする関数を除き URI 使用のためのサポートを提供しない。`encodeURI` と `decodeURI` は完全な URI を扱うことを意図し、予約文字は特別な意味（区切りなど）を持つことを前提としてエンコードしない。`encodeURIComponent` と `decodeURIComponent` は URI の個々の構成要素を扱うことを意図し、予約文字がテキストを表し完全な URI の一部となるときに特別な意味を持たないようエンコードされるべきであると仮定する。</p>
+      <h1>URI ハンドリング関数</h1>
+      <p>Uniform Resource Identifier（URI）は、インターネット上のリソース（例:ウェブページやファイル）、それらにアクセスするためのプロトコル（例:HTTPやFTP）を識別する文字列です。ECMAScript自体はこの節で述べるURIのエンコード・デコード以外の機能は提供しません。`encodeURI` と `decodeURI` は完全なURI用で、予約文字は区切り等の特別な意味を持つと想定されエンコードされません。`encodeURIComponent`, `decodeURIComponent` はURIの個々の構成部品用で、予約文字もテキストとみなしエンコードされ、URI全体内で特別な意味にならないようにされます。</p>
       <emu-note>
-        <p>予約文字集合は RFC 2396 に基づき、より新しい RFC 3986 による変更を反映していない。</p>
+        <p>予約文字集合はRFC 2396に基づき、新しいRFC 3986での変更は反映されていません。</p>
       </emu-note>
       <emu-note>
-        <p>ECMAScript の多くの実装はウェブページを操作する追加関数やメソッドを提供する；それらは本標準の範囲外である。</p>
+        <p>多くのECMAScript実装はウェブページ操作の追加関数・メソッドを持ちますが、これらは本標準の範囲外です。</p>
       </emu-note>
 
       <emu-clause id="sec-decodeuri-encodeduri">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>この関数は、`encodeURI` 関数によって導入された可能性がある種類の各エスケープシーケンスおよび UTF-8 エンコーディングを、その表すコードポイントの UTF-16 エンコーディングへ置換した新しいバージョンの URI を計算する。`encodeURI` によって導入され得なかったエスケープシーケンスは置換されない。</p>
-        <p>これは <dfn>%decodeURI%</dfn> 組み込みオブジェクトである。</p>
-        <p>呼び出されたとき次を実行:</p>
+        <p>この関数は、`encodeURI` 関数で導入されうるエスケープやUTF-8エンコードを、それが表すコードポイントのUTF-16と置き換えた新しいURIを返します。`encodeURI` で導入されないエスケープは置換されません。</p>
+        <p>これは <dfn>%decodeURI%</dfn> という組み込みオブジェクトです。</p>
+        <p>呼び出されたとき以下の手順を実行します:</p>
         <emu-alg>
           1. _uriString_ を ? ToString(_encodedURI_) とする。
           1. _preserveEscapeSet_ を *";/?:@&=+$,#"* とする。
@@ -29963,9 +30108,9 @@
 
       <emu-clause id="sec-decodeuricomponent-encodeduricomponent">
         <h1>decodeURIComponent ( _encodedURIComponent_ )</h1>
-        <p>この関数は、`encodeURIComponent` によって導入された可能性がある各エスケープシーケンスおよび UTF-8 エンコーディングを、その表すコードポイントの UTF-16 エンコーディングへ置換した新しいバージョンの URI を計算する。</p>
-        <p>これは <dfn>%decodeURIComponent%</dfn> 組み込みオブジェクトである。</p>
-        <p>呼び出されたとき次を実行:</p>
+        <p>この関数は、`encodeURIComponent` で導入されうるエスケープやUTF-8エンコードを、それが表すコードポイントのUTF-16と置き換えた新しいURIを返します。</p>
+        <p>これは <dfn>%decodeURIComponent%</dfn> という組み込みオブジェクトです。</p>
+        <p>呼び出されたとき以下の手順を実行します:</p>
         <emu-alg>
           1. _componentString_ を ? ToString(_encodedURIComponent_) とする。
           1. _preserveEscapeSet_ を空文字列とする。
@@ -29975,9 +30120,9 @@
 
       <emu-clause id="sec-encodeuri-uri">
         <h1>encodeURI ( _uri_ )</h1>
-        <p>この関数は、UTF-16 エンコード (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) された URI の新しいバージョンを計算し、特定コードポイントの各出現を、そのコードポイントの UTF-8 エンコーディングを表す 1〜4 個のエスケープシーケンスへ置換する。</p>
-        <p>これは <dfn>%encodeURI%</dfn> 組み込みオブジェクトである。</p>
-        <p>呼び出されたとき次を実行:</p>
+        <p>この関数は、UTF-16エンコードされた (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) URIのうち特定コードポイントごとにUTF-8の1～4個エスケープに置き換えた新しいURIを計算します。</p>
+        <p>これは <dfn>%encodeURI%</dfn> という組み込みオブジェクトです。</p>
+        <p>呼び出されたとき以下の手順を実行します:</p>
         <emu-alg>
           1. _uriString_ を ? ToString(_uri_) とする。
           1. _extraUnescaped_ を *";/?:@&=+$,#"* とする。
@@ -29987,9 +30132,9 @@
 
       <emu-clause id="sec-encodeuricomponent-uricomponent">
         <h1>encodeURIComponent ( _uriComponent_ )</h1>
-        <p>この関数は、UTF-16 エンコード (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) された URI 構成要素の新しいバージョンを計算し、特定コードポイントの各出現を、そのコードポイントの UTF-8 エンコーディングを表す 1〜4 個のエスケープシーケンスへ置換する。</p>
-        <p>これは <dfn>%encodeURIComponent%</dfn> 組み込みオブジェクトである。</p>
-        <p>呼び出されたとき次を実行:</p>
+        <p>この関数は、UTF-16エンコードされた (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) URIのうち特定コードポイントごとにUTF-8の1～4個エスケープに置き換えた新しいURIを計算します。</p>
+        <p>これは <dfn>%encodeURIComponent%</dfn> という組み込みオブジェクトです。</p>
+        <p>呼び出されたとき以下の手順を実行します:</p>
         <emu-alg>
           1. _componentString_ を ? ToString(_uriComponent_) とする。
           1. _extraUnescaped_ を空文字列とする。
@@ -30002,35 +30147,35 @@
           Encode (
             _string_: 文字列,
             _extraUnescaped_: 文字列,
-          ): 文字列を含む通常完了または throw completion
+          ): 文字列または throw completion を含む通常完了
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_string_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> に記述される UTF-16 エンコードされたコードポイント列とみなし URI エンコードとエスケープを行う。文字が RFC 2396 で非予約 (unreserved) と識別されるか _extraUnescaped_ に現れる場合はエスケープされない。</dd>
+          <dd>URIエンコード・エスケープを行い、_string_ を <emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> のUTF-16コードポイント列と解釈します。RFC 2396で未予約または _extraUnescaped_ に現れる文字はエスケープされません。</dd>
         </dl>
         <emu-alg>
           1. _len_ を _string_ の長さとする。
           1. _R_ を空文字列とする。
-          1. _alwaysUnescaped_ を ASCII 単語文字列と *"-.!~\*'()"* の連結とする。
-          1. _unescapedSet_ を _alwaysUnescaped_ と _extraUnescaped_ の連結とする。
+          1. _alwaysUnescaped_ をASCII英数字と *"-.!~\*'()"* を連結した文字列とする。
+          1. _unescapedSet_ を _alwaysUnescaped_ と _extraUnescaped_ を連結した文字列とする。
           1. _k_ を 0 とする。
-          1. _k_ &lt; _len_ の間繰り返す
-            1. _C_ を _string_ のインデックス _k_ のコード単位とする。
-            1. もし _unescapedSet_ が _C_ を含むなら
-              1. _k_ を _k_ + 1 に。
-              1. _R_ を _R_ と _C_ の連結に。
-            1. それ以外
+          1. _k_ &lt; _len_ の間、繰り返す:
+            1. _C_ を _string_ のindex _k_ のコードユニットとする。
+            1. _unescapedSet_ に _C_ が含まれる場合、
+              1. _k_ を _k_ + 1 にする。
+              1. _R_ を _R_ + _C_ とする。
+            1. それ以外の場合、
               1. _cp_ を CodePointAt(_string_, _k_) とする。
-              1. もし _cp_.[[IsUnpairedSurrogate]] が *true* なら *URIError* 例外。
-              1. _k_ を _k_ + _cp_.[[CodeUnitCount]] に。
-              1. _Octets_ を _cp_.[[CodePoint]] に UTF-8 変換を適用して得るオクテット列とする。
-              1. 各 _octet_ ∈ _Octets_ について
-                1. _hex_ を _octet_ の 16 進大文字表現文字列とする。
-                1. _R_ を _R_、*"%"*、StringPad(_hex_, 2, *"0"*, ~start~) の連結に。
+              1. _cp_.[[IsUnpairedSurrogate]] が *true* なら *URIError* を投げる。
+              1. _k_ を _k_ + _cp_.[[CodeUnitCount]] にする。
+              1. _Octets_ を _cp_.[[CodePoint]] をUTF-8変換したオクテット配列とする。
+              1. _Octets_ の各 _octet_ について:
+                1. _hex_ を _octet_ を大文字16進表記した文字列とする。
+                1. _R_ を _R_、*"%"*、StringPad(_hex_, 2, *"0"*, ~start~) の連結とする。
           1. _R_ を返す。
         </emu-alg>
         <emu-note>
-          <p>パーセントエンコーディングは個々のオクテットを表すため、単一のコードポイントが複数連続エスケープシーケンス（その UTF-8 コードユニット毎に 1 つ）で表現され得る。</p>
+          <p>パーセントエンコードで個々のオクテットを表現するので、1コードポイントが複数連続エスケープ（UTF-8各8ビットごとに1つ）になることがある。</p>
         </emu-note>
       </emu-clause>
 
@@ -30039,52 +30184,52 @@
           Decode (
             _string_: 文字列,
             _preserveEscapeSet_: 文字列,
-          ): 文字列を含む通常完了または throw completion
+          ): 文字列または throw completion を含む通常完了
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_preserveEscapeSet_ 内の Basic Latin 文字に対応するエスケープシーケンスを保持しつつ URI のアンエスケープとデコードを行う。</dd>
+          <dd>URIのアンエスケープとデコードを行い、_preserveEscapeSet_ 内のBasic Latin文字のエスケープは保持します。</dd>
         </dl>
         <emu-alg>
           1. _len_ を _string_ の長さとする。
           1. _R_ を空文字列とする。
           1. _k_ を 0 とする。
-          1. _k_ &lt; _len_ の間繰り返す
-            1. _C_ を _string_ のインデックス _k_ のコード単位とする。
+          1. _k_ &lt; _len_ の間、繰り返す:
+            1. _C_ を _string_ のindex _k_ のコードユニットとする。
             1. _S_ を _C_ とする。
-            1. もし _C_ がコード単位 0x0025 (PERCENT SIGN) なら
-              1. もし _k_ + 3 > _len_ なら *URIError* 例外。
-              1. _escape_ を _string_ の _k_ から _k_ + 3 までの部分文字列とする。
+            1. _C_ が 0x0025（%）なら
+              1. _k_ + 3 > _len_ なら *URIError* を投げる。
+              1. _escape_ を _string_ の _k_ から _k_ + 3 までとする。
               1. _B_ を ParseHexOctet(_string_, _k_ + 1) とする。
-              1. もし _B_ が整数でなければ *URIError* 例外。
-              1. _k_ を _k_ + 2 に。
-              1. _n_ を _B_ の先頭連続 1 ビット数とする。
-              1. もし _n_ = 0 なら
-                1. _asciiChar_ を数値が _B_ のコード単位とする。
-                1. もし _preserveEscapeSet_ が _asciiChar_ を含むなら _S_ を _escape_ に、そうでなければ _S_ を _asciiChar_ に設定。
-              1. それ以外
-                1. もし _n_ = 1 または _n_ > 4 なら *URIError* 例外。
+              1. _B_ が整数でなければ *URIError* を投げる。
+              1. _k_ を _k_ + 2 にする。
+              1. _n_ を _B_ の先頭1ビット個数とする。
+              1. _n_=0 の場合、
+                1. _asciiChar_ を数値 _B_ のコードユニットとする。
+                1. _preserveEscapeSet_ に _asciiChar_ が含まれれば _S_ を _escape_ に、そうでなければ _S_ を _asciiChar_ にする。
+              1. それ以外の場合、
+                1. _n_=1 または _n_>4 なら *URIError* を投げる。
                 1. _Octets_ を « _B_ » とする。
                 1. _j_ を 1 とする。
-                1. _j_ &lt; _n_ の間繰り返す
-                  1. _k_ を _k_ + 1 に。
-                  1. もし _k_ + 3 > _len_ なら *URIError* 例外。
-                  1. もし _string_ のインデックス _k_ のコード単位が 0x0025 でなければ *URIError* 例外。
+                1. _j_ &lt; _n_ の間:
+                  1. _k_ を _k_ + 1 にする。
+                  1. _k_ + 3 > _len_ なら *URIError* を投げる。
+                  1. _string_ のindex _k_ が 0x0025 でないなら *URIError* を投げる。
                   1. _continuationByte_ を ParseHexOctet(_string_, _k_ + 1) とする。
-                  1. もし _continuationByte_ が整数でなければ *URIError* 例外。
-                  1. _continuationByte_ を _Octets_ に追加。
-                  1. _k_ を _k_ + 2 に。
-                  1. _j_ を _j_ + 1 に。
-                1. Assert: _Octets_ の長さは _n_。
-                1. もし _Octets_ が Unicode コードポイントの有効な UTF-8 エンコーディングを含まなければ *URIError* 例外。
-                1. _V_ を _Octets_ に UTF-8 変換を適用して得るコードポイント（オクテット列から 21 ビット値）とする。
-                1. _S_ を UTF16EncodeCodePoint(_V_) に設定。
-            1. _R_ を _R_ と _S_ の連結に。
-            1. _k_ を _k_ + 1 に。
+                  1. _continuationByte_ が整数でなければ *URIError* を投げる。
+                  1. _Octets_ に _continuationByte_ を追加する。
+                  1. _k_ を _k_ + 2 にする。
+                  1. _j_ を _j_ + 1 にする。
+                1. 断言: _Octets_ の長さは _n_ である。
+                1. _Octets_ が有効なUTF-8符号化でなければ *URIError* を投げる。
+                1. _V_ を _Octets_ からUTF-8変換で得られるコードポイント（21bit値）とする。
+                1. _S_ を UTF16EncodeCodePoint(_V_) とする。
+            1. _R_ を _R_ + _S_ とする。
+            1. _k_ を _k_ + 1 にする。
           1. _R_ を返す。
         </emu-alg>
         <emu-note>
-          <p>RFC 3629 は無効な UTF-8 オクテットシーケンスのデコードを禁止する。例えば無効なシーケンス 0xC0 0x80 はコード単位 0x0000 にデコードされてはならない。Decode アルゴリズムの実装は、そのような無効シーケンスに遭遇した際 *URIError* を投げる必要がある。</p>
+          <p>RFC 3629では不正なUTF-8オクテット列のデコードは禁止されています。例えば0xC0 0x80は0x0000にデコードしてはならず、Decodeアルゴリズムは不正列で *URIError* を投げるべきです。</p>
         </emu-note>
       </emu-clause>
 
@@ -30093,20 +30238,20 @@
           ParseHexOctet (
             _string_: 文字列,
             _position_: 非負整数,
-          ): 非負整数または *SyntaxError* オブジェクトの空でないリスト
+          ): 非負整数または非空Listの *SyntaxError* オブジェクト
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_string_ の指定 _position_ にある 2 つの 16 進文字を符号なし 8 ビット整数にパースする。</dd>
+          <dd>_string_ の _position_ の2文字分を16進として解析し符号なし8ビット整数に変換します。</dd>
         </dl>
         <emu-alg>
           1. _len_ を _string_ の長さとする。
-          1. Assert: _position_ + 2 ≤ _len_。
-          1. _hexDigits_ を _string_ の _position_ から _position_ + 2 までの部分文字列とする。
+          1. 断言: _position_ + 2 ≤ _len_。
+          1. _hexDigits_ を _string_ の _position_ から _position_ + 2 の部分とする。
           1. _parseResult_ を ParseText(_hexDigits_, |HexDigits[~Sep]|) とする。
-          1. もし _parseResult_ が Parse Node でなければ _parseResult_ を返す。
+          1. _parseResult_ が Parse Node でなければ _parseResult_ を返す。
           1. _n_ を _parseResult_ の MV とする。
-          1. Assert: _n_ は 0 から 255 の閉区間内。
+          1. 断言: _n_ は 0～255 の範囲内。
           1. _n_ を返す。
         </emu-alg>
       </emu-clause>
@@ -31299,8 +31444,9 @@
         <h1>Boolean.prototype.toString ( )</h1>
         <p>呼び出し手順:</p>
         <emu-alg>
-          1. _b_ を ? ThisBooleanValue(*this* value) とする。
-          1. _b_ が *true* なら *"true"* それ以外 *"false"* を返す。
+          1. _b_ を ? ThisBooleanValue(*this* 値) とする。
+          1. _b_ が *true* の場合、*"true"* を返す。
+          1. *"false"* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32021,7 +32167,7 @@
         <emu-alg>
           1. _number_ が Number でなければ *false* を返す。
           1. _number_ が有限でなければ *false* を返す。
-          1. それ以外なら *true* を返す。
+          1. *true* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32040,7 +32186,7 @@
         <emu-alg>
           1. _number_ が Number でなければ *false* を返す。
           1. _number_ が *NaN* なら *true* を返す。
-          1. それ以外は *false* を返す。
+          1. *false* を返す。
         </emu-alg>
         <emu-note>
           <p>この関数は、引数を *NaN* かどうか判定する前に Number へ変換しない点で、グローバルの isNaN 関数 (<emu-xref href="#sec-isnan-number"></emu-xref>) と異なる。</p>
@@ -32357,7 +32503,7 @@
           1. NewTarget が *undefined* でなければ *TypeError* 例外を投げる。
           1. _prim_ を ? ToPrimitive(_value_, ~number~) とする。
           1. _prim_ が Number なら ? NumberToBigInt(_prim_) を返す。
-          1. それ以外なら ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta> を返す。
+          1. ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta> を返す。
         </emu-alg>
 
         <emu-clause id="sec-numbertobigint" type="abstract operation">
@@ -32390,8 +32536,9 @@
         <emu-alg>
           1. _bits_ を ? ToIndex(_bits_) に設定する。
           1. _bigint_ を ? ToBigInt(_bigint_) に設定する。
-          1. _mod_ を ℝ(_bigint_) modulo 2<sup>_bits_</sup> とする。
-          1. もし _mod_ ≥ 2<sup>_bits_ - 1</sup> なら ℤ(_mod_ - 2<sup>_bits_</sup>) を返す; そうでなければ ℤ(_mod_) を返す。
+          1. _mod_ を ℝ(_bigint_) を 2<sup>_bits_</sup> で割った余りとする。
+          1. _mod_ ≥ 2<sup>_bits_ - 1</sup> の場合、ℤ(_mod_ - 2<sup>_bits_</sup>) を返す。
+          1. ℤ(_mod_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -32879,8 +33026,9 @@
         <emu-alg>
           1. _a_ を ℝ(? ToUint32(_x_)) とする。
           1. _b_ を ℝ(? ToUint32(_y_)) とする。
-          1. _product_ を (_a_ × _b_) modulo 2<sup>32</sup> とする。
-          1. _product_ ≥ 2<sup>31</sup> なら 𝔽(_product_ - 2<sup>32</sup>) を返す; そうでなければ 𝔽(_product_) を返す。
+          1. _product_ を (_a_ × _b_) の 2<sup>32</sup> での剰余とする。
+          1. _product_ ≥ 2<sup>31</sup> の場合、𝔽(_product_ - 2<sup>32</sup>) を返す。
+          1. 𝔽(_product_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -33313,7 +33461,8 @@
           <dd>_t_ がうるう年内なら *1*<sub>𝔽</sub>、そうでなければ *+0*<sub>𝔽</sub> を返す。</dd>
         </dl>
         <emu-alg>
-          1. DaysInYear(YearFromTime(_t_)) が *366*<sub>𝔽</sub> なら *1*<sub>𝔽</sub> を返し、そうでなければ *+0*<sub>𝔽</sub> を返す。
+          1. DaysInYear(YearFromTime(_t_)) が *366*<sub>𝔽</sub> の場合、*1*<sub>𝔽</sub> を返す。
+          1. *+0*<sub>𝔽</sub> を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34489,12 +34638,12 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_dateObject_, [[DateValue]]) を実行する。
           1. _t_ を _dateObject_.[[DateValue]] とする。
           1. _y_ を ? ToNumber(_year_) とする。
-          1. _t_ が *NaN* なら _t_ を *+0*<sub>𝔽</sub> に設定し、そうでなければ LocalTime(_t_) に設定する。
-          1. _month_ が存在しない場合、_m_ を MonthFromTime(_t_) とし、そうでなければ ? ToNumber(_month_) とする。
-          1. _date_ が存在しない場合、_dt_ を DateFromTime(_t_) とし、そうでなければ ? ToNumber(_date_) とする。
+          1. _t_ が *NaN* の場合は _t_ を *+0*<sub>𝔽</sub> にし、そうでない場合は _t_ を LocalTime(_t_) にする。
+          1. _month_ が与えられている場合は _m_ を ? ToNumber(_month_) にし、そうでなければ _m_ を MonthFromTime(_t_) にする。
+          1. _date_ が与えられている場合は _dt_ を ? ToNumber(_date_) にし、そうでなければ _dt_ を DateFromTime(_t_) にする。
           1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_)) とする。
           1. _u_ を TimeClip(UTC(_newDate_)) とする。
-          1. _dateObject_.[[DateValue]] に _u_ を設定する。
+          1. _dateObject_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
@@ -34654,13 +34803,13 @@ THH:mm:ss.sss
           1. _dateObject_ を *this* の値とする。
           1. ? RequireInternalSlot(_dateObject_, [[DateValue]]) を実行する。
           1. _t_ を _dateObject_.[[DateValue]] とする。
-          1. _t_ が *NaN* なら _t_ を *+0*<sub>𝔽</sub> に設定する。
+          1. _t_ が *NaN* の場合、_t_ を *+0*<sub>𝔽</sub> に設定する。
           1. _y_ を ? ToNumber(_year_) とする。
-          1. _month_ が存在しない場合、_m_ を MonthFromTime(_t_) とし、そうでなければ ? ToNumber(_month_) とする。
-          1. _date_ が存在しない場合、_dt_ を DateFromTime(_t_) とし、そうでなければ ? ToNumber(_date_) とする。
+          1. _month_ が存在する場合は _m_ を ? ToNumber(_month_) に、そうでなければ _m_ を MonthFromTime(_t_) にする。
+          1. _date_ が存在する場合は _dt_ を ? ToNumber(_date_) に、そうでなければ _dt_ を DateFromTime(_t_) にする。
           1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_t_)) とする。
           1. _v_ を TimeClip(_newDate_) とする。
-          1. _dateObject_.[[DateValue]] に _v_ を設定する。
+          1. _dateObject_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
@@ -35704,7 +35853,7 @@ THH:mm:ss.sss
             1. _fillLen_ を _maxLength_ - _stringLength_。
             1. _truncatedStringFiller_ を _fillString_ を繰り返し連結し長さ _fillLen_ に切り詰めた String。
             1. _placement_ が ~start~ なら _truncatedStringFiller_ と _S_ の連結を返す。
-            1. それ以外は _S_ と _truncatedStringFiller_ の連結を返す。
+            1. _S_ と _truncatedStringFiller_ の連結を返す。
           </emu-alg>
           <emu-note>
             <p>_maxLength_ は _S_ の長さ未満にならないようクランプされる。</p>
@@ -37523,15 +37672,14 @@ THH:mm:ss.sss
                   1. アサート: _y_ は MatchState。
                   1. _m2_(_y_, _c_) を返す。
                 1. _m1_(_x_, _d_) を返す。
-            1. それ以外
-              1. アサート: _direction_ は ~backward~。
-              1. (_x_, _c_) を引数に取り _m1_, _m2_ を捕捉し以下を行う新しい Matcher を返す:
-                1. アサート: _x_ は MatchState。
-                1. アサート: _c_ は MatcherContinuation。
-                1. (_y_) を引数に取り _c_, _m1_ を捕捉し以下を行う新しい MatcherContinuation _d_ を作る:
-                  1. アサート: _y_ は MatchState。
-                  1. _m1_(_y_, _c_) を返す。
-                1. _m2_(_x_, _d_) を返す。
+            1. アサート: _direction_ は ~backward~。
+            1. (_x_, _c_) を引数に取り _m1_, _m2_ を捕捉し以下を行う新しい Matcher を返す:
+              1. アサート: _x_ は MatchState。
+              1. アサート: _c_ は MatcherContinuation。
+              1. (_y_) を引数に取り _c_, _m1_ を捕捉し以下を行う新しい MatcherContinuation _d_ を作る:
+                1. アサート: _y_ は MatchState。
+                1. _m1_(_y_, _c_) を返す。
+              1. _m2_(_x_, _d_) を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -38343,8 +38491,7 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _rer_.[[Unicode]] が *true* または _rer_.[[UnicodeSets]] が *true* なら
-              1. *true* を返す。
+            1. _rer_.[[Unicode]] が *true* または _rer_.[[UnicodeSets]] が *true* の場合、*true* を返す。
             1. *false* を返す。
           </emu-alg>
         </emu-clause>
@@ -38378,12 +38525,11 @@ THH:mm:ss.sss
             <dd>正規表現フラグに従う「全ての文字」の集合を返す。</dd>
           </dl>
           <emu-alg>
-            1. _rer_.[[UnicodeSets]] が *true* かつ _rer_.[[IgnoreCase]] が *true* なら
-              1. [declared="c"] Simple Case Folding を持たない (scf(_c_) = _c_) 全 Unicode コードポイント _c_ を含む CharSet を返す。
-            1. それ以外で HasEitherUnicodeFlag(_rer_) が *true* なら
-              1. 全コードポイント値を含む CharSet を返す。
-            1. それ以外
-              1. 全コードユニット値を含む CharSet を返す。
+            1. _rer_.[[UnicodeSets]] が *true* かつ _rer_.[[IgnoreCase]] が *true* の場合、
+              1. [declared="c"] <a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">単純なケースフォールディング</a> の対応がない（すなわち、scf(_c_)=_c_ となる）すべての Unicode コードポイント _c_ を含む CharSet を返す。
+            1. HasEitherUnicodeFlag(_rer_) が *true* の場合、
+              1. すべてのコードポイント値を含む CharSet を返す。
+            1. すべてのコードユニット値を含む CharSet を返す。
           </emu-alg>
         </emu-clause>
 
@@ -38698,21 +38844,21 @@ THH:mm:ss.sss
           </dl>
 
           <emu-alg>
-            1. _cp_ が |SyntaxCharacter| にマッチするか、_cp_ が U+002F (SOLIDUS) なら
-              1. 0x005C (REVERSE SOLIDUS) と UTF16EncodeCodePoint(_cp_) の連結を返す。
-            1. そうでなく _cp_ が <emu-xref href="#table-controlescape-code-point-values"></emu-xref> の “Code Point” 列に列挙されるコードポイントなら
-              1. 0x005C (REVERSE SOLIDUS) と対応行の “ControlEscape” 列の文字列との連結を返す。
-            1. _otherPunctuators_ を *",-=&lt;>#&amp;!%:;@~'`"* とコードユニット 0x0022 (QUOTATION MARK) の連結とする。
+            1. _cp_ が |SyntaxCharacter| にマッチするか、_cp_ が U+002F（SOLIDUS）の場合、
+              1. 0x005C（リバーススラッシュ）と UTF16EncodeCodePoint(_cp_) を連結した文字列を返す。
+            1. _cp_ が <emu-xref href="#table-controlescape-code-point-values"></emu-xref> の「Code Point」列に記載されたコードポイントの場合、
+              1. 0x005C（リバーススラッシュ）と、その行の「ControlEscape」列の文字列を連結して返す（「Code Point」が _cp_ の行）。
+            1. _otherPunctuators_ を *",-=&lt;>#&amp;!%:;@~'`"* とコードユニット 0x0022（引用符）を連結した文字列とする。
             1. _toEscape_ を StringToCodePoints(_otherPunctuators_) とする。
-            1. _toEscape_ が _cp_ を含む、または _cp_ が |WhiteSpace| もしくは |LineTerminator| にマッチする、または _cp_ が先行サロゲートまたは後続サロゲートと同じ数値を持つなら
+            1. _toEscape_ が _cp_ を含む場合、_cp_ が |WhiteSpace| または |LineTerminator| にマッチする場合、または _cp_ が開始サロゲート・終了サロゲートと同じ数値の場合、
               1. _cpNum_ を _cp_ の数値とする。
-              1. _cpNum_ ≤ 0xFF なら
+              1. _cpNum_ ≤ 0xFF の場合、
                 1. _hex_ を Number::toString(𝔽(_cpNum_), 16) とする。
-                1. 0x005C (REVERSE SOLIDUS), *"x"*, StringPad(_hex_, 2, *"0"*, ~start~) の連結を返す。
+                1. 0x005C（リバーススラッシュ）、*"x"*、StringPad(_hex_, 2, *"0"*, ~start~) を連結した文字列を返す。
               1. _escaped_ を空文字列とする。
               1. _codeUnits_ を UTF16EncodeCodePoint(_cp_) とする。
-              1. 各コードユニット _cu_ について
-                1. _escaped_ を _escaped_ と UnicodeEscape(_cu_) の連結にする。
+              1. 各コードユニット _cu_ について、
+                1. _escaped_ に UnicodeEscape(_cu_) を連結する。
               1. _escaped_ を返す。
             1. UTF16EncodeCodePoint(_cp_) を返す。
           </emu-alg>
@@ -38817,7 +38963,7 @@ THH:mm:ss.sss
             1. _R_ がオブジェクトでなければ *TypeError* 例外。
             1. _R_ が [[OriginalFlags]] 内部スロットを持たないなら
               1. SameValue(_R_, %RegExp.prototype%) が *true* なら *undefined* を返す。
-              1. そうでなければ *TypeError* 例外。
+              1. *TypeError* 例外。
             1. _flags_ を _R_.[[OriginalFlags]] とする。
             1. _flags_ が _codeUnit_ を含むなら *true* を返す。
             1. *false* を返す。
@@ -38859,30 +39005,27 @@ THH:mm:ss.sss
         <h1>RegExp.prototype [ %Symbol.match% ] ( _string_ )</h1>
         <p>このメソッドは呼び出し時以下を行う:</p>
         <emu-alg>
-          1. _rx_ を *this* 値とする。
-          1. _rx_ がオブジェクトでなければ *TypeError* 例外。
+          1. _rx_ を *this* の値とする。
+          1. _rx_ がオブジェクトでなければ、*TypeError* 例外を投げる。
           1. _S_ を ? ToString(_string_) とする。
           1. _flags_ を ? ToString(? Get(_rx_, *"flags"* )) とする。
-          1. _flags_ が *"g"* を含まなければ
-            1. ? RegExpExec(_rx_, _S_) を返す。
-          1. そうでなければ
-            1. _flags_ が *"u"* または *"v"* を含むなら _fullUnicode_ を *true*、そうでなければ *false* とする。
-            1. ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*) を実行する。
-            1. _A_ を ! ArrayCreate(0) とする。
-            1. _n_ を 0 とする。
-            1. 繰り返し、
-              1. _result_ を ? RegExpExec(_rx_, _S_) とする。
-              1. _result_ が *null* なら
-                1. _n_ = 0 なら *null* を返す。
-                1. _A_ を返す。
-              1. そうでなければ
-                1. _matchStr_ を ? ToString(? Get(_result_, *"0"* )) とする。
-                1. ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_) を実行。
-                1. _matchStr_ が空文字列なら
-                  1. _thisIndex_ を ℝ(? ToLength(? Get(_rx_, *"lastIndex"*))) とする。
-                  1. _nextIndex_ を AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_) とする。
-                  1. ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*) を実行。
-                1. _n_ を _n_ + 1 にする。
+          1. _flags_ に *"g"* が含まれなければ、? RegExpExec(_rx_, _S_) を返す。
+          1. _flags_ に *"u"* または *"v"* が含まれていれば _fullUnicode_ を *true*、そうでなければ *false* にする。
+          1. ? Set(_rx_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*) を実行する。
+          1. _A_ を ! ArrayCreate(0) とする。
+          1. _n_ を 0 とする。
+          1. 次を繰り返す:
+            1. _result_ を ? RegExpExec(_rx_, _S_) とする。
+            1. _result_ が *null* の場合、
+              1. _n_ = 0 なら *null* を返す。
+              1. _A_ を返す。
+            1. _matchStr_ を ? ToString(? Get(_result_, *"0"*)) とする。
+            1. ! CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_n_)), _matchStr_) を実行する。
+            1. _matchStr_ が空文字列の場合、
+              1. _thisIndex_ を ℝ(? ToLength(? Get(_rx_, *"lastIndex"*))) とする。
+              1. _nextIndex_ を AdvanceStringIndex(_S_, _thisIndex_, _fullUnicode_) とする。
+              1. ? Set(_rx_, *"lastIndex"*, 𝔽(_nextIndex_), *true*) を実行する。
+            1. _n_ を _n_ + 1 に設定する。
         </emu-alg>
         <p>このメソッドの *"name"* プロパティ値は *"[Symbol.match]"* である。</p>
         <emu-note>
@@ -39017,14 +39160,14 @@ THH:mm:ss.sss
         <h1>get RegExp.prototype.source</h1>
         <p>`RegExp.prototype.source` は set アクセサが *undefined* のアクセサプロパティであり、get アクセサは以下を行う:</p>
         <emu-alg>
-          1. _R_ を *this* 値。
-          1. _R_ がオブジェクトでなければ *TypeError* 例外。
-          1. _R_ が [[OriginalSource]] 内部スロットを持たないなら
+          1. _R_ を *this* の値とする。
+          1. _R_ がオブジェクトでなければ、*TypeError* 例外を投げる。
+          1. _R_ が [[OriginalSource]] 内部スロットを持たない場合、
             1. SameValue(_R_, %RegExp.prototype%) が *true* なら *"(?:)"* を返す。
-            1. そうでなければ *TypeError* 例外。
-          1. アサート: _R_ は [[OriginalFlags]] 内部スロットを持つ。
-          1. _src_ を _R_.[[OriginalSource]]。
-          1. _flags_ を _R_.[[OriginalFlags]]。
+            1. *TypeError* 例外を投げる。
+          1. 断言: _R_ は [[OriginalFlags]] 内部スロットを持つ。
+          1. _src_ を _R_.[[OriginalSource]] とする。
+          1. _flags_ を _R_.[[OriginalFlags]] とする。
           1. EscapeRegExpPattern(_src_, _flags_) を返す。
         </emu-alg>
 
@@ -39140,11 +39283,12 @@ THH:mm:ss.sss
         <h1>RegExp.prototype.test ( _S_ )</h1>
         <p>このメソッドは呼び出し時以下を行う:</p>
         <emu-alg>
-          1. _R_ を *this* 値。
-          1. _R_ がオブジェクトでなければ *TypeError* 例外。
-          1. _string_ を ? ToString(_S_)。
-          1. _match_ を ? RegExpExec(_R_, _string_)。
-          1. _match_ が *null* でなければ *true*、そうでなければ *false* を返す。
+          1. _R_ を *this* の値とする。
+          1. _R_ がオブジェクトでなければ、*TypeError* 例外を投げる。
+          1. _string_ を ? ToString(_S_) とする。
+          1. _match_ を ? RegExpExec(_R_, _string_) とする。
+          1. _match_ が *null* なら *false* を返す。
+          1. *true* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -39598,33 +39742,31 @@ THH:mm:ss.sss
         <h1>Array ( ..._values_ )</h1>
         <p>この関数は呼び出し時に以下の手順を実行する:</p>
         <emu-alg>
-          1. NewTarget が *undefined* なら _newTarget_ をアクティブな関数オブジェクトとし；そうでなければ _newTarget_ を NewTarget とする。
+          1. NewTarget が *undefined* の場合、_newTarget_ をアクティブな関数オブジェクトとし、それ以外の場合は NewTarget を _newTarget_ とする。
           1. _proto_ を ? GetPrototypeFromConstructor(_newTarget_, *"%Array.prototype%"*) とする。
           1. _numberOfArgs_ を _values_ の要素数とする。
-          1. _numberOfArgs_ = 0 なら
-            1. ! ArrayCreate(0, _proto_) を返す。
-          1. そうでなく _numberOfArgs_ = 1 なら
+          1. _numberOfArgs_ = 0 の場合、! ArrayCreate(0, _proto_) を返す。
+          1. _numberOfArgs_ = 1 の場合、
             1. _len_ を _values_[0] とする。
             1. _array_ を ! ArrayCreate(0, _proto_) とする。
-            1. _len_ が Number でなければ
-              1. ! CreateDataPropertyOrThrow(_array_, *"0"*, _len_) を実行。
+            1. _len_ が Number でない場合、
+              1. ! CreateDataPropertyOrThrow(_array_, *"0"*, _len_) を実行する。
               1. _intLen_ を *1*<sub>𝔽</sub> とする。
-            1. そうでなければ
+            1. それ以外の場合、
               1. _intLen_ を ! ToUint32(_len_) とする。
-              1. SameValueZero(_intLen_, _len_) が *false* なら *RangeError* 例外を投げる。
-            1. ! Set(_array_, *"length"*, _intLen_, *true*) を実行。
+              1. SameValueZero(_intLen_, _len_) が *false* の場合、*RangeError* 例外を投げる。
+            1. ! Set(_array_, *"length"*, _intLen_, *true*) を実行する。
             1. _array_ を返す。
-          1. それ以外の場合
-            1. アサート: _numberOfArgs_ ≥ 2.
-            1. _array_ を ? ArrayCreate(_numberOfArgs_, _proto_) とする。
-            1. _k_ を 0 とする。
-            1. _k_ &lt; _numberOfArgs_ の間繰り返し、
-              1. _Pk_ を ! ToString(𝔽(_k_)) とする。
-              1. _itemK_ を _values_[_k_] とする。
-              1. ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_) を実行。
-              1. _k_ を _k_ + 1 にする。
-            1. アサート: _array_ の *"length"* プロパティの数学的値は _numberOfArgs_ である。
-            1. _array_ を返す。
+          1. 断言: _numberOfArgs_ ≥ 2。
+          1. _array_ を ? ArrayCreate(_numberOfArgs_, _proto_) とする。
+          1. _k_ を 0 とする。
+          1. _k_ &lt; _numberOfArgs_ の間、繰り返す:
+            1. _Pk_ を ! ToString(𝔽(_k_)) とする。
+            1. _itemK_ を _values_[_k_] とする。
+            1. ! CreateDataPropertyOrThrow(_array_, _Pk_, _itemK_) を実行する。
+            1. _k_ を _k_ + 1 にする。
+          1. 断言: _array_ の *"length"* プロパティの数学的値は _numberOfArgs_ である。
+          1. _array_ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -40211,22 +40353,22 @@ THH:mm:ss.sss
         </emu-note>
         <p>手順:</p>
         <emu-alg>
-          1. _O_ を ? ToObject(*this* value)。
-          1. _len_ を ? LengthOfArrayLike(_O_)。
-          1. _len_ = 0 なら *false*。
-          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_)。
-          1. アサート: _fromIndex_ が *undefined* なら _n_ = 0。
-          1. _n_ = +∞ なら *false*。
-          1. そうでなく _n_ = -∞ なら _n_ = 0。
-          1. _n_ ≥ 0 なら
-            1. _k_ = _n_。
-          1. そうでなければ
-            1. _k_ = _len_ + _n_。
-            1. _k_ &lt; 0 なら _k_ = 0。
-          1. _k_ &lt; _len_ の間、
-            1. _elementK_ を ? Get(_O_, ! ToString(𝔽(_k_)))。
-            1. SameValueZero(_searchElement_, _elementK_) が *true* なら *true*。
-            1. _k_++。
+          1. _O_ を ? ToObject(*this* の値) とする。
+          1. _len_ を ? LengthOfArrayLike(_O_) とする。
+          1. _len_ = 0 の場合、*false* を返す。
+          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_) とする。
+          1. 断言: _fromIndex_ が *undefined* のとき、_n_ は 0 である。
+          1. _n_ = +∞ の場合、*false* を返す。
+          1. _n_ = -∞ の場合、_n_ を 0 に設定する。
+          1. _n_ ≥ 0 の場合、
+            1. _k_ を _n_ に設定する。
+          1. それ以外の場合、
+            1. _k_ を _len_ + _n_ とする。
+            1. _k_ < 0 の場合、_k_ を 0 に設定する。
+          1. _k_ < _len_ の間、繰り返す:
+            1. _elementK_ を ? Get(_O_, ! ToString(𝔽(_k_))) とする。
+            1. SameValueZero(_searchElement_, _elementK_) が *true* の場合、*true* を返す。
+            1. _k_ を _k_ + 1 に設定する。
           1. *false* を返す。
         </emu-alg>
         <emu-note>
@@ -40245,25 +40387,25 @@ THH:mm:ss.sss
         </emu-note>
         <p>手順:</p>
         <emu-alg>
-          1. _O_ を ? ToObject(*this* value)。
-          1. _len_ を ? LengthOfArrayLike(_O_)。
-          1. _len_ = 0 なら *-1*<sub>𝔽</sub>。
-          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_)。
-          1. アサート: _fromIndex_ が *undefined* なら _n_ = 0。
-          1. _n_ = +∞ なら *-1*<sub>𝔽</sub>。
-          1. そうでなく _n_ = -∞ なら _n_ = 0。
-          1. _n_ ≥ 0 なら
-            1. _k_ = _n_。
-          1. そうでなければ
-            1. _k_ = _len_ + _n_。
-            1. _k_ &lt; 0 なら _k_ = 0。
-          1. _k_ &lt; _len_ の間、
-            1. _Pk_ を ! ToString(𝔽(_k_))。
-            1. _kPresent_ を ? HasProperty(_O_, _Pk_)。
-            1. _kPresent_ が *true* なら
-              1. _elementK_ を ? Get(_O_, _Pk_)。
-              1. IsStrictlyEqual(_searchElement_, _elementK_) が *true* なら 𝔽(_k_)。
-            1. _k_++。
+          1. _O_ を ? ToObject(*this* の値) とする。
+          1. _len_ を ? LengthOfArrayLike(_O_) とする。
+          1. _len_ = 0 の場合、*-1*<sub>𝔽</sub> を返す。
+          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_) とする。
+          1. 断言: _fromIndex_ が *undefined* のとき、_n_ は 0 である。
+          1. _n_ = +∞ の場合、*-1*<sub>𝔽</sub> を返す。
+          1. _n_ = -∞ の場合、_n_ を 0 に設定する。
+          1. _n_ ≥ 0 の場合、
+            1. _k_ を _n_ に設定する。
+          1. それ以外の場合、
+            1. _k_ を _len_ + _n_ とする。
+            1. _k_ < 0 の場合、_k_ を 0 に設定する。
+          1. _k_ < _len_ の間、繰り返す:
+            1. _Pk_ を ! ToString(𝔽(_k_)) とする。
+            1. _kPresent_ を ? HasProperty(_O_, _Pk_) とする。
+            1. _kPresent_ が *true* の場合、
+              1. _elementK_ を ? Get(_O_, _Pk_) とする。
+              1. IsStrictlyEqual(_searchElement_, _elementK_) が *true* の場合、𝔽(_k_) を返す。
+            1. _k_ を _k_ + 1 に設定する。
           1. *-1*<sub>𝔽</sub> を返す。
         </emu-alg>
         <emu-note>
@@ -40378,14 +40520,13 @@ THH:mm:ss.sss
           1. _len_ = 0 なら
             1. ? Set(_O_, *"length"*, *+0*<sub>𝔽</sub>, *true*)。
             1. *undefined* を返す。
-          1. それ以外
-            1. アサート: _len_ > 0。
-            1. _newLen_ = 𝔽(_len_ - 1)。
-            1. _index_ = ! ToString(_newLen_)。
-            1. _element_ を ? Get(_O_, _index_)。
-            1. ? DeletePropertyOrThrow(_O_, _index_)。
-            1. ? Set(_O_, *"length"*, _newLen_, *true*)。
-            1. _element_ を返す。
+          1. アサート: _len_ > 0。
+          1. _newLen_ = 𝔽(_len_ - 1)。
+          1. _index_ = ! ToString(_newLen_)。
+          1. _element_ を ? Get(_O_, _index_)。
+          1. ? DeletePropertyOrThrow(_O_, _index_)。
+          1. ? Set(_O_, *"length"*, _newLen_, *true*)。
+          1. _element_ を返す。
         </emu-alg>
         <emu-note>
           <p>汎用。</p>
@@ -41817,23 +41958,23 @@ THH:mm:ss.sss
         <p>引数の意味と使用法は <emu-xref href="#sec-array.prototype.includes"></emu-xref> の `Array.prototype.includes` と同じ。</p>
         <p>呼び出し時:</p>
         <emu-alg>
-          1. _O_ = *this* 値。
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~)。
-          1. _len_ = TypedArrayLength(_taRecord_)。
-          1. _len_ = 0 なら *false*。
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_)。
-          1. アサート: _fromIndex_ が *undefined* なら _n_ = 0。
-          1. _n_ = +∞ なら *false*。
-          1. そうでなく _n_ = -∞ なら _n_ = 0。
-          1. _n_ ≥ 0 なら
-            1. _k_ = _n_。
-          1. そうでなければ
-            1. _k_ = _len_ + _n_。
-            1. _k_ &lt; 0 なら _k_ = 0。
-          1. _k_ &lt; _len_ の間、
-            1. _elementK_ = ! Get(_O_, ! ToString(𝔽(_k_)))。
-            1. SameValueZero(_searchElement_, _elementK_) が *true* なら *true*。
-            1. _k_++。
+          1. _O_ を *this* の値とする。
+          1. _taRecord_ を ? ValidateTypedArray(_O_, ~seq-cst~) とする。
+          1. _len_ を TypedArrayLength(_taRecord_) とする。
+          1. _len_ = 0 の場合、*false* を返す。
+          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_) とする。
+          1. 断言: _fromIndex_ が *undefined* の場合、_n_ は 0 である。
+          1. _n_ = +∞ の場合、*false* を返す。
+          1. _n_ = -∞ の場合、_n_ を 0 に設定する。
+          1. _n_ ≥ 0 の場合、
+            1. _k_ を _n_ に設定する。
+          1. それ以外の場合、
+            1. _k_ を _len_ + _n_ とする。
+            1. _k_ < 0 の場合、_k_ を 0 に設定する。
+          1. _k_ < _len_ の間、繰り返す:
+            1. _elementK_ を ! Get(_O_, ! ToString(𝔽(_k_))) とする。
+            1. SameValueZero(_searchElement_, _elementK_) が *true* の場合、*true* を返す。
+            1. _k_ を _k_ + 1 に設定する。
           1. *false* を返す。
         </emu-alg>
         <p>汎用ではない。</p>
@@ -41844,26 +41985,26 @@ THH:mm:ss.sss
         <p>引数の意味と使用法は <emu-xref href="#sec-array.prototype.indexof"></emu-xref> の `Array.prototype.indexOf` と同じ。</p>
         <p>呼び出し時:</p>
         <emu-alg>
-          1. _O_ = *this* 値。
-          1. _taRecord_ = ? ValidateTypedArray(_O_, ~seq-cst~)。
-          1. _len_ = TypedArrayLength(_taRecord_)。
-          1. _len_ = 0 なら *-1*<sub>𝔽</sub>。
-          1. _n_ = ? ToIntegerOrInfinity(_fromIndex_)。
-          1. アサート: _fromIndex_ *undefined* → _n_ = 0。
-          1. _n_ = +∞ なら *-1*<sub>𝔽</sub>。
-          1. そうでなく _n_ = -∞ なら _n_ = 0。
-          1. _n_ ≥ 0 なら
-            1. _k_ = _n_。
-          1. そうでなければ
-            1. _k_ = _len_ + _n_。
-            1. _k_ &lt; 0 なら _k_ = 0。
-          1. _k_ &lt; _len_ の間、
-            1. _Pk_ = ! ToString(𝔽(_k_))。
-            1. _kPresent_ = ! HasProperty(_O_, _Pk_)。
-            1. _kPresent_ が *true* なら
-              1. _elementK_ = ! Get(_O_, _Pk_)。
-              1. IsStrictlyEqual(_searchElement_, _elementK_) が *true* なら 𝔽(_k_)。
-            1. _k_++。
+          1. _O_ を *this* の値とする。
+          1. _taRecord_ を ? ValidateTypedArray(_O_, ~seq-cst~) とする。
+          1. _len_ を TypedArrayLength(_taRecord_) とする。
+          1. _len_ = 0 の場合、*-1*<sub>𝔽</sub> を返す。
+          1. _n_ を ? ToIntegerOrInfinity(_fromIndex_) とする。
+          1. 断言: _fromIndex_ が *undefined* の場合、_n_ は 0 である。
+          1. _n_ = +∞ の場合、*-1*<sub>𝔽</sub> を返す。
+          1. _n_ = -∞ の場合、_n_ を 0 に設定する。
+          1. _n_ ≥ 0 の場合、
+            1. _k_ を _n_ に設定する。
+          1. それ以外の場合、
+            1. _k_ を _len_ + _n_ とする。
+            1. _k_ < 0 の場合、_k_ を 0 に設定する。
+          1. _k_ < _len_ の間、繰り返す:
+            1. _Pk_ を ! ToString(𝔽(_k_)) とする。
+            1. _kPresent_ を ! HasProperty(_O_, _Pk_) とする。
+            1. _kPresent_ が *true* の場合、
+              1. _elementK_ を ! Get(_O_, _Pk_) とする。
+              1. IsStrictlyEqual(_searchElement_, _elementK_) が *true* の場合、𝔽(_k_) を返す。
+            1. _k_ を _k_ + 1 に設定する。
           1. *-1*<sub>𝔽</sub> を返す。
         </emu-alg>
         <p>汎用ではない。</p>
@@ -42546,36 +42687,33 @@ THH:mm:ss.sss
         <h1>_TypedArray_ ( ..._args_ )</h1>
         <p>各 _TypedArray_ コンストラクターは呼び出し時に以下を行う:</p>
         <emu-alg>
-          1. NewTarget が *undefined* なら *TypeError*。
-          1. _constructorName_ をこの <var>TypedArray</var> コンストラクターに対応する <emu-xref href="#table-the-typedarray-constructors"></emu-xref> の Constructor Name の String 値とする。
-          1. _proto_ = <code>"%<var>TypedArray</var>.prototype%"</code>。
-          1. _numberOfArgs_ = _args_ の要素数。
-          1. _numberOfArgs_ = 0 なら
-            1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0) を返す。
-          1. それ以外
-            1. _firstArgument_ = _args_[0]。
-            1. _firstArgument_ がオブジェクトなら
-              1. _O_ = ? AllocateTypedArray(_constructorName_, NewTarget, _proto_)。
-              1. _firstArgument_ が [[TypedArrayName]] を持つなら
-                1. ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_)。
-              1. そうでなく [[ArrayBufferData]] を持つなら
-                1. _numberOfArgs_ > 1 なら _byteOffset_ = _args_[1]; そうでなければ *undefined*。
-                1. _numberOfArgs_ > 2 なら _length_ = _args_[2]; そうでなければ *undefined*。
-                1. ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_)。
-              1. それ以外
-                1. アサート: _firstArgument_ はオブジェクトで [[TypedArrayName]] も [[ArrayBufferData]] も持たない。
-                1. _usingIterator_ = ? GetMethod(_firstArgument_, %Symbol.iterator%)。
-                1. _usingIterator_ が *undefined* でなければ
-                  1. _values_ = ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_))。
-                  1. ? InitializeTypedArrayFromList(_O_, _values_)。
-                1. そうでなければ
-                  1. 注: _firstArgument_ は iterable でないので配列ライクと仮定。
-                  1. ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_)。
-              1. _O_ を返す。
-            1. そうでなければ
-              1. アサート: _firstArgument_ はオブジェクトでない。
-              1. _elementLength_ = ? ToIndex(_firstArgument_)。
-              1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_) を返す。
+          1. NewTarget が *undefined* の場合、*TypeError* 例外を投げる。
+          1. _constructorName_ を、<emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定されたこの <var>TypedArray</var> コンストラクタの Constructor Name の文字列値とする。
+          1. _proto_ を <code>"%<var>TypedArray</var>.prototype%"</code> とする。
+          1. _numberOfArgs_ を _args_ の要素数とする。
+          1. _numberOfArgs_ = 0 なら、? AllocateTypedArray(_constructorName_, NewTarget, _proto_, 0) を返す。
+          1. _firstArgument_ を _args_[0] とする。
+          1. _firstArgument_ がオブジェクトなら、
+            1. _O_ を ? AllocateTypedArray(_constructorName_, NewTarget, _proto_) とする。
+            1. _firstArgument_ が [[TypedArrayName]] 内部スロットを持つ場合、
+              1. ? InitializeTypedArrayFromTypedArray(_O_, _firstArgument_) を実行する。
+            1. そうでなく、_firstArgument_ が [[ArrayBufferData]] 内部スロットを持つ場合、
+              1. _numberOfArgs_ > 1 のとき _byteOffset_ を _args_[1]、そうでなければ *undefined* とする。
+              1. _numberOfArgs_ > 2 のとき _length_ を _args_[2]、そうでなければ *undefined* とする。
+              1. ? InitializeTypedArrayFromArrayBuffer(_O_, _firstArgument_, _byteOffset_, _length_) を実行する。
+            1. それ以外の場合、
+              1. 断言: _firstArgument_ はオブジェクト、かつ [[TypedArrayName]] も [[ArrayBufferData]] も持たない。
+              1. _usingIterator_ を ? GetMethod(_firstArgument_, %Symbol.iterator%) とする。
+              1. _usingIterator_ が *undefined* でなければ、
+                1. _values_ を ? IteratorToList(? GetIteratorFromMethod(_firstArgument_, _usingIterator_)) とする。
+                1. ? InitializeTypedArrayFromList(_O_, _values_) を実行する。
+              1. それ以外の場合、
+                1. 注: _firstArgument_ はイテラブルでないので既に array-like オブジェクトとみなす。
+                1. ? InitializeTypedArrayFromArrayLike(_O_, _firstArgument_) を実行する。
+            1. _O_ を返す。
+          1. 断言: _firstArgument_ はオブジェクトではない。
+          1. _elementLength_ を ? ToIndex(_firstArgument_) とする。
+          1. ? AllocateTypedArray(_constructorName_, NewTarget, _proto_, _elementLength_) を返す。
         </emu-alg>
 
         <emu-clause id="sec-allocatetypedarray" type="abstract operation">
@@ -43043,21 +43181,18 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _chunkLength_ に _chunk_ の長さを設定する。
+          1. _chunkLength_ を _chunk_ の長さとする。
           1. _chunkLength_ = 2 の場合、
-            1. _chunk_ に _chunk_ と *"AA"* を連結する。
+            1. _chunk_ に *"AA"* を連結する。
           1. それ以外の場合、
-            1. アサート: _chunkLength_ は 3 である。
-            1. _chunk_ に _chunk_ と *"A"* を連結する。
-          1. _bytes_ に DecodeFullLengthBase64Chunk(_chunk_) を設定する。
+            1. 断言: _chunkLength_ は 3 である。
+            1. _chunk_ に *"A"* を連結する。
+          1. _bytes_ を DecodeFullLengthBase64Chunk(_chunk_) とする。
           1. _chunkLength_ = 2 の場合、
-            1. _throwOnExtraBits_ が *true* かつ _bytes_[1] ≠ 0 なら、
-              1. *SyntaxError* 例外をスローする。
+            1. _throwOnExtraBits_ が *true* かつ _bytes_[1] ≠ 0 なら、*SyntaxError* 例外を投げる。
             1. « _bytes_[0] » を返す。
-          1. それ以外の場合、
-            1. _throwOnExtraBits_ が *true* かつ _bytes_[2] ≠ 0 なら、
-              1. *SyntaxError* 例外をスローする。
-            1. « _bytes_[0], _bytes_[1] » を返す。
+          1. _throwOnExtraBits_ が *true* かつ _bytes_[2] ≠ 0 なら、*SyntaxError* 例外を投げる。
+          1. « _bytes_[0], _bytes_[1] » を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43088,81 +43223,82 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _maxLength_ が指定されていなければ、_maxLength_ に 2<sup>53</sup> - 1 を設定する。
-            1. 注: 入力が文字列であるため、文字列の長さは 2<sup>53</sup> - 1 に制限されており、出力は常に入力の文字数以下のバイト数となるため、この上限に達することはない。ただし編集上の都合で有限値を使用している。
-          1. 注: 以下のアルゴリズムにおける検証とデコードの順序は観測できない。実装は効率的な順序で（検証とデコードを組み合わせて）処理してよい。
+          1. _maxLength_ が指定されていなければ、
+            1. _maxLength_ を 2<sup>53</sup> - 1 に設定する。
+            1. 注: 入力が文字列であるため、文字列の長さは最大 2<sup>53</sup> - 1 文字であり、出力のバイト数が入力文字数を超えることはないので、この上限に達することは無い。しかし、編集上の便宜のため有限値を使う。
+          1. 注: この下記アルゴリズムの検証・デコードの順は観察されない。実装は最も効率的な順で検証とデコードを行ってよい（場合によっては交互に処理してもよい）。
           1. _maxLength_ = 0 の場合、
-            1. Record { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ } を返す。
-          1. _read_ に 0 を設定する。
-          1. _bytes_ に新しい空リストを設定する。
-          1. _chunk_ に空文字列を設定する。
-          1. _chunkLength_ に 0 を設定する。
-          1. _index_ に 0 を設定する。
-          1. _length_ に _string_ の長さを設定する。
+            1. レコード { [[Read]]: 0, [[Bytes]]: « », [[Error]]: ~none~ } を返す。
+          1. _read_ を 0 にする。
+          1. _bytes_ を新しい空のリストとする。
+          1. _chunk_ を空文字列とする。
+          1. _chunkLength_ を 0 にする。
+          1. _index_ を 0 にする。
+          1. _length_ を _string_ の長さとする。
           1. 繰り返す:
-            1. _index_ に SkipAsciiWhitespace(_string_, _index_) を設定する。
+            1. _index_ を SkipAsciiWhitespace(_string_, _index_) に設定する。
             1. _index_ = _length_ の場合、
               1. _chunkLength_ > 0 の場合、
-                1. _lastChunkHandling_ が *"stop-before-partial"* なら
-                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
-                1. それ以外で _lastChunkHandling_ が *"loose"* なら
-                  1. _chunkLength_ = 1 の場合
-                    1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-                  1. _bytes_ に _bytes_ と ! DecodeFinalBase64Chunk(_chunk_, *false*) を連結したリストを設定する。
-                1. それ以外の場合（_lastChunkHandling_ が *"strict"* であることをアサート）
-                  1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
-            1. _char_ に _string_ の _index_ から _index_ + 1 までの部分文字列を設定する。
-            1. _index_ を _index_ + 1 に設定する。
-            1. _char_ が *"="* の場合
-              1. _chunkLength_ &lt; 2 の場合
-                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-              1. _index_ に SkipAsciiWhitespace(_string_, _index_) を設定する。
-              1. _chunkLength_ = 2 の場合
-                1. _index_ = _length_ の場合
-                  1. _lastChunkHandling_ が *"stop-before-partial"* なら
-                    1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
-                  1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                  1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-                1. _char_ に _string_ の _index_ から _index_ + 1 までの部分文字列を設定する。
-                1. _char_ が *"="* の場合
-                  1. _index_ に SkipAsciiWhitespace(_string_, _index_ + 1) を設定する。
-              1. _index_ &lt; _length_ の場合
-                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-              1. _lastChunkHandling_ が *"strict"* の場合は _throwOnExtraBits_ に *true* を、そうでなければ *false* を設定する。
-              1. _decodeResult_ に Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_)) を設定する。
-              1. _decodeResult_ がアブストラクト完了であれば
-                1. _error_ に _decodeResult_.[[Value]] を設定する。
-                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-              1. _bytes_ に _bytes_ と ! _decodeResult_ を連結したリストを設定する。
-              1. Record { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
-            1. _alphabet_ が *"base64url"* の場合
-              1. _char_ が *"+"* または *"/"* のいずれかの場合
-                1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-              1. それ以外で _char_ が *"-"* の場合
-                1. _char_ に *"+"* を設定する。
-              1. それ以外で _char_ が *"_"* の場合
-                1. _char_ に *"/"* を設定する。
-            1. _char_ の唯一のコードユニットが標準 base64 アルファベットの要素でなければ
-              1. _error_ に新しく作成した *SyntaxError* オブジェクトを設定する。
-              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
-            1. _remaining_ に _maxLength_ から _bytes_ の要素数を引いた値を設定する。
-            1. _remaining_ = 1 かつ _chunkLength_ = 2 または _remaining_ = 2 かつ _chunkLength_ = 3 の場合
-              1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
-            1. _chunk_ に _chunk_ と _char_ を連結する。
-            1. _chunkLength_ に _chunk_ の長さを設定する。
-            1. _chunkLength_ = 4 の場合
-              1. _bytes_ に _bytes_ と DecodeFullLengthBase64Chunk(_chunk_) を連結したリストを設定する。
-              1. _chunk_ に空文字列を設定する。
-              1. _chunkLength_ に 0 を設定する。
-              1. _read_ に _index_ を設定する。
-              1. _bytes_ の要素数が _maxLength_ と等しい場合
-                1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+                1. _lastChunkHandling_ が *"stop-before-partial"* の場合、
+                  1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+                1. _lastChunkHandling_ が *"strict"* の場合、
+                  1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                  1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+                1. 断言: _lastChunkHandling_ は *"loose"* である。
+                1. _chunkLength_ = 1 の場合、
+                  1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                  1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+                1. _bytes_ を _bytes_ に ! DecodeFinalBase64Chunk(_chunk_, *false*) を連結したものに設定する。
+              1. レコード { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _char_ を _string_ の _index_ から _index_ + 1 の部分文字列とする。
+            1. _index_ を _index_ + 1 にする。
+            1. _char_ が *"="* の場合、
+              1. _chunkLength_ &lt; 2 の場合、
+                1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _index_ を SkipAsciiWhitespace(_string_, _index_) に設定する。
+              1. _chunkLength_ = 2 の場合、
+                1. _index_ = _length_ の場合、
+                  1. _lastChunkHandling_ が *"stop-before-partial"* の場合、
+                    1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+                  1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                  1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+                1. _char_ を _string_ の _index_ から _index_ + 1 の部分文字列とする。
+                1. _char_ が *"="* の場合、
+                  1. _index_ を SkipAsciiWhitespace(_string_, _index_ + 1) に設定する。
+              1. _index_ &lt; _length_ の場合、
+                1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _lastChunkHandling_ が *"strict"* なら _throwOnExtraBits_ を *true* とし、それ以外なら *false* とする。
+              1. _decodeResult_ を Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_)) とする。
+              1. _decodeResult_ がアブストラクト完了（例外等）の場合、
+                1. _error_ を _decodeResult_.[[Value]] とする。
+                1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. _bytes_ を _bytes_ に ! _decodeResult_ を連結したものに設定する。
+              1. レコード { [[Read]]: _length_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _alphabet_ が *"base64url"* の場合、
+              1. _char_ が *"+"* または *"/"* の場合、
+                1. _error_ を新しい *SyntaxError* オブジェクトとする。
+                1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+              1. それ以外の場合 _char_ が *"-"* の場合、
+                1. _char_ を *"+"* にする。
+              1. それ以外の場合 _char_ が *"_"* の場合、
+                1. _char_ を *"/"* にする。
+            1. _char_ の唯一のコードユニットが標準 base64 アルファベットの要素でない場合、
+              1. _error_ を新しい *SyntaxError* オブジェクトとする。
+              1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ } を返す。
+            1. _remaining_ を _maxLength_ から _bytes_ の要素数を引いた値とする。
+            1. _remaining_ = 1 かつ _chunkLength_ = 2 の場合、または _remaining_ = 2 かつ _chunkLength_ = 3 の場合、
+              1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
+            1. _chunk_ を _chunk_ と _char_ を連結したものに設定する。
+            1. _chunkLength_ を _chunk_ の長さとする。
+            1. _chunkLength_ = 4 の場合、
+              1. _bytes_ を _bytes_ に DecodeFullLengthBase64Chunk(_chunk_) を連結したものに設定する。
+              1. _chunk_ を空文字列に設定する。
+              1. _chunkLength_ を 0 に設定する。
+              1. _read_ を _index_ に設定する。
+              1. _bytes_ の要素数 = _maxLength_ の場合、
+                1. レコード { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: ~none~ } を返す。
         </emu-alg>
       </emu-clause>
 
@@ -44856,26 +44992,26 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値とする。
-          1. _isLittleEndian_ が *false* なら _rawBytes_ の要素順を反転する。
-          1. _type_ が ~float16~ なら
-            1. _value_ を _rawBytes_ のバイト要素を連結し IEEE 754-2019 binary16 値のリトルエンディアンビット列エンコーディングとして解釈したものとする。
-            1. _value_ が NaN なら *NaN* を返す。
+          1. _elementSize_ を、要素型 _type_ 用の <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定された要素サイズ値とする。
+          1. _isLittleEndian_ が *false* の場合、_rawBytes_ の要素の順序を逆にする。
+          1. _type_ が ~float16~ の場合、
+            1. _value_ を、_rawBytes_ のバイト要素を連結し、IEEE 754-2019 binary16値としてリトルエンディアンのビット列として解釈したものとする。
+            1. _value_ が NaN の場合、*NaN* を返す。
             1. _value_ に対応する Number 値を返す。
-          1. _type_ が ~float32~ なら
-            1. _value_ を _rawBytes_ のバイト要素を連結し IEEE 754-2019 binary32 値のリトルエンディアンビット列エンコーディングとして解釈したものとする。
-            1. _value_ が NaN なら *NaN*。
-            1. 対応する Number 値を返す。
-          1. _type_ が ~float64~ なら
-            1. _value_ を _rawBytes_ のバイト要素を連結し IEEE 754-2019 binary64 値のリトルエンディアンビット列エンコーディングとして解釈したものとする。
-            1. _value_ が NaN なら *NaN*。
-            1. 対応する Number 値を返す。
-          1. IsUnsignedElementType(_type_) が *true* なら
-            1. _intValue_ を _rawBytes_ のバイト要素を連結し符号なしリトルエンディアン 2 進数のビット列エンコーディングとして解釈したものとする。
-          1. そうでなければ
-            1. _intValue_ を _rawBytes_ のバイト要素を連結しビット長 _elementSize_ × 8 のリトルエンディアン 2 の補数表現として解釈したものとする。
-          1. IsBigIntElementType(_type_) が *true* なら _intValue_ に対応する BigInt 値を返す。
-          1. そうでなければ _intValue_ に対応する Number 値を返す。
+          1. _type_ が ~float32~ の場合、
+            1. _value_ を、_rawBytes_ のバイト要素を連結し、IEEE 754-2019 binary32値としてリトルエンディアンのビット列として解釈したものとする。
+            1. _value_ が NaN の場合、*NaN* を返す。
+            1. _value_ に対応する Number 値を返す。
+          1. _type_ が ~float64~ の場合、
+            1. _value_ を、_rawBytes_ のバイト要素を連結し、IEEE 754-2019 binary64値としてリトルエンディアンのビット列として解釈したものとする。
+            1. _value_ が NaN の場合、*NaN* を返す。
+            1. _value_ に対応する Number 値を返す。
+          1. IsUnsignedElementType(_type_) が *true* の場合、
+            1. _intValue_ を、_rawBytes_ のバイト要素を連結し、符号なしリトルエンディアンのバイナリ数値のビット列として解釈したものとする。
+          1. それ以外の場合、
+            1. _intValue_ を、_rawBytes_ のバイト要素を連結し、ビット長が _elementSize_ × 8 のリトルエンディアン2の補数のバイナリ数値のビット列として解釈したものとする。
+          1. IsBigIntElementType(_type_) が *true* の場合、_intValue_ に対応する BigInt 値を返す。
+          1. _intValue_ に対応する Number 値を返す。
         </emu-alg>
       </emu-clause>
 
@@ -44892,13 +45028,13 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _elementSize_ を、要素型 _type_ に対して <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定されている Element Size 値とする。
+          1. _elementSize_ を要素型 _type_ 用の <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定された要素サイズ値とする。
           1. _AR_ を周囲のエージェントの Agent Record とする。
           1. _execution_ を _AR_.[[CandidateExecution]] とする。
-          1. _eventsRecord_ を、_execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
-          1. もし _isTypedArray_ が *true* であり、かつ IsNoTearConfiguration(_type_, _order_) が *true* なら、_noTear_ を *true* とし、そうでなければ *false* とする。
-          1. _rawValue_ を、長さ _elementSize_ で要素が非決定的に選ばれたバイト値であるリストとする。
-          1. 注記: 実装において、_rawValue_ は基礎となるハードウェア上で非アトミックまたはアトミックな読み取り命令の結果となる。非決定性は、メモリモデルの意味的要請として、弱い一貫性を持つハードウェアの観測可能な動作を記述するためのものである。
+          1. _eventsRecord_ を _execution_.[[EventsRecords]] のうち [[AgentSignifier]] が AgentSignifier() である Agent Events Record とする。
+          1. _isTypedArray_ が *true* かつ IsNoTearConfiguration(_type_, _order_) が *true* の場合、_noTear_ を *true* にし、そうでなければ *false* にする。
+          1. _rawValue_ を、要素数 _elementSize_ の長さを持つ、非決定的に選択されたバイト値からなるリストとする。
+          1. 注: 実装では、_rawValue_ は下層ハードウェア上の非アトミックもしくはアトミックなリード命令の結果となる。非決定性は、弱整合性ハードウェアの観察可能動作を記述するためのメモリモデルの意味的処方である。
           1. _readEvent_ を ReadSharedMemory { [[Order]]: _order_, [[NoTear]]: _noTear_, [[Block]]: _block_, [[ByteIndex]]: _byteIndex_, [[ElementSize]]: _elementSize_ } とする。
           1. _readEvent_ を _eventsRecord_.[[EventList]] に追加する。
           1. Chosen Value Record { [[Event]]: _readEvent_, [[ChosenValue]]: _rawValue_ } を _execution_.[[ChosenValues]] に追加する。
@@ -44948,21 +45084,21 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _type_ が ~float16~ なら
-            1. _rawBytes_ を、_value_ を roundTiesToEven モードで IEEE 754-2019 binary16 形式に変換した結果の 2 バイトを要素とする List とする。バイトはリトルエンディアン順。_value_ が *NaN* の場合、_rawBytes_ は実装が選ぶ任意の IEEE 754-2019 binary16 NaN エンコーディングとなり得る。実装は区別可能な各 *NaN* 値に常に同じエンコーディングを選択しなければならない。
-          1. Else if _type_ が ~float32~ なら
-            1. 同様に 4 バイト (binary32)。
-          1. Else if _type_ が ~float64~ なら
-            1. 同様に 8 バイト (binary64)。
-          1. Else
-            1. _n_ を要素型 _type_ について <emu-xref href="#table-the-typedarray-constructors"></emu-xref> に指定された要素サイズ値とする。
-            1. _conversionOperation_ を <emu-xref href="#table-the-typedarray-constructors"></emu-xref> の変換操作列に _type_ について示された抽象操作とする。
+          1. _type_ が ~float16~ の場合、
+            1. _rawBytes_ を、_value_ を roundTiesToEven モードで IEEE 754-2019 binary16 形式に変換した結果の 2 バイトからなるリストとする。バイトはリトルエンディアン順に並べる。_value_ が *NaN* の場合、_rawBytes_ は実装が選択した IEEE 754-2019 binary16 形式の NaN エンコーディングに設定してよい。実装は実装で識別される *NaN* 値ごとに常に同じエンコーディングを選択しなければならない。
+          1. それ以外で _type_ が ~float32~ の場合、
+            1. _rawBytes_ を、_value_ を roundTiesToEven モードで IEEE 754-2019 binary32 形式に変換した結果の 4 バイトからなるリストとする。バイトはリトルエンディアン順に並べる。_value_ が *NaN* の場合、_rawBytes_ は実装が選択した IEEE 754-2019 binary32 形式の NaN エンコーディングに設定してよい。実装は実装で識別される *NaN* 値ごとに常に同じエンコーディングを選択しなければならない。
+          1. それ以外で _type_ が ~float64~ の場合、
+            1. _rawBytes_ を、_value_ の IEEE 754-2019 binary64 形式エンコーディングの 8 バイトからなるリストとする。バイトはリトルエンディアン順に並べる。_value_ が *NaN* の場合、_rawBytes_ は実装が選択した IEEE 754-2019 binary64 形式の NaN エンコーディングに設定してよい。実装は実装で識別される *NaN* 値ごとに常に同じエンコーディングを選択しなければならない。
+          1. それ以外の場合、
+            1. _n_ を要素型 _type_ 用の <emu-xref href="#table-the-typedarray-constructors"></emu-xref> で指定された Element Size 値とする。
+            1. _conversionOperation_ を、要素型 _type_ 用の <emu-xref href="#table-the-typedarray-constructors"></emu-xref> の「Conversion Operation」欄に記載された抽象演算とする。
             1. _intValue_ を ℝ(! _conversionOperation_(_value_)) とする。
-            1. _intValue_ ≥ 0 なら
-              1. _rawBytes_ を _intValue_ の _n_ バイト 2 進エンコーディング (リトルエンディアン) を要素とする List とする。
-            1. そうでなければ
-              1. _rawBytes_ を _intValue_ の _n_ バイト 2 の補数エンコーディング (リトルエンディアン) を要素とする List とする。
-          1. _isLittleEndian_ が *false* なら _rawBytes_ の順序を反転。
+            1. _intValue_ ≥ 0 の場合、
+              1. _rawBytes_ を _intValue_ の _n_ バイトバイナリエンコーディング（リトルエンディアン順）からなるリストとする。
+            1. それ以外の場合、
+              1. _rawBytes_ を _intValue_ の _n_ バイトバイナリ2の補数エンコーディング（リトルエンディアン順）からなるリストとする。
+          1. _isLittleEndian_ が *false* の場合、_rawBytes_ の要素の並び順を逆にする。
           1. _rawBytes_ を返す。
         </emu-alg>
       </emu-clause>
@@ -45162,7 +45298,8 @@ THH:mm:ss.sss
           1. _O_ を *this* 値。
           1. ? RequireInternalSlot(_O_, [[ArrayBufferData]])。
           1. IsSharedArrayBuffer(_O_) が *true* なら *TypeError* 例外。
-          1. IsFixedLengthArrayBuffer(_O_) が *false* なら *true* を返し、そうでなければ *false* を返す。
+          1. IsFixedLengthArrayBuffer(_O_) が *false* なら *true* を返し。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -45503,7 +45640,8 @@ THH:mm:ss.sss
           1. _O_ を *this* 値。
           1. ? RequireInternalSlot(_O_, [[ArrayBufferData]])。
           1. IsSharedArrayBuffer(_O_) が *false* なら *TypeError* 例外。
-          1. IsFixedLengthArrayBuffer(_O_) が *false* なら *true*、そうでなければ *false* を返す。
+          1. IsFixedLengthArrayBuffer(_O_) が *false* なら *true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -46528,8 +46666,10 @@ THH:mm:ss.sss
           1. _arrayTypeName_ が *"BigInt64Array"* の場合、_v_ を ? ToBigInt64(_value_) とする。
           1. それ以外の場合、_v_ を ? ToInt32(_value_) とする。
           1. _q_ を ? ToNumber(_timeout_) とする。
-          1. _q_ が *NaN* または *+∞*<sub>𝔽</sub> の場合、_t_ を +∞ とする。そうでなければ _q_ が *-∞*<sub>𝔽</sub> の場合、_t_ を 0 とする。それ以外は _t_ を max(ℝ(_q_), 0) とする。
-          1. _mode_ が ~sync~ かつ AgentCanSuspend() が *false* なら、*TypeError* 例外を投げる。
+          1. _q_ が *NaN* または *+∞*<sub>𝔽</sub> の場合、_t_ を +∞ とする。
+          1. それ以外で _q_ が *-∞*<sub>𝔽</sub> の場合、_t_ を 0 とする。
+          1. それ以外の場合、_t_ を max(ℝ(_q_), 0) とする。
+          1. _mode_ が ~sync~ かつ AgentCanSuspend() が *false* の場合、*TypeError* 例外を投げる。
           1. _block_ を _buffer_.[[ArrayBufferData]] とする。
           1. _WL_ を GetWaiterList(_block_, _byteIndexInBuffer_) とする。
           1. _mode_ が ~sync~ の場合、
@@ -46543,21 +46683,21 @@ THH:mm:ss.sss
           1. _w_ を GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~) とする。
           1. _v_ ≠ _w_ の場合、
             1. LeaveCriticalSection(_WL_) を実行する。
-            1. _mode_ が ~sync~ の場合、*"not-equal"* を返す。
+            1. _mode_ が ~sync~ なら *"not-equal"* を返す。
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行する。
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"not-equal"*) を実行する。
             1. _resultObject_ を返す。
           1. _t_ = 0 かつ _mode_ が ~async~ の場合、
-            1. 注記: 同期即時タイムアウトに対する特別な扱いはない。非同期即時タイムアウトは素早く失敗し不要な Promise ジョブを避けるために特別な扱いがなされる。
+            1. 注: 同期即時タイムアウトには特別な処理は行わない。非同期即時タイムアウトは高速失敗と不要な Promise ジョブ回避のために特別に処理される。
             1. LeaveCriticalSection(_WL_) を実行する。
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *false*) を実行する。
             1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, *"timed-out"*) を実行する。
             1. _resultObject_ を返す。
           1. _thisAgent_ を AgentSignifier() とする。
-          1. _now_ を現在時刻（UTC）の値とする。
-          1. _additionalTimeout_ を実装依存の非負の数学値とする。
+          1. _now_ を現在時刻（UTC）を識別する time value とする。
+          1. _additionalTimeout_ を実装定義の非負の数学的値とする。
           1. _timeoutTime_ を ℝ(_now_) + _t_ + _additionalTimeout_ とする。
-          1. 注記: _t_ が +∞ の場合、_timeoutTime_ も +∞ となる。
+          1. 注: _t_ が +∞ の場合、_timeoutTime_ も +∞ である。
           1. _waiterRecord_ を新しい Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* } とする。
           1. AddWaiter(_WL_, _waiterRecord_) を実行する。
           1. _mode_ が ~sync~ の場合、
@@ -46565,7 +46705,7 @@ THH:mm:ss.sss
           1. それ以外で _timeoutTime_ が有限の場合、
             1. EnqueueAtomicsWaitAsyncTimeoutJob(_WL_, _waiterRecord_) を実行する。
           1. LeaveCriticalSection(_WL_) を実行する。
-          1. _mode_ が ~sync~ の場合、_waiterRecord_.[[Result]] を返す。
+          1. _mode_ が ~sync~ なら _waiterRecord_.[[Result]] を返す。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"async"*, *true*) を実行する。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"value"*, _promiseCapability_.[[Promise]]) を実行する。
           1. _resultObject_ を返す。
@@ -46937,13 +47077,11 @@ THH:mm:ss.sss
       <emu-alg>
         1. _jsonString_ を ? ToString(_text_) とする。
         1. _unfiltered_ を ? ParseJSON(_jsonString_) とする。
-        1. もし IsCallable(_reviver_) が *true* なら
-          1. _root_ を OrdinaryObjectCreate(%Object.prototype%) とする。
-          1. _rootName_ を空文字列とする。
-          1. ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_) を実行する。
-          1. ? InternalizeJSONProperty(_root_, _rootName_, _reviver_) を返す。
-        1. それ以外
-          1. _unfiltered_ を返す。
+        1. IsCallable(_reviver_) が *false* の場合、_unfiltered_ を返す。
+        1. _root_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+        1. _rootName_ を空文字列とする。
+        1. ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_) を実行する。
+        1. ? InternalizeJSONProperty(_root_, _rootName_, _reviver_) を返す。
       </emu-alg>
       <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
 
@@ -48756,8 +48894,7 @@ THH:mm:ss.sss
             1. もし _value_ が abrupt completion なら
               1. ? Call(_capability_.[[Reject]], *undefined*, « _value_.[[Value]] ») を実行する。
               1. _capability_.[[Promise]] を返す。
-            1. それ以外
-              1. _value_ を ! _value_ に設定する。
+            1. _value_ を ! _value_ に設定する。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -49034,8 +49171,7 @@ THH:mm:ss.sss
             1. 事前条件: _promiseCapability_ は PromiseCapability Record である。
             1. もし _handlerResult_ が abrupt completion なら
               1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _handlerResult_.[[Value]] ») を返す。
-            1. それ以外
-              1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] ») を返す。
+            1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] ») を返す。
           1. _handlerRealm_ を *null* とする。
           1. もし _reaction_.[[Handler]] が ~empty~ でないなら
             1. _getHandlerRealmResult_ を Completion(GetFunctionRealm(_reaction_.[[Handler]].[[Callback]])) とする。
@@ -49606,37 +49742,35 @@ THH:mm:ss.sss
             <dd>_promise_ に対し _onFulfilled_ と _onRejected_ を確定時アクションとして “then” 操作を行う。_resultCapability_ が渡された場合、その Promise を更新して結果を格納する。渡されない場合、結果を不要とする仕様内部操作による呼び出しである。</dd>
           </dl>
           <emu-alg>
-            1. 事前条件: IsPromise(_promise_) は *true* である。
-            1. もし _resultCapability_ が存在しなければ
+            1. 断言: IsPromise(_promise_) は *true* である。
+            1. _resultCapability_ が存在しない場合、
               1. _resultCapability_ を *undefined* に設定する。
-            1. もし IsCallable(_onFulfilled_) が *false* なら
-              1. _onFulfilledJobCallback_ を ~empty~ とする。
-            1. それ以外
-              1. _onFulfilledJobCallback_ を HostMakeJobCallback(_onFulfilled_) とする。
-            1. もし IsCallable(_onRejected_) が *false* なら
-              1. _onRejectedJobCallback_ を ~empty~ とする。
-            1. それ以外
-              1. _onRejectedJobCallback_ を HostMakeJobCallback(_onRejected_) とする。
-            1. _fulfillReaction_ を PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ } とする。
-            1. _rejectReaction_ を PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ } とする。
-            1. もし _promise_.[[PromiseState]] が ~pending~ なら
+            1. IsCallable(_onFulfilled_) が *false* の場合、
+              1. _onFulfilledJobCallback_ を ~empty~ にする。
+            1. それ以外の場合、
+              1. _onFulfilledJobCallback_ を HostMakeJobCallback(_onFulfilled_) にする。
+            1. IsCallable(_onRejected_) が *false* の場合、
+              1. _onRejectedJobCallback_ を ~empty~ にする。
+            1. それ以外の場合、
+              1. _onRejectedJobCallback_ を HostMakeJobCallback(_onRejected_) にする。
+            1. _fulfillReaction_ を PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~fulfill~, [[Handler]]: _onFulfilledJobCallback_ } にする。
+            1. _rejectReaction_ を PromiseReaction Record { [[Capability]]: _resultCapability_, [[Type]]: ~reject~, [[Handler]]: _onRejectedJobCallback_ } にする。
+            1. _promise_.[[PromiseState]] が ~pending~ の場合、
               1. _fulfillReaction_ を _promise_.[[PromiseFulfillReactions]] に追加する。
               1. _rejectReaction_ を _promise_.[[PromiseRejectReactions]] に追加する。
-            1. それ以外で _promise_.[[PromiseState]] が ~fulfilled~ なら
-              1. _value_ を _promise_.[[PromiseResult]] とする。
-              1. _fulfillJob_ を NewPromiseReactionJob(_fulfillReaction_, _value_) とする。
+            1. それ以外で _promise_.[[PromiseState]] が ~fulfilled~ の場合、
+              1. _value_ を _promise_.[[PromiseResult]] にする。
+              1. _fulfillJob_ を NewPromiseReactionJob(_fulfillReaction_, _value_) にする。
               1. HostEnqueuePromiseJob(_fulfillJob_.[[Job]], _fulfillJob_.[[Realm]]) を実行する。
-            1. それ以外
-              1. 事前条件: _promise_.[[PromiseState]] は ~rejected~ である。
-              1. _reason_ を _promise_.[[PromiseResult]] とする。
-              1. もし _promise_.[[PromiseIsHandled]] が *false* なら HostPromiseRejectionTracker(_promise_, *"handle"*) を実行する。
-              1. _rejectJob_ を NewPromiseReactionJob(_rejectReaction_, _reason_) とする。
+            1. それ以外の場合、
+              1. 断言: _promise_.[[PromiseState]] は ~rejected~ である。
+              1. _reason_ を _promise_.[[PromiseResult]] にする。
+              1. _promise_.[[PromiseIsHandled]] が *false* の場合、HostPromiseRejectionTracker(_promise_, *"handle"*) を実行する。
+              1. _rejectJob_ を NewPromiseReactionJob(_rejectReaction_, _reason_) にする。
               1. HostEnqueuePromiseJob(_rejectJob_.[[Job]], _rejectJob_.[[Realm]]) を実行する。
             1. _promise_.[[PromiseIsHandled]] を *true* に設定する。
-            1. もし _resultCapability_ が *undefined* なら
-              1. *undefined* を返す。
-            1. それ以外
-              1. _resultCapability_.[[Promise]] を返す。
+            1. _resultCapability_ が *undefined* の場合、*undefined* を返す。
+            1. _resultCapability_.[[Promise]] を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -50173,7 +50307,7 @@ THH:mm:ss.sss
           1. もし _genContext_ が Generator コンポーネントを持たなければ ~non-generator~ を返す。
           1. _generator_ を _genContext_ の Generator コンポーネントとする。
           1. もし _generator_ が [[AsyncGeneratorState]] 内部スロットを持てば ~async~ を返す。
-          1. それ以外は ~sync~ を返す。
+          1. ~sync~ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -50212,7 +50346,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _generatorKind_ を GetGeneratorKind() とする。
           1. もし _generatorKind_ が ~async~ なら ? AsyncGeneratorYield(? Await(_value_)) を返す。
-          1. それ以外は ? GeneratorYield(CreateIteratorResultObject(_value_, *false*)) を返す。
+          1. ? GeneratorYield(CreateIteratorResultObject(_value_, *false*)) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -50580,13 +50714,12 @@ THH:mm:ss.sss
             1. _toYield_ を _queue_ の先頭要素とする。
             1. _resumptionValue_ を Completion(_toYield_.[[Completion]]) とする。
             1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) を返す。
-          1. それ以外
-            1. _generator_.[[AsyncGeneratorState]] を ~suspended-yield~ に設定する。
-            1. _genContext_ を実行コンテキストスタックから除去し、頂上の実行コンテキストを実行中として復元する。
-            1. _callerContext_ を実行中の実行コンテキストとする。
-            1. _callerContext_ を *undefined* を渡して再開する。もし _genContext_ が再度再開されるなら _resumptionValue_ をその Completion Record とする。
-            1. 事前条件: ここに到達したとき _genContext_ が再び実行中。
-            1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) を返す。
+          1. _generator_.[[AsyncGeneratorState]] を ~suspended-yield~ に設定する。
+          1. _genContext_ を実行コンテキストスタックから除去し、頂上の実行コンテキストを実行中として復元する。
+          1. _callerContext_ を実行中の実行コンテキストとする。
+          1. _callerContext_ を *undefined* を渡して再開する。もし _genContext_ が再度再開されるなら _resumptionValue_ をその Completion Record とする。
+          1. 事前条件: ここに到達したとき _genContext_ が再び実行中。
+          1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -50650,10 +50783,9 @@ THH:mm:ss.sss
             1. もし _completion_ が return completion なら
               1. AsyncGeneratorAwaitReturn(_generator_) を実行。
               1. ~unused~ を返す。
-            1. それ以外
-              1. もし _completion_ が normal completion なら
-                1. _completion_ を NormalCompletion(*undefined*) に設定。
-              1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) を実行。
+            1. もし _completion_ が normal completion なら
+              1. _completion_ を NormalCompletion(*undefined*) に設定。
+            1. AsyncGeneratorCompleteStep(_generator_, _completion_, *true*) を実行。
           1. _generator_.[[AsyncGeneratorState]] を ~completed~ に設定。
           1. ~unused~ を返す。
         </emu-alg>
