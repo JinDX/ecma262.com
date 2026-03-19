@@ -82,40 +82,40 @@
 
 // const perPage = 100;
 
-// const legacyCommitsWithUnknownAuthors = new Set([
-// 	'6e2f689b1bcecaf59f5e7c76e544443ffe4ed299',
-// 	'a103b287cd19bdc51c7a3d8d7c1431b1506a74e2',
-// 	'2527be4344c78e5ed56aef8e08463160f5bb2154',
-// 	'5c9f191c9e6ccfc909817510bf74fd64ea145ac4',
-// 	'8710d2b2a8906d0d41e90cfcb9f47573d8d573fb',
-// 	'0b89915d3ccbf372e8114d823688d74e7778bfdb',
-// 	'4374762005846b779d1cc4f03aeababe41af0e79',
-// 	'676dae0955b072a31b05eafdab17dfcd8f7b4975',
-// 	'2724be0f9aeb6265c60935334a3bdc293b2c4b4e',
-// 	'1c6fb24ef7b29558593ce6fd4310c3bc4fe67d82',
-// 	'dcc9584e642b55b8a99df91f2e80d065e3d2451c',
-// 	'daef7b05b2625caf06ab546acd6eb654e9777d16',
-// 	'eb0615ea028000d84f3d5dcd9d94a74558d3a206',
-// 	'50ec9b4195df6caf4da2352e0edb19024b515f2d',
-// 	'8d7995d6f7538534f2a54af4811c939ac8614676',
-// 	'1046a423adf3ea9c5460cdbdf3a9c156f52f1632',
-// 	'cdf5865b7da09cce276581f134349e24d2b6c199',
-// 	'b7d01876c19751e4c75d9910ce4fb2e0d1dc45fa',
-// 	'cc46cc38b9374d13f958cc6992daaec73d5fbecd',
-// 	'f424bf075fe582ed8acc36e8a420ee713a21561a', // https://github.com/tc39/ecma262/pull/3142
-// 	'bea8d0d682fcf2be2a29564bd2ae66ab9dcce21c', // https://github.com/tc39/ecma262/pull/612, user deleted their github
-// 	'329069469609d8f05ad64c328e2295c171050ce4', // https://github.com/tc39/ecma262/pull/3249, commit email doesn't point to the github user
-// 	'57f427b18bf7e629565ac2fcf2392ba7b7d0d8fb', // https://github.com/tc39/ecma262/pull/3127, user account deactivated
-// 	'aada40840dc152d4759b0e3353542e971db08ee7', // tutizaraz (signed) renamed their account to riwom -> dbarabashh
-// 	'57f427b18bf7e629565ac2fcf2392ba7b7d0d8fb', // https://github.com/tc39/ecma262/pull/3377, bojavou has not signed the form
-// 	'f55b180957aa626ef8f87311e2e3b469dff0bf17', // rbuckton, microsoft email detached
-// 	'fc03120c4abd8883b424a3864040f9101c022c24', // rbuckton, microsoft email detached
-// 	'0209d8571b41e1c7dd18befd2ba45312680d6fcd', // rbuckton, microsoft email detached
-// 	'51e28c71cea1c73e3f22a007a058ebbf5ebc06aa', // rbuckton, microsoft email detached
-// 	'aab1ea3bd4d03c85d6f4a91503b4169346ab7271', // rbuckton, microsoft email detached
-// 	'94c6c6be7e694083393ac8cf1ee8dc8189ce8005', // https://github.com/tc39/ecma262/pull/2331, user account deactivated
-
-// ]);
+const legacyCommitsWithUnknownAuthors = new Set([
+	'6e2f689b1bcecaf59f5e7c76e544443ffe4ed299',
+	'a103b287cd19bdc51c7a3d8d7c1431b1506a74e2',
+	'2527be4344c78e5ed56aef8e08463160f5bb2154',
+	'5c9f191c9e6ccfc909817510bf74fd64ea145ac4',
+	'8710d2b2a8906d0d41e90cfcb9f47573d8d573fb',
+	'0b89915d3ccbf372e8114d823688d74e7778bfdb',
+	'4374762005846b779d1cc4f03aeababe41af0e79',
+	'676dae0955b072a31b05eafdab17dfcd8f7b4975',
+	'2724be0f9aeb6265c60935334a3bdc293b2c4b4e',
+	'1c6fb24ef7b29558593ce6fd4310c3bc4fe67d82',
+	'dcc9584e642b55b8a99df91f2e80d065e3d2451c',
+	'daef7b05b2625caf06ab546acd6eb654e9777d16',
+	'eb0615ea028000d84f3d5dcd9d94a74558d3a206',
+	'50ec9b4195df6caf4da2352e0edb19024b515f2d',
+	'8d7995d6f7538534f2a54af4811c939ac8614676',
+	'1046a423adf3ea9c5460cdbdf3a9c156f52f1632',
+	'cdf5865b7da09cce276581f134349e24d2b6c199',
+	'b7d01876c19751e4c75d9910ce4fb2e0d1dc45fa',
+	'cc46cc38b9374d13f958cc6992daaec73d5fbecd',
+	'f424bf075fe582ed8acc36e8a420ee713a21561a', // https://github.com/tc39/ecma262/pull/3142
+	'bea8d0d682fcf2be2a29564bd2ae66ab9dcce21c', // https://github.com/tc39/ecma262/pull/612, user deleted their github
+	'329069469609d8f05ad64c328e2295c171050ce4', // https://github.com/tc39/ecma262/pull/3249, commit email doesn't point to the github user
+	'57f427b18bf7e629565ac2fcf2392ba7b7d0d8fb', // https://github.com/tc39/ecma262/pull/3127, user account deactivated
+	'aada40840dc152d4759b0e3353542e971db08ee7', // tutizaraz (signed) renamed their account to riwom -> dbarabashh
+	'57f427b18bf7e629565ac2fcf2392ba7b7d0d8fb', // https://github.com/tc39/ecma262/pull/3377, bojavou has not signed the form
+	'f55b180957aa626ef8f87311e2e3b469dff0bf17', // rbuckton, microsoft email detached
+	'fc03120c4abd8883b424a3864040f9101c022c24', // rbuckton, microsoft email detached
+	'0209d8571b41e1c7dd18befd2ba45312680d6fcd', // rbuckton, microsoft email detached
+	'51e28c71cea1c73e3f22a007a058ebbf5ebc06aa', // rbuckton, microsoft email detached
+	'aab1ea3bd4d03c85d6f4a91503b4169346ab7271', // rbuckton, microsoft email detached
+	'94c6c6be7e694083393ac8cf1ee8dc8189ce8005', // https://github.com/tc39/ecma262/pull/2331, user account deactivated
+	'4895a117eb54edd829f2010092bae8f41c2b174a', // hriztam, https://github.com/tc39/ecma262/pull/3760
+]);
 
 // function getAuthorFromCommit(commitObj) {
 // 	if (!commitObj) {
