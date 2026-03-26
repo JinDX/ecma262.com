@@ -1,7 +1,7 @@
 <!doctype html><html lang="ja-JP">
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2026 言語仕様"><meta property="og:description" content="はじめに
   このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第十七版です。ECMAScriptは複数の起源技術に基づいており、最もよく知られているのは JavaScript（Netscape） と JScript（Microsoft）です。この言語は Netscape の Brendan Eich によって発明され、同社の Navigator 2.0 ブラウザで初めて登場しました。その後のすべての Netscape ブラウザおよび Microsoft の Internet Explorer 3.0 以降のすべてのブラウザに搭載され">
-<script src="..\assets\js\multipage.js?cache=qsv7Hhap" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<script src="..\assets\js\multipage.js?cache=w3exH9WJ" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
@@ -153,7 +153,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2026 言語仕様</title><script src="..\assets\js\ecmarkup.js?cache=xRQnY3Bl" defer=""></script><style>
+<title>ECMAScript® 2026 言語仕様</title><script src="..\assets\js\ecmarkup.js?cache=6aohS5UW" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -436,7 +436,7 @@
   <li><span>Jump to the most recent link target</span><code>`</code></li>
 </ul></div><div id='spec-container'><emu-clause id="sec-ecmascript-standard-built-in-objects">
   <h1><span class="secnum">18</span> ECMAScript 標準組み込みオブジェクト</h1>
-  <p>ECMAScript の <emu-nt id="_ref_17901"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_17902"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> が実行を開始するとき、特定の組み込みオブジェクトが利用可能である。1 つは<emu-xref href="#sec-global-object" id="_ref_5877"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>で、実行中プログラムのグローバル環境の一部である。その他は<emu-xref href="#sec-global-object" id="_ref_5878"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>の初期プロパティ、またはアクセス可能な組み込みオブジェクトのプロパティとして間接的にアクセスできる。</p>
+  <p>ECMAScript の <emu-nt id="_ref_17900"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_17901"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> が実行を開始するとき、特定の組み込みオブジェクトが利用可能である。1 つは<emu-xref href="#sec-global-object" id="_ref_5877"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>で、実行中プログラムのグローバル環境の一部である。その他は<emu-xref href="#sec-global-object" id="_ref_5878"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>の初期プロパティ、またはアクセス可能な組み込みオブジェクトのプロパティとして間接的にアクセスできる。</p>
   <p>特に規定がない限り、関数として呼び出し可能な組み込みオブジェクトは <emu-xref href="#sec-built-in-function-objects" id="_ref_524"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> に記述される特性を持つ組み込み<emu-xref href="#function-object" id="_ref_5879"><a href="ecmascript-data-types-and-values.html#function-object">関数オブジェクト</a></emu-xref>である。特に規定がない限り、組み込みオブジェクトの <var class="field">[[Extensible]]</var> 内部スロットは初期値 <emu-val>true</emu-val> を持つ。すべての組み込み<emu-xref href="#function-object" id="_ref_5880"><a href="ecmascript-data-types-and-values.html#function-object">関数オブジェクト</a></emu-xref>は、そのオブジェクトが最初に生成されたレルムの <emu-xref href="#realm-record" id="_ref_5881"><a href="executable-code-and-execution-contexts.html#realm-record">Realm Record</a></emu-xref> を値とする <var class="field">[[Realm]]</var> 内部スロットを持つ。</p>
   <p>多くの組み込みオブジェクトは関数であり、引数付きで呼び出すことができる。そのうちいくつかは<emu-xref href="#constructor" id="_ref_5882"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>でもあり、<code>new</code> 演算子とともに使用されることを意図した関数である。各組み込み関数について、本仕様はその関数が要求する引数およびその<emu-xref href="#function-object" id="_ref_5883"><a href="ecmascript-data-types-and-values.html#function-object">関数オブジェクト</a></emu-xref>のプロパティを記述する。各組み込み<emu-xref href="#constructor" id="_ref_5884"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>については、さらにその<emu-xref href="#constructor" id="_ref_5885"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>のプロトタイプオブジェクトのプロパティと、その<emu-xref href="#constructor" id="_ref_5886"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>を呼び出す <code>new</code> 式が返す特定オブジェクトインスタンスのプロパティを記述する。</p>
   <p>特に規定がない限り、ある関数または<emu-xref href="#constructor" id="_ref_5887"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>が規定されたより少ない個数の引数を与えられた場合、その関数または<emu-xref href="#constructor" id="_ref_5888"><a href="ecmascript-data-types-and-values.html#constructor">コンストラクタ</a></emu-xref>は不足引数（各々 <emu-val>undefined</emu-val> 値）を与えられたかのように正確に動作しなければならない。これら不足引数は「存在しない (not present)」ものと見なされ、仕様アルゴリズムによってそのように識別され得る。個別の関数の記述において、用語 “<emu-val>this</emu-val> value” および “NewTarget” は <emu-xref href="#sec-built-in-function-objects" id="_ref_525"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> に示される意味を持つ。</p>

@@ -12771,7 +12771,7 @@
               1. 若 _Desc_ 含 [[Enumerable]]，令 _enumerable_ 为 _Desc_.[[Enumerable]]；否则令 _enumerable_ 为 _current_.[[Enumerable]]。
               1. 用一个数据属性替换对象 _O_ 上名为 _P_ 的属性，其 [[Configurable]]、[[Enumerable]] 分别设为 _configurable_、_enumerable_，其 [[Value]]、[[Writable]] 特性若 _Desc_ 含该字段则取其值，否则取该特性的 <emu-xref href="#table-object-property-attributes">默认值</emu-xref>。
             1. 否则，
-              1. 对 _Desc_ 的每个字段，将对象 _O_ 上名为 _P_ 的属性对应特性设为该字段的值。
+              1. 对于 _Desc_ 的每个字段名 _F_，将对象 _O_ 的属性 _P_ 的名为 _F_ 的特性设置为 _Desc_ 的字段 _F_ 的值。
           1. 返回 *true*。
         </emu-alg>
       </emu-clause>
@@ -48384,26 +48384,26 @@ THH:mm:ss.sss
       <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions（
-            _toResolve_：一个 Promise，
-          ）：一个具有字段 [[Resolve]]（函数对象）和 [[Reject]]（函数对象）的 Record
+            _toResolve_：一个 Promise,
+          ）：一个含有 [[Resolve]]（一个函数对象）和 [[Reject]]（一个函数对象）字段的 Record
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
           1. 令 _promiseOrEmpty_ 为 Record { [[Value]]: _toResolve_ }。
-          1. 令 _resolveSteps_ 为一个新的抽象闭包，其参数为 (_resolution_)，捕获 _promiseOrEmpty_，并在调用时执行以下步骤：
+          1. 令 _resolveSteps_ 为一个新的抽象闭包，带参数（_resolution_），捕获 _promiseOrEmpty_ 并在调用时执行以下步骤：
             1. 如果 _promiseOrEmpty_.[[Value]] 是 ~empty~，返回 *undefined*。
             1. 令 _promise_ 为 _promiseOrEmpty_.[[Value]]。
             1. 设 _promiseOrEmpty_.[[Value]] 为 ~empty~。
             1. 如果 SameValue(_resolution_, _promise_) 为 *true*，则
-              1. 令 _selfResolutionError_ 为新创建的 *TypeError* 对象。
+              1. 令 _selfResolutionError_ 为新建的 *TypeError* 对象。
               1. 执行 RejectPromise(_promise_, _selfResolutionError_)。
               1. 返回 *undefined*。
-            1. 如果 _resolution_ 不是一个 Object，则
+            1. 如果 _resolution_ 不是一个对象，则
               1. 执行 FulfillPromise(_promise_, _resolution_)。
               1. 返回 *undefined*。
             1. 令 _then_ 为 Completion(Get(_resolution_, *"then"*))。
-            1. 如果 _then_ 是一个突变完成，则
+            1. 如果 _then_ 是突然完成，则
               1. 执行 RejectPromise(_promise_, _then_.[[Value]])。
               1. 返回 *undefined*。
             1. 令 _thenAction_ 为 _then_.[[Value]]。
@@ -48415,7 +48415,7 @@ THH:mm:ss.sss
             1. 执行 HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])。
             1. 返回 *undefined*。
           1. 令 _resolve_ 为 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)。
-          1. 令 _rejectSteps_ 为一个新的抽象闭包，其参数为 (_reason_)，捕获 _promiseOrEmpty_，并在调用时执行以下步骤：
+          1. 令 _rejectSteps_ 为一个新的抽象闭包，带参数（_reason_），捕获 _promiseOrEmpty_ 并在调用时执行以下步骤：
             1. 如果 _promiseOrEmpty_.[[Value]] 是 ~empty~，返回 *undefined*。
             1. 令 _promise_ 为 _promiseOrEmpty_.[[Value]]。
             1. 设 _promiseOrEmpty_.[[Value]] 为 ~empty~。

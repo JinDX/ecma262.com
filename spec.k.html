@@ -12812,7 +12812,7 @@
               1. _Desc_ 에 [[Enumerable]] 필드가 있으면 _enumerable_ 을 그 값으로, 아니면 _current_.[[Enumerable]] 로 둔다.
               1. 객체 _O_ 의 이름 _P_ 인 프로퍼티를 데이터 프로퍼티로 교체하되 [[Configurable]] 과 [[Enumerable]] 은 각각 _configurable_, _enumerable_ 로, [[Value]], [[Writable]] 은 _Desc_ 에 해당 필드가 있으면 그 값, 아니면 <emu-xref href="#table-object-property-attributes">기본값</emu-xref> 로 설정.
             1. Else
-              1. _Desc_ 의 각 필드에 대해 객체 _O_ 의 이름 _P_ 인 프로퍼티의 대응 속성을 그 필드 값으로 설정.
+              1. _Desc_의 각 필드 이름 _F_에 대해, 객체 _O_의 속성 이름 _P_의 속성 중 이름이 _F_인 특성(attribute)을 _Desc_의 _F_ 필드 값으로 설정한다.
           1. *true* 반환.
         </emu-alg>
       </emu-clause>
@@ -48481,38 +48481,38 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _promiseOrEmpty_를 레코드 { [[Value]]: _toResolve_ }로 설정한다.
-          1. _resolveSteps_를 (_resolution_) 파라미터를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 설정하고, 호출 시 다음 작업을 수행한다:
-            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면 *undefined*를 반환한다.
-            1. _promise_를 _promiseOrEmpty_.[[Value]]로 설정한다.
+          1. _promiseOrEmpty_를 레코드 { [[Value]]: _toResolve_ }로 둔다.
+          1. _resolveSteps_를 매개변수 (_resolution_)를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 두고, 호출 시 다음 단계를 수행한다:
+            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면, *undefined*를 반환한다.
+            1. _promise_를 _promiseOrEmpty_.[[Value]]로 둔다.
             1. _promiseOrEmpty_.[[Value]]를 ~empty~로 설정한다.
             1. SameValue(_resolution_, _promise_)가 *true*이면,
-              1. _selfResolutionError_를 새로 생성된 *TypeError* 객체로 설정한다.
+              1. _selfResolutionError_를 새로 생성된 *TypeError* 객체로 둔다.
               1. RejectPromise(_promise_, _selfResolutionError_)를 수행한다.
               1. *undefined*를 반환한다.
             1. _resolution_이 객체가 아니면,
               1. FulfillPromise(_promise_, _resolution_)을 수행한다.
               1. *undefined*를 반환한다.
-            1. _then_을 Completion(Get(_resolution_, *"then"*))으로 설정한다.
+            1. _then_을 Completion(Get(_resolution_, *"then"*));로 둔다.
             1. _then_이 abrupt completion이면,
               1. RejectPromise(_promise_, _then_.[[Value]])를 수행한다.
               1. *undefined*를 반환한다.
-            1. _thenAction_을 _then_.[[Value]]로 설정한다.
+            1. _thenAction_을 _then_.[[Value]]로 둔다.
             1. IsCallable(_thenAction_)이 *false*이면,
               1. FulfillPromise(_promise_, _resolution_)을 수행한다.
               1. *undefined*를 반환한다.
-            1. _thenJobCallback_을 HostMakeJobCallback(_thenAction_)으로 설정한다.
-            1. _job_을 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)으로 설정한다.
+            1. _thenJobCallback_을 HostMakeJobCallback(_thenAction_)으로 둔다.
+            1. _job_을 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)으로 둔다.
             1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])을 수행한다.
             1. *undefined*를 반환한다.
-          1. _resolve_를 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)으로 설정한다.
-          1. _rejectSteps_를 (_reason_) 파라미터를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 설정하고, 호출 시 다음 작업을 수행한다:
-            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면 *undefined*를 반환한다.
-            1. _promise_를 _promiseOrEmpty_.[[Value]]로 설정한다.
+          1. _resolve_를 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)로 둔다.
+          1. _rejectSteps_를 매개변수 (_reason_)를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 두고, 호출 시 다음 단계를 수행한다:
+            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면, *undefined*를 반환한다.
+            1. _promise_를 _promiseOrEmpty_.[[Value]]로 둔다.
             1. _promiseOrEmpty_.[[Value]]를 ~empty~로 설정한다.
             1. RejectPromise(_promise_, _reason_)을 수행한다.
             1. *undefined*를 반환한다.
-          1. _reject_를 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)으로 설정한다.
+          1. _reject_를 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)로 둔다.
           1. 레코드 { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }를 반환한다.
         </emu-alg>
       </emu-clause>
