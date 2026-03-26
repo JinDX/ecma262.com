@@ -48383,44 +48383,46 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
-          创建解析函数 (
-            _promise_: 一个 Promise,
-          ): 一个包含字段 [[Resolve]]（函数对象）和 [[Reject]]（函数对象）的记录
+          CreateResolvingFunctions（
+            _toResolve_：一个 Promise，
+          ）：一个具有字段 [[Resolve]]（函数对象）和 [[Reject]]（函数对象）的 Record
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 让 _alreadyResolved_ 为记录 { [[Value]]: *false* }。
-          1. 让 _resolveSteps_ 为一个带参数 (_resolution_) 的新抽象闭包，捕获 _promise_ 和 _alreadyResolved_，被调用时执行以下步骤：
-            1. 如果 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
-            1. 设置 _alreadyResolved_.[[Value]] 为 *true*。
+          1. 令 _promiseOrEmpty_ 为 Record { [[Value]]: _toResolve_ }。
+          1. 令 _resolveSteps_ 为一个新的抽象闭包，其参数为 (_resolution_)，捕获 _promiseOrEmpty_，并在调用时执行以下步骤：
+            1. 如果 _promiseOrEmpty_.[[Value]] 是 ~empty~，返回 *undefined*。
+            1. 令 _promise_ 为 _promiseOrEmpty_.[[Value]]。
+            1. 设 _promiseOrEmpty_.[[Value]] 为 ~empty~。
             1. 如果 SameValue(_resolution_, _promise_) 为 *true*，则
-              1. 让 _selfResolutionError_ 为新建的 *TypeError* 对象。
+              1. 令 _selfResolutionError_ 为新创建的 *TypeError* 对象。
               1. 执行 RejectPromise(_promise_, _selfResolutionError_)。
               1. 返回 *undefined*。
-            1. 如果 _resolution_ 不是对象，则
+            1. 如果 _resolution_ 不是一个 Object，则
               1. 执行 FulfillPromise(_promise_, _resolution_)。
               1. 返回 *undefined*。
-            1. 让 _then_ 为 Completion(Get(_resolution_, *"then"*))。
-            1. 如果 _then_ 是突变完成，则
+            1. 令 _then_ 为 Completion(Get(_resolution_, *"then"*))。
+            1. 如果 _then_ 是一个突变完成，则
               1. 执行 RejectPromise(_promise_, _then_.[[Value]])。
               1. 返回 *undefined*。
-            1. 让 _thenAction_ 为 _then_.[[Value]]。
+            1. 令 _thenAction_ 为 _then_.[[Value]]。
             1. 如果 IsCallable(_thenAction_) 为 *false*，则
               1. 执行 FulfillPromise(_promise_, _resolution_)。
               1. 返回 *undefined*。
-            1. 让 _thenJobCallback_ 为 HostMakeJobCallback(_thenAction_)。
-            1. 让 _job_ 为 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)。
+            1. 令 _thenJobCallback_ 为 HostMakeJobCallback(_thenAction_)。
+            1. 令 _job_ 为 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)。
             1. 执行 HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])。
             1. 返回 *undefined*。
-          1. 让 _resolve_ 为 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)。
-          1. 让 _rejectSteps_ 为一个带参数 (_reason_) 的新抽象闭包，捕获 _promise_ 和 _alreadyResolved_，被调用时执行以下步骤：
-            1. 如果 _alreadyResolved_.[[Value]] 为 *true*，返回 *undefined*。
-            1. 设置 _alreadyResolved_.[[Value]] 为 *true*。
+          1. 令 _resolve_ 为 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)。
+          1. 令 _rejectSteps_ 为一个新的抽象闭包，其参数为 (_reason_)，捕获 _promiseOrEmpty_，并在调用时执行以下步骤：
+            1. 如果 _promiseOrEmpty_.[[Value]] 是 ~empty~，返回 *undefined*。
+            1. 令 _promise_ 为 _promiseOrEmpty_.[[Value]]。
+            1. 设 _promiseOrEmpty_.[[Value]] 为 ~empty~。
             1. 执行 RejectPromise(_promise_, _reason_)。
             1. 返回 *undefined*。
-          1. 让 _reject_ 为 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)。
-          1. 返回记录 { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }。
+          1. 令 _reject_ 为 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)。
+          1. 返回 Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }。
         </emu-alg>
       </emu-clause>
 

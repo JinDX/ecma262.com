@@ -49032,43 +49032,45 @@ THH:mm:ss.sss
       <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions (
-            _promise_: a Promise,
-          ): [[Resolve]]（関数オブジェクト）と[[Reject]]（関数オブジェクト）のフィールドを持つレコードを返す
+            _toResolve_: Promise 型の値,
+          ): フィールド [[Resolve]]（関数オブジェクト）と [[Reject]]（関数オブジェクト）を持つ Record
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _alreadyResolved_ に Record { [[Value]]: *false* } を設定する。
-          1. _resolveSteps_ に、パラメーターを（_resolution_）とし、_promise_ と _alreadyResolved_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャを設定する:
-            1. _alreadyResolved_.[[Value]] が *true* である場合、*undefined* を返す。
-            1. _alreadyResolved_.[[Value]] を *true* に設定する。
-            1. SameValue(_resolution_, _promise_) が *true* である場合、次を行う:
-              1. _selfResolutionError_ に新たに作成された *TypeError* オブジェクトを設定する。
+          1. _promiseOrEmpty_ を Record { [[Value]]: _toResolve_ } とする。
+          1. _resolveSteps_ を、パラメータ (_resolution_) を持ち _promiseOrEmpty_ をキャプチャし、呼び出されたとき次の手順を実行する新しい抽象クロージャとする：
+            1. もし _promiseOrEmpty_.[[Value]] が ~empty~ なら、*undefined* を返す。
+            1. _promise_ を _promiseOrEmpty_.[[Value]] とする。
+            1. _promiseOrEmpty_.[[Value]] に ~empty~ を設定する。
+            1. もし SameValue(_resolution_, _promise_) が *true* なら
+              1. _selfResolutionError_ を新たに生成した *TypeError* オブジェクトとする。
               1. RejectPromise(_promise_, _selfResolutionError_) を実行する。
               1. *undefined* を返す。
-            1. _resolution_ がオブジェクトでない場合、次を行う:
+            1. もし _resolution_ がオブジェクトでなければ
               1. FulfillPromise(_promise_, _resolution_) を実行する。
               1. *undefined* を返す。
-            1. _then_ に Completion(Get(_resolution_, *"then"* )) を設定する。
-            1. _then_ が突然完了（abrupt completion）である場合、次を行う:
+            1. _then_ を Completion(Get(_resolution_, *"then"*)) とする。
+            1. もし _then_ がアブストラクト完了であれば
               1. RejectPromise(_promise_, _then_.[[Value]]) を実行する。
               1. *undefined* を返す。
-            1. _thenAction_ に _then_.[[Value]] を設定する。
-            1. IsCallable(_thenAction_) が *false* である場合、次を行う:
+            1. _thenAction_ を _then_.[[Value]] とする。
+            1. IsCallable(_thenAction_) が *false* なら
               1. FulfillPromise(_promise_, _resolution_) を実行する。
               1. *undefined* を返す。
-            1. _thenJobCallback_ に HostMakeJobCallback(_thenAction_) を設定する。
-            1. _job_ に NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_) を設定する。
+            1. _thenJobCallback_ を HostMakeJobCallback(_thenAction_) とする。
+            1. _job_ を NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_) とする。
             1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]]) を実行する。
             1. *undefined* を返す。
-          1. _resolve_ に CreateBuiltinFunction(_resolveSteps_, 1, *""*, « ») を設定する。
-          1. _rejectSteps_ に、パラメーターを（_reason_）とし、_promise_ と _alreadyResolved_ をキャプチャし、呼び出されたときに次の手順を実行する新しい抽象クロージャを設定する:
-            1. _alreadyResolved_.[[Value]] が *true* である場合、*undefined* を返す。
-            1. _alreadyResolved_.[[Value]] を *true* に設定する。
+          1. _resolve_ を CreateBuiltinFunction(_resolveSteps_, 1, *""*, « ») とする。
+          1. _rejectSteps_ を、パラメータ (_reason_) を持ち _promiseOrEmpty_ をキャプチャし、呼び出されたとき次の手順を実行する新しい抽象クロージャとする：
+            1. もし _promiseOrEmpty_.[[Value]] が ~empty~ なら、*undefined* を返す。
+            1. _promise_ を _promiseOrEmpty_.[[Value]] とする。
+            1. _promiseOrEmpty_.[[Value]] に ~empty~ を設定する。
             1. RejectPromise(_promise_, _reason_) を実行する。
             1. *undefined* を返す。
-          1. _reject_ に CreateBuiltinFunction(_rejectSteps_, 1, *""*, « ») を設定する。
-          1. レコード { [[Resolve]]: _resolve_, [[Reject]]: _reject_ } を返す。
+          1. _reject_ を CreateBuiltinFunction(_rejectSteps_, 1, *""*, « ») とする。
+          1. Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ } を返す。
         </emu-alg>
       </emu-clause>
 

@@ -48475,43 +48475,45 @@ THH:mm:ss.sss
       <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions (
-            _promise_: a Promise,
-          ): [[Resolve]] (함수 객체)와 [[Reject]] (함수 객체) 필드를 가진 Record
+            _toResolve_: 프라미스,
+          ): 필드 [[Resolve]] (함수 객체)와 [[Reject]] (함수 객체)를 가진 레코드
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _alreadyResolved_를 Record { [[Value]]: *false* }로 한다.
-          1. _resolveSteps_를 매개변수 (_resolution_)를 가지며 _promise_와 _alreadyResolved_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 한다:
-            1. _alreadyResolved_.[[Value]]가 *true*이면 *undefined*를 반환한다.
-            1. _alreadyResolved_.[[Value]]를 *true*로 설정한다.
+          1. _promiseOrEmpty_를 레코드 { [[Value]]: _toResolve_ }로 설정한다.
+          1. _resolveSteps_를 (_resolution_) 파라미터를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 설정하고, 호출 시 다음 작업을 수행한다:
+            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면 *undefined*를 반환한다.
+            1. _promise_를 _promiseOrEmpty_.[[Value]]로 설정한다.
+            1. _promiseOrEmpty_.[[Value]]를 ~empty~로 설정한다.
             1. SameValue(_resolution_, _promise_)가 *true*이면,
-              1. _selfResolutionError_를 새로 생성된 *TypeError* 객체로 한다.
+              1. _selfResolutionError_를 새로 생성된 *TypeError* 객체로 설정한다.
               1. RejectPromise(_promise_, _selfResolutionError_)를 수행한다.
               1. *undefined*를 반환한다.
             1. _resolution_이 객체가 아니면,
-              1. FulfillPromise(_promise_, _resolution_)를 수행한다.
+              1. FulfillPromise(_promise_, _resolution_)을 수행한다.
               1. *undefined*를 반환한다.
-            1. _then_를 Completion(Get(_resolution_, *"then"*))로 한다.
-            1. _then_가 비정상 완료이면,
+            1. _then_을 Completion(Get(_resolution_, *"then"*))으로 설정한다.
+            1. _then_이 abrupt completion이면,
               1. RejectPromise(_promise_, _then_.[[Value]])를 수행한다.
               1. *undefined*를 반환한다.
-            1. _thenAction_를 _then_.[[Value]]로 한다.
+            1. _thenAction_을 _then_.[[Value]]로 설정한다.
             1. IsCallable(_thenAction_)이 *false*이면,
-              1. FulfillPromise(_promise_, _resolution_)를 수행한다.
+              1. FulfillPromise(_promise_, _resolution_)을 수행한다.
               1. *undefined*를 반환한다.
-            1. _thenJobCallback_를 HostMakeJobCallback(_thenAction_)로 한다.
-            1. _job_를 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)로 한다.
-            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])를 수행한다.
+            1. _thenJobCallback_을 HostMakeJobCallback(_thenAction_)으로 설정한다.
+            1. _job_을 NewPromiseResolveThenableJob(_promise_, _resolution_, _thenJobCallback_)으로 설정한다.
+            1. HostEnqueuePromiseJob(_job_.[[Job]], _job_.[[Realm]])을 수행한다.
             1. *undefined*를 반환한다.
-          1. _resolve_를 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)로 한다.
-          1. _rejectSteps_를 매개변수 (_reason_)를 가지며 _promise_와 _alreadyResolved_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 한다:
-            1. _alreadyResolved_.[[Value]]가 *true*이면 *undefined*를 반환한다.
-            1. _alreadyResolved_.[[Value]]를 *true*로 설정한다.
-            1. RejectPromise(_promise_, _reason_)를 수행한다.
+          1. _resolve_를 CreateBuiltinFunction(_resolveSteps_, 1, *""*, « »)으로 설정한다.
+          1. _rejectSteps_를 (_reason_) 파라미터를 가지며 _promiseOrEmpty_를 캡처하는 새로운 추상 클로저로 설정하고, 호출 시 다음 작업을 수행한다:
+            1. _promiseOrEmpty_.[[Value]]가 ~empty~이면 *undefined*를 반환한다.
+            1. _promise_를 _promiseOrEmpty_.[[Value]]로 설정한다.
+            1. _promiseOrEmpty_.[[Value]]를 ~empty~로 설정한다.
+            1. RejectPromise(_promise_, _reason_)을 수행한다.
             1. *undefined*를 반환한다.
-          1. _reject_를 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)로 한다.
-          1. Record { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }를 반환한다.
+          1. _reject_를 CreateBuiltinFunction(_rejectSteps_, 1, *""*, « »)으로 설정한다.
+          1. 레코드 { [[Resolve]]: _resolve_, [[Reject]]: _reject_ }를 반환한다.
         </emu-alg>
       </emu-clause>
 
