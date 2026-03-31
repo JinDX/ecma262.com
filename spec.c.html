@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-hans">
 <meta charset="utf-8">
-<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <script src="https://htmlspecs.com/dropdown.js"></script>
+<link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
+<script>
+(function() {
+  let d = new Date;
+  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
+    let d = document;
+    let h = d.documentElement;
+    let l = d.createElement('link');
+    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
+    l.setAttribute('rel', 'stylesheet');
+    h.appendChild(l);
+    let s = d.createElement('style');
+    s.innerHTML = '* { font-family: Itim !important; }';
+    h.appendChild(s);
+  }
+})();
+</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -154,7 +170,7 @@
   }
 </style>
 <pre class="metadata">
-  title: ECMAScript<sup>&reg;</sup> 2026 语言规范
+  title: ECMAScript<sup>&reg;</sup> 2027 语言规范
   shortname: ECMA-262
   status: draft
   location: https://tc39.es/ecma262/
@@ -196,7 +212,7 @@
 
 <emu-intro id="sec-intro">
   <h1>简介</h1>
-  <p>本 Ecma 标准定义了 ECMAScript 2026 语言。这是 ECMAScript 语言规范的第十七版。ECMAScript 基于多种最初的技术，其中最著名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。虽然 ECMAScript 最为人熟知的是作为网页浏览器中的嵌入式语言，但它也被广泛应用于浏览器之外的场景，包括服务器和嵌入式应用程序，并且已经发展成为全球最广泛使用的通用编程语言之一。</p>
+  <p>本 Ecma 标准定义了 ECMAScript 2027 语言。这是 ECMAScript 语言规范的第十七版。ECMAScript 基于多种最初的技术，其中最著名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。虽然 ECMAScript 最为人熟知的是作为网页浏览器中的嵌入式语言，但它也被广泛应用于浏览器之外的场景，包括服务器和嵌入式应用程序，并且已经发展成为全球最广泛使用的通用编程语言之一。</p>
   <p>ECMAScript 语言规范的开发始于 1996 年 11 月。该 Ecma 标准的第一版由 Ecma 大会在 1997 年 6 月通过。</p>
   <p>该 Ecma 标准按快速通道程序提交至 ISO/IEC JTC 1，并于 1998 年 4 月获批为国际标准 ISO/IEC 16262。Ecma 大会于 1998 年 6 月批准了 ECMA-262 的第二版，以确保其与 ISO/IEC 16262 完全一致。第一版与第二版之间的更改仅为编辑性质。</p>
   <p>标准的第三版引入了强大的正则表达式、更好的字符串处理、新的控制语句、try/catch 异常处理、更严格的错误定义、数字输出格式，以及为未来语言发展做出的细微调整。第三版由 Ecma 大会于 1999 年 12 月通过，并作为 ISO/IEC 16262:2002 于 2002 年 6 月发布。</p>
@@ -217,33 +233,49 @@
   <p>有数十位代表众多机构的个人在 Ecma TC39 中为本版及以往版本的开发做出了重要贡献。此外，支持 TC39 ECMAScript 工作的社区也日益活跃。该社区审查了大量草案，提交了成千上万个错误报告，进行了实现实验，贡献了测试套件，并向全球开发者介绍 ECMAScript。遗憾的是，无法逐一列举和感谢每一位做出贡献的个人和机构。</p>
   <p>
     Allen Wirfs-Brock<br>
-    ECMA-262，第 6 版项目编辑
+    ECMA-262，第6版项目编辑
   </p>
   <p>
     Brian Terlson<br>
-    ECMA-262，第 7–10 版项目编辑
+    ECMA-262，第7至10版项目编辑
   </p>
   <p>
     Jordan Harband<br>
-    ECMA-262，第 10–12 版项目编辑
-  </p>
-  <p>
-    Shu-yu Guo<br>
-    ECMA-262，第 12–16 版项目编辑
-  </p>
-  <p>
-    Michael Ficarra<br>
-    ECMA-262，第 12–16 版项目编辑
+    ECMA-262，第10至12版项目编辑
   </p>
   <p>
     Kevin Gibbons<br>
-    ECMA-262，第 12–16 版项目编辑
+    ECMA-262，第12至17版项目编辑
+  </p>
+  <p>
+    Shu-yu Guo<br>
+    ECMA-262，第12至18版项目编辑
+  </p>
+  <p>
+    Michael Ficarra<br>
+    ECMA-262，第12至18版项目编辑
+  </p>
+  <p>
+    Richard Gibson<br>
+    ECMA-262，第18版项目编辑
+  </p>
+  <p>
+    Ron Buckton<br>
+    ECMA-262，第18版项目编辑
+  </p>
+  <p>
+    Nicolò Ribaudo<br>
+    ECMA-262，第18版项目编辑
+  </p>
+  <p>
+    Linus Groh<br>
+    ECMA-262，第18版项目编辑
   </p>
 </emu-intro>
 
 <emu-clause id="sec-scope">
   <h1>范围</h1>
-  <p>本标准定义了 ECMAScript 2026 通用编程语言。</p>
+  <p>本标准定义了 ECMAScript 2027 通用编程语言。</p>
 </emu-clause>
 
 <emu-clause id="sec-conformance">
@@ -1128,29 +1160,29 @@
         </ul>
         <p>如果通过其他方式从此类抽象操作返回 Completion Record，则属于编辑错误。例如，在这些抽象操作中，</p>
         <emu-alg example>
-          1. Return *true*.
+          1. 返回 *true*。
         </emu-alg>
-        <p>与如下语句含义相同：</p>
+        <p>与下面任意一种写法含义相同：</p>
         <emu-alg example>
-          1. Return NormalCompletion(*true*)。
-        </emu-alg>
-        <p>或</p>
-        <emu-alg example>
-          1. Let _completion_ be NormalCompletion(*true*)。
-          1. Return Completion(_completion_)。
+          1. 返回 NormalCompletion(*true*)。
         </emu-alg>
         <p>或</p>
         <emu-alg example>
-          1. Return Completion Record { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ }。
+          1. 令 _completion_ 为 NormalCompletion(*true*)。
+          1. 返回 Completion(_completion_)。
         </emu-alg>
-        <p>注意，通过 ReturnIfAbrupt 展开，以下写法允许，因为在展开步骤中，异常情况直接返回 Completion，正常情况在解包后隐式应用 NormalCompletion。</p>
+        <p>或</p>
         <emu-alg example>
-          1. Return ? _completion_。
+          1. 返回 Completion Record { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ }。
         </emu-alg>
-        <p>以下示例则属于编辑错误，因为返回 Completion Record 时未在该步骤标注。</p>
+        <p>注意，根据 <emu-xref href="#sec-shorthands-for-unwrapping-completion-records">? 简写展开</emu-xref>，下例是合法的，因为在展开后的步骤中，abrupt 情况下直接返回 Completion 的结果，而 normal 情况下在解包后隐式应用 NormalCompletion。</p>
         <emu-alg example>
-          1. Let _completion_ be NormalCompletion(*true*)。
-          1. Return _completion_。
+          1. 返回 ? _completion_。
+        </emu-alg>
+        <p>如下例则属于编辑错误，因为直接返回了 Completion Record 而该步骤未进行标注。</p>
+        <emu-alg example>
+          1. 令 _completion_ 为 NormalCompletion(*true*)。
+          1. 返回 _completion_。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -4175,7 +4207,7 @@
 
     <emu-clause id="sec-enum-specification-type">
       <h1>枚举规范类型</h1>
-      <p><dfn variants="enum,enums">枚举</dfn>是规范内部使用的值，不能被 ECMAScript 代码直接观察。枚举用 ~无衬线体~ 表示。例如，Completion Record 的 [[Type]] 字段会取 ~normal~、~return~ 或 ~throw~ 等值。枚举除了名称外没有其他特性。枚举的名称仅用于与其他枚举区分，并不暗示其在上下文中的用途或意义。</p>
+      <p><dfn variants="enum,enums">枚举（Enums）</dfn>是规范内部使用的值，不能被 ECMAScript 代码直接观察到。枚举用大写短横线（upper kebab case）并以 ~sans-serif~ 字体表示。例如，完成记录（Completion Record）的 [[Type]] 字段会取 ~normal~、~return~ 或 ~throw~ 等值。枚举值除了名称之外没有其它特性。枚举的名称仅用于与其它枚举区分，并不暗示其在上下文中的用途或含义。</p>
     </emu-clause>
 
     <emu-clause id="sec-list-and-record-specification-type">
@@ -4448,7 +4480,7 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 如果 _V_ 不是 引��记录，返回 _V_。
+          1. 如果 _V_ 不是 引用记录，返回 _V_。
           1. 如果 IsUnresolvableReference(_V_) 为 *true*，抛出 *ReferenceError* 异常。
           1. 如果 IsPropertyReference(_V_) 为 *true*，则
             1. [id="step-getvalue-toobject"] 令 _baseObj_ 为 ? ToObject(_V_.[[Base]])。
@@ -18385,18 +18417,18 @@
         <emu-alg>
           1. 令 _len_ 为 _nextIndex_ + 1。
           1. 执行 ? Set(_array_, *"length"*, 𝔽(_len_), *true*)。
-          1. 注：若 _len_ 超过 2<sup>32</sup> - 1，上一步会抛出。
+          1. 注：如果 _len_ 超过 2<sup>32</sup> - 1，上述步骤将抛出异常。
           1. 返回 _len_。
         </emu-alg>
         <emu-grammar>Elision : Elision `,`</emu-grammar>
         <emu-alg>
-          1. 返回 ? ArrayAccumulation of |Elision| with arguments _array_ and (_nextIndex_ + 1)。
+          1. 返回 ? ArrayAccumulation 以 |Elision| 和参数 _array_ 及 (_nextIndex_ + 1)。
         </emu-alg>
         <emu-grammar>ElementList : Elision? AssignmentExpression</emu-grammar>
         <emu-alg>
           1. 若存在 |Elision|，则
-            1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |Elision|，参数 _array_ 与 _nextIndex_。
-          1. 令 _initResult_ 为 ? Evaluation of |AssignmentExpression|。
+            1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以 |Elision| 和参数 _array_ 及 _nextIndex_。
+          1. 令 _initResult_ 为 ? 对 |AssignmentExpression| 的求值。
           1. 令 _initValue_ 为 ? GetValue(_initResult_)。
           1. 执行 ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_)。
           1. 返回 _nextIndex_ + 1。
@@ -18404,39 +18436,39 @@
         <emu-grammar>ElementList : Elision? SpreadElement</emu-grammar>
         <emu-alg>
           1. 若存在 |Elision|，则
-            1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |Elision|，参数 _array_ 与 _nextIndex_。
-          1. 返回 ? ArrayAccumulation of |SpreadElement|，参数 _array_ 与 _nextIndex_。
+            1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以 |Elision| 和参数 _array_ 及 _nextIndex_。
+          1. 返回 ? ArrayAccumulation 以 |SpreadElement| 和参数 _array_ 及 _nextIndex_。
         </emu-alg>
         <emu-grammar>ElementList : ElementList `,` Elision? AssignmentExpression</emu-grammar>
         <emu-alg>
-          1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |ElementList|，参数 _array_ 与 _nextIndex_。
+          1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以派生的 |ElementList| 和参数 _array_ 及 _nextIndex_。
           1. 若存在 |Elision|，则
-            1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |Elision|，参数 _array_ 与 _nextIndex_。
-          1. 令 _initResult_ 为 ? Evaluation of |AssignmentExpression|。
+            1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以 |Elision| 和参数 _array_ 及 _nextIndex_。
+          1. 令 _initResult_ 为 ? 对 |AssignmentExpression| 的求值。
           1. 令 _initValue_ 为 ? GetValue(_initResult_)。
           1. 执行 ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_)。
           1. 返回 _nextIndex_ + 1。
         </emu-alg>
         <emu-grammar>ElementList : ElementList `,` Elision? SpreadElement</emu-grammar>
         <emu-alg>
-          1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |ElementList|，参数 _array_ 与 _nextIndex_。
+          1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以派生的 |ElementList| 和参数 _array_ 及 _nextIndex_。
           1. 若存在 |Elision|，则
-            1. 将 _nextIndex_ 设为 ? ArrayAccumulation of |Elision|，参数 _array_ 与 _nextIndex_。
-          1. 返回 ? ArrayAccumulation of |SpreadElement|，参数 _array_ 与 _nextIndex_。
+            1. 将 _nextIndex_ 设为 ? ArrayAccumulation 以 |Elision| 和参数 _array_ 及 _nextIndex_。
+          1. 返回 ? ArrayAccumulation 以 |SpreadElement| 和参数 _array_ 及 _nextIndex_。
         </emu-alg>
         <emu-grammar>SpreadElement : `...` AssignmentExpression</emu-grammar>
         <emu-alg>
-          1. 令 _spreadRef_ 为 ? Evaluation of |AssignmentExpression|。
+          1. 令 _spreadRef_ 为 ? 对 |AssignmentExpression| 的求值。
           1. 令 _spreadObj_ 为 ? GetValue(_spreadRef_)。
           1. 令 _iteratorRecord_ 为 ? GetIterator(_spreadObj_, ~sync~)。
           1. 重复，
             1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
             1. 若 _next_ 为 ~done~，返回 _nextIndex_。
             1. 执行 ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _next_)。
-            1. 将 _nextIndex_ 设为 _nextIndex_ + 1。
+            1. 令 _nextIndex_ 为 _nextIndex_ + 1。
         </emu-alg>
         <emu-note>
-          <p>使用 CreateDataPropertyOrThrow 以确保即使内置 Array 原型对象被修改（导致用 [[Set]] 无法创建新自有属性），数组自有属性仍能被定义。</p>
+          <p>CreateDataPropertyOrThrow 用于确保即使标准内置的 Array 原型对象已被修改以致不能用 [[Set]] 创建新自有属性时，数组也能正确定义自有属性。</p>
         </emu-note>
       </emu-clause>
 
@@ -18561,6 +18593,28 @@
         <emu-grammar>PropertyName : ComputedPropertyName</emu-grammar>
         <emu-alg>
           1. 返回 *true*。
+        </emu-alg>
+      </emu-clause>
+
+            <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
+        <h1>静态语义：PropertyDefinitionNodes ( ): 解析节点的列表</h1>
+        <dl class="header">
+        </dl>
+
+        <emu-grammar>ObjectLiteral : `{` `}`</emu-grammar>
+        <emu-alg>
+          1. 返回一个新的空列表。
+        </emu-alg>
+
+        <emu-grammar>PropertyDefinitionList : PropertyDefinition</emu-grammar>
+        <emu-alg>
+          1. 返回 « |PropertyDefinition| »。
+        </emu-alg>
+
+        <emu-grammar>PropertyDefinitionList : PropertyDefinitionList `,` PropertyDefinition</emu-grammar>
+        <emu-alg>
+          1. 令 _head_ 为派生 |PropertyDefinitionList| 的 PropertyDefinitionNodes。
+          1. 返回 _head_ 与 « |PropertyDefinition| » 的列表拼接结果。
         </emu-alg>
       </emu-clause>
 
@@ -26570,13 +26624,13 @@
             <thead>
               <tr>
                 <th>
-                  字段名 (Field Name)
+                  字段名称
                 </th>
                 <th>
-                  值类型 (Value Type)
+                  值类型
                 </th>
                 <th>
-                  含义 (Meaning)
+                  含义
                 </th>
               </tr>
             </thead>
@@ -26585,10 +26639,10 @@
                 [[Status]]
               </td>
               <td>
-                ~new~, ~unlinked~, ~linking~, ~linked~, ~evaluating~, ~evaluating-async~, 或 ~evaluated~
+                ~new~、~unlinked~、~linking~、~linked~、~evaluating~、~evaluating-async~ 或 ~evaluated~
               </td>
               <td>
-                初始为 ~new~。在模块生命周期推进过程中按顺序转变为 ~unlinked~, ~linking~, ~linked~, ~evaluating~, 可能的 ~evaluating-async~, 最终 ~evaluated~。~evaluating-async~ 表示该模块已排队等待其异步依赖完成后执行，或其 [[HasTLA]] 为 *true* 且已开始执行，正在等待顶层完成。
+                初始为 ~new~。在模块生命周期的推进过程中，依次切换为 ~unlinked~、~linking~、~linked~、~evaluating~，如有必要再依次为 ~evaluating-async~、~evaluated~。~evaluating-async~ 表示该模块已排队，待异步依赖完成后执行，或该模块的 [[HasTLA]] 字段为 *true* 且已执行但正等待顶层完成。
               </td>
             </tr>
             <tr>
@@ -26596,10 +26650,10 @@
                 [[EvaluationError]]
               </td>
               <td>
-                throw completion 或 ~empty~
+                抛出完成（throw completion）或 ~empty~
               </td>
               <td>
-                表示求值期间发生的异常的 throw completion。若无异常或 [[Status]] 不是 ~evaluated~，则为 *undefined*。
+                表示在求值期间发生异常的抛出完成。如果没有异常，或 [[Status]] 不是 ~evaluated~，则为 *undefined*。
               </td>
             </tr>
             <tr>
@@ -26607,10 +26661,10 @@
                 [[DFSAncestorIndex]]
               </td>
               <td>
-                整数或 ~empty~
+                一个整数或 ~empty~
               </td>
               <td>
-                仅在 Link 与 Evaluate 过程中使用的辅助字段。若 [[Status]] 为 ~linking~ 或 ~evaluating~，此值为该模块的深度优先遍历索引或其所在强连通分量中“更早”模块的索引。
+                仅在 Link 和 Evaluate 期间使用的辅助字段。若 [[Status]] 为 ~linking~ 或 ~evaluating~，该值为模块的深度优先遍历索引，或在同一强连通分量内“较早”模块的索引。
               </td>
             </tr>
             <tr>
@@ -26618,10 +26672,10 @@
                 [[RequestedModules]]
               </td>
               <td>
-                ModuleRequest Record 列表
+                ModuleRequest 记录的列表
               </td>
               <td>
-                与该模块中的 import 相关联的 ModuleRequest Record 列表，按源码出现顺序排列。
+                与本模块导入关联的 ModuleRequest 记录的列表。列表顺序与导入在源码中的出现顺序一致。
               </td>
             </tr>
             <tr>
@@ -26629,10 +26683,10 @@
                 [[LoadedModules]]
               </td>
               <td>
-                LoadedModuleRequest Record 列表
+                LoadedModuleRequest 记录的列表
               </td>
               <td>
-                将此记录所代表模块使用的说明符字符串（及相对导入属性）映射到解析得到的 Module Record。该列表不包含两个不同记录 _r1_ 与 _r2_ 使得 ModuleRequestsEqual(_r1_, _r2_) 为 *true*。
+                一个映射，将本记录表示的模块用到的说明符字符串以及所有相关的相对导入属性映射到已解析的模块记录。该列表不会包含任意两个记录 _r1_ 和 _r2_ 满足 ModuleRequestsEqual(_r1_, _r2_) 为 *true*。
               </td>
             </tr>
             <tr>
@@ -26640,10 +26694,10 @@
                 [[CycleRoot]]
               </td>
               <td>
-                Cyclic Module Record 或 ~empty~
+                一个循环模块记录或 ~empty~
               </td>
               <td>
-                环的首个访问模块，即强连通分量（SCC）的深度优先根祖先。对不在环中的模块，该字段为其自身。Evaluate 完成后，模块的 [[DFSAncestorIndex]] 等于其 [[CycleRoot]] 的深度优先遍历索引。
+                环的首次访问模块，即该强连通分量的根 DFS 祖先。对于不在循环中的模块，此处为其自身。Evaluate 完成后，一个模块的 [[DFSAncestorIndex]] 等于其 [[CycleRoot]] 的深度优先遍历索引。
               </td>
             </tr>
             <tr>
@@ -26651,10 +26705,10 @@
                 [[HasTLA]]
               </td>
               <td>
-                Boolean
+                布尔值
               </td>
               <td>
-                该模块自身是否为异步（例如包含顶层 await 的 Source Text Module Record）。拥有异步依赖不意味着此字段为 *true*。解析后不得再改变。
+                标记该模块本身是否为异步（例如，它是否包含顶层 await 的 Source Text Module Record）。具有异步依赖并不意味着该字段为 *true*。该字段在模块解析后不得更改。
               </td>
             </tr>
             <tr>
@@ -26665,7 +26719,7 @@
                 ~unset~、整数或 ~done~
               </td>
               <td>
-                初始为 ~unset~，同步模块保持 ~unset~。对自身异步或拥有异步依赖的模块，设为一个整数，用于决定 <emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref> 排队执行的顺序。待执行完毕后设为 ~done~。
+                该字段初始值为 ~unset~，完全同步的模块一直保持 ~unset~。对于自身或有异步依赖的模块，将设为整数，表示 <emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref> 按顺序排队待执行模块时的顺序。一旦待执行模块成功执行，该字段设为 ~done~。
               </td>
             </tr>
             <tr>
@@ -26673,10 +26727,10 @@
                 [[TopLevelCapability]]
               </td>
               <td>
-                PromiseCapability Record 或 ~empty~
+                PromiseCapability 记录或 ~empty~
               </td>
               <td>
-                若此模块是某个环的 [[CycleRoot]] 且对该环中某模块调用了 Evaluate()，此字段保存该整体求值的 PromiseCapability，用于完成 Evaluate() 返回的 Promise。除非对依赖发起顶层 Evaluate()，否则依赖的该字段为 ~empty~。
+                如果该模块是某个环的 [[CycleRoot]]，且该环上有模块调用了 Evaluate()，该字段包含整个求值过程的 PromiseCapability 记录。用于结算 Evaluate() 抽象方法返回的 Promise 对象。如果模块作为其它模块的依赖，则该字段为 ~empty~，除非其顶层也被明确发起 Evaluate()。
               </td>
             </tr>
             <tr>
@@ -26684,10 +26738,10 @@
                 [[AsyncParentModules]]
               </td>
               <td>
-                Cyclic Module Record 列表
+                循环模块记录的列表
               </td>
               <td>
-                若此模块或其依赖具有 [[HasTLA]] *true* 且执行中，记录在顶层执行作业中依赖它的父导入者。在其完成之前这些父模块不会开始执行。
+                如果此模块或其依赖的 [[HasTLA]] 为 *true*，且执行正在进行中，则此字段追踪该模块顶层执行任务的父导入者。这些父模块必须在本模块成功执行后才能开始执行。
               </td>
             </tr>
             <tr>
@@ -26695,10 +26749,10 @@
                 [[PendingAsyncDependencies]]
               </td>
               <td>
-                整数或 ~empty~
+                一个整数或 ~empty~
               </td>
               <td>
-                若该模块有异步依赖，此值跟踪剩余尚未执行完成的异步依赖模块数量。计数降至 0 且无执行错误时，该模块执行。
+                如果本模块存在异步依赖，该字段记录尚需执行的异步依赖模块数量。当该值为 0 且无执行错误时，本模块才能被执行。
               </td>
             </tr>
           </table>
@@ -27015,7 +27069,6 @@
               1. 如果 _result_ 是一个突然完成（abrupt completion），则
                 1. 对于 _stack_ 中的每一个循环模块记录（Cyclic Module Record）_m_，执行
                   1. 断言：_m_.[[Status]] 是 ~evaluating~。
-                  1. 断言：_m_.[[AsyncEvaluationOrder]] 是 ~unset~。
                   1. 设置 _m_.[[Status]] 为 ~evaluated~。
                   1. 设置 _m_.[[EvaluationError]] 为 _result_。
                 1. 断言：_module_.[[Status]] 是 ~evaluated~。
@@ -28340,8 +28393,8 @@
           </dl>
 
           <emu-alg>
-            1. 令 _json_ = ? ParseJSON(_source_)。
-            1. 返回 CreateDefaultExportSyntheticModule(_json_)。
+            1. 令 _parseResult_ 为 ? ParseJSON(_source_)。
+            1. 返回 CreateDefaultExportSyntheticModule(_parseResult_.[[Value]])。
           </emu-alg>
         </emu-clause>
 
@@ -46499,90 +46552,305 @@ THH:mm:ss.sss
     </ul>
     <p>JSON 数据交换格式在 ECMA-404 中定义。本规范使用的 JSON 交换格式完全与 ECMA-404 所描述一致。`JSON.parse` 与 `JSON.stringify` 的一致实现必须支持 ECMA-404 规范所描述的精确交换格式，不得删除或扩展该格式。</p>
 
+    <emu-clause id="sec-json.israwjson" type="built-in function">
+      <h1>JSON.isRawJSON ( _O_ )</h1>
+      <p>当调用此函数时，执行以下步骤：</p>
+      <emu-alg>
+        1. 如果 _O_ 是一个对象且 _O_ 拥有 [[IsRawJSON]] 内部槽，则返回 *true*。
+        1. 返回 *false*。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-json.parse" type="built-in function">
       <h1>JSON.parse ( _text_ [ , _reviver_ ] )</h1>
-      <p>该函数解析一个 JSON 文本（JSON 格式的字符串）并生成一个 ECMAScript 语言值。JSON 格式以类似 ECMAScript 字面量、数组初始值与对象初始值的语法表示字面量、数组与对象。解析后，JSON 对象被实现为 ECMAScript 对象；JSON 数组被实现为 ECMAScript Array 实例；JSON 字符串、数字、布尔与 null 分别实现为 ECMAScript 的 String、Number、Boolean 与 *null*。</p>
-      <p>可选参数 _reviver_ 是一个带两个参数 _key_ 与 _value_ 的函数。它可以过滤并转换结果。解析产生的每个 _key_/_value_ 对都会调用它，其返回值将替代原始值。若返回收到的值，结构不变；若返回 *undefined* 则该属性从结果中删除。</p>
+      <p>该函数解析一个 JSON 文本（即 JSON 格式的字符串）并生成一个 ECMAScript 语言值。JSON 格式通过类似于 ECMAScript 字面量、数组初始值和对象初始值的语法来表示字面量、数组和对象。解析后，JSON 对象被实现为 ECMAScript 对象。JSON 数组被实现为 ECMAScript 的数组实例。JSON 字符串、数字、布尔值和 null 被实现为 ECMAScript 的字符串、数字、布尔值和 *null*。</p>
+      <p>可选的 _reviver_ 参数是一个可以过滤和转换解析结果的函数。对于解析生成的每个值，_reviver_ 会以三个参数被调用（关联的属性键、该值和一个上下文对象）。如果属性未被修改且其值是基本类型，则所提供的上下文对象拥有名为 *"source"* 的属性，包含对应解析节点的源码文本。如果该调用返回 *undefined*，则该属性会被删除。否则，该属性会被重定义为返回值。</p>
       <emu-alg>
         1. 令 _jsonString_ 为 ? ToString(_text_)。
-        1. 令 _unfiltered_ 为 ? ParseJSON(_jsonString_)。
+        1. 令 _parseResult_ 为 ? ParseJSON(_jsonString_)。
+        1. 令 _unfiltered_ 为 _parseResult_.[[Value]]。
         1. 如果 IsCallable(_reviver_) 为 *false*，返回 _unfiltered_。
         1. 令 _root_ 为 OrdinaryObjectCreate(%Object.prototype%)。
         1. 令 _rootName_ 为空字符串。
         1. 执行 ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_)。
-        1. 返回 ? InternalizeJSONProperty(_root_, _rootName_, _reviver_)。
+        1. 令 _snapshot_ 为 <emu-meta suppress-effects="user-code">CreateJSONParseRecord(_parseResult_.[[ParseNode]], _rootName_, _unfiltered_)</emu-meta>。
+        1. 返回 ? InternalizeJSONProperty(_root_, _rootName_, _reviver_, _snapshot_)。
       </emu-alg>
       <p>该函数的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
 
       <emu-clause id="sec-ParseJSON" type="abstract operation">
         <h1>
           ParseJSON (
-            _text_: a String,
-          ): 要么是包含一个 ECMAScript 语言值的正常完成要么是抛出完成
+            _text_: 字符串,
+          ): 正常完成时返回包含 [[ParseNode]]（一个解析节点）和 [[Value]]（一个 ECMAScript 语言值）字段的记录，或抛出完成
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. [id="step-json-parse-validate"] 若 StringToCodePoints(_text_) 不是 ECMA-404 所规定的有效 JSON 文本，抛出 *SyntaxError* 异常。
-          1. 令 _scriptString_ 为 *"("*、_text_ 与 *");"* 的字符串连接。
+          1. [id="step-json-parse-validate"] 如果 StringToCodePoints(_text_) 不是 ECMA-404 规定的合法 JSON 文本，则抛出 *SyntaxError* 异常。
+          1. 令 _scriptString_ 为 *"("*、_text_、*");"* 这三者字符串拼接的结果。
           1. [id="step-json-parse-parse"] 令 _script_ 为 ParseText(_scriptString_, |Script|)。
-          1. 注：<emu-xref href="#sec-object-initializer-static-semantics-early-errors"></emu-xref> 定义的早期错误规则对上述 ParseText 调用有特殊处理。
-          1. 断言：_script_ 是一个 Parse Node。
-          1. [id="step-json-parse-eval"] 令 _result_ 为 ! <emu-meta suppress-effects="user-code">Evaluation of _script_</emu-meta>。
-          1. 注：<emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> 定义的 PropertyDefinitionEvaluation 语义对上述求值有特殊处理。
-          1. [id="step-json-parse-assert-type"] 断言：_result_ 不是 String、Number、Boolean、由 |ArrayLiteral| 或 |ObjectLiteral| 定义的 Object、就是 *null*。
-          1. 返回 _result_。
+          1. 注：在对以上 ParseText 调用时，<emu-xref href="#sec-object-initializer-static-semantics-early-errors"></emu-xref> 中定义的提前错误规则有特殊处理。
+          1. 断言：_script_ 是解析节点。
+          1. [id="step-json-parse-eval"] 令 _result_ 为 ! <emu-meta suppress-effects="user-code">对 _script_ 的求值</emu-meta>。
+          1. 注：<emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> 中定义的 PropertyDefinitionEvaluation 语义对上述求值有特殊处理。
+          1. [id="step-json-parse-assert-type"] 断言：_result_ 是字符串、数字、布尔值、由 |ArrayLiteral| 或 |ObjectLiteral| 定义的对象，或 *null*。
+          1. 返回记录 { [[ParseNode]]: _script_, [[Value]]: _result_ }。
         </emu-alg>
-        <p>一致实现的 `JSON.parse` 不允许扩展 JSON 语法。若实现希望支持修改或扩展的 JSON 交换格式，必须定义不同的解析函数。</p>
+        <p>符合规范的 `JSON.parse` 实现不得扩展 JSON 语法。如果实现希望支持修改或扩展的 JSON 交换格式，必须通过定义不同的 parse 函数来实现。</p>
         <emu-note>
-          <p>有效 JSON 文本是 ECMAScript |PrimaryExpression| 语法的子集。步骤 <emu-xref href="#step-json-parse-validate"></emu-xref> 验证 _jsonString_ 是否符合该子集，步骤 <emu-xref href="#step-json-parse-assert-type"></emu-xref> 断言求值返回一个适当类型的值。</p>
-          <p>然而，由于 <emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> 在 ParseJSON 期间行为不同，同一源文本作为 |PrimaryExpression| 求值与作为 JSON 求值可能产生不同结果。此外，对对象字面量中重复 *"__proto__"* 属性的 Early Error 在 ParseJSON 中不适用，这意味着尽管语法匹配，并非所有 ParseJSON 接受的文本都可作为 |PrimaryExpression| 有效。</p>
+          <p>合法的 JSON 文本是 ECMAScript |PrimaryExpression| 语法的子集。步骤 <emu-xref href="#step-json-parse-validate"></emu-xref> 验证 _jsonString_ 是否符合该子集，步骤 <emu-xref href="#step-json-parse-assert-type"></emu-xref> 断言求值返回了合适类型的值。</p>
+          <p>然而，由于 <emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> 在 ParseJSON 期间行为不同，相同源文本作为 |PrimaryExpression| 求值时与作为 JSON 可能产生不同结果。此外，对对象字面量中 *"__proto__"* 属性重复的提前错误也不适用于 ParseJSON，这导致某些被 ParseJSON 接收的文本并非所有都作为 |PrimaryExpression| 有效，尽管它们在语法上匹配。</p>
         </emu-note>
         <emu-note>
-          <p>当对象中存在重复名称字符串时，词法上先出现的同键值将被覆盖。</p>
+          <p>当一个对象中的名称字符串重复时，词法上靠前的同名属性值会被覆盖。</p>
         </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-json-parse-record">
+        <h1>JSON 解析记录（JSON Parse Record）</h1>
+        <p><dfn variants="JSON Parse Records">JSON 解析记录</dfn> 是用于描述从 JSON 文本解析得到的初始状态值的记录值。</p>
+        <p>JSON 解析记录包含 <emu-xref href="#table-json-parse-record"></emu-xref> 中列出的字段。</p>
+        <emu-table id="table-json-parse-record" caption="JSON 解析记录字段">
+          <table>
+            <tr>
+              <th>字段名称</th>
+              <th>值</th>
+              <th>含义</th>
+            </tr>
+            <tr>
+              <td>[[ParseNode]]</td>
+              <td>一个解析节点</td>
+              <td>上下文解析节点。</td>
+            </tr>
+            <tr>
+              <td>[[Key]]</td>
+              <td>一个属性名</td>
+              <td>[[Value]] 所关联的属性名。</td>
+            </tr>
+            <tr>
+              <td>[[Value]]</td>
+              <td>一个 ECMAScript 语言值</td>
+              <td>对 [[ParseNode]] 求值得到的值。</td>
+            </tr>
+            <tr>
+              <td>[[Elements]]</td>
+              <td>JSON 解析记录的列表</td>
+              <td>若 [[Value]] 是数组，该列表包含与 [[Value]] 元素对应的 JSON 解析记录。否则为一个空列表。</td>
+            </tr>
+            <tr>
+              <td>[[Entries]]</td>
+              <td>JSON 解析记录的列表</td>
+              <td>若 [[Value]] 是非数组对象，该列表包含与 [[Value]] 属性对应的 JSON 解析记录。否则为一个空列表。</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
+      <emu-clause id="sec-createjsonparserecord" type="abstract operation">
+        <h1>
+          CreateJSONParseRecord (
+            _parseNode_: 解析节点,
+            _key_: 属性名,
+            _val_: ECMAScript 语言值,
+          ): 一个 JSON 解析记录
+        </h1>
+        <dl class="header">
+          <dt>描述</dt>
+          <dd>它递归地合并从 JSON 文本解析出的 _parseNode_ 和其求值得到的 _val_。</dd>
+        </dl>
+        <emu-alg>
+          1. 令 _typedValNode_ 为 ShallowestContainedJSONValue(_parseNode_)。
+          1. 断言：_typedValNode_ 不为 ~empty~。
+          1. 令 _elements_ 为一个新的空列表。
+          1. 令 _entries_ 为一个新的空列表。
+          1. 如果 _val_ 是一个对象，则
+            1. 令 _isArray_ 为 ! <emu-meta suppress-effects="user-code">IsArray(_val_)</emu-meta>。
+            1. 如果 _isArray_ 为 *true*，则
+              1. 断言：_typedValNode_ 是 |ArrayLiteral| 解析节点。
+              1. 令 _contentNodes_ 为 _typedValNode_ 的 JSONArrayLiteralContentNodes。
+              1. 令 _len_ 为 _contentNodes_ 的元素数目。
+              1. 令 _valLen_ 为 ! <emu-meta suppress-effects="user-code">LengthOfArrayLike(_val_)</emu-meta>。
+              1. 断言：_valLen_ 等于 _len_。
+              1. 令 _index_ 为 0。
+              1. 当 _index_ &lt; _len_ 时，重复：
+                1. 令 _propName_ 为 ! ToString(𝔽(_index_))。
+                1. 令 _elementParseRecord_ 为 CreateJSONParseRecord(_contentNodes_[_index_], _propName_, ! <emu-meta suppress-effects="user-code">Get(_val_, _propName_)</emu-meta>)。
+                1. 将 _elementParseRecord_ 添加到 _elements_。
+                1. 将 _index_ 增加 1。
+            1. 否则，
+              1. 断言：_typedValNode_ 是 |ObjectLiteral| 解析节点。
+              1. 令 _propertyNodes_ 为 _typedValNode_ 的 PropertyDefinitionNodes。
+              1. 注：由于 _val_ 是从 JSON 文本生成且未被修改的，其所有属性键均为字符串且会被全部枚举。
+              1. 令 _keys_ 为 ! <emu-meta suppress-effects="user-code">EnumerableOwnProperties(_val_, ~key~)</emu-meta>。
+              1. 对于 _keys_ 中的每个字符串 _P_，执行：
+                1. 注：对于 JSON 文本中同一对象存在多个相同属性名的情况（如 <code>{"a":"lost","a":"kept"}</code>），最终结果对象对应属性的值为最后一次赋值。
+                1. 令 _propertyDefinition_ 为 ~empty~。
+                1. 对 _propertyNodes_ 中的每个解析节点 _propertyNode_，执行：
+                  1. 令 _propName_ 为 _propertyNode_ 的 PropName。
+                  1. 若 _propName_ 等于 _P_，则将 _propertyDefinition_ 置为 _propertyNode_。
+                1. 断言：_propertyDefinition_ 为 <emu-grammar>PropertyDefinition : PropertyName `:` AssignmentExpression</emu-grammar>。
+                1. 令 _propertyValueNode_ 为 _propertyDefinition_ 的 |AssignmentExpression|。
+                1. 令 _entryParseRecord_ 为 CreateJSONParseRecord(_propertyValueNode_, _P_, ! <emu-meta suppress-effects="user-code">Get(_val_, _P_)</emu-meta>)。
+                1. 将 _entryParseRecord_ 添加到 _entries_。
+          1. 否则，
+            1. 断言：_typedValNode_ 既不是 |ArrayLiteral| 解析节点也不是 |ObjectLiteral| 解析节点。
+          1. 返回 JSON 解析记录 { [[ParseNode]]: _typedValNode_, [[Key]]: _key_, [[Value]]: _val_, [[Elements]]: _elements_, [[Entries]]: _entries_ }。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-internalizejsonproperty" type="abstract operation">
         <h1>
           InternalizeJSONProperty (
-            _holder_: an Object,
-            _name_: a String,
-            _reviver_: a function object,
-          ): 要么是包含一个 ECMAScript 语言值的正常完成要么是抛出完成
+            _holder_: 对象,
+            _name_: 字符串,
+            _reviver_: 函数对象,
+            _parseRecord_: JSON 解析记录或 ~empty~,
+          ): 返回 ECMAScript 语言值的正常完成或抛出完成
         </h1>
         <dl class="header">
         </dl>
         <emu-note>
-          <p>该算法故意不在 [[Delete]] 或 CreateDataProperty 返回 *false* 时抛出异常。</p>
+          <p>该算法特意不会因为 [[Delete]] 或 CreateDataProperty 返回 *false* 而抛异常。</p>
         </emu-note>
         <p>调用时执行以下步骤：</p>
         <emu-alg>
           1. 令 _val_ 为 ? Get(_holder_, _name_)。
-          1. 若 _val_ 是 Object，则
+          1. 令 _context_ 为 OrdinaryObjectCreate(%Object.prototype%)。
+          1. 如果 _parseRecord_ 是 JSON 解析记录且 SameValue(_parseRecord_.[[Value]], _val_) 为 *true*，则
+            1. 如果 _val_ 不是对象，则
+              1. 令 _parseNode_ 为 _parseRecord_.[[ParseNode]]。
+              1. 断言：_parseNode_ 既不是 |ArrayLiteral| 解析节点，也不是 |ObjectLiteral| 解析节点。
+              1. 令 _sourceText_ 为 _parseNode_ 匹配的源文本。
+              1. 执行 ! CreateDataPropertyOrThrow(_context_, *"source"*, CodePointsToString(_sourceText_))。
+            1. 令 _elementRecords_ 为 _parseRecord_.[[Elements]]。
+            1. 令 _entryRecords_ 为 _parseRecord_.[[Entries]]。
+          1. 否则，
+            1. 令 _elementRecords_ 为新的空列表。
+            1. 令 _entryRecords_ 为新的空列表。
+          1. 如果 _val_ 是对象，则
             1. 令 _isArray_ 为 ? IsArray(_val_)。
-            1. 若 _isArray_ 为 *true*，则
+            1. 如果 _isArray_ 为 *true*，则
+              1. 令 _elementRecordsLen_ 为 _elementRecords_ 的元素个数。
               1. 令 _len_ 为 ? LengthOfArrayLike(_val_)。
-              1. 令 _I_ 为 0。
-              1. 当 _I_ &lt; _len_ 重复，
-                1. 令 _prop_ 为 ! ToString(𝔽(_I_))。
-                1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _prop_, _reviver_)。
-                1. 若 _newElement_ 为 *undefined*，则
+              1. 令 _index_ 为 0。
+              1. 当 _index_ &lt; _len_ 时，重复，
+                1. 令 _prop_ 为 ! ToString(𝔽(_index_))。
+                1. 如果 _index_ &lt; _elementRecordsLen_，令 _elementRecord_ 为 _elementRecords_[_index_]；否则令 _elementRecord_ 为 ~empty~。
+                1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _prop_, _reviver_, _elementRecord_)。
+                1. 如果 _newElement_ 为 *undefined*，则
                   1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta>。
                 1. 否则，
                   1. 执行 ? CreateDataProperty(_val_, _prop_, _newElement_)。
-                1. 设 _I_ 为 _I_ + 1。
+                1. 令 _index_ 为 _index_ + 1。
             1. 否则，
               1. 令 _keys_ 为 ? EnumerableOwnProperties(_val_, ~key~)。
-              1. 对 _keys_ 的每个 String _P_，执行
-                1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _P_, _reviver_)。
-                1. 若 _newElement_ 为 *undefined*，则
+              1. 对于 _keys_ 中每个字符串 _P_，执行
+                1. 如 _entryRecords_ 中存在 _e_ 使得 _e_.[[Key]] 等于 _P_，则令 _entryRecord_ 为 _e_；否则为 ~empty~。
+                1. 令 _newElement_ 为 ? InternalizeJSONProperty(_val_, _P_, _reviver_, _entryRecord_)。
+                1. 如果 _newElement_ 为 *undefined*，则
                   1. 执行 ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta>。
                 1. 否则，
                   1. 执行 ? CreateDataProperty(_val_, _P_, _newElement_)。
-          1. 返回 ? Call(_reviver_, _holder_, « _name_, _val_ »)。
+          1. 返回 ? Call(_reviver_, _holder_, « _name_, _val_, _context_ »)。
         </emu-alg>
       </emu-clause>
+
+      <emu-clause id="sec-shallowestcontainedjsonvalue" type="abstract operation">
+        <h1>
+          静态语义：ShallowestContainedJSONValue (
+            _root_: 解析节点,
+          ): 解析节点或 ~empty~
+        </h1>
+        <dl class="header">
+          <dt>描述</dt>
+          <dd>对以 _root_ 为根的解析树执行广度优先搜索，并返回第一个属于 JSON 值对应非终结符的节点，如无则返回 ~empty~。</dd>
+        </dl>
+        <emu-alg>
+          1. 令 _F_ 为当前活动函数对象。
+          1. 断言：_F_ 是 `JSON.parse` 内置函数对象（参见 <emu-xref href="#sec-json.parse">JSON.parse</emu-xref>）。
+          1. 令 _types_ 为 « |NullLiteral|, |BooleanLiteral|, |NumericLiteral|, |StringLiteral|, |ArrayLiteral|, |ObjectLiteral|, |UnaryExpression| »。
+          1. 令 _unaryExpression_ 为 ~empty~。
+          1. 令 _queue_ 为 « _root_ »。
+          1. 当 _queue_ 非空时，重复：
+            1. 令 _candidate_ 为 _queue_ 的第一个元素。
+            1. 将 _queue_ 的第一个元素移除。
+            1. 令 _queuedChildren_ 为 *false*。
+            1. 对 _types_ 中每个非终结符 _type_，执行：
+              1. 如果 _candidate_ 是 _type_ 的一个实例，则
+                1. 注：在 JSON 语法中，<code>number</code> 词法符可代表负数。在 ECMAScript 中，负号表示为一元运算，即 |UnaryExpression| 解析为 `-` 和派生的 |UnaryExpression|。
+                1. 若 _type_ 为 |UnaryExpression|，则
+                  1. 若 _candidate_ 的父节点不是 |UnaryExpression| 解析节点，则将 _unaryExpression_ 设为 _candidate_。
+                1. 若 _type_ 为 |NumericLiteral|，则
+                  1. 断言：_candidate_ 包含在 _unaryExpression_ 中。
+                  1. 返回 _unaryExpression_。
+                1. 否则，
+                  1. 返回 _candidate_。
+              1. 如果 _queuedChildren_ 为 *false*，_candidate_ 是非终结符的一个实例，且 _candidate_ Contains _type_ 为 *true*，则
+                1. 令 _children_ 为包含 _candidate_ 子节点的列表，顺序不变。
+                1. 将 _queue_ 与 _children_ 拼接。
+                1. 设置 _queuedChildren_ 为 *true*。
+          1. 返回 ~empty~。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-static-semantics-jsonarrayliteralcontentnodes" type="sdo">
+        <h1>静态语义：JSONArrayLiteralContentNodes ( ): 解析节点列表</h1>
+        <dl class="header">
+        </dl>
+        <emu-grammar>
+          ArrayLiteral :
+            `[` Elision? `]`
+            `[` ElementList `]`
+            `[` ElementList `,` Elision? `]`
+        </emu-grammar>
+        <emu-alg>
+          1. 断言：|Elision| 不存在。
+          1. 若 |ElementList| 不存在，返回一个新的空列表。
+          1. 返回 |ElementList| 的 JSONArrayLiteralContentNodes。
+        </emu-alg>
+
+        <emu-grammar>ElementList : Elision? AssignmentExpression</emu-grammar>
+        <emu-alg>
+          1. 断言：|Elision| 不存在。
+          1. 返回 « |AssignmentExpression| »。
+        </emu-alg>
+
+        <emu-grammar>ElementList : ElementList `,` Elision? AssignmentExpression</emu-grammar>
+        <emu-alg>
+          1. 断言：|Elision| 不存在。
+          1. 令 _elements_ 为派生 |ElementList| 的 JSONArrayLiteralContentNodes。
+          1. 返回 _elements_ 与 « |AssignmentExpression| » 的列表拼接结果。
+        </emu-alg>
+
+        <emu-grammar>
+          ElementList :
+            Elision? SpreadElement
+            ElementList `,` Elision? SpreadElement
+        </emu-grammar>
+        <emu-alg>
+          1. 注：ECMA-404 规定的 JSON 文本不包含 |SpreadElement|。
+          1. 断言：不会执行到该步骤。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-json.rawjson">
+      <h1>JSON.rawJSON ( _text_ )</h1>
+      <p>该函数返回一个代表原始 JSON 文本（字符串、数字、布尔或 null）的对象。</p>
+      <emu-alg>
+        1. 令 _jsonString_ 为 ? ToString(_text_)。
+        1. 若 _jsonString_ 是空字符串，则抛出 *SyntaxError* 异常。
+        1. 若 _jsonString_ 的首个码元不是 ASCII 小写字母码元（0x0061 至 0x007A）、ASCII 数字码元（0x0030 至 0x0039）、0x0022（双引号）或 0x002D（连字符），则抛出 *SyntaxError* 异常。
+        1. 若 _jsonString_ 的最后一个码元不是 ASCII 小写字母码元（0x0061 至 0x007A）、ASCII 数字码元（0x0030 至 0x0039）或 0x0022（双引号），则抛出 *SyntaxError* 异常。
+        1. 令 _parseResult_ 为 ? ParseJSON(_jsonString_)。
+        1. 断言：_parseResult_.[[Value]] 仅为字符串、数字、布尔值或 *null*。
+        1. 令 _internalSlotsList_ 为 « [[IsRawJSON]] »。
+        1. 令 _obj_ 为 OrdinaryObjectCreate(*null*, _internalSlotsList_)。
+        1. 执行 ! CreateDataPropertyOrThrow(_obj_, *"rawJSON"*, _jsonString_)。
+        1. 执行 ! SetIntegrityLevel(_obj_, ~frozen~)。
+        1. 返回 _obj_。
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-json.stringify" type="built-in function">
@@ -46719,32 +46987,36 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 令 _value_ 为 ? Get(_holder_, _key_)。
-          1. 若 _value_ 是 Object 或 _value_ 是 BigInt，则
+          1. 如果 _value_ 是对象或 _value_ 是 BigInt，则
             1. 令 _toJSON_ 为 ? GetV(_value_, *"toJSON"*)。
-            1. 若 IsCallable(_toJSON_) 为 *true*，则
-              1. 设 _value_ 为 ? Call(_toJSON_, _value_, « _key_ »)。
-          1. 若 _state_.[[ReplacerFunction]] 不为 *undefined*，则
-            1. 设 _value_ 为 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)。
-          1. 若 _value_ 是 Object，则
-            1. 若 _value_ 有 [[NumberData]] 内部槽，则
-              1. 设 _value_ 为 ? ToNumber(_value_)。
-            1. 否则若有 [[StringData]] 内部槽，则
-              1. 设 _value_ 为 ? ToString(_value_)。
-            1. 否则若有 [[BooleanData]] 内部槽，则
-              1. 设 _value_ 为 _value_.[[BooleanData]]。
-            1. 否则若有 [[BigIntData]] 内部槽，则
-              1. 设 _value_ 为 _value_.[[BigIntData]]。
-          1. 若 _value_ 为 *null*，返回 *"null"*。
-          1. 若 _value_ 为 *true*，返回 *"true"*。
-          1. 若 _value_ 为 *false*，返回 *"false"*。
-          1. 若 _value_ 为 String，返回 QuoteJSONString(_value_)。
-          1. 若 _value_ 为 Number，则
-            1. 若 _value_ 有限，返回 ! ToString(_value_)。
+            1. 如果 IsCallable(_toJSON_) 为 *true*，则
+              1. 将 _value_ 设为 ? Call(_toJSON_, _value_, « _key_ »)。
+          1. 如果 _state_.[[ReplacerFunction]] 不为 *undefined*，则
+            1. 将 _value_ 设为 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)。
+          1. 如果 _value_ 是对象，则
+            1. 如果 _value_ 拥有 [[IsRawJSON]] 内部槽，则
+              1. 令 _rawJSON_ 为 ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta>。
+              1. 断言：_rawJSON_ 为字符串。
+              1. 返回 _rawJSON_。
+            1. 如果 _value_ 拥有 [[NumberData]] 内部槽，则
+              1. 将 _value_ 设为 ? ToNumber(_value_)。
+            1. 否则如果 _value_ 拥有 [[StringData]] 内部槽，则
+              1. 将 _value_ 设为 ? ToString(_value_)。
+            1. 否则如果 _value_ 拥有 [[BooleanData]] 内部槽，则
+              1. 将 _value_ 设为 _value_.[[BooleanData]]。
+            1. 否则如果 _value_ 拥有 [[BigIntData]] 内部槽，则
+              1. 将 _value_ 设为 _value_.[[BigIntData]]。
+          1. 如果 _value_ 为 *null*，返回 *"null"*。
+          1. 如果 _value_ 为 *true*，返回 *"true"*。
+          1. 如果 _value_ 为 *false*，返回 *"false"*。
+          1. 如果 _value_ 为字符串，返回 QuoteJSONString(_value_)。
+          1. 如果 _value_ 为数字，则
+            1. 如果 _value_ 是有限的，返回 ! ToString(_value_)。
             1. 返回 *"null"*。
-          1. 若 _value_ 为 BigInt，抛出 *TypeError* 异常。
-          1. 若 _value_ 是 Object 且 IsCallable(_value_) 为 *false*，则
+          1. 如果 _value_ 是 BigInt，抛出 *TypeError* 异常。
+          1. 如果 _value_ 是对象且 IsCallable(_value_) 为 *false*，则
             1. 令 _isArray_ 为 ? IsArray(_value_)。
-            1. 若 _isArray_ 为 *true*，返回 ? SerializeJSONArray(_state_, _value_)。
+            1. 如果 _isArray_ 为 *true*，返回 ? SerializeJSONArray(_state_, _value_)。
             1. 返回 ? SerializeJSONObject(_state_, _value_)。
           1. 返回 *undefined*。
         </emu-alg>

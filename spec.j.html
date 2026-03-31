@@ -3,6 +3,22 @@
 <meta charset="utf-8">
 <script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
+<script>
+(function() {
+  let d = new Date;
+  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
+    let d = document;
+    let h = d.documentElement;
+    let l = d.createElement('link');
+    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
+    l.setAttribute('rel', 'stylesheet');
+    h.appendChild(l);
+    let s = d.createElement('style');
+    s.innerHTML = '* { font-family: Itim !important; }';
+    h.appendChild(s);
+  }
+})();
+</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -154,7 +170,7 @@
   }
 </style>
 <pre class="metadata">
-  title: ECMAScript<sup>&reg;</sup> 2026 言語仕様
+  title: ECMAScript<sup>&reg;</sup> 2027 言語仕様
   shortname: ECMA-262
   status: draft
   location: https://tc39.es/ecma262/
@@ -196,7 +212,7 @@
 
 <emu-intro id="sec-intro">
   <h1>はじめに</h1>
-  <p>このEcma標準は、ECMAScript 2026言語を定義します。これはECMAScript言語仕様の第十七版です。ECMAScriptは複数の起源技術に基づいており、最もよく知られているのは JavaScript（Netscape） と JScript（Microsoft）です。この言語は Netscape の Brendan Eich によって発明され、同社の Navigator 2.0 ブラウザで初めて登場しました。その後のすべての Netscape ブラウザおよび Microsoft の Internet Explorer 3.0 以降のすべてのブラウザに搭載されました。ウェブブラウザに組み込まれた言語として最もよく知られていますが、ブラウザ外でも広く採用され、サーバーや組み込み用途などでも利用されており、世界で最も広く使われている汎用プログラミング言語の一つに成長しています。</p>
+  <p>このEcma標準は、ECMAScript 2027言語を定義します。これはECMAScript言語仕様の第十七版です。ECMAScriptは複数の起源技術に基づいており、最もよく知られているのは JavaScript（Netscape） と JScript（Microsoft）です。この言語は Netscape の Brendan Eich によって発明され、同社の Navigator 2.0 ブラウザで初めて登場しました。その後のすべての Netscape ブラウザおよび Microsoft の Internet Explorer 3.0 以降のすべてのブラウザに搭載されました。ウェブブラウザに組み込まれた言語として最もよく知られていますが、ブラウザ外でも広く採用され、サーバーや組み込み用途などでも利用されており、世界で最も広く使われている汎用プログラミング言語の一つに成長しています。</p>
   <p>ECMAScript言語仕様の開発は1996年11月に始まりました。このEcma標準の第1版は1997年6月のEcma総会で採択されました。</p>
   <p>このEcma標準はISO/IEC JTC 1に高速トラック手続きで提出され、1998年4月に国際標準ISO/IEC 16262として承認されました。1998年6月のEcma総会では、ISO/IEC 16262との完全な整合性を保つため第2版（ECMA-262）が承認されました。第1版と第2版の間の変更は編集上のものです。</p>
   <p>第3版の標準では、強力な正規表現、より良い文字列処理、新しい制御文、try/catch例外処理、エラー定義の強化、数値出力のフォーマット、将来の言語成長を見越した小さな変更などが導入されました。ECMAScript標準の第3版は1999年12月のEcma総会で採択され、2002年6月にISO/IEC 16262:2002として発行されました。</p>
@@ -217,33 +233,49 @@
   <p>本版および以前の版の開発において、Ecma TC39には多くの組織を代表する多数の個人が非常に重要な貢献をしています。さらに、TC39のECMAScript活動を支える活発なコミュニティも生まれました。このコミュニティは多数のドラフトのレビュー、数千件に及ぶバグ報告、実装実験、テストスイートの提供、世界中の開発者へのECMAScriptの教育などで貢献しています。残念ながら、この取り組みに貢献した全ての個人や組織を特定し、謝意を表することは不可能です。</p>
   <p>
     Allen Wirfs-Brock<br>
-    ECMA-262、第6版プロジェクトエディター
+    ECMA-262、第6版 プロジェクトエディター
   </p>
   <p>
     Brian Terlson<br>
-    ECMA-262、第7～10版プロジェクトエディター
+    ECMA-262、第7版〜第10版 プロジェクトエディター
   </p>
   <p>
     Jordan Harband<br>
-    ECMA-262、第10～12版プロジェクトエディター
-  </p>
-  <p>
-    Shu-yu Guo<br>
-    ECMA-262、第12～16版プロジェクトエディター
-  </p>
-  <p>
-    Michael Ficarra<br>
-    ECMA-262、第12～16版プロジェクトエディター
+    ECMA-262、第10版〜第12版 プロジェクトエディター
   </p>
   <p>
     Kevin Gibbons<br>
-    ECMA-262、第12～16版プロジェクトエディター
+    ECMA-262、第12版〜第17版 プロジェクトエディター
+  </p>
+  <p>
+    Shu-yu Guo<br>
+    ECMA-262、第12版〜第18版 プロジェクトエディター
+  </p>
+  <p>
+    Michael Ficarra<br>
+    ECMA-262、第12版〜第18版 プロジェクトエディター
+  </p>
+  <p>
+    Richard Gibson<br>
+    ECMA-262、第18版 プロジェクトエディター
+  </p>
+  <p>
+    Ron Buckton<br>
+    ECMA-262、第18版 プロジェクトエディター
+  </p>
+  <p>
+    Nicolò Ribaudo<br>
+    ECMA-262、第18版 プロジェクトエディター
+  </p>
+  <p>
+    Linus Groh<br>
+    ECMA-262、第18版 プロジェクトエディター
   </p>
 </emu-intro>
 
 <emu-clause id="sec-scope">
   <h1>適用範囲</h1>
-  <p>本標準は、ECMAScript 2026汎用プログラミング言語を定義します。</p>
+  <p>本標準は、ECMAScript 2027汎用プログラミング言語を定義します。</p>
 </emu-clause>
 
 <emu-clause id="sec-conformance">
@@ -1128,29 +1160,29 @@
         </ul>
         <p>これら以外の方法でCompletion Recordを返すことは編集上の誤りです。例として、これらの抽象操作内では、</p>
         <emu-alg example>
-          1. *true*を返す。
+          1. *true* を返す。
         </emu-alg>
-        <p>は次のいずれかと同義です:</p>
+        <p>は、次のいずれとも同じ意味になります。</p>
         <emu-alg example>
-          1. NormalCompletion(*true*)を返す。
+          1. NormalCompletion(*true*) を返す。
         </emu-alg>
-        <p>あるいは</p>
+        <p>または</p>
         <emu-alg example>
-          1. Let _completion_ be NormalCompletion(*true*)。
-          1. Completion(_completion_)を返す。
+          1. _completion_ を NormalCompletion(*true*) とする。
+          1. Completion(_completion_) を返す。
         </emu-alg>
-        <p>あるいは</p>
+        <p>または</p>
         <emu-alg example>
-          1. Completion Record { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ }を返す。
+          1. Completion Record { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ } を返す。
         </emu-alg>
-        <p>ReturnIfAbrupt展開によって、次の例は許容されます。展開後の手順内でCompletionの適用結果がabruptの場合は直接返され、normalの場合はアンラップ後に暗黙のNormalCompletion適用が行われます。</p>
+        <p><emu-xref href="#sec-shorthands-for-unwrapping-completion-records">? ショートハンド展開</emu-xref> により、次の例も許可されます。展開後の手順内で、abruptな場合は Completion の結果が直接返され、normalな場合はアンラップ後に暗黙の NormalCompletion が適用されます。</p>
         <emu-alg example>
-          1. Return ? _completion_。
+          1. ? _completion_ を返す。
         </emu-alg>
-        <p>次の例は、Completion Recordをその手順で注釈なしに返しているため編集上の誤りです。</p>
+        <p>次の例は編集上の誤りです。なぜなら、このステップでアノテートせずに Completion Record が返されているからです。</p>
         <emu-alg example>
-          1. Let _completion_ be NormalCompletion(*true*)。
-          1. _completion_を返す。
+          1. _completion_ を NormalCompletion(*true*) とする。
+          1. _completion_ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -4174,7 +4206,7 @@
 
     <emu-clause id="sec-enum-specification-type">
       <h1>Enum仕様型</h1>
-      <p><dfn variants="enum,enums">Enum</dfn>は仕様内部の値であり、ECMAScriptコードから直接観測することはできません。Enumは~sans-serif~フォントで表記されます。例えば、Completion Recordの[[Type]]フィールドは~normal~、~return~、~throw~などの値を取ります。Enumは名前以外の特性を持ちません。Enumの名前は他のEnumと区別するためだけに存在し、コンテキストでの使い方や意味を暗示しません。</p>
+      <p><dfn variants="enum,enums">列挙型</dfn>は、この仕様書で内部的に使用される値であり、ECMAScript コードから直接観測することはできません。列挙型は、上位ケバブケースかつ~サンセリフ~書体で記述されます。たとえば、Completion Record の [[Type]] フィールドは ~normal~、~return~、~throw~ などの値を取ります。列挙型は名前以外の特性を持ちません。列挙型の名前は、他の列挙型と区別するためだけのものであり、文脈での用途や意味については何も示唆しません。</p>
     </emu-clause>
 
     <emu-clause id="sec-list-and-record-specification-type">
@@ -18476,62 +18508,62 @@
         </h1>
         <dl class="header">
         </dl>
-        <emu-grammar>Elision : `,`</emu-grammar>
+        <emu-grammar>省略 : `,`</emu-grammar>
         <emu-alg>
           1. _len_ を _nextIndex_ + 1 とする。
-          1. ? Set(_array_, *"length"*, 𝔽(_len_), *true*) を実行する。
-          1. 注: 上の手順は _len_ が 2<sup>32</sup>-1 を超えると投げる。
+          1. 𝔽(_len_) を用いて ? Set(_array_, *"length"*, 𝔽(_len_), *true*) を実行する。
+          1. 注: 上記のステップは _len_ が 2<sup>32</sup> - 1 を超える場合に例外をスローする。
           1. _len_ を返す。
         </emu-alg>
-        <emu-grammar>Elision : Elision `,`</emu-grammar>
+        <emu-grammar>省略 : 省略 `,`</emu-grammar>
         <emu-alg>
-          1. 引数 _array_, (_nextIndex_ + 1) で |Elision| の ArrayAccumulation を実行した結果を返す。
+          1. |Elision| の ArrayAccumulation を、引数 _array_ と (_nextIndex_ + 1) で呼び出し、?で返す。
         </emu-alg>
-        <emu-grammar>ElementList : Elision? AssignmentExpression</emu-grammar>
+        <emu-grammar>要素リスト : 省略? 代入式</emu-grammar>
         <emu-alg>
-          1. |Elision| が存在するなら
-            1. _nextIndex_ を 引数 _array_, _nextIndex_ で |Elision| の ArrayAccumulation を実行した結果に設定。
-          1. _initResult_ を |AssignmentExpression| の Evaluation。
-          1. _initValue_ を ? GetValue(_initResult_)。
-          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を実行。
+          1. |Elision| が存在する場合、
+            1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
+          1. _initResult_ を |AssignmentExpression| の評価（?）とする。
+          1. _initValue_ を ? GetValue(_initResult_) とする。
+          1. ! ToString(𝔽(_nextIndex_)) を用いて ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を行う。
           1. _nextIndex_ + 1 を返す。
         </emu-alg>
-        <emu-grammar>ElementList : Elision? SpreadElement</emu-grammar>
+        <emu-grammar>要素リスト : 省略? スプレッド要素</emu-grammar>
         <emu-alg>
-          1. |Elision| が存在するなら
-            1. _nextIndex_ を 引数 _array_, _nextIndex_ で |Elision| の ArrayAccumulation を実行した結果に設定。
-          1. 引数 _array_, _nextIndex_ で |SpreadElement| の ArrayAccumulation を実行した結果を返す。
+          1. |Elision| が存在する場合、
+            1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
+          1. |SpreadElement| の ArrayAccumulation を、引数 _array_ と _nextIndex_ で呼び出し、? で返す。
         </emu-alg>
-        <emu-grammar>ElementList : ElementList `,` Elision? AssignmentExpression</emu-grammar>
+        <emu-grammar>要素リスト : 要素リスト `,` 省略? 代入式</emu-grammar>
         <emu-alg>
-          1. _nextIndex_ を 引数 _array_, _nextIndex_ で |ElementList| の ArrayAccumulation を実行した結果に設定。
-          1. |Elision| が存在するなら
-            1. _nextIndex_ を 引数 _array_, _nextIndex_ で |Elision| の ArrayAccumulation を実行した結果に設定。
-          1. _initResult_ を |AssignmentExpression| の Evaluation。
-          1. _initValue_ を ? GetValue(_initResult_)。
-          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を実行。
+          1. _nextIndex_ を、派生した |ElementList| の ArrayAccumulation（引数 _array_ と _nextIndex_）で?にする。
+          1. |Elision| が存在する場合、
+            1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
+          1. _initResult_ を |AssignmentExpression| の評価（?）とする。
+          1. _initValue_ を ? GetValue(_initResult_) とする。
+          1. ! ToString(𝔽(_nextIndex_)) を用いて ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を行う。
           1. _nextIndex_ + 1 を返す。
         </emu-alg>
-        <emu-grammar>ElementList : ElementList `,` Elision? SpreadElement</emu-grammar>
+        <emu-grammar>要素リスト : 要素リスト `,` 省略? スプレッド要素</emu-grammar>
         <emu-alg>
-          1. _nextIndex_ を 引数 _array_, _nextIndex_ で |ElementList| の ArrayAccumulation を実行した結果に設定。
-          1. |Elision| が存在するなら
-            1. _nextIndex_ を 引数 _array_, _nextIndex_ で |Elision| の ArrayAccumulation を実行した結果に設定。
-          1. 引数 _array_, _nextIndex_ で |SpreadElement| の ArrayAccumulation を実行した結果を返す。
+          1. _nextIndex_ を、派生した |ElementList| の ArrayAccumulation（引数 _array_ と _nextIndex_）で?にする。
+          1. |Elision| が存在する場合、
+            1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
+          1. |SpreadElement| の ArrayAccumulation を、引数 _array_ と _nextIndex_ で呼び出し、? で返す。
         </emu-alg>
-        <emu-grammar>SpreadElement : `...` AssignmentExpression</emu-grammar>
+        <emu-grammar>スプレッド要素 : `...` 代入式</emu-grammar>
         <emu-alg>
-          1. _spreadRef_ を |AssignmentExpression| の Evaluation。
-          1. _spreadObj_ を ? GetValue(_spreadRef_)。
-          1. _iteratorRecord_ を ? GetIterator(_spreadObj_, ~sync~)。
-          1. 反復:
-            1. _next_ を ? IteratorStepValue(_iteratorRecord_)。
-            1. _next_ が ~done~ なら _nextIndex_ を返す。
-            1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _next_) を実行。
-            1. _nextIndex_ を _nextIndex_ + 1 に設定。
+          1. _spreadRef_ を |AssignmentExpression| の評価（?）とする。
+          1. _spreadObj_ を ? GetValue(_spreadRef_) とする。
+          1. _iteratorRecord_ を ? GetIterator(_spreadObj_, ~sync~) とする。
+          1. 繰り返し、
+            1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+            1. _next_ が ~done~ であれば、_nextIndex_ を返す。
+            1. ! ToString(𝔽(_nextIndex_)) を用いて ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _next_) を行う。
+            1. _nextIndex_ を _nextIndex_ + 1 に設定する。
         </emu-alg>
         <emu-note>
-          <p>標準組込み Array prototype が [[Set]] による新たな自身プロパティ生成を妨げるよう改変されていても、自身プロパティ確立を保証するため CreateDataPropertyOrThrow が使用される。</p>
+          <p>CreateDataPropertyOrThrow は、組み込みの Array プロトタイプオブジェクトが [[Set]] を使った新しい自身のプロパティ作成を妨げるよう変更されている場合でも、配列に自身のプロパティが定義されることを保証するために使用される。</p>
         </emu-note>
       </emu-clause>
 
@@ -18656,6 +18688,28 @@
         <emu-grammar>PropertyName : ComputedPropertyName</emu-grammar>
         <emu-alg>
           1. *true* を返す。
+        </emu-alg>
+      </emu-clause>
+
+            <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
+        <h1>静的セマンティクス: PropertyDefinitionNodes ( ): パースノードのリスト</h1>
+        <dl class="header">
+        </dl>
+
+        <emu-grammar>ObjectLiteral : `{` `}`</emu-grammar>
+        <emu-alg>
+          1. 新しい空のリストを返す。
+        </emu-alg>
+
+        <emu-grammar>PropertyDefinitionList : PropertyDefinition</emu-grammar>
+        <emu-alg>
+          1. « |PropertyDefinition| » を返す。
+        </emu-alg>
+
+        <emu-grammar>PropertyDefinitionList : PropertyDefinitionList `,` PropertyDefinition</emu-grammar>
+        <emu-alg>
+          1. _head_ を、派生した |PropertyDefinitionList| の PropertyDefinitionNodes とする。
+          1. _head_ と « |PropertyDefinition| » のリスト結合を返す。
         </emu-alg>
       </emu-clause>
 
@@ -26777,10 +26831,10 @@
                 [[Status]]
               </td>
               <td>
-                ~new~, ~unlinked~, ~linking~, ~linked~, ~evaluating~, ~evaluating-async~, または ~evaluated~
+                ~new~, ~unlinked~, ~linking~, ~linked~, ~evaluating~, ~evaluating-async~ または ~evaluated~
               </td>
               <td>
-                初期値は ~new~。モジュールのライフサイクル進行に伴って ~unlinked~, ~linking~, ~linked~, ~evaluating~, （必要に応じて）~evaluating-async~, ~evaluated~ と順に遷移する。~evaluating-async~ は、このモジュールが非同期依存の完了後に実行キューへ入ったか、[[HasTLA]] フィールドが *true* で実行済みでトップレベル完了待ちであることを示す。
+                初期値は ~new~。モジュールのライフサイクル進行にともない、~unlinked~、~linking~、~linked~、~evaluating~、場合によっては ~evaluating-async~、~evaluated~ へ（この順で）遷移する。~evaluating-async~ は、このモジュールが非同期依存の完了待ちで実行キューに入っているか、[[HasTLA]] フィールドが *true* で実行された後、トップレベル完了待ちであることを示す。
               </td>
             </tr>
             <tr>
@@ -26791,7 +26845,7 @@
                 throw completion または ~empty~
               </td>
               <td>
-                評価中に発生した例外を表す throw completion。例外が発生していない、または [[Status]] が ~evaluated~ でない場合は *undefined*。
+                評価中に発生した例外を表す throw completion。例外が発生しなかった場合や [[Status]] が ~evaluated~ でない場合は *undefined*。
               </td>
             </tr>
             <tr>
@@ -26802,7 +26856,7 @@
                 整数または ~empty~
               </td>
               <td>
-                Link と Evaluate 中のみ使用される補助フィールド。[[Status]] が ~linking~ または ~evaluating~ のとき、モジュール自身の深さ優先走査インデックス、または同じ強連結成分内の「より早い」モジュールのそれ。
+                Link および Evaluate 時のみ使用される補助フィールド。[[Status]] が ~linking~ または ~evaluating~ のいずれかの場合、モジュール自身または同じ強連結成分内の「より前に」現れたモジュールの深さ優先走査インデックスとなる。
               </td>
             </tr>
             <tr>
@@ -26810,10 +26864,10 @@
                 [[RequestedModules]]
               </td>
               <td>
-                ModuleRequest Record のリスト
+                ModuleRequest レコードのリスト
               </td>
               <td>
-                そのモジュール内の import に対応する ModuleRequest Record のリスト。ソーステキスト出現順で並ぶ。
+                このモジュールのインポートに関連する ModuleRequest レコードのリスト。リストの順序はインポートがソーステキスト内で現れる順序。
               </td>
             </tr>
             <tr>
@@ -26821,10 +26875,10 @@
                 [[LoadedModules]]
               </td>
               <td>
-                LoadedModuleRequest Record のリスト
+                LoadedModuleRequest レコードのリスト
               </td>
               <td>
-                このレコードが表すモジュールが使用した指定子文字列と解決済み Module Record との（相対的インポート属性を含む）対応。ModuleRequestsEqual(_r1_, _r2_) が *true* となる異なる Record _r1_ と _r2_ を同時に含まない。
+                このレコードが表すモジュールが、相対インポート属性つきでモジュールを要求する際の識別子文字列から、解決済みモジュールレコードへのマップを表す。ModuleRequestsEqual(_r1_, _r2_) が *true* であるようなレコード _r1_ と _r2_ が2つ同時に存在することはない。
               </td>
             </tr>
             <tr>
@@ -26832,10 +26886,10 @@
                 [[CycleRoot]]
               </td>
               <td>
-                Cyclic Module Record または ~empty~
+                循環モジュールレコードまたは ~empty~
               </td>
               <td>
-                サイクル内で最初に訪れたモジュール（強連結成分の DFS ルート）。サイクル外ならモジュール自身。Evaluate 完了後、モジュールの [[DFSAncestorIndex]] はその [[CycleRoot]] の深さ優先インデックスとなる。
+                サイクル内で最初に訪れたモジュール、すなわち強連結成分のルートとなるDFS祖先。サイクルにない場合は該当モジュール自身。Evaluate 完了後、モジュールの [[DFSAncestorIndex]] はその [[CycleRoot]] の深さ優先走査インデックスとなる。
               </td>
             </tr>
             <tr>
@@ -26843,10 +26897,10 @@
                 [[HasTLA]]
               </td>
               <td>
-                Boolean
+                ブール値
               </td>
               <td>
-                このモジュール自体が個別に非同期かどうか（例: top-level await を含む Source Text Module Record）。非同期依存があるだけでは *true* にはならない。パース後に変更されてはならない。
+                このモジュールが個別に非同期であるかどうか（例：トップレベル await を含むソーステキストモジュールレコードの場合）。依存先が非同期であるだけではこのフィールドは *true* とはならない。パース後、このフィールドは変更してはならない。
               </td>
             </tr>
             <tr>
@@ -26854,10 +26908,10 @@
                 [[AsyncEvaluationOrder]]
               </td>
               <td>
-                ~unset~, 整数, または ~done~
+                ~unset~、整数、または ~done~
               </td>
               <td>
-                初期値 ~unset~。完全同期モジュールでは ~unset~ のまま。自身が非同期または非同期依存を持つ場合、<emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref> により保留モジュール実行をキューする順序を決める整数を設定。保留モジュールが実行されたら ~done~。
+                初期値は ~unset~ で、完全な同期モジュールの場合はずっと ~unset~ のまま。自身または依存先が非同期の場合、未処理モジュールの実行キューの順を決める整数となる（<emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref> 参照）。モジュールの実行が成功したら、このフィールドは ~done~ になる。
               </td>
             </tr>
             <tr>
@@ -26865,10 +26919,10 @@
                 [[TopLevelCapability]]
               </td>
               <td>
-                PromiseCapability Record または ~empty~
+                PromiseCapability レコードまたは ~empty~
               </td>
               <td>
-                あるサイクルの [[CycleRoot]] で、かつそのサイクル内のモジュールに Evaluate() が呼ばれた場合、その全評価の PromiseCapability Record を保持。Evaluate() 抽象メソッドが返す Promise を解決・拒否するために用いる。サイクル内依存でもトップレベル Evaluate() が開始されていなければ ~empty~。
+                このモジュールがサイクルの [[CycleRoot]] であり、そのサイクル内のいずれかのモジュールで Evaluate() が呼ばれている場合、このフィールドにはその評価全体に対する PromiseCapability レコードが入る。Evaluate() 抽象メソッドが返す Promise オブジェクトの決着処理に使われる。このモジュールの依存では（トップレベル Evaluate() が開始されていない限り）通常 ~empty~ となる。
               </td>
             </tr>
             <tr>
@@ -26876,10 +26930,10 @@
                 [[AsyncParentModules]]
               </td>
               <td>
-                Cyclic Module Record のリスト
+                循環モジュールレコードのリスト
               </td>
               <td>
-                このモジュールまたは依存に [[HasTLA]] *true* があり実行進行中の場合、トップレベル実行ジョブにおける親インポーターを追跡。親モジュールはこのモジュールが成功完了するまで実行を開始しない。
+                このモジュールまたは依存先が [[HasTLA]] *true* で、実行進行中の場合、トップレベル実行ジョブに対する親インポーターを追跡する。この親モジュール群は、このモジュールの実行が完全に終了するまで実行が開始されない。
               </td>
             </tr>
             <tr>
@@ -26890,7 +26944,7 @@
                 整数または ~empty~
               </td>
               <td>
-                非同期依存がある場合、残り非同期依存モジュールの数。これが 0 になり実行エラーがなければモジュールは実行される。
+                このモジュールが非同期依存を持つ場合、残り実行すべき非同期依存モジュール数を追跡する。この値が0かつ実行エラーがなければ、その時点でこのモジュールが実行される。
               </td>
             </tr>
           </table>
@@ -27207,7 +27261,6 @@
               1. もし _result_ がアブストラクトコンプリ―ションであれば、
                 1. _stack_ の各 Cyclic Module Record _m_ について、以下を行う
                   1. アサート: _m_.[[Status]] は ~evaluating~ である。
-                  1. アサート: _m_.[[AsyncEvaluationOrder]] は ~unset~ である。
                   1. _m_.[[Status]] に ~evaluated~ を設定する。
                   1. _m_.[[EvaluationError]] に _result_ を設定する。
                 1. アサート: _module_.[[Status]] は ~evaluated~ である。
@@ -28727,8 +28780,8 @@
           </dl>
 
           <emu-alg>
-            1. _json_ を ? ParseJSON(_source_) とする。
-            1. CreateDefaultExportSyntheticModule(_json_) を返す。
+            1. _parseResult_ を ? ParseJSON(_source_) とする。
+            1. CreateDefaultExportSyntheticModule(_parseResult_.[[Value]]) を返す。
           </emu-alg>
         </emu-clause>
 
@@ -47144,90 +47197,305 @@ THH:mm:ss.sss
     </ul>
     <p>JSON データ交換形式は ECMA-404 に定義される。本仕様で使用される JSON 交換形式は ECMA-404 に記述されるものと正確に同一である。`JSON.parse` および `JSON.stringify` の適合実装は ECMA-404 仕様に記述された交換形式を、削除や拡張なしにサポートしなければならない。</p>
 
+    <emu-clause id="sec-json.israwjson" type="built-in function">
+      <h1>JSON.isRawJSON ( _O_ )</h1>
+      <p>この関数は呼び出されたとき、次の手順を実行する：</p>
+      <emu-alg>
+        1. _O_ がオブジェクトであり、かつ _O_ が [[IsRawJSON]] 内部スロットを持つ場合、*true* を返す。
+        1. *false* を返す。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-json.parse" type="built-in function">
       <h1>JSON.parse ( _text_ [ , _reviver_ ] )</h1>
-      <p>この関数は JSON テキスト（JSON 形式の文字列）を構文解析し、ECMAScript 言語値を生成する。JSON 形式はリテラル、配列、オブジェクトを ECMAScript のリテラル、配列初期化子、オブジェクト初期化子に類似した構文で表現する。構文解析後、JSON オブジェクトは ECMAScript オブジェクトとして実体化され、JSON 配列は ECMAScript の Array インスタンスとして実体化される。JSON の文字列、数値、真偽値、および null はそれぞれ ECMAScript の String, Number, Boolean, *null* として実体化される。</p>
-      <p>任意の _reviver_ パラメータは 2 つのパラメータ _key_, _value_ を取る関数であり、結果をフィルタおよび変換できる。構文解析で生成された各 _key_/_value_ ペアで呼び出され、その戻り値が元の値の代わりに使用される。受け取ったものをそのまま返した場合、構造は変更されない。*undefined* を返した場合、そのプロパティは結果から削除される。</p>
+      <p>この関数は JSON テキスト（JSON 形式の文字列）を解析し、ECMAScript 言語値を生成する。JSON の書式はリテラル、配列、オブジェクトを ECMAScript のリテラル、配列初期化式、オブジェクト初期化式に類似した構文で表現する。解析後、JSON オブジェクトは ECMAScript オブジェクトとして実体化される。JSON 配列は ECMAScript 配列インスタンスとなる。JSON 文字列、数値、ブール値、null は、それぞれ ECMAScript の String, Number, Boolean, *null* として実体化される。</p>
+      <p>省略可能な _reviver_ パラメータは、結果をフィルターおよび変換するための関数である。解析で生成された全ての値に対して、_reviver_ は3つの引数（関連プロパティキー、その値、コンテキストオブジェクト）で呼び出される。プロパティが変更されず、その値がプリミティブの場合、与えられたコンテキストオブジェクトは対応するパースノードのソーステキストを含む *"source"* プロパティを持つ。この呼び出しが *undefined* を返した場合、そのプロパティは削除される。それ以外の場合は、プロパティは戻り値を使って再定義される。</p>
       <emu-alg>
         1. _jsonString_ を ? ToString(_text_) とする。
-        1. _unfiltered_ を ? ParseJSON(_jsonString_) とする。
-        1. IsCallable(_reviver_) が *false* の場合、_unfiltered_ を返す。
+        1. _parseResult_ を ? ParseJSON(_jsonString_) とする。
+        1. _unfiltered_ を _parseResult_.[[Value]] とする。
+        1. IsCallable(_reviver_) が *false* なら _unfiltered_ を返す。
         1. _root_ を OrdinaryObjectCreate(%Object.prototype%) とする。
         1. _rootName_ を空文字列とする。
         1. ! CreateDataPropertyOrThrow(_root_, _rootName_, _unfiltered_) を実行する。
-        1. ? InternalizeJSONProperty(_root_, _rootName_, _reviver_) を返す。
+        1. _snapshot_ を <emu-meta suppress-effects="user-code">CreateJSONParseRecord(_parseResult_.[[ParseNode]], _rootName_, _unfiltered_)</emu-meta> とする。
+        1. ? InternalizeJSONProperty(_root_, _rootName_, _reviver_, _snapshot_) を返す。
       </emu-alg>
-      <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
+      <p>この関数の *"length"* プロパティの値は *2*<sub>𝔽</sub> である。</p>
 
       <emu-clause id="sec-ParseJSON" type="abstract operation">
         <h1>
           ParseJSON (
-            _text_: a String,
-          ): 正常完了で ECMAScript 言語値を含むか、または throw completion
+            _text_: 文字列,
+          ): フィールド [[ParseNode]]（パースノード）と [[Value]]（ECMAScript 言語値）を持つレコードを返す通常の完了またはthrow completion
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. [id="step-json-parse-validate"] もし StringToCodePoints(_text_) が ECMA-404 で規定された有効な JSON テキストでないなら *SyntaxError* 例外を投げる。
-          1. _scriptString_ を *"("*, _text_, *");"* の文字列連結とする。
+          1. [id="step-json-parse-validate"] StringToCodePoints(_text_) が ECMA-404 で定義された有効な JSON テキストでない場合、*SyntaxError* 例外をスローする。
+          1. _scriptString_ を *"("*, _text_, *");"* を連結した文字列とする。
           1. [id="step-json-parse-parse"] _script_ を ParseText(_scriptString_, |Script|) とする。
-          1. 注: <emu-xref href="#sec-object-initializer-static-semantics-early-errors"></emu-xref> で定義される早期エラールールは上記 ParseText 呼び出しに特別な扱いを持つ。
-          1. 事前条件: _script_ は Parse Node。
+          1. 注: <emu-xref href="#sec-object-initializer-static-semantics-early-errors"></emu-xref> で定義された早期エラールールは、上記の ParseText 呼び出しで特別に扱われる。
+          1. アサート: _script_ はパースノードである。
           1. [id="step-json-parse-eval"] _result_ を ! <emu-meta suppress-effects="user-code">_script_ の評価</emu-meta> とする。
-          1. 注: <emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> で定義される PropertyDefinitionEvaluation の意味論は ParseJSON 中特別な扱いを持つ。
-          1. [id="step-json-parse-assert-type"] 事前条件: _result_ は String, Number, Boolean, |ArrayLiteral| か |ObjectLiteral| により定義される Object, または *null* のいずれかである。
-          1. _result_ を返す。
+          1. 注: <emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> で定義される PropertyDefinitionEvaluation のセマンティクスは、上記の評価時に特別扱いされる。
+          1. [id="step-json-parse-assert-type"] アサート: _result_ は String, Number, Boolean, |ArrayLiteral| または |ObjectLiteral| によって定義されるオブジェクト、または *null* のいずれかである。
+          1. レコード { [[ParseNode]]: _script_, [[Value]]: _result_ } を返す。
         </emu-alg>
-        <p>適合実装が `JSON.parse` の JSON 文法を拡張することは許されない。修正または拡張された JSON 交換形式をサポートしたい実装は別の parse 関数を定義しなければならない。</p>
+        <p>準拠実装が `JSON.parse` のために JSON 文法を拡張することは許可されない。修正版または拡張版の JSON インターチェンジ形式をサポートする場合は、別のパース関数を定義しなければならない。</p>
         <emu-note>
-          <p>有効な JSON テキストは ECMAScript |PrimaryExpression| 構文の部分集合である。ステップ <emu-xref href="#step-json-parse-validate"></emu-xref> は _jsonString_ がその部分集合に従うことを検証し、ステップ <emu-xref href="#step-json-parse-assert-type"></emu-xref> は評価が適切な型の値を返すことを保証する。</p>
-          <p>しかし、<emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> が ParseJSON 中で異なる振る舞いをするため、同一のソーステキストを |PrimaryExpression| として評価した場合と JSON として評価した場合で異なる結果を生むことがある。さらにオブジェクトリテラル内の重複 *"__proto__"* プロパティの Early Error（ParseJSON 中は適用されない）により、文法に合致していても ParseJSON が受理するすべてのテキストが |PrimaryExpression| として有効とは限らない。</p>
+          <p>有効な JSON テキストは ECMAScript の |PrimaryExpression| 構文の部分集合である。ステップ <emu-xref href="#step-json-parse-validate"></emu-xref> は _jsonString_ がこの部分集合に準拠していることを検証し、<emu-xref href="#step-json-parse-assert-type"></emu-xref> は評価が適切な型の値を返すことをアサートする。</p>
+          <p>ただし、<emu-xref href="#sec-runtime-semantics-propertydefinitionevaluation"></emu-xref> の動作は ParseJSON 中で異なるため、同一のソーステキストであっても |PrimaryExpression| として評価した場合と JSON として評価した場合で異なる結果となることがある。さらに、オブジェクトリテラル内の重複 *"__proto__"* プロパティの Early Error も ParseJSON では適用されないため、文法に合致していても必ずしも ParseJSON で受理されるテキストが |PrimaryExpression| としても有効とは限らない。</p>
         </emu-note>
         <emu-note>
-          <p>オブジェクト内に重複する name String が存在する場合、字句的に先行する同一キーの値は上書きされる。</p>
+          <p>オブジェクト内で同じ名前の文字列が重複している場合、同じキーに対し直前に現れる値は上書きされる。</p>
         </emu-note>
+      </emu-clause>
+
+      <emu-clause id="sec-json-parse-record">
+        <h1>JSON パースレコード</h1>
+        <p><dfn variants="JSON Parse Records">JSON パースレコード</dfn>は、JSON テキストから解析された値の初期状態を記述するために使用されるレコード値である。</p>
+        <p>JSON パースレコードは、<emu-xref href="#table-json-parse-record"></emu-xref> に記載のフィールドを持つ。</p>
+        <emu-table id="table-json-parse-record" caption="JSON パースレコードのフィールド">
+          <table>
+            <tr>
+              <th>フィールド名</th>
+              <th>値</th>
+              <th>意味</th>
+            </tr>
+            <tr>
+              <td>[[ParseNode]]</td>
+              <td>パースノード</td>
+              <td>そのコンテキストのパースノード。</td>
+            </tr>
+            <tr>
+              <td>[[Key]]</td>
+              <td>プロパティ名</td>
+              <td>[[Value]] に関連付けられているプロパティ名。</td>
+            </tr>
+            <tr>
+              <td>[[Value]]</td>
+              <td>ECMAScript 言語値</td>
+              <td>[[ParseNode]] の評価によって生成された値。</td>
+            </tr>
+            <tr>
+              <td>[[Elements]]</td>
+              <td>JSON パースレコードのリスト</td>
+              <td>[[Value]] が配列の場合、その各要素に対応する JSON パースレコードを保持。そうでなければ空リスト。</td>
+            </tr>
+            <tr>
+              <td>[[Entries]]</td>
+              <td>JSON パースレコードのリスト</td>
+              <td>[[Value]] が配列でないオブジェクトの場合、その各エントリに対応する JSON パースレコードを保持。そうでなければ空リスト。</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
+      <emu-clause id="sec-createjsonparserecord" type="abstract operation">
+        <h1>
+          CreateJSONParseRecord (
+            _parseNode_: パースノード,
+            _key_: プロパティ名,
+            _val_: ECMAScript 言語値,
+          ): JSON パースレコード
+        </h1>
+        <dl class="header">
+          <dt>説明</dt>
+          <dd>JSON テキストから解析された _parseNode_ と、その評価によって得られる _val_ を再帰的に組み合わせる。</dd>
+        </dl>
+        <emu-alg>
+          1. _typedValNode_ を ShallowestContainedJSONValue(_parseNode_) とする。
+          1. アサート: _typedValNode_ は ~empty~ ではない。
+          1. _elements_ を新しい空リストとする。
+          1. _entries_ を新しい空リストとする。
+          1. _val_ がオブジェクトであれば、
+            1. _isArray_ を ! <emu-meta suppress-effects="user-code">IsArray(_val_)</emu-meta> とする。
+            1. _isArray_ が *true* なら、
+              1. アサート: _typedValNode_ は |ArrayLiteral| パースノードである。
+              1. _contentNodes_ を _typedValNode_ の JSONArrayLiteralContentNodes とする。
+              1. _len_ を _contentNodes_ の要素数とする。
+              1. _valLen_ を ! <emu-meta suppress-effects="user-code">LengthOfArrayLike(_val_)</emu-meta> とする。
+              1. アサート: _valLen_ は _len_ と等しい。
+              1. _index_ を 0 とする。
+              1. _index_ &lt; _len_ の間、繰り返し
+                1. _propName_ を ! ToString(𝔽(_index_)) とする。
+                1. _elementParseRecord_ を CreateJSONParseRecord(_contentNodes_[_index_], _propName_, ! <emu-meta suppress-effects="user-code">Get(_val_, _propName_)</emu-meta>) とする。
+                1. _elements_ に _elementParseRecord_ を追加する。
+                1. _index_ を _index_ + 1 にする。
+            1. それ以外の場合、
+              1. アサート: _typedValNode_ は |ObjectLiteral| パースノードである。
+              1. _propertyNodes_ を _typedValNode_ の PropertyDefinitionNodes とする。
+              1. 注: _val_ は JSON テキストから生成され、変更されていないため、全てのプロパティキーは文字列であり、完全に列挙可能である。
+              1. _keys_ を ! <emu-meta suppress-effects="user-code">EnumerableOwnProperties(_val_, ~key~)</emu-meta> とする。
+              1. 各 _keys_ の文字列 _P_ について、
+                1. （例: <code>{"a":"lost","a":"kept"}</code> のように）JSON テキストで単一オブジェクトに対して同じ名前／値ペアが複数指定されている場合、該当プロパティの最終値が結果で使われることに注意。
+                1. _propertyDefinition_ を ~empty~ とする。
+                1. 各 Parse Node _propertyNode_ in _propertyNodes_ について、
+                  1. _propName_ を _propertyNode_ の PropName とする。
+                  1. _propName_ が _P_ なら _propertyDefinition_ に _propertyNode_ をセットする。
+                1. アサート: _propertyDefinition_ は <emu-grammar>PropertyDefinition : PropertyName `:` AssignmentExpression</emu-grammar> である。
+                1. _propertyValueNode_ を _propertyDefinition_ の |AssignmentExpression| とする。
+                1. _entryParseRecord_ を CreateJSONParseRecord(_propertyValueNode_, _P_, ! <emu-meta suppress-effects="user-code">Get(_val_, _P_)</emu-meta>) とする。
+                1. _entries_ に _entryParseRecord_ を追加する。
+          1. それ以外の場合、
+            1. アサート: _typedValNode_ は |ArrayLiteral| でも |ObjectLiteral| でもない。
+          1. JSON パースレコード { [[ParseNode]]: _typedValNode_, [[Key]]: _key_, [[Value]]: _val_, [[Elements]]: _elements_, [[Entries]]: _entries_ } を返す。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-internalizejsonproperty" type="abstract operation">
         <h1>
           InternalizeJSONProperty (
-            _holder_: an Object,
-            _name_: a String,
-            _reviver_: a function object,
-          ): 正常完了で ECMAScript 言語値を含むか、または throw completion
+            _holder_: オブジェクト,
+            _name_: 文字列,
+            _reviver_: 関数オブジェクト,
+            _parseRecord_: JSON パースレコードまたは ~empty~,
+          ): ECMAScript 言語値を含む通常の完了または throw completion
         </h1>
         <dl class="header">
         </dl>
         <emu-note>
-          <p>このアルゴリズムは [[Delete]] または CreateDataProperty が *false* を返しても例外を投げないことを意図している。</p>
+          <p>このアルゴリズムは [[Delete]] または CreateDataProperty が *false* を返しても例外をスローしないよう、意図的に設計されている。</p>
         </emu-note>
-        <p>呼び出されたとき次を行う:</p>
+        <p>呼び出されたとき、次の手順を実行する：</p>
         <emu-alg>
           1. _val_ を ? Get(_holder_, _name_) とする。
-          1. もし _val_ が Object なら
+          1. _context_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+          1. _parseRecord_ が JSON パースレコードであり、SameValue(_parseRecord_.[[Value]], _val_) が *true* の場合、
+            1. _val_ がオブジェクトでない場合、
+              1. _parseNode_ を _parseRecord_.[[ParseNode]] とする。
+              1. アサート: _parseNode_ は |ArrayLiteral| パースノードでも |ObjectLiteral| パースノードでもない。
+              1. _sourceText_ を _parseNode_ がマッチしたソーステキストとする。
+              1. ! CreateDataPropertyOrThrow(_context_, *"source"*, CodePointsToString(_sourceText_)) を実行する。
+            1. _elementRecords_ を _parseRecord_.[[Elements]] とする。
+            1. _entryRecords_ を _parseRecord_.[[Entries]] とする。
+          1. それ以外の場合、
+            1. _elementRecords_ を新しい空リストとする。
+            1. _entryRecords_ を新しい空リストとする。
+          1. _val_ がオブジェクトの場合、
             1. _isArray_ を ? IsArray(_val_) とする。
-            1. もし _isArray_ が *true* なら
+            1. _isArray_ が *true* の場合、
+              1. _elementRecordsLen_ を _elementRecords_ の要素数とする。
               1. _len_ を ? LengthOfArrayLike(_val_) とする。
-              1. _I_ を 0 とする。
-              1. _I_ &lt; _len_ の間繰り返す:
-                1. _prop_ を ! ToString(𝔽(_I_)) とする。
-                1. _newElement_ を ? InternalizeJSONProperty(_val_, _prop_, _reviver_) とする。
-                1. もし _newElement_ が *undefined* なら
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta> を実行。
-                1. それ以外
-                  1. ? CreateDataProperty(_val_, _prop_, _newElement_) を実行。
-                1. _I_ を _I_ + 1 にする。
-            1. それ以外
+              1. _index_ を 0 とする。
+              1. _index_ &lt; _len_ の間、繰り返す
+                1. _prop_ を ! ToString(𝔽(_index_)) とする。
+                1. _index_ &lt; _elementRecordsLen_ の場合、_elementRecord_ を _elementRecords_[_index_]、そうでなければ ~empty~ とする。
+                1. _newElement_ を ? InternalizeJSONProperty(_val_, _prop_, _reviver_, _elementRecord_) とする。
+                1. _newElement_ が *undefined* の場合、
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_prop_)</emu-meta> を実行する。
+                1. それ以外の場合、
+                  1. ? CreateDataProperty(_val_, _prop_, _newElement_) を実行する。
+                1. _index_ を _index_ + 1 にする。
+            1. それ以外の場合、
               1. _keys_ を ? EnumerableOwnProperties(_val_, ~key~) とする。
-              1. 各 String _P_ について
-                1. _newElement_ を ? InternalizeJSONProperty(_val_, _P_, _reviver_) とする。
-                1. もし _newElement_ が *undefined* なら
-                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta> を実行。
-                1. それ以外
-                  1. ? CreateDataProperty(_val_, _P_, _newElement_) を実行。
-          1. ? Call(_reviver_, _holder_, « _name_, _val_ ») を返す。
+              1. 各 _keys_ の文字列 _P_ について、
+                1. _entryRecords_ の要素 _e_ のうち _e_.[[Key]] が _P_ であるものが存在すれば、_entryRecord_ をその _e_、存在しなければ ~empty~ とする。
+                1. _newElement_ を ? InternalizeJSONProperty(_val_, _P_, _reviver_, _entryRecord_) とする。
+                1. _newElement_ が *undefined* の場合、
+                  1. ? <emu-meta effects="user-code">_val_.[[Delete]](_P_)</emu-meta> を実行する。
+                1. それ以外の場合、
+                  1. ? CreateDataProperty(_val_, _P_, _newElement_) を実行する。
+          1. ? Call(_reviver_, _holder_, « _name_, _val_, _context_ ») を返す。
         </emu-alg>
       </emu-clause>
+
+      <emu-clause id="sec-shallowestcontainedjsonvalue" type="abstract operation">
+        <h1>
+          静的セマンティクス: ShallowestContainedJSONValue (
+            _root_: パースノード,
+          ): パースノードまたは ~empty~
+        </h1>
+        <dl class="header">
+          <dt>説明</dt>
+          <dd>_root_ をルートとするパースツリーに対し幅優先検索を行い、JSON 値に対応する非終端記号のインスタンスとなる最初のノードを返す。該当ノードがなければ ~empty~ を返す。</dd>
+        </dl>
+        <emu-alg>
+          1. _F_ をアクティブな関数オブジェクトとする。
+          1. アサート: _F_ は `JSON.parse` の組み込み関数オブジェクトである（<emu-xref href="#sec-json.parse">JSON.parse</emu-xref> 参照）。
+          1. _types_ を « |NullLiteral|, |BooleanLiteral|, |NumericLiteral|, |StringLiteral|, |ArrayLiteral|, |ObjectLiteral|, |UnaryExpression| » とする。
+          1. _unaryExpression_ を ~empty~ とする。
+          1. _queue_ を « _root_ » とする。
+          1. _queue_ が空でない間、繰り返し
+            1. _candidate_ を _queue_ の先頭要素とする。
+            1. _queue_ の先頭要素を削除する。
+            1. _queuedChildren_ を *false* とする。
+            1. 各 _types_ の非終端記号 _type_ について、
+              1. _candidate_ が _type_ のインスタンスなら
+                1. 注: JSON 文法では <code>number</code> トークンは負の値を表すことがある。ECMAScript では否定は単項演算であり、|UnaryExpression| が `-` と派生 |UnaryExpression| になる。
+                1. _type_ が |UnaryExpression| なら
+                  1. _candidate_ の親が |UnaryExpression| パースノードでなければ _unaryExpression_ に _candidate_ を設定。
+                1. それ以外で _type_ が |NumericLiteral| なら
+                  1. アサート: _candidate_ は _unaryExpression_ 内に含まれる。
+                  1. _unaryExpression_ を返す。
+                1. それ以外の場合、
+                  1. _candidate_ を返す。
+              1. _queuedChildren_ が *false* で _candidate_ が非終端記号のインスタンス、かつ _candidate_ Contains _type_ が *true* なら
+                1. _children_ を _candidate_ の子ノードを順に含むリストとする。
+                1. _queue_ を _queue_ と _children_ のリスト結合とする。
+                1. _queuedChildren_ を *true* にする。
+          1. ~empty~ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-static-semantics-jsonarrayliteralcontentnodes" type="sdo">
+        <h1>静的セマンティクス: JSONArrayLiteralContentNodes ( ): パースノードのリスト</h1>
+        <dl class="header">
+        </dl>
+        <emu-grammar>
+          ArrayLiteral :
+            `[` Elision? `]`
+            `[` ElementList `]`
+            `[` ElementList `,` Elision? `]`
+        </emu-grammar>
+        <emu-alg>
+          1. アサート: |Elision| は存在しない。
+          1. |ElementList| が存在しない場合、新しい空のリストを返す。
+          1. |ElementList| の JSONArrayLiteralContentNodes を返す。
+        </emu-alg>
+
+        <emu-grammar>ElementList : Elision? AssignmentExpression</emu-grammar>
+        <emu-alg>
+          1. アサート: |Elision| は存在しない。
+          1. « |AssignmentExpression| » を返す。
+        </emu-alg>
+
+        <emu-grammar>ElementList : ElementList `,` Elision? AssignmentExpression</emu-grammar>
+        <emu-alg>
+          1. アサート: |Elision| は存在しない。
+          1. _elements_ を派生した |ElementList| の JSONArrayLiteralContentNodes とする。
+          1. _elements_ と « |AssignmentExpression| » のリスト結合を返す。
+        </emu-alg>
+
+        <emu-grammar>
+          ElementList :
+            Elision? SpreadElement
+            ElementList `,` Elision? SpreadElement
+        </emu-grammar>
+        <emu-alg>
+          1. 注: ECMA-404 で定義されている JSON テキストには |SpreadElement| は含まれない。
+          1. アサート: このステップには決して到達しない。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-json.rawjson">
+      <h1>JSON.rawJSON ( _text_ )</h1>
+      <p>この関数は、文字列、数値、ブール値、または null 値の生 JSON テキストを表すオブジェクトを返す。</p>
+      <emu-alg>
+        1. _jsonString_ を ? ToString(_text_) とする。
+        1. _jsonString_ が空文字列なら *SyntaxError* 例外をスローする。
+        1. _jsonString_ の最初のコード単位が ASCII 小文字（0x0061～0x007A）、ASCII 数字（0x0030～0x0039）、0x0022（引用符）、または 0x002D（ハイフン）以外なら *SyntaxError* 例外をスローする。
+        1. _jsonString_ の最終コード単位が ASCII 小文字（0x0061～0x007A）、ASCII 数字（0x0030～0x0039）、または 0x0022（引用符）以外なら *SyntaxError* 例外をスローする。
+        1. _parseResult_ を ? ParseJSON(_jsonString_) とする。
+        1. アサート: _parseResult_.[[Value]] は String, Number, Boolean, *null* のいずれかである。
+        1. _internalSlotsList_ を « [[IsRawJSON]] » とする。
+        1. _obj_ を OrdinaryObjectCreate(*null*, _internalSlotsList_) とする。
+        1. ! CreateDataPropertyOrThrow(_obj_, *"rawJSON"*, _jsonString_) を実行する。
+        1. ! SetIntegrityLevel(_obj_, ~frozen~) を実行する。
+        1. _obj_ を返す。
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-json.stringify" type="built-in function">
@@ -47371,32 +47639,36 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. _value_ を ? Get(_holder_, _key_) とする。
-          1. もし _value_ が Object かまたは _value_ が BigInt なら
+          1. _value_ がオブジェクトまたは _value_ が BigInt の場合、
             1. _toJSON_ を ? GetV(_value_, *"toJSON"*) とする。
-            1. もし IsCallable(_toJSON_) が *true* なら
-              1. _value_ を ? Call(_toJSON_, _value_, « _key_ ») とする。
-          1. もし _state_.[[ReplacerFunction]] が *undefined* でなければ
-            1. _value_ を ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ ») とする。
-          1. もし _value_ が Object なら
-            1. もし _value_ が [[NumberData]] 内部スロットを持つなら
-              1. _value_ を ? ToNumber(_value_) とする。
-            1. それ以外で [[StringData]] 内部スロットを持つなら
-              1. _value_ を ? ToString(_value_) とする。
-            1. それ以外で [[BooleanData]] 内部スロットを持つなら
-              1. _value_ を _value_.[[BooleanData]] とする。
-            1. それ以外で [[BigIntData]] 内部スロットを持つなら
-              1. _value_ を _value_.[[BigIntData]] とする。
-          1. もし _value_ が *null* なら *"null"* を返す。
-          1. もし _value_ が *true* なら *"true"* を返す。
-          1. もし _value_ が *false* なら *"false"* を返す。
-          1. もし _value_ が String なら QuoteJSONString(_value_) を返す。
-          1. もし _value_ が Number なら
-            1. もし _value_ が有限なら ! ToString(_value_) を返す。
+            1. IsCallable(_toJSON_) が *true* なら、
+              1. _value_ を ? Call(_toJSON_, _value_, « _key_ ») に設定する。
+          1. _state_.[[ReplacerFunction]] が *undefined* でない場合、
+            1. _value_ を ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ ») に設定する。
+          1. _value_ がオブジェクトの場合、
+            1. _value_ が [[IsRawJSON]] 内部スロットを持つ場合、
+              1. _rawJSON_ を ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta> とする。
+              1. アサート: _rawJSON_ は文字列である。
+              1. _rawJSON_ を返す。
+            1. _value_ が [[NumberData]] 内部スロットを持つ場合、
+              1. _value_ を ? ToNumber(_value_) に設定する。
+            1. それ以外で _value_ が [[StringData]] 内部スロットを持つ場合、
+              1. _value_ を ? ToString(_value_) に設定する。
+            1. それ以外で _value_ が [[BooleanData]] 内部スロットを持つ場合、
+              1. _value_ を _value_.[[BooleanData]] に設定する。
+            1. それ以外で _value_ が [[BigIntData]] 内部スロットを持つ場合、
+              1. _value_ を _value_.[[BigIntData]] に設定する。
+          1. _value_ が *null* なら *"null"* を返す。
+          1. _value_ が *true* なら *"true"* を返す。
+          1. _value_ が *false* なら *"false"* を返す。
+          1. _value_ が文字列なら QuoteJSONString(_value_) を返す。
+          1. _value_ が数値の場合、
+            1. _value_ が有限なら ! ToString(_value_) を返す。
             1. *"null"* を返す。
-          1. もし _value_ が BigInt なら *TypeError* 例外を投げる。
-          1. もし _value_ が Object かつ IsCallable(_value_) が *false* なら
+          1. _value_ が BigInt の場合、*TypeError* 例外をスローする。
+          1. _value_ がオブジェクトかつ IsCallable(_value_) が *false* の場合、
             1. _isArray_ を ? IsArray(_value_) とする。
-            1. もし _isArray_ が *true* なら ? SerializeJSONArray(_state_, _value_) を返す。
+            1. _isArray_ が *true* なら ? SerializeJSONArray(_state_, _value_) を返す。
             1. ? SerializeJSONObject(_state_, _value_) を返す。
           1. *undefined* を返す。
         </emu-alg>
