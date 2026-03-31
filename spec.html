@@ -26873,7 +26873,7 @@
                 ~unset~, an integer, or ~done~
               </td>
               <td>
-                This field is initially set to ~unset~, and remains ~unset~ for fully synchronous modules. For modules that are either themselves asynchronous or have an asynchronous dependency, it is set to an integer that determines the order in which execution of pending modules is queued by <emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref>. Once the pending module is executed, the field is set to ~done~.
+                This field is initially set to ~unset~, and remains ~unset~ for fully synchronous modules. For modules that are either themselves asynchronous or have an asynchronous dependency, it is set to an integer that determines the order in which execution of pending modules is queued by <emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref>. Once the pending module is successfully executed, the field is set to ~done~.
               </td>
             </tr>
             <tr>
@@ -27224,7 +27224,6 @@
               1. If _result_ is an abrupt completion, then
                 1. For each Cyclic Module Record _m_ of _stack_, do
                   1. Assert: _m_.[[Status]] is ~evaluating~.
-                  1. Assert: _m_.[[AsyncEvaluationOrder]] is ~unset~.
                   1. Set _m_.[[Status]] to ~evaluated~.
                   1. Set _m_.[[EvaluationError]] to _result_.
                 1. Assert: _module_.[[Status]] is ~evaluated~.
