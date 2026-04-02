@@ -1099,12 +1099,20 @@
       </emu-clause>
 
       <emu-clause id="sec-throw-an-exception">
-        <h1>Throw an Exception</h1>
-        <p>Algorithms steps that say to throw an exception, such as</p>
+        <h1>Throw</h1>
+        <p>In algorithm steps, the word "throw" is shorthand for returning the result of calling ThrowCompletion. For example,</p>
+        <emu-alg example>
+          1. If _result_.[[Error]] is not ~none~, throw _result_.[[Error]].
+        </emu-alg>
+        <p>is equivalent to</p>
+        <emu-alg example>
+          1. If _result_.[[Error]] is not ~none~, return ThrowCompletion(_result_.[[Error]]).
+        </emu-alg>
+        <p>Algorithm steps that say to throw an exception of a particular type construct an exception of that type to be thrown. For example,</p>
         <emu-alg example>
           1. Throw a *TypeError* exception.
         </emu-alg>
-        <p>mean the same things as:</p>
+        <p>is equivalent to</p>
         <emu-alg example>
           1. Return ThrowCompletion(a newly created *TypeError* object).
         </emu-alg>
@@ -13380,7 +13388,7 @@
           1. Let _error_ be a newly created *TypeError* object.
           1. NOTE: _error_ is created in _calleeContext_ with _F_'s associated Realm Record.
           1. Remove _calleeContext_ from the execution context stack and restore _callerContext_ as the running execution context.
-          1. Return ThrowCompletion(_error_).
+          1. Throw _error_.
         1. Perform OrdinaryCallBindThis(_F_, _calleeContext_, _thisArgument_).
         1. Let _result_ be Completion(OrdinaryCallEvaluateBody(_F_, _argumentsList_)).
         1. [id="step-call-pop-context-stack"] Remove _calleeContext_ from the execution context stack and restore _callerContext_ as the running execution context.
@@ -23160,7 +23168,7 @@
       <emu-alg>
         1. Let _exprRef_ be ? Evaluation of |Expression|.
         1. Let _exprValue_ be ? GetValue(_exprRef_).
-        1. Return ThrowCompletion(_exprValue_).
+        1. Throw _exprValue_.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -26795,7 +26803,7 @@
             1. If _promise_.[[PromiseState]] is ~rejected~, then
               1. If _promise_.[[PromiseIsHandled]] is *false*, perform HostPromiseRejectionTracker(_promise_, *"handle"*).
               1. Set _promise_.[[PromiseIsHandled]] to *true*.
-              1. Return ThrowCompletion(_promise_.[[PromiseResult]]).
+              1. Throw _promise_.[[PromiseResult]].
             1. Return ~unused~.
           </emu-alg>
         </emu-clause>
@@ -43167,7 +43175,7 @@ THH:mm:ss.sss
           1. If _lastChunkHandling_ is not one of *"loose"*, *"strict"*, or *"stop-before-partial"*, throw a *TypeError* exception.
           1. Let _result_ be FromBase64(_string_, _alphabet_, _lastChunkHandling_).
           1. If _result_.[[Error]] is not ~none~, then
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. Throw _result_.[[Error]].
           1. Let _resultLength_ be the number of elements in _result_.[[Bytes]].
           1. Let _ta_ be ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>.
           1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] is the number of elements in _result_.[[Bytes]].
@@ -43182,7 +43190,7 @@ THH:mm:ss.sss
           1. If _string_ is not a String, throw a *TypeError* exception.
           1. Let _result_ be FromHex(_string_).
           1. If _result_.[[Error]] is not ~none~, then
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. Throw _result_.[[Error]].
           1. Let _resultLength_ be the number of elements in _result_.[[Bytes]].
           1. Let _ta_ be ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>.
           1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] is the number of elements in _result_.[[Bytes]].
@@ -43218,7 +43226,7 @@ THH:mm:ss.sss
           1. Assert: _written_ ≤ _byteLength_.
           1. Perform SetUint8ArrayBytes(_into_, _bytes_).
           1. If _result_.[[Error]] is not ~none~, then
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. Throw _result_.[[Error]].
           1. Let _resultObject_ be OrdinaryObjectCreate(%Object.prototype%).
           1. Perform ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])).
           1. Perform ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)).
@@ -43242,7 +43250,7 @@ THH:mm:ss.sss
           1. Assert: _written_ ≤ _byteLength_.
           1. Perform SetUint8ArrayBytes(_into_, _bytes_).
           1. If _result_.[[Error]] is not ~none~, then
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. Throw _result_.[[Error]].
           1. Let _resultObject_ be OrdinaryObjectCreate(%Object.prototype%).
           1. Perform ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])).
           1. Perform ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)).
@@ -50118,7 +50126,7 @@ THH:mm:ss.sss
               1. Let _result_ be ? Call(_onFinally_, *undefined*).
               1. Let _p_ be ? PromiseResolve(_C_, _result_).
               1. Let _throwReason_ be a new Abstract Closure with no parameters that captures _reason_ and performs the following steps when called:
-                1. Return ThrowCompletion(_reason_).
+                1. Throw _reason_.
               1. Let _thrower_ be CreateBuiltinFunction(_throwReason_, 0, *""*, « »).
               1. Return ? Invoke(_p_, *"then"*, « _thrower_ »).
             1. Let _catchFinally_ be CreateBuiltinFunction(_catchFinallyClosure_, 1, *""*, « »).
