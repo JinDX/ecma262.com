@@ -1099,14 +1099,22 @@
       </emu-clause>
 
       <emu-clause id="sec-throw-an-exception">
-        <h1>抛出异常</h1>
-        <p>算法步骤如：</p>
+        <h1>抛出</h1>
+        <p>在算法步骤中，“throw”一词是返回调用 ThrowCompletion 的结果的简写。例如，</p>
         <emu-alg example>
-          1. Throw a *TypeError* exception.
+          1. 如果 _result_.[[Error]] 不为 ~none~，抛出 _result_.[[Error]]。
         </emu-alg>
-        <p>与如下语句含义相同：</p>
+        <p>等价于</p>
         <emu-alg example>
-          1. Return ThrowCompletion(a newly created *TypeError* object).
+          1. 如果 _result_.[[Error]] 不为 ~none~，返回 ThrowCompletion(_result_.[[Error]])。
+        </emu-alg>
+        <p>算法步骤中，如指明抛出某特定类型的异常，则构造该类型的异常进行抛出。例如，</p>
+        <emu-alg example>
+          1. 抛出一个 *TypeError* 异常。
+        </emu-alg>
+        <p>等价于</p>
+        <emu-alg example>
+          1. 返回 ThrowCompletion(新创建的 *TypeError* 对象)。
         </emu-alg>
       </emu-clause>
 
@@ -13318,7 +13326,7 @@
           1. 令 _error_ 为一个新创建的 *TypeError* 对象。
           1. NOTE: _error_ 在 _calleeContext_ 中、使用 _F_ 关联的 Realm Record 创建。
           1. 从执行上下文栈移除 _calleeContext_ 并恢复 _callerContext_ 为运行执行上下文。
-          1. 返回 ThrowCompletion(_error_)。
+          1. 抛出 _error_。
         1. 执行 OrdinaryCallBindThis(_F_, _calleeContext_, _thisArgument_)。
         1. 令 _result_ 为 Completion(OrdinaryCallEvaluateBody(_F_, _argumentsList_))。
         1. [id="step-call-pop-context-stack"] 从执行上下文栈移除 _calleeContext_ 并恢复 _callerContext_ 为运行执行上下文。
@@ -22991,7 +22999,7 @@
       <emu-alg>
         1. _exprRef_ ← ? Evaluation of |Expression|。
         1. _exprValue_ ← ? GetValue(_exprRef_)。
-        1. 返回 ThrowCompletion(_exprValue_)。
+        1. 抛出 _exprValue_。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -26609,7 +26617,7 @@
             1. 若 _promise_.[[PromiseState]] 为 ~rejected~，则
               1. 若 _promise_.[[PromiseIsHandled]] 为 *false*，执行 HostPromiseRejectionTracker(_promise_, *"handle"*)。
               1. 设 _promise_.[[PromiseIsHandled]] 为 *true*。
-              1. 返回 ThrowCompletion(_promise_.[[PromiseResult]])。
+              1. 抛出 _promise_.[[PromiseResult]]。
             1. 返回 ~unused~。
           </emu-alg>
         </emu-clause>
@@ -42476,7 +42484,7 @@ THH:mm:ss.sss
           1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_)。
           1. 如果 _result_.[[Error]] 不为 ~none~，则
-            1. 返回 ThrowCompletion(_result_.[[Error]])。
+            1. 抛出 _result_.[[Error]]。
           1. 令 _resultLength_ 为 _result_.[[Bytes]] 的元素数量。
           1. 令 _ta_ 为 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>。
           1. 断言：_ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] 等于 _result_.[[Bytes]] 的元素数量。
@@ -42491,7 +42499,7 @@ THH:mm:ss.sss
           1. 如果 _string_ 不是一个字符串，则抛出 *TypeError* 异常。
           1. 令 _result_ 为 FromHex(_string_)。
           1. 如果 _result_.[[Error]] 不为 ~none~，则
-            1. 返回 ThrowCompletion(_result_.[[Error]])。
+            1. 抛出 _result_.[[Error]]。
           1. 令 _resultLength_ 为 _result_.[[Bytes]] 的元素数量。
           1. 令 _ta_ 为 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>。
           1. 断言：_ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] 等于 _result_.[[Bytes]] 的元素数量。
@@ -42527,7 +42535,7 @@ THH:mm:ss.sss
           1. 断言：_written_ ≤ _byteLength_。
           1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
           1. 如果 _result_.[[Error]] 不为 ~none~，则
-            1. 返回 ThrowCompletion(_result_.[[Error]])。
+            1. 抛出 _result_.[[Error]]。
           1. 令 _resultObject_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))。
@@ -42551,7 +42559,7 @@ THH:mm:ss.sss
           1. 断言：_written_ ≤ _byteLength_。
           1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
           1. 如果 _result_.[[Error]] 不为 ~none~，则
-            1. 返回 ThrowCompletion(_result_.[[Error]])。
+            1. 抛出 _result_.[[Error]]。
           1. 令 _resultObject_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))。
@@ -49411,7 +49419,7 @@ THH:mm:ss.sss
               1. 令 _result_ 为 ? Call(_onFinally_, *undefined*)。
               1. 令 _p_ 为 ? PromiseResolve(_C_, _result_)。
               1. 令 _throwReason_ 为一个无参数的新抽象闭包，捕获 _reason_ 并在被调用时执行以下步骤：
-                1. 返回 ThrowCompletion(_reason_)。
+                1. 抛出 _reason_。
               1. 令 _thrower_ 为 CreateBuiltinFunction(_throwReason_, 0, *""*, « »)。
               1. 返回 ? Invoke(_p_, *"then"*, « _thrower_ »)。
             1. 令 _catchFinally_ 为 CreateBuiltinFunction(_catchFinallyClosure_, 1, *""*, « »)。

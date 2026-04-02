@@ -1099,14 +1099,22 @@
       </emu-clause>
 
       <emu-clause id="sec-throw-an-exception">
-        <h1>예외 던지기</h1>
-        <p>알고리즘 단계에서 예외를 던지라고 명시된 경우(예:</p>
+        <h1>Throw</h1>
+        <p>알고리즘 단계에서 "throw"라는 단어는 ThrowCompletion을 호출한 결과를 반환하는 것의 약어입니다. 예를 들어,</p>
         <emu-alg example>
-          1. *TypeError* 예외를 던진다.
+          1. _result_.[[Error]]가 ~none~이 아니면, _result_.[[Error]]를 throw 한다.
         </emu-alg>
-        <p>)는 다음과 동일한 의미입니다:</p>
+        <p>는 다음과 같습니다</p>
         <emu-alg example>
-          1. Return ThrowCompletion(새로 생성된 *TypeError* 객체).
+          1. _result_.[[Error]]가 ~none~이 아니면, ThrowCompletion(_result_.[[Error]])을 반환한다.
+        </emu-alg>
+        <p>특정 타입의 예외를 throw 하라고 명시되어 있는 알고리즘 단계는 해당 타입의 예외 객체를 생성해서 throw 합니다. 예를 들어,</p>
+        <emu-alg example>
+          1. *TypeError* 예외를 throw 한다.
+        </emu-alg>
+        <p>는 다음과 같습니다</p>
+        <emu-alg example>
+          1. 새로 생성된 *TypeError* 객체로 ThrowCompletion을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -13263,7 +13271,7 @@
           1. 새 *TypeError* 객체 _error_ 를 생성한다.
           1. NOTE: _error_ 는 _calleeContext_ 에서 _F_ 의 Realm Record 로 생성된다.
           1. 실행 컨텍스트 스택에서 _calleeContext_ 를 제거하고 _callerContext_ 를 실행 중 실행 컨텍스트로 복원한다.
-          1. ThrowCompletion(_error_) 를 반환한다.
+          1. _error_를 throw 한다.
         1. OrdinaryCallBindThis(_F_, _calleeContext_, _thisArgument_) 를 수행한다.
         1. _result_ 를 Completion(OrdinaryCallEvaluateBody(_F_, _argumentsList_)) 로 둔다.
         1. [id="step-call-pop-context-stack"] 실행 컨텍스트 스택에서 _calleeContext_ 를 제거하고 _callerContext_ 를 실행 중 실행 컨텍스트로 복원한다.
@@ -22672,7 +22680,7 @@
       <emu-alg>
         1. _exprRef_ = |Expression| 평가 결과 (?)
         1. _exprValue_ = ? GetValue(_exprRef_)
-        1. ThrowCompletion(_exprValue_) 반환.
+        1. _exprValue_를 throw 한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -26245,7 +26253,7 @@
             1. _promise_.[[PromiseState]]가 ~rejected~이면
               1. _promise_.[[PromiseIsHandled]]이 *false*이면 HostPromiseRejectionTracker(_promise_, *"handle"*)를 수행한다.
               1. _promise_.[[PromiseIsHandled]]을 *true*로 설정한다.
-              1. ThrowCompletion(_promise_.[[PromiseResult]])를 반환한다.
+              1. _promise_.[[PromiseResult]]를 throw 한다.
             1. ~unused~를 반환한다.
           </emu-alg>
         </emu-clause>
@@ -42545,7 +42553,7 @@ THH:mm:ss.sss
           1. _lastChunkHandling_이 *"loose"*, *"strict"*, *"stop-before-partial"* 중 하나가 아니면, *TypeError* 예외를 throw한다.
           1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_)로 둔다.
           1. _result_.[[Error]]가 ~none~이 아니면,
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. _result_.[[Error]]를 throw 한다.
           1. _resultLength_을 _result_.[[Bytes]]의 요소 개수로 둔다.
           1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 둔다.
           1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]]의 요소 개수와 같다.
@@ -42560,7 +42568,7 @@ THH:mm:ss.sss
           1. _string_이 String이 아니면, *TypeError* 예외를 throw한다.
           1. _result_를 FromHex(_string_)로 둔다.
           1. _result_.[[Error]]가 ~none~이 아니면,
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. _result_.[[Error]]를 throw 한다.
           1. _resultLength_을 _result_.[[Bytes]]의 요소 개수로 둔다.
           1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 둔다.
           1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]]의 요소 개수와 같다.
@@ -42596,7 +42604,7 @@ THH:mm:ss.sss
           1. Assert: _written_ ≤ _byteLength_.
           1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
           1. _result_.[[Error]]가 ~none~이 아니면,
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. _result_.[[Error]]를 throw 한다.
           1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))를 수행한다.
@@ -42620,7 +42628,7 @@ THH:mm:ss.sss
           1. Assert: _written_ ≤ _byteLength_.
           1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
           1. _result_.[[Error]]가 ~none~이 아니면,
-            1. Return ThrowCompletion(_result_.[[Error]]).
+            1. _result_.[[Error]]를 throw 한다.
           1. _resultObject_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_))를 수행한다.
@@ -49506,7 +49514,7 @@ THH:mm:ss.sss
               1. _result_ 를 ? Call(_onFinally_, *undefined*) 로 둔다.
               1. _p_ 를 ? PromiseResolve(_C_, _result_) 로 둔다.
               1. _throwReason_ 을 매개변수 없는 새로운 Abstract Closure 로 두고 _reason_ 을 포획하며 호출 시 다음 단계를 수행하게 한다:
-                1. ThrowCompletion(_reason_) 를 반환한다.
+                1. _reason_을 throw 한다.
               1. _thrower_ 를 CreateBuiltinFunction(_throwReason_, 0, *""*, « ») 로 둔다.
               1. ? Invoke(_p_, *"then"*, « _thrower_ ») 를 반환한다.
             1. _catchFinally_ 를 CreateBuiltinFunction(_catchFinallyClosure_, 1, *""*, « ») 로 둔다.

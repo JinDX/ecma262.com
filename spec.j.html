@@ -1099,14 +1099,22 @@
       </emu-clause>
 
       <emu-clause id="sec-throw-an-exception">
-        <h1>例外を投げる</h1>
-        <p>例外を投げるように記載されたアルゴリズム手順、例えば</p>
+        <h1>Throw</h1>
+        <p>アルゴリズムステップにおいて、「throw」という語は ThrowCompletion を呼び出した結果を返すことの省略表現です。例えば、</p>
         <emu-alg example>
-          1. *TypeError*例外を投げる。
+          1. もし _result_.[[Error]] が ~none~ でないなら、_result_.[[Error]] を throw する。
         </emu-alg>
-        <p>は、次の意味と同じです:</p>
+        <p>これは次と同等です：</p>
         <emu-alg example>
-          1. ThrowCompletion(新しく生成された*TypeError*オブジェクト)を返す。
+          1. もし _result_.[[Error]] が ~none~ でないなら、ThrowCompletion(_result_.[[Error]]) を返す。
+        </emu-alg>
+        <p>特定の型の例外を throw する旨が記述されているアルゴリズムステップは、その型の例外を構築して throw します。例えば、</p>
+        <emu-alg example>
+          1. *TypeError* 例外を throw する。
+        </emu-alg>
+        <p>これは次と同等です：</p>
+        <emu-alg example>
+          1. 新たに生成した *TypeError* オブジェクトを ThrowCompletion で返す。
         </emu-alg>
       </emu-clause>
 
@@ -13434,7 +13442,7 @@
           1. _error_ を新たに生成された *TypeError* オブジェクトとする。
           1. 注記: _error_ は _F_ の関連 Realm Record を持つ _calleeContext_ 内で生成される。
           1. 実行コンテキストスタックから _calleeContext_ を除去し _callerContext_ を実行中実行コンテキストとして復元する。
-          1. ThrowCompletion(_error_) を返す。
+          1. _error_ を throw する。
         1. OrdinaryCallBindThis(_F_, _calleeContext_, _thisArgument_) を実行する。
         1. _result_ を Completion(OrdinaryCallEvaluateBody(_F_, _argumentsList_)) とする。
         1. [id="step-call-pop-context-stack"] 実行コンテキストスタックから _calleeContext_ を除去し _callerContext_ を実行中実行コンテキストとして復元する。
@@ -23170,7 +23178,7 @@
       <emu-alg>
         1. _exprRef_ を |Expression| の Evaluation を ? 付きで行った結果とする。
         1. _exprValue_ を ? GetValue(_exprRef_) とする。
-        1. ThrowCompletion(_exprValue_) を返す。
+        1. _exprValue_ を throw する。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -26801,7 +26809,7 @@
             1. _promise_.[[PromiseState]] が ~rejected~ の場合、
               1. _promise_.[[PromiseIsHandled]] が *false* の場合、HostPromiseRejectionTracker(_promise_, *"handle"*) を実行する。
               1. _promise_.[[PromiseIsHandled]] を *true* に設定する。
-              1. ThrowCompletion(_promise_.[[PromiseResult]]) を返す。
+              1. _promise_.[[PromiseResult]] を throw する。
             1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
@@ -43097,7 +43105,7 @@ THH:mm:ss.sss
           1. _lastChunkHandling_ が *"loose"*、*"strict"*、*"stop-before-partial"* のいずれでもなければ、*TypeError* 例外をスローする。
           1. _result_ に FromBase64(_string_, _alphabet_, _lastChunkHandling_) を設定する。
           1. _result_.[[Error]] が ~none~ でなければ、
-            1. ThrowCompletion(_result_.[[Error]]) を返す。
+            1. _result_.[[Error]] を throw する。
           1. _resultLength_ に _result_.[[Bytes]] の要素数を設定する。
           1. _ta_ に ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> を設定する。
           1. アサート: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] は _result_.[[Bytes]] の要素数である。
@@ -43112,7 +43120,7 @@ THH:mm:ss.sss
           1. _string_ が文字列でなければ、*TypeError* 例外をスローする。
           1. _result_ に FromHex(_string_) を設定する。
           1. _result_.[[Error]] が ~none~ でなければ、
-            1. ThrowCompletion(_result_.[[Error]]) を返す。
+            1. _result_.[[Error]] を throw する。
           1. _resultLength_ に _result_.[[Bytes]] の要素数を設定する。
           1. _ta_ に ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> を設定する。
           1. アサート: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] は _result_.[[Bytes]] の要素数である。
@@ -43148,7 +43156,7 @@ THH:mm:ss.sss
           1. アサート: _written_ ≤ _byteLength_。
           1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
           1. _result_.[[Error]] が ~none~ でなければ、
-            1. ThrowCompletion(_result_.[[Error]]) を返す。
+            1. _result_.[[Error]] を throw する。
           1. _resultObject_ に OrdinaryObjectCreate(%Object.prototype%) を設定する。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)) を実行する。
@@ -43172,7 +43180,7 @@ THH:mm:ss.sss
           1. アサート: _written_ ≤ _byteLength_。
           1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
           1. _result_.[[Error]] が ~none~ でなければ、
-            1. ThrowCompletion(_result_.[[Error]]) を返す。
+            1. _result_.[[Error]] を throw する。
           1. _resultObject_ に OrdinaryObjectCreate(%Object.prototype%) を設定する。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
           1. ! CreateDataPropertyOrThrow(_resultObject_, *"written"*, 𝔽(_written_)) を実行する。
@@ -50040,28 +50048,30 @@ THH:mm:ss.sss
         <p>このメソッドは呼び出されると次の手順を実行する:</p>
         <emu-alg>
           1. _promise_ を *this* 値とする。
-          1. もし _promise_ が Object でなければ *TypeError* 例外を投げる。
+          1. もし _promise_ がオブジェクトでなければ、*TypeError* 例外を throw する。
           1. _C_ を ? SpeciesConstructor(_promise_, %Promise%) とする。
-          1. 事前条件: IsConstructor(_C_) は *true* である。
-          1. もし IsCallable(_onFinally_) が *false* なら
+          1. Assert: IsConstructor(_C_) は *true* である。
+          1. もし IsCallable(_onFinally_) が *false* なら、
             1. _thenFinally_ を _onFinally_ とする。
             1. _catchFinally_ を _onFinally_ とする。
-          1. それ以外
-            1. _thenFinallyClosure_ をパラメータ (_value_) を取り _onFinally_ と _C_ を捕捉し呼び出されると次を行う新たな Abstract Closure とする:
+          1. そうでなければ、
+            1. _thenFinallyClosure_ を、パラメータ (_value_) を持ち、_onFinally_ と _C_ をキャプチャし、呼び出された時に次のステップを実行する新しい抽象クロージャとする：
               1. _result_ を ? Call(_onFinally_, *undefined*) とする。
               1. _p_ を ? PromiseResolve(_C_, _result_) とする。
-              1. _returnValue_ を引数なしで _value_ を捕捉し呼び出されると次を行う新たな Abstract Closure とし、NormalCompletion(_value_) を返す。
+              1. _returnValue_ をパラメータなしで、_value_ をキャプチャし、呼び出された時に次のステップを実行する新しい抽象クロージャとする：
+                1. NormalCompletion(_value_) を返す。
               1. _valueThunk_ を CreateBuiltinFunction(_returnValue_, 0, *""*, « ») とする。
-              1. Return ? Invoke(_p_, *"then"*, « _valueThunk_ »).
+              1. ? Invoke(_p_, *"then"*, « _valueThunk_ ») を返す。
             1. _thenFinally_ を CreateBuiltinFunction(_thenFinallyClosure_, 1, *""*, « ») とする。
-            1. _catchFinallyClosure_ をパラメータ (_reason_) を取り _onFinally_ と _C_ を捕捉し呼び出されると次を行う新たな Abstract Closure とする:
+            1. _catchFinallyClosure_ を、パラメータ (_reason_) を持ち、_onFinally_ と _C_ をキャプチャし、呼び出された時に次のステップを実行する新しい抽象クロージャとする：
               1. _result_ を ? Call(_onFinally_, *undefined*) とする。
               1. _p_ を ? PromiseResolve(_C_, _result_) とする。
-              1. _throwReason_ を引数なしで _reason_ を捕捉し呼び出されると次を行う新たな Abstract Closure とし、Return ThrowCompletion(_reason_)。
+              1. _throwReason_ をパラメータなしで、_reason_ をキャプチャし、呼び出された時に次のステップを実行する新しい抽象クロージャとする：
+                1. _reason_ を throw する。
               1. _thrower_ を CreateBuiltinFunction(_throwReason_, 0, *""*, « ») とする。
-              1. Return ? Invoke(_p_, *"then"*, « _thrower_ »).
+              1. ? Invoke(_p_, *"then"*, « _thrower_ ») を返す。
             1. _catchFinally_ を CreateBuiltinFunction(_catchFinallyClosure_, 1, *""*, « ») とする。
-          1. Return ? Invoke(_promise_, *"then"*, « _thenFinally_, _catchFinally_ »).
+          1. ? Invoke(_promise_, *"then"*, « _thenFinally_, _catchFinally_ ») を返す。
         </emu-alg>
       </emu-clause>
 
