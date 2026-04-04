@@ -170,7 +170,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=g681iJo8" defer=""></script><style>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=PgxZhNNW" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -1817,7 +1817,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-json.rawjson">
+    <emu-clause id="sec-json.rawjson" type="built-in function">
       <h1><span class="secnum">25.5.3</span> JSON.rawJSON ( <var>text</var> )</h1>
       <p>该函数返回一个代表原始 JSON 文本（字符串、数字、布尔或 null）的对象。</p>
       <emu-alg><ol><li>令 <var>jsonString</var> 为 ?&nbsp;<emu-xref aoid="ToString" id="_ref_9901"><a href="abstract-operations.html#sec-tostring">ToString</a></emu-xref>(<var>text</var>)。</li><li>若 <var>jsonString</var> 是空字符串，则抛出 <emu-val>SyntaxError</emu-val> 异常。</li><li>若 <var>jsonString</var> 的首个码元不是 ASCII 小写字母码元（0x0061 至 0x007A）、ASCII 数字码元（0x0030 至 0x0039）、0x0022（双引号）或 0x002D（连字符），则抛出 <emu-val>SyntaxError</emu-val> 异常。</li><li>若 <var>jsonString</var> 的最后一个码元不是 ASCII 小写字母码元（0x0061 至 0x007A）、ASCII 数字码元（0x0030 至 0x0039）或 0x0022（双引号），则抛出 <emu-val>SyntaxError</emu-val> 异常。</li><li>令 <var>parseResult</var> 为 ?&nbsp;<emu-xref aoid="ParseJSON" id="_ref_9902"><a href="structured-data.html#sec-ParseJSON">ParseJSON</a></emu-xref>(<var>jsonString</var>)。</li><li>断言：<var>parseResult</var>.<var class="field">[[Value]]</var> 仅为字符串、数字、布尔值或 <emu-val>null</emu-val>。</li><li>令 <var>internalSlotsList</var> 为 « <var class="field">[[IsRawJSON]]</var>&nbsp;»。</li><li>令 <var>obj</var> 为 <emu-xref aoid="OrdinaryObjectCreate" id="_ref_9903"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(<emu-val>null</emu-val>, <var>internalSlotsList</var>)。</li><li>执行 !&nbsp;<emu-xref aoid="CreateDataPropertyOrThrow" id="_ref_9904"><a href="abstract-operations.html#sec-createdatapropertyorthrow">CreateDataPropertyOrThrow</a></emu-xref>(<var>obj</var>, <emu-val>"rawJSON"</emu-val>, <var>jsonString</var>)。</li><li>执行 !&nbsp;<emu-xref aoid="SetIntegrityLevel" id="_ref_9905"><a href="abstract-operations.html#sec-setintegritylevel">SetIntegrityLevel</a></emu-xref>(<var>obj</var>, <emu-const>frozen</emu-const>)。</li><li>返回 <var>obj</var>。</li></ol></emu-alg>

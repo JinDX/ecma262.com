@@ -169,7 +169,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 언어&nbsp;명세서</title><script src="..\assets\js\ecmarkup.js?cache=i8wtY4-Q" defer=""></script><style>
+<title>ECMAScript® 2027 언어&nbsp;명세서</title><script src="..\assets\js\ecmarkup.js?cache=d2cwlLWR" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -1689,7 +1689,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-json.rawjson">
+    <emu-clause id="sec-json.rawjson" type="built-in function">
       <h1><span class="secnum">25.5.3</span> JSON.rawJSON ( <var>text</var> )</h1>
       <p>이 함수는 문자열, 숫자, 불리언, null 값의 raw JSON 텍스트를 나타내는 객체를 반환한다.</p>
       <emu-alg><ol><li><var>jsonString</var>을 ?&nbsp;<emu-xref aoid="ToString" id="_ref_10572"><a href="abstract-operations.html#sec-tostring" class="e-user-code">ToString</a></emu-xref>(<var>text</var>)로 둔다.</li><li><var>jsonString</var>이 빈 문자열이면 <emu-val>SyntaxError</emu-val> 예외를 던진다.</li><li><var>jsonString</var>의 첫 코드 유닛이 ASCII 소문자(0x0061~0x007A), ASCII 숫자(0x0030~0x0039), 0x0022(따옴표), 또는 0x002D(하이픈)가 아니면 <emu-val>SyntaxError</emu-val> 예외를 던진다.</li><li><var>jsonString</var>의 마지막 코드 유닛이 ASCII 소문자(0x0061~0x007A), ASCII 숫자(0x0030~0x0039), 또는 0x0022(따옴표)가 아니면 <emu-val>SyntaxError</emu-val> 예외를 던진다.</li><li><var>parseResult</var>를 ?&nbsp;<emu-xref aoid="ParseJSON" id="_ref_10573"><a href="structured-data.html#sec-ParseJSON">ParseJSON</a></emu-xref>(<var>jsonString</var>)으로 둔다.</li><li><emu-xref href="#assert" id="_ref_10574"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>parseResult</var>.<var class="field">[[Value]]</var>는 문자열, 숫자, 불리언, <emu-val>null</emu-val> 중 하나다.</li><li><var>internalSlotsList</var>를 « <var class="field">[[IsRawJSON]]</var>&nbsp;»로 둔다.</li><li><var>obj</var>를 <emu-xref aoid="OrdinaryObjectCreate" id="_ref_10575"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(<emu-val>null</emu-val>, <var>internalSlotsList</var>)로 둔다.</li><li>!&nbsp;<emu-xref aoid="CreateDataPropertyOrThrow" id="_ref_10576"><a href="abstract-operations.html#sec-createdatapropertyorthrow">CreateDataPropertyOrThrow</a></emu-xref>(<var>obj</var>, <emu-val>"rawJSON"</emu-val>, <var>jsonString</var>)을 수행한다.</li><li>!&nbsp;<emu-xref aoid="SetIntegrityLevel" id="_ref_10577"><a href="abstract-operations.html#sec-setintegritylevel">SetIntegrityLevel</a></emu-xref>(<var>obj</var>, <emu-const>frozen</emu-const>)을 수행한다.</li><li><var>obj</var>를 반환한다.</li></ol></emu-alg>

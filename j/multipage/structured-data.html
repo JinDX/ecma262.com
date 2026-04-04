@@ -169,7 +169,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 言語仕様</title><script src="..\assets\js\ecmarkup.js?cache=YFhnGAql" defer=""></script><style>
+<title>ECMAScript® 2027 言語仕様</title><script src="..\assets\js\ecmarkup.js?cache=rJTZGHeB" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -1763,7 +1763,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-json.rawjson">
+    <emu-clause id="sec-json.rawjson" type="built-in function">
       <h1><span class="secnum">25.5.3</span> JSON.rawJSON ( <var>text</var> )</h1>
       <p>この関数は、文字列、数値、ブール値、または null 値の生 JSON テキストを表すオブジェクトを返す。</p>
       <emu-alg><ol><li><var>jsonString</var> を ?&nbsp;<emu-xref aoid="ToString" id="_ref_10444"><a href="abstract-operations.html#sec-tostring">ToString</a></emu-xref>(<var>text</var>) とする。</li><li><var>jsonString</var> が空文字列なら <emu-val>SyntaxError</emu-val> 例外をスローする。</li><li><var>jsonString</var> の最初のコード単位が ASCII 小文字（0x0061～0x007A）、ASCII 数字（0x0030～0x0039）、0x0022（引用符）、または 0x002D（ハイフン）以外なら <emu-val>SyntaxError</emu-val> 例外をスローする。</li><li><var>jsonString</var> の最終コード単位が ASCII 小文字（0x0061～0x007A）、ASCII 数字（0x0030～0x0039）、または 0x0022（引用符）以外なら <emu-val>SyntaxError</emu-val> 例外をスローする。</li><li><var>parseResult</var> を ?&nbsp;<emu-xref aoid="ParseJSON" id="_ref_10445"><a href="structured-data.html#sec-ParseJSON">ParseJSON</a></emu-xref>(<var>jsonString</var>) とする。</li><li>アサート: <var>parseResult</var>.<var class="field">[[Value]]</var> は String, Number, Boolean, <emu-val>null</emu-val> のいずれかである。</li><li><var>internalSlotsList</var> を « <var class="field">[[IsRawJSON]]</var>&nbsp;» とする。</li><li><var>obj</var> を <emu-xref aoid="OrdinaryObjectCreate" id="_ref_10446"><a href="ordinary-and-exotic-objects-behaviours.html#sec-ordinaryobjectcreate">OrdinaryObjectCreate</a></emu-xref>(<emu-val>null</emu-val>, <var>internalSlotsList</var>) とする。</li><li>!&nbsp;<emu-xref aoid="CreateDataPropertyOrThrow" id="_ref_10447"><a href="abstract-operations.html#sec-createdatapropertyorthrow">CreateDataPropertyOrThrow</a></emu-xref>(<var>obj</var>, <emu-val>"rawJSON"</emu-val>, <var>jsonString</var>) を実行する。</li><li>!&nbsp;<emu-xref aoid="SetIntegrityLevel" id="_ref_10448"><a href="abstract-operations.html#sec-setintegritylevel">SetIntegrityLevel</a></emu-xref>(<var>obj</var>, <emu-const>frozen</emu-const>) を実行する。</li><li><var>obj</var> を返す。</li></ol></emu-alg>
