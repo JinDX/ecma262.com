@@ -28093,10 +28093,10 @@
                 [[ImportName]]
               </td>
               <td>
-                a String or ~namespace-object~
+                a String or ~namespace~
               </td>
               <td>
-                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. The value ~namespace-object~ indicates that the import request is for the target module's namespace object.
+                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. The value ~namespace~ indicates that the import request is for the target module's namespace object.
               </td>
             </tr>
             <tr>
@@ -28154,7 +28154,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~namespace-object~
+                  ~namespace~
                 </td>
                 <td>
                   *"ns"*
@@ -28242,10 +28242,10 @@
                 [[ImportName]]
               </td>
               <td>
-                a String, *null*, ~all~, or ~all-but-default~
+                a String, *null*, ~namespace~, or ~all-but-default~
               </td>
               <td>
-                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. *null* if the |ExportDeclaration| does not have a |ModuleSpecifier|. ~all~ is used for `export * as ns from "mod"` declarations. ~all-but-default~ is used for `export * from "mod"` declarations.
+                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. *null* if the |ExportDeclaration| does not have a |ModuleSpecifier|. ~namespace~ is used for `export * as ns from "mod"` declarations. ~all-but-default~ is used for `export * from "mod"` declarations.
               </td>
             </tr>
             <tr>
@@ -28448,7 +28448,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~all~
+                  ~namespace~
                 </td>
                 <td>
                   *null*
@@ -28488,12 +28488,7 @@
                 1. Else,
                   1. NOTE: When exporting a binding or namespace object which was originally imported from another module, the ExportEntry Record is rewritten to match the form it would have if the binding or namespace object had been re-exported directly from the original module rather than imported then exported. This allows conflicts which arise from exporting the same binding or namespace twice under the same name through `export * from` to be ignored rather than being treated as ambiguous in step <emu-xref href="#step-resolveexport-conflict"></emu-xref> of <emu-xref href="#sec-resolveexport">the ResolveExport concrete method of Source Text Module Records</emu-xref>.
                   1. Let _ie_ be the element of _importEntries_ whose [[LocalName]] is _ee_.[[LocalName]].
-                  1. If _ie_.[[ImportName]] is ~namespace-object~, then
-                    1. NOTE: This is a re-export of an imported module namespace object.
-                    1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
-                  1. Else,
-                    1. NOTE: This is a re-export of a single name.
-                    1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
+                  1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
               1. Else if _ee_.[[ImportName]] is ~all-but-default~, then
                 1. Assert: _ee_.[[ExportName]] is *null*.
                 1. Append _ee_ to _starExportEntries_.
@@ -28587,7 +28582,7 @@
                 1. If _e_.[[ExportName]] is _exportName_, then
                   1. Assert: _e_.[[ModuleRequest]] is not *null*.
                   1. Let _importedModule_ be GetImportedModule(_module_, _e_.[[ModuleRequest]]).
-                  1. If _e_.[[ImportName]] is ~all~, then
+                  1. If _e_.[[ImportName]] is ~namespace~, then
                     1. Assert: _module_ does not provide the direct binding for this export.
                     1. Return ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }.
                   1. Assert: _module_ imports a specific binding for this export.
@@ -28641,11 +28636,12 @@
               1. Set _module_.[[Environment]] to _env_.
               1. For each ImportEntry Record _in_ of _module_.[[ImportEntries]], do
                 1. Let _importedModule_ be GetImportedModule(_module_, _in_.[[ModuleRequest]]).
-                1. If _in_.[[ImportName]] is ~namespace-object~, then
+                1. If _in_.[[ImportName]] is ~namespace~, then
                   1. Let _namespace_ be GetModuleNamespace(_importedModule_).
                   1. Perform ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*).
                   1. Perform ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_).
                 1. Else,
+                  1. Assert: _in_.[[ImportName]] is a String.
                   1. Let _resolution_ be _importedModule_.ResolveExport(_in_.[[ImportName]]).
                   1. If _resolution_ is either *null* or ~ambiguous~, throw a *SyntaxError* exception.
                   1. If _resolution_.[[BindingName]] is ~namespace~, then
@@ -29246,7 +29242,7 @@
         <emu-grammar>NameSpaceImport : `*` `as` ImportedBinding</emu-grammar>
         <emu-alg>
           1. Let _localName_ be the StringValue of |ImportedBinding|.
-          1. Let _entry_ be the ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace-object~, [[LocalName]]: _localName_ }.
+          1. Let _entry_ be the ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: _localName_ }.
           1. Return « _entry_ ».
         </emu-alg>
         <emu-grammar>NamedImports : `{` `}`</emu-grammar>
@@ -29589,7 +29585,7 @@
         <emu-grammar>ExportFromClause : `*` `as` ModuleExportName</emu-grammar>
         <emu-alg>
           1. Let _exportName_ be the StringValue of |ModuleExportName|.
-          1. Let _entry_ be the ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }.
+          1. Let _entry_ be the ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }.
           1. Return « _entry_ ».
         </emu-alg>
         <emu-grammar>NamedExports : `{` `}`</emu-grammar>
