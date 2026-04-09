@@ -5348,13 +5348,13 @@
         1. Return 𝔽(_int32bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToInt32:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
-            The ToInt32 abstract operation is idempotent: if applied to a result that it produced, the second application leaves that value unchanged.
+            It is idempotent: for any ECMAScript language value _x_, ToInt32(ToInt32(_x_)) is the same as ToInt32(_x_).
           </li>
           <li>
-            ToInt32(ToUint32(_x_)) is the same value as ToInt32(_x_) for all values of _x_. (It is to preserve this latter property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
+            For any ECMAScript language value _x_, ToInt32(ToUint32(_x_)) is the same as ToInt32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
           </li>
           <li>
             ToInt32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
@@ -5381,16 +5381,16 @@
         1. [id="step-touint32-return"] Return 𝔽(_int32bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToUint32:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
             Step <emu-xref href="#step-touint32-return"></emu-xref> is the only difference between ToUint32 and ToInt32.
           </li>
           <li>
-            The ToUint32 abstract operation is idempotent: if applied to a result that it produced, the second application leaves that value unchanged.
+            It is idempotent: for any ECMAScript language value _x_, ToUint32(ToUint32(_x_)) is the same as ToUint32(_x_).
           </li>
           <li>
-            ToUint32(ToInt32(_x_)) is the same value as ToUint32(_x_) for all values of _x_. (It is to preserve this latter property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
+            For any ECMAScript language value _x_, ToUint32(ToInt32(_x_)) is the same as ToUint32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
           </li>
           <li>
             ToUint32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
@@ -5437,7 +5437,7 @@
         1. Return 𝔽(_int16bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToUint16:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
             The substitution of 2<sup>16</sup> for 2<sup>32</sup> in step <emu-xref href="#step-touint16-mod"></emu-xref> is the only difference between ToUint32 and ToUint16.
