@@ -2,22 +2,6 @@
 <html lang="en-GB-oxendict">
 <meta charset="utf-8">
 <link rel="icon" href="img/favicon.ico">
-<script>
-(function() {
-  let d = new Date;
-  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
-    let d = document;
-    let h = d.documentElement;
-    let l = d.createElement('link');
-    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
-    l.setAttribute('rel', 'stylesheet');
-    h.appendChild(l);
-    let s = d.createElement('style');
-    s.innerHTML = '* { font-family: Itim !important; }';
-    h.appendChild(s);
-  }
-})();
-</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -192,9 +176,10 @@
     <li>
       Editors:
       <ul>
-        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
-        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
         <li><a href="mailto:ecma262 at chronicles dot org">Ron Buckton</a></li> (<a href="https://bsky.app/profile/chronicles.org">@chronicles.org</a>)
+        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
+        <li><a href="mailto:mail@linusgroh.de">Linus Groh</a></li>
+        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
       </ul>
     </li>
     <li>
@@ -229,6 +214,7 @@
   <p>ECMAScript 2023, the 14<sup>th</sup> edition, introduced the `toSorted`, `toReversed`, `with`, `findLast`, and `findLastIndex` methods on `Array.prototype` and `TypedArray.prototype`, as well as the `toSpliced` method on `Array.prototype`; added support for `#!` comments at the beginning of files to better facilitate executable ECMAScript files; and allowed the use of most Symbols as keys in weak collections.</p>
   <p>ECMAScript 2024, the 15<sup>th</sup> edition, added facilities for resizing and transferring ArrayBuffers and SharedArrayBuffers; added a new RegExp `/v` flag for creating RegExps with more advanced features for working with sets of strings; and introduced the `Promise.withResolvers` convenience method for constructing Promises, the `Object.groupBy` and `Map.groupBy` methods for aggregating data, the `Atomics.waitAsync` method for asynchronously waiting for a change to shared memory, and the `String.prototype.isWellFormed` and `String.prototype.toWellFormed` methods for checking and ensuring that strings contain only well-formed Unicode.</p>
   <p>ECMAScript 2025, the 16<sup>th</sup> edition, added a new `Iterator` global with associated static and prototype methods for working with iterators; added methods to `Set.prototype` for performing common operations on Sets; added support for importing JSON modules as well as syntax for declaring attributes of imported modules; added the `RegExp.escape` method for escaping a string to be safely used in a regular expression; added syntax for enabling and disabling modifier flags inline within regular expressions; added the `Promise.try` method for calling functions which may or may not return a `Promise` and ensuring the result is always a `Promise`; and added a new `Float16Array` TypedArray kind as well as the related `DataView.prototype.getFloat16`, `DataView.prototype.setFloat16`, and `Math.f16round` methods.</p>
+  <p>ECMAScript 2026, the 17<sup>th</sup> edition, added `Math.sumPrecise` for summing an iterable of Numbers of varying magnitude while minimizing precision loss; `Iterator.concat` for sequencing iterators; `Array.fromAsync` for constructing Arrays from async iterables and other async sources; `Error.isError` for identifying error objects; methods to `Map.prototype` and `WeakMap.prototype` for providing a default value to use during retrieval when a key is not already present; methods to `Uint8Array` for converting to and from Strings of hexadecimal- and base64-encoded binary data; a parameter to `JSON.parse` revivers to access the matched segment of JSON source; and `JSON.rawJSON` for fine control over `JSON.stringify` output for primitive values.</p>
   <p>Dozens of individuals representing many organizations have made very significant contributions within Ecma TC39 to the development of this edition and to the prior editions. In addition, a vibrant community has emerged supporting TC39's ECMAScript efforts. This community has reviewed numerous drafts, filed thousands of bug reports, performed implementation experiments, contributed test suites, and educated the world-wide developer community about ECMAScript. Unfortunately, it is impossible to identify and acknowledge every person and organization who has contributed to this effort.</p>
   <p>
     Allen Wirfs-Brock<br>
@@ -5340,21 +5326,20 @@
         <dd>It converts _argument_ to one of 2<sup>32</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>31</sup>) to 𝔽(2<sup>31</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. Let _int32bit_ be _int_ modulo 2<sup>32</sup>.
         1. If _int32bit_ ≥ 2<sup>31</sup>, return 𝔽(_int32bit_ - 2<sup>32</sup>).
         1. Return 𝔽(_int32bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToInt32:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
-            The ToInt32 abstract operation is idempotent: if applied to a result that it produced, the second application leaves that value unchanged.
+            It is idempotent: for any ECMAScript language value _x_, ToInt32(ToInt32(_x_)) is the same as ToInt32(_x_).
           </li>
           <li>
-            ToInt32(ToUint32(_x_)) is the same value as ToInt32(_x_) for all values of _x_. (It is to preserve this latter property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
+            For any ECMAScript language value _x_, ToInt32(ToUint32(_x_)) is the same as ToInt32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
           </li>
           <li>
             ToInt32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
@@ -5374,23 +5359,22 @@
         <dd>It converts _argument_ to one of 2<sup>32</sup> integral Number values in the inclusive interval from *+0*<sub>𝔽</sub> to 𝔽(2<sup>32</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. Let _int32bit_ be _int_ modulo 2<sup>32</sup>.
         1. [id="step-touint32-return"] Return 𝔽(_int32bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToUint32:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
             Step <emu-xref href="#step-touint32-return"></emu-xref> is the only difference between ToUint32 and ToInt32.
           </li>
           <li>
-            The ToUint32 abstract operation is idempotent: if applied to a result that it produced, the second application leaves that value unchanged.
+            It is idempotent: for any ECMAScript language value _x_, ToUint32(ToUint32(_x_)) is the same as ToUint32(_x_).
           </li>
           <li>
-            ToUint32(ToInt32(_x_)) is the same value as ToUint32(_x_) for all values of _x_. (It is to preserve this latter property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
+            For any ECMAScript language value _x_, ToUint32(ToInt32(_x_)) is the same as ToUint32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
           </li>
           <li>
             ToUint32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
@@ -5410,9 +5394,8 @@
         <dd>It converts _argument_ to one of 2<sup>16</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>15</sup>) to 𝔽(2<sup>15</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. Let _int16bit_ be _int_ modulo 2<sup>16</sup>.
         1. If _int16bit_ ≥ 2<sup>15</sup>, return 𝔽(_int16bit_ - 2<sup>16</sup>).
         1. Return 𝔽(_int16bit_).
@@ -5430,14 +5413,13 @@
         <dd>It converts _argument_ to one of 2<sup>16</sup> integral Number values in the inclusive interval from *+0*<sub>𝔽</sub> to 𝔽(2<sup>16</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. [id="step-touint16-mod"] Let _int16bit_ be _int_ modulo 2<sup>16</sup>.
         1. Return 𝔽(_int16bit_).
       </emu-alg>
       <emu-note>
-        <p>Given the above definition of ToUint16:</p>
+        <p>Given the above definition:</p>
         <ul>
           <li>
             The substitution of 2<sup>16</sup> for 2<sup>32</sup> in step <emu-xref href="#step-touint16-mod"></emu-xref> is the only difference between ToUint32 and ToUint16.
@@ -5460,9 +5442,8 @@
         <dd>It converts _argument_ to one of 2<sup>8</sup> integral Number values in the inclusive interval from *-128*<sub>𝔽</sub> to *127*<sub>𝔽</sub>.</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. Let _int8bit_ be _int_ modulo 2<sup>8</sup>.
         1. If _int8bit_ ≥ 2<sup>7</sup>, return 𝔽(_int8bit_ - 2<sup>8</sup>).
         1. Return 𝔽(_int8bit_).
@@ -5480,9 +5461,8 @@
         <dd>It converts _argument_ to one of 2<sup>8</sup> integral Number values in the inclusive interval from *+0*<sub>𝔽</sub> to *255*<sub>𝔽</sub>.</dd>
       </dl>
       <emu-alg>
-        1. Let _number_ be ? ToNumber(_argument_).
-        1. If _number_ is not finite or _number_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, return *+0*<sub>𝔽</sub>.
-        1. Let _int_ be truncate(ℝ(_number_)).
+        1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
+        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
         1. Let _int8bit_ be _int_ modulo 2<sup>8</sup>.
         1. Return 𝔽(_int8bit_).
       </emu-alg>
@@ -10952,7 +10932,7 @@
         <h1>Global Environment Records</h1>
         <p>A <dfn variants="Global Environment Records">Global Environment Record</dfn> is used to represent the outer most scope that is shared by all of the ECMAScript |Script| elements that are processed in a common realm. A Global Environment Record provides the bindings for built-in globals (clause <emu-xref href="#sec-global-object"></emu-xref>), properties of the global object, and for all top-level declarations (<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>) that occur within a |Script|.</p>
         <p>A Global Environment Record is logically a single record but it is specified as a composite encapsulating an Object Environment Record and a Declarative Environment Record. The Object Environment Record has as its base object the global object of the associated Realm Record. This global object is the value returned by the Global Environment Record's GetThisBinding concrete method. The Object Environment Record component of a Global Environment Record contains the bindings for all built-in globals (clause <emu-xref href="#sec-global-object"></emu-xref>) and all bindings introduced by a |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableStatement| contained in global code. The bindings for all other ECMAScript declarations in global code are contained in the Declarative Environment Record component of the Global Environment Record.</p>
-        <p>Properties may be created directly on a global object. Hence, the Object Environment Record component of a Global Environment Record may contain both bindings created explicitly by |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableDeclaration| declarations and bindings created implicitly as properties of the global object. In order to identify which bindings were explicitly created using declarations, a Global Environment Record maintains a list of the names bound using the CreateGlobalVarBinding and CreateGlobalFunctionBinding abstract operations.</p>
+        <p>Properties may be created directly on a global object. Hence, the Object Environment Record component of a Global Environment Record may contain both bindings created explicitly by |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableDeclaration| declarations and bindings created implicitly as properties of the global object.</p>
         <p>Global Environment Records have the additional fields listed in <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>.</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="Additional Fields of Global Environment Records" oldids="table-18">
           <table>
@@ -13304,7 +13284,7 @@
             [[HomeObject]]
           </td>
           <td>
-            an Object
+            an Object or *undefined*
           </td>
           <td>
             If the function uses `super`, this is the object whose [[GetPrototypeOf]] provides the object where `super` property lookups begin.
@@ -15761,7 +15741,7 @@
         <p>[[GetOwnProperty]] for Proxy objects enforces the following invariants:</p>
         <ul>
           <li>
-            The result of [[GetOwnProperty]] must be either an Object or *undefined*.
+            The result of [[GetOwnProperty]] must be either a Property Descriptor or *undefined*.
           </li>
           <li>
             A property cannot be reported as non-existent, if it exists as a non-configurable own property of the target object.
@@ -26847,7 +26827,7 @@
                 a throw completion or ~empty~
               </td>
               <td>
-                A throw completion representing the exception that occurred during evaluation. *undefined* if no exception occurred or if [[Status]] is not ~evaluated~.
+                A throw completion representing the exception that occurred during evaluation. ~empty~ if no exception occurred or if [[Status]] is not ~evaluated~.
               </td>
             </tr>
             <tr>
@@ -28093,10 +28073,10 @@
                 [[ImportName]]
               </td>
               <td>
-                a String or ~namespace-object~
+                a String or ~namespace~
               </td>
               <td>
-                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. The value ~namespace-object~ indicates that the import request is for the target module's namespace object.
+                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. The value ~namespace~ indicates that the import request is for the target module's namespace object.
               </td>
             </tr>
             <tr>
@@ -28154,7 +28134,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~namespace-object~
+                  ~namespace~
                 </td>
                 <td>
                   *"ns"*
@@ -28242,10 +28222,10 @@
                 [[ImportName]]
               </td>
               <td>
-                a String, *null*, ~all~, or ~all-but-default~
+                a String, *null*, ~namespace~, or ~all-but-default~
               </td>
               <td>
-                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. *null* if the |ExportDeclaration| does not have a |ModuleSpecifier|. ~all~ is used for `export * as ns from "mod"` declarations. ~all-but-default~ is used for `export * from "mod"` declarations.
+                The name under which the desired binding is exported by the module identified by [[ModuleRequest]]. *null* if the |ExportDeclaration| does not have a |ModuleSpecifier|. ~namespace~ is used for `export * as ns from "mod"` declarations. ~all-but-default~ is used for `export * from "mod"` declarations.
               </td>
             </tr>
             <tr>
@@ -28448,7 +28428,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~all~
+                  ~namespace~
                 </td>
                 <td>
                   *null*
@@ -28488,12 +28468,7 @@
                 1. Else,
                   1. NOTE: When exporting a binding or namespace object which was originally imported from another module, the ExportEntry Record is rewritten to match the form it would have if the binding or namespace object had been re-exported directly from the original module rather than imported then exported. This allows conflicts which arise from exporting the same binding or namespace twice under the same name through `export * from` to be ignored rather than being treated as ambiguous in step <emu-xref href="#step-resolveexport-conflict"></emu-xref> of <emu-xref href="#sec-resolveexport">the ResolveExport concrete method of Source Text Module Records</emu-xref>.
                   1. Let _ie_ be the element of _importEntries_ whose [[LocalName]] is _ee_.[[LocalName]].
-                  1. If _ie_.[[ImportName]] is ~namespace-object~, then
-                    1. NOTE: This is a re-export of an imported module namespace object.
-                    1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
-                  1. Else,
-                    1. NOTE: This is a re-export of a single name.
-                    1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
+                  1. Append the ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } to _indirectExportEntries_.
               1. Else if _ee_.[[ImportName]] is ~all-but-default~, then
                 1. Assert: _ee_.[[ExportName]] is *null*.
                 1. Append _ee_ to _starExportEntries_.
@@ -28587,7 +28562,7 @@
                 1. If _e_.[[ExportName]] is _exportName_, then
                   1. Assert: _e_.[[ModuleRequest]] is not *null*.
                   1. Let _importedModule_ be GetImportedModule(_module_, _e_.[[ModuleRequest]]).
-                  1. If _e_.[[ImportName]] is ~all~, then
+                  1. If _e_.[[ImportName]] is ~namespace~, then
                     1. Assert: _module_ does not provide the direct binding for this export.
                     1. Return ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }.
                   1. Assert: _module_ imports a specific binding for this export.
@@ -28641,11 +28616,12 @@
               1. Set _module_.[[Environment]] to _env_.
               1. For each ImportEntry Record _in_ of _module_.[[ImportEntries]], do
                 1. Let _importedModule_ be GetImportedModule(_module_, _in_.[[ModuleRequest]]).
-                1. If _in_.[[ImportName]] is ~namespace-object~, then
+                1. If _in_.[[ImportName]] is ~namespace~, then
                   1. Let _namespace_ be GetModuleNamespace(_importedModule_).
                   1. Perform ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*).
                   1. Perform ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_).
                 1. Else,
+                  1. Assert: _in_.[[ImportName]] is a String.
                   1. Let _resolution_ be _importedModule_.ResolveExport(_in_.[[ImportName]]).
                   1. If _resolution_ is either *null* or ~ambiguous~, throw a *SyntaxError* exception.
                   1. If _resolution_.[[BindingName]] is ~namespace~, then
@@ -28701,13 +28677,8 @@
             </dl>
 
             <emu-alg>
-              1. Let _moduleContext_ be a new ECMAScript code execution context.
-              1. Set the Function of _moduleContext_ to *null*.
-              1. Set the Realm of _moduleContext_ to _module_.[[Realm]].
-              1. Set the ScriptOrModule of _moduleContext_ to _module_.
               1. Assert: _module_ has been linked and declarations in its module environment have been instantiated.
-              1. Set the VariableEnvironment of _moduleContext_ to _module_.[[Environment]].
-              1. Set the LexicalEnvironment of _moduleContext_ to _module_.[[Environment]].
+              1. Let _moduleContext_ be _module_.[[Context]].
               1. Suspend the running execution context.
               1. If _module_.[[HasTLA]] is *false*, then
                 1. Assert: _capability_ is not present.
@@ -29251,7 +29222,7 @@
         <emu-grammar>NameSpaceImport : `*` `as` ImportedBinding</emu-grammar>
         <emu-alg>
           1. Let _localName_ be the StringValue of |ImportedBinding|.
-          1. Let _entry_ be the ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace-object~, [[LocalName]]: _localName_ }.
+          1. Let _entry_ be the ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: _localName_ }.
           1. Return « _entry_ ».
         </emu-alg>
         <emu-grammar>NamedImports : `{` `}`</emu-grammar>
@@ -29594,7 +29565,7 @@
         <emu-grammar>ExportFromClause : `*` `as` ModuleExportName</emu-grammar>
         <emu-alg>
           1. Let _exportName_ be the StringValue of |ModuleExportName|.
-          1. Let _entry_ be the ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }.
+          1. Let _entry_ be the ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }.
           1. Return « _entry_ ».
         </emu-alg>
         <emu-grammar>NamedExports : `{` `}`</emu-grammar>
@@ -33195,7 +33166,7 @@
           1. Return _lowest_.
         </emu-alg>
         <emu-note>
-          <p>The comparison of values to determine the largest value is done using the IsLessThan algorithm except that *+0*<sub>𝔽</sub> is considered to be larger than *-0*<sub>𝔽</sub>.</p>
+          <p>The comparison of values to determine the smallest value is done using the IsLessThan algorithm except that *+0*<sub>𝔽</sub> is considered to be larger than *-0*<sub>𝔽</sub>.</p>
         </emu-note>
         <p>The *"length"* property of this function is *2*<sub>𝔽</sub>.</p>
       </emu-clause>
@@ -35656,7 +35627,7 @@ THH:mm:ss.sss
           1. Return *false*.
         </emu-alg>
         <emu-note>
-          <p>This method returns *true* if the sequence of code units of _searchString_ converted to a String is the same as the corresponding code units of this object (converted to a String) starting at _endPosition_ - length(this). Otherwise it returns *false*.</p>
+          <p>This method returns *true* if the sequence of code units of _searchString_ converted to a String is the same as the corresponding code units of this object (converted to a String) starting at _endPosition_ - length(_searchString_). Otherwise it returns *false*.</p>
         </emu-note>
         <emu-note>
           <p>Throwing an exception if the first argument is a RegExp is specified in order to allow future editions to define extensions that allow such argument values.</p>
@@ -40535,7 +40506,7 @@ THH:mm:ss.sss
         <h1>Array.prototype.indexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <p>This method compares _searchElement_ to the elements of the array, in ascending order, using the IsStrictlyEqual algorithm, and if found at one or more indices, returns the smallest such index; otherwise, it returns *-1*<sub>𝔽</sub>.</p>
         <emu-note>
-          <p>The optional second argument _fromIndex_ defaults to *+0*<sub>𝔽</sub> (i.e. the whole array is searched). If it is greater than or equal to the length of the array, *-1*<sub>𝔽</sub> is returned, i.e. the array will not be searched. If it is less than *-0*<sub>𝔽</sub>, it is used as the offset from the end of the array to compute _fromIndex_. If the computed index is less than or equal to *+0*<sub>𝔽</sub>, the whole array will be searched.</p>
+          <p>The optional second argument _fromIndex_ defaults to *+0*<sub>𝔽</sub> (i.e. the whole array is searched). If it is greater than or equal to the length of the array, *-1*<sub>𝔽</sub> is returned, i.e. the array will not be searched. If it is less than *-0*<sub>𝔽</sub>, it is used to compute an offset from the end of the array. If the computed index is less than or equal to *+0*<sub>𝔽</sub>, the whole array will be searched.</p>
         </emu-note>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
@@ -40603,7 +40574,7 @@ THH:mm:ss.sss
         <h1>Array.prototype.lastIndexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <emu-note>
           <p>This method compares _searchElement_ to the elements of the array in descending order using the IsStrictlyEqual algorithm, and if found at one or more indices, returns the largest such index; otherwise, it returns *-1*<sub>𝔽</sub>.</p>
-          <p>The optional second argument _fromIndex_ defaults to the array's length minus one (i.e. the whole array is searched). If it is greater than or equal to the length of the array, the whole array will be searched. If it is less than *-0*<sub>𝔽</sub>, it is used as the offset from the end of the array to compute _fromIndex_. If the computed index is less than or equal to *+0*<sub>𝔽</sub>, *-1*<sub>𝔽</sub> is returned.</p>
+          <p>The optional second argument _fromIndex_ defaults to the array's length minus one (i.e. the whole array is searched). If it is greater than or equal to the length of the array, the whole array will be searched. If it is less than *-0*<sub>𝔽</sub>, it is used to compute an offset from the end of the array. If the computed index is less than *-0*<sub>𝔽</sub>, *-1*<sub>𝔽</sub> is returned.</p>
         </emu-note>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
