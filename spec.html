@@ -1009,8 +1009,8 @@
                 1. Subsubsubsubsubstep
     </emu-alg>
     <p>A step or substep may be written as an “if” predicate that conditions its substeps. In this case, the substeps are only applied if the predicate is true. If a step or substep begins with the word “else”, it is a predicate that is the negation of the preceding “if” predicate step at the same level.</p>
-    <p>A step may specify the iterative application of its substeps.</p>
-    <p>A step that begins with “<dfn id="assert">Assert</dfn>:” asserts an invariant condition of its algorithm. Such assertions are used to make explicit algorithmic invariants that would otherwise be implicit. Such assertions add no additional semantic requirements and hence need not be checked by an implementation. They are used simply to clarify algorithms.</p>
+    <p>A step may begin with "For each" or "Repeat" to specify the iterative application of its substeps.</p>
+    <p>A step that begins with “<dfn id="assert">Assert</dfn>:” asserts an invariant condition of its algorithm. Such assertions are used to make explicit algorithmic invariants that would otherwise be implicit. Similarly, a step that begins with “<dfn id="note-step">NOTE</dfn>:” provides pertinent context for nearby steps. Assertion steps and note steps are strictly informative; they add no additional semantic requirements and hence need not be checked by an implementation.</p>
     <p>Algorithm steps may declare named aliases for any value using the form “Let _x_ be _someValue_”. These aliases are reference-like in that both _x_ and _someValue_ refer to the same underlying data and modifications to either are visible to both. Algorithm steps that want to avoid this reference-like behaviour should explicitly make a copy of the right-hand side: “Let _x_ be a copy of _someValue_” creates a shallow copy of _someValue_.</p>
     <p>Once declared, an alias may be referenced in any subsequent steps and must not be referenced from steps prior to the alias's declaration. Aliases may be modified using the form “Set _x_ to _someOtherValue_”.</p>
 
