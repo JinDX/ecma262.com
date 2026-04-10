@@ -3,22 +3,6 @@
 <meta charset="utf-8">
 <script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
-<script>
-(function() {
-  let d = new Date;
-  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
-    let d = document;
-    let h = d.documentElement;
-    let l = d.createElement('link');
-    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
-    l.setAttribute('rel', 'stylesheet');
-    h.appendChild(l);
-    let s = d.createElement('style');
-    s.innerHTML = '* { font-family: Itim !important; }';
-    h.appendChild(s);
-  }
-})();
-</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -193,9 +177,10 @@
     <li>
       編集者:
       <ul>
-        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
-        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
         <li><a href="mailto:ecma262 at chronicles dot org">Ron Buckton</a></li> (<a href="https://bsky.app/profile/chronicles.org">@chronicles.org</a>)
+        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
+        <li><a href="mailto:mail@linusgroh.de">Linus Groh</a></li>
+        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
       </ul>
     </li>
     <li>
@@ -230,6 +215,7 @@
   <p>ECMAScript 2023（第14版）では、`Array.prototype`と`TypedArray.prototype`の`toSorted`、`toReversed`、`with`、`findLast`、`findLastIndex`メソッド、および`Array.prototype`の`toSpliced`メソッドが追加されました。また、ファイル先頭の`#!`コメントによる実行可能ECMAScriptファイル対応や、弱コレクションのキーとしてほとんどのSymbolの使用が許可されました。</p>
   <p>ECMAScript 2024（第15版）では、ArrayBufferとSharedArrayBufferのサイズ変更・転送機能、文字列集合操作に便利な新しいRegExp `/v`フラグ、Promise構築のための`Promise.withResolvers`、データ集計の`Object.groupBy`と`Map.groupBy`、共有メモリ変更を非同期で待つ`Atomics.waitAsync`、文字列のUnicode整形式判定・修正の`String.prototype.isWellFormed`と`String.prototype.toWellFormed`などが導入されました。</p>
   <p>ECMAScript 2025（第16版）では、イテレータ操作のための新しいグローバル`Iterator`（静的・プロトタイプメソッド付き）、`Set.prototype`のセット操作メソッド、JSONモジュールのインポートとインポート属性宣言構文、正規表現用の`RegExp.escape`メソッド、正規表現内での修飾子フラグのインライン変更構文、Promise返却有無を問わず常にPromiseを返す`Promise.try`メソッド、新しいTypedArray種`Float16Array`とそれに対応する`DataView.prototype.getFloat16`、`DataView.prototype.setFloat16`、`Math.f16round`メソッドが導入されました。</p>
+  <p>ECMAScript 2026（第17版）では、精度損失を最小限に抑えつつ様々な大きさの Number のイテラブルを合計する `Math.sumPrecise`、イテレータを連結するための `Iterator.concat`、非同期イテラブルやその他の非同期ソースから Array を構築する `Array.fromAsync`、エラーオブジェクトを判定する `Error.isError`、キーが存在しない場合にデフォルト値を返す `Map.prototype` および `WeakMap.prototype` へのメソッド、16進/BASE64エンコードされたバイナリデータとの相互変換メソッドを `Uint8Array` に、`JSON.parse` の reviver で一致したJSONソース区間へアクセスするためのパラメータ、プリミティブ値に対する `JSON.stringify` 出力を精密に制御する `JSON.rawJSON` などが追加されました。</p>
   <p>本版および以前の版の開発において、Ecma TC39には多くの組織を代表する多数の個人が非常に重要な貢献をしています。さらに、TC39のECMAScript活動を支える活発なコミュニティも生まれました。このコミュニティは多数のドラフトのレビュー、数千件に及ぶバグ報告、実装実験、テストスイートの提供、世界中の開発者へのECMAScriptの教育などで貢献しています。残念ながら、この取り組みに貢献した全ての個人や組織を特定し、謝意を表することは不可能です。</p>
   <p>
     Allen Wirfs-Brock<br>
@@ -5436,19 +5422,24 @@
         <dd>_argument_ を 𝔽(-2<sup>31</sup>) から 𝔽(2<sup>31</sup> - 1) までの 2<sup>32</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. _int32bit_ を _int_ を 2<sup>32</sup> で割った余りとする。
         1. _int32bit_ ≥ 2<sup>31</sup> の場合、𝔽(_int32bit_ - 2<sup>32</sup>) を返す。
         1. 𝔽(_int32bit_) を返す。
       </emu-alg>
       <emu-note>
-        <p>上記 ToInt32 定義により:</p>
+        <p>上記の定義により：</p>
         <ul>
-          <li>ToInt32 抽象操作は冪等であり、その結果に再適用しても値は変わらない。</li>
-          <li>全ての _x_ について ToInt32(ToUint32(_x_)) は ToInt32(_x_) と同じ値。（この性質を保つため *+∞*<sub>𝔽</sub> と *-∞*<sub>𝔽</sub> は *+0*<sub>𝔽</sub> に写る。）</li>
-          <li>ToInt32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写す。</li>
+          <li>
+            これは冪等である：任意の ECMAScript 言語値 _x_ について、ToInt32(ToInt32(_x_)) は ToInt32(_x_) と同じである。
+          </li>
+          <li>
+            任意の ECMAScript 言語値 _x_ について、ToInt32(ToUint32(_x_)) は ToInt32(_x_) と同じである。（この性質を保持するために、*+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> は *+0*<sub>𝔽</sub> に写される。）
+          </li>
+          <li>
+            ToInt32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写す。
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5464,19 +5455,26 @@
         <dd>_argument_ を *+0*<sub>𝔽</sub> から 𝔽(2<sup>32</sup> - 1) までの 2<sup>32</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. _int32bit_ を _int_ modulo 2<sup>32</sup> とする。
         1. [id="step-touint32-return"] 𝔽(_int32bit_) を返す。
       </emu-alg>
       <emu-note>
-        <p>上記 ToUint32 定義により:</p>
+        <p>上記の定義により：</p>
         <ul>
-          <li>ステップ <emu-xref href="#step-touint32-return"></emu-xref> が ToUint32 と ToInt32 の唯一の差異。</li>
-          <li>ToUint32 抽象操作は冪等である。</li>
-          <li>全ての _x_ について ToUint32(ToInt32(_x_)) は ToUint32(_x_) と同じ値。（この性質を保つため *+∞*<sub>𝔽</sub> と *-∞*<sub>𝔽</sub> は *+0*<sub>𝔽</sub> に写る。）</li>
-          <li>ToUint32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写す。</li>
+          <li>
+            <emu-xref href="#step-touint32-return"></emu-xref> のステップが、ToUint32 と ToInt32 の唯一の違いである。
+          </li>
+          <li>
+            これは冪等である：任意の ECMAScript 言語値 _x_ について、ToUint32(ToUint32(_x_)) は ToUint32(_x_) と同じである。
+          </li>
+          <li>
+            任意の ECMAScript 言語値 _x_ について、ToUint32(ToInt32(_x_)) は ToUint32(_x_) と同じである。（この性質を保持するために、*+∞*<sub>𝔽</sub> および *-���*<sub>𝔽</sub> は *+0*<sub>𝔽</sub> に写される。）
+          </li>
+          <li>
+            ToUint32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写す。
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5492,9 +5490,8 @@
         <dd>_argument_ を 𝔽(-2<sup>15</sup>) から 𝔽(2<sup>15</sup> - 1) までの 2<sup>16</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. _int16bit_ を _int_ を 2<sup>16</sup> で割った余りとする。
         1. _int16bit_ ≥ 2<sup>15</sup> の場合、𝔽(_int16bit_ - 2<sup>16</sup>) を返す。
         1. 𝔽(_int16bit_) を返す。
@@ -5512,14 +5509,13 @@
         <dd>_argument_ を *+0*<sub>𝔽</sub> から 𝔽(2<sup>16</sup> - 1) までの 2<sup>16</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. [id="step-touint16-mod"] _int16bit_ を _int_ modulo 2<sup>16</sup> とする。
         1. 𝔽(_int16bit_) を返す。
       </emu-alg>
       <emu-note>
-        <p>上記 ToUint16 定義により:</p>
+        <p>上記の定義により：</p>
         <ul>
           <li>ステップ <emu-xref href="#step-touint16-mod"></emu-xref> における 2<sup>16</sup> の代入が ToUint32 との唯一の差異。</li>
           <li>ToUint16 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写す。</li>
@@ -5538,9 +5534,8 @@
         <dd>_argument_ を *-128*<sub>𝔽</sub> から *127*<sub>𝔽</sub> までの 2<sup>8</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. _int8bit_ を _int_ を 2<sup>8</sup> で割った余りとする。
         1. _int8bit_ ≥ 2<sup>7</sup> の場合、𝔽(_int8bit_ - 2<sup>8</sup>) を返す。
         1. 𝔽(_int8bit_) を返す。
@@ -5558,9 +5553,8 @@
         <dd>_argument_ を *+0*<sub>𝔽</sub> から *255*<sub>𝔽</sub> までの 2<sup>8</sup> 個の整数 Number 値のいずれかに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかなら *+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
+        1. もし _int_ が有限でなければ、*+0*<sub>𝔽</sub> を返す。
         1. _int8bit_ を _int_ modulo 2<sup>8</sup> とする。
         1. 𝔽(_int8bit_) を返す。
       </emu-alg>
@@ -10265,7 +10259,7 @@
           <tr id="abstract-hasbinding">
             <td>
               HasBinding (
-              _N_: 文字列,
+                _N_: 文字列,
               ): ブール値を含む正常完了または throw 完了
             </td>
             <td>
@@ -10279,8 +10273,8 @@
           <tr id="abstract-createmutablebinding">
             <td>
               CreateMutableBinding (
-              _N_: 文字列,
-              _D_: ブール値,
+                _N_: 文字列,
+                _D_: ブール値,
               ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
@@ -10294,8 +10288,8 @@
           <tr id="abstract-createimmutablebinding">
             <td>
               CreateImmutableBinding (
-              _N_: 文字列,
-              _S_: ブール値,
+                _N_: 文字列,
+                _S_: ブール値,
               ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
@@ -10309,8 +10303,8 @@
           <tr id="abstract-initializebinding">
             <td>
               InitializeBinding (
-              _N_: 文字列,
-              _V_: ECMAScript 言語値,
+                _N_: 文字列,
+                _V_: ECMAScript 言語値,
               ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
@@ -10324,9 +10318,9 @@
           <tr id="abstract-setmutablebinding">
             <td>
               SetMutableBinding (
-              _N_: 文字列,
-              _V_: ECMAScript 言語値,
-              _S_: ブール値,
+                _N_: 文字列,
+                _V_: ECMAScript 言語値,
+                _S_: ブール値,
               ): ~unused~ を含む正常完了または throw 完了
             </td>
             <td>
@@ -10340,8 +10334,8 @@
           <tr id="abstract-getbindingvalue">
             <td>
               GetBindingValue (
-              _N_: 文字列,
-              _S_: ブール値,
+                _N_: 文字列,
+                _S_: ブール値,
               ): ECMAScript 言語値を含む正常完了または throw 完了
             </td>
             <td>
@@ -10355,7 +10349,7 @@
           <tr id="abstract-deletebinding">
             <td>
               DeleteBinding (
-              _N_: 文字列,
+                _N_: 文字列,
               ): ブール値を含む正常完了または throw 完了
             </td>
             <td>
@@ -11004,7 +10998,7 @@
         <h1>グローバル Environment Record</h1>
         <p><dfn variants="Global Environment Records">グローバル Environment Record</dfn> は、共通の Realm で処理されるすべての ECMAScript |Script| 要素が共有する最も外側のスコープを表すのに使用される。グローバル Environment Record は、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）、グローバルオブジェクトのプロパティ、そして |Script| 内で発生するすべてのトップレベル宣言（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）のバインディングを提供する。</p>
         <p>グローバル Environment Record は論理的には単一のレコードであるが、オブジェクト Environment Record と宣言的 Environment Record をカプセル化した複合体として仕様化される。オブジェクト Environment Record は関連する Realm Record のグローバルオブジェクトをベースオブジェクトとする。このグローバルオブジェクトは、グローバル Environment Record の GetThisBinding 具体メソッドで返される値でもある。グローバル Environment Record のオブジェクト Environment Record 部分には、組み込みグローバル（<emu-xref href="#sec-global-object"></emu-xref> の節）およびグローバルコード内の |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableStatement| によって導入されたすべてのバインディングが含まれる。グローバルコード中の他の ECMAScript 宣言用のバインディングは、グローバル Environment Record の宣言的 Environment Record 部分に保持される。</p>
-        <p>プロパティはグローバルオブジェクトに直接作成されることもある。そのため、グローバル Environment Record のオブジェクト Environment Record 部分には、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、|VariableDeclaration| 宣言で明示的に作成されたバインディングと、グローバルオブジェクトのプロパティとして暗黙的に作成されたバインディングが両方含まれている可能性がある。どのバインディングが明示的な宣言によって作成されたかを特定するため、グローバル Environment Record は CreateGlobalVarBinding および CreateGlobalFunctionBinding 抽象操作で束縛された名前のリストを保持している。</p>
+        <p>プロパティはグローバルオブジェクト上に直接作成されることがあります。そのため、グローバル環境レコードの Object Environment Record コンポーネントには、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration|、または |VariableDeclaration| の宣言によって明示的に作成された束縛と、グローバルオブジェクトのプロパティとして暗黙的に作成された束縛の両方が含まれる場合があります。</p>
         <p>グローバル Environment Record は、<emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> に記載された追加フィールドを持つ。</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="グローバル Environment Record の追加フィールド" oldids="table-18">
           <table>
@@ -13358,7 +13352,7 @@
             [[HomeObject]]
           </td>
           <td>
-            an Object
+            an Object or *undefined*
           </td>
           <td>
             関数が `super` を使用する場合、`super` プロパティ探索が開始されるオブジェクトを提供する [[GetPrototypeOf]] を持つオブジェクト。
@@ -15812,7 +15806,7 @@
         <p>Proxy オブジェクトの [[GetOwnProperty]] は以下の不変条件を強制する:</p>
         <ul>
           <li>
-            [[GetOwnProperty]] の結果は Object か *undefined* でなければならない。
+            [[GetOwnProperty]] の結果は、プロパティ記述または *undefined* のいずれかでなければならない。
           </li>
           <li>
             ターゲットオブジェクトに設定不可な自身プロパティとして存在する場合、そのプロパティを不存在と報告してはならない。
@@ -18516,18 +18510,21 @@
         </h1>
         <dl class="header">
         </dl>
-        <emu-grammar>省略 : `,`</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. _len_ を _nextIndex_ + 1 とする。
           1. 𝔽(_len_) を用いて ? Set(_array_, *"length"*, 𝔽(_len_), *true*) を実行する。
           1. 注: 上記のステップは _len_ が 2<sup>32</sup> - 1 を超える場合に例外をスローする。
           1. _len_ を返す。
         </emu-alg>
-        <emu-grammar>省略 : 省略 `,`</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. |Elision| の ArrayAccumulation を、引数 _array_ と (_nextIndex_ + 1) で呼び出し、?で返す。
         </emu-alg>
-        <emu-grammar>要素リスト : 省略? 代入式</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. |Elision| が存在する場合、
             1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
@@ -18536,13 +18533,15 @@
           1. ! ToString(𝔽(_nextIndex_)) を用いて ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を行う。
           1. _nextIndex_ + 1 を返す。
         </emu-alg>
-        <emu-grammar>要素リスト : 省略? スプレッド要素</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. |Elision| が存在する場合、
             1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
           1. |SpreadElement| の ArrayAccumulation を、引数 _array_ と _nextIndex_ で呼び出し、? で返す。
         </emu-alg>
-        <emu-grammar>要素リスト : 要素リスト `,` 省略? 代入式</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. _nextIndex_ を、派生した |ElementList| の ArrayAccumulation（引数 _array_ と _nextIndex_）で?にする。
           1. |Elision| が存在する場合、
@@ -18552,14 +18551,16 @@
           1. ! ToString(𝔽(_nextIndex_)) を用いて ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_nextIndex_)), _initValue_) を行う。
           1. _nextIndex_ + 1 を返す。
         </emu-alg>
-        <emu-grammar>要素リスト : 要素リスト `,` 省略? スプレッド要素</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. _nextIndex_ を、派生した |ElementList| の ArrayAccumulation（引数 _array_ と _nextIndex_）で?にする。
           1. |Elision| が存在する場合、
             1. _nextIndex_ を、引数 _array_ と _nextIndex_ で |Elision| の ArrayAccumulation （?）に設定する。
           1. |SpreadElement| の ArrayAccumulation を、引数 _array_ と _nextIndex_ で呼び出し、? で返す。
         </emu-alg>
-        <emu-grammar>スプレッド要素 : `...` 代入式</emu-grammar>
+        <emu-grammar>
+        </emu-grammar>
         <emu-alg>
           1. _spreadRef_ を |AssignmentExpression| の評価（?）とする。
           1. _spreadObj_ を ? GetValue(_spreadRef_) とする。
@@ -18699,7 +18700,7 @@
         </emu-alg>
       </emu-clause>
 
-            <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
+      <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
         <h1>静的セマンティクス: PropertyDefinitionNodes ( ): パースノードのリスト</h1>
         <dl class="header">
         </dl>
@@ -26723,7 +26724,7 @@
             <tr id="abstract-loadrequestedmodules">
               <td>
                 LoadRequestedModules (
-                optional _hostDefined_: 任意の型,
+                  optional _hostDefined_: 任意の型,
                 ): Promise
               </td>
               <td>
@@ -26737,7 +26738,7 @@
             <tr id="abstract-getexportednames">
               <td>
                 GetExportedNames (
-                optional _exportStarSet_: ソーステキストモジュールレコードのリスト,
+                  optional _exportStarSet_: ソーステキストモジュールレコードのリスト,
                 ): 文字列のリスト
               </td>
               <td>
@@ -26752,8 +26753,8 @@
             <tr id="abstract-resolveexport">
               <td>
                 ResolveExport (
-                _exportName_: 文字列,
-                optional _resolveSet_: [[Module]]（モジュールレコード）と [[ExportName]]（文字列）フィールドを持つレコードのリスト,
+                  _exportName_: 文字列,
+                  optional _resolveSet_: [[Module]]（モジュールレコード）と [[ExportName]]（文字列）フィールドを持つレコードのリスト,
                 ): ResolvedBinding レコード、*null*、または ~ambiguous~
               </td>
               <td>
@@ -26853,7 +26854,7 @@
                 throw completion または ~empty~
               </td>
               <td>
-                評価中に発生した例外を表す throw completion。例外が発生しなかった場合や [[Status]] が ~evaluated~ でない場合は *undefined*。
+                評価中に発生した例外を表す throw completion。例外が発生しなかった場合や [[Status]] が ~evaluated~ でない場合は ~empty~。
               </td>
             </tr>
             <tr>
@@ -26986,7 +26987,7 @@
             <tr id="abstract-executemodule">
               <td>
                 ExecuteModule (
-                optional _capability_: a PromiseCapability Record,
+                  optional _capability_: a PromiseCapability Record,
                 ): ~unused~ を含む正常完了または throw 完了
               </td>
               <td>
@@ -28097,10 +28098,10 @@
                 [[ImportName]]
               </td>
               <td>
-                文字列または ~namespace-object~
+                文字列または ~namespace~
               </td>
               <td>
-                [[ModuleRequest]] が指すモジュールで束縛がエクスポートされる名前。~namespace-object~ は対象モジュールの namespace オブジェクトを要求することを示す。
+                [[ModuleRequest]] が指すモジュールで束縛がエクスポートされる名前。~namespace~ は対象モジュールの namespace オブジェクトを要求することを示す。
               </td>
             </tr>
             <tr>
@@ -28158,7 +28159,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~namespace-object~
+                  ~namespace~
                 </td>
                 <td>
                   *"ns"*
@@ -28246,10 +28247,10 @@
                 [[ImportName]]
               </td>
               <td>
-                文字列, *null*, ~all~, ~all-but-default~
+                文字列, *null*, ~namespace~, ~all-but-default~
               </td>
               <td>
-                [[ModuleRequest]] が指すモジュールがこの束縛をエクスポートする名前。|ModuleSpecifier| が無い場合 *null*。~all~ は `export * as ns from "mod"`、~all-but-default~ は `export * from "mod"` に使用。
+                [[ModuleRequest]] が指すモジュールがこの束縛をエクスポートする名前。|ModuleSpecifier| が無い場合 *null*。~namespace~ は `export * as ns from "mod"`、~all-but-default~ は `export * from "mod"` に使用。
               </td>
             </tr>
             <tr>
@@ -28452,7 +28453,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~all~
+                  ~namespace~
                 </td>
                 <td>
                   *null*
@@ -28492,12 +28493,7 @@
                 1. そうでなければ，
                   1. 注記: 別のモジュールから元々インポートされた束縛または名前空間オブジェクトをエクスポートする場合，その ExportEntry Record は，「インポートしてからエクスポート」した形ではなく，「元のモジュールから直接再エクスポート」した形に一致するように書き換えられる。これにより，`export * from` を通じて同じ束縛または名前空間を同じ名前で 2 回エクスポートしたことから生じる衝突は，<emu-xref href="#sec-resolveexport">Source Text Module Records の ResolveExport 具象メソッド</emu-xref> の <emu-xref href="#step-resolveexport-conflict"></emu-xref> の段階であいまいとして扱われるのではなく，無視される。
                   1. _ie_ を，[[LocalName]] が _ee_.[[LocalName]] である _importEntries_ の要素とする。
-                  1. もし _ie_.[[ImportName]] が ~namespace-object~ なら，
-                    1. 注記: これはインポートされたモジュール名前空間オブジェクトの再エクスポートである。
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加する。
-                  1. そうでなければ，
-                    1. 注記: これは単一の名前の再エクスポートである。
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加する。
+                  1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } を _indirectExportEntries_ に追加する。
               1. そうでなく，かつ _ee_.[[ImportName]] が ~all-but-default~ なら，
                 1. Assert: _ee_.[[ExportName]] は *null* である。
                 1. _ee_ を _starExportEntries_ に追加する。
@@ -28590,7 +28586,7 @@
                 1. _e_.[[ExportName]] が _exportName_ である場合、
                   1. アサート: _e_.[[ModuleRequest]] は *null* ではない。
                   1. _importedModule_ を GetImportedModule(_module_, _e_.[[ModuleRequest]]) とする。
-                  1. _e_.[[ImportName]] が ~all~ の場合、
+                  1. _e_.[[ImportName]] が ~namespace~ の場合、
                     1. アサート: _module_ はこのエクスポートに対する直接バインディングを提供しない。
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ } を返す。
                   1. アサート: _module_ はこのエクスポートに対する特定のバインディングをインポートする。
@@ -28632,61 +28628,63 @@
             </dl>
 
             <emu-alg>
-              1. _module_.[[IndirectExportEntries]] の各 ExportEntry Record _e_ について
-                1. Assert: _e_.[[ExportName]] は *null* でない。
+              1. 各 ExportEntry Record _e_ について、_module_.[[IndirectExportEntries]] 内の各エントリを走査する：
+                1. 断言：_e_.[[ExportName]] は *null* ではない。
                 1. _resolution_ を _module_.ResolveExport(_e_.[[ExportName]]) とする。
-                1. もし _resolution_ が *null* または ~ambiguous~ なら *SyntaxError* を投げる。
-                1. Assert: _resolution_ は ResolvedBinding。
-              1. Assert: すべての名前付き export は解決可能。
-              1. _realm_ を _module_.[[Realm]]。
-              1. Assert: _realm_ は *undefined* でない。
-              1. _env_ を NewModuleEnvironment(_realm_.[[GlobalEnv]])。
-              1. _module_.[[Environment]] を _env_ に設定。
-              1. _module_.[[ImportEntries]] の各 ImportEntry Record _in_ について
-                1. _importedModule_ を GetImportedModule(_module_, _in_.[[ModuleRequest]])。
-                1. もし _in_.[[ImportName]] が ~namespace-object~ なら
-                  1. _namespace_ を GetModuleNamespace(_importedModule_)。
-                  1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
-                  1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
-                1. それ以外
-                  1. _resolution_ を _importedModule_.ResolveExport(_in_.[[ImportName]])。
-                  1. もし _resolution_ が *null* または ~ambiguous~ なら *SyntaxError*。
-                  1. もし _resolution_.[[BindingName]] が ~namespace~ なら
-                    1. _namespace_ を GetModuleNamespace(_resolution_.[[Module]])。
-                    1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
-                    1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
-                  1. それ以外
-                    1. CreateImportBinding(_env_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])。
-              1. _moduleContext_ を新 ECMAScript 実行コンテキスト。
-              1. Function を *null*。
-              1. Assert: _module_.[[Realm]] は *undefined* でない。
-              1. Realm を _module_.[[Realm]]。
-              1. ScriptOrModule を _module_。
-              1. VariableEnvironment / LexicalEnvironment を _module_.[[Environment]]。
-              1. PrivateEnvironment を *null*。
-              1. _module_.[[Context]] を _moduleContext_ に。
-              1. _moduleContext_ を実行コンテキストスタックに push。
-              1. _code_ を _module_.[[ECMAScriptCode]]。
-              1. _varDeclarations_ を _code_ の VarScopedDeclarations。
-              1. _declaredVarNames_ を空リスト。
-              1. 各 _d_ ∈ _varDeclarations_ について
-                1. _d_ の BoundNames 各 _dn_ について
-                  1. _declaredVarNames_ に含まれなければ
-                    1. ! _env_.CreateMutableBinding(_dn_, *false*)。
-                    1. ! _env_.InitializeBinding(_dn_, *undefined*)。
-                    1. _declaredVarNames_ に追加。
-              1. _lexDeclarations_ を _code_ の LexicallyScopedDeclarations。
-              1. _privateEnv_ を *null*。
-              1. 各 _d_ ∈ _lexDeclarations_ について
-                1. _d_ の BoundNames 各 _dn_ について
-                  1. もし IsConstantDeclaration(_d_) が *true* なら
-                    1. ! _env_.CreateImmutableBinding(_dn_, *true*)。
-                  1. それ以外
-                    1. ! _env_.CreateMutableBinding(_dn_, *false*)。
-                  1. もし _d_ が |FunctionDeclaration| / |GeneratorDeclaration| / |AsyncFunctionDeclaration| / |AsyncGeneratorDeclaration| のいずれかなら
-                    1. _fo_ を InstantiateFunctionObject(_d_, _env_, _privateEnv_)。
-                    1. ! _env_.InitializeBinding(_dn_, _fo_)。
-              1. 実行コンテキストスタックから _moduleContext_ を除去。
+                1. もし _resolution_ が *null* または ~ambiguous~ の場合、*SyntaxError* 例外をスローする。
+                1. 断言：_resolution_ は ResolvedBinding Record である。
+              1. 断言：_module_ からの全ての名前付きエクスポートは解決可能である。
+              1. _realm_ を _module_.[[Realm]] とする。
+              1. 断言：_realm_ は *undefined* ではない。
+              1. _env_ を NewModuleEnvironment(_realm_.[[GlobalEnv]]) とする。
+              1. _module_.[[Environment]] に _env_ を設定する。
+              1. 各 ImportEntry Record _in_ について、_module_.[[ImportEntries]] 内の各エントリを走査する：
+                1. _importedModule_ を GetImportedModule(_module_, _in_.[[ModuleRequest]]) とする。
+                1. もし _in_.[[ImportName]] が ~namespace~ の場合、
+                  1. _namespace_ を GetModuleNamespace(_importedModule_) とする。
+                  1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*) を実行する。
+                  1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_) を実行する。
+                1. それ以外の場合、
+                  1. 断言：_in_.[[ImportName]] は文字列 (String) である。
+                  1. _resolution_ を _importedModule_.ResolveExport(_in_.[[ImportName]]) とする。
+                  1. もし _resolution_ が *null* または ~ambiguous~ の場合、*SyntaxError* 例外をスローする。
+                  1. もし _resolution_.[[BindingName]] が ~namespace~ の場合、
+                    1. _namespace_ を GetModuleNamespace(_resolution_.[[Module]]) とする。
+                    1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*) を実行する。
+                    1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_) を実行する。
+                  1. それ以外の場合、
+                    1. CreateImportBinding(_env_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]]) を実行する。
+              1. _moduleContext_ を新しい ECMAScript コード実行コンテキストとする。
+              1. _moduleContext_ の Function を *null* に設定する。
+              1. 断言：_module_.[[Realm]] は *undefined* ではない。
+              1. _moduleContext_ の Realm を _module_.[[Realm]] に設定する。
+              1. _moduleContext_ の ScriptOrModule を _module_ に設定する。
+              1. _moduleContext_ の VariableEnvironment を _module_.[[Environment]] に設定する。
+              1. _moduleContext_ の LexicalEnvironment を _module_.[[Environment]] に設定する。
+              1. _moduleContext_ の PrivateEnvironment を *null* に設定する。
+              1. _module_.[[Context]] に _moduleContext_ を設定する。
+              1. _moduleContext_ を実行コンテキストスタックにプッシュする；_moduleContext_ が現在の実行中の実行コンテキストとなる。
+              1. _code_ を _module_.[[ECMAScriptCode]] とする。
+              1. _varDeclarations_ を _code_ の VarScopedDeclarations とする。
+              1. _declaredVarNames_ を新しい空のリストとする。
+              1. 各要素 _d_ について、_varDeclarations_ を走査する：
+                1. 各要素 _dn_ について、_d_ の BoundNames を走査する：
+                  1. もし _declaredVarNames_ に _dn_ が含まれていない場合、
+                    1. ! _env_.CreateMutableBinding(_dn_, *false*) を実行する。
+                    1. ! _env_.InitializeBinding(_dn_, *undefined*) を実行する。
+                    1. _dn_ を _declaredVarNames_ に追加する。
+              1. _lexDeclarations_ を _code_ の LexicallyScopedDeclarations とする。
+              1. _privateEnv_ を *null* とする。
+              1. 各要素 _d_ について、_lexDeclarations_ を走査する：
+                1. 各要素 _dn_ について、_d_ の BoundNames を走査する：
+                  1. もし IsConstantDeclaration(_d_) が *true* の場合、
+                    1. ! _env_.CreateImmutableBinding(_dn_, *true*) を実行する。
+                  1. それ以外の場合、
+                    1. ! _env_.CreateMutableBinding(_dn_, *false*) を実行する。
+                  1. もし _d_ が |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration| のいずれかの場合、
+                    1. _fo_ を InstantiateFunctionObject(_d_, _env_, _privateEnv_) とする。
+                    1. ! _env_.InitializeBinding(_dn_, _fo_) を実行する。
+              1. _moduleContext_ を実行コンテキストスタックから削除する。
               1. ~unused~ を返す。
             </emu-alg>
           </emu-clause>
@@ -28703,23 +28701,20 @@
             </dl>
 
             <emu-alg>
-              1. _moduleContext_ を新 ECMAScript 実行コンテキスト。
-              1. Function を *null*。
-              1. Realm を _module_.[[Realm]]。
-              1. ScriptOrModule を _module_。
-              1. Assert: モジュールはリンク済みで環境宣言インスタンス化済み。
-              1. VariableEnvironment / LexicalEnvironment を _module_.[[Environment]]。
-              1. 実行中コンテキストを中断。
-              1. もし _module_.[[HasTLA]] が *false* なら
-                1. Assert: _capability_ は存在しない。
-                1. _moduleContext_ をスタックへ push。
-                1. _result_ を Completion(Evaluation of _module_.[[ECMAScriptCode]])。
-                1. _moduleContext_ を中断しスタックから除去。
-                1. 上位コンテキストを再開。
-                1. もし _result_ が abrupt completion なら ? _result_ を返す。
-              1. それ以外
-                1. Assert: _capability_ は PromiseCapability Record。
-                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_) を実行。
+              1. 断言：_module_ はリンクされており、そのモジュール環境内の宣言がインスタンス化されている。
+              1. _moduleContext_ を _module_.[[Context]] とする。
+              1. 実行中の実行コンテキストを一時停止する。
+              1. もし _module_.[[HasTLA]] が *false* の場合，
+                1. 断言：_capability_ は存在しない。
+                1. _moduleContext_ を実行コンテキストスタックにプッシュする；_moduleContext_ が現在の実行中の実行コンテキストとなる。
+                1. _result_ を Completion(_module_.[[ECMAScriptCode]] の評価)とする。
+                1. _moduleContext_ を一時停止し、実行コンテキストスタックから削除する。
+                1. スタックの最上位にあるコンテキストを再開し、それを実行中の実行コンテキストとする。
+                1. もし _result_ が突発的完了(abrupt completion)なら，
+                  1. ? _result_ を返す。
+              1. それ以外の場合，
+                1. 断言：_capability_ は PromiseCapability Record である。
+                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_) を実行する。
               1. ~unused~ を返す。
             </emu-alg>
           </emu-clause>
@@ -29246,7 +29241,7 @@
         <emu-grammar>NameSpaceImport : `*` `as` ImportedBinding</emu-grammar>
         <emu-alg>
           1. _localName_ を |ImportedBinding| の StringValue とする。
-          1. _entry_ を ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace-object~, [[LocalName]]: _localName_ } とする。
+          1. _entry_ を ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: _localName_ } とする。
           1. « _entry_ » を返す。
         </emu-alg>
         <emu-grammar>NamedImports : `{` `}`</emu-grammar>
@@ -29589,7 +29584,7 @@
         <emu-grammar>ExportFromClause : `*` `as` ModuleExportName</emu-grammar>
         <emu-alg>
           1. _exportName_ を |ModuleExportName| の StringValue とする。
-          1. _entry_ を ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ } とする。
+          1. _entry_ を ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ } とする。
           1. « _entry_ » を返す。
         </emu-alg>
         <emu-grammar>NamedExports : `{` `}`</emu-grammar>
@@ -30178,6 +30173,7 @@
           1. ? Decode(_componentString_, _preserveEscapeSet_) を返す。
         </emu-alg>
       </emu-clause>
+
       <emu-clause id="sec-encodeuri-uri" type="built-in function">
         <h1>encodeURI ( _uri_ )</h1>
         <p>この関数は、UTF-16エンコードされた (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>) URIのうち特定コードポイントごとにUTF-8の1～4個エスケープに置き換えた新しいURIを計算します。</p>
@@ -33186,7 +33182,7 @@
           1. _lowest_ を返す。
         </emu-alg>
         <emu-note>
-          <p>最大値判定と同様、比較は IsLessThan に準じるが *+0*<sub>𝔽</sub> を *-0*<sub>𝔽</sub> より大きいと見なす。</p>
+          <p>最小値を決定するための値の比較は、IsLessThan アルゴリズムを用いて行われますが、*+0*<sub>𝔽</sub> は *-0*<sub>𝔽</sub> よりも大きいものとみなされます。</p>
         </emu-note>
         <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
       </emu-clause>
@@ -35644,7 +35640,7 @@ THH:mm:ss.sss
           1. *false* を返す。
         </emu-alg>
         <emu-note>
-          <p>_endPosition_ - length(this) から始まる対応するコードユニット列が一致すれば *true*。</p>
+          <p>_endPosition_ - length(_searchString_) から始まる対応するコードユニット列が一致すれば *true*。</p>
         </emu-note>
         <emu-note>
           <p>最初の引数が RegExp の場合に例外を投げるのは将来の拡張余地のため。</p>
@@ -40518,7 +40514,7 @@ THH:mm:ss.sss
         <h1>Array.prototype.indexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <p>昇順で IsStrictlyEqual アルゴリズムにより比較し、マッチする最小インデックスを返し、なければ *-1*<sub>𝔽</sub> を返す。</p>
         <emu-note>
-          <p>第 2 引数 _fromIndex_ の既定値は *+0*<sub>𝔽</sub>。配列長以上なら検索せず *-1*<sub>𝔽</sub>。*-0*<sub>𝔽</sub> 未満なら末尾からのオフセットとして扱い、結果が *+0*<sub>𝔽</sub> 以下なら全検索。</p>
+          <p>2番目の省略可能な引数 _fromIndex_ の既定値は *+0*<sub>𝔽</sub> です（つまり配列全体が検索されます）。これが配列の長さ以上の場合、*-1*<sub>𝔽</sub> が返されます。つまり配列は検索されません。*-0*<sub>𝔽</sub> 未満の場合、配列の末尾からのオフセットとして計算に使われます。計算されたインデックスが *+0*<sub>𝔽</sub> 以下の場合、配列全体が検索されます。</p>
         </emu-note>
         <p>手順:</p>
         <emu-alg>
@@ -40584,8 +40580,8 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.lastindexof" type="built-in function">
         <h1>Array.prototype.lastIndexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <emu-note>
-          <p>降順で IsStrictlyEqual により比較し、一致した最大インデックスを返し、なければ *-1*<sub>𝔽</sub>。</p>
-          <p>第2引数 _fromIndex_ の既定は長さ−1。長さ以上なら全検索。*-0*<sub>𝔽</sub> 未満なら末尾からのオフセット。計算結果が *+0*<sub>𝔽</sub> 以下なら *-1*<sub>𝔽</sub>。</p>
+          <p>このメソッドは、IsStrictlyEqual アルゴリズムを用いて配列要素に対し _searchElement_ を降順で比較し、1つ以上のインデックスで一致した場合はその最大のインデックスを返します。一致しない場合は *-1*<sub>𝔽</sub> を返します。</p>
+          <p>2番目の省略可能な引数 _fromIndex_ は配列の長さから1を引いた値がデフォルトです（すなわち配列全体が検索されます）。これが配列長以上の場合、配列全体が検索されます。*-0*<sub>𝔽</sub> 未満の場合は、配列の末尾からのオフセットとして使われます。計算されたインデックスが *-0*<sub>𝔽</sub> 未満の場合、*-1*<sub>𝔽</sub> が返されます。</p>
         </emu-note>
         <p>手順:</p>
         <emu-alg>
@@ -47412,7 +47408,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-shallowestcontainedjsonvalue" type="abstract operation">
         <h1>
           静的セマンティクス: ShallowestContainedJSONValue (
-            _root_: パースノード,
+          _root_: パースノード,
           ): パースノードまたは ~empty~
         </h1>
         <dl class="header">

@@ -3,22 +3,6 @@
 <meta charset="utf-8">
 <script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
-<script>
-(function() {
-  let d = new Date;
-  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
-    let d = document;
-    let h = d.documentElement;
-    let l = d.createElement('link');
-    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
-    l.setAttribute('rel', 'stylesheet');
-    h.appendChild(l);
-    let s = d.createElement('style');
-    s.innerHTML = '* { font-family: Itim !important; }';
-    h.appendChild(s);
-  }
-})();
-</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -193,9 +177,10 @@
     <li>
       编辑：
       <ul>
-        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
-        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
         <li><a href="mailto:ecma262 at chronicles dot org">Ron Buckton</a></li> (<a href="https://bsky.app/profile/chronicles.org">@chronicles.org</a>)
+        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
+        <li><a href="mailto:mail@linusgroh.de">Linus Groh</a></li>
+        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
       </ul>
     </li>
     <li>
@@ -230,6 +215,7 @@
   <p>ECMAScript 2023，第 14 版，在 `Array.prototype` 和 `TypedArray.prototype` 上新增了 `toSorted`、`toReversed`、`with`、`findLast` 和 `findLastIndex` 方法，并在 `Array.prototype` 上新增了 `toSpliced` 方法；支持文件开头的 `#!` 注释，以更好地支持可执行 ECMAScript 文件；允许在弱集合中使用大多数 Symbol 作为键。</p>
   <p>ECMAScript 2024，第 15 版，增加了 ArrayBuffer 和 SharedArrayBuffer 的动态调整大小和转移功能；新增了用于处理字符串集合的高级特性的新正则表达式 `/v` 标志；引入了便捷构造 Promise 的 `Promise.withResolvers` 方法，数据聚合的 `Object.groupBy` 和 `Map.groupBy` 方法，异步等待共享内存变更的 `Atomics.waitAsync` 方法，以及用于检测和保证字符串仅包含格式正确 Unicode 的 `String.prototype.isWellFormed` 和 `String.prototype.toWellFormed` 方法。</p>
   <p>ECMAScript 2025，第 16 版，新增了带有相关静态方法和原型方法的全局 `Iterator`，用于迭代器操作；为 `Set.prototype` 增加了常用集合操作方法；支持导入 JSON 模块，以及声明导入模块属性的语法；新增了用于安全处理字符串的 `RegExp.escape` 方法；支持在正则表达式中内联启用和禁用修饰符标志的语法；新增了用于处理可能返回 Promise 或非 Promise 的函数并确保返回值始终是 Promise 的 `Promise.try` 方法；并新增了新的 `Float16Array` 类型数组及相关的 `DataView.prototype.getFloat16`、`DataView.prototype.setFloat16` 和 `Math.f16round` 方法。</p>
+  <p>ECMAScript 2026，第 17 版，新增了 `Math.sumPrecise`，用于对数量级不同的 Number 可迭代对象进行求和，同时最小化精度损失；新增了 `Iterator.concat`，用于串联迭代器；新增了 `Array.fromAsync`，用于从异步可迭代对象及其他异步来源构建数组；新增了 `Error.isError`，用于识别错误对象；为 `Map.prototype` 和 `WeakMap.prototype` 添加了在检索时当键不存在时提供默认值的方法；为 `Uint8Array` 新增了用于与十六进制字符串和 base64 编码二进制数据相互转换的方法；为 `JSON.parse` 的 reviver 增加了一个参数，以访问匹配的 JSON 片段；以及新增了 `JSON.rawJSON`，可对原始值的 `JSON.stringify` 输出进行精细控制。</p>
   <p>有数十位代表众多机构的个人在 Ecma TC39 中为本版及以往版本的开发做出了重要贡献。此外，支持 TC39 ECMAScript 工作的社区也日益活跃。该社区审查了大量草案，提交了成千上万个错误报告，进行了实现实验，贡献了测试套件，并向全球开发者介绍 ECMAScript。遗憾的是，无法逐一列举和感谢每一位做出贡献的个人和机构。</p>
   <p>
     Allen Wirfs-Brock<br>
@@ -5300,19 +5286,24 @@
         <dd>将 _argument_ 转换为 2<sup>32</sup> 个整型 Number 值之一，范围为 𝔽(-2<sup>31</sup>) 到 𝔽(2<sup>31</sup> - 1)（含）。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int32bit_ 为 _int_ 模 2<sup>32</sup>。
         1. 如果 _int32bit_ ≥ 2<sup>31</sup>，返回 𝔽(_int32bit_ - 2<sup>32</sup>)。
         1. 返回 𝔽(_int32bit_)。
       </emu-alg>
       <emu-note>
-        <p>基于上述定义：</p>
+        <p>根据以上定义：</p>
         <ul>
-          <li>ToInt32 是幂等的：对其输出再次应用结果不变。</li>
-          <li>对所有 _x_，ToInt32(ToUint32(_x_)) 与 ToInt32(_x_) 相同。（为保持此性质，*+∞*<sub>𝔽</sub> 与 *-∞*<sub>𝔽</sub> 被映射为 *+0*<sub>𝔽</sub>。）</li>
-          <li>ToInt32 将 *-0*<sub>𝔽</sub> 映射为 *+0*<sub>𝔽</sub>。</li>
+          <li>
+            该操作是幂等的：对于任意 ECMAScript 语言值 _x_，ToInt32(ToInt32(_x_)) 与 ToInt32(_x_) 相同。
+          </li>
+          <li>
+            对于任意 ECMAScript 语言值 _x_，ToInt32(ToUint32(_x_)) 与 ToInt32(_x_) 相同。（正是为了保持此性质，*+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 被映射为 *+0*<sub>𝔽</sub>。）
+          </li>
+          <li>
+            ToInt32 会将 *-0*<sub>𝔽</sub> 映射为 *+0*<sub>𝔽</sub>。
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5328,19 +5319,26 @@
         <dd>将 _argument_ 转换为 2<sup>32</sup> 个整型 Number 值之一，范围为 *+0*<sub>𝔽</sub> 到 𝔽(2<sup>32</sup> - 1)（含）。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int32bit_ 为 _int_ modulo 2<sup>32</sup>。
         1. [id="step-touint32-return"] 返回 𝔽(_int32bit_)。
       </emu-alg>
       <emu-note>
-        <p>基于上述定义：</p>
+        <p>根据上述定义：</p>
         <ul>
-          <li>步骤 <emu-xref href="#step-touint32-return"></emu-xref> 是 ToUint32 与 ToInt32 的唯一差别。</li>
-          <li>ToUint32 幂等。</li>
-          <li>对所有 _x_，ToUint32(ToInt32(_x_)) 与 ToUint32(_x_) 相同。（为保持此性质，*+∞*<sub>𝔽</sub> 与 *-∞*<sub>𝔽</sub> 被映射为 *+0*<sub>𝔽</sub>。）</li>
-          <li>ToUint32 将 *-0*<sub>𝔽</sub> 映射为 *+0*<sub>𝔽</sub>。</li>
+          <li>
+            第 <emu-xref href="#step-touint32-return"></emu-xref> 步是 ToUint32 和 ToInt32 之间的唯一不同点。
+          </li>
+          <li>
+            该操作是幂等的：对于任意 ECMAScript 语言值 _x_，ToUint32(ToUint32(_x_)) 与 ToUint32(_x_) 相同。
+          </li>
+          <li>
+            对于任意 ECMAScript 语言值 _x_，ToUint32(ToInt32(_x_)) 与 ToUint32(_x_) 相同。（正是为了保持这个属性，*+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 被映射为 *+0*<sub>𝔽</sub>。）
+          </li>
+          <li>
+            ToUint32 会将 *-0*<sub>𝔽</sub> 映射为 *+0*<sub>𝔽</sub>。
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5356,9 +5354,8 @@
         <dd>转换为 2<sup>16</sup> 个整型 Number 之一，范围 𝔽(-2<sup>15</sup>) 到 𝔽(2<sup>15</sup> - 1)。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int16bit_ 为 _int_ 模 2<sup>16</sup>。
         1. 如果 _int16bit_ ≥ 2<sup>15</sup>，返回 𝔽(_int16bit_ - 2<sup>16</sup>)。
         1. 返回 𝔽(_int16bit_)。
@@ -5376,14 +5373,13 @@
         <dd>转换为 2<sup>16</sup> 个整型 Number 之一，范围 *+0*<sub>𝔽</sub> 到 𝔽(2<sup>16</sup> - 1)。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. [id="step-touint16-mod"] 令 _int16bit_ 为 _int_ modulo 2<sup>16</sup>。
         1. 返回 𝔽(_int16bit_)。
       </emu-alg>
       <emu-note>
-        <p>基于上述定义：</p>
+        <p>根据上述定义：</p>
         <ul>
           <li>在步骤 <emu-xref href="#step-touint16-mod"></emu-xref> 中把 2<sup>16</sup> 代替 2<sup>32</sup> 是 ToUint32 与 ToUint16 的唯一差别。</li>
           <li>ToUint16 将 *-0*<sub>𝔽</sub> 映射为 *+0*<sub>𝔽</sub>。</li>
@@ -5402,9 +5398,8 @@
         <dd>转换为 2<sup>8</sup> 个整型 Number 之一，范围 *-128*<sub>𝔽</sub> 到 *127*<sub>𝔽</sub>。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限值或 _number_ 为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int8bit_ 为 _int_ 模 2<sup>8</sup>。
         1. 如果 _int8bit_ ≥ 2<sup>7</sup>，返回 𝔽(_int8bit_ - 2<sup>8</sup>)。
         1. 返回 𝔽(_int8bit_)。
@@ -5422,9 +5417,8 @@
         <dd>转换为 2<sup>8</sup> 个整型 Number 之一，范围 *+0*<sub>𝔽</sub> 到 *255*<sub>𝔽</sub>。</dd>
       </dl>
       <emu-alg>
-        1. 令 _number_ 为 ? ToNumber(_argument_)。
-        1. 如果 _number_ 不是有限数或为 *+0*<sub>𝔽</sub> 或 *-0*<sub>𝔽</sub>，返回 *+0*<sub>𝔽</sub>。
-        1. 令 _int_ 为 truncate(ℝ(_number_))。
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_argument_)。
+        1. 如果 _int_ 不是有限值，返回 *+0*<sub>𝔽</sub>。
         1. 令 _int8bit_ 为 _int_ modulo 2<sup>8</sup>。
         1. 返回 𝔽(_int8bit_)。
       </emu-alg>
@@ -10147,7 +10141,7 @@
           <tr id="abstract-hasbinding">
             <td>
               HasBinding (
-              _N_: 一个字符串,
+                _N_: 一个字符串,
               ): 返回一个包含布尔值的正常完成或抛出完成
             </td>
             <td>
@@ -10161,8 +10155,8 @@
           <tr id="abstract-createmutablebinding">
             <td>
               CreateMutableBinding (
-              _N_: 一个字符串,
-              _D_: 一个布尔值,
+                _N_: 一个字符串,
+                _D_: 一个布尔值,
               ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
@@ -10176,8 +10170,8 @@
           <tr id="abstract-createimmutablebinding">
             <td>
               CreateImmutableBinding (
-              _N_: 一个字符串,
-              _S_: 一个布尔值,
+                _N_: 一个字符串,
+                _S_: 一个布尔值,
               ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
@@ -10191,8 +10185,8 @@
           <tr id="abstract-initializebinding">
             <td>
               InitializeBinding (
-              _N_: 一个字符串,
-              _V_: 一个 ECMAScript 语言值,
+                _N_: 一个字符串,
+                _V_: 一个 ECMAScript 语言值,
               ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
@@ -10206,9 +10200,9 @@
           <tr id="abstract-setmutablebinding">
             <td>
               SetMutableBinding (
-              _N_: 一个字符串,
-              _V_: 一个 ECMAScript 语言值,
-              _S_: 一个布尔值,
+                _N_: 一个字符串,
+                _V_: 一个 ECMAScript 语言值,
+                _S_: 一个布尔值,
               ): 返回一个包含 ~unused~ 的正常完成或抛出完成
             </td>
             <td>
@@ -10222,8 +10216,8 @@
           <tr id="abstract-getbindingvalue">
             <td>
               GetBindingValue (
-              _N_: 一个字符串,
-              _S_: 一个布尔值,
+                _N_: 一个字符串,
+                _S_: 一个布尔值,
               ): 返回一个包含 ECMAScript 语言值的正常完成或抛出完成
             </td>
             <td>
@@ -10237,7 +10231,7 @@
           <tr id="abstract-deletebinding">
             <td>
               DeleteBinding (
-              _N_: 一个字符串,
+                _N_: 一个字符串,
               ): 返回一个包含布尔值的正常完成或抛出完成
             </td>
             <td>
@@ -10886,7 +10880,7 @@
         <h1>全局环境记录</h1>
         <p><dfn variants="全局环境记录">全局环境记录</dfn>用于表示由所有在同一领域（realm）中处理的 ECMAScript |Script| 元素共享的最外层作用域。全局环境记录为内置全局对象（见 <emu-xref href="#sec-global-object"></emu-xref>）、全局对象的属性以及所有出现在 |Script| 中的顶级声明（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>、<emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）提供绑定。</p>
         <p>全局环境记录在逻辑上是一个单独的记录，但规范上被描述为封装了对象环境记录和声明式环境记录的复合体。对象环境记录的基础对象是相关领域记录（Realm Record）的全局对象。该全局对象是全局环境记录的 GetThisBinding 具体方法返回的值。全局环境记录的对象环境记录部分包含所有内置全局绑定（见 <emu-xref href="#sec-global-object"></emu-xref>）以及所有在全局代码中通过 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableStatement| 引入的绑定。全局代码中的所有其他 ECMAScript 声明的绑定包含在全局环境记录的声明式环境记录部分。</p>
-        <p>属性可以直接在全局对象上创建。因此，全局环境记录的对象环境记录部分可能包含通过 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableDeclaration| 显式创建的绑定，也可能包含作为全局对象属性隐式创建的绑定。为了标识哪些绑定是通过声明显式创建的，全局环境记录维护一个使用 CreateGlobalVarBinding 和 CreateGlobalFunctionBinding 抽象操作绑定的名称列表。</p>
+        <p>属性可以直接在全局对象上创建。因此，全局环境记录的对象环境记录组件可能包含两类绑定：由 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableDeclaration| 显式声明创建的绑定，以及作为全局对象属性隐式创建的绑定。</p>
         <p>全局环境记录具有<emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>中列出的附加字段。</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="全局环境记录的附加字段" oldids="table-18">
           <table>
@@ -13242,7 +13236,7 @@
             [[HomeObject]]
           </td>
           <td>
-            an Object
+            an Object or *undefined*
           </td>
           <td>
             若函数使用 `super`，此槽为其 `super` 属性查找起始的对象（通过该对象的 [[GetPrototypeOf]]）。
@@ -15695,7 +15689,7 @@
         <p>Proxy 的 [[GetOwnProperty]] 强制以下不变式：</p>
         <ul>
           <li>
-            结果必须是 Object 或 *undefined*。
+            [[GetOwnProperty]] 的结果必须是属性描述符或 *undefined*。
           </li>
           <li>
             若 target 上存在一个不可配置自身属性，不得报告其不存在。
@@ -18604,7 +18598,7 @@
         </emu-alg>
       </emu-clause>
 
-            <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
+      <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
         <h1>静态语义：PropertyDefinitionNodes ( ): 解析节点的列表</h1>
         <dl class="header">
         </dl>
@@ -26661,7 +26655,7 @@
                 抛出完成（throw completion）或 ~empty~
               </td>
               <td>
-                表示在求值期间发生异常的抛出完成。如果没有异常，或 [[Status]] 不是 ~evaluated~，则为 *undefined*。
+                表示在求值期间发生异常的抛出完成。如果没有异常，或 [[Status]] 不是 ~evaluated~，则为 ~empty~。
               </td>
             </tr>
             <tr>
@@ -27749,10 +27743,10 @@
                 [[ImportName]]
               </td>
               <td>
-                String 或 ~namespace-object~
+                String 或 ~namespace~
               </td>
               <td>
-                目标模块中导出的绑定名称。~namespace-object~ 表示请求模块命名空间对象。
+                目标模块中导出的绑定名称。~namespace~ 表示请求模块命名空间对象。
               </td>
             </tr>
             <tr>
@@ -27810,7 +27804,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~namespace-object~
+                  ~namespace~
                 </td>
                 <td>
                   *"ns"*
@@ -27898,10 +27892,10 @@
                 [[ImportName]]
               </td>
               <td>
-                String、*null*、~all~ 或 ~all-but-default~
+                String、*null*、~namespace~ 或 ~all-but-default~
               </td>
               <td>
-                从 [[ModuleRequest]] 指定模块导出的绑定名；`export * as ns` 用 ~all~，`export *` 用 ~all-but-default~。无则 *null*。
+                从 [[ModuleRequest]] 指定模块导出的绑定名；`export * as ns` 用 ~namespace~，`export *` 用 ~all-but-default~。无则 *null*。
               </td>
             </tr>
             <tr>
@@ -28104,7 +28098,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~all~
+                  ~namespace~
                 </td>
                 <td>
                   *null*
@@ -28144,12 +28138,7 @@
                 1. 否则，
                   1. 注：当导出一个最初从其他模块导入的绑定或命名空间对象时，ExportEntry 记录会被重写为与直接从原始模块重新导出时的形式一致。这允许通过 `export * from` 在同一名称下多次导出相同绑定或命名空间时产生的冲突，在 <emu-xref href="#sec-resolveexport">Source Text Module Records 的 ResolveExport 具体方法</emu-xref> 的 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 步骤中被忽略，而不是被视为歧义。
                   1. 令 _ie_ 为 _importEntries_ 中 [[LocalName]] 等于 _ee_.[[LocalName]] 的元素。
-                  1. 如果 _ie_.[[ImportName]] 为 ~namespace-object~，则
-                    1. 注：这是对导入模块命名空间对象的再导出。
-                    1. 将 ExportEntry 记录 { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 添加到 _indirectExportEntries_。
-                  1. 否则，
-                    1. 注：这是对单一名称的再导出。
-                    1. 将 ExportEntry 记录 { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 添加到 _indirectExportEntries_。
+                  1. 将 ExportEntry 记录 { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] } 添加到 _indirectExportEntries_。
               1. 否则如果 _ee_.[[ImportName]] 为 ~all-but-default~，则
                 1. 断言：_ee_.[[ExportName]] 为 *null*。
                 1. 将 _ee_ 添加到 _starExportEntries_。
@@ -28239,7 +28228,7 @@
                 1. 如果 _e_.[[ExportName]] 等于 _exportName_，则
                   1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
                   1. 令 _importedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
-                  1. 如果 _e_.[[ImportName]] 为 ~all~，则
+                  1. 如果 _e_.[[ImportName]] 为 ~namespace~，则
                     1. 断言：_module_ 不提供此导出的直接绑定。
                     1. 返回 ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }。
                   1. 断言：_module_ 导入了此导出的特定绑定。
@@ -28281,31 +28270,63 @@
             </dl>
 
             <emu-alg>
-              1. 对 _module_.[[IndirectExportEntries]] 每个 _e_：
-                1. 断言 _e_.[[ExportName]] 非 *null*。
-                1. 令 _resolution_ = _module_.ResolveExport(_e_.[[ExportName]])。
-                1. 若为 *null* 或 ~ambiguous~ 抛 *SyntaxError*。
-              1. 断言所有命名导出可解析。
-              1. 令 _realm_ = _module_.[[Realm]]。
-              1. 断言非 *undefined*。
-              1. 令 _env_ = NewModuleEnvironment(_realm_.[[GlobalEnv]])。
-              1. 设 _module_.[[Environment]] = _env_。
-              1. 对 _module_.[[ImportEntries]] 每个 _in_：
-                1. 令 _importedModule_ = GetImportedModule(... )。
-                1. 若 _in_.[[ImportName]] 为 ~namespace-object~：
-                  1. 令 _namespace_ = GetModuleNamespace(_importedModule_)。
-                  1. ! CreateImmutableBinding + InitializeBinding。
-                1. 否则：
-                  1. 令 _resolution_ = _importedModule_.ResolveExport(_in_.[[ImportName]])。
-                  1. 若 *null* 或 ~ambiguous~ 抛 *SyntaxError*。
-                  1. 若 _resolution_.[[BindingName]] 为 ~namespace~：
-                    1. 获取命名空间并绑定。
-                  1. 否则 CreateImportBinding。
-              1. 创建执行上下文 _moduleContext_ 并关联环境。
-              1. 推入执行上下文栈并获取 _code_。
-              1. 处理 VarScopedDeclarations：为每个唯一变量创建并初始化 *undefined*。
-              1. 处理 LexicallyScopedDeclarations：创建（可变或不可变）绑定；若是函数类声明，实例化函数对象并初始化绑定。
-              1. 弹出执行上下文。
+              1. 对于 _module_.[[IndirectExportEntries]] 中的每个 ExportEntry 记录 _e_，执行
+                1. 断言：_e_.[[ExportName]] 不为 *null*。
+                1. 令 _resolution_ 为 _module_.ResolveExport(_e_.[[ExportName]])。
+                1. 如果 _resolution_ 为 *null* 或 ~ambiguous~，抛出 *SyntaxError* 异常。
+                1. 断言：_resolution_ 是一个 ResolvedBinding 记录。
+              1. 断言：所有来自 _module_ 的具名导出都可被解析。
+              1. 令 _realm_ 为 _module_.[[Realm]]。
+              1. 断言：_realm_ 不为 *undefined*。
+              1. 令 _env_ 为 NewModuleEnvironment(_realm_.[[GlobalEnv]])。
+              1. 设置 _module_.[[Environment]] 为 _env_。
+              1. 对于 _module_.[[ImportEntries]] 中的每个 ImportEntry 记录 _in_，执行
+                1. 令 _importedModule_ 为 GetImportedModule(_module_, _in_.[[ModuleRequest]])。
+                1. 如果 _in_.[[ImportName]] 为 ~namespace~，则
+                  1. 令 _namespace_ 为 GetModuleNamespace(_importedModule_)。
+                  1. 执行 ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
+                  1. 执行 ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
+                1. 否则，
+                  1. 断言：_in_.[[ImportName]] 是一个字符串。
+                  1. 令 _resolution_ 为 _importedModule_.ResolveExport(_in_.[[ImportName]])。
+                  1. 如果 _resolution_ 为 *null* 或 ~ambiguous~，抛出 *SyntaxError* 异常。
+                  1. 如果 _resolution_.[[BindingName]] 为 ~namespace~，则
+                    1. 令 _namespace_ 为 GetModuleNamespace(_resolution_.[[Module]])。
+                    1. 执行 ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
+                    1. 执行 ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
+                  1. 否则，
+                    1. 执行 CreateImportBinding(_env_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])。
+              1. 令 _moduleContext_ 为一个新的 ECMAScript 代码执行上下文。
+              1. 设置 _moduleContext_ 的 Function 为 *null*。
+              1. 断言：_module_.[[Realm]] 不为 *undefined*。
+              1. 设置 _moduleContext_ 的 Realm 为 _module_.[[Realm]]。
+              1. 设置 _moduleContext_ 的 ScriptOrModule 为 _module_。
+              1. 设置 _moduleContext_ 的 VariableEnvironment 为 _module_.[[Environment]]。
+              1. 设置 _moduleContext_ 的 LexicalEnvironment 为 _module_.[[Environment]]。
+              1. 设置 _moduleContext_ 的 PrivateEnvironment 为 *null*。
+              1. 设置 _module_.[[Context]] 为 _moduleContext_。
+              1. 将 _moduleContext_ 推入执行上下文栈；_moduleContext_ 现在是正在运行的执行上下文。
+              1. 令 _code_ 为 _module_.[[ECMAScriptCode]]。
+              1. 令 _varDeclarations_ 为 _code_ 的 VarScopedDeclarations。
+              1. 令 _declaredVarNames_ 为一个新的空 List。
+              1. 对于 _varDeclarations_ 中的每个元素 _d_，执行
+                1. 对于 BoundNames(_d_) 中的每个元素 _dn_，执行
+                  1. 如果 _declaredVarNames_ 不包含 _dn_，则
+                    1. 执行 ! _env_.CreateMutableBinding(_dn_, *false*)。
+                    1. 执行 ! _env_.InitializeBinding(_dn_, *undefined*)。
+                    1. 将 _dn_ 添加到 _declaredVarNames_。
+              1. 令 _lexDeclarations_ 为 _code_ 的 LexicallyScopedDeclarations。
+              1. 令 _privateEnv_ 为 *null*。
+              1. 对于 _lexDeclarations_ 中的每个元素 _d_，执行
+                1. 对于 BoundNames(_d_) 中的每个元素 _dn_，执行
+                  1. 如果 IsConstantDeclaration(_d_) 为 *true*，则
+                    1. 执行 ! _env_.CreateImmutableBinding(_dn_, *true*)。
+                  1. 否则，
+                    1. 执行 ! _env_.CreateMutableBinding(_dn_, *false*)。
+                  1. 如果 _d_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|，则
+                    1. 令 _fo_ 为以参数 _env_ 和 _privateEnv_ 调用 InstantiateFunctionObject(_d_)。
+                    1. 执行 ! _env_.InitializeBinding(_dn_, _fo_)。
+              1. 从执行上下文栈中移除 _moduleContext_。
               1. 返回 ~unused~。
             </emu-alg>
           </emu-clause>
@@ -28322,16 +28343,19 @@
             </dl>
 
             <emu-alg>
-              1. 创建新执行上下文 _moduleContext_ 并关联 _module_.[[Environment]]。
-              1. 暂停当前执行上下文。
-              1. 若 _module_.[[HasTLA]] 为 *false*：
-                1. 断言 _capability_ 未提供。
-                1. 推入 _moduleContext_。
-                1. 令 _result_ = Completion(Evaluation of _module_.[[ECMAScriptCode]])。
-                1. 弹出并恢复上层上下文。
-                1. 若 _result_ 为突然完成，返回 ? _result_。
-              1. 否则：
-                1. 断言 _capability_ 存在。
+              1. 断言：_module_ 已经被链接，并且它的模块环境中的声明已经被实例化。
+              1. 令 _moduleContext_ 为 _module_.[[Context]]。
+              1. 挂起正在运行的执行上下文。
+              1. 如果 _module_.[[HasTLA]] 为 *false*，那么
+                1. 断言：_capability_ 不存在。
+                1. 将 _moduleContext_ 推入执行上下文栈；_moduleContext_ 现在是正在运行的执行上下文。
+                1. 令 _result_ 为 Completion(对 _module_.[[ECMAScriptCode]] 的求值)。
+                1. 挂起 _moduleContext_ 并从执行上下文栈中移除。
+                1. 恢复此时位于执行上下文栈顶的上下文为正在运行的执行上下文。
+                1. 如果 _result_ 是异常完成，则
+                  1. 返回 ? _result_。
+              1. 否则，
+                1. 断言：_capability_ 是 PromiseCapability 记录。
                 1. 执行 AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_)。
               1. 返回 ~unused~。
             </emu-alg>
@@ -28863,7 +28887,7 @@
         <emu-grammar>NameSpaceImport : `*` `as` ImportedBinding</emu-grammar>
         <emu-alg>
           1. 令 _localName_ 为 |ImportedBinding| 的 StringValue。
-          1. 令 _entry_ 为 ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace-object~, [[LocalName]]: _localName_ }。
+          1. 令 _entry_ 为 ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: _localName_ }。
           1. 返回 « _entry_ »。
         </emu-alg>
         <emu-grammar>NamedImports : `{` `}`</emu-grammar>
@@ -29206,7 +29230,7 @@
         <emu-grammar>ExportFromClause : `*` `as` ModuleExportName</emu-grammar>
         <emu-alg>
           1. 令 _exportName_ 为 |ModuleExportName| 的 StringValue。
-          1. 令 _entry_ 为 ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }。
+          1. 令 _entry_ 为 ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ }。
           1. 返回 « _entry_ »。
         </emu-alg>
         <emu-grammar>NamedExports : `{` `}`</emu-grammar>
@@ -32800,7 +32824,7 @@
           1. 返回 _lowest_。
         </emu-alg>
         <emu-note>
-          <p>确定最大值的比较使用 IsLessThan 算法，但 *+0*<sub>𝔽</sub> 被认为大于 *-0*<sub>𝔽</sub>。</p>
+          <p>用于确定最小值的比较采用 IsLessThan 算法，但 *+0*<sub>𝔽</sub> 被认为大于 *-0*<sub>𝔽</sub>。</p>
         </emu-note>
         <p>此函数的 *"length"* 属性值为 *2*<sub>𝔽</sub>。</p>
       </emu-clause>
@@ -35259,7 +35283,7 @@ THH:mm:ss.sss
           1. 返回 *false*。
         </emu-alg>
         <emu-note>
-          <p>若 _searchString_（转为 String） 的代码单元序列与该对象（转为 String）在 _endPosition_ - length(this) 处开始的对应代码单元相同，则此方法返回 *true*；否则返回 *false*。</p>
+          <p>若 _searchString_（转为 String） 的代码单元序列与该对象（转为 String）在 _endPosition_ - length(_searchString_) 处开始的对应代码单元相同，则此方法返回 *true*；否则返回 *false*。</p>
         </emu-note>
         <emu-note>
           <p>当第一个参数是 RegExp 时抛出异常是为了允许未来版本定义允许此类参数值的扩展。</p>
@@ -40101,7 +40125,7 @@ THH:mm:ss.sss
         <h1>Array.prototype.indexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <p>使用 IsStrictlyEqual 升序查找首个匹配索引，未找到返回 *-1*<sub>𝔽</sub>（跳过空洞）。</p>
         <emu-note>
-          <p>_fromIndex_ 缺省 *+0*<sub>𝔽</sub>；可为负表示从末尾偏移。</p>
+          <p>可选的第二个参数 _fromIndex_ 默认为 *+0*<sub>𝔽</sub>（即搜索整个数组）。如果它大于或等于数组的长度，则返回 *-1*<sub>𝔽</sub>，也就是不会搜索数组。如果它小于 *-0*<sub>𝔽</sub>，则用来从数组末尾计算一个偏移量。如果计算出的索引小于或等于 *+0*<sub>𝔽</sub>，将搜索整个数组。</p>
         </emu-note>
         <p>步骤：</p>
         <emu-alg>
@@ -40166,7 +40190,8 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.lastindexof" type="built-in function">
         <h1>Array.prototype.lastIndexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <emu-note>
-          <p>自右向左使用 IsStrictlyEqual 查找，返回最大匹配索引，否则 -1。</p>
+          <p>该方法使用 IsStrictlyEqual 算法从大到小比较 _searchElement_ 与数组中的各元素，如果在一个或多个索引处找到，则返回最大的那个索引；否则返回 *-1*<sub>𝔽</sub>。</p>
+          <p>可选的第二个参数 _fromIndex_ 默认为数组长度减一（即搜索整个数组）。如果它大于或等于数组长度，将搜索整个数组。如果它小于 *-0*<sub>𝔽</sub>，则用来从数组末尾计算一个偏移量。如果计算出的索引小于 *-0*<sub>𝔽</sub>，则返回 *-1*<sub>𝔽</sub>。</p>
         </emu-note>
         <p>步骤：</p>
         <emu-alg>
@@ -48664,7 +48689,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-createresolvingfunctions" oldids="sec-promise-reject-functions,sec-promise-resolve-functions" type="abstract operation">
         <h1>
           CreateResolvingFunctions（
-            _toResolve_：一个 Promise,
+          _toResolve_：一个 Promise,
           ）：一个含有 [[Resolve]]（一个函数对象）和 [[Reject]]（一个函数对象）字段的 Record
         </h1>
         <dl class="header">

@@ -3,22 +3,6 @@
 <meta charset="utf-8">
 <script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
-<script>
-(function() {
-  let d = new Date;
-  if (document.location.host === 'tc39.es' && d.getMonth() === 3 && d.getDate() === 1) {
-    let d = document;
-    let h = d.documentElement;
-    let l = d.createElement('link');
-    l.setAttribute('href', 'https://fonts.googleapis.com/css2?family=Itim&display=swap');
-    l.setAttribute('rel', 'stylesheet');
-    h.appendChild(l);
-    let s = d.createElement('style');
-    s.innerHTML = '* { font-family: Itim !important; }';
-    h.appendChild(s);
-  }
-})();
-</script>
 <style>
   .unicode-property-table {
     table-layout: fixed;
@@ -193,9 +177,10 @@
     <li>
       편집자:
       <ul>
-        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
-        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
         <li><a href="mailto:ecma262 at chronicles dot org">Ron Buckton</a></li> (<a href="https://bsky.app/profile/chronicles.org">@chronicles.org</a>)
+        <li><a href="mailto:ecma262-editor-list at michael dot ficarra dot me">Michael Ficarra</a> (<a href="https://bsky.app/profile/michael.ficarra.me">@michael.ficarra.me</a>)</li>
+        <li><a href="mailto:mail@linusgroh.de">Linus Groh</a></li>
+        <li><a href="mailto:shu at rfrn dot org">Shu-yu Guo</a></li>
       </ul>
     </li>
     <li>
@@ -230,6 +215,20 @@
   <p>ECMAScript 2023, 14<sup>판</sup>에서는 `Array.prototype` 및 `TypedArray.prototype`의 `toSorted`, `toReversed`, `with`, `findLast`, `findLastIndex` 메소드, 그리고 `Array.prototype`의 `toSpliced` 메소드가 도입되었습니다. 파일 시작 부분에 `#!` 주석을 허용하여 실행 가능한 ECMAScript 파일 지원이 강화되었고, 대부분의 Symbol을 weak collection의 키로 사용할 수 있게 되었습니다.</p>
   <p>ECMAScript 2024, 15<sup>판</sup>에서는 ArrayBuffer와 SharedArrayBuffer의 크기 조정 및 전송 기능, 문자열 집합 작업을 위한 고급 기능을 가진 RegExp `/v` 플래그, Promise를 쉽게 생성하기 위한 `Promise.withResolvers` 메소드, 데이터 집계용 `Object.groupBy` 및 `Map.groupBy` 메소드, 공유 메모리 변경을 비동기적으로 기다리는 `Atomics.waitAsync` 메소드, 문자열이 올바른 유니코드만 포함하는지 확인/보장하는 `String.prototype.isWellFormed` 및 `String.prototype.toWellFormed` 메소드가 도입되었습니다.</p>
   <p>ECMAScript 2025, 16<sup>판</sup>에서는 이터레이터 작업을 위한 새로운 전역 `Iterator`와 관련 정적 및 프로토타입 메소드, `Set.prototype`의 셋 작업용 메소드, JSON 모듈 import 및 import된 모듈의 속성 선언 구문, 정규 표현식 안전 문자열 이스케이프를 위한 `RegExp.escape` 메소드, 정규 표현식 내에서 인라인 플래그 활성/비활성화 구문, 함수가 Promise를 반환하든 아니든 항상 Promise를 반환하게 하는 `Promise.try` 메소드, 새로운 TypedArray 종류인 `Float16Array`와 관련된 `DataView.prototype.getFloat16`, `DataView.prototype.setFloat16`, `Math.f16round` 메소드가 추가되었습니다.</p>
+  <p>
+    ECMAScript 2026, 17<sup>판</sup>에서는 다양한 크기의
+    숫자들을 정밀도 손실을 최소화하며 합산하는 `Math.sumPrecise`를
+    추가하였고, 이터레이터들을 순차적으로 연결하는 `Iterator.concat`,
+    비동기 이터러블 및 기타 비동기 소스에서 배열을 생성하는
+    `Array.fromAsync`, 에러 객체를 식별하는 `Error.isError`,
+    키가 존재하지 않을 때 사용할 기본값을 제공하는
+    `Map.prototype` 및 `WeakMap.prototype`의 메서드,
+    16진수 및 base64로 인코딩된 이진 데이터를 문자열로 변환하거나,
+    그 반대로 변환하는 `Uint8Array`의 메서드, 매칭된 JSON 소스를
+    reviver에서 접근할 수 있는 `JSON.parse`의 파라미터,
+    그리고 프리미티브 값에 대해 `JSON.stringify`의 결과를 정밀히
+    제어할 수 있는 `JSON.rawJSON`을 추가하였다.
+  </p>
   <p>Ecma TC39 내에서 많은 단체를 대표하는 수십 명의 개인이 이번 판뿐만 아니라 이전 판의 개발에도 매우 중요한 기여를 했습니다. 또한 TC39의 ECMAScript 활동을 지원하는 활발한 커뮤니티가 성장했습니다. 이 커뮤니티는 수많은 초안 검토, 수천 건의 버그 리포트 제출, 구현 실험, 테스트 슈트 기여, ECMAScript에 대해 전 세계 개발자 커뮤니티를 교육하는 역할을 했습니다. 유감스럽게도 이 노력에 기여한 모든 개인과 단체를 식별하고 인정하는 것은 불가능합니다.</p>
   <p>
     Allen Wirfs-Brock<br>
@@ -5326,19 +5325,24 @@
         <dd>_argument_를 𝔽(-2<sup>31</sup>)부터 𝔽(2<sup>31</sup> - 1)까지(포함) 2<sup>32</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が有限でない、または _number_ が *+0*<sub>𝔽</sub> か *-0*<sub>𝔽</sub> のいずれかの場合、*+0*<sub>𝔽</sub> を返す。
-        1. _int_ を truncate(ℝ(_number_)) とする。
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. _int32bit_ を _int_ を 2<sup>32</sup> で割った余りとする。
         1. _int32bit_ ≥ 2<sup>31</sup> の場合、𝔽(_int32bit_ - 2<sup>32</sup>) を返す。
         1. 𝔽(_int32bit_) を返す。
       </emu-alg>
       <emu-note>
-        <p>위 정의에 따른 ToInt32의 성질:</p>
+        <p>위 정의에 따르면:</p>
         <ul>
-          <li>ToInt32 추상 연산은 멱등성: 자신의 결과에 다시 적용해도 값은 변하지 않습니다.</li>
-          <li>모든 _x_에 대해 ToInt32(ToUint32(_x_))는 ToInt32(_x_)와 동일한 값입니다. (이 후속 성질을 보존하기 위해 *+∞*<sub>𝔽</sub>와 *-∞*<sub>𝔽</sub>이 *+0*<sub>𝔽</sub>으로 매핑됩니다.)</li>
-          <li>ToInt32는 *-0*<sub>𝔽</sub>을 *+0*<sub>𝔽</sub>으로 매핑합니다.</li>
+          <li>
+            이 연산은 멱등적이다: 어떤 ECMAScript 언어 값 _x_에 대해, ToInt32(ToInt32(_x_))는 ToInt32(_x_)와 같다.
+          </li>
+          <li>
+            어떤 ECMAScript 언어 값 _x_에 대해, ToInt32(ToUint32(_x_))는 ToInt32(_x_)와 같다. (이 특성을 보존하기 위해 *+∞*<sub>𝔽</sub> 및 *-∞*<sub>𝔽</sub>는 *+0*<sub>𝔽</sub>로 매핑된다.)
+          </li>
+          <li>
+            ToInt32는 *-0*<sub>𝔽</sub>를 *+0*<sub>𝔽</sub>로 매핑한다.
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5354,19 +5358,26 @@
         <dd>_argument_를 *+0*<sub>𝔽</sub>에서 𝔽(2<sup>32</sup> - 1)까지(포함) 2<sup>32</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. _int32bit_를 _int_ modulo 2<sup>32</sup>로 둔다.
         1. [id="step-touint32-return"] 𝔽(_int32bit_)를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>위 정의에 따른 ToUint32의 성질:</p>
+        <p>위의 정의에 따르면:</p>
         <ul>
-          <li><emu-xref href="#step-touint32-return"></emu-xref> 단계가 ToUint32와 ToInt32의 유일한 차이점입니다.</li>
-          <li>ToUint32 추상 연산은 멱등성입니다.</li>
-          <li>모든 _x_에 대해 ToUint32(ToInt32(_x_))는 ToUint32(_x_)와 동일합니다. (*+∞*<sub>𝔽</sub>, *-∞*<sub>𝔽</sub>이 *+0*<sub>𝔽</sub>으로 매핑되는 이유.)</li>
-          <li>ToUint32는 *-0*<sub>𝔽</sub>을 *+0*<sub>𝔽</sub>으로 매핑합니다.</li>
+          <li>
+            <emu-xref href="#step-touint32-return"></emu-xref> 단계는 ToUint32와 ToInt32의 유일한 차이점이다.
+          </li>
+          <li>
+            이 연산은 멱등적이다: 어떤 ECMAScript 언어 값 _x_에 대해, ToUint32(ToUint32(_x_))는 ToUint32(_x_)와 같다.
+          </li>
+          <li>
+            어떤 ECMAScript 언어 값 _x_에 대해, ToUint32(ToInt32(_x_))는 ToUint32(_x_)와 같다. (이 특성을 보존하기 위해 *+∞*<sub>𝔽</sub> 및 *-∞*<sub>𝔽</sub>는 *+0*<sub>𝔽</sub>로 매핑된다.)
+          </li>
+          <li>
+            ToUint32는 *-0*<sub>𝔽</sub>를 *+0*<sub>𝔽</sub>로 매핑한다.
+          </li>
         </ul>
       </emu-note>
     </emu-clause>
@@ -5382,9 +5393,8 @@
         <dd>_argument_를 𝔽(-2<sup>15</sup>)부터 𝔽(2<sup>15</sup> - 1)까지(포함) 2<sup>16</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 한다.
-        1. _number_가 유한하지 않거나 _number_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. _int16bit_를 _int_ modulo 2<sup>16</sup>로 한다.
         1. _int16bit_ ≥ 2<sup>15</sup>이면 𝔽(_int16bit_ - 2<sup>16</sup>)를 반환한다.
         1. 𝔽(_int16bit_)를 반환한다.
@@ -5402,14 +5412,13 @@
         <dd>_argument_를 *+0*<sub>𝔽</sub>에서 𝔽(2<sup>16</sup> - 1)까지(포함) 2<sup>16</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. [id="step-touint16-mod"] _int16bit_를 _int_ modulo 2<sup>16</sup>으로 둔다.
         1. 𝔽(_int16bit_)를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>위 정의에 따른 ToUint16의 성질:</p>
+        <p>위의 정의에 따르면:</p>
         <ul>
           <li><emu-xref href="#step-touint16-mod"></emu-xref> 단계에서 2<sup>16</sup>을 2<sup>32</sup> 대신 사용하는 점이 ToUint32와 ToUint16의 유일한 차이입니다.</li>
           <li>ToUint16은 *-0*<sub>𝔽</sub>을 *+0*<sub>𝔽</sub>으로 매핑합니다.</li>
@@ -5428,9 +5437,8 @@
         <dd>_argument_를 *-128*<sub>𝔽</sub>에서 *127*<sub>𝔽</sub>까지(포함) 2<sup>8</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 한다.
-        1. _number_가 유한하지 않거나 _number_가 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. _int8bit_를 _int_ modulo 2<sup>8</sup>로 한다.
         1. _int8bit_ ≥ 2<sup>7</sup>이면 𝔽(_int8bit_ - 2<sup>8</sup>)를 반환한다.
         1. 𝔽(_int8bit_)를 반환한다.
@@ -5448,9 +5456,8 @@
         <dd>_argument_를 *+0*<sub>𝔽</sub>에서 *255*<sub>𝔽</sub>까지(포함) 2<sup>8</sup>개의 적분 Number 값 중 하나로 변환합니다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)로 둔다.
-        1. _number_가 유한이 아니거나 *+0*<sub>𝔽</sub> 또는 *-0*<sub>𝔽</sub>이면 *+0*<sub>𝔽</sub>을 반환한다.
-        1. _int_를 truncate(ℝ(_number_))로 둔다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)로 둔다.
+        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
         1. _int8bit_를 _int_ modulo 2<sup>8</sup>로 둔다.
         1. 𝔽(_int8bit_)를 반환한다.
       </emu-alg>
@@ -10177,7 +10184,7 @@
           <tr id="abstract-hasbinding">
             <td>
               HasBinding (
-              _N_: 문자열,
+                _N_: 문자열,
               ): 불리언 값을 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10191,8 +10198,8 @@
           <tr id="abstract-createmutablebinding">
             <td>
               CreateMutableBinding (
-              _N_: 문자열,
-              _D_: 불리언,
+                _N_: 문자열,
+                _D_: 불리언,
               ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10206,8 +10213,8 @@
           <tr id="abstract-createimmutablebinding">
             <td>
               CreateImmutableBinding (
-              _N_: 문자열,
-              _S_: 불리언,
+                _N_: 문자열,
+                _S_: 불리언,
               ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10221,8 +10228,8 @@
           <tr id="abstract-initializebinding">
             <td>
               InitializeBinding (
-              _N_: 문자열,
-              _V_: ECMAScript 언어 값,
+                _N_: 문자열,
+                _V_: ECMAScript 언어 값,
               ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10236,9 +10243,9 @@
           <tr id="abstract-setmutablebinding">
             <td>
               SetMutableBinding (
-              _N_: 문자열,
-              _V_: ECMAScript 언어 값,
-              _S_: 불리언,
+                _N_: 문자열,
+                _V_: ECMAScript 언어 값,
+                _S_: 불리언,
               ): ~unused~를 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10252,8 +10259,8 @@
           <tr id="abstract-getbindingvalue">
             <td>
               GetBindingValue (
-              _N_: 문자열,
-              _S_: 불리언,
+                _N_: 문자열,
+                _S_: 불리언,
               ): ECMAScript 언어 값을 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10267,7 +10274,7 @@
           <tr id="abstract-deletebinding">
             <td>
               DeleteBinding (
-              _N_: 문자열,
+                _N_: 문자열,
               ): 불리언 값을 포함한 정상 완료 또는 throw 완료
             </td>
             <td>
@@ -10926,7 +10933,7 @@
         <h1>글로벌 환경 레코드(Global Environment Records)</h1>
         <p><dfn variants="Global Environment Records">글로벌 환경 레코드</dfn>는 동일한 Realm에서 처리되는 모든 ECMAScript |Script| 요소가 공유하는 가장 바깥쪽 스코프를 나타내는 데 사용된다. 글로벌 환경 레코드는 내장 글로벌(clause <emu-xref href="#sec-global-object"></emu-xref>), 글로벌 객체의 프로퍼티, 그리고 |Script| 내에서 발생하는 모든 최상위 선언(<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>)에 대한 바인딩을 제공한다.</p>
         <p>글로벌 환경 레코드는 논리적으로 하나의 레코드이지만, 객체 환경 레코드(Object Environment Record)와 선언적 환경 레코드(Declarative Environment Record)를 캡슐화하는 복합 구조로 지정된다. 객체 환경 레코드의 기반 객체는 연관된 Realm 레코드의 글로벌 객체이다. 이 글로벌 객체는 글로벌 환경 레코드의 GetThisBinding 구체 메서드가 반환하는 값이다. 글로벌 환경 레코드의 객체 환경 레코드 구성 요소는 해당 Realm의 글로벌 코드에서 내장 글로벌(clause <emu-xref href="#sec-global-object"></emu-xref>)과 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableStatement|로 도입된 모든 바인딩을 포함한다. 글로벌 코드 내의 그 외 ECMAScript 선언에 대한 바인딩은 글로벌 환경 레코드의 선언적 환경 레코드 구성 요소에 포함된다.</p>
-        <p>프로퍼티는 글로벌 객체에 직접 생성될 수 있다. 따라서 글로벌 환경 레코드의 객체 환경 레코드 구성 요소에는 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, |VariableDeclaration| 선언에 의해 명시적으로 생성된 바인딩과 글로벌 객체의 프로퍼티로 암시적으로 생성된 바인딩이 모두 포함될 수 있다. 어떤 바인딩이 선언을 사용해 명시적으로 생성되었는지 식별하기 위해 글로벌 환경 레코드는 CreateGlobalVarBinding 및 CreateGlobalFunctionBinding 추상 연산을 사용해 바인딩된 이름의 목록을 유지한다.</p>
+        <p>프로퍼티는 전역 객체에 직접 생성될 수 있다. 따라서 글로벌 환경 레코드의 오브젝트 환경 레코드 컴포넌트에는 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration| 또는 |VariableDeclaration| 선언에 의해 명시적으로 생성된 바인딩과 전역 객체의 프로퍼티로 암묵적으로 생성된 바인딩이 모두 포함될 수 있다.</p>
         <p>글로벌 환경 레코드는 <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>에 나열된 추가 필드를 가진다.</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="글로벌 환경 레코드의 추가 필드" oldids="table-18">
           <table>
@@ -13220,7 +13227,9 @@
         </tr>
         <tr>
           <td>[[HomeObject]]</td>
-          <td>an Object</td>
+          <td>
+            an Object or *undefined*
+          </td>
           <td>함수가 `super`를 사용한다면, `super` 프로퍼티 조회의 시작점을 제공하는 [[GetPrototypeOf]] 대상 객체.</td>
         </tr>
         <tr>
@@ -15536,7 +15545,9 @@
       <emu-note>
         <p>Proxy 객체의 [[GetOwnProperty]] 는 다음 불변식을 강제한다:</p>
         <ul>
-          <li>[[GetOwnProperty]] 결과는 Object 또는 *undefined* 여야 한다.</li>
+          <li>
+            [[GetOwnProperty]]의 결과는 프로퍼티 디스크립터 또는 *undefined*여야 한다.
+          </li>
           <li>target 객체에 비구성 가능(non-configurable) 자체 프로퍼티로 존재하면 그 프로퍼티를 비존재로 보고할 수 없다.</li>
           <li>target 객체가 비확장이고 해당 프로퍼티가 자체 프로퍼티로 존재하면 비존재로 보고할 수 없다.</li>
           <li>target 객체가 비확장이고 해당 프로퍼티가 target 에 자체 프로퍼티로 존재하지 않으면 존재한다고 보고할 수 없다.</li>
@@ -18200,7 +18211,7 @@
         </emu-alg>
       </emu-clause>
 
-            <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
+      <emu-clause id="sec-static-semantics-propertydefinitionnodes" type="sdo">
         <h1>정적 의미론: PropertyDefinitionNodes ( ): 파스 노드의 리스트</h1>
         <dl class="header">
         </dl>
@@ -26160,7 +26171,7 @@
             <tr id="abstract-loadrequestedmodules">
               <td>
                 LoadRequestedModules (
-                optional _hostDefined_: any 값,
+                  optional _hostDefined_: any 값,
                 ): 프라미스(Promise)
               </td>
               <td>
@@ -26174,7 +26185,7 @@
             <tr id="abstract-getexportednames">
               <td>
                 GetExportedNames (
-                optional _exportStarSet_: 소스 텍스트 모듈 레코드(Source Text Module Records) 리스트,
+                  optional _exportStarSet_: 소스 텍스트 모듈 레코드(Source Text Module Records) 리스트,
                 ): 문자열 리스트
               </td>
               <td>
@@ -26189,8 +26200,8 @@
             <tr id="abstract-resolveexport">
               <td>
                 ResolveExport (
-                _exportName_: 문자열,
-                optional _resolveSet_: 레코드 리스트(필드 [[Module]]: 모듈 레코드, [[ExportName]]: 문자열),
+                  _exportName_: 문자열,
+                  optional _resolveSet_: 레코드 리스트(필드 [[Module]]: 모듈 레코드, [[ExportName]]: 문자열),
                 ): ResolvedBinding 레코드, *null*, 또는 ~ambiguous~
               </td>
               <td>
@@ -26297,7 +26308,7 @@
                 throw 완료 또는 ~empty~
               </td>
               <td>
-                평가 중 발생한 예외를 나타내는 throw 완료. 예외가 발생하지 않았거나 [[Status]]가 ~evaluated~가 아닌 경우 *undefined*.
+                평가 중 발생한 예외를 나타내는 throw 완료. 예외가 발생하지 않았거나 [[Status]]가 ~evaluated~가 아닌 경우 ~empty~.
               </td>
             </tr>
             <tr>
@@ -26430,7 +26441,7 @@
             <tr id="abstract-executemodule">
               <td>
                 ExecuteModule (
-                optional _capability_: PromiseCapability 레코드,
+                  optional _capability_: PromiseCapability 레코드,
                 ): ~unused~를 포함한 정상 완료 또는 throw 완료
               </td>
               <td>
@@ -27542,10 +27553,10 @@
                 [[ImportName]]
               </td>
               <td>
-                String 또는 ~namespace-object~
+                String 또는 ~namespace~
               </td>
               <td>
-                [[ModuleRequest]] 로 식별된 모듈이 해당 바인딩을 export 하는 이름. ~namespace-object~ 는 대상 모듈 네임스페이스 객체 import 요청을 의미.
+                [[ModuleRequest]] 로 식별된 모듈이 해당 바인딩을 export 하는 이름. ~namespace~ 는 대상 모듈 네임스페이스 객체 import 요청을 의미.
               </td>
             </tr>
             <tr>
@@ -27603,7 +27614,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~namespace-object~
+                  ~namespace~
                 </td>
                 <td>
                   *"ns"*
@@ -27691,10 +27702,10 @@
                 [[ImportName]]
               </td>
               <td>
-                String, *null*, ~all~, 또는 ~all-but-default~
+                String, *null*, ~namespace~, 또는 ~all-but-default~
               </td>
               <td>
-                [[ModuleRequest]] 로 식별된 모듈이 해당 바인딩을 export 하는 이름. |ModuleSpecifier| 없으면 *null*. `export * as ns from "mod"` 는 ~all~, `export * from "mod"` 는 ~all-but-default~ 사용.
+                [[ModuleRequest]] 로 식별된 모듈이 해당 바인딩을 export 하는 이름. |ModuleSpecifier| 없으면 *null*. `export * as ns from "mod"` 는 ~namespace~, `export * from "mod"` 는 ~all-but-default~ 사용.
               </td>
             </tr>
             <tr>
@@ -27897,7 +27908,7 @@
                   *"mod"*
                 </td>
                 <td>
-                  ~all~
+                  ~namespace~
                 </td>
                 <td>
                   *null*
@@ -27937,12 +27948,7 @@
                 1. 그렇지 않으면,
                   1. NOTE: 다른 모듈에서 원래 import되었던 바인딩 또는 네임스페이스 객체를 export할 때, ExportEntry Record는 해당 바인딩 또는 네임스페이스 객체가 import된 다음 export된 것이 아니라, 원래 모듈에서 직접 re-export되었을 경우의 형태와 일치하도록 다시 작성된다. 이는 `export * from`을 통해 같은 이름으로 동일한 바인딩 또는 네임스페이스를 두 번 export함으로써 발생하는 충돌이, Source Text Module Records의 <emu-xref href="#sec-resolveexport">ResolveExport 구체 메서드</emu-xref>의 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 단계에서 모호한 것으로 취급되는 대신 무시될 수 있게 한다.
                   1. _ie_를 [[LocalName]]이 _ee_.[[LocalName]]인 _importEntries_의 요소로 둔다.
-                  1. _ie_.[[ImportName]]이 ~namespace-object~이면, 그때
-                    1. NOTE: 이는 import된 모듈 네임스페이스 객체의 re-export이다.
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
-                  1. 그렇지 않으면,
-                    1. NOTE: 이는 단일 이름의 re-export이다.
-                    1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
+                  1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _ee_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
               1. 그렇지 않고 _ee_.[[ImportName]]이 ~all-but-default~이면, 그때
                 1. Assert: _ee_.[[ExportName]]은 *null*이다.
                 1. _ee_를 _starExportEntries_에 추가한다.
@@ -28035,7 +28041,7 @@
                 1. _e_.[[ExportName]]이 _exportName_과 같다면,
                   1. 단언: _e_.[[ModuleRequest]]는 *null*이 아니다.
                   1. _importedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
-                  1. _e_.[[ImportName]]이 ~all~이라면,
+                  1. _e_.[[ImportName]]이 ~namespace~이라면,
                     1. 단언: _module_이 이 export에 대한 직접 바인딩을 제공하지 않는다.
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }를 반환한다.
                   1. 단언: _module_이 이 export에 대한 특정 바인딩을 import한다.
@@ -28077,63 +28083,64 @@
             </dl>
 
             <emu-alg>
-              1. _module_.[[IndirectExportEntries]] 의 각 ExportEntry Record _e_ 에 대해
-                1. 단언: _e_.[[ExportName]] ≠ *null*.
-                1. _resolution_ = _module_.ResolveExport(_e_.[[ExportName]]).
-                1. _resolution_ 이 *null* 또는 ~ambiguous~ 이면 *SyntaxError* throw.
-                1. 단언: _resolution_ 은 ResolvedBinding Record.
-              1. 단언: _module_ 의 모든 named export 는 해석 가능.
-              1. _realm_ = _module_.[[Realm]].
-              1. 단언: _realm_ ≠ *undefined*.
-              1. _env_ = NewModuleEnvironment(_realm_.[[GlobalEnv]]).
-              1. _module_.[[Environment]] = _env_.
-              1. _module_.[[ImportEntries]] 각 ImportEntry Record _in_ 에 대해
-                1. _importedModule_ = GetImportedModule(_module_, _in_.[[ModuleRequest]]).
-                1. _in_.[[ImportName]] 가 ~namespace-object~ 이면
-                  1. _namespace_ = GetModuleNamespace(_importedModule_).
-                  1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*) 수행.
-                  1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_) 수행.
-                1. Else
-                  1. _resolution_ = _importedModule_.ResolveExport(_in_.[[ImportName]]).
-                  1. _resolution_ 이 *null* 또는 ~ambiguous~ 이면 *SyntaxError* throw.
-                  1. _resolution_.[[BindingName]] = ~namespace~ 이면
-                    1. _namespace_ = GetModuleNamespace(_resolution_.[[Module]]).
-                    1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*).
-                    1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_).
-                  1. Else
-                    1. CreateImportBinding(_env_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]]) 수행.
-              1. _moduleContext_ = 새 ECMAScript 코드 실행 컨텍스트.
-              1. _moduleContext_.Function = *null*.
-              1. 단언: _module_.[[Realm]] ≠ *undefined*.
-              1. _moduleContext_.Realm = _module_.[[Realm]].
-              1. _moduleContext_.ScriptOrModule = _module_.
-              1. _moduleContext_.VariableEnvironment = _module_.[[Environment]].
-              1. _moduleContext_.LexicalEnvironment = _module_.[[Environment]].
-              1. _moduleContext_.PrivateEnvironment = *null*.
-              1. _module_.[[Context]] = _moduleContext_.
-              1. _moduleContext_ 를 실행 컨텍스트 스택에 push; 실행 중 컨텍스트.
-              1. _code_ = _module_.[[ECMAScriptCode]].
-              1. _varDeclarations_ = VarScopedDeclarations(_code_).
-              1. _declaredVarNames_ = 새 빈 리스트.
-              1. 각 _d_ ∈ _varDeclarations_ 에 대해
-                1. BoundNames(_d_) 의 각 _dn_ 에 대해
-                  1. _declaredVarNames_ 가 _dn_ 포함하지 않으면
-                    1. ! _env_.CreateMutableBinding(_dn_, *false*).
-                    1. ! _env_.InitializeBinding(_dn_, *undefined*).
-                    1. _dn_ 을 _declaredVarNames_ 에 추가.
-              1. _lexDeclarations_ = LexicallyScopedDeclarations(_code_).
-              1. _privateEnv_ = *null*.
-              1. 각 _d_ ∈ _lexDeclarations_ 에 대해
-                1. BoundNames(_d_) 의 각 _dn_ 에 대해
-                  1. IsConstantDeclaration(_d_) 가 *true* 이면
-                    1. ! _env_.CreateImmutableBinding(_dn_, *true*).
-                  1. Else
-                    1. ! _env_.CreateMutableBinding(_dn_, *false*).
-                  1. _d_ 가 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration| 중 하나이면
-                    1. _fo_ = InstantiateFunctionObject(_d_, _env_, _privateEnv_).
-                    1. ! _env_.InitializeBinding(_dn_, _fo_).
-              1. _moduleContext_ 를 실행 컨텍스트 스택에서 제거.
-              1. ~unused~ 반환.
+              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _e_에 대해,
+                1. 단언: _e_.[[ExportName]]은(는) *null*이 아니다.
+                1. _resolution_을 _module_.ResolveExport(_e_.[[ExportName]])로 둔다.
+                1. _resolution_이 *null* 또는 ~ambiguous~이면, *SyntaxError* 예외를 발생시킨다.
+                1. 단언: _resolution_은(는) ResolvedBinding Record이다.
+              1. 단언: _module_의 모든 명명된 내보내기(named export)는 해결 가능하다.
+              1. _realm_을 _module_.[[Realm]]으로 둔다.
+              1. 단언: _realm_은(는) *undefined*가 아니다.
+              1. _env_를 NewModuleEnvironment(_realm_.[[GlobalEnv]])로 둔다.
+              1. _module_.[[Environment]]에 _env_를 할당한다.
+              1. _module_.[[ImportEntries]]의 각 ImportEntry Record _in_에 대해,
+                1. _importedModule_을 GetImportedModule(_module_, _in_.[[ModuleRequest]])로 둔다.
+                1. _in_.[[ImportName]]이 ~namespace~이면,
+                  1. _namespace_를 GetModuleNamespace(_importedModule_)로 둔다.
+                  1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)를 수행한다.
+                  1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)를 수행한다.
+                1. 아니면,
+                  1. 단언: _in_.[[ImportName]]은(는) String이다.
+                  1. _resolution_을 _importedModule_.ResolveExport(_in_.[[ImportName]])로 둔다.
+                  1. _resolution_이 *null* 또는 ~ambiguous~이면, *SyntaxError* 예외를 발생시킨다.
+                  1. _resolution_.[[BindingName]]이 ~namespace~이면,
+                    1. _namespace_를 GetModuleNamespace(_resolution_.[[Module]])로 둔다.
+                    1. ! _env_.CreateImmutableBinding(_in_.[[LocalName]], *true*)를 수행한다.
+                    1. ! _env_.InitializeBinding(_in_.[[LocalName]], _namespace_)를 수행한다.
+                  1. 아니면,
+                    1. CreateImportBinding(_env_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])를 수행한다.
+              1. _moduleContext_를 새로운 ECMAScript 코드 실행 컨텍스트로 둔다.
+              1. _moduleContext_의 Function에 *null*을 할당한다.
+              1. 단언: _module_.[[Realm]]은(는) *undefined*가 아니다.
+              1. _moduleContext_의 Realm에 _module_.[[Realm]]을 할당한다.
+              1. _moduleContext_의 ScriptOrModule에 _module_을 할당한다.
+              1. _moduleContext_의 VariableEnvironment에 _module_.[[Environment]]을 할당한다.
+              1. _moduleContext_의 LexicalEnvironment에 _module_.[[Environment]]을 할당한다.
+              1. _moduleContext_의 PrivateEnvironment에 *null*을 할당한다.
+              1. _module_.[[Context]]에 _moduleContext_를 할당한다.
+              1. _moduleContext_를 실행 컨텍스트 스택에 푸시한다; 이제 _moduleContext_가 실행 컨텍스트이다.
+              1. _code_를 _module_.[[ECMAScriptCode]]로 둔다.
+              1. _varDeclarations_를 _code_의 VarScopedDeclarations로 둔다.
+              1. _declaredVarNames_를 새로운 빈 리스트로 둔다.
+              1. _varDeclarations_의 각 요소 _d_에 대해,
+                1. _d_의 BoundNames의 각 요소 _dn_에 대해,
+                  1. _declaredVarNames_에 _dn_이 포함되어 있지 않으면,
+                    1. ! _env_.CreateMutableBinding(_dn_, *false*)를 수행한다.
+                    1. ! _env_.InitializeBinding(_dn_, *undefined*)를 수행한다.
+                    1. _declaredVarNames_에 _dn_을 추가한다.
+              1. _lexDeclarations_를 _code_의 LexicallyScopedDeclarations로 둔다.
+              1. _privateEnv_를 *null*로 둔다.
+              1. _lexDeclarations_의 각 요소 _d_에 대해,
+                1. _d_의 BoundNames의 각 요소 _dn_에 대해,
+                  1. IsConstantDeclaration(_d_)이 *true*이면,
+                    1. ! _env_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+                  1. 아니면,
+                    1. ! _env_.CreateMutableBinding(_dn_, *false*)를 수행한다.
+                  1. _d_가 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나라면,
+                    1. _fo_를 InstantiateFunctionObject(_d_, _env_, _privateEnv_)로 둔다.
+                    1. ! _env_.InitializeBinding(_dn_, _fo_)를 수행한다.
+              1. 실행 컨텍스트 스택에서 _moduleContext_를 제거한다.
+              1. ~unused~를 반환한다.
             </emu-alg>
           </emu-clause>
 
@@ -28149,26 +28156,21 @@
             </dl>
 
             <emu-alg>
-              1. _moduleContext_ = 새 ECMAScript 코드 실행 컨텍스트.
-              1. _moduleContext_.Function = *null*.
-              1. _moduleContext_.Realm = _module_.[[Realm]].
-              1. _moduleContext_.ScriptOrModule = _module_.
-              1. 단언: 모듈이 링크되었고 환경 선언 인스턴스화 완료.
-              1. _moduleContext_.VariableEnvironment = _module_.[[Environment]].
-              1. _moduleContext_.LexicalEnvironment = _module_.[[Environment]].
-              1. 실행 중 컨텍스트 suspend.
-              1. _module_.[[HasTLA]] = *false* 이면
-                1. 단언: _capability_ 없음.
-                1. _moduleContext_ push → 실행 중 컨텍스트.
-                1. _result_ = Completion(Evaluation(_module_.[[ECMAScriptCode]]) ).
-                1. _moduleContext_ suspend 및 스택에서 제거.
-                1. 최상위 컨텍스트 resume.
-                1. _result_ 가 abrupt completion 이면
-                  1. ? _result_ 반환.
-              1. Else
-                1. 단언: _capability_ 는 PromiseCapability Record.
-                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_) 수행.
-              1. ~unused~ 반환.
+              1. 단언: _module_이(가) 링크되었고, 해당 모듈 환경의 선언이 인스턴스화되었다.
+              1. _moduleContext_를 _module_.[[Context]]로 둔다.
+              1. 실행 컨텍스트를 일시 중단한다.
+              1. _module_.[[HasTLA]]가 *false*이면,
+                1. 단언: _capability_가 존재하지 않는다.
+                1. _moduleContext_를 실행 컨텍스트 스택에 푸시한다; _moduleContext_가 현재 실행 컨텍스트이다.
+                1. _result_를 Completion(Evaluation of _module_.[[ECMAScriptCode]])로 둔다.
+                1. _moduleContext_를 일시 중단하고 실행 컨텍스트 스택에서 제거한다.
+                1. 이제 실행 컨텍스트 스택의 맨 위에 있는 컨텍스트를 실행 컨텍스트로 재개한다.
+                1. _result_가 갑작스러운 완료(abrupt completion)라면,
+                  1. ? _result_를 반환한다.
+              1. 아니면,
+                1. 단언: _capability_는 PromiseCapability Record이다.
+                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_)를 수행한다.
+              1. ~unused~를 반환한다.
             </emu-alg>
           </emu-clause>
         </emu-clause>
@@ -28694,7 +28696,7 @@
         <emu-grammar>NameSpaceImport : `*` `as` ImportedBinding</emu-grammar>
         <emu-alg>
           1. _localName_ 을 |ImportedBinding| 의 StringValue 로 둔다.
-          1. _entry_ 를 ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace-object~, [[LocalName]]: _localName_ } 로 둔다.
+          1. _entry_ 를 ImportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: _localName_ } 로 둔다.
           1. « _entry_ » 를 반환한다.
         </emu-alg>
         <emu-grammar>NamedImports : `{` `}`</emu-grammar>
@@ -29037,7 +29039,7 @@
         <emu-grammar>ExportFromClause : `*` `as` ModuleExportName</emu-grammar>
         <emu-alg>
           1. _exportName_ 을 |ModuleExportName| 의 StringValue 로 둔다.
-          1. _entry_ 를 ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~all~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ } 로 둔다.
+          1. _entry_ 를 ExportEntry Record { [[ModuleRequest]]: _module_, [[ImportName]]: ~namespace~, [[LocalName]]: *null*, [[ExportName]]: _exportName_ } 로 둔다.
           1. « _entry_ » 를 반환한다.
         </emu-alg>
         <emu-grammar>NamedExports : `{` `}`</emu-grammar>
@@ -32635,7 +32637,7 @@
           1. _lowest_ 반환.
         </emu-alg>
         <emu-note>
-          <p>최솟값 결정 비교도 IsLessThan 을 사용하되 *+0*<sub>𝔽</sub> 를 *-0*<sub>𝔽</sub> 보다 큰 것으로 취급한다.</p>
+          <p>가장 작은 값을 결정하기 위해 값들을 비교할 때 IsLessThan 알고리즘을 사용하지만, *+0*<sub>𝔽</sub>는 *-0*<sub>𝔽</sub>보다 더 큰 값으로 간주된다.</p>
         </emu-note>
         <p>이 함수의 *"length"* 프로퍼티는 *2*<sub>𝔽</sub> 이다.</p>
       </emu-clause>
@@ -35094,7 +35096,7 @@ THH:mm:ss.sss
           1. *false*를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>이 메서드는 _searchString_의 코드 유닛 시퀀스(문자열로 변환)가 이 객체(문자열로 변환)의 해당 코드 유닛과 _endPosition_ - length(this) 지점부터 일치하면 *true*를 반환한다. 그렇지 않으면 *false*를 반환한다.</p>
+          <p>이 메서드는 _searchString_의 코드 유닛 시퀀스(문자열로 변환)가 이 객체(문자열로 변환)의 해당 코드 유닛과 _endPosition_ - length(_searchString_) 지점부터 일치하면 *true*를 반환한다. 그렇지 않으면 *false*를 반환한다.</p>
         </emu-note>
         <emu-note>
           <p>첫 번째 인수가 RegExp이면 예외를 던지는 것은 향후 버전에서 그러한 인수 값을 허용하는 확장을 정의할 수 있도록 하기 위한 것이다.</p>
@@ -39943,7 +39945,7 @@ THH:mm:ss.sss
         <h1>Array.prototype.indexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <p>오름차순으로 IsStrictlyEqual 알고리즘으로 비교하여 발견된 가장 작은 인덱스 반환, 없으면 *-1*<sub>𝔽</sub>.</p>
         <emu-note>
-          <p>두 번째 인자 _fromIndex_ 기본 *+0*<sub>𝔽</sub>. 길이 이상이면 *-1*<sub>𝔽</sub>. *-0*<sub>𝔽</sub> 보다 작으면 끝에서 오프셋. 계산 인덱스 ≤ *+0*<sub>𝔽</sub> 이면 전체 검색.</p>
+          <p>선택적인 두 번째 인수 _fromIndex_의 기본값은 *+0*<sub>𝔽</sub>이다(즉, 배열 전체를 탐색한다). 만약 배열의 길이보다 크거나 같으면 *-1*<sub>𝔽</sub>이 반환된다. 즉, 배열을 탐색하지 않는다. 만약 *-0*<sub>𝔽</sub>보다 작으면, 배열 끝에서부터의 offset을 계산할 때 사용된다. 계산된 인덱스가 *+0*<sub>𝔽</sub>보다 작거나 같으면, 배열 전체가 탐색된다.</p>
         </emu-note>
         <p>호출 시:</p>
         <emu-alg>
@@ -40010,7 +40012,20 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.lastindexof" type="built-in function">
         <h1>Array.prototype.lastIndexOf ( _searchElement_ [ , _fromIndex_ ] )</h1>
         <emu-note>
-          <p>내림차순 IsStrictlyEqual 로 비교, 발견된 가장 큰 인덱스 반환, 없으면 *-1*<sub>𝔽</sub>. _fromIndex_ 기본은 길이 - 1.</p>
+          <p>
+            이 메서드는 IsStrictlyEqual 알고리즘을 사용하여
+            _searchElement_를 배열의 요소들과 내림차순으로 비교하며,
+            하나 이상의 인덱스에서 찾을 경우 그중 가장 큰 인덱스를 반환한다.
+            찾지 못하면 *-1*<sub>𝔽</sub>을 반환한다.
+          </p>
+          <p>
+            선택적인 두 번째 인수 _fromIndex_의 기본값은
+            배열의 길이에서 1을 뺀 값이다(즉, 배열 전체를 탐색한다).
+            만약 배열 길이보다 크거나 같으면, 배열 전체를 탐색한다.
+            * -0*<sub>𝔽</sub>보다 작으면 배열의 끝에서부터 오프셋을
+            계산하는 데 사용된다. 계산된 인덱스가 *-0*<sub>𝔽</sub>보다
+            작으면 *-1*<sub>𝔽</sub>이 반환된다.
+          </p>
         </emu-note>
         <p>호출 시:</p>
         <emu-alg>
@@ -40551,7 +40566,7 @@ THH:mm:ss.sss
         </emu-note>
       </emu-clause>
 
-      <emu-clause id="sec-array.prototype.toreversed" type="built-in function"`>
+      <emu-clause id="sec-array.prototype.toreversed" type="built-in function" `>
         <h1>Array.prototype.toReversed ( )</h1>
         <p>호출 시:</p>
         <emu-alg>
@@ -46862,7 +46877,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-shallowestcontainedjsonvalue" type="abstract operation">
         <h1>
           정적 의미론: ShallowestContainedJSONValue (
-            _root_: 파스 노드,
+          _root_: 파스 노드,
           ): 파스 노드 또는 ~empty~
         </h1>
         <dl class="header">
