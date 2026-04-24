@@ -22306,14 +22306,11 @@
         <h1>
           Runtime Semantics: ForDeclarationBindingInitialization (
             _value_: an ECMAScript language value,
-            _environment_: an Environment Record or *undefined*,
+            _environment_: an Environment Record,
           ): either a normal completion containing ~unused~ or an abrupt completion
         </h1>
         <dl class="header">
         </dl>
-        <emu-note>
-          <p>*undefined* is passed for _environment_ to indicate that a PutValue operation should be used to assign the initialization value. This is the case for `var` statements and the formal parameter lists of some non-strict functions (see <emu-xref href="#sec-functiondeclarationinstantiation"></emu-xref>). In those cases a lexical binding is hoisted and preinitialized prior to evaluation of its initializer.</p>
-        </emu-note>
         <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
         <emu-alg>
           1. Return ? BindingInitialization of |ForBinding| with arguments _value_ and _environment_.
