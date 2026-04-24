@@ -2491,7 +2491,7 @@
           <emu-note>
             <p>規定よりも高精度の変換が可能な実装には、step <emu-xref href="#step-number-tostring-intermediate-values"></emu-xref>の次の代替手順が指針となります：</p>
             <emu-alg replaces-step="step-number-tostring-intermediate-values">
-              1. _n_、_k_、_s_を整数として、_k_ ≥ 1、_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>、𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>)が_x_、_k_が最小となるようにする。_s_の値が複数ある場合、_s_ × _radix_<sup>_n_ - _k_</sup>がℝ(_x_)に最も近いものを選ぶ。2つの可能な値がある場合は偶数の方を選ぶ。_k_は_radix_進法での_s_の桁数であり、_s_は_radix_で割り切れない。
+              1. _n_、_k_、_s_を整数とし、_k_ ≥ 1、_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>、𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) が _x_ であり、_k_ は可能な限り小さいとする。_s_ の候補が複数ある場合は、_s_ × _radix_<sup>_n_ - _k_</sup> が ℝ(_x_) に最も近いものを選ぶ。そのような _s_ が2つある場合は、偶数の方を選ぶ。_k_ は_基数_radix_で表現したときの _s_ の桁数であり、_s_ は_radix_で割り切れないことに注意すること。
             </emu-alg>
           </emu-note>
           <emu-note>
@@ -6079,18 +6079,19 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 断言: SameType(_x_, _y_) は *true* である。
+        1. アサート: SameType(_x_, _y_) は *true* である。
         1. _x_ が *undefined* または *null* のいずれかであれば、*true* を返す。
-        1. _x_ が BigInt である場合、
+        1. _x_ が BigInt であれば、
           1. BigInt::equal(_x_, _y_) を返す。
-        1. _x_ が文字列 (String) である場合、
-          1. _x_ と _y_ の長さが同じかつ各位置のコードユニットも同じであれば、*true* を返す。
+        1. _x_ が String であれば、
+          1. _x_ と _y_ の長さが同じで、かつ同じ位置に同じコード単位を持つ場合、*true* を返す。
           1. *false* を返す。
-        1. _x_ がブール値 (Boolean) である場合、
-          1. _x_ と _y_ がともに *true* またはともに *false* であれば、*true* を返す。
+        1. _x_ が Boolean であれば、
+          1. _x_ が *true* かつ _y_ も *true* であれば、*true* を返す。
+          1. _x_ が *false* かつ _y_ も *false* であれば、*true* を返す。
           1. *false* を返す。
-        1. 注: その他の ECMAScript 言語値は同一性で比較される。
-        1. _x_ が _y_ と同じであれば、*true* を返す。
+        1. 注記: その他すべての ECMAScript 言語値は同一性によって比較される。
+        1. _x_ が _y_ であれば、*true* を返す。
         1. *false* を返す。
       </emu-alg>
       <emu-note>
@@ -6147,7 +6148,7 @@
           1. 断言: _nx_ は BigInt である。
           1. BigInt::lessThan(_nx_, _ny_) を返す。
         1. 断言: _nx_ が BigInt かつ _ny_ が数値、または _nx_ が数値かつ _ny_ が BigInt である。
-        1. _nx_ または _ny_ が *NaN* の場合、*undefined* を返す。
+        1. _nx_ が *NaN* または _ny_ が *NaN* の場合、*undefined* を返す。
         1. _nx_ が *-∞*<sub>𝔽</sub> かつ _ny_ が *+∞*<sub>𝔽</sub> の場合、*true* を返す。
         1. _nx_ が *+∞*<sub>𝔽</sub> かつ _ny_ が *-∞*<sub>𝔽</sub> の場合、*false* を返す。
         1. ℝ(_nx_) &lt; ℝ(_ny_) の場合、*true* を返す。
@@ -11152,7 +11153,7 @@
             <dd>Global Environment Record _envRec_</dd>
 
             <dt>description</dt>
-            <dd>名前 _N_ の現在の束縛値を _V_ に変更しようとする。不変束縛で _S_ が *true* なら *TypeError*。プロパティ _N_ が存在しないか書き込み不可の場合の処理は _S_ に依存。</dd>
+            <dd>識別子名 _N_ の現在の束縛の値を値 _V_ に変更しようとします。その束縛が不変束縛で、かつ _S_ が *true* の場合、*TypeError* がスローされます。通常、_N_ という名前の束縛はすでに存在しますが、存在しない場合や現在書き込み可能でない場合、エラー処理は _S_ により決定されます。</dd>
           </dl>
           <emu-alg>
             1. _DclRec_ を _envRec_.[[DeclarativeRecord]] とする。
@@ -18876,15 +18877,16 @@
         </dl>
         <emu-alg>
           1. _flags_ を _literal_ の FlagText とする。
-          1. _flags_ が `d`, `g`, `i`, `m`, `s`, `u`, `v`, `y` 以外のコードポイントを含む場合、またはいずれかのコードポイントを複数回含む場合、*false* を返す。
-          1. _flags_ が `u` を含む場合、_u_ を *true*、そうでなければ *false* とする。
-          1. _flags_ が `v` を含む場合、_v_ を *true*、そうでなければ *false* とする。
+          1. _flags_ に `d`、`g`、`i`、`m`、`s`、`u`、`v`、`y` 以外のコードポイントが含まれていれば、*false* を返す。
+          1. _flags_ に同じコードポイントが2回以上含まれていれば、*false* を返す。
+          1. _flags_ に `u` が含まれていれば、_u_ を *true* とし、そうでなければ *false* とする。
+          1. _flags_ に `v` が含まれていれば、_v_ を *true* とし、そうでなければ *false* とする。
           1. _patternText_ を _literal_ の BodyText とする。
-          1. _u_ が *false* かつ _v_ が *false* の場合、
+          1. _u_ が *false* かつ _v_ も *false* であれば、
             1. _stringValue_ を CodePointsToString(_patternText_) とする。
-            1. _patternText_ を _stringValue_ の 16 ビット要素それぞれをユニコード BMP コードポイントとして解釈したときのコードポイント列とする。UTF-16 デコードは適用しない。
+            1. _stringValue_ の16ビット要素それぞれを Unicode BMP コードポイントとして解釈した結果のコードポイント列を _patternText_ とする。要素には UTF-16 デコードは適用されない。
           1. _parseResult_ を ParsePattern(_patternText_, _u_, _v_) とする。
-          1. _parseResult_ が Parse Node の場合、*true* を返す。
+          1. _parseResult_ が Parse Node であれば、*true* を返す。
           1. *false* を返す。
         </emu-alg>
       </emu-clause>
@@ -23756,13 +23758,13 @@
       </dl>
       <emu-grammar>FunctionExpression : `function` `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ *""* を代入。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |FunctionExpression| にマッチしたソーステキストとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|FunctionExpression| がマッチしたソーステキストとする。
         1. _closure_ を OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |FormalParameters|, |FunctionBody|, ~non-lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
-        1. MakeConstructor(_closure_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
+        1. MakeConstructor(_closure_) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-grammar>FunctionExpression : `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
@@ -23908,12 +23910,12 @@
       </dl>
       <emu-grammar>ArrowFunction : ArrowParameters `=>` ConciseBody</emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ *""* を代入。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |ArrowFunction| にマッチしたソーステキストとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|ArrowFunction| がマッチしたソーステキストとする。
         1. [id="step-arrowfunction-evaluation-functioncreate"] _closure_ を OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |ArrowParameters|, |ConciseBody|, ~lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-note>
@@ -24301,14 +24303,14 @@
       </dl>
       <emu-grammar>GeneratorExpression : `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ _name_ に *""* を設定。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |GeneratorExpression| にマッチしたソーステキストとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|GeneratorExpression| がマッチしたソーステキストとする。
         1. _closure_ を OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |GeneratorBody|, ~non-lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _prototype_ を OrdinaryObjectCreate(%GeneratorPrototype%) とする。
-        1. ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* }) を実行。
+        1. ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* }) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-grammar>GeneratorExpression : `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
@@ -24536,14 +24538,14 @@
         AsyncGeneratorExpression : `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ _name_ に *""* を設定。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |AsyncGeneratorExpression| にマッチしたソーステキストとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|AsyncGeneratorExpression| がマッチしたソーステキストとする。
         1. _closure_ を OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _prototype_ を OrdinaryObjectCreate(%AsyncGeneratorPrototype%) とする。
-        1. ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* }) を実行。
+        1. ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* }) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-grammar>
@@ -25311,8 +25313,8 @@
       </emu-note>
       <emu-grammar>ClassExpression : `class` ClassTail</emu-grammar>
       <emu-alg>
-        1. _sourceText_ を |ClassExpression| にマッチしたソースとする。
-        1. ? ClassDefinitionEvaluation(|ClassTail|, *undefined*, *""*, _sourceText_) を返す。
+        1. _sourceText_ を、|ClassExpression| がマッチしたソーステキストとする。
+        1. |ClassTail| の ClassDefinitionEvaluation を引数 *undefined*、空文字列、および _sourceText_ で呼び出し、その結果を返す。
       </emu-alg>
       <emu-grammar>ClassExpression : `class` BindingIdentifier ClassTail</emu-grammar>
       <emu-alg>
@@ -25449,12 +25451,12 @@
         AsyncFunctionExpression : `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ *""* を設定。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |AsyncFunctionExpression| にマッチしたソースとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|AsyncFunctionExpression| がマッチしたソーステキストとする。
         1. _closure_ を OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-grammar>
@@ -25620,27 +25622,27 @@
         AsyncArrowFunction : `async` AsyncArrowBindingIdentifier `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ *""* を設定。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |AsyncArrowFunction| にマッチしたソースとする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|AsyncArrowFunction| がマッチしたソーステキストとする。
         1. _parameters_ を |AsyncArrowBindingIdentifier| とする。
         1. _closure_ を OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, _parameters_, |AsyncConciseBody|, ~lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _closure_ を返す。
       </emu-alg>
       <emu-grammar>
         AsyncArrowFunction : CoverCallExpressionAndAsyncArrowHead `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. _name_ が存在しなければ *""* を設定。
-        1. _env_ を実行中コンテキストの LexicalEnvironment とする。
-        1. _privateEnv_ を実行中コンテキストの PrivateEnvironment とする。
-        1. _sourceText_ を |AsyncArrowFunction| にマッチしたソースとする。
-        1. _head_ を |CoverCallExpressionAndAsyncArrowHead| が覆う |AsyncArrowHead| とする。
+        1. _name_ が存在しない場合、_name_ に空文字列を設定する。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _privateEnv_ を、実行中の実行コンテキストの PrivateEnvironment とする。
+        1. _sourceText_ を、|AsyncArrowFunction| がマッチしたソーステキストとする。
+        1. _head_ を |CoverCallExpressionAndAsyncArrowHead| でカバーされた |AsyncArrowHead| とする。
         1. _parameters_ を _head_ の |ArrowFormalParameters| とする。
         1. _closure_ を OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, _parameters_, |AsyncConciseBody|, ~lexical-this~, _env_, _privateEnv_) とする。
-        1. SetFunctionName(_closure_, _name_) を実行。
+        1. SetFunctionName(_closure_, _name_) を実行する。
         1. _closure_ を返す。
       </emu-alg>
     </emu-clause>
@@ -32392,7 +32394,7 @@
         <emu-note>
           <p>上記規則より高精度な変換を提供する実装では、手順 <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> の代替指針として以下を推奨する:</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. _e_、_n_、_ff_ を整数とし、_ff_ ≥ 0、10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) に等しく、かつ _ff_ ができるだけ小さいようにする。_n_ の候補が複数ある場合は、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) に最も近い値となる _n_ を選ぶ。そのような _n_ が 2 つある場合は、偶数の方を選ぶ。
+            1. _e_、_n_、_ff_ を整数とし、_ff_ ≥ 0、10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) であり、_ff_ は可能な限り小さいとする。_n_ の候補が複数ある場合は、𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) が 𝔽(_x_) に最も近いものを選ぶ。そのような _n_ が2つある場合は、偶数の方を選ぶ。
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -38757,29 +38759,30 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _pattern_ が *undefined* なら _P_ を空文字列とする。
-          1. そうでなければ _P_ を ? ToString(_pattern_) とする。
-          1. _flags_ が *undefined* なら _F_ を空文字列とする。
-          1. そうでなければ _F_ を ? ToString(_flags_) とする。
-          1. _F_ が *"d"*, *"g"*, *"i"*, *"m"*, *"s"*, *"u"*, *"v"*, *"y"* 以外のコードユニットを含むか、あるいは同じコードユニットを複数回含むなら *SyntaxError* 例外を投げる。
-          1. _F_ が *"i"* を含むなら _i_ を *true*、そうでなければ *false* とする。
-          1. _F_ が *"m"* を含むなら _m_ を *true*、そうでなければ *false* とする。
-          1. _F_ が *"s"* を含むなら _s_ を *true*、そうでなければ *false* とする。
-          1. _F_ が *"u"* を含むなら _u_ を *true*、そうでなければ *false* とする。
-          1. _F_ が *"v"* を含むなら _v_ を *true*、そうでなければ *false* とする。
-          1. _u_ が *true* もしくは _v_ が *true* の場合
+          1. _pattern_ が *undefined* の場合、_P_ に空文字列を設定する。
+          1. それ以外の場合、_P_ を ? ToString(_pattern_) とする。
+          1. _flags_ が *undefined* の場合、_F_ に空文字列を設定する。
+          1. それ以外の場合、_F_ を ? ToString(_flags_) とする。
+          1. _F_ に *"d"*、*"g"*、*"i"*、*"m"*、*"s"*、*"u"*、*"v"*、*"y"* 以外のコードユニットが含まれていれば、*SyntaxError* 例外をスローする。
+          1. _F_ に同じコードユニットが2回以上含まれていれば、*SyntaxError* 例外をスローする。
+          1. _F_ に *"i"* が含まれていれば、_i_ を *true*、そうでなければ *false* とする。
+          1. _F_ に *"m"* が含まれていれば、_m_ を *true*、そうでなければ *false* とする。
+          1. _F_ に *"s"* が含まれていれば、_s_ を *true*、そうでなければ *false* とする。
+          1. _F_ に *"u"* が含まれていれば、_u_ を *true*、そうでなければ *false* とする。
+          1. _F_ に *"v"* が含まれていれば、_v_ を *true*、そうでなければ *false* とする。
+          1. _u_ が *true* または _v_ が *true* の場合、
             1. _patternText_ を StringToCodePoints(_P_) とする。
-          1. そうでなければ
-            1. _patternText_ を _P_ の各 16-bit 要素を Unicode BMP コードポイントとして解釈した結果とする (UTF-16 デコードは行わない)。
+          1. それ以外の場合、
+            1. _patternText_ を _P_ の16ビット要素それぞれを Unicode BMP コードポイントとして解釈した結果のコードポイント列とする。要素には UTF-16 デコードは適用されない。
           1. _parseResult_ を ParsePattern(_patternText_, _u_, _v_) とする。
-          1. _parseResult_ が空でない *SyntaxError* オブジェクトの List なら *SyntaxError* 例外を投げる。
-          1. アサート: _parseResult_ は |Pattern| パースノードである。
+          1. _parseResult_ が空でない *SyntaxError* オブジェクトのリストであれば、*SyntaxError* 例外をスローする。
+          1. アサート: _parseResult_ は |Pattern| Parse Node である。
           1. _obj_.[[OriginalSource]] に _P_ を設定する。
           1. _obj_.[[OriginalFlags]] に _F_ を設定する。
           1. _capturingGroupsCount_ を CountLeftCapturingParensWithin(_parseResult_) とする。
           1. _rer_ を RegExp Record { [[IgnoreCase]]: _i_, [[Multiline]]: _m_, [[DotAll]]: _s_, [[Unicode]]: _u_, [[UnicodeSets]]: _v_, [[CapturingGroupsCount]]: _capturingGroupsCount_ } とする。
           1. _obj_.[[RegExpRecord]] に _rer_ を設定する。
-          1. _obj_.[[RegExpMatcher]] に 引数 _rer_ で _parseResult_ の CompilePattern を設定する。
+          1. _obj_.[[RegExpMatcher]] に _parseResult_ と引数 _rer_ で CompilePattern を実行した結果を設定する。
           1. ? <emu-meta suppress-effects="user-code">Set(_obj_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)</emu-meta> を実行する。
           1. _obj_ を返す。
         </emu-alg>
@@ -40991,7 +40994,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header"></dl>
           <emu-alg>
-            1. _x_ と _y_ が共に *undefined* なら *+0*<sub>𝔽</sub>。
+            1. _x_ が *undefined* かつ _y_ も *undefined* の場合、*+0*<sub>𝔽</sub> を返す。
             1. _x_ が *undefined* なら *1*<sub>𝔽</sub>。
             1. _y_ が *undefined* なら *-1*<sub>𝔽</sub>。
             1. _comparator_ が *undefined* でなければ
@@ -42785,18 +42788,18 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. アサート: _x_ と _y_ は両方 Number か両方 BigInt。
-          1. _comparator_ が *undefined* でないなら
-            1. _v_ = ? ToNumber(? Call(_comparator_, *undefined*, « _x_, _y_ »))。
-            1. _v_ が *NaN* なら *+0*<sub>𝔽</sub>。
+          1. アサート: _x_ は Number かつ _y_ も Number、または _x_ は BigInt かつ _y_ も BigInt である。
+          1. _comparator_ が *undefined* でない場合、
+            1. _v_ を ? ToNumber(? Call(_comparator_, *undefined*, « _x_, _y_ »)) とする。
+            1. _v_ が *NaN* であれば、*+0*<sub>𝔽</sub> を返す。
             1. _v_ を返す。
-          1. _x_ と _y_ が両方 *NaN* なら *+0*<sub>𝔽</sub>。
-          1. _x_ が *NaN* なら *1*<sub>𝔽</sub>。
-          1. _y_ が *NaN* なら *-1*<sub>𝔽</sub>。
-          1. _x_ &lt; _y_ なら *-1*<sub>𝔽</sub>。
-          1. _x_ > _y_ なら *1*<sub>𝔽</sub>。
-          1. _x_ が *-0*<sub>𝔽</sub> かつ _y_ が *+0*<sub>𝔽</sub> なら *-1*<sub>𝔽</sub>。
-          1. _x_ が *+0*<sub>𝔽</sub> かつ _y_ が *-0*<sub>𝔽</sub> なら *1*<sub>𝔽</sub>。
+          1. _x_ が *NaN* かつ _y_ も *NaN* であれば、*+0*<sub>𝔽</sub> を返す。
+          1. _x_ が *NaN* であれば、*1*<sub>𝔽</sub> を返す。
+          1. _y_ が *NaN* であれば、*-1*<sub>𝔽</sub> を返す。
+          1. _x_ &lt; _y_ であれば、*-1*<sub>𝔽</sub> を返す。
+          1. _x_ > _y_ であれば、*1*<sub>𝔽</sub> を返す。
+          1. _x_ が *-0*<sub>𝔽</sub> かつ _y_ が *+0*<sub>𝔽</sub> であれば、*-1*<sub>𝔽</sub> を返す。
+          1. _x_ が *+0*<sub>𝔽</sub> かつ _y_ が *-0*<sub>𝔽</sub> であれば、*1*<sub>𝔽</sub> を返す。
           1. *+0*<sub>𝔽</sub> を返す。
         </emu-alg>
         <emu-note>
@@ -49144,7 +49147,7 @@ THH:mm:ss.sss
           1. _unwrap_ をパラメータ (_v_) を持ち _done_ を捕捉し呼び出されると次を実行する新たな Abstract Closure とし、CreateIteratorResultObject(_v_, _done_) を返す。
           1. _onFulfilled_ を CreateBuiltinFunction(_unwrap_, 1, *""*, « ») とする。
           1. 注: _onFulfilled_ は IteratorResult オブジェクトの *"value"* プロパティを処理する際、その値が promise であれば待機し、新たな「unwrapped」 IteratorResult オブジェクトとして再パッケージするために使用される。
-          1. もし _done_ が *true* または _closeOnRejection_ が *false* なら
+          1. _done_ が *true* または _closeOnRejection_ が *false* の場合、
             1. _onRejected_ を *undefined* とする。
           1. それ以外
             1. _closeIterator_ をパラメータ (_error_) を持ち _syncIteratorRecord_ を捕捉し呼び出されると ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_)) を返す新たな Abstract Closure とする。
@@ -52127,11 +52130,11 @@ THH:mm:ss.sss
     <h1>競合</h1>
     <p>実行 _execution_ および SharedDataBlockEventSet(_execution_) に含まれるイベント _E_ と _D_ について、次のアルゴリズムが *true* を返す場合、_E_ と _D_ は <em>競合（race）</em> している。</p>
     <emu-alg>
-      1. _E_ と _D_ が同じ Shared Data Block event でない場合、
-        1. _execution_ において _E_ happens-before _D_ かつ _D_ happens-before _E_ の両方が成り立たない場合、
-          1. _E_ と _D_ の両方が WriteSharedMemory または ReadModifyWriteSharedMemory イベントであり、かつ _E_ と _D_ のメモリ範囲が互いに素でない場合、
+      1. _E_ と _D_ が同じ Shared Data Block イベントでない場合、
+        1. 両方とも _E_ が _execution_ で _D_ よりも前、かつ _D_ が _execution_ で _E_ よりも前、というわけでない場合、
+          1. _E_ が WriteSharedMemory または ReadModifyWriteSharedMemory イベントであり、_D_ も WriteSharedMemory または ReadModifyWriteSharedMemory イベントであり、かつ _E_ と _D_ のメモリ範囲が独立していない場合、
             1. *true* を返す。
-          1. _execution_ において _E_ reads-from _D_ または _D_ reads-from _E_ である場合、
+          1. _E_ が _execution_ で _D_ から読んでいる、または _D_ が _execution_ で _E_ から読んでいる場合、
             1. *true* を返す。
       1. *false* を返す。
     </emu-alg>

@@ -2492,7 +2492,7 @@
           <emu-note>
             <p>对于提供比上述规则更精确转换的实现，建议参考如下步骤 <emu-xref href="#step-number-tostring-intermediate-values"></emu-xref> 的替代版本：</p>
             <emu-alg replaces-step="step-number-tostring-intermediate-values">
-              1. 令 _n_、_k_、_s_ 为整数，满足 _k_ ≥ 1，_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>，𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) 为 _x_，且 _k_ 尽可能小。如果有多个 _s_，选择 _s_ × _radix_<sup>_n_ - _k_</sup> 最接近 ℝ(_x_) 的那个；如有两个结果，选偶数的那个。注意 _k_ 是用基数 _radix_ 表示 _s_ 的位数，且 _s_ 不能被 _radix_ 整除。
+              1. 令 _n_、_k_ 和 _s_ 为整数，满足 _k_ ≥ 1、_radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>、𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) 的结果为 _x_，并且 _k_ 要尽可能小。如果存在多个 _s_ 的可能选项，选择使得 _s_ × _radix_<sup>_n_ - _k_</sup> 最接近 ℝ(_x_) 的 _s_；若有两个这样的 _s_，则选取偶数的那个。注意，_k_ 是用进制 _radix_ 表示 _s_ 时的数字位数，并且 _s_ 不能被 _radix_ 整除。
             </emu-alg>
           </emu-note>
           <emu-note>
@@ -5944,17 +5944,18 @@
       </dl>
       <emu-alg>
         1. 断言：SameType(_x_, _y_) 为 *true*。
-        1. 如果 _x_ 为 *undefined* 或 *null*，返回 *true*。
-        1. 如果 _x_ 是 BigInt，则
+        1. 如果 _x_ 是 *undefined* 或 *null*，返回 *true*。
+        1. 如果 _x_ 是 BigInt，
           1. 返回 BigInt::equal(_x_, _y_)。
-        1. 如果 _x_ 是字符串，则
-          1. 如果 _x_ 和 _y_ 长度相同且对应位置的代码单元也相同，返回 *true*。
-          1. 返回 *false*。
-        1. 如果 _x_ 是布尔值，则
-          1. 如果 _x_ 和 _y_ 同为 *true* 或同为 *false*，返回 *true*。
-          1. 返回 *false*。
-        1. 注：所有其它 ECMAScript 语言值都按标识比较。
-        1. 如果 _x_ 与 _y_ 相同，返回 *true*。
+        1. 如果 _x_ 是字符串，
+          1. 如果 _x_ 和 _y_ 长度相同且每个位置的码元都相同，返回 *true*。
+          1. 否则返回 *false*。
+        1. 如果 _x_ 是布尔值，
+          1. 如果 _x_ 为 *true* 且 _y_ 为 *true*，返回 *true*。
+          1. 如果 _x_ 为 *false* 且 _y_ 为 *false*，返回 *true*。
+          1. 否则返回 *false*。
+        1. 注：所有其他 ECMAScript 语言值通过标识（identity）来比较。
+        1. 如果 _x_ 等于 _y_，返回 *true*。
         1. 返回 *false*。
       </emu-alg>
       <emu-note>
@@ -6011,7 +6012,7 @@
           1. 断言：_nx_ 为 BigInt。
           1. 返回 BigInt::lessThan(_nx_, _ny_)。
         1. 断言：_nx_ 为 BigInt 且 _ny_ 为数字，或 _nx_ 为数字且 _ny_ 为 BigInt。
-        1. 如果 _nx_ 或 _ny_ 为 *NaN*，返回 *undefined*。
+        1. 如果 _nx_ 是 *NaN* 或 _ny_ 是 *NaN*，返回 *undefined*。
         1. 如果 _nx_ 为 *-∞*<sub>𝔽</sub> 或 _ny_ 为 *+∞*<sub>𝔽</sub>，返回 *true*。
         1. 如果 _nx_ 为 *+∞*<sub>𝔽</sub> 或 _ny_ 为 *-∞*<sub>𝔽</sub>，返回 *false*。
         1. 如果 ℝ(_nx_) &lt; ℝ(_ny_)，返回 *true*。
@@ -11034,7 +11035,7 @@
             <dd>Global Environment Record _envRec_</dd>
 
             <dt>描述</dt>
-            <dd>尝试更改名称为 _N_ 的当前绑定值为 _V_。若为不可变绑定且 _S_ 为 *true*，抛 *TypeError*。若属性不存在或不可写，处理取决于 _S_。</dd>
+            <dd>它试图将名称为 _N_ 的标识符当前绑定的值修改为 _V_。如果该绑定是不可变绑定且 _S_ 为 *true*，则抛出 *TypeError*。名为 _N_ 的绑定通常已经存在，但如果它不存在或者当前不可写，错误处理则由 _S_ 决定。</dd>
           </dl>
           <emu-alg>
             1. 令 _DclRec_ 为 _envRec_.[[DeclarativeRecord]]。
@@ -18774,15 +18775,16 @@
         </dl>
         <emu-alg>
           1. 令 _flags_ 为 _literal_ 的 FlagText。
-          1. 如果 _flags_ 包含除 `d`、`g`、`i`、`m`、`s`、`u`、`v` 或 `y` 之外的任何码位，或 _flags_ 中某个码位出现多于一次，则返回 *false*。
-          1. 如果 _flags_ 包含 `u`，令 _u_ 为 *true*；否则令 _u_ 为 *false*。
-          1. 如果 _flags_ 包含 `v`，令 _v_ 为 *true*；否则令 _v_ 为 *false*。
+          1. 如果 _flags_ 包含 `d`、`g`、`i`、`m`、`s`、`u`、`v`、`y` 以外的其他码点，则返回 *false*。
+          1. 如果 _flags_ 中有任何码点出现多次，则返回 *false*。
+          1. 如果 _flags_ 包含 `u`，则令 _u_ 为 *true*；否则令 _u_ 为 *false*。
+          1. 如果 _flags_ 包含 `v`，则令 _v_ 为 *true*；否则令 _v_ 为 *false*。
           1. 令 _patternText_ 为 _literal_ 的 BodyText。
           1. 如果 _u_ 为 *false* 且 _v_ 为 *false*，则
             1. 令 _stringValue_ 为 CodePointsToString(_patternText_)。
-            1. 设置 _patternText_ 为将 _stringValue_ 的每个 16 位元素都解释为 Unicode BMP 码位后得到的码位序列。不会对这些元素进行 UTF-16 解码。
+            1. 将 _patternText_ 设为将 _stringValue_ 的每个 16 位元素按照 Unicode BMP 码点解释而成的码点序列。不对这些元素应用 UTF-16 解码。
           1. 令 _parseResult_ 为 ParsePattern(_patternText_, _u_, _v_) 的结果。
-          1. 如果 _parseResult_ 是 Parse Node，则返回 *true*。
+          1. 如果 _parseResult_ 是一个 Parse Node，返回 *true*。
           1. 返回 *false*。
         </emu-alg>
       </emu-clause>
@@ -23563,10 +23565,10 @@
       </dl>
       <emu-grammar>FunctionExpression : `function` `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |FunctionExpression| 匹配的源文本。
+        1. 令 _sourceText_ 为 |FunctionExpression| 匹配到的源文本。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |FormalParameters|, |FunctionBody|, ~non-lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
         1. 执行 MakeConstructor(_closure_)。
@@ -23715,10 +23717,10 @@
       </dl>
       <emu-grammar>ArrowFunction : ArrowParameters `=>` ConciseBody</emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |ArrowFunction| 匹配的源文本。
+        1. 令 _sourceText_ 为 |ArrowFunction| 匹配到的源文本。
         1. [id="step-arrowfunction-evaluation-functioncreate"] 令 _closure_ 为 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, |ArrowParameters|, |ConciseBody|, ~lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
         1. 返回 _closure_。
@@ -24105,10 +24107,10 @@
       </dl>
       <emu-grammar>GeneratorExpression : `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |GeneratorExpression| 匹配的源文本。
+        1. 令 _sourceText_ 为 |GeneratorExpression| 匹配到的源文本。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%GeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |GeneratorBody|, ~non-lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
         1. 令 _prototype_ 为 OrdinaryObjectCreate(%GeneratorPrototype%)。
@@ -24340,14 +24342,14 @@
         AsyncGeneratorExpression : `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果未提供 _name_，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |AsyncGeneratorExpression| 匹配的源文本。
+        1. 令 _sourceText_ 为 |AsyncGeneratorExpression| 匹配到的源文本。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%AsyncGeneratorFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncGeneratorBody|, ~non-lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
         1. 令 _prototype_ 为 OrdinaryObjectCreate(%AsyncGeneratorPrototype%)。
-        1. 执行 ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* })。
+        1. 执行 ! DefinePropertyOrThrow(_closure_, *"prototype"*, PropertyDescriptor { [[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false* )。
         1. 返回 _closure_。
       </emu-alg>
       <emu-grammar>
@@ -25112,8 +25114,8 @@
       </emu-note>
       <emu-grammar>ClassExpression : `class` ClassTail</emu-grammar>
       <emu-alg>
-        1. 令 _sourceText_ 为 |ClassExpression| 匹配的源文本。
-        1. 返回 ? ClassDefinitionEvaluation of |ClassTail|，参数 *undefined*、*""* 与 _sourceText_。
+        1. 令 _sourceText_ 为 |ClassExpression| 匹配到的源文本。
+        1. 返回 |ClassTail| 的 ClassDefinitionEvaluation，参数为 *undefined*、空字符串和 _sourceText_。
       </emu-alg>
       <emu-grammar>ClassExpression : `class` BindingIdentifier ClassTail</emu-grammar>
       <emu-alg>
@@ -25250,10 +25252,10 @@
         AsyncFunctionExpression : `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
-        1. 令 _env_ 为运行执行上下文的 LexicalEnvironment。
-        1. 令 _privateEnv_ 为运行执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |AsyncFunctionExpression| 匹配的源文本。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
+        1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
+        1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
+        1. 令 _sourceText_ 为 |AsyncFunctionExpression| 匹配到的源文本。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, |FormalParameters|, |AsyncFunctionBody|, ~non-lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
         1. 返回 _closure_。
@@ -25421,10 +25423,10 @@
         AsyncArrowFunction : `async` AsyncArrowBindingIdentifier `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |AsyncArrowFunction| 匹配的源文本。
+        1. 令 _sourceText_ 为 |AsyncArrowFunction| 匹配到的源文本。
         1. 令 _parameters_ 为 |AsyncArrowBindingIdentifier|。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, _parameters_, |AsyncConciseBody|, ~lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
@@ -25434,11 +25436,11 @@
         AsyncArrowFunction : CoverCallExpressionAndAsyncArrowHead `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. 若 _name_ 不存在，设 _name_ 为 *""*。
+        1. 如果 _name_ 不存在，则将 _name_ 设为空字符串。
         1. 令 _env_ 为当前执行上下文的 LexicalEnvironment。
         1. 令 _privateEnv_ 为当前执行上下文的 PrivateEnvironment。
-        1. 令 _sourceText_ 为 |AsyncArrowFunction| 匹配的源文本。
-        1. 令 _head_ 为 |CoverCallExpressionAndAsyncArrowHead| 覆盖的 |AsyncArrowHead|。
+        1. 令 _sourceText_ 为 |AsyncArrowFunction| 匹配到的源文本。
+        1. 令 _head_ 为 |CoverCallExpressionAndAsyncArrowHead| 所涵盖的 |AsyncArrowHead|。
         1. 令 _parameters_ 为 _head_ 的 |ArrowFormalParameters|。
         1. 令 _closure_ 为 OrdinaryFunctionCreate(%AsyncFunction.prototype%, _sourceText_, _parameters_, |AsyncConciseBody|, ~lexical-this~, _env_, _privateEnv_)。
         1. 执行 SetFunctionName(_closure_, _name_)。
@@ -32034,7 +32036,7 @@
         <emu-note>
           <p>对于提供比上述规则更高精度转换的实现，建议使用下列替代版本的步骤 <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> 作为指导：</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. 令 _e_、_n_ 和 _ff_ 为整数，满足 _ff_ ≥ 0，10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>，𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) 等于 𝔽(_x_)，且 _ff_ 尽可能小。如果存在多个 _n_，选择使 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) 最接近 𝔽(_x_) 的 _n_。如果有两个这样的 _n_，选择偶数的那个。
+            1. 令 _e_、_n_ 和 _ff_ 为整数，满足 _ff_ ≥ 0，10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>，𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) 等于 𝔽(_x_)，并且 _ff_ 要尽可能小。如果存在多个 _n_ 的可能值，选择使 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) 最接近 𝔽(_x_) 的 _n_。如果有两个这样的 _n_，选择偶数的那个。
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -38397,29 +38399,30 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 如果 _pattern_ 是 *undefined*，令 _P_ 为空字符串。
+          1. 如果 _pattern_ 为 *undefined*，则令 _P_ 为空字符串。
           1. 否则，令 _P_ 为 ? ToString(_pattern_)。
-          1. 如果 _flags_ 是 *undefined*，令 _F_ 为空字符串。
+          1. 如果 _flags_ 为 *undefined*，则令 _F_ 为空字符串。
           1. 否则，令 _F_ 为 ? ToString(_flags_)。
-          1. 如果 _F_ 包含 *"d"*、*"g"*、*"i"*、*"m"*、*"s"*、*"u"*、*"v"*、*"y"* 之外的任一代码单元，或 _F_ 中任一代码单元出现多于一次，抛出 *SyntaxError* 异常。
-          1. 如果 _F_ 包含 *"i"*，令 _i_ 为 *true*；否则令 _i_ 为 *false*。
-          1. 如果 _F_ 包含 *"m"*，令 _m_ 为 *true*；否则令 _m_ 为 *false*。
-          1. 如果 _F_ 包含 *"s"*，令 _s_ 为 *true*；否则令 _s_ 为 *false*。
-          1. 如果 _F_ 包含 *"u"*，令 _u_ 为 *true*；否则令 _u_ 为 *false*。
-          1. 如果 _F_ 包含 *"v"*，令 _v_ 为 *true*；否则令 _v_ 为 *false*。
+          1. 如果 _F_ 包含 *"d"*、*"g"*、*"i"*、*"m"*、*"s"*、*"u"*、*"v"* 或 *"y"* 以外的任何码元，则抛出 *SyntaxError* 异常。
+          1. 如果 _F_ 中有任何码元出现多次，则抛出 *SyntaxError* 异常。
+          1. 如果 _F_ 包含 *"i"*，令 _i_ 为 *true*；否则为 *false*。
+          1. 如果 _F_ 包含 *"m"*，令 _m_ 为 *true*；否则为 *false*。
+          1. 如果 _F_ 包含 *"s"*，令 _s_ 为 *true*；否则为 *false*。
+          1. 如果 _F_ 包含 *"u"*，令 _u_ 为 *true*；否则为 *false*。
+          1. 如果 _F_ 包含 *"v"*，令 _v_ 为 *true*；否则为 *false*。
           1. 如果 _u_ 为 *true* 或 _v_ 为 *true*，则
             1. 令 _patternText_ 为 StringToCodePoints(_P_)。
           1. 否则，
-            1. 令 _patternText_ 为将 _P_ 的每个 16 位元素按 Unicode BMP 代码点解释的结果。不会对这些元素应用 UTF-16 解码。
-          1. 令 _parseResult_ 为 ParsePattern(_patternText_, _u_, _v_)。
-          1. 如果 _parseResult_ 是一个非空 *SyntaxError* 对象列表，抛出 *SyntaxError* 异常。
-          1. 断言：_parseResult_ 是一个 |Pattern| 解析节点。
-          1. 设 _obj_.[[OriginalSource]] 为 _P_。
-          1. 设 _obj_.[[OriginalFlags]] 为 _F_。
+            1. 令 _patternText_ 为将 _P_ 的每个 16 位元素解释为 Unicode BMP 码点后的结果。不对这些元素进行 UTF-16 解码。
+          1. 令 _parseResult_ 为 ParsePattern(_patternText_, _u_, _v_) 的结果。
+          1. 如果 _parseResult_ 是非空的 *SyntaxError* 对象列表，则抛出 *SyntaxError* 异常。
+          1. 断言：_parseResult_ 是一个 |Pattern| Parse Node。
+          1. 设置 _obj_.[[OriginalSource]] 为 _P_。
+          1. 设置 _obj_.[[OriginalFlags]] 为 _F_。
           1. 令 _capturingGroupsCount_ 为 CountLeftCapturingParensWithin(_parseResult_)。
           1. 令 _rer_ 为 RegExp 记录 { [[IgnoreCase]]: _i_, [[Multiline]]: _m_, [[DotAll]]: _s_, [[Unicode]]: _u_, [[UnicodeSets]]: _v_, [[CapturingGroupsCount]]: _capturingGroupsCount_ }。
-          1. 设 _obj_.[[RegExpRecord]] 为 _rer_。
-          1. 设 _obj_.[[RegExpMatcher]] 为 CompilePattern of _parseResult_ with argument _rer_。
+          1. 设置 _obj_.[[RegExpRecord]] 为 _rer_。
+          1. 设置 _obj_.[[RegExpMatcher]] 为以 _rer_ 为参数 CompilePattern(_parseResult_) 的返回值。
           1. 执行 ? <emu-meta suppress-effects="user-code">Set(_obj_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)</emu-meta>。
           1. 返回 _obj_。
         </emu-alg>
@@ -40561,7 +40564,7 @@ THH:mm:ss.sss
             ): either a normal completion containing a Number or an abrupt completion
           </h1>
           <emu-alg>
-            1. 若 _x_ 与 _y_ 均 *undefined* 返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _x_ 是 *undefined* 且 _y_ 是 *undefined*，返回 *+0*<sub>𝔽</sub>。
             1. 若 _x_ 为 *undefined* 返回 *1*<sub>𝔽</sub>。
             1. 若 _y_ 为 *undefined* 返回 *-1*<sub>𝔽</sub>。
             1. 若 _comparator_ 非 *undefined*：
@@ -42193,18 +42196,18 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：_x_ 与 _y_ 同为 Number，或 _x_ 与 _y_ 同为 BigInt。
-          1. 若 _comparator_ 不为 *undefined*，则
+          1. 断言：_x_ 和 _y_ 要么都是 Number，要么都是 BigInt。
+          1. 如果 _comparator_ 不为 *undefined*，则
             1. 令 _v_ 为 ? ToNumber(? Call(_comparator_, *undefined*, « _x_, _y_ »))。
-            1. 若 _v_ 为 *NaN*，返回 *+0*<sub>𝔽</sub>。
+            1. 如果 _v_ 是 *NaN*，返回 *+0*<sub>𝔽</sub>。
             1. 返回 _v_。
-          1. 若 _x_ 和 _y_ 均为 *NaN*，返回 *+0*<sub>𝔽</sub>。
-          1. 若 _x_ 为 *NaN*，返回 *1*<sub>𝔽</sub>。
-          1. 若 _y_ 为 *NaN*，返回 *-1*<sub>𝔽</sub>。
-          1. 若 _x_ &lt; _y_，返回 *-1*<sub>𝔽</sub>。
-          1. 若 _x_ > _y_，返回 *1*<sub>𝔽</sub>。
-          1. 若 _x_ 为 *-0*<sub>𝔽</sub> 且 _y_ 为 *+0*<sub>𝔽</sub>，返回 *-1*<sub>𝔽</sub>。
-          1. 若 _x_ 为 *+0*<sub>𝔽</sub> 且 _y_ 为 *-0*<sub>𝔽</sub>，返回 *1*<sub>𝔽</sub>。
+          1. 如果 _x_ 是 *NaN* 且 _y_ 是 *NaN*，返回 *+0*<sub>𝔽</sub>。
+          1. 如果 _x_ 是 *NaN*，返回 *1*<sub>𝔽</sub>。
+          1. 如果 _y_ 是 *NaN*，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _x_ &lt; _y_，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _x_ > _y_，返回 *1*<sub>𝔽</sub>。
+          1. 如果 _x_ 是 *-0*<sub>𝔽</sub> 且 _y_ 是 *+0*<sub>𝔽</sub>，返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _x_ 是 *+0*<sub>𝔽</sub> 且 _y_ 是 *-0*<sub>𝔽</sub>，返回 *1*<sub>𝔽</sub>。
           1. 返回 *+0*<sub>𝔽</sub>。
         </emu-alg>
         <emu-note>
@@ -48524,7 +48527,7 @@ THH:mm:ss.sss
             1. 返回 CreateIteratorResultObject(_v_, _done_)。
           1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)。
           1. 注：_onFulfilled_ 用于处理 IteratorResult 对象的 *"value"* 属性，以便在其值为 promise 时等待，并将结果重新打包为一个新的“解包后的” IteratorResult 对象。
-          1. 若 _done_ 为 *true*，或 _closeOnRejection_ 为 *false*，则
+          1. 如果 _done_ 为 *true* 或 _closeOnRejection_ 为 *false*，则
             1. 令 _onRejected_ 为 *undefined*。
           1. 否则，
             1. 令 _closeIterator_ 为一个新的具有参数 (_error_) 且捕获 _syncIteratorRecord_ 的抽象闭包，调用时执行：
@@ -51505,11 +51508,11 @@ THH:mm:ss.sss
     <h1>竞争（Races）</h1>
     <p>对于 execution _execution_ 和已包含在 SharedDataBlockEventSet(_execution_) 内的事件 _E_ 和 _D_，若下述算法返回 *true*，则 _E_ 和 _D_ 存在 <em>竞争</em>。</p>
     <emu-alg>
-      1. 如果 _E_ 和 _D_ 不是同一个 Shared Data Block 事件，则
-        1. 如果不存在 _E_ happens-before _D_ in _execution_ 且 _D_ happens-before _E_ in _execution_，则
-          1. 如果 _E_ 和 _D_ 均为 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，且 _E_ 和 _D_ 的内存区间不相交，则
+      1. 如果 _E_ 和 _D_ 不是同一个共享数据块事件，则
+        1. 如果不存在 _E_ 在 _execution_ 中先于 _D_ 以及 _D_ 在 _execution_ 中先于 _E_ 的情况，则
+          1. 如果 _E_ 是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，_D_ 也是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，并且 _E_ 和 _D_ 的内存范围不互不相交，则
             1. 返回 *true*。
-          1. 如果 _E_ reads-from _D_ in _execution_ 或 _D_ reads-from _E_ in _execution_，则
+          1. 如果 _E_ 在 _execution_ 中 reads-from _D_，或 _D_ 在 _execution_ 中 reads-from _E_，则
             1. 返回 *true*。
       1. 返回 *false*。
     </emu-alg>

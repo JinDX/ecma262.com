@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2027 语言规范"><meta property="og:description" content="简介
   本 Ecma 标准定义了 ECMAScript 2027 语言。这是 ECMAScript 语言规范的第十七版。ECMAScript 基于多种最初的技术，其中最著名的是 JavaScript（Netscape）和 JScript（Microsoft）。该语言由 Brendan Eich 在 Netscape 发明，并首次出现在该公司 Navigator 2.0 浏览器中。虽然 ECMAScript 最为人熟知的是作为网页浏览器中的嵌入式语言，但它也被广泛应用于浏览器之外的场景，包括服务器和嵌入式应用程序，并且已经发展成为全球最广泛使用的通用编程语言之一。
   ECMAScrip">
-<script src="..\assets\js\multipage.js?cache=5zAJPv7p" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<script src="..\assets\js\multipage.js?cache=6Rx8nZ6k" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="icon" href="https://tc39.es/ecma262/img/favicon.ico">
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
@@ -154,7 +154,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=2tLkZztC" defer=""></script><style>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=97uZ1zDc" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -953,40 +953,40 @@
   <emu-clause id="sec-races">
     <h1><span class="secnum">29.8</span> 竞争（Races）</h1>
     <p>对于 execution <var>execution</var> 和已包含在 <emu-xref aoid="SharedDataBlockEventSet" id="_ref_11639"><a href="memory-model.html#sec-sharedatablockeventset">SharedDataBlockEventSet</a></emu-xref>(<var>execution</var>) 内的事件 <var>E</var> 和 <var>D</var>，若下述算法返回 <emu-val>true</emu-val>，则 <var>E</var> 和 <var>D</var> 存在 <em>竞争</em>。</p>
-    <emu-alg><ol><li>如果 <var>E</var> 和 <var>D</var> 不是同一个 <emu-xref href="#sec-data-blocks" id="_ref_11640"><a href="ecmascript-data-types-and-values.html#sec-data-blocks">Shared Data Block</a></emu-xref> 事件，则<ol><li>如果不存在 <var>E</var> <emu-xref href="#sec-happens-before" id="_ref_11641"><a href="memory-model.html#sec-happens-before">happens-before</a></emu-xref> <var>D</var> in <var>execution</var> 且 <var>D</var> <emu-xref href="#sec-happens-before" id="_ref_11642"><a href="memory-model.html#sec-happens-before">happens-before</a></emu-xref> <var>E</var> in <var>execution</var>，则<ol><li>如果 <var>E</var> 和 <var>D</var> 均为 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11643"><a href="memory-model.html#sec-memory-model-fundamentals">WriteSharedMemory</a></emu-xref> 或 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11644"><a href="memory-model.html#sec-memory-model-fundamentals">ReadModifyWriteSharedMemory</a></emu-xref> 事件，且 <var>E</var> 和 <var>D</var> 的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11645"><a href="memory-model.html#sec-memory-model-fundamentals">内存区间</a></emu-xref>不相交，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li><li>如果 <var>E</var> <emu-xref href="#sec-reads-from" id="_ref_11646"><a href="memory-model.html#sec-reads-from">reads-from</a></emu-xref> <var>D</var> in <var>execution</var> 或 <var>D</var> <emu-xref href="#sec-reads-from" id="_ref_11647"><a href="memory-model.html#sec-reads-from">reads-from</a></emu-xref> <var>E</var> in <var>execution</var>，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li></ol></li></ol></li><li>返回 <emu-val>false</emu-val>。</li></ol></emu-alg>
+    <emu-alg><ol><li>如果 <var>E</var> 和 <var>D</var> 不是同一个<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11640"><a href="memory-model.html#sec-memory-model-fundamentals">共享数据块事件</a></emu-xref>，则<ol><li>如果不存在 <var>E</var> 在 <var>execution</var> 中先于 <var>D</var> 以及 <var>D</var> 在 <var>execution</var> 中先于 <var>E</var> 的情况，则<ol><li>如果 <var>E</var> 是 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11641"><a href="memory-model.html#sec-memory-model-fundamentals">WriteSharedMemory</a></emu-xref> 或 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11642"><a href="memory-model.html#sec-memory-model-fundamentals">ReadModifyWriteSharedMemory</a></emu-xref> 事件，<var>D</var> 也是 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11643"><a href="memory-model.html#sec-memory-model-fundamentals">WriteSharedMemory</a></emu-xref> 或 <emu-xref href="#sec-memory-model-fundamentals" id="_ref_11644"><a href="memory-model.html#sec-memory-model-fundamentals">ReadModifyWriteSharedMemory</a></emu-xref> 事件，并且 <var>E</var> 和 <var>D</var> 的内存范围不互不相交，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li><li>如果 <var>E</var> 在 <var>execution</var> 中 <emu-xref href="#sec-reads-from" id="_ref_11645"><a href="memory-model.html#sec-reads-from">reads-from</a></emu-xref> <var>D</var>，或 <var>D</var> 在 <var>execution</var> 中 <emu-xref href="#sec-reads-from" id="_ref_11646"><a href="memory-model.html#sec-reads-from">reads-from</a></emu-xref> <var>E</var>，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li></ol></li></ol></li><li>返回 <emu-val>false</emu-val>。</li></ol></emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-races">
     <h1><span class="secnum">29.9</span> 数据竞争（Data Races）</h1>
-    <p>对于 execution <var>execution</var> 和 <emu-xref aoid="SharedDataBlockEventSet" id="_ref_11648"><a href="memory-model.html#sec-sharedatablockeventset">SharedDataBlockEventSet</a></emu-xref>(<var>execution</var>) 内的事件 <var>E</var> 和 <var>D</var>，若下述算法返回 <emu-val>true</emu-val>，则它们存在 <dfn tabindex="-1">数据竞争</dfn>。</p>
-    <emu-alg><ol><li>如果 <var>E</var> 和 <var>D</var> 在 <var>execution</var> 中存在 <emu-xref href="#sec-races" id="_ref_840"><a href="memory-model.html#sec-races">竞争</a></emu-xref>，则<ol><li>如果 <var>E</var>.<var class="field">[[Order]]</var> 不是 <emu-const>seq-cst</emu-const> 或 <var>D</var>.<var class="field">[[Order]]</var> 不是 <emu-const>seq-cst</emu-const>，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li><li>如果 <var>E</var> 和 <var>D</var> 的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11649"><a href="memory-model.html#sec-memory-model-fundamentals">内存区间</a></emu-xref>重叠，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li></ol></li><li>返回 <emu-val>false</emu-val>。</li></ol></emu-alg>
+    <p>对于 execution <var>execution</var> 和 <emu-xref aoid="SharedDataBlockEventSet" id="_ref_11647"><a href="memory-model.html#sec-sharedatablockeventset">SharedDataBlockEventSet</a></emu-xref>(<var>execution</var>) 内的事件 <var>E</var> 和 <var>D</var>，若下述算法返回 <emu-val>true</emu-val>，则它们存在 <dfn tabindex="-1">数据竞争</dfn>。</p>
+    <emu-alg><ol><li>如果 <var>E</var> 和 <var>D</var> 在 <var>execution</var> 中存在 <emu-xref href="#sec-races" id="_ref_840"><a href="memory-model.html#sec-races">竞争</a></emu-xref>，则<ol><li>如果 <var>E</var>.<var class="field">[[Order]]</var> 不是 <emu-const>seq-cst</emu-const> 或 <var>D</var>.<var class="field">[[Order]]</var> 不是 <emu-const>seq-cst</emu-const>，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li><li>如果 <var>E</var> 和 <var>D</var> 的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11648"><a href="memory-model.html#sec-memory-model-fundamentals">内存区间</a></emu-xref>重叠，则<ol><li>返回 <emu-val>true</emu-val>。</li></ol></li></ol></li><li>返回 <emu-val>false</emu-val>。</li></ol></emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-data-race-freedom">
     <h1><span class="secnum">29.10</span> 无数据竞争（Data Race Freedom）</h1>
-    <p>若 <emu-xref aoid="SharedDataBlockEventSet" id="_ref_11650"><a href="memory-model.html#sec-sharedatablockeventset">SharedDataBlockEventSet</a></emu-xref>(<var>execution</var>) 中不存在任何处于<emu-xref href="#sec-data-races" id="_ref_11651"><a href="memory-model.html#sec-data-races">数据竞争</a></emu-xref>的事件对，则执行 <var>execution</var> 是<dfn tabindex="-1">无数据竞争</dfn>的。</p>
+    <p>若 <emu-xref aoid="SharedDataBlockEventSet" id="_ref_11649"><a href="memory-model.html#sec-sharedatablockeventset">SharedDataBlockEventSet</a></emu-xref>(<var>execution</var>) 中不存在任何处于<emu-xref href="#sec-data-races" id="_ref_11650"><a href="memory-model.html#sec-data-races">数据竞争</a></emu-xref>的事件对，则执行 <var>execution</var> 是<dfn tabindex="-1">无数据竞争</dfn>的。</p>
     <p>若某程序的所有执行都无数据竞争，则该程序是无数据竞争的。</p>
-    <p><emu-xref href="#sec-memory-model" id="_ref_11652"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>保证无数据竞争程序的全部事件都具有顺序一致性。</p>
+    <p><emu-xref href="#sec-memory-model" id="_ref_11651"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>保证无数据竞争程序的全部事件都具有顺序一致性。</p>
   </emu-clause>
 
   <emu-clause id="sec-shared-memory-guidelines">
     <h1><span class="secnum">29.11</span> 共享内存编程指南</h1>
     <emu-note><span class="note">Note 1</span><div class="note-contents">
       <p>以下是 ECMAScript 程序员在使用共享内存时的相关建议。</p>
-      <p>我们建议程序保持<emu-xref href="#sec-data-race-freedom" id="_ref_11653"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>（即确保不存在对同一内存地址的并发非原子操作）。<emu-xref href="#sec-data-race-freedom" id="_ref_11654"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>的程序具有交织语义，每个 agent 的求值语义中的每一步都可以与其他 agent 交织。在<emu-xref href="#sec-data-race-freedom" id="_ref_11655"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>程序下，不必理解<emu-xref href="#sec-memory-model" id="_ref_11656"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>的细节。细节并不会真正帮助你更好地编写 ECMAScript 代码。</p>
-      <p>更一般来说，即使程序不是<emu-xref href="#sec-data-race-freedom" id="_ref_11657"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>的，只要所有涉及原子操作的<emu-xref href="#sec-data-races" id="_ref_11658"><a href="memory-model.html#sec-data-races">数据竞争</a></emu-xref>都不存在，且发生竞争的操作具有相同的访问大小，程序可能依然是可预测的。让原子操作不参与竞争最简单的方式是确保原子和非原子操作访问不同的内存单元，并且不同大小的原子访问不会同时访问同一单元。实质上，程序应尽量把共享内存视为强类型内存。你仍不能依赖于参与竞争的非原子访问的顺序和时机，但如果内存视为强类型，则访问不会“撕裂”（即值的各位不会出现混杂）。</p>
+      <p>我们建议程序保持<emu-xref href="#sec-data-race-freedom" id="_ref_11652"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>（即确保不存在对同一内存地址的并发非原子操作）。<emu-xref href="#sec-data-race-freedom" id="_ref_11653"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>的程序具有交织语义，每个 agent 的求值语义中的每一步都可以与其他 agent 交织。在<emu-xref href="#sec-data-race-freedom" id="_ref_11654"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>程序下，不必理解<emu-xref href="#sec-memory-model" id="_ref_11655"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>的细节。细节并不会真正帮助你更好地编写 ECMAScript 代码。</p>
+      <p>更一般来说，即使程序不是<emu-xref href="#sec-data-race-freedom" id="_ref_11656"><a href="memory-model.html#sec-data-race-freedom">无数据竞争</a></emu-xref>的，只要所有涉及原子操作的<emu-xref href="#sec-data-races" id="_ref_11657"><a href="memory-model.html#sec-data-races">数据竞争</a></emu-xref>都不存在，且发生竞争的操作具有相同的访问大小，程序可能依然是可预测的。让原子操作不参与竞争最简单的方式是确保原子和非原子操作访问不同的内存单元，并且不同大小的原子访问不会同时访问同一单元。实质上，程序应尽量把共享内存视为强类型内存。你仍不能依赖于参与竞争的非原子访问的顺序和时机，但如果内存视为强类型，则访问不会“撕裂”（即值的各位不会出现混杂）。</p>
     </div></emu-note>
 
     <emu-note><span class="note">Note 2</span><div class="note-contents">
       <p>以下是 ECMAScript 实现者针对使用共享内存的程序编译器转换的建议。</p>
-      <p>在多 agent 环境下，允许大多数在单 agent 环境中有效的程序变换是很有必要的，这样可以确保多 agent 程序中每个 agent 的性能不会低于其在单 agent 情境下的表现。然而，这些变换通常难以评判。我们在此概述了一些关于程序变换的规范性规则（即这些规则要么隐含于<emu-xref href="#sec-memory-model" id="_ref_11659"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>，要么比<emu-xref href="#sec-memory-model" id="_ref_11660"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>更严格），但这些规则很可能不是完全穷尽的。这些规则旨在适用于那些发生在组成 <emu-xref href="#sec-agent-order" id="_ref_11661"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系的 Memory 事件被引入之前的程序变换。</p>
-      <p>定义 <dfn variants="agent-order slices" tabindex="-1">agent-order 切片</dfn> 为 <emu-xref href="#sec-agent-order" id="_ref_11662"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系中，属于单个 agent 的子集。</p>
-      <p>定义某次<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11663"><a href="memory-model.html#sec-memory-model-fundamentals">读事件</a></emu-xref>的 <dfn tabindex="-1">可能读取值</dfn>（possible read values）为所有有效执行中 <emu-xref aoid="ValueOfReadEvent" id="_ref_11664"><a href="memory-model.html#sec-valueofreadevent">ValueOfReadEvent</a></emu-xref> 的所有可能值之集合。</p>
+      <p>在多 agent 环境下，允许大多数在单 agent 环境中有效的程序变换是很有必要的，这样可以确保多 agent 程序中每个 agent 的性能不会低于其在单 agent 情境下的表现。然而，这些变换通常难以评判。我们在此概述了一些关于程序变换的规范性规则（即这些规则要么隐含于<emu-xref href="#sec-memory-model" id="_ref_11658"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>，要么比<emu-xref href="#sec-memory-model" id="_ref_11659"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>更严格），但这些规则很可能不是完全穷尽的。这些规则旨在适用于那些发生在组成 <emu-xref href="#sec-agent-order" id="_ref_11660"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系的 Memory 事件被引入之前的程序变换。</p>
+      <p>定义 <dfn variants="agent-order slices" tabindex="-1">agent-order 切片</dfn> 为 <emu-xref href="#sec-agent-order" id="_ref_11661"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系中，属于单个 agent 的子集。</p>
+      <p>定义某次<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11662"><a href="memory-model.html#sec-memory-model-fundamentals">读事件</a></emu-xref>的 <dfn tabindex="-1">可能读取值</dfn>（possible read values）为所有有效执行中 <emu-xref aoid="ValueOfReadEvent" id="_ref_11663"><a href="memory-model.html#sec-valueofreadevent">ValueOfReadEvent</a></emu-xref> 的所有可能值之集合。</p>
       <p>任何在无共享内存场景下有效的 agent-order 切片转换，在有共享内存下同样有效，但需遵循以下例外：</p>
       <ul>
         <li>
-          <p><em>原子操作不可改变</em>：程序变换不得导致 <emu-xref href="#sec-agent-order" id="_ref_11665"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系中 <var class="field">[[Order]]</var> 为 <emu-const>seq-cst</emu-const> 的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11666"><a href="memory-model.html#sec-memory-model-fundamentals">共享数据块事件</a></emu-xref>被移除、互相重排序，或与 <var class="field">[[Order]]</var> 为 <emu-const>unordered</emu-const> 的事件重排序。</p>
-          <p>（实际上，对重排序的禁止迫使编译器假定每个 <emu-const>seq-cst</emu-const> 操作都是一次同步，并会出现在最终的 <emu-xref href="#sec-memory-order" id="_ref_11667"><a href="memory-model.html#sec-memory-order">is-memory-order-before</a></emu-xref> 关系中，实际在无跨 agent 程序分析下也必须这样处理。同时编译器还假定所有调用、其中被调函数对 memory-order 影响未知时，也可能含有 <emu-const>seq-cst</emu-const> 操作。）</p>
+          <p><em>原子操作不可改变</em>：程序变换不得导致 <emu-xref href="#sec-agent-order" id="_ref_11664"><a href="memory-model.html#sec-agent-order">is-agent-order-before</a></emu-xref> 关系中 <var class="field">[[Order]]</var> 为 <emu-const>seq-cst</emu-const> 的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11665"><a href="memory-model.html#sec-memory-model-fundamentals">共享数据块事件</a></emu-xref>被移除、互相重排序，或与 <var class="field">[[Order]]</var> 为 <emu-const>unordered</emu-const> 的事件重排序。</p>
+          <p>（实际上，对重排序的禁止迫使编译器假定每个 <emu-const>seq-cst</emu-const> 操作都是一次同步，并会出现在最终的 <emu-xref href="#sec-memory-order" id="_ref_11666"><a href="memory-model.html#sec-memory-order">is-memory-order-before</a></emu-xref> 关系中，实际在无跨 agent 程序分析下也必须这样处理。同时编译器还假定所有调用、其中被调函数对 memory-order 影响未知时，也可能含有 <emu-const>seq-cst</emu-const> 操作。）</p>
         </li>
         <li>
           <p><em>读取需稳定</em>：每个共享内存读取在一次执行中只能见到唯一值。</p>
@@ -994,20 +994,20 @@
         </li>
         <li>
           <p><em>写入需稳定</em>：所有可观察到的对共享内存的写都必须基于执行过程产生。</p>
-          <p>（如：某些变换不得引入新的可观察写入，比如用对更大内存的读改写操作写入小数据，在程序无法写出的值被写入、或者读取后又立即写回，而该地址可能已被其它 agent <emu-xref href="#sec-syntactic-grammar" id="_ref_11668"><a href="notational-conventions.html#sec-syntactic-grammar">覆盖</a></emu-xref>。）</p>
+          <p>（如：某些变换不得引入新的可观察写入，比如用对更大内存的读改写操作写入小数据，在程序无法写出的值被写入、或者读取后又立即写回，而该地址可能已被其它 agent <emu-xref href="#sec-syntactic-grammar" id="_ref_11667"><a href="notational-conventions.html#sec-syntactic-grammar">覆盖</a></emu-xref>。）</p>
         </li>
         <li>
           <p><em>读取的可能值不能为空</em>：程序变换不得导致某次共享内存读取的"可能读取值"集合为空。</p>
           <p>（直观上，这一规则实则限制了对写的变换，因为写只有能被读到才有模型效力。例如，允许合并/重排序写，但不得移除全部写入，否则可能会让某次读取无值可读。）</p>
         </li>
       </ul>
-      <p>例如：合并同一地址的多次非原子读取、重排序非原子读取、引入投机性非原子读取，合并同一地址的多次非原子写、重排序写到不同地址的非原子写，以及将非原子读取提出循环体外甚至影响终止性等，都是有效的变换。但需要<emu-xref href="#note-step" id="_ref_11669"><a href="notational-conventions.html#note-step">注意</a></emu-xref>别名 <emu-xref href="#typedarray" id="_ref_11670"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArray</a></emu-xref> 情况下难以证明地址不同。</p>
+      <p>例如：合并同一地址的多次非原子读取、重排序非原子读取、引入投机性非原子读取，合并同一地址的多次非原子写、重排序写到不同地址的非原子写，以及将非原子读取提出循环体外甚至影响终止性等，都是有效的变换。但需要<emu-xref href="#note-step" id="_ref_11668"><a href="notational-conventions.html#note-step">注意</a></emu-xref>别名 <emu-xref href="#typedarray" id="_ref_11669"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArray</a></emu-xref> 情况下难以证明地址不同。</p>
     </div></emu-note>
 
     <emu-note><span class="note">Note 3</span><div class="note-contents">
       <p>以下是 ECMAScript 实现者在为共享内存访问生成机器码时的建议。</p>
-      <p>对于<emu-xref href="#sec-memory-model" id="_ref_11671"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>不弱于 ARM 或 Power 的体系结构，非原子读写可直接编译为普通的存取指令。原子读写可编译为保证顺序一致性的指令，如无则应组合内存屏障：在普通存取指令前后分别插入屏障。读改写操作可编译为对应的读改写指令，例如 x86 的 <code>LOCK</code> 前缀、ARM 的 load-exclusive/store-exclusive、Power 的 load-link/store-conditional。</p>
-      <p>本<emu-xref href="#sec-memory-model" id="_ref_11672"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>的本意容许如下代码生成：</p>
+      <p>对于<emu-xref href="#sec-memory-model" id="_ref_11670"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>不弱于 ARM 或 Power 的体系结构，非原子读写可直接编译为普通的存取指令。原子读写可编译为保证顺序一致性的指令，如无则应组合内存屏障：在普通存取指令前后分别插入屏障。读改写操作可编译为对应的读改写指令，例如 x86 的 <code>LOCK</code> 前缀、ARM 的 load-exclusive/store-exclusive、Power 的 load-link/store-conditional。</p>
+      <p>本<emu-xref href="#sec-memory-model" id="_ref_11671"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>的本意容许如下代码生成：</p>
       <ul>
         <li>程序中的每个原子操作都视为必需。</li>
         <li>原子操作之间，及与非原子操作之间，都不得重排序。</li>
@@ -1021,8 +1021,8 @@
         <li>lock-free 的原子读改写：完整屏障、原子读改写指令序列、完整屏障。</li>
         <li>非 lock-free 原子需加自旋锁 acquire、完整屏障、非原子读写指令序列、完整屏障、自旋锁 release。</li>
       </ul>
-      <p>只要原子操作的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11673"><a href="memory-model.html#sec-memory-model-fundamentals">内存区间</a></emu-xref>不与非原子写或不同大小的原子操作竞争，这种方式就是正确的。<emu-xref href="#sec-memory-model" id="_ref_11674"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>实际上会把参与竞争的原子操作降级为非原子。而该映射方式比规范还强：它允许原子操作用来实现顺序一致的全局屏障，这是<emu-xref href="#sec-memory-model" id="_ref_11675"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>本身未实际保证的。</p>
-      <p>对上述模式的局部优化也是允许的，只要遵循<emu-xref href="#sec-memory-model" id="_ref_11676"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>约束。例如：</p>
+      <p>只要原子操作的<emu-xref href="#sec-memory-model-fundamentals" id="_ref_11672"><a href="memory-model.html#sec-memory-model-fundamentals">内存区间</a></emu-xref>不与非原子写或不同大小的原子操作竞争，这种方式就是正确的。<emu-xref href="#sec-memory-model" id="_ref_11673"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>实际上会把参与竞争的原子操作降级为非原子。而该映射方式比规范还强：它允许原子操作用来实现顺序一致的全局屏障，这是<emu-xref href="#sec-memory-model" id="_ref_11674"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>本身未实际保证的。</p>
+      <p>对上述模式的局部优化也是允许的，只要遵循<emu-xref href="#sec-memory-model" id="_ref_11675"><a href="memory-model.html#sec-memory-model">内存模型</a></emu-xref>约束。例如：</p>
       <ul>
         <li>可以根据平台移除冗余屏障。如 x86 上 lock-free 原子读写前后的屏障一般都可以省略，仅存储后需要，lock-free 原子读改写则完全无需屏障（因皆用 <code>LOCK</code> 前缀）。多数平台有不同强度的屏障，根据场景可用更弱屏障而不破坏顺序一致性。</li>
         <li>大多数现代平台都支持 ECMAScript 所需尺寸的 lock-free 原子，如需非 lock-free 的原子，原子的屏障通常能融合进锁的 acquire/release。最简单的方案是为每个 SharedArrayBuffer 配一个锁字。</li>
