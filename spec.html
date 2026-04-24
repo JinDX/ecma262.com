@@ -34005,7 +34005,7 @@
           <dd>It returns the full year associated with the integer part of _year_, interpreting any value in the inclusive interval from 0 to 99 as a count of years since the start of 1900. For alignment with the proleptic Gregorian calendar, "full year" is defined as the signed count of complete years since the start of year 0 (1 B.C.).</dd>
         </dl>
         <emu-alg>
-          1. If _year_ is *NaN*, return *NaN*.
+          1. If _year_ is one of *NaN*, *+∞*<sub>𝔽</sub>, or *-∞*<sub>𝔽</sub>, return *NaN*.
           1. Let _truncated_ be ! ToIntegerOrInfinity(_year_).
           1. If _truncated_ is in the inclusive interval from 0 to 99, return *1900*<sub>𝔽</sub> + 𝔽(_truncated_).
           1. Return 𝔽(_truncated_).
