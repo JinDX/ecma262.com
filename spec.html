@@ -2492,7 +2492,7 @@
           <emu-note>
             <p>For implementations that provide more accurate conversions than required by the rules above, it is recommended that the following alternative version of step <emu-xref href="#step-number-tostring-intermediate-values"></emu-xref> be used as a guideline:</p>
             <emu-alg replaces-step="step-number-tostring-intermediate-values">
-              1. Let _n_, _k_, and _s_ be integers such that _k_ ≥ 1, _radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>, 𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) is _x_, and _k_ is as small as possible. If there are multiple possibilities for _s_, choose the value of _s_ for which _s_ × _radix_<sup>_n_ - _k_</sup> is closest in value to ℝ(_x_). If there are two such possible values of _s_, choose the one that is even. Note that _k_ is the number of digits in the representation of _s_ using radix _radix_ and that _s_ is not divisible by _radix_.
+              1. Let _n_, _k_, and _s_ be integers such that _k_ ≥ 1, _radix_<sup>_k_ - 1</sup> ≤ _s_ &lt; _radix_<sup>_k_</sup>, 𝔽(_s_ × _radix_<sup>_n_ - _k_</sup>) is _x_, and _k_ is as small as possible. If there are multiple possibilities for _s_, choose _s_ such that _s_ × _radix_<sup>_n_ - _k_</sup> is closest to ℝ(_x_). If there are two such possible values of _s_, choose the one that is even. Note that _k_ is the number of digits in the representation of _s_ using radix _radix_ and that _s_ is not divisible by _radix_.
             </emu-alg>
           </emu-note>
           <emu-note>
@@ -5995,7 +5995,8 @@
           1. If _x_ and _y_ have the same length and the same code units in the same positions, return *true*.
           1. Return *false*.
         1. If _x_ is a Boolean, then
-          1. If _x_ and _y_ are both *true* or both *false*, return *true*.
+          1. If _x_ is *true* and _y_ is *true*, return *true*.
+          1. If _x_ is *false* and _y_ is *false*, return *true*.
           1. Return *false*.
         1. NOTE: All other ECMAScript language values are compared by identity.
         1. If _x_ is _y_, return *true*.
@@ -6055,7 +6056,7 @@
           1. Assert: _nx_ is a BigInt.
           1. Return BigInt::lessThan(_nx_, _ny_).
         1. Assert: _nx_ is a BigInt and _ny_ is a Number, or _nx_ is a Number and _ny_ is a BigInt.
-        1. If _nx_ or _ny_ is *NaN*, return *undefined*.
+        1. If _nx_ is *NaN* or _ny_ is *NaN*, return *undefined*.
         1. If _nx_ is *-∞*<sub>𝔽</sub> or _ny_ is *+∞*<sub>𝔽</sub>, return *true*.
         1. If _nx_ is *+∞*<sub>𝔽</sub> or _ny_ is *-∞*<sub>𝔽</sub>, return *false*.
         1. If ℝ(_nx_) &lt; ℝ(_ny_), return *true*.
@@ -13868,7 +13869,7 @@
             1. If _instantiatedVarNames_ does not contain _n_, then
               1. Append _n_ to _instantiatedVarNames_.
               1. Perform ! _varEnv_.CreateMutableBinding(_n_, *false*).
-              1. If _parameterBindings_ does not contain _n_, or if _functionNames_ contains _n_, then
+              1. If _parameterBindings_ does not contain _n_ or _functionNames_ contains _n_, then
                 1. Let _initialValue_ be *undefined*.
               1. Else,
                 1. Let _initialValue_ be ! _env_.GetBindingValue(_n_, *false*).
@@ -18826,7 +18827,8 @@
         </dl>
         <emu-alg>
           1. Let _flags_ be the FlagText of _literal_.
-          1. If _flags_ contains any code points other than `d`, `g`, `i`, `m`, `s`, `u`, `v`, or `y`, or if _flags_ contains any code point more than once, return *false*.
+          1. If _flags_ contains any code points other than `d`, `g`, `i`, `m`, `s`, `u`, `v`, or `y`, return *false*.
+          1. If _flags_ contains any code point more than once, return *false*.
           1. If _flags_ contains `u`, let _u_ be *true*; else let _u_ be *false*.
           1. If _flags_ contains `v`, let _v_ be *true*; else let _v_ be *false*.
           1. Let _patternText_ be the BodyText of _literal_.
@@ -23727,7 +23729,7 @@
       </dl>
       <emu-grammar>FunctionExpression : `function` `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |FunctionExpression|.
@@ -23879,7 +23881,7 @@
       </dl>
       <emu-grammar>ArrowFunction : ArrowParameters `=>` ConciseBody</emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |ArrowFunction|.
@@ -24272,7 +24274,7 @@
       </dl>
       <emu-grammar>GeneratorExpression : `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |GeneratorExpression|.
@@ -24507,7 +24509,7 @@
         AsyncGeneratorExpression : `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncGeneratorExpression|.
@@ -25285,7 +25287,7 @@
       <emu-grammar>ClassExpression : `class` ClassTail</emu-grammar>
       <emu-alg>
         1. Let _sourceText_ be the source text matched by |ClassExpression|.
-        1. Return ? ClassDefinitionEvaluation of |ClassTail| with arguments *undefined*, *""*, and _sourceText_.
+        1. Return ? ClassDefinitionEvaluation of |ClassTail| with arguments *undefined*, the empty String, and _sourceText_.
       </emu-alg>
       <emu-grammar>ClassExpression : `class` BindingIdentifier ClassTail</emu-grammar>
       <emu-alg>
@@ -25422,7 +25424,7 @@
         AsyncFunctionExpression : `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncFunctionExpression|.
@@ -25593,7 +25595,7 @@
         AsyncArrowFunction : `async` AsyncArrowBindingIdentifier `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncArrowFunction|.
@@ -25606,7 +25608,7 @@
         AsyncArrowFunction : CoverCallExpressionAndAsyncArrowHead `=>` AsyncConciseBody
       </emu-grammar>
       <emu-alg>
-        1. If _name_ is not present, set _name_ to *""*.
+        1. If _name_ is not present, set _name_ to the empty String.
         1. Let _env_ be the LexicalEnvironment of the running execution context.
         1. Let _privateEnv_ be the running execution context's PrivateEnvironment.
         1. Let _sourceText_ be the source text matched by |AsyncArrowFunction|.
@@ -32376,7 +32378,7 @@
         <emu-note>
           <p>For implementations that provide more accurate conversions than required by the rules above, it is recommended that the following alternative version of step <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> be used as a guideline:</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. Let _e_, _n_, and _ff_ be integers such that _ff_ ≥ 0, 10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>, 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) is 𝔽(_x_), and _ff_ is as small as possible. If there are multiple possibilities for _n_, choose the value of _n_ for which 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) is closest in value to 𝔽(_x_). If there are two such possible values of _n_, choose the one that is even.
+            1. Let _e_, _n_, and _ff_ be integers such that _ff_ ≥ 0, 10<sup>_ff_</sup> ≤ _n_ &lt; 10<sup>_ff_ + 1</sup>, 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) is 𝔽(_x_), and _ff_ is as small as possible. If there are multiple possibilities for _n_, choose _n_ such that 𝔽(_n_ × 10<sup>_e_ - _ff_</sup>) is closest to 𝔽(_x_). If there are two such possible values of _n_, choose the one that is even.
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -37973,7 +37975,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. Let _cc_ be CompileCharacterClass of |CharacterClass| with argument _rer_.
           1. Let _cs_ be _cc_.[[CharSet]].
-          1. If _rer_.[[UnicodeSets]] is *false*, or if every CharSetElement of _cs_ consists of a single character (including if _cs_ is empty), return CharacterSetMatcher(_rer_, _cs_, _cc_.[[Invert]], _direction_).
+          1. If _rer_.[[UnicodeSets]] is *false* or every CharSetElement of _cs_ consists of a single character (including if _cs_ is empty), return CharacterSetMatcher(_rer_, _cs_, _cc_.[[Invert]], _direction_).
           1. Assert: _cc_.[[Invert]] is *false*.
           1. Let _lm_ be an empty List of Matchers.
           1. For each CharSetElement _s_ in _cs_ containing more than 1 character, iterating in descending order of length, do
@@ -38055,7 +38057,7 @@ THH:mm:ss.sss
         <emu-grammar>AtomEscape :: CharacterClassEscape</emu-grammar>
         <emu-alg>
           1. Let _cs_ be CompileToCharSet of |CharacterClassEscape| with argument _rer_.
-          1. If _rer_.[[UnicodeSets]] is *false*, or if every CharSetElement of _cs_ consists of a single character (including if _cs_ is empty), return CharacterSetMatcher(_rer_, _cs_, *false*, _direction_).
+          1. If _rer_.[[UnicodeSets]] is *false* or every CharSetElement of _cs_ consists of a single character (including if _cs_ is empty), return CharacterSetMatcher(_rer_, _cs_, *false*, _direction_).
           1. Let _lm_ be an empty List of Matchers.
           1. For each CharSetElement _s_ in _cs_ containing more than 1 character, iterating in descending order of length, do
             1. Let _cs2_ be a one-element CharSet containing the last code point of _s_.
@@ -38749,7 +38751,8 @@ THH:mm:ss.sss
           1. Else, let _P_ be ? ToString(_pattern_).
           1. If _flags_ is *undefined*, let _F_ be the empty String.
           1. Else, let _F_ be ? ToString(_flags_).
-          1. If _F_ contains any code unit other than *"d"*, *"g"*, *"i"*, *"m"*, *"s"*, *"u"*, *"v"*, or *"y"*, or if _F_ contains any code unit more than once, throw a *SyntaxError* exception.
+          1. If _F_ contains any code unit other than *"d"*, *"g"*, *"i"*, *"m"*, *"s"*, *"u"*, *"v"*, or *"y"*, throw a *SyntaxError* exception.
+          1. If _F_ contains any code unit more than once, throw a *SyntaxError* exception.
           1. If _F_ contains *"i"*, let _i_ be *true*; else let _i_ be *false*.
           1. If _F_ contains *"m"*, let _m_ be *true*; else let _m_ be *false*.
           1. If _F_ contains *"s"*, let _s_ be *true*; else let _s_ be *false*.
@@ -41017,7 +41020,7 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. If _x_ and _y_ are both *undefined*, return *+0*<sub>𝔽</sub>.
+            1. If _x_ is *undefined* and _y_ is *undefined*, return *+0*<sub>𝔽</sub>.
             1. If _x_ is *undefined*, return *1*<sub>𝔽</sub>.
             1. If _y_ is *undefined*, return *-1*<sub>𝔽</sub>.
             1. If _comparator_ is not *undefined*, then
@@ -42835,7 +42838,7 @@ THH:mm:ss.sss
             1. Let _v_ be ? ToNumber(? Call(_comparator_, *undefined*, « _x_, _y_ »)).
             1. If _v_ is *NaN*, return *+0*<sub>𝔽</sub>.
             1. Return _v_.
-          1. If _x_ and _y_ are both *NaN*, return *+0*<sub>𝔽</sub>.
+          1. If _x_ is *NaN* and _y_ is *NaN*, return *+0*<sub>𝔽</sub>.
           1. If _x_ is *NaN*, return *1*<sub>𝔽</sub>.
           1. If _y_ is *NaN*, return *-1*<sub>𝔽</sub>.
           1. If _x_ &lt; _y_, return *-1*<sub>𝔽</sub>.
@@ -49199,7 +49202,7 @@ THH:mm:ss.sss
             1. Return CreateIteratorResultObject(_v_, _done_).
           1. Let _onFulfilled_ be CreateBuiltinFunction(_unwrap_, 1, *""*, « »).
           1. NOTE: _onFulfilled_ is used when processing the *"value"* property of an IteratorResult object in order to wait for its value if it is a promise and re-package the result in a new "unwrapped" IteratorResult object.
-          1. If _done_ is *true*, or if _closeOnRejection_ is *false*, then
+          1. If _done_ is *true* or _closeOnRejection_ is *false*, then
             1. Let _onRejected_ be *undefined*.
           1. Else,
             1. Let _closeIterator_ be a new Abstract Closure with parameters (_error_) that captures _syncIteratorRecord_ and performs the following steps when called:
@@ -52159,7 +52162,7 @@ THH:mm:ss.sss
     <emu-alg>
       1. If _E_ and _D_ are not the same Shared Data Block event, then
         1. If it is not the case that both _E_ happens-before _D_ in _execution_ and _D_ happens-before _E_ in _execution_, then
-          1. If _E_ and _D_ are both WriteSharedMemory or ReadModifyWriteSharedMemory events and _E_ and _D_ do not have disjoint memory ranges, then
+          1. If _E_ is either a WriteSharedMemory or ReadModifyWriteSharedMemory event, _D_ is either a WriteSharedMemory or ReadModifyWriteSharedMemory event, and _E_ and _D_ do not have disjoint memory ranges, then
             1. Return *true*.
           1. If _E_ reads-from _D_ in _execution_ or _D_ reads-from _E_ in _execution_, then
             1. Return *true*.
