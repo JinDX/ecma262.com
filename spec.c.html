@@ -22220,13 +22220,10 @@
         <h1>
           运行时语义：ForDeclarationBindingInitialization (
             _value_: ECMAScript 语言值,
-            _environment_: Environment Record 或 *undefined*,
+            _environment_: an Environment Record,
           ): 正常或突然完成
         </h1>
         <dl class="header"></dl>
-        <emu-note>
-          <p>传 *undefined* 表示应使用 PutValue 赋值。适用于 `var` 语句以及某些非严格函数形参（参见 <emu-xref href="#sec-functiondeclarationinstantiation"></emu-xref>）。这些场景下词法绑定被提升并预初始化。</p>
-        </emu-note>
         <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
         <emu-alg>
           1. 返回 ? BindingInitialization of |ForBinding|，参数 _value_ 与 _environment_。
