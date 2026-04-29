@@ -6021,7 +6021,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It provides the semantics for the comparison _x_ &lt; _y_, returning *true*, *false*, or *undefined* (which indicates that at least one operand is *NaN*). The _leftFirst_ flag is used to control the order in which operations with potentially visible side-effects are performed upon _x_ and _y_. It is necessary because ECMAScript specifies left to right evaluation of expressions. If _leftFirst_ is *true*, the _x_ parameter corresponds to an expression that occurs to the left of the _y_ parameter's corresponding expression. If _leftFirst_ is *false*, the reverse is the case and operations must be performed upon _y_ before _x_.</dd>
+        <dd>It provides the semantics for the comparison _x_ &lt; _y_, returning *true*, *false*, or *undefined* (which indicates that the operands could not be coerced to comparable values of the same numeric type). The _leftFirst_ flag is used to control the order in which operations with potentially visible side-effects are performed upon _x_ and _y_. It is necessary because ECMAScript specifies left to right evaluation of expressions. If _leftFirst_ is *true*, the _x_ parameter corresponds to an expression that occurs to the left of the _y_ parameter's corresponding expression. If _leftFirst_ is *false*, the reverse is the case and operations must be performed upon _y_ before _x_.</dd>
       </dl>
       <emu-alg>
         1. If _leftFirst_ is *true*, then
@@ -11310,7 +11310,7 @@
             CreateGlobalFunctionBinding (
               _envRec_: a Global Environment Record,
               _name_: a String,
-              _value_: an ECMAScript language value,
+              _value_: an ECMAScript function object,
               _deletable_: a Boolean,
             ): either a normal completion containing ~unused~ or a throw completion
           </h1>
@@ -11530,7 +11530,7 @@
       <emu-clause id="sec-newmoduleenvironment" type="abstract operation">
         <h1>
           NewModuleEnvironment (
-            _outerEnv_: an Environment Record,
+            _outerEnv_: a Global Environment Record,
           ): a Module Environment Record
         </h1>
         <dl class="header">
@@ -12308,7 +12308,7 @@
     </emu-clause>
 
     <emu-clause id="sec-IncrementModuleAsyncEvaluationCount" type="abstract operation">
-      <h1>IncrementModuleAsyncEvaluationCount ( ): an integer</h1>
+      <h1>IncrementModuleAsyncEvaluationCount ( ): a non-negative integer</h1>
       <dl class="header">
       </dl>
       <emu-alg>
@@ -14607,7 +14607,7 @@
       <emu-clause id="sec-createmappedargumentsobject" type="abstract operation">
         <h1>
           CreateMappedArgumentsObject (
-            _func_: an Object,
+            _func_: an ECMAScript function object,
             _formals_: a Parse Node,
             _argumentsList_: a List of ECMAScript language values,
             _env_: an Environment Record,
@@ -19408,7 +19408,7 @@
             EvaluateNew (
               _constructExpr_: a |NewExpression| Parse Node or a |MemberExpression| Parse Node,
               _arguments_: ~empty~ or an |Arguments| Parse Node,
-            ): either a normal completion containing an ECMAScript language value or an abrupt completion
+            ): either a normal completion containing an Object or an abrupt completion
           </h1>
           <dl class="header">
           </dl>
@@ -19532,7 +19532,7 @@
       </emu-clause>
 
       <emu-clause id="sec-getsuperconstructor" type="abstract operation">
-        <h1>GetSuperConstructor ( ): an ECMAScript language value</h1>
+        <h1>GetSuperConstructor ( ): an Object or *null*</h1>
         <dl class="header">
         </dl>
         <emu-alg>
@@ -20952,7 +20952,7 @@
       <h1>
         EvaluateStringOrNumericBinaryExpression (
           _leftOperand_: a Parse Node,
-          _opText_: a sequence of Unicode code points,
+          _opText_: `**`, `*`, `/`, `%`, `+`, `-`, `&lt;&lt;`, `&gt;&gt;`, `&gt;&gt;&gt;`, `&amp;`, `^`, or `|`,
           _rightOperand_: a Parse Node,
         ): either a normal completion containing either a String, a BigInt, or a Number, or an abrupt completion
       </h1>
@@ -33957,7 +33957,7 @@
             _year_: a Number,
             _month_: a Number,
             _date_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -33981,7 +33981,7 @@
           MakeDate (
             _day_: a Number,
             _time_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -34017,7 +34017,7 @@
         <h1>
           TimeClip (
             _time_: a Number,
-          ): a Number
+          ): a time value
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -39496,7 +39496,7 @@ THH:mm:ss.sss
             _str_: a String,
             _index_: a non-negative integer,
             _unicode_: a Boolean,
-          ): an integer
+          ): a non-negative integer
         </h1>
         <dl class="header">
         </dl>
@@ -43544,7 +43544,7 @@ THH:mm:ss.sss
             _target_: an Object,
             _iterable_: an ECMAScript language value, but not *undefined* or *null*,
             _adder_: a function object,
-          ): either a normal completion containing an ECMAScript language value or a throw completion
+          ): either a normal completion containing an Object or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -46580,7 +46580,7 @@ THH:mm:ss.sss
           ValidateAtomicAccess (
             _taRecord_: a TypedArray With Buffer Witness Record,
             _requestIndex_: an ECMAScript language value,
-          ): either a normal completion containing an integer or a throw completion
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -46601,7 +46601,7 @@ THH:mm:ss.sss
           ValidateAtomicAccessOnIntegerTypedArray (
             _typedArray_: an ECMAScript language value,
             _requestIndex_: an ECMAScript language value,
-          ): either a normal completion containing an integer or a throw completion
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -46615,7 +46615,7 @@ THH:mm:ss.sss
         <h1>
           RevalidateAtomicAccess (
             _typedArray_: a TypedArray,
-            _byteIndexInBuffer_: an integer,
+            _byteIndexInBuffer_: a non-negative integer,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -47716,7 +47716,9 @@ THH:mm:ss.sss
           1. If _value_ is a BigInt, throw a *TypeError* exception.
           1. If _value_ is an Object and IsCallable(_value_) is *false*, then
             1. Let _isArray_ be ? IsArray(_value_).
-            1. If _isArray_ is *true*, return ? SerializeJSONArray(_state_, _value_).
+            1. If _isArray_ is *true*, then
+              1. Assert: _value_ is an Array. _value_ is not a Proxy.
+              1. Return ? SerializeJSONArray(_state_, _value_).
             1. Return ? SerializeJSONObject(_state_, _value_).
           1. Return *undefined*.
         </emu-alg>
@@ -47909,7 +47911,7 @@ THH:mm:ss.sss
         <h1>
           SerializeJSONArray (
             _state_: a JSON Serialization Record,
-            _value_: an ECMAScript language value,
+            _value_: an Array,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
@@ -49699,7 +49701,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -49766,7 +49768,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -49854,7 +49856,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -49932,7 +49934,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -49978,7 +49980,7 @@ THH:mm:ss.sss
             PromiseResolve (
               _constructor_: an Object,
               _resolution_: an ECMAScript language value,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -50115,7 +50117,7 @@ THH:mm:ss.sss
               _onFulfilled_: an ECMAScript language value,
               _onRejected_: an ECMAScript language value,
               optional _resultCapability_: a PromiseCapability Record,
-            ): an ECMAScript language value
+            ): an Object or *undefined*
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -52150,7 +52152,7 @@ THH:mm:ss.sss
     <emu-alg>
       1. If _eventA_ and _eventB_ are not the same Shared Data Block event, then
         1. If it is not the case that both _eventA_ happens-before _eventB_ in _execution_ and _eventB_ happens-before _eventA_ in _execution_, then
-          1. If _eventA_ and _eventB_ are both WriteSharedMemory or ReadModifyWriteSharedMemory events and _eventA_ and _eventB_ do not have disjoint memory ranges, then
+          1. If _eventA_ is either a WriteSharedMemory or ReadModifyWriteSharedMemory event, _eventB_ is either a WriteSharedMemory or ReadModifyWriteSharedMemory event, and _eventA_ and _eventB_ do not have disjoint memory ranges, then
             1. Return *true*.
           1. If _eventA_ reads-from _eventB_ in _execution_ or _eventB_ reads-from _eventA_ in _execution_, then
             1. Return *true*.
