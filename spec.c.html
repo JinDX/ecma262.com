@@ -7031,7 +7031,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>它提供比较 _x_ &lt; _y_ 的语义，返回 *true*、*false* 或 *undefined*（表示至少有一个操作数是 *NaN*）。标志 _leftFirst_ 用于控制对 _x_ 和 _y_ 执行具有潜在可见副作用的操作的顺序。这是必要的，因为 ECMAScript 规定表达式按从左到右求值。如果 _leftFirst_ 为 *true*，则参数 _x_ 对应的表达式出现在参数 _y_ 对应表达式的左边。如果 _leftFirst_ 为 *false*，则情况相反，必须先对 _y_ 再对 _x_ 执行操作。</dd>
+        <dd>它为比较 _x_ &lt; _y_ 提供语义，返回 *true*、*false* 或 *undefined*（表示操作数无法被强制转换为同一数值类型的可比较值）。_leftFirst_ 标志用于控制对 _x_ 和 _y_ 执行具有潜在可见副作用的操作的顺序。这是必要的，因为 ECMAScript 规定表达式从左到右求值。如果 _leftFirst_ 为 *true*，则 _x_ 参数对应于出现在 _y_ 参数对应表达式左侧的表达式。如果 _leftFirst_ 为 *false*，则情况相反，必须先对 _y_ 执行操作，再对 _x_ 执行操作。</dd>
       </dl>
       <emu-alg>
         1. 如果 _leftFirst_ 是 *true*，那么
@@ -12318,10 +12318,10 @@
         <emu-clause id="sec-createglobalfunctionbinding" type="abstract operation">
           <h1>
             CreateGlobalFunctionBinding (
-              _envRec_: 一个 Global Environment Record，,
-              _name_: 一个 String，,
-              _value_: 一个 ECMAScript 语言值，,
-              _deletable_: 一个 Boolean，,
+              _envRec_: a Global Environment Record,
+              _name_: a String,
+              _value_: an ECMAScript function object,
+              _deletable_: a Boolean,
             ): 要么是包含 ~unused~ 的正常完成，要么是抛出完成
           </h1>
           <dl class="header">
@@ -12540,8 +12540,8 @@
       <emu-clause id="sec-newmoduleenvironment" type="abstract operation">
         <h1>
           NewModuleEnvironment (
-            _outerEnv_: 一个 Environment Record，,
-          ): 一个 Module Environment Record
+            _outerEnv_: a Global Environment Record,
+          ): a Module Environment Record
         </h1>
         <dl class="header">
         </dl>
@@ -13318,7 +13318,7 @@
     </emu-clause>
 
     <emu-clause id="sec-IncrementModuleAsyncEvaluationCount" type="abstract operation">
-      <h1>IncrementModuleAsyncEvaluationCount ( ): 一个整数</h1>
+      <h1>IncrementModuleAsyncEvaluationCount ( ): a non-negative integer</h1>
       <dl class="header">
       </dl>
       <emu-alg>
@@ -15888,11 +15888,11 @@
       <emu-clause id="sec-createmappedargumentsobject" type="abstract operation">
         <h1>
           CreateMappedArgumentsObject (
-            _func_: 一个 Object,
-            _formals_: 一个 Parse Node,
-            _argumentsList_: 一个 ECMAScript 语言值列表,
-            _env_: 一个 Environment Record,
-          ): 一个 arguments 异质对象
+            _func_: an ECMAScript function object,
+            _formals_: a Parse Node,
+            _argumentsList_: a List of ECMAScript language values,
+            _env_: an Environment Record,
+          ): an arguments exotic object
         </h1>
         <dl class="header">
         </dl>
@@ -21682,9 +21682,9 @@
         <emu-clause id="sec-evaluatenew" type="abstract operation">
           <h1>
             EvaluateNew (
-              _constructExpr_: 一个 |NewExpression| Parse Node 或一个 |MemberExpression| Parse Node,
-              _arguments_: ~empty~ 或一个 |Arguments| Parse Node,
-            ): 要么是一个正常完成，包含一个 ECMAScript 语言值，要么是一个突然完成
+              _constructExpr_: a |NewExpression| Parse Node or a |MemberExpression| Parse Node,
+              _arguments_: ~empty~ or an |Arguments| Parse Node,
+            ): either a normal completion containing an Object or an abrupt completion
           </h1>
           <dl class="header">
           </dl>
@@ -21812,7 +21812,7 @@
       </emu-clause>
 
       <emu-clause id="sec-getsuperconstructor" type="abstract operation">
-        <h1>GetSuperConstructor ( ): 一个 ECMAScript 语言值</h1>
+        <h1>GetSuperConstructor ( ): an Object or *null*</h1>
         <dl class="header">
         </dl>
         <emu-alg>
@@ -23338,10 +23338,10 @@
     <emu-clause id="sec-evaluatestringornumericbinaryexpression" type="abstract operation">
       <h1>
         EvaluateStringOrNumericBinaryExpression (
-          _leftOperand_: 一个 Parse Node,
-          _opText_: 一个 Unicode 码点序列,
-          _rightOperand_: 一个 Parse Node,
-        ): 要么是一个正常完成，包含一个 String、一个 BigInt 或一个 Number，要么是一个突然完成
+          _leftOperand_: a Parse Node,
+          _opText_: `**`, `*`, `/`, `%`, `+`, `-`, `&lt;&lt;`, `&gt;&gt;`, `&gt;&gt;&gt;`, `&amp;`, `^`, or `|`,
+          _rightOperand_: a Parse Node,
+        ): either a normal completion containing either a String, a BigInt, or a Number, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -36628,7 +36628,7 @@
             _year_: a Number,
             _month_: a Number,
             _date_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -36652,7 +36652,7 @@
           MakeDate (
             _day_: a Number,
             _time_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -36688,7 +36688,7 @@
         <h1>
           TimeClip (
             _time_: a Number,
-          ): a Number
+          ): a time value
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -42164,10 +42164,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-advancestringindex" type="abstract operation">
         <h1>
           AdvanceStringIndex (
-            _str_: 一个 String，,
-            _index_: 一个非负整数，,
-            _unicode_: 一个 Boolean，,
-          ): 一个整数
+            _str_: a String,
+            _index_: a non-negative integer,
+            _unicode_: a Boolean,
+          ): a non-negative integer
         </h1>
         <dl class="header">
         </dl>
@@ -46212,10 +46212,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-add-entries-from-iterable" type="abstract operation">
         <h1>
           AddEntriesFromIterable (
-            _target_: 一个 Object，,
-            _iterable_: 一个 ECMAScript 语言值，但不是 *undefined* 或 *null*，,
-            _adder_: 一个函数对象，,
-          ): 要么是一个包含 ECMAScript 语言值的正常完成，要么是一个抛出完成
+            _target_: an Object,
+            _iterable_: an ECMAScript language value, but not *undefined* or *null*,
+            _adder_: a function object,
+          ): either a normal completion containing an Object or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -49249,9 +49249,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-validateatomicaccess" type="abstract operation">
         <h1>
           ValidateAtomicAccess (
-            _taRecord_: 一个 TypedArray With Buffer Witness Record，,
-            _requestIndex_: 一个 ECMAScript 语言值，,
-          ): 要么是一个包含整数的正常完成，要么是一个抛出完成
+            _taRecord_: a TypedArray With Buffer Witness Record,
+            _requestIndex_: an ECMAScript language value,
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -49270,9 +49270,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-validateatomicaccessonintegertypedarray" type="abstract operation">
         <h1>
           ValidateAtomicAccessOnIntegerTypedArray (
-            _typedArray_: 一个 ECMAScript 语言值，,
-            _requestIndex_: 一个 ECMAScript 语言值，,
-          ): 要么是一个包含整数的正常完成，要么是一个抛出完成
+            _typedArray_: an ECMAScript language value,
+            _requestIndex_: an ECMAScript language value,
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -49285,9 +49285,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-revalidateatomicaccess" type="abstract operation">
         <h1>
           RevalidateAtomicAccess (
-            _typedArray_: 一个 TypedArray，,
-            _byteIndexInBuffer_: 一个整数，,
-          ): 要么是一个包含 ~unused~ 的正常完成，要么是一个抛出完成
+            _typedArray_: a TypedArray,
+            _byteIndexInBuffer_: a non-negative integer,
+          ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -50358,36 +50358,38 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 令 _value_ 为 ? Get(_holder_, _key_)。
-          1. 如果 _value_ 是 Object 或 _value_ 是 BigInt，则
+          1. 如果 _value_ 是一个 Object 或 _value_ 是一个 BigInt，则
             1. 令 _toJSON_ 为 ? GetV(_value_, *"toJSON"*)。
-            1. 如果 IsCallable(_toJSON_) 是 *true*，则
-              1. 将 _value_ 设置为 ? Call(_toJSON_, _value_, « _key_ »)。
+            1. 如果 IsCallable(_toJSON_) 为 *true*，则
+              1. 将 _value_ 设为 ? Call(_toJSON_, _value_, « _key_ »)。
           1. 如果 _state_.[[ReplacerFunction]] 不是 *undefined*，则
-            1. 将 _value_ 设置为 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)。
-          1. 如果 _value_ 是 Object，则
-            1. 如果 _value_ 有 [[IsRawJSON]] 内部槽，则
+            1. 将 _value_ 设为 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)。
+          1. 如果 _value_ 是一个 Object，则
+            1. 如果 _value_ 具有 [[IsRawJSON]] 内部槽，则
               1. 令 _rawJSON_ 为 ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta>。
               1. 断言：_rawJSON_ 是一个 String。
               1. 返回 _rawJSON_。
-            1. 如果 _value_ 有 [[NumberData]] 内部槽，则
-              1. 将 _value_ 设置为 ? ToNumber(_value_)。
-            1. 否则如果 _value_ 有 [[StringData]] 内部槽，则
-              1. 将 _value_ 设置为 ? ToString(_value_)。
-            1. 否则如果 _value_ 有 [[BooleanData]] 内部槽，则
-              1. 将 _value_ 设置为 _value_.[[BooleanData]]。
-            1. 否则如果 _value_ 有 [[BigIntData]] 内部槽，则
-              1. 将 _value_ 设置为 _value_.[[BigIntData]]。
+            1. 如果 _value_ 具有 [[NumberData]] 内部槽，则
+              1. 将 _value_ 设为 ? ToNumber(_value_)。
+            1. 否则，如果 _value_ 具有 [[StringData]] 内部槽，则
+              1. 将 _value_ 设为 ? ToString(_value_)。
+            1. 否则，如果 _value_ 具有 [[BooleanData]] 内部槽，则
+              1. 将 _value_ 设为 _value_.[[BooleanData]]。
+            1. 否则，如果 _value_ 具有 [[BigIntData]] 内部槽，则
+              1. 将 _value_ 设为 _value_.[[BigIntData]]。
           1. 如果 _value_ 是 *null*，返回 *"null"*。
           1. 如果 _value_ 是 *true*，返回 *"true"*。
           1. 如果 _value_ 是 *false*，返回 *"false"*。
-          1. 如果 _value_ 是 String，返回 QuoteJSONString(_value_)。
-          1. 如果 _value_ 是 Number，则
+          1. 如果 _value_ 是一个 String，返回 QuoteJSONString(_value_)。
+          1. 如果 _value_ 是一个 Number，则
             1. 如果 _value_ 是有限的，返回 ! ToString(_value_)。
             1. 返回 *"null"*。
-          1. 如果 _value_ 是 BigInt，抛出 *TypeError* 异常。
-          1. 如果 _value_ 是 Object 且 IsCallable(_value_) 是 *false*，则
+          1. 如果 _value_ 是一个 BigInt，抛出一个 *TypeError* 异常。
+          1. 如果 _value_ 是一个 Object 且 IsCallable(_value_) 为 *false*，则
             1. 令 _isArray_ 为 ? IsArray(_value_)。
-            1. 如果 _isArray_ 是 *true*，返回 ? SerializeJSONArray(_state_, _value_)。
+            1. 如果 _isArray_ 为 *true*，则
+              1. 断言：_value_ 是一个 Array。_value_ 不是 Proxy。
+              1. 返回 ? SerializeJSONArray(_state_, _value_)。
             1. 返回 ? SerializeJSONObject(_state_, _value_)。
           1. 返回 *undefined*。
         </emu-alg>
@@ -50579,9 +50581,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-serializejsonarray" type="abstract operation">
         <h1>
           SerializeJSONArray (
-            _state_: 一个 JSON Serialization Record，,
-            _value_: 一个 ECMAScript 语言值，,
-          ): 要么是一个包含 String 的正常完成，要么是一个抛出完成
+            _state_: a JSON Serialization Record,
+            _value_: an Array,
+          ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -52366,11 +52368,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseall" oldids="sec-promise.all-resolve-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAll (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个构造器,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 一个包含 ECMAScript 语言值的 normal completion 或一个 throw completion
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52433,11 +52435,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseallsettled" oldids="sec-promise.allsettled-resolve-element-functions,sec-promise.allsettled-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAllSettled (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个构造器,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 一个包含 ECMAScript 语言值的 normal completion 或一个 throw completion
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52521,11 +52523,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseany" oldids="sec-promise.any-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAny (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个构造器,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 一个包含 ECMAScript 语言值的 normal completion 或一个 throw completion
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52599,11 +52601,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiserace" type="abstract operation">
           <h1>
             PerformPromiseRace (
-              _iteratorRecord_: 一个 Iterator Record,
-              _constructor_: 一个构造器,
-              _resultCapability_: 一个 PromiseCapability Record,
-              _promiseResolve_: 一个函数对象,
-            ): 一个包含 ECMAScript 语言值的 normal completion 或一个 throw completion
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52647,9 +52649,9 @@ THH:mm:ss.sss
         <emu-clause id="sec-promise-resolve" type="abstract operation">
           <h1>
             PromiseResolve (
-              _constructor_: 一个 Object,
-              _resolution_: 一个 ECMAScript 语言值,
-            ): 一个包含 ECMAScript 语言值的 normal completion 或一个 throw completion
+              _constructor_: an Object,
+              _resolution_: an ECMAScript language value,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -52782,11 +52784,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromisethen" type="abstract operation">
           <h1>
             PerformPromiseThen (
-              _promise_: 一个 Promise,
-              _onFulfilled_: 一个 ECMAScript 语言值,
-              _onRejected_: 一个 ECMAScript 语言值,
-              optional _resultCapability_: 一个 PromiseCapability Record,
-            ): 一个 ECMAScript 语言值
+              _promise_: a Promise,
+              _onFulfilled_: an ECMAScript language value,
+              _onRejected_: an ECMAScript language value,
+              optional _resultCapability_: a PromiseCapability Record,
+            ): an Object or *undefined*
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -54821,7 +54823,7 @@ THH:mm:ss.sss
     <emu-alg>
       1. 如果 _eventA_ 和 _eventB_ 不是同一个共享数据块事件，则
         1. 如果并非 _eventA_ 在 _execution_ 中 happens-before _eventB_ 且 _eventB_ 在 _execution_ 中 happens-before _eventA_，则
-          1. 如果 _eventA_ 和 _eventB_ 都是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，并且 _eventA_ 和 _eventB_ 不具有不相交的内存范围，则
+          1. 如果 _eventA_ 是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，_eventB_ 是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，并且 _eventA_ 和 _eventB_ 的内存范围并非互不相交，则
             1. 返回 *true*。
           1. 如果 _eventA_ 在 _execution_ 中 reads-from _eventB_，或 _eventB_ 在 _execution_ 中 reads-from _eventA_，则
             1. 返回 *true*。

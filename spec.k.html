@@ -7226,15 +7226,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 비교 _x_ &lt; _y_의 의미론을 제공하며, *true*,
-          *false*, 또는 *undefined*를 반환한다
-          (*undefined*는 적어도 하나의 피연산자가 *NaN*임을 나타낸다).
-          _leftFirst_ 플래그는 _x_와 _y_에 대해 잠재적으로 관찰 가능한 부작용이
-          있는 연산이 수행되는 순서를 제어하는 데 사용된다. 이는 ECMAScript가
-          표현식을 왼쪽에서 오른쪽으로 평가하도록 명세하기 때문에 필요하다.
-          _leftFirst_가 *true*이면, _x_ 매개변수는 _y_ 매개변수에 대응하는
-          표현식의 왼쪽에 위치한 표현식에 대응한다. _leftFirst_가 *false*이면
-          그 반대이며, _x_보다 먼저 _y_에 대한 연산이 수행되어야 한다.</dd>
+        <dd>_x_ &lt; _y_ 비교에 대한 의미론을 제공하며, *true*, *false* 또는 *undefined*를 반환한다(*undefined*는 피연산자를 동일한 수치 타입의 비교 가능한 값으로 강제 변환할 수 없음을 나타낸다). _leftFirst_ 플래그는 _x_와 _y_에 대해 잠재적으로 관찰 가능한 부수 효과가 있는 연산이 수행되는 순서를 제어하는 데 사용된다. ECMAScript는 표현식의 왼쪽에서 오른쪽으로의 평가를 명시하므로 이것이 필요하다. _leftFirst_가 *true*이면, _x_ 매개변수는 _y_ 매개변수에 대응하는 표현식의 왼쪽에 나타나는 표현식에 대응한다. _leftFirst_가 *false*이면 그 반대의 경우이며, 연산은 _x_보다 _y_에 대해 먼저 수행되어야 한다.</dd>
       </dl>
       <emu-alg>
         1. _leftFirst_가 *true*이면,
@@ -12727,7 +12719,7 @@
             CreateGlobalFunctionBinding (
               _envRec_: a Global Environment Record,
               _name_: a String,
-              _value_: an ECMAScript language value,
+              _value_: an ECMAScript function object,
               _deletable_: a Boolean,
             ): either a normal completion containing ~unused~ or a throw completion
           </h1>
@@ -12947,7 +12939,7 @@
       <emu-clause id="sec-newmoduleenvironment" type="abstract operation">
         <h1>
           NewModuleEnvironment (
-            _outerEnv_: an Environment Record,
+            _outerEnv_: a Global Environment Record,
           ): a Module Environment Record
         </h1>
         <dl class="header">
@@ -13725,7 +13717,7 @@
     </emu-clause>
 
     <emu-clause id="sec-IncrementModuleAsyncEvaluationCount" type="abstract operation">
-      <h1>IncrementModuleAsyncEvaluationCount ( ): an integer</h1>
+      <h1>IncrementModuleAsyncEvaluationCount ( ): a non-negative integer</h1>
       <dl class="header">
       </dl>
       <emu-alg>
@@ -16453,7 +16445,7 @@
       <emu-clause id="sec-createmappedargumentsobject" type="abstract operation">
         <h1>
           CreateMappedArgumentsObject (
-            _func_: an Object,
+            _func_: an ECMAScript function object,
             _formals_: a Parse Node,
             _argumentsList_: a List of ECMAScript language values,
             _env_: an Environment Record,
@@ -21626,7 +21618,7 @@
             EvaluateNew (
               _constructExpr_: a |NewExpression| Parse Node or a |MemberExpression| Parse Node,
               _arguments_: ~empty~ or an |Arguments| Parse Node,
-            ): either a normal completion containing an ECMAScript language value or an abrupt completion
+            ): either a normal completion containing an Object or an abrupt completion
           </h1>
           <dl class="header">
           </dl>
@@ -21750,7 +21742,7 @@
       </emu-clause>
 
       <emu-clause id="sec-getsuperconstructor" type="abstract operation">
-        <h1>GetSuperConstructor ( ): an ECMAScript language value</h1>
+        <h1>GetSuperConstructor ( ): an Object or *null*</h1>
         <dl class="header">
         </dl>
         <emu-alg>
@@ -23170,7 +23162,7 @@
       <h1>
         EvaluateStringOrNumericBinaryExpression (
           _leftOperand_: a Parse Node,
-          _opText_: a sequence of Unicode code points,
+          _opText_: `**`, `*`, `/`, `%`, `+`, `-`, `&lt;&lt;`, `&gt;&gt;`, `&gt;&gt;&gt;`, `&amp;`, `^`, or `|`,
           _rightOperand_: a Parse Node,
         ): either a normal completion containing either a String, a BigInt, or a Number, or an abrupt completion
       </h1>
@@ -36738,7 +36730,7 @@
             _year_: a Number,
             _month_: a Number,
             _date_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -36762,7 +36754,7 @@
           MakeDate (
             _day_: a Number,
             _time_: a Number,
-          ): a Number
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -36798,7 +36790,7 @@
         <h1>
           TimeClip (
             _time_: a Number,
-          ): a Number
+          ): a time value
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -42278,7 +42270,7 @@ THH:mm:ss.sss
             _str_: a String,
             _index_: a non-negative integer,
             _unicode_: a Boolean,
-          ): an integer
+          ): a non-negative integer
         </h1>
         <dl class="header">
         </dl>
@@ -46326,7 +46318,7 @@ THH:mm:ss.sss
             _target_: an Object,
             _iterable_: an ECMAScript language value, but not *undefined* or *null*,
             _adder_: a function object,
-          ): either a normal completion containing an ECMAScript language value or a throw completion
+          ): either a normal completion containing an Object or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -49362,7 +49354,7 @@ THH:mm:ss.sss
           ValidateAtomicAccess (
             _taRecord_: a TypedArray With Buffer Witness Record,
             _requestIndex_: an ECMAScript language value,
-          ): either a normal completion containing an integer or a throw completion
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -49383,7 +49375,7 @@ THH:mm:ss.sss
           ValidateAtomicAccessOnIntegerTypedArray (
             _typedArray_: an ECMAScript language value,
             _requestIndex_: an ECMAScript language value,
-          ): either a normal completion containing an integer or a throw completion
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -49397,7 +49389,7 @@ THH:mm:ss.sss
         <h1>
           RevalidateAtomicAccess (
             _typedArray_: a TypedArray,
-            _byteIndexInBuffer_: an integer,
+            _byteIndexInBuffer_: a non-negative integer,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -50468,39 +50460,41 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _value_를 ? Get(_holder_, _key_)라고 하자.
+          1. _value_를 ? Get(_holder_, _key_)이라고 하라.
           1. _value_가 Object이거나 _value_가 BigInt이면,
-            1. _toJSON_을 ? GetV(_value_, *"toJSON"*)라고 하자.
-            1. IsCallable(_toJSON_)가 *true*이면,
-              1. _value_를 ? Call(_toJSON_, _value_, « _key_ »)로 설정한다.
+            1. _toJSON_을 ? GetV(_value_, *"toJSON"*)이라고 하라.
+            1. IsCallable(_toJSON_)이 *true*이면,
+              1. _value_를 ? Call(_toJSON_, _value_, « _key_ »)로 설정하라.
           1. _state_.[[ReplacerFunction]]이 *undefined*가 아니면,
-            1. _value_를 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)로 설정한다.
+            1. _value_를 ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »)로 설정하라.
           1. _value_가 Object이면,
-            1. _value_가 [[IsRawJSON]] 내부 슬롯을 가지면,
-              1. _rawJSON_을 ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta>이라고 하자.
+            1. _value_에 [[IsRawJSON]] 내부 슬롯이 있으면,
+              1. _rawJSON_을 ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta>이라고 하라.
               1. Assert: _rawJSON_은 String이다.
-              1. _rawJSON_을 반환한다.
-            1. _value_가 [[NumberData]] 내부 슬롯을 가지면,
-              1. _value_를 ? ToNumber(_value_)로 설정한다.
-            1. 그렇지 않고 _value_가 [[StringData]] 내부 슬롯을 가지면,
-              1. _value_를 ? ToString(_value_)로 설정한다.
-            1. 그렇지 않고 _value_가 [[BooleanData]] 내부 슬롯을 가지면,
-              1. _value_를 _value_.[[BooleanData]]로 설정한다.
-            1. 그렇지 않고 _value_가 [[BigIntData]] 내부 슬롯을 가지면,
-              1. _value_를 _value_.[[BigIntData]]로 설정한다.
-          1. _value_가 *null*이면, *"null"*을 반환한다.
-          1. _value_가 *true*이면, *"true"*를 반환한다.
-          1. _value_가 *false*이면, *"false"*를 반환한다.
-          1. _value_가 String이면, QuoteJSONString(_value_)를 반환한다.
+              1. _rawJSON_을 반환하라.
+            1. _value_에 [[NumberData]] 내부 슬롯이 있으면,
+              1. _value_를 ? ToNumber(_value_)로 설정하라.
+            1. 그렇지 않고 _value_에 [[StringData]] 내부 슬롯이 있으면,
+              1. _value_를 ? ToString(_value_)로 설정하라.
+            1. 그렇지 않고 _value_에 [[BooleanData]] 내부 슬롯이 있으면,
+              1. _value_를 _value_.[[BooleanData]]로 설정하라.
+            1. 그렇지 않고 _value_에 [[BigIntData]] 내부 슬롯이 있으면,
+              1. _value_를 _value_.[[BigIntData]]로 설정하라.
+          1. _value_가 *null*이면, *"null"*을 반환하라.
+          1. _value_가 *true*이면, *"true"*를 반환하라.
+          1. _value_가 *false*이면, *"false"*를 반환하라.
+          1. _value_가 String이면, QuoteJSONString(_value_)를 반환하라.
           1. _value_가 Number이면,
-            1. _value_가 유한하면, ! ToString(_value_)를 반환한다.
-            1. *"null"*을 반환한다.
-          1. _value_가 BigInt이면, *TypeError* 예외를 던진다.
-          1. _value_가 Object이고 IsCallable(_value_)가 *false*이면,
-            1. _isArray_를 ? IsArray(_value_)라고 하자.
-            1. _isArray_가 *true*이면, ? SerializeJSONArray(_state_, _value_)를 반환한다.
-            1. ? SerializeJSONObject(_state_, _value_)를 반환한다.
-          1. *undefined*를 반환한다.
+            1. _value_가 유한하면, ! ToString(_value_)를 반환하라.
+            1. *"null"*을 반환하라.
+          1. _value_가 BigInt이면, *TypeError* 예외를 던져라.
+          1. _value_가 Object이고 IsCallable(_value_)이 *false*이면,
+            1. _isArray_를 ? IsArray(_value_)라고 하라.
+            1. _isArray_가 *true*이면,
+              1. Assert: _value_는 Array이다. _value_는 Proxy가 아니다.
+              1. ? SerializeJSONArray(_state_, _value_)를 반환하라.
+            1. ? SerializeJSONObject(_state_, _value_)를 반환하라.
+          1. *undefined*를 반환하라.
         </emu-alg>
       </emu-clause>
 
@@ -50691,7 +50685,7 @@ THH:mm:ss.sss
         <h1>
           SerializeJSONArray (
             _state_: a JSON Serialization Record,
-            _value_: an ECMAScript language value,
+            _value_: an Array,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
@@ -52481,7 +52475,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52548,7 +52542,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52636,7 +52630,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52714,7 +52708,7 @@ THH:mm:ss.sss
               _constructor_: a constructor,
               _resultCapability_: a PromiseCapability Record,
               _promiseResolve_: a function object,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -52760,7 +52754,7 @@ THH:mm:ss.sss
             PromiseResolve (
               _constructor_: an Object,
               _resolution_: an ECMAScript language value,
-            ): either a normal completion containing an ECMAScript language value or a throw completion
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -52897,7 +52891,7 @@ THH:mm:ss.sss
               _onFulfilled_: an ECMAScript language value,
               _onRejected_: an ECMAScript language value,
               optional _resultCapability_: a PromiseCapability Record,
-            ): an ECMAScript language value
+            ): an Object or *undefined*
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -54932,7 +54926,7 @@ THH:mm:ss.sss
     <emu-alg>
       1. _eventA_와 _eventB_가 같은 Shared Data Block 이벤트가 아니면,
         1. _execution_에서 _eventA_ happens-before _eventB_이고 _eventB_ happens-before _eventA_인 경우가 아니면,
-          1. _eventA_와 _eventB_가 모두 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트이고 _eventA_와 _eventB_가 disjoint memory range를 가지지 않으면,
+          1. _eventA_가 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트이고, _eventB_가 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트이며, _eventA_와 _eventB_가 서로소인 메모리 범위를 갖지 않으면,
             1. *true*를 반환한다.
           1. _execution_에서 _eventA_가 _eventB_로부터 reads-from하거나 _eventB_가 _eventA_로부터 reads-from하면,
             1. *true*를 반환한다.

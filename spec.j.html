@@ -6022,7 +6022,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは比較 _x_ &lt; _y_ の意味論を与え、*true*、*false*、または *undefined*（少なくとも一方のオペランドが *NaN* であることを示す）を返す。フラグ _leftFirst_ は、潜在的に可視な副作用を持つ _x_ および _y_ に対する操作をどの順序で行うかを制御するために使用される。ECMAScript が式の左から右への評価を規定しているため、これが必要である。_leftFirst_ が *true* なら、パラメータ _x_ は、_y_ に対応する式より左側に現れる式に対応する。_leftFirst_ が *false* なら逆であり、操作は _x_ より前に _y_ に対して行われなければならない。</dd>
+        <dd>これは比較 _x_ &lt; _y_ のセマンティクスを提供し、*true*、*false*、または *undefined*（これは、オペランドを同じ数値型の比較可能な値へ強制変換できなかったことを示す）を返す。_leftFirst_ フラグは、潜在的に可視の副作用を伴う操作が _x_ および _y_ に対して実行される順序を制御するために使用される。ECMAScript は式の左から右への評価を規定しているため、これは必要である。_leftFirst_ が *true* の場合、_x_ パラメータは、_y_ パラメータに対応する式の左側に現れる式に対応する。_leftFirst_ が *false* の場合、その逆であり、操作は _x_ より前に _y_ に対して実行されなければならない。</dd>
       </dl>
       <emu-alg>
         1. _leftFirst_ が *true* の場合、
@@ -11311,7 +11311,7 @@
             CreateGlobalFunctionBinding (
               _envRec_: a Global Environment Record,
               _name_: a String,
-              _value_: an ECMAScript language value,
+              _value_: an ECMAScript function object,
               _deletable_: a Boolean,
             ): either a normal completion containing ~unused~ or a throw completion
           </h1>
@@ -11531,7 +11531,7 @@
       <emu-clause id="sec-newmoduleenvironment" type="abstract operation">
         <h1>
           NewModuleEnvironment (
-            _outerEnv_: an Environment Record,
+            _outerEnv_: a Global Environment Record,
           ): a Module Environment Record
         </h1>
         <dl class="header">
@@ -12309,7 +12309,7 @@
     </emu-clause>
 
     <emu-clause id="sec-IncrementModuleAsyncEvaluationCount" type="abstract operation">
-      <h1>IncrementModuleAsyncEvaluationCount ( ): an integer</h1>
+      <h1>IncrementModuleAsyncEvaluationCount ( ): a non-negative integer</h1>
       <dl class="header">
       </dl>
       <emu-alg>
@@ -15738,7 +15738,7 @@
       <emu-clause id="sec-createmappedargumentsobject" type="abstract operation">
         <h1>
           CreateMappedArgumentsObject (
-            _func_: an Object,
+            _func_: an ECMAScript function object,
             _formals_: a Parse Node,
             _argumentsList_: a List of ECMAScript language values,
             _env_: an Environment Record,
@@ -22754,7 +22754,7 @@
             EvaluateNew (
               _constructExpr_: a |NewExpression| Parse Node or a |MemberExpression| Parse Node,
               _arguments_: ~empty~ or an |Arguments| Parse Node,
-            ): either a normal completion containing an ECMAScript language value or an abrupt completion
+            ): either a normal completion containing an Object or an abrupt completion
           </h1>
           <dl class="header">
           </dl>
@@ -22949,7 +22949,7 @@
       </emu-clause>
 
       <emu-clause id="sec-getsuperconstructor" type="abstract operation">
-        <h1>GetSuperConstructor ( ): an ECMAScript language value</h1>
+        <h1>GetSuperConstructor ( ): an Object or *null*</h1>
         <dl class="header">
         </dl>
         <emu-alg>
@@ -25049,7 +25049,7 @@
       <h1>
         EvaluateStringOrNumericBinaryExpression (
           _leftOperand_: a Parse Node,
-          _opText_: a sequence of Unicode code points,
+          _opText_: `**`, `*`, `/`, `%`, `+`, `-`, `&lt;&lt;`, `&gt;&gt;`, `&gt;&gt;&gt;`, `&amp;`, `^`, or `|`,
           _rightOperand_: a Parse Node,
         ): either a normal completion containing either a String, a BigInt, or a Number, or an abrupt completion
       </h1>
@@ -38962,10 +38962,10 @@
       <emu-clause id="sec-makeday" type="abstract operation">
         <h1>
           MakeDay (
-            _year_: Number,
-            _month_: Number,
-            _date_: Number,
-          ): Number
+            _year_: a Number,
+            _month_: a Number,
+            _date_: a Number,
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -38987,9 +38987,9 @@
       <emu-clause id="sec-makedate" type="abstract operation">
         <h1>
           MakeDate (
-            _day_: Number,
-            _time_: Number,
-          ): Number
+            _day_: a Number,
+            _time_: a Number,
+          ): a finite Number or *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -39024,8 +39024,8 @@
       <emu-clause id="sec-timeclip" type="abstract operation">
         <h1>
           TimeClip (
-            _time_: Number,
-          ): Number
+            _time_: a Number,
+          ): a time value
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -44501,10 +44501,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-advancestringindex" type="abstract operation">
         <h1>
           AdvanceStringIndex (
-            _str_: String,
-            _index_: 非負整数,
-            _unicode_: Boolean,
-          ): 整数
+            _str_: a String,
+            _index_: a non-negative integer,
+            _unicode_: a Boolean,
+          ): a non-negative integer
         </h1>
         <dl class="header">
         </dl>
@@ -48550,10 +48550,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-add-entries-from-iterable" type="abstract operation">
         <h1>
           AddEntriesFromIterable (
-            _target_: Object,
-            _iterable_: ECMAScript言語値、ただし *undefined* または *null* ではない,
-            _adder_: 関数オブジェクト,
-          ): ECMAScript言語値を含む正常完了またはスロー完了のいずれか
+            _target_: an Object,
+            _iterable_: an ECMAScript language value, but not *undefined* or *null*,
+            _adder_: a function object,
+          ): either a normal completion containing an Object or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -51587,9 +51587,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-validateatomicaccess" type="abstract operation">
         <h1>
           ValidateAtomicAccess (
-            _taRecord_: TypedArray With Buffer Witness Record,
-            _requestIndex_: ECMAScript言語値,
-          ): 整数を含む正常完了またはスロー完了のいずれか
+            _taRecord_: a TypedArray With Buffer Witness Record,
+            _requestIndex_: an ECMAScript language value,
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -51608,9 +51608,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-validateatomicaccessonintegertypedarray" type="abstract operation">
         <h1>
           ValidateAtomicAccessOnIntegerTypedArray (
-            _typedArray_: ECMAScript言語値,
-            _requestIndex_: ECMAScript言語値,
-          ): 整数を含む正常完了またはスロー完了のいずれか
+            _typedArray_: an ECMAScript language value,
+            _requestIndex_: an ECMAScript language value,
+          ): either a normal completion containing a non-negative integer or a throw completion
         </h1>
         <dl class="header">
         </dl>
@@ -51623,9 +51623,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-revalidateatomicaccess" type="abstract operation">
         <h1>
           RevalidateAtomicAccess (
-            _typedArray_: TypedArray,
-            _byteIndexInBuffer_: 整数,
-          ): ~unused~ を含む正常完了またはスロー完了のいずれか
+            _typedArray_: a TypedArray,
+            _byteIndexInBuffer_: a non-negative integer,
+          ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -52696,36 +52696,38 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. _value_ を ? Get(_holder_, _key_) とする。
-          1. _value_ がObjectであるか、または _value_ がBigIntである場合、
+          1. _value_ が Object または _value_ が BigInt である場合、
             1. _toJSON_ を ? GetV(_value_, *"toJSON"*) とする。
-            1. IsCallable(_toJSON_) が *true* の場合、
+            1. IsCallable(_toJSON_) が *true* である場合、
               1. _value_ を ? Call(_toJSON_, _value_, « _key_ ») に設定する。
           1. _state_.[[ReplacerFunction]] が *undefined* でない場合、
             1. _value_ を ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ ») に設定する。
-          1. _value_ がObjectである場合、
+          1. _value_ が Object である場合、
             1. _value_ が [[IsRawJSON]] 内部スロットを持つ場合、
               1. _rawJSON_ を ! <emu-meta suppress-effects="user-code">Get(_value_, *"rawJSON"*)</emu-meta> とする。
-              1. Assert: _rawJSON_ はStringである。
+              1. Assert: _rawJSON_ は String である。
               1. _rawJSON_ を返す。
             1. _value_ が [[NumberData]] 内部スロットを持つ場合、
               1. _value_ を ? ToNumber(_value_) に設定する。
-            1. そうでなく _value_ が [[StringData]] 内部スロットを持つ場合、
+            1. そうではなく、_value_ が [[StringData]] 内部スロットを持つ場合、
               1. _value_ を ? ToString(_value_) に設定する。
-            1. そうでなく _value_ が [[BooleanData]] 内部スロットを持つ場合、
+            1. そうではなく、_value_ が [[BooleanData]] 内部スロットを持つ場合、
               1. _value_ を _value_.[[BooleanData]] に設定する。
-            1. そうでなく _value_ が [[BigIntData]] 内部スロットを持つ場合、
+            1. そうではなく、_value_ が [[BigIntData]] 内部スロットを持つ場合、
               1. _value_ を _value_.[[BigIntData]] に設定する。
           1. _value_ が *null* である場合、*"null"* を返す。
           1. _value_ が *true* である場合、*"true"* を返す。
           1. _value_ が *false* である場合、*"false"* を返す。
-          1. _value_ がStringである場合、QuoteJSONString(_value_) を返す。
-          1. _value_ がNumberである場合、
+          1. _value_ が String である場合、QuoteJSONString(_value_) を返す。
+          1. _value_ が Number である場合、
             1. _value_ が有限である場合、! ToString(_value_) を返す。
             1. *"null"* を返す。
-          1. _value_ がBigIntである場合、*TypeError* 例外をスローする。
-          1. _value_ がObjectであり、IsCallable(_value_) が *false* である場合、
+          1. _value_ が BigInt である場合、*TypeError* 例外を投げる。
+          1. _value_ が Object であり、IsCallable(_value_) が *false* である場合、
             1. _isArray_ を ? IsArray(_value_) とする。
-            1. _isArray_ が *true* である場合、? SerializeJSONArray(_state_, _value_) を返す。
+            1. _isArray_ が *true* である場合、
+              1. Assert: _value_ は Array である。_value_ は Proxy ではない。
+              1. ? SerializeJSONArray(_state_, _value_) を返す。
             1. ? SerializeJSONObject(_state_, _value_) を返す。
           1. *undefined* を返す。
         </emu-alg>
@@ -52917,9 +52919,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-serializejsonarray" type="abstract operation">
         <h1>
           SerializeJSONArray (
-            _state_: JSON Serialization Record,
-            _value_: ECMAScript言語値,
-          ): Stringを含む正常完了またはスロー完了のいずれか
+            _state_: a JSON Serialization Record,
+            _value_: an Array,
+          ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -54704,11 +54706,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseall" oldids="sec-promise.all-resolve-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAll (
-              _iteratorRecord_: Iterator Record,
-              _constructor_: constructor,
-              _resultCapability_: PromiseCapability Record,
-              _promiseResolve_: function object,
-            ): ECMAScript 言語値を含む normal completion または throw completion のいずれか
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -54771,11 +54773,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseallsettled" oldids="sec-promise.allsettled-resolve-element-functions,sec-promise.allsettled-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAllSettled (
-              _iteratorRecord_: Iterator Record,
-              _constructor_: constructor,
-              _resultCapability_: PromiseCapability Record,
-              _promiseResolve_: function object,
-            ): ECMAScript 言語値を含む normal completion または throw completion のいずれか
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -54859,11 +54861,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiseany" oldids="sec-promise.any-reject-element-functions" type="abstract operation">
           <h1>
             PerformPromiseAny (
-              _iteratorRecord_: Iterator Record,
-              _constructor_: constructor,
-              _resultCapability_: PromiseCapability Record,
-              _promiseResolve_: function object,
-            ): ECMAScript 言語値を含む normal completion または throw completion のいずれか
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -54937,11 +54939,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromiserace" type="abstract operation">
           <h1>
             PerformPromiseRace (
-              _iteratorRecord_: Iterator Record,
-              _constructor_: constructor,
-              _resultCapability_: PromiseCapability Record,
-              _promiseResolve_: function object,
-            ): ECMAScript 言語値を含む normal completion または throw completion のいずれか
+              _iteratorRecord_: an Iterator Record,
+              _constructor_: a constructor,
+              _resultCapability_: a PromiseCapability Record,
+              _promiseResolve_: a function object,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
           </dl>
@@ -54985,9 +54987,9 @@ THH:mm:ss.sss
         <emu-clause id="sec-promise-resolve" type="abstract operation">
           <h1>
             PromiseResolve (
-              _constructor_: Object,
-              _resolution_: ECMAScript 言語値,
-            ): ECMAScript 言語値を含む normal completion または throw completion のいずれか
+              _constructor_: an Object,
+              _resolution_: an ECMAScript language value,
+            ): either a normal completion containing an Object or a throw completion
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -55120,11 +55122,11 @@ THH:mm:ss.sss
         <emu-clause id="sec-performpromisethen" type="abstract operation">
           <h1>
             PerformPromiseThen (
-              _promise_: Promise,
-              _onFulfilled_: ECMAScript 言語値,
-              _onRejected_: ECMAScript 言語値,
-              optional _resultCapability_: PromiseCapability Record,
-            ): ECMAScript 言語値
+              _promise_: a Promise,
+              _onFulfilled_: an ECMAScript language value,
+              _onRejected_: an ECMAScript language value,
+              optional _resultCapability_: a PromiseCapability Record,
+            ): an Object or *undefined*
           </h1>
           <dl class="header">
             <dt>description</dt>
@@ -57159,7 +57161,7 @@ THH:mm:ss.sss
     <emu-alg>
       1. _eventA_ と _eventB_ が同じ Shared Data Block イベントでないならば、
         1. _execution_ において _eventA_ が _eventB_ より happens-before であり、かつ _eventB_ が _eventA_ より happens-before である、ということが成り立たないならば、
-          1. _eventA_ と _eventB_ がともに WriteSharedMemory または ReadModifyWriteSharedMemory イベントであり、かつ _eventA_ と _eventB_ が互いに素なメモリ範囲を持たないならば、
+          1. _eventA_ が WriteSharedMemory または ReadModifyWriteSharedMemory イベントのいずれかであり、_eventB_ が WriteSharedMemory または ReadModifyWriteSharedMemory イベントのいずれかであり、かつ _eventA_ と _eventB_ が互いに素なメモリ範囲を持たない場合、
             1. *true* を返す。
           1. _execution_ において _eventA_ が _eventB_ から reads-from する、または _eventB_ が _eventA_ から reads-from するならば、
             1. *true* を返す。
