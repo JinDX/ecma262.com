@@ -45683,7 +45683,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduce" type="built-in function">
         <h1>Array.prototype.reduce ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_ は4つの引数を取る関数であるべきです。`reduce`は、配列内に存在する最初の要素の後の各要素について、昇順にコールバックを関数として1回ずつ呼び出します。</p>
+          <p>_callback_ は4つの引数を取る関数でなければならない。`reduce` は、配列内に存在する各要素について昇順で _callback_ を1回ずつ呼び出す。ただし、_initialValue_ が提供されていない場合は最初の要素をスキップする。</p>
           <p>_callback_ は4つの引数、すなわち _previousValue_（_callback_ の前回の呼び出しからの値）、_currentValue_（現在の要素の値）、_currentIndex_、および走査されているオブジェクトで呼び出されます。callbackが初めて呼び出されるとき、_previousValue_ と _currentValue_ は2つの値のいずれかになります。`reduce`の呼び出しで _initialValue_ が供給された場合、_previousValue_ は _initialValue_ となり、_currentValue_ は配列の最初の値となります。_initialValue_ が供給されなかった場合、_previousValue_ は配列の最初の値となり、_currentValue_ は2番目の値となります。配列が要素を含まず、_initialValue_ が提供されていない場合、*TypeError* です。</p>
           <p>`reduce`は、それが呼び出されたオブジェクトを直接変更しませんが、_callback_ の呼び出しによってそのオブジェクトが変更される可能性があります。</p>
           <p>`reduce`によって処理される要素の範囲は、_callback_ の最初の呼び出しの前に設定されます。`reduce`の呼び出しが開始された後に配列へ追加された要素は、_callback_ によって訪問されません。配列の既存要素が変更された場合、_callback_ に渡される値は、`reduce`がその要素を訪問した時点の値になります。`reduce`の呼び出しが開始された後、訪問される前に削除された要素は訪問されません。</p>
@@ -45724,7 +45724,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduceright" type="built-in function">
         <h1>Array.prototype.reduceRight ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_ は4つの引数を取る関数であるべきです。`reduceRight`は、配列内に存在する最初の要素の後の各要素について、降順にコールバックを関数として1回ずつ呼び出します。</p>
+          <p>_callback_ は4つの引数を取る関数でなければならない。`reduceRight` は、配列内に存在する各要素について降順で _callback_ を1回ずつ呼び出す。ただし、_initialValue_ が提供されていない場合は最初の呼び出しをスキップする。</p>
           <p>_callback_ は4つの引数、すなわち _previousValue_（_callback_ の前回の呼び出しからの値）、_currentValue_（現在の要素の値）、_currentIndex_、および走査されているオブジェクトで呼び出されます。関数が初めて呼び出されるとき、_previousValue_ と _currentValue_ は2つの値のいずれかになります。`reduceRight`の呼び出しで _initialValue_ が供給された場合、_previousValue_ は _initialValue_ となり、_currentValue_ は配列の最後の値となります。_initialValue_ が供給されなかった場合、_previousValue_ は配列の最後の値となり、_currentValue_ は最後から2番目の値となります。配列が要素を含まず、_initialValue_ が提供されていない場合、*TypeError* です。</p>
           <p>`reduceRight`は、それが呼び出されたオブジェクトを直接変更しませんが、_callback_ の呼び出しによってそのオブジェクトが変更される可能性があります。</p>
           <p>`reduceRight`によって処理される要素の範囲は、_callback_ の最初の呼び出しの前に設定されます。`reduceRight`の呼び出しが開始された後に配列へ追加された要素は、_callback_ によって訪問されません。配列の既存要素が _callback_ によって変更された場合、_callback_ に渡される値は、`reduceRight`がその要素を訪問した時点の値になります。`reduceRight`の呼び出しが開始された後、訪問される前に削除された要素は訪問されません。</p>

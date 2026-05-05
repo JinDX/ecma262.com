@@ -43449,7 +43449,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduce" type="built-in function">
         <h1>Array.prototype.reduce ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_은 네 개의 인자를 받는 함수여야 한다. `reduce`는 배열에 존재하는 첫 번째 요소 뒤의 각 요소에 대해 오름차순으로 한 번씩 callback을 함수로 호출한다.</p>
+          <p>_callback_은 네 개의 인수를 받는 함수여야 한다. `reduce`는 _initialValue_가 제공되지 않는 한 첫 번째 요소를 건너뛰고, 배열에 존재하는 각 요소에 대해 오름차순으로 _callback_을 한 번씩 호출한다.</p>
           <p>_callback_은 네 개의 인자, 즉 _previousValue_(_callback_의 이전 호출에서 온 값), _currentValue_(현재 요소의 값), _currentIndex_, 그리고 순회 중인 객체와 함께 호출된다. callback이 처음 호출될 때, _previousValue_와 _currentValue_는 두 값 중 하나일 수 있다. `reduce` 호출에서 _initialValue_가 제공되었다면, _previousValue_는 _initialValue_가 되고 _currentValue_는 배열의 첫 번째 값이 된다. _initialValue_가 제공되지 않았다면, _previousValue_는 배열의 첫 번째 값이 되고 _currentValue_는 두 번째 값이 된다. 배열이 요소를 포함하지 않고 _initialValue_가 제공되지 않으면 *TypeError*이다.</p>
           <p>`reduce`는 호출 대상 객체를 직접 변경하지 않지만, _callback_ 호출에 의해 객체가 변경될 수 있다.</p>
           <p>`reduce`가 처리하는 요소의 범위는 _callback_의 첫 호출 전에 설정된다. `reduce` 호출이 시작된 뒤 배열에 추가되는 요소는 _callback_이 방문하지 않는다. 배열의 기존 요소가 변경되면, _callback_에 전달되는 값은 `reduce`가 해당 요소를 방문하는 시점의 값이 된다; `reduce` 호출이 시작된 뒤 방문되기 전에 삭제되는 요소는 방문되지 않는다.</p>
@@ -43490,7 +43490,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduceright" type="built-in function">
         <h1>Array.prototype.reduceRight ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_은 네 개의 인자를 받는 함수여야 한다. `reduceRight`는 배열에 존재하는 첫 번째 요소 뒤의 각 요소에 대해 내림차순으로 한 번씩 callback을 함수로 호출한다.</p>
+          <p>_callback_은 네 개의 인수를 받는 함수여야 한다. `reduceRight`는 _initialValue_가 제공되지 않는 한 첫 번째 호출을 건너뛰고, 배열에 존재하는 각 요소에 대해 내림차순으로 _callback_을 한 번씩 호출한다.</p>
           <p>_callback_은 네 개의 인자, 즉 _previousValue_(_callback_의 이전 호출에서 온 값), _currentValue_(현재 요소의 값), _currentIndex_, 그리고 순회 중인 객체와 함께 호출된다. 함수가 처음 호출될 때, _previousValue_와 _currentValue_는 두 값 중 하나일 수 있다. `reduceRight` 호출에서 _initialValue_가 제공되었다면, _previousValue_는 _initialValue_가 되고 _currentValue_는 배열의 마지막 값이 된다. _initialValue_가 제공되지 않았다면, _previousValue_는 배열의 마지막 값이 되고 _currentValue_는 끝에서 두 번째 값이 된다. 배열이 요소를 포함하지 않고 _initialValue_가 제공되지 않으면 *TypeError*이다.</p>
           <p>`reduceRight`는 호출 대상 객체를 직접 변경하지 않지만, _callback_ 호출에 의해 객체가 변경될 수 있다.</p>
           <p>`reduceRight`가 처리하는 요소의 범위는 _callback_의 첫 호출 전에 설정된다. `reduceRight` 호출이 시작된 뒤 배열에 추가되는 요소는 _callback_이 방문하지 않는다. 배열의 기존 요소가 _callback_에 의해 변경되면, _callback_에 전달되는 값은 `reduceRight`가 해당 요소를 방문하는 시점의 값이 된다; `reduceRight` 호출이 시작된 뒤 방문되기 전에 삭제되는 요소는 방문되지 않는다.</p>

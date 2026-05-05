@@ -43346,7 +43346,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduce" type="built-in function">
         <h1>Array.prototype.reduce ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_ 应是一个接受四个参数的函数。`reduce` 以函数形式按升序对数组中存在的第一个元素之后的每个元素调用一次 callback。</p>
+          <p>_callback_ 应是一个接受四个参数的函数。`reduce` 会按升序对数组中存在的每个元素调用一次 _callback_，除非提供了 _initialValue_，否则会跳过第一个元素。</p>
           <p>调用 _callback_ 时传入四个参数：_previousValue_（前一次调用 _callback_ 得到的值）、_currentValue_（当前元素的值）、_currentIndex_ 以及正在遍历的对象。第一次调用 callback 时，_previousValue_ 和 _currentValue_ 可以是两种值之一。如果调用 `reduce` 时提供了 _initialValue_，则 _previousValue_ 将是 _initialValue_，_currentValue_ 将是数组中的第一个值。如果未提供 _initialValue_，则 _previousValue_ 将是数组中的第一个值，_currentValue_ 将是第二个值。如果数组不包含任何元素且未提供 _initialValue_，则为 *TypeError*。</p>
           <p>`reduce` 不会直接修改调用它的对象，但该对象可能会被对 _callback_ 的调用修改。</p>
           <p>`reduce` 处理的元素范围在第一次调用 _callback_ 之前确定。在 `reduce` 调用开始后追加到数组的元素不会被 _callback_ 访问。如果数组的现有元素被更改，则传给 _callback_ 的值将是 `reduce` 访问它们时的值；在 `reduce` 调用开始后且被访问之前被删除的元素不会被访问。</p>
@@ -43387,7 +43387,7 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.reduceright" type="built-in function">
         <h1>Array.prototype.reduceRight ( _callback_ [ , _initialValue_ ] )</h1>
         <emu-note>
-          <p>_callback_ 应是一个接受四个参数的函数。`reduceRight` 以函数形式按降序对数组中存在的第一个元素之后的每个元素调用一次 callback。</p>
+          <p>_callback_ 应是一个接受四个参数的函数。`reduceRight` 会按降序对数组中存在的每个元素调用一次 _callback_，除非提供了 _initialValue_，否则会跳过第一次调用。</p>
           <p>调用 _callback_ 时传入四个参数：_previousValue_（前一次调用 _callback_ 得到的值）、_currentValue_（当前元素的值）、_currentIndex_ 以及正在遍历的对象。第一次调用该函数时，_previousValue_ 和 _currentValue_ 可以是两种值之一。如果调用 `reduceRight` 时提供了 _initialValue_，则 _previousValue_ 将是 _initialValue_，_currentValue_ 将是数组中的最后一个值。如果未提供 _initialValue_，则 _previousValue_ 将是数组中的最后一个值，_currentValue_ 将是倒数第二个值。如果数组不包含任何元素且未提供 _initialValue_，则为 *TypeError*。</p>
           <p>`reduceRight` 不会直接修改调用它的对象，但该对象可能会被对 _callback_ 的调用修改。</p>
           <p>`reduceRight` 处理的元素范围在第一次调用 _callback_ 之前确定。在 `reduceRight` 调用开始后追加到数组的元素不会被 _callback_ 访问。如果数组的现有元素被 _callback_ 更改，则传给 _callback_ 的值将是 `reduceRight` 访问它们时的值；在 `reduceRight` 调用开始后且被访问之前被删除的元素不会被访问。</p>
