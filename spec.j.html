@@ -5318,205 +5318,172 @@
       </emu-note>
     </emu-clause>
 
-    <emu-clause id="sec-toint32" type="abstract operation">
+    <emu-clause id="sec-tofixedsizeinteger" type="abstract operation">
       <h1>
-        ToInt32 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+        ToFixedSizeInteger (
+          _int_: 整数、+∞、または -∞,
+          _signed_: ~unsigned~ または ~signed~,
+          _bitWidth_: 正の整数,
+        ): 整数
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、𝔽(-2<sup>31</sup>) から 𝔽(2<sup>31</sup> - 1) までの包含区間にある 2<sup>32</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_int_ を、0 から 2<sup>_bitWidth_</sup> - 1 までの両端を含む区間にある 2<sup>_bitWidth_</sup> 個の整数のうちの 1 つ（_signed_ が ~unsigned~ の場合）、または -2<sup>_bitWidth_ - 1</sup> から 2<sup>_bitWidth_ - 1</sup> - 1 まで（_signed_ が ~signed~ の場合）に写像する。</dd>
+      </dl>
+      <emu-alg>
+        1. _int_ = +∞ または _int_ = -∞ である場合、0 を返す。
+        1. _fixedInt_ を _int_ modulo 2<sup>_bitWidth_</sup> とする。
+        1. NOTE: 次のステップは _fixedInt_ の 2 の補数表現を変更しない。
+        1. _signed_ が ~signed~ であり、かつ _fixedInt_ ≥ 2<sup>_bitWidth_ - 1</sup> である場合、_fixedInt_ を _fixedInt_ - 2<sup>_bitWidth_</sup> に設定する。
+        1. _fixedInt_ を返す。
+      </emu-alg>
+      <emu-note>
+        <p>ToFixedSizeInteger は冪等である: 任意の ECMAScript 言語値 _x_ について、ToFixedSizeInteger(ToFixedSizeInteger(_x_, _signed_, _bitWidth_), _signed_, _bitWidth_) は ToFixedSizeInteger(_x_, _signed_, _bitWidth_) と同じである。実際、+∞ と -∞ は 0 に写像されるため、この不変条件は _signed_ の反転をまたいでも維持される（例えば、ToFixedSizeInteger(ToFixedSizeInteger(_x_, ~signed~, 32), ~unsigned~, 32) は ToFixedSizeInteger(_x_, ~unsigned~, 32) と同じである）。</p>
+      </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-toint32" type="abstract operation">
+      <h1>
+        ToInt32 (
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>これは、_argument_ を、𝔽(-2<sup>31</sup>) から 𝔽(2<sup>31</sup> - 1) までの両端を含む区間にある、*-0*<sub>𝔽</sub> を除く 2<sup>32</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. _int32bit_ を _int_ modulo 2<sup>32</sup> とする。
-        1. _int32bit_ ≥ 2<sup>31</sup> なら、𝔽(_int32bit_ - 2<sup>32</sup>) を返す。
-        1. 𝔽(_int32bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 32)) を返す。
       </emu-alg>
-      <emu-note>
-        <p>上の定義から次が言える。</p>
-        <ul>
-          <li>
-            これは冪等である。任意の ECMAScript 言語値 _x_ に対し、ToInt32(ToInt32(_x_)) は ToInt32(_x_) と同じである。
-          </li>
-          <li>
-            任意の ECMAScript 言語値 _x_ に対し、ToInt32(ToUint32(_x_)) は ToInt32(_x_) と同じである。（*+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> が *+0*<sub>𝔽</sub> に写像されるのは、この性質を保つためである。）
-          </li>
-          <li>
-            ToInt32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写像する。
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-touint32" type="abstract operation">
       <h1>
         ToUint32 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*+0*<sub>𝔽</sub> から 𝔽(2<sup>32</sup> - 1) までの包含区間にある 2<sup>32</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、*+0*<sub>𝔽</sub> から 𝔽(2<sup>32</sup> - 1) までの両端を含む区間にある 2<sup>32</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. _int32bit_ を _int_ modulo 2<sup>32</sup> とする。
-        1. [id="step-touint32-return"] 𝔽(_int32bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 32)) を返す。
       </emu-alg>
-      <emu-note>
-        <p>上の定義から次が言える。</p>
-        <ul>
-          <li>
-            手順 <emu-xref href="#step-touint32-return"></emu-xref> だけが ToUint32 と ToInt32 の相違点である。
-          </li>
-          <li>
-            これは冪等である。任意の ECMAScript 言語値 _x_ に対し、ToUint32(ToUint32(_x_)) は ToUint32(_x_) と同じである。
-          </li>
-          <li>
-            任意の ECMAScript 言語値 _x_ に対し、ToUint32(ToInt32(_x_)) は ToUint32(_x_) と同じである。（*+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> が *+0*<sub>𝔽</sub> に写像されるのは、この性質を保つためである。）
-          </li>
-          <li>
-            ToUint32 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写像する。
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint16" type="abstract operation">
       <h1>
         ToInt16 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、𝔽(-2<sup>15</sup>) から 𝔽(2<sup>15</sup> - 1) までの包含区間にある 2<sup>16</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、𝔽(-2<sup>15</sup>) から 𝔽(2<sup>15</sup> - 1) までの両端を含む区間にある、*-0*<sub>𝔽</sub> を除く 2<sup>16</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. _int16bit_ を _int_ modulo 2<sup>16</sup> とする。
-        1. _int16bit_ ≥ 2<sup>15</sup> なら、𝔽(_int16bit_ - 2<sup>16</sup>) を返す。
-        1. 𝔽(_int16bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 16)) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint16" type="abstract operation">
       <h1>
         ToUint16 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*+0*<sub>𝔽</sub> から 𝔽(2<sup>16</sup> - 1) までの包含区間にある 2<sup>16</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、*+0*<sub>𝔽</sub> から 𝔽(2<sup>16</sup> - 1) までの両端を含む区間にある 2<sup>16</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. [id="step-touint16-mod"] _int16bit_ を _int_ modulo 2<sup>16</sup> とする。
-        1. 𝔽(_int16bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 16)) を返す。
       </emu-alg>
-      <emu-note>
-        <p>上の定義から次が言える。</p>
-        <ul>
-          <li>
-            手順 <emu-xref href="#step-touint16-mod"></emu-xref> における 2<sup>32</sup> を 2<sup>16</sup> に置き換えることだけが ToUint32 と ToUint16 の相違点である。
-          </li>
-          <li>
-            ToUint16 は *-0*<sub>𝔽</sub> を *+0*<sub>𝔽</sub> に写像する。
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint8" type="abstract operation">
       <h1>
         ToInt8 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*-128*<sub>𝔽</sub> から *127*<sub>𝔽</sub> までの包含区間にある 2<sup>8</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、*-128*<sub>𝔽</sub> から *127*<sub>𝔽</sub> までの両端を含む区間にある、*-0*<sub>𝔽</sub> を除く 2<sup>8</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. _int8bit_ を _int_ modulo 2<sup>8</sup> とする。
-        1. _int8bit_ ≥ 2<sup>7</sup> なら、𝔽(_int8bit_ - 2<sup>8</sup>) を返す。
-        1. 𝔽(_int8bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 8)) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint8" type="abstract operation">
       <h1>
         ToUint8 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*+0*<sub>𝔽</sub> から *255*<sub>𝔽</sub> までの包含区間にある 2<sup>8</sup> 個の integral Number 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、*+0*<sub>𝔽</sub> から *255*<sub>𝔽</sub> までの両端を含む区間にある 2<sup>8</sup> 個の整数の Number 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
         1. _int_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _int_ が有限でないなら、*+0*<sub>𝔽</sub> を返す。
-        1. _int8bit_ を _int_ modulo 2<sup>8</sup> とする。
-        1. 𝔽(_int8bit_) を返す。
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 8)) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint8clamp" type="abstract operation">
       <h1>
         ToUint8Clamp (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*+0*<sub>𝔽</sub> から *255*<sub>𝔽</sub> までの包含区間にある 2<sup>8</sup> 個の integral Number 値のいずれかへ clamp し、丸める。</dd>
+        <dd>これは、_argument_ を *+0*<sub>𝔽</sub> から *255*<sub>𝔽</sub> までの両端を含む区間にある 2<sup>8</sup> 個の整数の Number 値のうちの 1 つにクランプし、丸める。</dd>
       </dl>
       <emu-alg>
         1. _number_ を ? ToNumber(_argument_) とする。
-        1. _number_ が *NaN* なら、*+0*<sub>𝔽</sub> を返す。
-        1. _mv_ を _number_ の拡張数学的値とする。
-        1. _clamped_ を _mv_ を 0 と 255 の間に clamp した結果とする。
+        1. _number_ が *NaN* である場合、*+0*<sub>𝔽</sub> を返す。
+        1. _mv_ を _number_ の拡張数学値とする。
+        1. _clamped_ を _mv_ を 0 と 255 の間にクランプした結果とする。
         1. _f_ を floor(_clamped_) とする。
-        1. _clamped_ &lt; _f_ + 0.5 なら、𝔽(_f_) を返す。
-        1. _clamped_ > _f_ + 0.5 なら、𝔽(_f_ + 1) を返す。
-        1. _f_ が偶数なら、𝔽(_f_) を返す。
+        1. _clamped_ &lt; _f_ + 0.5 である場合、𝔽(_f_) を返す。
+        1. _clamped_ > _f_ + 0.5 である場合、𝔽(_f_ + 1) を返す。
+        1. _f_ が偶数である場合、𝔽(_f_) を返す。
         1. 𝔽(_f_ + 1) を返す。
       </emu-alg>
       <emu-note>
-        <p>他の大半の ECMAScript 整数変換操作と異なり、ToUint8Clamp は非整数値を切り捨てるのではなく丸める。また、<emu-xref href="#sec-math.round">`Math.round`</emu-xref> の “round half up” による tie-breaking とは異なり、“round half to even” による tie-breaking を用いる。</p>
+        <p>他のほとんどの ECMAScript 整数変換操作とは異なり、ToUint8Clamp は非整数値を切り捨てるのではなく丸める。また、これは「最近接偶数丸め」の同値分岐を使用し、これは <emu-xref href="#sec-math.round">`Math.round`</emu-xref> の「最近接切り上げ」の同値分岐とは異なる。</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-tobigint" type="abstract operation">
       <h1>
         ToBigInt (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): BigInt を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を BigInt 値に変換する。あるいは、Number からの暗黙変換が必要となるなら throw する。</dd>
+        <dd>これは、_argument_ を BigInt 値に変換する、または Number からの暗黙の変換が必要となる場合は throw する。</dd>
       </dl>
       <emu-alg>
         1. _prim_ を ? ToPrimitive(_argument_, ~number~) とする。
-        1. _prim_ に対応する <emu-xref href="#table-tobigint"></emu-xref> の値を返す。
+        1. <emu-xref href="#table-tobigint"></emu-xref> において _prim_ が対応する値を返す。
       </emu-alg>
-      <emu-table id="table-tobigint" caption="BigInt Conversions">
+      <emu-table id="table-tobigint" caption="BigInt 変換">
         <table>
           <thead>
             <tr>
               <th>
-                引数型
+                引数の型
               </th>
               <th>
                 結果
@@ -5528,7 +5495,7 @@
               Undefined
             </td>
             <td>
-              *TypeError* 例外を throw する。
+              *TypeError* 例外を投げる。
             </td>
           </tr>
           <tr>
@@ -5536,7 +5503,7 @@
               Null
             </td>
             <td>
-              *TypeError* 例外を throw する。
+              *TypeError* 例外を投げる。
             </td>
           </tr>
           <tr>
@@ -5544,7 +5511,7 @@
               Boolean
             </td>
             <td>
-              _prim_ が *true* なら `1n` を、_prim_ が *false* なら `0n` を返す。
+              _prim_ が *true* である場合は `1n` を返し、_prim_ が *false* である場合は `0n` を返す。
             </td>
           </tr>
           <tr>
@@ -5560,7 +5527,7 @@
               Number
             </td>
             <td>
-              *TypeError* 例外を throw する。
+              *TypeError* 例外を投げる。
             </td>
           </tr>
           <tr>
@@ -5570,7 +5537,7 @@
             <td>
               <emu-alg>
                 1. _n_ を StringToBigInt(_prim_) とする。
-                1. _n_ が *undefined* なら、*SyntaxError* 例外を throw する。
+                1. _n_ が *undefined* である場合、*SyntaxError* 例外を投げる。
                 1. _n_ を返す。
               </emu-alg>
             </td>
@@ -5580,7 +5547,7 @@
               Symbol
             </td>
             <td>
-              *TypeError* 例外を throw する。
+              *TypeError* 例外を投げる。
             </td>
           </tr>
         </table>
@@ -5590,14 +5557,14 @@
     <emu-clause id="sec-stringtobigint" type="abstract operation">
       <h1>
         StringToBigInt (
-          _str_: a String,
-        ): a BigInt or *undefined*
+          _str_: String,
+        ): BigInt または *undefined*
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
         1. _literal_ を ParseText(_str_, |StringIntegerLiteral|) とする。
-        1. _literal_ がエラーの List なら、*undefined* を返す。
+        1. _literal_ がエラーの List である場合、*undefined* を返す。
         1. _mv_ を _literal_ の MV とする。
         1. Assert: _mv_ は整数である。
         1. ℤ(_mv_) を返す。
@@ -5605,7 +5572,7 @@
 
       <emu-clause id="sec-stringintegerliteral-grammar">
         <h1>StringIntegerLiteral 文法</h1>
-        <p>StringToBigInt は以下の文法を用いる。</p>
+        <p>StringToBigInt は次の文法を使用する。</p>
         <h2>構文</h2>
         <emu-grammar type="definition">
           StringIntegerLiteral :::
@@ -5619,7 +5586,7 @@
       </emu-clause>
 
       <emu-clause id="sec-runtime-semantics-mv-for-stringintegerliteral">
-        <h1>Runtime Semantics: MV</h1>
+        <h1>実行時セマンティクス: MV</h1>
         <ul>
           <li>
             <emu-grammar>StringIntegerLiteral ::: StrWhiteSpace?</emu-grammar> の MV は 0 である。
@@ -5634,57 +5601,54 @@
     <emu-clause id="sec-tobigint64" type="abstract operation">
       <h1>
         ToBigInt64 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): BigInt を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、ℤ(-2<sup>63</sup>) から ℤ(2<sup>63</sup> - 1) までの包含区間にある 2<sup>64</sup> 個の BigInt 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、ℤ(-2<sup>63</sup>) から ℤ(2<sup>63</sup> - 1) までの両端を含む区間にある 2<sup>64</sup> 個の BigInt 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _n_ を ? ToBigInt(_argument_) とする。
-        1. _int64bit_ を ℝ(_n_) modulo 2<sup>64</sup> とする。
-        1. _int64bit_ ≥ 2<sup>63</sup> なら、ℤ(_int64bit_ - 2<sup>64</sup>) を返す。
-        1. ℤ(_int64bit_) を返す。
+        1. _int_ を ℝ(? ToBigInt(_argument_)) とする。
+        1. ℤ(ToFixedSizeInteger(_int_, ~signed~, 64)) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tobiguint64" type="abstract operation">
       <h1>
         ToBigUint64 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): BigInt を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、*0*<sub>ℤ</sub> から ℤ(2<sup>64</sup> - 1) までの包含区間にある 2<sup>64</sup> 個の BigInt 値のいずれかに変換する。</dd>
+        <dd>これは、_argument_ を、*0*<sub>ℤ</sub> から ℤ(2<sup>64</sup> - 1) までの両端を含む区間にある 2<sup>64</sup> 個の BigInt 値のうちの 1 つに変換する。</dd>
       </dl>
       <emu-alg>
-        1. _n_ を ? ToBigInt(_argument_) とする。
-        1. _int64bit_ を ℝ(_n_) modulo 2<sup>64</sup> とする。
-        1. ℤ(_int64bit_) を返す。
+        1. _int_ を ℝ(? ToBigInt(_argument_)) とする。
+        1. ℤ(ToFixedSizeInteger(_int_, ~unsigned~, 64)) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tostring" oldids="table-tostring-conversions" type="abstract operation">
       <h1>
         ToString (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a String or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): String を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を String 型の値へ変換する。</dd>
+        <dd>これは、_argument_ を String 型の値に変換する。</dd>
       </dl>
       <emu-alg>
-        1. _argument_ が String なら、_argument_ を返す。
-        1. _argument_ が Symbol なら、*TypeError* 例外を throw する。
-        1. _argument_ が *undefined* なら、*"undefined"* を返す。
-        1. _argument_ が *null* なら、*"null"* を返す。
-        1. _argument_ が *true* なら、*"true"* を返す。
-        1. _argument_ が *false* なら、*"false"* を返す。
-        1. _argument_ が Number なら、Number::toString(_argument_, 10) を返す。
-        1. _argument_ が BigInt なら、BigInt::toString(_argument_, 10) を返す。
+        1. _argument_ が String である場合、_argument_ を返す。
+        1. _argument_ が Symbol である場合、*TypeError* 例外を投げる。
+        1. _argument_ が *undefined* である場合、*"undefined"* を返す。
+        1. _argument_ が *null* である場合、*"null"* を返す。
+        1. _argument_ が *true* である場合、*"true"* を返す。
+        1. _argument_ が *false* である場合、*"false"* を返す。
+        1. _argument_ が Number である場合、Number::toString(_argument_, 10) を返す。
+        1. _argument_ が BigInt である場合、BigInt::toString(_argument_, 10) を返す。
         1. Assert: _argument_ は Object である。
         1. _primValue_ を ? ToPrimitive(_argument_, ~string~) とする。
         1. Assert: _primValue_ は Object ではない。
@@ -5695,20 +5659,20 @@
     <emu-clause id="sec-toobject" type="abstract operation" oldids="table-toobject-conversions,table-13">
       <h1>
         ToObject (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an Object or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): Object を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を Object 型の値へ変換する。</dd>
+        <dd>これは、_argument_ を Object 型の値に変換する。</dd>
       </dl>
       <emu-alg>
-        1. _argument_ が *undefined* または *null* のいずれかであるなら、*TypeError* 例外を throw する。
-        1. _argument_ が Boolean なら、その [[BooleanData]] 内部スロットが _argument_ に設定された新しい Boolean object を返す。Boolean object の説明については <emu-xref href="#sec-boolean-objects"></emu-xref> を参照。
-        1. _argument_ が Number なら、その [[NumberData]] 内部スロットが _argument_ に設定された新しい Number object を返す。Number object の説明については <emu-xref href="#sec-number-objects"></emu-xref> を参照。
-        1. _argument_ が String なら、その [[StringData]] 内部スロットが _argument_ に設定された新しい String object を返す。String object の説明については <emu-xref href="#sec-string-objects"></emu-xref> を参照。
-        1. _argument_ が Symbol なら、その [[SymbolData]] 内部スロットが _argument_ に設定された新しい Symbol object を返す。Symbol object の説明については <emu-xref href="#sec-symbol-objects"></emu-xref> を参照。
-        1. _argument_ が BigInt なら、その [[BigIntData]] 内部スロットが _argument_ に設定された新しい BigInt object を返す。BigInt object の説明については <emu-xref href="#sec-bigint-objects"></emu-xref> を参照。
+        1. _argument_ が *undefined* または *null* のいずれかである場合、*TypeError* 例外を投げる。
+        1. _argument_ が Boolean である場合、[[BooleanData]] 内部スロットが _argument_ に設定された新しい Boolean オブジェクトを返す。Boolean オブジェクトの説明については <emu-xref href="#sec-boolean-objects"></emu-xref> を参照。
+        1. _argument_ が Number である場合、[[NumberData]] 内部スロットが _argument_ に設定された新しい Number オブジェクトを返す。Number オブジェクトの説明については <emu-xref href="#sec-number-objects"></emu-xref> を参照。
+        1. _argument_ が String である場合、[[StringData]] 内部スロットが _argument_ に設定された新しい String オブジェクトを返す。String オブジェクトの説明については <emu-xref href="#sec-string-objects"></emu-xref> を参照。
+        1. _argument_ が Symbol である場合、[[SymbolData]] 内部スロットが _argument_ に設定された新しい Symbol オブジェクトを返す。Symbol オブジェクトの説明については <emu-xref href="#sec-symbol-objects"></emu-xref> を参照。
+        1. _argument_ が BigInt である場合、[[BigIntData]] 内部スロットが _argument_ に設定された新しい BigInt オブジェクトを返す。BigInt オブジェクトの説明については <emu-xref href="#sec-bigint-objects"></emu-xref> を参照。
         1. Assert: _argument_ は Object である。
         1. _argument_ を返す。
       </emu-alg>
@@ -5717,16 +5681,16 @@
     <emu-clause id="sec-topropertykey" type="abstract operation">
       <h1>
         ToPropertyKey (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a property key or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): プロパティキーを含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を property key として使用できる値へ変換する。</dd>
+        <dd>これは、_argument_ をプロパティキーとして使用できる値に変換する。</dd>
       </dl>
       <emu-alg>
         1. _key_ を ? ToPrimitive(_argument_, ~string~) とする。
-        1. _key_ が Symbol であるなら、
+        1. _key_ が Symbol である場合、
           1. _key_ を返す。
         1. ! ToString(_key_) を返す。
       </emu-alg>
@@ -5735,16 +5699,16 @@
     <emu-clause id="sec-tolength" type="abstract operation">
       <h1>
         ToLength (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a non-negative integral Number or a throw completion
+          _argument_: ECMAScript 言語値,
+        ): 非負の整数の Number を含む正常完了、または throw 完了
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>これは _argument_ を、array-like object の length として使用するのに適した非負の integral Number に clamp し、切り捨てる。</dd>
+        <dd>これは、_argument_ を、配列風オブジェクトの長さとして使用するのに適した非負の整数の Number にクランプし、切り捨てる。</dd>
       </dl>
       <emu-alg>
         1. _len_ を ? ToIntegerOrInfinity(_argument_) とする。
-        1. _len_ ≤ 0 なら、*+0*<sub>𝔽</sub> を返す。
+        1. _len_ ≤ 0 である場合、*+0*<sub>𝔽</sub> を返す。
         1. 𝔽(min(_len_, 2<sup>53</sup> - 1)) を返す。
       </emu-alg>
     </emu-clause>
@@ -5752,20 +5716,20 @@
     <emu-clause id="sec-canonicalnumericindexstring" type="abstract operation">
       <h1>
         CanonicalNumericIndexString (
-          _argument_: a String,
-        ): a Number or *undefined*
+          _argument_: String,
+        ): Number または *undefined*
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>_argument_ が *"-0"* であるか、またはある Number 値 _n_ に対して ToString(_n_) に正確に一致するなら、対応する Number 値を返す。それ以外の場合は *undefined* を返す。</dd>
+        <dd>_argument_ が *"-0"* であるか、ある Number 値 _n_ について ToString(_n_) と正確に一致する場合、それは対応する Number 値を返す。そうでない場合、*undefined* を返す。</dd>
       </dl>
       <emu-alg>
-        1. _argument_ が *"-0"* なら、*-0*<sub>𝔽</sub> を返す。
+        1. _argument_ が *"-0"* である場合、*-0*<sub>𝔽</sub> を返す。
         1. _n_ を ! ToNumber(_argument_) とする。
-        1. ! ToString(_n_) が _argument_ であるなら、_n_ を返す。
+        1. ! ToString(_n_) が _argument_ である場合、_n_ を返す。
         1. *undefined* を返す。
       </emu-alg>
-      <p><dfn variants="canonical numeric strings">canonical numeric string</dfn> とは、抽象操作 CanonicalNumericIndexString が *undefined* を返さない任意の String のことである。</p>
+      <p><dfn variants="canonical numeric strings">正準数値文字列</dfn>とは、CanonicalNumericIndexString 抽象操作が *undefined* を返さない任意の String である。</p>
     </emu-clause>
 
     <emu-clause id="sec-toindex" type="abstract operation">
@@ -12008,6 +11972,27 @@
       <emu-alg>
         1. _currentRealm_ を current Realm Record とする。
         1. _currentRealm_.[[GlobalObject]] を返す。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-runsuspendedcontext" type="abstract operation">
+      <h1>
+        RunSuspendedContext (
+          _context_: 実行コンテキスト,
+          _completionRecord_: 完了レコード,
+        ): ECMAScript 言語値または ~unused~ のいずれかを含む正常完了、または中途完了
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>これは _context_ を再開し（再開値として _completionRecord_ を送信し）、結果を待つ。</dd>
+      </dl>
+      <emu-alg>
+        1. _callerContext_ を実行中の実行コンテキストとする。
+        1. _callerContext_ を中断する。
+        1. _context_ を実行コンテキストスタックにプッシュする；_context_ は今や実行中の実行コンテキストである。
+        1. <emu-meta effects="user-code">_context_ の中断された評価を再開する</emu-meta>。その際、それを中断させた操作の結果として _completionRecord_ を用いる。再開された計算により返された完了レコードを _result_ とする。
+        1. Assert: このステップに到達した時点で、_context_ はすでに実行コンテキストスタックから取り除かれており、_callerContext_ が再び実行中の実行コンテキストである。
+        1. Return Completion(_result_).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -33929,9 +33914,9 @@
             <emu-alg>
               1. Assert: _module_ はリンク済みであり、そのモジュール環境内の宣言はインスタンス化済みである。
               1. _moduleContext_ を _module_.[[Context]] とする。
-              1. 実行中の実行コンテキストを中断する。
               1. _module_.[[HasTLA]] が *false* である場合、
                 1. Assert: _capability_ は存在しない。
+                1. 実行中の実行コンテキストを中断する。
                 1. _moduleContext_ を実行コンテキストスタックにプッシュする。_moduleContext_ は現在の実行中の実行コンテキストである。
                 1. _result_ を Completion(_module_.[[ECMAScriptCode]] の Evaluation) とする。
                 1. _moduleContext_ を中断し、実行コンテキストスタックから削除する。
@@ -55644,16 +55629,11 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. _state_ を ? GeneratorValidate(_generator_, _generatorBrand_) とする。
-          1. _state_ が ~completed~ であるならば、CreateIteratorResultObject(*undefined*, *true*) を返す。
+          1. _state_ が ~completed~ である場合、CreateIteratorResultObject(*undefined*, *true*) を返す。
           1. Assert: _state_ は ~suspended-start~ または ~suspended-yield~ のいずれかである。
           1. _genContext_ を _generator_.[[GeneratorContext]] とする。
-          1. _methodContext_ を実行中の実行コンテキストとする。
-          1. _methodContext_ を suspend する。
           1. _generator_.[[GeneratorState]] を ~executing~ に設定する。
-          1. _genContext_ を実行コンテキストスタックに push する。_genContext_ はここで実行中の実行コンテキストとなる。
-          1. <emu-meta effects="user-code">_genContext_ の suspended evaluation を再開する</emu-meta>。その際、それを suspend した操作の結果として NormalCompletion(_value_) を使用する。_result_ を、再開された計算によって返された値とする。
-          1. Assert: ここに戻ってきたとき、_genContext_ は既に実行コンテキストスタックから取り除かれており、_methodContext_ が現在実行中の実行コンテキストである。
-          1. ? _result_ を返す。
+          1. ? RunSuspendedContext(_genContext_, NormalCompletion(_value_)) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -55669,23 +55649,18 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. _state_ を ? GeneratorValidate(_generator_, _generatorBrand_) とする。
-          1. _state_ が ~suspended-start~ であるならば、
+          1. _state_ が ~suspended-start~ である場合、
             1. _generator_.[[GeneratorState]] を ~completed~ に設定する。
-            1. NOTE: generator が ~completed~ 状態に入ると、それは二度とその状態を離れず、関連付けられた実行コンテキストは二度と再開されない。この時点で、_generator_ に関連付けられた任意の実行状態は破棄できる。
+            1. NOTE: ジェネレーターはいったん ~completed~ 状態に入ると、そこから離れることはなく、それに関連付けられた実行コンテキストが再開されることもない。この時点で、_generator_ に関連付けられた任意の実行状態を破棄できる。
             1. _state_ を ~completed~ に設定する。
-          1. _state_ が ~completed~ であるならば、
-            1. _abruptCompletion_ が return completion であるならば、
+          1. _state_ が ~completed~ である場合、
+            1. _abruptCompletion_ が return 完了である場合、
               1. CreateIteratorResultObject(_abruptCompletion_.[[Value]], *true*) を返す。
             1. ? _abruptCompletion_ を返す。
           1. Assert: _state_ は ~suspended-yield~ である。
           1. _genContext_ を _generator_.[[GeneratorContext]] とする。
-          1. _methodContext_ を実行中の実行コンテキストとする。
-          1. _methodContext_ を suspend する。
           1. _generator_.[[GeneratorState]] を ~executing~ に設定する。
-          1. _genContext_ を実行コンテキストスタックに push する。_genContext_ はここで実行中の実行コンテキストとなる。
-          1. <emu-meta effects="user-code">_genContext_ の suspended evaluation を再開する</emu-meta>。その際、それを suspend した操作の結果として _abruptCompletion_ を使用する。_result_ を、再開された計算によって返された Completion Record とする。
-          1. Assert: ここに戻ってきたとき、_genContext_ は既に実行コンテキストスタックから取り除かれており、_methodContext_ が現在実行中の実行コンテキストである。
-          1. ? _result_ を返す。
+          1. ? RunSuspendedContext(_genContext_, _abruptCompletion_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -56053,13 +56028,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. Assert: _generator_.[[AsyncGeneratorState]] は ~suspended-start~ または ~suspended-yield~ のいずれかである。
           1. _genContext_ を _generator_.[[AsyncGeneratorContext]] とする。
-          1. _callerContext_ を実行中の実行コンテキストとする。
-          1. _callerContext_ を suspend する。
           1. _generator_.[[AsyncGeneratorState]] を ~executing~ に設定する。
-          1. _genContext_ を実行コンテキストスタックに push する。_genContext_ はここで実行中の実行コンテキストとなる。
-          1. <emu-meta effects="user-code">_genContext_ の suspended evaluation を再開する</emu-meta>。その際、それを suspend した操作の結果として _completion_ を使用する。_result_ を、再開された計算によって返された Completion Record とする。
-          1. Assert: _result_ は決して abrupt completion ではない。
-          1. Assert: ここに戻ってきたとき、_genContext_ は既に実行コンテキストスタックから取り除かれており、_callerContext_ が現在実行中の実行コンテキストである。
+          1. ! RunSuspendedContext(_genContext_, _completion_) を実行する。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -56310,29 +56280,27 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _runningContext_ を実行中の実行コンテキストとする。
-          1. _closure_ を、_promiseCapability_ と _asyncBody_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメータを持たない新しい Abstract Closure とする：
+          1. _closure_ を、パラメーターを持たず、_promiseCapability_ と _asyncBody_ を捕捉する新しい抽象クロージャーとし、呼び出されたときに次の手順を実行するものとする:
             1. _acAsyncContext_ を実行中の実行コンテキストとする。
-            1. _asyncBody_ が Parse Node であるならば、
-              1. _result_ を _asyncBody_ の Evaluation の Completion とする。
-            1. そうでなければ、
-              1. Assert: _asyncBody_ はパラメータを持たない Abstract Closure である。
+            1. _asyncBody_ が構文解析ノードである場合、
+              1. _result_ を Completion(_asyncBody_ の評価) とする。
+            1. そうでない場合、
+              1. Assert: _asyncBody_ はパラメーターを持たない抽象クロージャーである。
               1. _result_ を Completion(_asyncBody_()) とする。
-            1. Assert: ここに戻ってきたならば、async function は例外を投げたか、暗黙的または明示的な return を実行した。すべての awaiting は完了している。
-            1. _acAsyncContext_ を実行コンテキストスタックから取り除き、実行コンテキストスタックの最上位にある実行コンテキストを実行中の実行コンテキストとして復元する。
-            1. _result_ が normal completion であるならば、
+            1. Assert: ここに戻ってきた場合、その async 関数は例外を投げたか、暗黙的または明示的な return を実行したかのいずれかであり、すべての await は完了している。
+            1. _acAsyncContext_ を実行コンテキストスタックから取り除き、実行コンテキストスタックの先頭にある実行コンテキストを実行中の実行コンテキストとして復元する。
+            1. _result_ が正常完了である場合、
               1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* ») を実行する。
-            1. そうではなく _result_ が return completion であるならば、
+            1. そうでなく _result_ が return 完了である場合、
               1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta> を実行する。
-            1. そうでなければ、
-              1. Assert: _result_ は throw completion である。
+            1. そうでない場合、
+              1. Assert: _result_ は throw 完了である。
               1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] ») を実行する。
             1. [id="step-asyncblockstart-return-undefined"] NormalCompletion(~unused~) を返す。
-          1. _asyncContext_ のコード評価状態を、その実行コンテキストについて評価が再開されたときに、_closure_ が引数なしで呼び出されるように設定する。
-          1. _asyncContext_ を実行コンテキストスタックに push する。_asyncContext_ はここで実行中の実行コンテキストとなる。
-          1. <emu-meta effects="user-code">_asyncContext_ の suspended evaluation を再開する</emu-meta>。_result_ を、再開された計算によって返された値とする。
-          1. Assert: ここに戻ってきたとき、_asyncContext_ は既に実行コンテキストスタックから取り除かれており、_runningContext_ が現在実行中の実行コンテキストである。
-          1. Assert: _result_ は、~unused~ の値を持つ normal completion である。この値の可能な発生源は Await、または async function が何も await しない場合は上記の step <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref> である。
+          1. _asyncContext_ のコード評価状態を、当該実行コンテキストについて評価が再開されたときに _closure_ が引数なしで呼び出されるように設定する。
+          1. _result_ を ! RunSuspendedContext(_asyncContext_, NormalCompletion(~empty~)) とする。
+          1. Assert: _result_ は ~unused~ である。
+          1. NOTE: _result_ 値の可能な発生源は Await、または async 関数が何も await しない場合は上記のステップ <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref> である。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -56348,27 +56316,21 @@ THH:mm:ss.sss
         <emu-alg>
           1. _asyncContext_ を実行中の実行コンテキストとする。
           1. _promise_ を ? PromiseResolve(%Promise%, _value_) とする。
-          1. _fulfilledClosure_ を、_asyncContext_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ (_v_) を持つ新しい Abstract Closure とする：
-            1. _prevContext_ を実行中の実行コンテキストとする。
-            1. _prevContext_ を suspend する。
-            1. _asyncContext_ を実行コンテキストスタックに push する。_asyncContext_ はここで実行中の実行コンテキストとなる。
-            1. <emu-meta effects="user-code">_asyncContext_ の suspended evaluation を再開する</emu-meta>。その際、それを suspend した操作の結果として NormalCompletion(_v_) を使用する。
-            1. Assert: この手順に到達したとき、_asyncContext_ は既に実行コンテキストスタックから取り除かれており、_prevContext_ が現在実行中の実行コンテキストである。
+          1. _fulfilledClosure_ を、パラメーター (_v_) を持ち、_asyncContext_ を捕捉する新しい抽象クロージャーとし、呼び出されたときに次の手順を実行するものとする:
+            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_))) を実行する。
+            1. NOTE: RunSuspendedContext によって返される完了レコードは意図的に無視される。
             1. NormalCompletion(*undefined*) を返す。
           1. _onFulfilled_ を CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « ») とする。
-          1. _rejectedClosure_ を、_asyncContext_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ (_reason_) を持つ新しい Abstract Closure とする：
-            1. _prevContext_ を実行中の実行コンテキストとする。
-            1. _prevContext_ を suspend する。
-            1. _asyncContext_ を実行コンテキストスタックに push する。_asyncContext_ はここで実行中の実行コンテキストとなる。
-            1. <emu-meta effects="user-code">_asyncContext_ の suspended evaluation を再開する</emu-meta>。その際、それを suspend した操作の結果として ThrowCompletion(_reason_) を使用する。
-            1. Assert: この手順に到達したとき、_asyncContext_ は既に実行コンテキストスタックから取り除かれており、_prevContext_ が現在実行中の実行コンテキストである。
+          1. _rejectedClosure_ を、パラメーター (_reason_) を持ち、_asyncContext_ を捕捉する新しい抽象クロージャーとし、呼び出されたときに次の手順を実行するものとする:
+            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_))) を実行する。
+            1. NOTE: RunSuspendedContext によって返される完了レコードは意図的に無視される。
             1. NormalCompletion(*undefined*) を返す。
           1. _onRejected_ を CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « ») とする。
           1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_) を実行する。
-          1. _asyncContext_ を実行コンテキストスタックから取り除き、実行コンテキストスタックの最上位にある実行コンテキストを実行中の実行コンテキストとして復元する。
+          1. _asyncContext_ を実行コンテキストスタックから取り除き、実行コンテキストスタックの先頭にある実行コンテキストを実行中の実行コンテキストとして復元する。
           1. _callerContext_ を実行中の実行コンテキストとする。
-          1. ~empty~ を渡して _callerContext_ を再開する。_asyncContext_ が再び再開された場合、_completion_ をそれが再開された Completion Record とする。
-          1. Assert: ここに制御が到達したならば、_asyncContext_ は再び実行中の実行コンテキストである。
+          1. ~empty~ を渡して _callerContext_ を再開する。_asyncContext_ が再び再開されることがあれば、それが再開されるときの完了レコードを _completion_ とする。
+          1. Assert: 制御がここに到達した場合、_asyncContext_ は再び実行中の実行コンテキストである。
           1. _completion_ を返す。
         </emu-alg>
       </emu-clause>

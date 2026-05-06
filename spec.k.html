@@ -6460,232 +6460,167 @@
       </emu-note>
     </emu-clause>
 
-    <emu-clause id="sec-toint32" type="abstract operation">
+    <emu-clause id="sec-tofixedsizeinteger" type="abstract operation">
       <h1>
-        ToInt32 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+        ToFixedSizeInteger (
+          _int_: an integer, +∞, or -∞,
+          _signed_: ~unsigned~ or ~signed~,
+          _bitWidth_: a positive integer,
+        ): an integer
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 𝔽(-2<sup>31</sup>)부터
-          𝔽(2<sup>31</sup> - 1)까지의 포함 구간에 있는 2<sup>32</sup>개의
-          정수 Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _int_를 0부터 2<sup>_bitWidth_</sup> - 1까지의 포함 구간에 있는 2<sup>_bitWidth_</sup>개의 정수 중 하나로(~unsigned~인 경우), 또는 -2<sup>_bitWidth_ - 1</sup>부터 2<sup>_bitWidth_ - 1</sup> - 1까지의 포함 구간에 있는 정수 중 하나로(~signed~인 경우) 매핑한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int32bit_를 _int_ modulo 2<sup>32</sup>라고 하자.
-        1. _int32bit_ ≥ 2<sup>31</sup>이면, 𝔽(_int32bit_ - 2<sup>32</sup>)를 반환한다.
-        1. 𝔽(_int32bit_)를 반환한다.
+        1. _int_ = +∞ 또는 _int_ = -∞이면, 0을 반환한다.
+        1. _fixedInt_를 _int_ modulo 2<sup>_bitWidth_</sup>라 하자.
+        1. NOTE: 다음 단계는 _fixedInt_의 2의 보수 표현을 변경하지 않는다.
+        1. _signed_가 ~signed~이고 _fixedInt_ ≥ 2<sup>_bitWidth_ - 1</sup>이면, _fixedInt_를 _fixedInt_ - 2<sup>_bitWidth_</sup>로 설정한다.
+        1. _fixedInt_를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>위 정의에 따르면:</p>
-        <ul>
-          <li>
-            이것은 멱등적이다: 어떤 ECMAScript 언어 값 _x_에 대해서도,
-            ToInt32(ToInt32(_x_))는 ToInt32(_x_)와 같다.
-          </li>
-          <li>
-            어떤 ECMAScript 언어 값 _x_에 대해서도,
-            ToInt32(ToUint32(_x_))는 ToInt32(_x_)와 같다.
-            (*+∞*<sub>𝔽</sub>와 *-∞*<sub>𝔽</sub>가
-            *+0*<sub>𝔽</sub>로 매핑되는 것은 이 성질을 보존하기 위함이다.)
-          </li>
-          <li>
-            ToInt32는 *-0*<sub>𝔽</sub>를 *+0*<sub>𝔽</sub>로 매핑한다.
-          </li>
-        </ul>
+        <p>ToFixedSizeInteger는 멱등적이다. 즉, 임의의 ECMAScript 언어 값 _x_에 대해 ToFixedSizeInteger(ToFixedSizeInteger(_x_, _signed_, _bitWidth_), _signed_, _bitWidth_)는 ToFixedSizeInteger(_x_, _signed_, _bitWidth_)와 같다. 실제로 +∞와 -∞는 0으로 매핑되므로, 이 불변성은 _signed_의 반전에서도 유지된다(예: ToFixedSizeInteger(ToFixedSizeInteger(_x_, ~signed~, 32), ~unsigned~, 32)는 ToFixedSizeInteger(_x_, ~unsigned~, 32)와 같다).</p>
       </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-toint32" type="abstract operation">
+      <h1>
+        ToInt32 (
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>이는 _argument_를 𝔽(-2<sup>31</sup>)부터 𝔽(2<sup>31</sup> - 1)까지의 포함 구간에 있는 2<sup>32</sup>개의 정수 Number 값 중 하나로 변환하며, *-0*<sub>𝔽</sub>는 제외한다.</dd>
+      </dl>
+      <emu-alg>
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 32))를 반환한다.
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint32" type="abstract operation">
       <h1>
         ToUint32 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *+0*<sub>𝔽</sub>부터
-          𝔽(2<sup>32</sup> - 1)까지의 포함 구간에 있는 2<sup>32</sup>개의
-          정수 Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 *+0*<sub>𝔽</sub>부터 𝔽(2<sup>32</sup> - 1)까지의 포함 구간에 있는 2<sup>32</sup>개의 정수 Number 값 중 하나로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int32bit_를 _int_ modulo 2<sup>32</sup>라고 하자.
-        1. [id="step-touint32-return"] 𝔽(_int32bit_)를 반환한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 32))를 반환한다.
       </emu-alg>
-      <emu-note>
-        <p>위 정의에 따르면:</p>
-        <ul>
-          <li>
-            단계 <emu-xref href="#step-touint32-return"></emu-xref>가
-            ToUint32와 ToInt32의 유일한 차이이다.
-          </li>
-          <li>
-            이것은 멱등적이다: 어떤 ECMAScript 언어 값 _x_에 대해서도,
-            ToUint32(ToUint32(_x_))는 ToUint32(_x_)와 같다.
-          </li>
-          <li>
-            어떤 ECMAScript 언어 값 _x_에 대해서도,
-            ToUint32(ToInt32(_x_))는 ToUint32(_x_)와 같다.
-            (*+∞*<sub>𝔽</sub>와 *-∞*<sub>𝔽</sub>가
-            *+0*<sub>𝔽</sub>로 매핑되는 것은 이 성질을 보존하기 위함이다.)
-          </li>
-          <li>
-            ToUint32는 *-0*<sub>𝔽</sub>를 *+0*<sub>𝔽</sub>로 매핑한다.
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint16" type="abstract operation">
       <h1>
         ToInt16 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 𝔽(-2<sup>15</sup>)부터
-          𝔽(2<sup>15</sup> - 1)까지의 포함 구간에 있는 2<sup>16</sup>개의
-          정수 Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 𝔽(-2<sup>15</sup>)부터 𝔽(2<sup>15</sup> - 1)까지의 포함 구간에 있는 2<sup>16</sup>개의 정수 Number 값 중 하나로 변환하며, *-0*<sub>𝔽</sub>는 제외한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int16bit_를 _int_ modulo 2<sup>16</sup>라고 하자.
-        1. _int16bit_ ≥ 2<sup>15</sup>이면, 𝔽(_int16bit_ - 2<sup>16</sup>)를 반환한다.
-        1. 𝔽(_int16bit_)를 반환한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 16))를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint16" type="abstract operation">
       <h1>
         ToUint16 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *+0*<sub>𝔽</sub>부터
-          𝔽(2<sup>16</sup> - 1)까지의 포함 구간에 있는 2<sup>16</sup>개의
-          정수 Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 *+0*<sub>𝔽</sub>부터 𝔽(2<sup>16</sup> - 1)까지의 포함 구간에 있는 2<sup>16</sup>개의 정수 Number 값 중 하나로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. [id="step-touint16-mod"] _int16bit_를 _int_ modulo 2<sup>16</sup>라고 하자.
-        1. 𝔽(_int16bit_)를 반환한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 16))를 반환한다.
       </emu-alg>
-      <emu-note>
-        <p>위 정의에 따르면:</p>
-        <ul>
-          <li>
-            단계 <emu-xref href="#step-touint16-mod"></emu-xref>에서
-            2<sup>32</sup> 대신 2<sup>16</sup>을 대입한 것이 ToUint32와
-            ToUint16의 유일한 차이이다.
-          </li>
-          <li>
-            ToUint16는 *-0*<sub>𝔽</sub>를 *+0*<sub>𝔽</sub>로 매핑한다.
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint8" type="abstract operation">
       <h1>
         ToInt8 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *-128*<sub>𝔽</sub>부터
-          *127*<sub>𝔽</sub>까지의 포함 구간에 있는 2<sup>8</sup>개의 정수
-          Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 *-128*<sub>𝔽</sub>부터 *127*<sub>𝔽</sub>까지의 포함 구간에 있는 2<sup>8</sup>개의 정수 Number 값 중 하나로 변환하며, *-0*<sub>𝔽</sub>는 제외한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int8bit_를 _int_ modulo 2<sup>8</sup>라고 하자.
-        1. _int8bit_ ≥ 2<sup>7</sup>이면, 𝔽(_int8bit_ - 2<sup>8</sup>)를 반환한다.
-        1. 𝔽(_int8bit_)를 반환한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~signed~, 8))를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint8" type="abstract operation">
       <h1>
         ToUint8 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *+0*<sub>𝔽</sub>부터
-          *255*<sub>𝔽</sub>까지의 포함 구간에 있는 2<sup>8</sup>개의 정수
-          Number 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 *+0*<sub>𝔽</sub>부터 *255*<sub>𝔽</sub>까지의 포함 구간에 있는 2<sup>8</sup>개의 정수 Number 값 중 하나로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _int_를 ? ToIntegerOrInfinity(_argument_)라고 하자.
-        1. _int_가 유한하지 않으면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _int8bit_를 _int_ modulo 2<sup>8</sup>라고 하자.
-        1. 𝔽(_int8bit_)를 반환한다.
+        1. _int_를 ? ToIntegerOrInfinity(_argument_)라 하자.
+        1. 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 8))를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-touint8clamp" type="abstract operation">
       <h1>
         ToUint8Clamp (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *+0*<sub>𝔽</sub>부터
-          *255*<sub>𝔽</sub>까지의 포함 구간에 있는 2<sup>8</sup>개의 정수
-          Number 값 중 하나로 clamp하고 반올림한다.</dd>
+        <dd>이는 _argument_를 0부터 255까지의 포함 구간에 있는 2<sup>8</sup>개의 정수 Number 값 중 하나로 클램프하고 반올림한다.</dd>
       </dl>
       <emu-alg>
-        1. _number_를 ? ToNumber(_argument_)라고 하자.
+        1. _number_를 ? ToNumber(_argument_)라 하자.
         1. _number_가 *NaN*이면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _mv_를 _number_의 확장 수학적 값이라고 하자.
-        1. _clamped_를 _mv_를 0과 255 사이로 clamping한 결과라고 하자.
-        1. _f_를 floor(_clamped_)라고 하자.
+        1. _mv_를 _number_의 확장 수학 값이라 하자.
+        1. _clamped_를 _mv_를 0과 255 사이로 클램프한 결과라 하자.
+        1. _f_를 floor(_clamped_)라 하자.
         1. _clamped_ &lt; _f_ + 0.5이면, 𝔽(_f_)를 반환한다.
-        1. _clamped_ > _f_ + 0.5이면, 𝔽(_f_ + 1)을 반환한다.
+        1. _clamped_ > _f_ + 0.5이면, 𝔽(_f_ + 1)를 반환한다.
         1. _f_가 짝수이면, 𝔽(_f_)를 반환한다.
-        1. 𝔽(_f_ + 1)을 반환한다.
+        1. 𝔽(_f_ + 1)를 반환한다.
       </emu-alg>
       <emu-note>
-        <p>
-          대부분의 다른 ECMAScript 정수 변환 연산과 달리, ToUint8Clamp는
-          비정수 값을 절단하지 않고 반올림한다. 또한
-          <emu-xref href="#sec-math.round">`Math.round`</emu-xref>의
-          “round half up” tie-breaking과 다른, “round half to even”
-          tie-breaking을 사용한다.
-        </p>
+        <p>대부분의 다른 ECMAScript 정수 변환 연산과 달리, ToUint8Clamp는 비정수 값을 자르지 않고 반올림한다. 또한 “절반은 짝수로 반올림” 동률 처리 방식을 사용하는데, 이는 <emu-xref href="#sec-math.round">`Math.round`</emu-xref>의 “절반 올림” 동률 처리 방식과 다르다.</p>
       </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-tobigint" type="abstract operation">
       <h1>
         ToBigInt (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): BigInt를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 BigInt 값으로 변환하거나, Number로부터의
-          암묵적 변환이 필요하다면 예외를 던진다.</dd>
+        <dd>이는 _argument_를 BigInt 값으로 변환하거나, Number에서의 암시적 변환이 필요한 경우 던진다.</dd>
       </dl>
       <emu-alg>
-        1. _prim_을 ? ToPrimitive(_argument_, ~number~)라고 하자.
+        1. _prim_을 ? ToPrimitive(_argument_, ~number~)라 하자.
         1. <emu-xref href="#table-tobigint"></emu-xref>에서 _prim_에 대응하는 값을 반환한다.
       </emu-alg>
-      <emu-table id="table-tobigint" caption="BigInt Conversions">
+      <emu-table id="table-tobigint" caption="BigInt 변환">
         <table>
           <thead>
             <tr>
@@ -6718,7 +6653,7 @@
               Boolean
             </td>
             <td>
-              _prim_이 *true*이면 `1n`을, _prim_이 *false*이면 `0n`을 반환한다.
+              _prim_이 *true*이면 `1n`을 반환하고, _prim_이 *false*이면 `0n`을 반환한다.
             </td>
           </tr>
           <tr>
@@ -6743,7 +6678,7 @@
             </td>
             <td>
               <emu-alg>
-                1. _n_을 StringToBigInt(_prim_)라고 하자.
+                1. _n_을 StringToBigInt(_prim_)라 하자.
                 1. _n_이 *undefined*이면, *SyntaxError* 예외를 던진다.
                 1. _n_을 반환한다.
               </emu-alg>
@@ -6764,15 +6699,15 @@
     <emu-clause id="sec-stringtobigint" type="abstract operation">
       <h1>
         StringToBigInt (
-          _str_: a String,
-        ): a BigInt or *undefined*
+          _str_: String,
+        ): BigInt 또는 *undefined*
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _literal_을 ParseText(_str_, |StringIntegerLiteral|)라고 하자.
-        1. _literal_이 오류들의 List이면, *undefined*를 반환한다.
-        1. _mv_를 _literal_의 MV라고 하자.
+        1. _literal_을 ParseText(_str_, |StringIntegerLiteral|)라 하자.
+        1. _literal_이 오류의 List이면, *undefined*를 반환한다.
+        1. _mv_를 _literal_의 MV라 하자.
         1. Assert: _mv_는 정수이다.
         1. ℤ(_mv_)를 반환한다.
       </emu-alg>
@@ -6793,7 +6728,7 @@
       </emu-clause>
 
       <emu-clause id="sec-runtime-semantics-mv-for-stringintegerliteral">
-        <h1>Runtime Semantics: MV</h1>
+        <h1>런타임 의미론: MV</h1>
         <ul>
           <li>
             <emu-grammar>StringIntegerLiteral ::: StrWhiteSpace?</emu-grammar>의 MV는 0이다.
@@ -6808,51 +6743,44 @@
     <emu-clause id="sec-tobigint64" type="abstract operation">
       <h1>
         ToBigInt64 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): BigInt를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 ℤ(-2<sup>63</sup>)부터
-          ℤ(2<sup>63</sup> - 1)까지의 포함 구간에 있는 2<sup>64</sup>개의
-          BigInt 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 ℤ(-2<sup>63</sup>)부터 ℤ(2<sup>63</sup> - 1)까지의 포함 구간에 있는 2<sup>64</sup>개의 BigInt 값 중 하나로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _n_을 ? ToBigInt(_argument_)라고 하자.
-        1. _int64bit_를 ℝ(_n_) modulo 2<sup>64</sup>라고 하자.
-        1. _int64bit_ ≥ 2<sup>63</sup>이면, ℤ(_int64bit_ - 2<sup>64</sup>)를 반환한다.
-        1. ℤ(_int64bit_)를 반환한다.
+        1. _int_를 ℝ(? ToBigInt(_argument_))라 하자.
+        1. ℤ(ToFixedSizeInteger(_int_, ~signed~, 64))를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tobiguint64" type="abstract operation">
       <h1>
         ToBigUint64 (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a BigInt or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): BigInt를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 *0*<sub>ℤ</sub>부터
-          ℤ(2<sup>64</sup> - 1)까지의 포함 구간에 있는 2<sup>64</sup>개의
-          BigInt 값 중 하나로 변환한다.</dd>
+        <dd>이는 _argument_를 *0*<sub>ℤ</sub>부터 ℤ(2<sup>64</sup> - 1)까지의 포함 구간에 있는 2<sup>64</sup>개의 BigInt 값 중 하나로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _n_을 ? ToBigInt(_argument_)라고 하자.
-        1. _int64bit_를 ℝ(_n_) modulo 2<sup>64</sup>라고 하자.
-        1. ℤ(_int64bit_)를 반환한다.
+        1. _int_를 ℝ(? ToBigInt(_argument_))라 하자.
+        1. ℤ(ToFixedSizeInteger(_int_, ~unsigned~, 64))를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-tostring" oldids="table-tostring-conversions" type="abstract operation">
       <h1>
         ToString (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a String or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): String을 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 String 타입의 값으로 변환한다.</dd>
+        <dd>이는 _argument_를 String 타입의 값으로 변환한다.</dd>
       </dl>
       <emu-alg>
         1. _argument_가 String이면, _argument_를 반환한다.
@@ -6864,7 +6792,7 @@
         1. _argument_가 Number이면, Number::toString(_argument_, 10)을 반환한다.
         1. _argument_가 BigInt이면, BigInt::toString(_argument_, 10)을 반환한다.
         1. Assert: _argument_는 Object이다.
-        1. _primValue_를 ? ToPrimitive(_argument_, ~string~)이라고 하자.
+        1. _primValue_를 ? ToPrimitive(_argument_, ~string~)이라 하자.
         1. Assert: _primValue_는 Object가 아니다.
         1. ? ToString(_primValue_)를 반환한다.
       </emu-alg>
@@ -6873,12 +6801,12 @@
     <emu-clause id="sec-toobject" type="abstract operation" oldids="table-toobject-conversions,table-13">
       <h1>
         ToObject (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing an Object or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): Object를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 Object 타입의 값으로 변환한다.</dd>
+        <dd>이는 _argument_를 Object 타입의 값으로 변환한다.</dd>
       </dl>
       <emu-alg>
         1. _argument_가 *undefined* 또는 *null*이면, *TypeError* 예외를 던진다.
@@ -6895,16 +6823,16 @@
     <emu-clause id="sec-topropertykey" type="abstract operation">
       <h1>
         ToPropertyKey (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a property key or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 속성 키를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 property key로 사용될 수 있는 값으로 변환한다.</dd>
+        <dd>이는 _argument_를 속성 키로 사용할 수 있는 값으로 변환한다.</dd>
       </dl>
       <emu-alg>
-        1. _key_를 ? ToPrimitive(_argument_, ~string~)이라고 하자.
-        1. _key_가 Symbol이면,
+        1. _key_를 ? ToPrimitive(_argument_, ~string~)이라 하자.
+        1. _key_가 Symbol이면, 다음을 수행한다.
           1. _key_를 반환한다.
         1. ! ToString(_key_)를 반환한다.
       </emu-alg>
@@ -6913,16 +6841,15 @@
     <emu-clause id="sec-tolength" type="abstract operation">
       <h1>
         ToLength (
-          _argument_: an ECMAScript language value,
-        ): either a normal completion containing a non-negative integral Number or a throw completion
+          _argument_: ECMAScript 언어 값,
+        ): 음이 아닌 정수 Number를 포함하는 정상 완료 또는 throw 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>이것은 _argument_를 배열 유사 객체의 길이로 사용하기에 적합한
-          음이 아닌 정수 Number로 clamp하고 절단한다.</dd>
+        <dd>이는 _argument_를 배열 유사 객체의 길이로 사용하기에 적합한 음이 아닌 정수 Number로 클램프하고 자른다.</dd>
       </dl>
       <emu-alg>
-        1. _len_을 ? ToIntegerOrInfinity(_argument_)라고 하자.
+        1. _len_을 ? ToIntegerOrInfinity(_argument_)라 하자.
         1. _len_ ≤ 0이면, *+0*<sub>𝔽</sub>를 반환한다.
         1. 𝔽(min(_len_, 2<sup>53</sup> - 1))를 반환한다.
       </emu-alg>
@@ -6931,26 +6858,20 @@
     <emu-clause id="sec-canonicalnumericindexstring" type="abstract operation">
       <h1>
         CanonicalNumericIndexString (
-          _argument_: a String,
-        ): a Number or *undefined*
+          _argument_: String,
+        ): Number 또는 *undefined*
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>_argument_가 *"-0"*이거나 어떤 Number 값 _n_에 대한 ToString(_n_)와
-          정확히 일치하면, 대응하는 Number 값을 반환한다. 그렇지 않으면
-          *undefined*를 반환한다.</dd>
+        <dd>_argument_가 *"-0"*이거나 어떤 Number 값 _n_에 대해 ToString(_n_)과 정확히 일치하면, 해당 Number 값을 반환한다. 그렇지 않으면 *undefined*를 반환한다.</dd>
       </dl>
       <emu-alg>
         1. _argument_가 *"-0"*이면, *-0*<sub>𝔽</sub>를 반환한다.
-        1. _n_을 ! ToNumber(_argument_)라고 하자.
+        1. _n_을 ! ToNumber(_argument_)라 하자.
         1. ! ToString(_n_)이 _argument_이면, _n_을 반환한다.
         1. *undefined*를 반환한다.
       </emu-alg>
-      <p>
-        CanonicalNumericIndexString 추상 연산이 *undefined*를 반환하지 않는
-        모든 String을 <dfn variants="canonical numeric strings">canonical numeric string</dfn>
-        이라고 한다.
-      </p>
+      <p><dfn variants="canonical numeric strings">표준 숫자 문자열</dfn>은 CanonicalNumericIndexString 추상 연산이 *undefined*를 반환하지 않는 모든 String이다.</p>
     </emu-clause>
 
     <emu-clause id="sec-toindex" type="abstract operation">
@@ -13416,6 +13337,27 @@
       <emu-alg>
         1. _currentRealm_을 current Realm Record라고 하자.
         1. _currentRealm_.[[GlobalObject]]를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-runsuspendedcontext" type="abstract operation">
+      <h1>
+        RunSuspendedContext (
+          _context_: an execution context,
+          _completionRecord_: a Completion Record,
+        ): either a normal completion containing either an ECMAScript language value or ~unused~, or an abrupt completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>이는 _context_를 재개하고(_completionRecord_를 재개 값으로 전송), 그 결과를 기다린다.</dd>
+      </dl>
+      <emu-alg>
+        1. _callerContext_를 실행 중인 실행 컨텍스트라 하자.
+        1. _callerContext_를 일시 중단한다.
+        1. _context_를 실행 컨텍스트 스택에 푸시한다. 이제 _context_가 실행 중인 실행 컨텍스트이다.
+        1. <emu-meta effects="user-code">_context_의 일시 중단된 평가를 재개한다</emu-meta>. 이때 _completionRecord_를 그것을 일시 중단한 연산의 결과로 사용한다. 재개된 계산이 반환한 Completion Record를 _result_라 하자.
+        1. Assert: 이 단계에 도달했을 때, _context_는 이미 실행 컨텍스트 스택에서 제거되었고 _callerContext_가 다시 실행 중인 실행 컨텍스트이다.
+        1. Completion(_result_)를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -31454,9 +31396,9 @@
             <emu-alg>
               1. Assert: _module_은 링크되었고 그 모듈 환경의 선언들이 인스턴스화되었다.
               1. _moduleContext_를 _module_.[[Context]]로 둔다.
-              1. 실행 중인 실행 컨텍스트를 suspend한다.
               1. _module_.[[HasTLA]]가 *false*이면,
                 1. Assert: _capability_는 존재하지 않는다.
+                1. 실행 중인 실행 컨텍스트를 suspend한다.
                 1. _moduleContext_를 실행 컨텍스트 stack에 push한다; 이제 _moduleContext_가 실행 중인 실행 컨텍스트이다.
                 1. _result_를 Completion(_module_.[[ECMAScriptCode]]의 Evaluation)으로 둔다.
                 1. _moduleContext_를 suspend하고 실행 컨텍스트 stack에서 제거한다.
@@ -53408,17 +53350,12 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _state_를 ? GeneratorValidate(_generator_, _generatorBrand_)로 둔다.
+          1. _state_를 ? GeneratorValidate(_generator_, _generatorBrand_)라 하자.
           1. _state_가 ~completed~이면, CreateIteratorResultObject(*undefined*, *true*)를 반환한다.
           1. Assert: _state_는 ~suspended-start~ 또는 ~suspended-yield~이다.
-          1. _genContext_를 _generator_.[[GeneratorContext]]로 둔다.
-          1. _methodContext_를 running execution context로 둔다.
-          1. _methodContext_를 suspend한다.
+          1. _genContext_를 _generator_.[[GeneratorContext]]라 하자.
           1. _generator_.[[GeneratorState]]를 ~executing~으로 설정한다.
-          1. _genContext_를 execution context stack에 push한다; _genContext_는 이제 running execution context이다.
-          1. <emu-meta effects="user-code">_genContext_의 중단된 평가를 재개한다</emu-meta>. 이때 이를 중단시킨 연산의 결과로 NormalCompletion(_value_)를 사용한다. _result_를 재개된 계산이 반환한 값으로 둔다.
-          1. Assert: 여기로 반환될 때, _genContext_는 이미 execution context stack에서 제거되었고 _methodContext_가 현재 running execution context이다.
-          1. ? _result_를 반환한다.
+          1. ? RunSuspendedContext(_genContext_, NormalCompletion(_value_))를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -53433,24 +53370,19 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _state_를 ? GeneratorValidate(_generator_, _generatorBrand_)로 둔다.
-          1. _state_가 ~suspended-start~이면,
+          1. _state_를 ? GeneratorValidate(_generator_, _generatorBrand_)라 하자.
+          1. _state_가 ~suspended-start~이면, 다음을 수행한다.
             1. _generator_.[[GeneratorState]]를 ~completed~로 설정한다.
-            1. NOTE: generator가 ~completed~ 상태에 들어가면 그 상태를 결코 떠나지 않으며 관련 execution context는 다시 재개되지 않는다. _generator_와 관련된 모든 실행 상태는 이 시점에서 폐기될 수 있다.
+            1. NOTE: 생성기가 ~completed~ 상태에 들어가면 다시는 그 상태를 벗어나지 않으며, 관련 실행 컨텍스트도 다시 재개되지 않는다. 이 시점에서 _generator_와 관련된 모든 실행 상태는 폐기될 수 있다.
             1. _state_를 ~completed~로 설정한다.
-          1. _state_가 ~completed~이면,
-            1. _abruptCompletion_이 return completion이면,
+          1. _state_가 ~completed~이면, 다음을 수행한다.
+            1. _abruptCompletion_이 return 완료이면, 다음을 수행한다.
               1. CreateIteratorResultObject(_abruptCompletion_.[[Value]], *true*)를 반환한다.
             1. ? _abruptCompletion_을 반환한다.
           1. Assert: _state_는 ~suspended-yield~이다.
-          1. _genContext_를 _generator_.[[GeneratorContext]]로 둔다.
-          1. _methodContext_를 running execution context로 둔다.
-          1. _methodContext_를 suspend한다.
+          1. _genContext_를 _generator_.[[GeneratorContext]]라 하자.
           1. _generator_.[[GeneratorState]]를 ~executing~으로 설정한다.
-          1. _genContext_를 execution context stack에 push한다; _genContext_는 이제 running execution context이다.
-          1. <emu-meta effects="user-code">_genContext_의 중단된 평가를 재개한다</emu-meta>. 이때 이를 중단시킨 연산의 결과로 _abruptCompletion_을 사용한다. _result_를 재개된 계산이 반환한 Completion Record로 둔다.
-          1. Assert: 여기로 반환될 때, _genContext_는 이미 execution context stack에서 제거되었고 _methodContext_가 현재 running execution context이다.
-          1. ? _result_를 반환한다.
+          1. ? RunSuspendedContext(_genContext_, _abruptCompletion_)을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -53817,14 +53749,9 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. Assert: _generator_.[[AsyncGeneratorState]]는 ~suspended-start~ 또는 ~suspended-yield~이다.
-          1. _genContext_를 _generator_.[[AsyncGeneratorContext]]로 둔다.
-          1. _callerContext_를 running execution context로 둔다.
-          1. _callerContext_를 suspend한다.
+          1. _genContext_를 _generator_.[[AsyncGeneratorContext]]라 하자.
           1. _generator_.[[AsyncGeneratorState]]를 ~executing~으로 설정한다.
-          1. _genContext_를 execution context stack에 push한다; _genContext_는 이제 running execution context이다.
-          1. <emu-meta effects="user-code">_genContext_의 중단된 평가를 재개한다</emu-meta>. 이때 이를 중단시킨 연산의 결과로 _completion_을 사용한다. _result_를 재개된 계산이 반환한 Completion Record로 둔다.
-          1. Assert: _result_는 결코 abrupt completion이 아니다.
-          1. Assert: 여기로 반환될 때, _genContext_는 이미 execution context stack에서 제거되었고 _callerContext_가 현재 running execution context이다.
+          1. ! RunSuspendedContext(_genContext_, _completion_)을 수행한다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -54075,29 +54002,27 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _runningContext_를 running execution context로 둔다.
-          1. _closure_를 _promiseCapability_와 _asyncBody_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새로운 Abstract Closure로 둔다:
-            1. _acAsyncContext_를 running execution context로 둔다.
-            1. _asyncBody_가 Parse Node이면,
-              1. _result_를 Completion(_asyncBody_의 Evaluation)으로 둔다.
+          1. _promiseCapability_와 _asyncBody_를 캡처하고, 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새로운 Abstract Closure를 _closure_라 하자.
+            1. _acAsyncContext_를 실행 중인 실행 컨텍스트라 하자.
+            1. _asyncBody_가 Parse Node이면, 다음을 수행한다.
+              1. _result_를 Completion(_asyncBody_의 Evaluation)이라 하자.
             1. 그렇지 않으면,
               1. Assert: _asyncBody_는 매개변수가 없는 Abstract Closure이다.
-              1. _result_를 Completion(_asyncBody_())로 둔다.
-            1. Assert: 여기로 반환된다면, async function은 예외를 던졌거나 암시적 또는 명시적 return을 수행한 것이며, 모든 awaiting이 완료된 것이다.
-            1. execution context stack에서 _acAsyncContext_를 제거하고 execution context stack의 맨 위에 있는 execution context를 running execution context로 복원한다.
-            1. _result_가 normal completion이면,
-              1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
-            1. 그렇지 않고 _result_가 return completion이면,
-              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta>를 수행한다.
+              1. _result_를 Completion(_asyncBody_())라 하자.
+            1. Assert: 여기로 반환되었다면, async 함수는 예외를 던졌거나 암시적 또는 명시적 반환을 수행한 것이다. 모든 await는 완료되었다.
+            1. _acAsyncContext_를 실행 컨텍스트 스택에서 제거하고, 실행 컨텍스트 스택의 맨 위에 있는 실행 컨텍스트를 실행 중인 실행 컨텍스트로 복원한다.
+            1. _result_가 정상 완료이면, 다음을 수행한다.
+              1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)을 수행한다.
+            1. 그렇지 않고 _result_가 return 완료이면, 다음을 수행한다.
+              1. ! <emu-meta effects="user-code">Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »)</emu-meta>을 수행한다.
             1. 그렇지 않으면,
-              1. Assert: _result_는 throw completion이다.
-              1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)를 수행한다.
-            1. [id="step-asyncblockstart-return-undefined"] NormalCompletion(~unused~)를 반환한다.
-          1. 그 execution context에 대해 평가가 재개될 때 _closure_가 인자 없이 호출되도록 _asyncContext_의 code evaluation state를 설정한다.
-          1. _asyncContext_를 execution context stack에 push한다; _asyncContext_는 이제 running execution context이다.
-          1. <emu-meta effects="user-code">_asyncContext_의 중단된 평가를 재개한다</emu-meta>. _result_를 재개된 계산이 반환한 값으로 둔다.
-          1. Assert: 여기로 반환될 때, _asyncContext_는 이미 execution context stack에서 제거되었고 _runningContext_가 현재 running execution context이다.
-          1. Assert: _result_는 값이 ~unused~인 normal completion이다. 이 값의 가능한 출처는 Await이거나, async function이 아무것도 await하지 않는 경우 위의 단계 <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref>이다.
+              1. Assert: _result_는 throw 완료이다.
+              1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)을 수행한다.
+            1. [id="step-asyncblockstart-return-undefined"] NormalCompletion(~unused~)을 반환한다.
+          1. _asyncContext_의 코드 평가 상태를 설정하여, 해당 실행 컨텍스트에 대해 평가가 재개될 때 _closure_가 인수 없이 호출되도록 한다.
+          1. _result_를 ! RunSuspendedContext(_asyncContext_, NormalCompletion(~empty~))라 하자.
+          1. Assert: _result_는 ~unused~이다.
+          1. NOTE: _result_ 값의 가능한 출처는 Await 또는, async 함수가 아무것도 await하지 않는 경우, 위의 단계 <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref>이다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -54111,29 +54036,23 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _asyncContext_를 running execution context로 둔다.
-          1. _promise_를 ? PromiseResolve(%Promise%, _value_)로 둔다.
-          1. _fulfilledClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_v_)를 가진 새로운 Abstract Closure로 둔다:
-            1. _prevContext_를 running execution context로 둔다.
-            1. _prevContext_를 suspend한다.
-            1. _asyncContext_를 execution context stack에 push한다; _asyncContext_는 이제 running execution context이다.
-            1. <emu-meta effects="user-code">_asyncContext_의 중단된 평가를 재개한다</emu-meta>. 이때 이를 중단시킨 연산의 결과로 NormalCompletion(_v_)를 사용한다.
-            1. Assert: 이 단계에 도달할 때, _asyncContext_는 이미 execution context stack에서 제거되었고 _prevContext_가 현재 running execution context이다.
-            1. NormalCompletion(*undefined*)를 반환한다.
-          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)로 둔다.
-          1. _rejectedClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_reason_)를 가진 새로운 Abstract Closure로 둔다:
-            1. _prevContext_를 running execution context로 둔다.
-            1. _prevContext_를 suspend한다.
-            1. _asyncContext_를 execution context stack에 push한다; _asyncContext_는 이제 running execution context이다.
-            1. <emu-meta effects="user-code">_asyncContext_의 중단된 평가를 재개한다</emu-meta>. 이때 이를 중단시킨 연산의 결과로 ThrowCompletion(_reason_)을 사용한다.
-            1. Assert: 이 단계에 도달할 때, _asyncContext_는 이미 execution context stack에서 제거되었고 _prevContext_가 현재 running execution context이다.
-            1. NormalCompletion(*undefined*)를 반환한다.
-          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)로 둔다.
+          1. _asyncContext_를 실행 중인 실행 컨텍스트라 하자.
+          1. _promise_를 ? PromiseResolve(%Promise%, _value_)라 하자.
+          1. _asyncContext_를 캡처하고, 호출될 때 다음 단계를 수행하는, 매개변수 (_v_)를 갖는 새로운 Abstract Closure를 _fulfilledClosure_라 하자.
+            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))를 수행한다.
+            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
+            1. NormalCompletion(*undefined*)을 반환한다.
+          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)라 하자.
+          1. _asyncContext_를 캡처하고, 호출될 때 다음 단계를 수행하는, 매개변수 (_reason_)를 갖는 새로운 Abstract Closure를 _rejectedClosure_라 하자.
+            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))을 수행한다.
+            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
+            1. NormalCompletion(*undefined*)을 반환한다.
+          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)라 하자.
           1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)를 수행한다.
-          1. execution context stack에서 _asyncContext_를 제거하고 execution context stack의 맨 위에 있는 execution context를 running execution context로 복원한다.
-          1. _callerContext_를 running execution context로 둔다.
-          1. ~empty~를 전달하여 _callerContext_를 재개한다. _asyncContext_가 다시 재개되면, _completion_을 그것이 재개될 때의 Completion Record로 둔다.
-          1. Assert: 제어가 여기 도달하면, _asyncContext_가 다시 running execution context이다.
+          1. _asyncContext_를 실행 컨텍스트 스택에서 제거하고, 실행 컨텍스트 스택의 맨 위에 있는 실행 컨텍스트를 실행 중인 실행 컨텍스트로 복원한다.
+          1. _callerContext_를 실행 중인 실행 컨텍스트라 하자.
+          1. ~empty~를 전달하여 _callerContext_를 재개한다. _asyncContext_가 다시 재개되는 경우, 그것을 재개하는 데 사용된 Completion Record를 _completion_이라 하자.
+          1. Assert: 제어가 여기에 도달하면, _asyncContext_가 다시 실행 중인 실행 컨텍스트이다.
           1. _completion_을 반환한다.
         </emu-alg>
       </emu-clause>
