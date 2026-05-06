@@ -5317,6 +5317,30 @@
       </emu-note>
     </emu-clause>
 
+    <emu-clause id="sec-tofixedsizeinteger" type="abstract operation">
+      <h1>
+        ToFixedSizeInteger (
+          _int_: an integer, +∞, or -∞,
+          _signed_: ~unsigned~ or ~signed~,
+          _bitWidth_: a positive integer,
+        ): an integer
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It maps _int_ to one of 2<sup>_bitWidth_</sup> integers in the inclusive interval from 0 to 2<sup>_bitWidth_</sup> - 1 (if _signed_ is ~unsigned~) or -2<sup>_bitWidth_ - 1</sup> to 2<sup>_bitWidth_ - 1</sup> - 1 (if _signed_ is ~signed~).</dd>
+      </dl>
+      <emu-alg>
+        1. If _int_ = +∞ or _int_ = -∞, return 0.
+        1. Let _fixedInt_ be _int_ modulo 2<sup>_bitWidth_</sup>.
+        1. NOTE: The following step does not change the two's complement representation of _fixedInt_.
+        1. If _signed_ is ~signed~ and _fixedInt_ ≥ 2<sup>_bitWidth_ - 1</sup>, set _fixedInt_ to _fixedInt_ - 2<sup>_bitWidth_</sup>.
+        1. Return _fixedInt_.
+      </emu-alg>
+      <emu-note>
+        <p>ToFixedSizeInteger is idempotent: for any ECMAScript language value _x_, ToFixedSizeInteger(ToFixedSizeInteger(_x_, _signed_, _bitWidth_), _signed_, _bitWidth_) is the same as ToFixedSizeInteger(_x_, _signed_, _bitWidth_). In fact, because +∞ and -∞ are mapped to 0, this invariant even survives inversion of _signed_ (e.g., ToFixedSizeInteger(ToFixedSizeInteger(_x_, ~signed~, 32), ~unsigned~, 32) is the same as ToFixedSizeInteger(_x_, ~unsigned~, 32)).</p>
+      </emu-note>
+    </emu-clause>
+
     <emu-clause id="sec-toint32" type="abstract operation">
       <h1>
         ToInt32 (
@@ -5325,29 +5349,12 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It converts _argument_ to one of 2<sup>32</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>31</sup>) to 𝔽(2<sup>31</sup> - 1).</dd>
+        <dd>It converts _argument_ to one of 2<sup>32</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>31</sup>) to 𝔽(2<sup>31</sup> - 1), excluding *-0*<sub>𝔽</sub>.</dd>
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. Let _int32bit_ be _int_ modulo 2<sup>32</sup>.
-        1. If _int32bit_ ≥ 2<sup>31</sup>, return 𝔽(_int32bit_ - 2<sup>32</sup>).
-        1. Return 𝔽(_int32bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~signed~, 32)).
       </emu-alg>
-      <emu-note>
-        <p>Given the above definition:</p>
-        <ul>
-          <li>
-            It is idempotent: for any ECMAScript language value _x_, ToInt32(ToInt32(_x_)) is the same as ToInt32(_x_).
-          </li>
-          <li>
-            For any ECMAScript language value _x_, ToInt32(ToUint32(_x_)) is the same as ToInt32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
-          </li>
-          <li>
-            ToInt32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-touint32" type="abstract operation">
@@ -5362,27 +5369,8 @@
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. Let _int32bit_ be _int_ modulo 2<sup>32</sup>.
-        1. [id="step-touint32-return"] Return 𝔽(_int32bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 32)).
       </emu-alg>
-      <emu-note>
-        <p>Given the above definition:</p>
-        <ul>
-          <li>
-            Step <emu-xref href="#step-touint32-return"></emu-xref> is the only difference between ToUint32 and ToInt32.
-          </li>
-          <li>
-            It is idempotent: for any ECMAScript language value _x_, ToUint32(ToUint32(_x_)) is the same as ToUint32(_x_).
-          </li>
-          <li>
-            For any ECMAScript language value _x_, ToUint32(ToInt32(_x_)) is the same as ToUint32(_x_). (It is to preserve this property that *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> are mapped to *+0*<sub>𝔽</sub>.)
-          </li>
-          <li>
-            ToUint32 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint16" type="abstract operation">
@@ -5393,14 +5381,11 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It converts _argument_ to one of 2<sup>16</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>15</sup>) to 𝔽(2<sup>15</sup> - 1).</dd>
+        <dd>It converts _argument_ to one of 2<sup>16</sup> integral Number values in the inclusive interval from 𝔽(-2<sup>15</sup>) to 𝔽(2<sup>15</sup> - 1), excluding *-0*<sub>𝔽</sub>.</dd>
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. Let _int16bit_ be _int_ modulo 2<sup>16</sup>.
-        1. If _int16bit_ ≥ 2<sup>15</sup>, return 𝔽(_int16bit_ - 2<sup>16</sup>).
-        1. Return 𝔽(_int16bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~signed~, 16)).
       </emu-alg>
     </emu-clause>
 
@@ -5416,21 +5401,8 @@
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. [id="step-touint16-mod"] Let _int16bit_ be _int_ modulo 2<sup>16</sup>.
-        1. Return 𝔽(_int16bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 16)).
       </emu-alg>
-      <emu-note>
-        <p>Given the above definition:</p>
-        <ul>
-          <li>
-            The substitution of 2<sup>16</sup> for 2<sup>32</sup> in step <emu-xref href="#step-touint16-mod"></emu-xref> is the only difference between ToUint32 and ToUint16.
-          </li>
-          <li>
-            ToUint16 maps *-0*<sub>𝔽</sub> to *+0*<sub>𝔽</sub>.
-          </li>
-        </ul>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-toint8" type="abstract operation">
@@ -5441,14 +5413,11 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It converts _argument_ to one of 2<sup>8</sup> integral Number values in the inclusive interval from *-128*<sub>𝔽</sub> to *127*<sub>𝔽</sub>.</dd>
+        <dd>It converts _argument_ to one of 2<sup>8</sup> integral Number values in the inclusive interval from *-128*<sub>𝔽</sub> to *127*<sub>𝔽</sub>, excluding *-0*<sub>𝔽</sub>.</dd>
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. Let _int8bit_ be _int_ modulo 2<sup>8</sup>.
-        1. If _int8bit_ ≥ 2<sup>7</sup>, return 𝔽(_int8bit_ - 2<sup>8</sup>).
-        1. Return 𝔽(_int8bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~signed~, 8)).
       </emu-alg>
     </emu-clause>
 
@@ -5464,9 +5433,7 @@
       </dl>
       <emu-alg>
         1. Let _int_ be ? ToIntegerOrInfinity(_argument_).
-        1. If _int_ is not finite, return *+0*<sub>𝔽</sub>.
-        1. Let _int8bit_ be _int_ modulo 2<sup>8</sup>.
-        1. Return 𝔽(_int8bit_).
+        1. Return 𝔽(ToFixedSizeInteger(_int_, ~unsigned~, 8)).
       </emu-alg>
     </emu-clause>
 
@@ -5641,10 +5608,8 @@
         <dd>It converts _argument_ to one of 2<sup>64</sup> BigInt values in the inclusive interval from ℤ(-2<sup>63</sup>) to ℤ(2<sup>63</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _n_ be ? ToBigInt(_argument_).
-        1. Let _int64bit_ be ℝ(_n_) modulo 2<sup>64</sup>.
-        1. If _int64bit_ ≥ 2<sup>63</sup>, return ℤ(_int64bit_ - 2<sup>64</sup>).
-        1. Return ℤ(_int64bit_).
+        1. Let _int_ be ℝ(? ToBigInt(_argument_)).
+        1. Return ℤ(ToFixedSizeInteger(_int_, ~signed~, 64)).
       </emu-alg>
     </emu-clause>
 
@@ -5659,9 +5624,8 @@
         <dd>It converts _argument_ to one of 2<sup>64</sup> BigInt values in the inclusive interval from *0*<sub>ℤ</sub> to ℤ(2<sup>64</sup> - 1).</dd>
       </dl>
       <emu-alg>
-        1. Let _n_ be ? ToBigInt(_argument_).
-        1. Let _int64bit_ be ℝ(_n_) modulo 2<sup>64</sup>.
-        1. Return ℤ(_int64bit_).
+        1. Let _int_ be ℝ(? ToBigInt(_argument_)).
+        1. Return ℤ(ToFixedSizeInteger(_int_, ~unsigned~, 64)).
       </emu-alg>
     </emu-clause>
 
@@ -12007,6 +11971,27 @@
       <emu-alg>
         1. Let _currentRealm_ be the current Realm Record.
         1. Return _currentRealm_.[[GlobalObject]].
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-runsuspendedcontext" type="abstract operation">
+      <h1>
+        RunSuspendedContext (
+          _context_: an execution context,
+          _completionRecord_: a Completion Record,
+        ): either a normal completion containing either an ECMAScript language value or ~unused~, or an abrupt completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It resumes _context_ (sending it _completionRecord_ as the resumption value), and waits for the result.</dd>
+      </dl>
+      <emu-alg>
+        1. Let _callerContext_ be the running execution context.
+        1. Suspend _callerContext_.
+        1. Push _context_ onto the execution context stack; _context_ is now the running execution context.
+        1. <emu-meta effects="user-code">Resume the suspended evaluation of _context_</emu-meta> using _completionRecord_ as the result of the operation that suspended it. Let _result_ be the Completion Record returned by the resumed computation.
+        1. Assert: When we reach this step, _context_ has already been removed from the execution context stack and _callerContext_ is the running execution context again.
+        1. Return Completion(_result_).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -28680,9 +28665,9 @@
             <emu-alg>
               1. Assert: _module_ has been linked and declarations in its module environment have been instantiated.
               1. Let _moduleContext_ be _module_.[[Context]].
-              1. Suspend the running execution context.
               1. If _module_.[[HasTLA]] is *false*, then
                 1. Assert: _capability_ is not present.
+                1. Suspend the running execution context.
                 1. Push _moduleContext_ onto the execution context stack; _moduleContext_ is now the running execution context.
                 1. Let _result_ be Completion(Evaluation of _module_.[[ECMAScriptCode]]).
                 1. Suspend _moduleContext_ and remove it from the execution context stack.
@@ -50638,13 +50623,8 @@ THH:mm:ss.sss
           1. If _state_ is ~completed~, return CreateIteratorResultObject(*undefined*, *true*).
           1. Assert: _state_ is either ~suspended-start~ or ~suspended-yield~.
           1. Let _genContext_ be _generator_.[[GeneratorContext]].
-          1. Let _methodContext_ be the running execution context.
-          1. Suspend _methodContext_.
           1. Set _generator_.[[GeneratorState]] to ~executing~.
-          1. Push _genContext_ onto the execution context stack; _genContext_ is now the running execution context.
-          1. <emu-meta effects="user-code">Resume the suspended evaluation of _genContext_</emu-meta> using NormalCompletion(_value_) as the result of the operation that suspended it. Let _result_ be the value returned by the resumed computation.
-          1. Assert: When we return here, _genContext_ has already been removed from the execution context stack and _methodContext_ is the currently running execution context.
-          1. Return ? _result_.
+          1. Return ? RunSuspendedContext(_genContext_, NormalCompletion(_value_)).
         </emu-alg>
       </emu-clause>
 
@@ -50670,13 +50650,8 @@ THH:mm:ss.sss
             1. Return ? _abruptCompletion_.
           1. Assert: _state_ is ~suspended-yield~.
           1. Let _genContext_ be _generator_.[[GeneratorContext]].
-          1. Let _methodContext_ be the running execution context.
-          1. Suspend _methodContext_.
           1. Set _generator_.[[GeneratorState]] to ~executing~.
-          1. Push _genContext_ onto the execution context stack; _genContext_ is now the running execution context.
-          1. <emu-meta effects="user-code">Resume the suspended evaluation of _genContext_</emu-meta> using _abruptCompletion_ as the result of the operation that suspended it. Let _result_ be the Completion Record returned by the resumed computation.
-          1. Assert: When we return here, _genContext_ has already been removed from the execution context stack and _methodContext_ is the currently running execution context.
-          1. Return ? _result_.
+          1. Return ? RunSuspendedContext(_genContext_, _abruptCompletion_).
         </emu-alg>
       </emu-clause>
 
@@ -51044,13 +51019,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. Assert: _generator_.[[AsyncGeneratorState]] is either ~suspended-start~ or ~suspended-yield~.
           1. Let _genContext_ be _generator_.[[AsyncGeneratorContext]].
-          1. Let _callerContext_ be the running execution context.
-          1. Suspend _callerContext_.
           1. Set _generator_.[[AsyncGeneratorState]] to ~executing~.
-          1. Push _genContext_ onto the execution context stack; _genContext_ is now the running execution context.
-          1. <emu-meta effects="user-code">Resume the suspended evaluation of _genContext_</emu-meta> using _completion_ as the result of the operation that suspended it. Let _result_ be the Completion Record returned by the resumed computation.
-          1. Assert: _result_ is never an abrupt completion.
-          1. Assert: When we return here, _genContext_ has already been removed from the execution context stack and _callerContext_ is the currently running execution context.
+          1. Perform ! RunSuspendedContext(_genContext_, _completion_).
           1. Return ~unused~.
         </emu-alg>
       </emu-clause>
@@ -51301,7 +51271,6 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. Let _runningContext_ be the running execution context.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _promiseCapability_ and _asyncBody_ and performs the following steps when called:
             1. Let _acAsyncContext_ be the running execution context.
             1. If _asyncBody_ is a Parse Node, then
@@ -51320,10 +51289,9 @@ THH:mm:ss.sss
               1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »).
             1. [id="step-asyncblockstart-return-undefined"] Return NormalCompletion(~unused~).
           1. Set the code evaluation state of _asyncContext_ such that when evaluation is resumed for that execution context, _closure_ will be called with no arguments.
-          1. Push _asyncContext_ onto the execution context stack; _asyncContext_ is now the running execution context.
-          1. <emu-meta effects="user-code">Resume the suspended evaluation of _asyncContext_</emu-meta>. Let _result_ be the value returned by the resumed computation.
-          1. Assert: When we return here, _asyncContext_ has already been removed from the execution context stack and _runningContext_ is the currently running execution context.
-          1. Assert: _result_ is a normal completion with a value of ~unused~. The possible sources of this value are Await or, if the async function doesn't await anything, step <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref> above.
+          1. Let _result_ be ! RunSuspendedContext(_asyncContext_, NormalCompletion(~empty~)).
+          1. Assert: _result_ is ~unused~.
+          1. NOTE: The possible sources of _result_ values are Await or, if the async function doesn't await anything, step <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref> above.
           1. Return ~unused~.
         </emu-alg>
       </emu-clause>
@@ -51340,19 +51308,13 @@ THH:mm:ss.sss
           1. Let _asyncContext_ be the running execution context.
           1. Let _promise_ be ? PromiseResolve(%Promise%, _value_).
           1. Let _fulfilledClosure_ be a new Abstract Closure with parameters (_v_) that captures _asyncContext_ and performs the following steps when called:
-            1. Let _prevContext_ be the running execution context.
-            1. Suspend _prevContext_.
-            1. Push _asyncContext_ onto the execution context stack; _asyncContext_ is now the running execution context.
-            1. <emu-meta effects="user-code">Resume the suspended evaluation of _asyncContext_</emu-meta> using NormalCompletion(_v_) as the result of the operation that suspended it.
-            1. Assert: When we reach this step, _asyncContext_ has already been removed from the execution context stack and _prevContext_ is the currently running execution context.
+            1. Perform Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_))).
+            1. NOTE: The Completion Record returned by RunSuspendedContext is intentionally ignored.
             1. Return NormalCompletion(*undefined*).
           1. Let _onFulfilled_ be CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »).
           1. Let _rejectedClosure_ be a new Abstract Closure with parameters (_reason_) that captures _asyncContext_ and performs the following steps when called:
-            1. Let _prevContext_ be the running execution context.
-            1. Suspend _prevContext_.
-            1. Push _asyncContext_ onto the execution context stack; _asyncContext_ is now the running execution context.
-            1. <emu-meta effects="user-code">Resume the suspended evaluation of _asyncContext_</emu-meta> using ThrowCompletion(_reason_) as the result of the operation that suspended it.
-            1. Assert: When we reach this step, _asyncContext_ has already been removed from the execution context stack and _prevContext_ is the currently running execution context.
+            1. Perform Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_))).
+            1. NOTE: The Completion Record returned by RunSuspendedContext is intentionally ignored.
             1. Return NormalCompletion(*undefined*).
           1. Let _onRejected_ be CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »).
           1. Perform PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_).
