@@ -47702,7 +47702,6 @@ THH:mm:ss.sss
           1. If _value_ is an Object and IsCallable(_value_) is *false*, then
             1. Let _isArray_ be ? IsArray(_value_).
             1. If _isArray_ is *true*, then
-              1. Assert: _value_ is an Array. _value_ is not a Proxy.
               1. Return ? SerializeJSONArray(_state_, _value_).
             1. Return ? SerializeJSONObject(_state_, _value_).
           1. Return *undefined*.
@@ -47896,7 +47895,7 @@ THH:mm:ss.sss
         <h1>
           SerializeJSONArray (
             _state_: a JSON Serialization Record,
-            _value_: an Array,
+            _value_: an Object,
           ): either a normal completion containing a String or a throw completion
         </h1>
         <dl class="header">

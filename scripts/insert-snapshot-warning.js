@@ -24,14 +24,43 @@ const WARNING_HTML = `
   </p>
 </details>
 <script>
-let base = "https://ci.tc39.es/preview/tc39/ecma262/sha/";
-if (
-  location.href.startsWith(base) &&
-  document.referrer.startsWith(base) &&
-  location.href.substring(base.length, base.length + 40) === document.referrer.substring(base.length, base.length + 40)
-) {
-  document.querySelector(".annoying-warning").open = false;
-}
+// make the warning keyboard-dismissable
+document.addEventListener('keydown', e => {
+  if (e.code === 'Escape') {
+    let warning = document.querySelector(".annoying-warning");
+    if (warning.open) {
+      warning.open = false;
+      e.stopImmediatePropagation();
+    }
+  }
+});
+
+// automatically collapse the warning when navigating within the same snapshot
+(() => {
+  let referrer;
+  try {
+    referrer = new URL(document.referrer);
+  } catch (_err) {
+    // ignore
+  }
+  if (!referrer || referrer.host !== location.host) return;
+
+  let getSpecPath = url => {
+    let pathParts = url.pathname.split('/');
+    let isMultipage = pathParts[pathParts.length - 2] === 'multipage';
+    let pathPrefixEnd = isMultipage
+      ? -2
+      : pathParts.findLastIndex(part => part !== '') + 1;
+    let pathPrefix = pathParts.slice(0, pathPrefixEnd).join('/');
+    return pathPrefix;
+  };
+
+  let referrerPathPrefix = getSpecPath(referrer);
+  let pathPrefix = getSpecPath(location);
+  if (referrerPathPrefix === pathPrefix) {
+    document.querySelector(".annoying-warning").open = false;
+  }
+})();
 </script>
 `;
 
