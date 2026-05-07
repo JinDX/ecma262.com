@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2027 Language&nbsp;Specification"><meta property="og:description" content="はじめに
   このEcma規格はECMAScript 2027言語を定義します。これはECMAScript言語仕様の第18版です。ECMAScriptは、最もよく知られているものとしてJavaScript（Netscape）やJScript（Microsoft）など、いくつかの起源技術を基にしています。この言語はNetscapeのBrendan Eichによって考案され、最初は同社のNavigator 2.0ブラウザに登場しました。ウェブブラウザに組み込まれた言語として有名ですが、サーバや組込み用途などブラウザ以外でも幅広く採用され、世界で最も広く使われている汎用プログラミング言語の一つ">
 <link rel="icon" href="..\img\favicon.ico">
-<script src="..\assets\js\multipage.js?cache=PP2w3mzt" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<script src="..\assets\js\multipage.js?cache=vP8kRQ-L" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -153,7 +153,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 Language&nbsp;Specification</title><script src="..\assets\js\ecmarkup.js?cache=6d-e8VMF" defer=""></script><style>
+<title>ECMAScript® 2027 Language&nbsp;Specification</title><script src="..\assets\js\ecmarkup.js?cache=4-IOgSa7" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -228,7 +228,7 @@
   <li><span>Jump to the most recent link target</span><code>`</code></li>
 </ul></div><div id='spec-container'><emu-clause id="sec-ecmascript-standard-built-in-objects">
   <h1><span class="secnum">18</span> ECMAScript Standard Built-in Objects</h1>
-  <p>ECMAScript の <emu-nt id="_ref_21594"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_21595"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> が実行を開始する際に利用可能ないくつかの組み込みオブジェクトがある。ひとつは<emu-xref href="#sec-global-object" id="_ref_8716"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>であり、実行中のプログラムのグローバル環境の一部である。他は<emu-xref href="#sec-global-object" id="_ref_8717"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>の初期プロパティとして、またはアクセス可能な組み込みオブジェクトのプロパティを通じて間接的にアクセス可能である。</p>
+  <p>ECMAScript の <emu-nt id="_ref_21593"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_21594"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> が実行を開始する際に利用可能ないくつかの組み込みオブジェクトがある。ひとつは<emu-xref href="#sec-global-object" id="_ref_8716"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>であり、実行中のプログラムのグローバル環境の一部である。他は<emu-xref href="#sec-global-object" id="_ref_8717"><a href="global-object.html#sec-global-object">グローバルオブジェクト</a></emu-xref>の初期プロパティとして、またはアクセス可能な組み込みオブジェクトのプロパティを通じて間接的にアクセス可能である。</p>
   <p>特に指定がない限り、関数として呼び出し可能な組み込みオブジェクトは <emu-xref href="#sec-built-in-function-objects" id="_ref_523"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> に記述された特性を持つ組み込み関数オブジェクトである。特に指定がない限り、組み込みオブジェクトの <var class="field">[[Extensible]]</var> 内部スロットは初期値として <emu-val>true</emu-val> を持つ。すべての組み込み関数オブジェクトは <var class="field">[[Realm]]</var> 内部スロットを持ち、その値はオブジェクトが最初に作成されたレルムのレコードである。</p>
   <p>多くの組み込みオブジェクトは関数であり、引数を指定して呼び出すことができる。さらにそれらのうちいくつかはコンストラクタであり、<code>new</code> 演算子で使うことを意図した関数である。各組み込み関数について、本仕様はその関数が要求する引数とその関数オブジェクトのプロパティを記述する。各組み込みコンストラクタについては、さらにそのコンストラクタの prototype オブジェクトのプロパティおよびそのコンストラクタを呼び出す <code>new</code> 式によって返される特定のオブジェクトインスタンスのプロパティを記述する。</p>
   <p>特定の関数の記述で別段の指定がない限り、組み込み関数またはコンストラクタに指定された必要引数より少ない引数が与えられた場合、その関数またはコンストラクタは、各不足引数が <emu-val>undefined</emu-val> 値であるかのように振る舞わなければならない。そのような不足引数は「存在しない」と見なされ、仕様アルゴリズムによってそのように識別され得る。特定の関数の記述において、「<emu-val>this</emu-val> 値」および「NewTarget」という用語は <emu-xref href="#sec-built-in-function-objects" id="_ref_524"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> に与えられた意味を持つ。</p>

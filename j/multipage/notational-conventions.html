@@ -2,7 +2,7 @@
 <head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta property="og:image" content="https://tc39.es/ecmarkup/ecma-logo.png"><meta property="og:title" content="ECMAScript® 2027 Language&nbsp;Specification"><meta property="og:description" content="はじめに
   このEcma規格はECMAScript 2027言語を定義します。これはECMAScript言語仕様の第18版です。ECMAScriptは、最もよく知られているものとしてJavaScript（Netscape）やJScript（Microsoft）など、いくつかの起源技術を基にしています。この言語はNetscapeのBrendan Eichによって考案され、最初は同社のNavigator 2.0ブラウザに登場しました。ウェブブラウザに組み込まれた言語として有名ですが、サーバや組込み用途などブラウザ以外でも幅広く採用され、世界で最も広く使われている汎用プログラミング言語の一つ">
 <link rel="icon" href="..\img\favicon.ico">
-<script src="..\assets\js\multipage.js?cache=PP2w3mzt" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<script src="..\assets\js\multipage.js?cache=vP8kRQ-L" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
 <link rel="stylesheet" href="..\assets\css\ecmarkup.css"><link rel="stylesheet" href="..\assets\css\print.css" media="print"><style>
   .unicode-property-table {
     table-layout: fixed;
@@ -153,7 +153,7 @@
     bottom: -1.25em;
   }
 </style>
-<title>ECMAScript® 2027 Language&nbsp;Specification</title><script src="..\assets\js\ecmarkup.js?cache=6d-e8VMF" defer=""></script><style>
+<title>ECMAScript® 2027 Language&nbsp;Specification</title><script src="..\assets\js\ecmarkup.js?cache=4-IOgSa7" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -241,22 +241,22 @@
 
     <emu-clause id="sec-lexical-and-regexp-grammars">
       <h1><span class="secnum">5.1.2</span> 字句文法と RegExp 文法</h1>
-      <p>ECMAScript の <em>lexical grammar</em> は節 <emu-xref href="#sec-ecmascript-language-lexical-grammar" id="_ref_24"><a href="ecmascript-language-lexical-grammar.html#sec-ecmascript-language-lexical-grammar">12</a></emu-xref> に与えられている。この文法は、<emu-xref href="#sec-source-text" id="_ref_25"><a href="ecmascript-language-source-code.html#sec-source-text">11.1</a></emu-xref> で定義される <emu-nt id="_ref_15422"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> の規則に適合する Unicode コードポイントを terminal 記号として持つ。この文法は、<emu-xref href="#sec-context-free-grammars" id="_ref_1067"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15423"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementDiv">InputElementDiv</a></emu-nt>、<emu-nt id="_ref_15424"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementTemplateTail">InputElementTemplateTail</a></emu-nt>、<emu-nt id="_ref_15425"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExp">InputElementRegExp</a></emu-nt>、<emu-nt id="_ref_15426"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExpOrTemplateTail">InputElementRegExpOrTemplateTail</a></emu-nt>、または <emu-nt id="_ref_15427"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementHashbangOrRegExp">InputElementHashbangOrRegExp</a></emu-nt> から始まる複数の production を定義し、そのようなコードポイント列がどのように入力要素列へ変換されるかを記述する。</p>
-      <p>空白およびコメント以外の入力要素は、ECMAScript の構文文法の terminal 記号を成し、ECMAScript の <em>token</em> と呼ばれる。これらの token は、ECMAScript 言語の予約語、識別子、リテラル、および区切り記号である。さらに、行終端子は token とはみなされないが、入力要素ストリームの一部となり、自動セミコロン挿入（<emu-xref href="#sec-automatic-semicolon-insertion" id="_ref_26"><a href="ecmascript-language-lexical-grammar.html#sec-automatic-semicolon-insertion">12.10</a></emu-xref>）の処理を導く。単純な空白と単一行コメントは破棄され、構文文法の入力要素ストリームには現れない。<emu-nt id="_ref_15428"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt>（すなわち <code>/*</code>…<code>*/</code> 形式のコメントで、複数行にまたがるかどうかを問わない）も、行終端子を含まなければ同様に単に破棄される。しかし、<emu-nt id="_ref_15429"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt> が 1 個以上の行終端子を含む場合、それは単一の行終端子に置き換えられ、それが構文文法の入力要素ストリームの一部となる。</p>
-      <p>ECMAScript の <em>RegExp grammar</em> は <emu-xref href="#sec-patterns" id="_ref_27"><a href="text-processing.html#sec-patterns">22.2.1</a></emu-xref> に与えられている。この文法も <emu-nt id="_ref_15430"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> によって定義されるコードポイントを terminal 記号として持つ。この文法は、<emu-xref href="#sec-context-free-grammars" id="_ref_1068"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15431"><a href="text-processing.html#prod-Pattern">Pattern</a></emu-nt> から始まる複数の production を定義し、コードポイント列がどのように正規表現パターンへ変換されるかを記述する。</p>
+      <p>ECMAScript の <em>lexical grammar</em> は節 <emu-xref href="#sec-ecmascript-language-lexical-grammar" id="_ref_24"><a href="ecmascript-language-lexical-grammar.html#sec-ecmascript-language-lexical-grammar">12</a></emu-xref> に与えられている。この文法は、<emu-xref href="#sec-source-text" id="_ref_25"><a href="ecmascript-language-source-code.html#sec-source-text">11.1</a></emu-xref> で定義される <emu-nt id="_ref_15421"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> の規則に適合する Unicode コードポイントを terminal 記号として持つ。この文法は、<emu-xref href="#sec-context-free-grammars" id="_ref_1067"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15422"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementDiv">InputElementDiv</a></emu-nt>、<emu-nt id="_ref_15423"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementTemplateTail">InputElementTemplateTail</a></emu-nt>、<emu-nt id="_ref_15424"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExp">InputElementRegExp</a></emu-nt>、<emu-nt id="_ref_15425"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExpOrTemplateTail">InputElementRegExpOrTemplateTail</a></emu-nt>、または <emu-nt id="_ref_15426"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementHashbangOrRegExp">InputElementHashbangOrRegExp</a></emu-nt> から始まる複数の production を定義し、そのようなコードポイント列がどのように入力要素列へ変換されるかを記述する。</p>
+      <p>空白およびコメント以外の入力要素は、ECMAScript の構文文法の terminal 記号を成し、ECMAScript の <em>token</em> と呼ばれる。これらの token は、ECMAScript 言語の予約語、識別子、リテラル、および区切り記号である。さらに、行終端子は token とはみなされないが、入力要素ストリームの一部となり、自動セミコロン挿入（<emu-xref href="#sec-automatic-semicolon-insertion" id="_ref_26"><a href="ecmascript-language-lexical-grammar.html#sec-automatic-semicolon-insertion">12.10</a></emu-xref>）の処理を導く。単純な空白と単一行コメントは破棄され、構文文法の入力要素ストリームには現れない。<emu-nt id="_ref_15427"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt>（すなわち <code>/*</code>…<code>*/</code> 形式のコメントで、複数行にまたがるかどうかを問わない）も、行終端子を含まなければ同様に単に破棄される。しかし、<emu-nt id="_ref_15428"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt> が 1 個以上の行終端子を含む場合、それは単一の行終端子に置き換えられ、それが構文文法の入力要素ストリームの一部となる。</p>
+      <p>ECMAScript の <em>RegExp grammar</em> は <emu-xref href="#sec-patterns" id="_ref_27"><a href="text-processing.html#sec-patterns">22.2.1</a></emu-xref> に与えられている。この文法も <emu-nt id="_ref_15429"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> によって定義されるコードポイントを terminal 記号として持つ。この文法は、<emu-xref href="#sec-context-free-grammars" id="_ref_1068"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15430"><a href="text-processing.html#prod-Pattern">Pattern</a></emu-nt> から始まる複数の production を定義し、コードポイント列がどのように正規表現パターンへ変換されるかを記述する。</p>
       <p>字句文法および RegExp 文法の production は、区切り記号として 2 つのコロン “<b>::</b>” を持つことで区別される。字句文法と RegExp 文法は一部の production を共有する。</p>
     </emu-clause>
 
     <emu-clause id="sec-numeric-string-grammar">
       <h1><span class="secnum">5.1.3</span> 数値文字列文法</h1>
-      <p><em>numeric string grammar</em> は <emu-xref href="#sec-tonumber-applied-to-the-string-type" id="_ref_28"><a href="abstract-operations.html#sec-tonumber-applied-to-the-string-type">7.1.4.1</a></emu-xref> に現れる。これは <emu-nt id="_ref_15432"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> を terminal 記号として持ち、<emu-xref href="#sec-context-free-grammars" id="_ref_1069"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15433"><a href="abstract-operations.html#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt> から始めて String を数値へ変換するために用いられる（これは <emu-xref href="#sec-literals-numeric-literals" id="_ref_29"><a href="ecmascript-language-lexical-grammar.html#sec-literals-numeric-literals">数値リテラルの字句文法</a></emu-xref> に似ているが別物である）。</p>
+      <p><em>numeric string grammar</em> は <emu-xref href="#sec-tonumber-applied-to-the-string-type" id="_ref_28"><a href="abstract-operations.html#sec-tonumber-applied-to-the-string-type">7.1.4.1</a></emu-xref> に現れる。これは <emu-nt id="_ref_15431"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> を terminal 記号として持ち、<emu-xref href="#sec-context-free-grammars" id="_ref_1069"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15432"><a href="abstract-operations.html#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt> から始めて String を数値へ変換するために用いられる（これは <emu-xref href="#sec-literals-numeric-literals" id="_ref_29"><a href="ecmascript-language-lexical-grammar.html#sec-literals-numeric-literals">数値リテラルの字句文法</a></emu-xref> に似ているが別物である）。</p>
       <p>numeric string grammar の production は、句読点として 3 つのコロン “<b>:::</b>” を持つことで区別され、ソーステキストの解析には決して用いられない。</p>
     </emu-clause>
 
     <emu-clause id="sec-syntactic-grammar">
       <h1><span class="secnum">5.1.4</span> 構文文法</h1>
-      <p>ECMAScript の <em>syntactic grammar</em> は、節 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_30"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_31"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> に与えられている。この文法は、その terminal 記号として字句文法で定義される ECMAScript token を持つ（<emu-xref href="#sec-lexical-and-regexp-grammars" id="_ref_32"><a href="notational-conventions.html#sec-lexical-and-regexp-grammars">5.1.2</a></emu-xref>）。この文法は、2 つの代替 <emu-xref href="#sec-context-free-grammars" id="_ref_1070"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15434"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> および <emu-nt id="_ref_15435"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> から始まる複数の production を定義し、token 列がどのように ECMAScript プログラムの構文的に正しい独立構成要素を形成するかを記述する。</p>
-      <p>コードポイントのストリームが ECMAScript の <emu-nt id="_ref_15436"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15437"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> として解析されるとき、まず字句文法の反復適用により入力要素のストリームへ変換される。その後、この入力要素ストリームは構文文法の単一適用によって解析される。入力要素ストリーム内の token が、余り token を残さず単一の goal nonterminal（<emu-nt id="_ref_15438"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15439"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>）の instance として解析できない場合、その入力ストリームは構文的に誤りである。</p>
+      <p>ECMAScript の <em>syntactic grammar</em> は、節 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_30"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_31"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> に与えられている。この文法は、その terminal 記号として字句文法で定義される ECMAScript token を持つ（<emu-xref href="#sec-lexical-and-regexp-grammars" id="_ref_32"><a href="notational-conventions.html#sec-lexical-and-regexp-grammars">5.1.2</a></emu-xref>）。この文法は、2 つの代替 <emu-xref href="#sec-context-free-grammars" id="_ref_1070"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> <emu-nt id="_ref_15433"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> および <emu-nt id="_ref_15434"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> から始まる複数の production を定義し、token 列がどのように ECMAScript プログラムの構文的に正しい独立構成要素を形成するかを記述する。</p>
+      <p>コードポイントのストリームが ECMAScript の <emu-nt id="_ref_15435"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15436"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> として解析されるとき、まず字句文法の反復適用により入力要素のストリームへ変換される。その後、この入力要素ストリームは構文文法の単一適用によって解析される。入力要素ストリーム内の token が、余り token を残さず単一の goal nonterminal（<emu-nt id="_ref_15437"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15438"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>）の instance として解析できない場合、その入力ストリームは構文的に誤りである。</p>
       <p>解析が成功すると、<em>parse tree</em>、すなわち各 node が <dfn variants="Parse Nodes" tabindex="-1">Parse Node</dfn> である根付き木構造が構築される。各 Parse Node は文法中の記号の <em>instance</em> であり、その記号から導出できるソーステキストの範囲を表す。ソーステキスト全体を表す parse tree の根 node は、解析の <emu-xref href="#sec-context-free-grammars" id="_ref_1071"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> の instance である。Parse Node が nonterminal の instance である場合、それはまた、その nonterminal を左辺に持ついずれかの production の instance でもある。さらに、その right-hand side 上の各記号に 1 つずつ対応する 0 個以上の <em>children</em> を持ち、各 child は対応する記号の instance である Parse Node である。</p>
       <p>新しい Parse Node は parser の各呼出しごとに生成され、たとえ同一のソーステキストであっても解析間で再利用されることはない。Parse Node は、同じソーステキスト範囲を表し、同じ文法記号の instance であり、かつ同じ parser 呼出しから生じた場合に限り、<dfn tabindex="-1">同じ Parse Node</dfn> とみなされる。</p>
       <emu-note><span class="note">Note 1</span><div class="note-contents">
@@ -268,8 +268,8 @@
       </div></emu-note>
       <emu-note><span class="note">Note 2</span><div class="note-contents">Parse Node は仕様上の人工物であり、実装が類似のデータ構造を用いることは要求されない。</div></emu-note>
       <p>構文文法の production は、句読点としてただ 1 つのコロン “<b>:</b>” を持つことで区別される。</p>
-      <p>節 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_33"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_34"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> に示される構文文法は、どの token 列が正しい ECMAScript <emu-nt id="_ref_15440"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15441"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> として受理されるかについての完全な説明ではない。追加の token 列も受理される。すなわち、特定の箇所（たとえば行終端文字の前）にセミコロンを追加した場合にのみ、その列が文法によって記述されるものがそれに当たる。さらに、文法により記述される token 列のうち、特定の「扱いにくい」位置に行終端文字が現れる場合には、受理可能とみなされないものもある。</p>
-      <p>場合によっては、曖昧さを避けるために、構文文法は、有効な ECMAScript <emu-nt id="_ref_15442"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15443"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> を構成しない token 列を許す一般化された production を用いる。たとえば、この技法は object literal や object destructuring pattern に用いられる。そのような場合、受理可能な token 列をさらに制限する、より制約の強い <em>supplemental grammar</em> が提供される。通常、その後に <emu-xref href="#early-error" id="_ref_1073"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule が、特定の文脈において「<var>p</var> <dfn id="must-cover" tabindex="-1">must cover</dfn> an <var>n</var>」と述べる。ここで <var>p</var> は Parse Node（一般化された production の instance）であり、<var>n</var> は supplemental grammar の nonterminal である。これは次を意味する。</p>
+      <p>節 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_33"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_34"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> に示される構文文法は、どの token 列が正しい ECMAScript <emu-nt id="_ref_15439"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15440"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> として受理されるかについての完全な説明ではない。追加の token 列も受理される。すなわち、特定の箇所（たとえば行終端文字の前）にセミコロンを追加した場合にのみ、その列が文法によって記述されるものがそれに当たる。さらに、文法により記述される token 列のうち、特定の「扱いにくい」位置に行終端文字が現れる場合には、受理可能とみなされないものもある。</p>
+      <p>場合によっては、曖昧さを避けるために、構文文法は、有効な ECMAScript <emu-nt id="_ref_15441"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15442"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> を構成しない token 列を許す一般化された production を用いる。たとえば、この技法は object literal や object destructuring pattern に用いられる。そのような場合、受理可能な token 列をさらに制限する、より制約の強い <em>supplemental grammar</em> が提供される。通常、その後に <emu-xref href="#early-error" id="_ref_1073"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule が、特定の文脈において「<var>p</var> <dfn id="must-cover" tabindex="-1">must cover</dfn> an <var>n</var>」と述べる。ここで <var>p</var> は Parse Node（一般化された production の instance）であり、<var>n</var> は supplemental grammar の nonterminal である。これは次を意味する。</p>
       <ol>
         <li>もともと <var>p</var> に一致した token 列は、<emu-xref href="#sec-context-free-grammars" id="_ref_1074"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> として <var>n</var> を用いて再度解析される。<var>n</var> が文法パラメータを取るなら、<var>p</var> が最初に解析されたときと同じ値に設定される。</li>
         <li>その token 列が、余り token を残さず、単一の <var>n</var> の instance として解析できる場合、次が成り立つ。
@@ -287,13 +287,13 @@
 
       <emu-clause id="sec-terminal-symbols">
         <h1><span class="secnum">5.1.5.1</span> 終端記号</h1>
-        <p>ECMAScript 文法では、一部の terminal 記号が <code>fixed-width</code> フォントで示される。これらは、ソーステキスト中に書かれたとおり正確に現れなければならない。この方法で指定されるすべての terminal 記号コードポイントは、他の Unicode 範囲の似た見た目のコードポイントではなく、Basic Latin ブロックの適切な Unicode コードポイントとして理解される。terminal 記号中のコードポイントは、<code>\</code> <emu-nt id="_ref_15444"><a href="ecmascript-language-lexical-grammar.html#prod-UnicodeEscapeSequence">UnicodeEscapeSequence</a></emu-nt> で表現することはできない。</p>
+        <p>ECMAScript 文法では、一部の terminal 記号が <code>fixed-width</code> フォントで示される。これらは、ソーステキスト中に書かれたとおり正確に現れなければならない。この方法で指定されるすべての terminal 記号コードポイントは、他の Unicode 範囲の似た見た目のコードポイントではなく、Basic Latin ブロックの適切な Unicode コードポイントとして理解される。terminal 記号中のコードポイントは、<code>\</code> <emu-nt id="_ref_15443"><a href="ecmascript-language-lexical-grammar.html#prod-UnicodeEscapeSequence">UnicodeEscapeSequence</a></emu-nt> で表現することはできない。</p>
         <p>terminal 記号が個々の Unicode コードポイントである文法（すなわち、字句文法、RegExp 文法、および numeric string grammar）では、production 中に現れる複数の fixed-width コードポイントの連続列は、その同じコードポイント列を単独の terminal 記号として書いたものの単純な略記である。</p>
         <p>たとえば、production:</p>
         <emu-grammar type="definition" example=""><emu-production name="HexIntegerLiteral" type="lexical" collapsed="">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-HexIntegerLiteral">HexIntegerLiteral</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="zxvbgn4l">
         <emu-t>0x</emu-t>
-        <emu-nt id="_ref_15445"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
+        <emu-nt id="_ref_15444"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -302,7 +302,7 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-HexIntegerLiteral">HexIntegerLiteral</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="tu0pitdu">
         <emu-t>0</emu-t>
         <emu-t>x</emu-t>
-        <emu-nt id="_ref_15446"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
+        <emu-nt id="_ref_15445"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -310,7 +310,7 @@
         <p>terminal 記号にはさらに 2 つの形式がある。</p>
         <ul>
           <li>字句文法および RegExp 文法では、通常の印字表現を持たない Unicode コードポイントは、代わりに "&lt;ABBREV&gt;" の形式で示される。ここで "ABBREV" はそのコードポイントまたはコードポイント集合のニーモニックである。これらの形式は <emu-xref href="#sec-unicode-format-control-characters" title="" id="_ref_35"><a href="ecmascript-language-lexical-grammar.html#sec-unicode-format-control-characters">Unicode 書式制御文字</a></emu-xref>、<emu-xref href="#sec-white-space" title="" id="_ref_36"><a href="ecmascript-language-lexical-grammar.html#sec-white-space">White Space</a></emu-xref>、および <emu-xref href="#sec-line-terminators" title="" id="_ref_37"><a href="ecmascript-language-lexical-grammar.html#sec-line-terminators">Line Terminator</a></emu-xref> で定義される。</li>
-          <li>構文文法では、特定の terminal 記号（たとえば <emu-nt id="_ref_15447"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> や <emu-nt id="_ref_15448"><a href="ecmascript-language-lexical-grammar.html#prod-RegularExpressionLiteral">RegularExpressionLiteral</a></emu-nt>）はイタリック体で示される。これは、それらが字句文法における同名の nonterminal を参照するためである。</li>
+          <li>構文文法では、特定の terminal 記号（たとえば <emu-nt id="_ref_15446"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> や <emu-nt id="_ref_15447"><a href="ecmascript-language-lexical-grammar.html#prod-RegularExpressionLiteral">RegularExpressionLiteral</a></emu-nt>）はイタリック体で示される。これは、それらが字句文法における同名の nonterminal を参照するためである。</li>
         </ul>
       </emu-clause>
 
@@ -321,25 +321,25 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="92j78-b5">
         <emu-t>while</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15449"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15448"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15450"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15449"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>は、nonterminal <emu-nt id="_ref_15451"><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> が、token <code>while</code>、左括弧 token、<emu-nt id="_ref_15452"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>、右括弧 token、<emu-nt id="_ref_15453"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> の順に続くものを表すことを述べている。<emu-nt id="_ref_15454"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> および <emu-nt id="_ref_15455"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> の出現は、それ自体 nonterminal である。別の例として、構文定義:</p>
+        <p>は、nonterminal <emu-nt id="_ref_15450"><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> が、token <code>while</code>、左括弧 token、<emu-nt id="_ref_15451"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>、右括弧 token、<emu-nt id="_ref_15452"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> の順に続くものを表すことを述べている。<emu-nt id="_ref_15453"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> および <emu-nt id="_ref_15454"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> の出現は、それ自体 nonterminal である。別の例として、構文定義:</p>
         <emu-grammar type="definition" example=""><emu-production name="ArgumentList" id="prod-grammar-notation-ArgumentList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="1px9pijq">
-        <emu-nt id="_ref_15456"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
+        <emu-nt id="_ref_15455"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="f_i_7oqe">
-        <emu-nt id="_ref_15457"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt>
+        <emu-nt id="_ref_15456"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt>
         <emu-t>,</emu-t>
-        <emu-nt id="_ref_15458"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
+        <emu-nt id="_ref_15457"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>は、<emu-nt id="_ref_15459"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> が、単一の <emu-nt id="_ref_15460"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> か、あるいは <emu-nt id="_ref_15461"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> に続けてコンマと <emu-nt id="_ref_15462"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> が続くもののいずれかを表してよいことを述べている。この <emu-nt id="_ref_15463"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> の定義は再帰的であり、すなわちそれ自体を用いて定義される。その結果、<emu-nt id="_ref_15464"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> は、各引数式が <emu-nt id="_ref_15465"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> である任意の正の個数の引数を、コンマ区切りで含んでよい。このような nonterminal の再帰的定義は一般的である。</p>
+        <p>は、<emu-nt id="_ref_15458"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> が、単一の <emu-nt id="_ref_15459"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> か、あるいは <emu-nt id="_ref_15460"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> に続けてコンマと <emu-nt id="_ref_15461"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> が続くもののいずれかを表してよいことを述べている。この <emu-nt id="_ref_15462"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> の定義は再帰的であり、すなわちそれ自体を用いて定義される。その結果、<emu-nt id="_ref_15463"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> は、各引数式が <emu-nt id="_ref_15464"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt> である任意の正の個数の引数を、コンマ区切りで含んでよい。このような nonterminal の再帰的定義は一般的である。</p>
       </emu-clause>
 
       <emu-clause id="sec-optional-symbols">
@@ -347,19 +347,19 @@
         <p>terminal または nonterminal の後ろに現れることがある下付き接尾辞 “<sub>opt</sub>” は、省略可能な記号を示す。省略可能記号を含む選択肢は、実際には 2 つの right-hand side、すなわち省略可能要素を省いたものと含むものを指定している。これは次を意味する。</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="c5neqctp">
-        <emu-nt id="_ref_15466"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt optional="" id="_ref_15467"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_15465"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt optional="" id="_ref_15466"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の便利な略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="uolyom43">
-        <emu-nt id="_ref_15468"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15467"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="ib7lg1vi">
-        <emu-nt id="_ref_15469"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt id="_ref_15470"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
+        <emu-nt id="_ref_15468"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15469"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -368,12 +368,12 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="k8b-ryxj">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15471"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt optional="" id="_ref_15472"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_15470"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt optional="" id="_ref_15471"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15473"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_15472"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15474"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15473"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -382,21 +382,21 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="ga1xtadp">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15475"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15474"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15476"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_15475"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15477"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15476"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="cs1gk7oq">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15478"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15479"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15477"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15478"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15480"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_15479"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15481"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15480"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -405,42 +405,42 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="acc913te">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15482"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15481"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15483"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15482"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="1lbcl8ka">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15484"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15483"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt id="_ref_15485"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15484"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15486"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15485"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="6nfzjduy">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15487"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15488"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15486"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15487"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15489"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15488"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="fyy9sdxo">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15490"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15491"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15489"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_15490"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt id="_ref_15492"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_15491"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15493"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_15492"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>したがって、この例では nonterminal <emu-nt id="_ref_15494"><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> は実際には 4 つの代替 right-hand side を持つ。</p>
+        <p>したがって、この例では nonterminal <emu-nt id="_ref_15493"><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> は実際には 4 つの代替 right-hand side を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-grammatical-parameters">
@@ -448,72 +448,72 @@
         <p>production は、定義される nonterminal 記号の接尾辞として現れる “<sub>[parameters]</sub>” 形式の下付き注記によってパラメータ化されてよい。“<sub>parameters</sub>” は単一の名前でも、コンマ区切りの名前列でもよい。パラメータ化された production は、パラメータ化された nonterminal 記号に、パラメータ名の前にアンダースコアを付けて追加した、パラメータ名のすべての組合せを定義する production 群の略記である。これは次を意味する。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15495"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15494"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15496"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15495"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の便利な略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15497"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15496"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15498"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15497"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15499"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15498"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15500"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15499"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>また、次も同様である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return, In">
     <emu-nt params="Return, In"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return, In]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15501"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15500"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15502"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15501"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15503"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15502"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15504"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15503"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15505"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15504"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15506"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15505"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_In" id="prod-grammar-notation-StatementList_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_In">StatementList_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15507"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15506"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15508"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15507"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return_In" id="prod-grammar-notation-StatementList_Return_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return_In">StatementList_Return_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15509"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15508"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15510"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15509"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -521,17 +521,17 @@
         <p>production の right-hand side 上の nonterminal 参照もパラメータ化できる。たとえば、</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15511"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15510"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="q7ib3n22">
-        <emu-nt params="+In" id="_ref_15512"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[+In]</emu-params></emu-mods></emu-nt>
+        <emu-nt params="+In" id="_ref_15511"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[+In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次と等価である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15513"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15512"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="k6ggb0ke">
         <emu-nt>ExpressionStatement_In</emu-nt>
@@ -541,38 +541,38 @@
         <p>また、</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15514"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15513"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="cbr-bcps">
-        <emu-nt params="~In" id="_ref_15515"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[~In]</emu-params></emu-mods></emu-nt>
+        <emu-nt params="~In" id="_ref_15514"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[~In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次と等価である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15516"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15515"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15517"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15516"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>nonterminal 参照は、パラメータリストと “<sub>opt</sub>” 接尾辞の両方を持ってよい。たとえば、</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="nj4iu70z">
-        <emu-nt id="_ref_15518"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt params="+In" optional="" id="_ref_15519"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[+In]</emu-params><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_15517"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt params="+In" optional="" id="_ref_15518"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[+In]</emu-params><emu-opt>opt</emu-opt></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="uolyom43">
-        <emu-nt id="_ref_15520"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15519"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="atb3-ttx">
-        <emu-nt id="_ref_15521"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15520"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
         <emu-nt>Initializer_In</emu-nt>
     </emu-rhs>
 </emu-production>
@@ -580,21 +580,21 @@
         <p>right-hand side の nonterminal 参照において、パラメータ名の前に “<sub>?</sub>” を付けると、そのパラメータ値は、現在の production の left-hand side 記号への参照におけるそのパラメータ名の有無に依存する。たとえば、</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration" params="In">
     <emu-nt params="In"><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a><emu-mods><emu-params>[In]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="3evhjud3">
-        <emu-nt id="_ref_15522"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt params="?In" id="_ref_15523"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[?In]</emu-params></emu-mods></emu-nt>
+        <emu-nt id="_ref_15521"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt params="?In" id="_ref_15522"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[?In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration" id="prod-grammar-notation-VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="ib7lg1vi">
-        <emu-nt id="_ref_15524"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt id="_ref_15525"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
+        <emu-nt id="_ref_15523"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15524"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="VariableDeclaration_In" id="prod-grammar-notation-VariableDeclaration_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration_In">VariableDeclaration_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="atb3-ttx">
-        <emu-nt id="_ref_15526"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_15525"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
         <emu-nt>Initializer_In</emu-nt>
     </emu-rhs>
 </emu-production>
@@ -602,50 +602,50 @@
         <p>right-hand side の選択肢の前に “[+parameter]” が付く場合、その選択肢は、その production の nonterminal 記号を参照する際に指定された parameter が用いられた場合にのみ利用可能である。right-hand side の選択肢の前に “[~parameter]” が付く場合、その選択肢は、その production の nonterminal 記号を参照する際に、その parameter が <em>用いられなかった</em> 場合にのみ利用可能である。これは次を意味する。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="pxk-qj7n" constraints="+Return"><emu-constraints>[+Return]</emu-constraints>
-        <emu-nt id="_ref_15527"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15526"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15528"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15527"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15529"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15528"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15530"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15529"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15531"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15530"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>また、次も同様である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="mr68necj" constraints="~Return"><emu-constraints>[~Return]</emu-constraints>
-        <emu-nt id="_ref_15532"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15531"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15533"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15532"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、次の略記である。</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" id="prod-grammar-notation-StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15534"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_15533"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15535"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15534"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return" id="prod-grammar-notation-StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15536"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_15535"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -706,11 +706,11 @@
 </emu-production>
 <emu-production name="DecimalDigits" type="lexical" id="prod-grammar-notation-DecimalDigits">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="s4me4hlz">
-        <emu-nt id="_ref_15537"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-nt id="_ref_15536"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="nyugv7lw">
-        <emu-nt id="_ref_15538"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
-        <emu-nt id="_ref_15539"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-nt id="_ref_15537"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
+        <emu-nt id="_ref_15538"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -719,32 +719,32 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-LookaheadExample">LookaheadExample</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="addtyof5">
         <emu-t>n</emu-t>
         <emu-gann>[lookahead ∉ { <emu-t>1</emu-t>, <emu-t>3</emu-t>, <emu-t>5</emu-t>, <emu-t>7</emu-t>, <emu-t>9</emu-t> }]</emu-gann>
-        <emu-nt id="_ref_15540"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
+        <emu-nt id="_ref_15539"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="ol8hhyg0">
-        <emu-nt id="_ref_15541"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
-        <emu-gann>[lookahead ∉ <emu-nt id="_ref_15542"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>]</emu-gann>
+        <emu-nt id="_ref_15540"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-gann>[lookahead ∉ <emu-nt id="_ref_15541"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>]</emu-gann>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>は、文字 <code>n</code> に続いて最初の 1 文字が偶数である 1 個以上の 10 進数字が続くもの、または別の 10 進数字が後続しない単一の 10 進数字、のいずれかに一致する。</p>
-        <p>これらの句が構文文法で用いられる場合、後の位置でどの字句 <emu-xref href="#sec-context-free-grammars" id="_ref_15203"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> を用いるかを知る必要があるため、直後の token 列を曖昧さなく特定できないことがありうることに注意。そのため、これらが構文文法で用いられるとき、ある token 列 <var>seq</var> が先読み制約（列集合の一部として現れる場合を含む）に現れ、その結果の token 列において <var>seq</var> が接頭辞であるかどうかを字句 <emu-xref href="#sec-context-free-grammars" id="_ref_15204"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> の選択が変えうるならば、それは編集上の誤りとみなされる。</p>
+        <p>これらの句が構文文法で用いられる場合、後の位置でどの字句 <emu-xref href="#sec-context-free-grammars" id="_ref_15202"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> を用いるかを知る必要があるため、直後の token 列を曖昧さなく特定できないことがありうることに注意。そのため、これらが構文文法で用いられるとき、ある token 列 <var>seq</var> が先読み制約（列集合の一部として現れる場合を含む）に現れ、その結果の token 列において <var>seq</var> が接頭辞であるかどうかを字句 <emu-xref href="#sec-context-free-grammars" id="_ref_15203"><a href="notational-conventions.html#sec-context-free-grammars">goal symbol</a></emu-xref> の選択が変えうるならば、それは編集上の誤りとみなされる。</p>
       </emu-clause>
 
       <emu-clause id="sec-no-lineterminator-here">
-        <h1><span class="secnum">5.1.5.8</span> [no <emu-nt id="_ref_15543"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</h1>
-        <p>構文文法の production の right-hand side に “[no <emu-nt id="_ref_15544"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]” という句が現れる場合、それはその production が <em>制限付き production</em> であることを示す。すなわち、示された位置で入力ストリーム中に <emu-nt id="_ref_15545"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が出現する場合、その production は使用できない。たとえば、production:</p>
+        <h1><span class="secnum">5.1.5.8</span> [no <emu-nt id="_ref_15542"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</h1>
+        <p>構文文法の production の right-hand side に “[no <emu-nt id="_ref_15543"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]” という句が現れる場合、それはその production が <em>制限付き production</em> であることを示す。すなわち、示された位置で入力ストリーム中に <emu-nt id="_ref_15544"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が出現する場合、その production は使用できない。たとえば、production:</p>
         <emu-grammar type="definition" example=""><emu-production name="ThrowStatement" id="prod-grammar-notation-ThrowStatement">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ThrowStatement">ThrowStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="_07izqvp">
         <emu-t>throw</emu-t>
-        <emu-gann>[no <emu-nt id="_ref_15546"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</emu-gann>
-        <emu-nt id="_ref_15547"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-gann>[no <emu-nt id="_ref_15545"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</emu-gann>
+        <emu-nt id="_ref_15546"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>は、スクリプト中で <code>throw</code> token と <emu-nt id="_ref_15548"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> の間に <emu-nt id="_ref_15549"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が現れる場合、その production は使用できないことを示す。</p>
-        <p><emu-nt id="_ref_15550"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> の存在が制限付き production によって禁止されていない限り、入力要素ストリーム中の任意の 2 つの連続する token の間には、スクリプトの構文的受理可能性に影響を与えることなく、任意個の <emu-nt id="_ref_15551"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が現れてよい。</p>
+        <p>は、スクリプト中で <code>throw</code> token と <emu-nt id="_ref_15547"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> の間に <emu-nt id="_ref_15548"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が現れる場合、その production は使用できないことを示す。</p>
+        <p><emu-nt id="_ref_15549"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> の存在が制限付き production によって禁止されていない限り、入力要素ストリーム中の任意の 2 つの連続する token の間には、スクリプトの構文的受理可能性に影響を与えることなく、任意個の <emu-nt id="_ref_15550"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> が現れてよい。</p>
       </emu-clause>
 
       <emu-clause id="sec-but-not">
@@ -752,11 +752,11 @@
         <p>production の right-hand side は、“<b>but not</b>” という句を用い、その後に除外される展開を示すことで、特定の展開が許されないことを指定してよい。たとえば、production:</p>
         <emu-grammar type="definition" example=""><emu-production name="Identifier" type="lexical" id="prod-grammar-notation-Identifier">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="v6xddc2h">
-        <emu-nt id="_ref_15552"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> <emu-gmod>but not <emu-nt id="_ref_15553"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt></emu-gmod>
+        <emu-nt id="_ref_15551"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> <emu-gmod>but not <emu-nt id="_ref_15552"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt></emu-gmod>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>は、nonterminal <emu-nt id="_ref_15554"><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> が、<emu-nt id="_ref_15555"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> を置き換えうる任意のコードポイント列で置き換えられてよいが、同じコードポイント列が <emu-nt id="_ref_15556"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt> を置き換えうる場合を除く、という意味である。</p>
+        <p>は、nonterminal <emu-nt id="_ref_15553"><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> が、<emu-nt id="_ref_15554"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> を置き換えうる任意のコードポイント列で置き換えられてよいが、同じコードポイント列が <emu-nt id="_ref_15555"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt> を置き換えうる場合を除く、という意味である。</p>
       </emu-clause>
 
       <emu-clause id="sec-descriptive-phrases">
@@ -804,11 +804,11 @@
       <p>アルゴリズムが production の代替に関連付けられている場合、その代替は通常、いかなる “[ ]” 文法注釈も付けずに示される。そのような注釈は代替の構文的認識にのみ影響し、代替に関連付けられた意味論には影響しない。</p>
       <p>syntax-directed operation は、parse node と、任意でその他のパラメータを用いて、以下のアルゴリズムの手順 <emu-xref href="#step-sdo-invocation-example-1" id="_ref_38"><a href="notational-conventions.html#step-sdo-invocation-example-1">1</a></emu-xref>、<emu-xref href="#step-sdo-invocation-example-2" id="_ref_39"><a href="notational-conventions.html#step-sdo-invocation-example-2">3</a></emu-xref>、および <emu-xref href="#step-sdo-invocation-example-3" id="_ref_40"><a href="notational-conventions.html#step-sdo-invocation-example-3">4</a></emu-xref> にある規約により呼び出される。</p>
       <emu-alg example=""><ol><li id="step-sdo-invocation-example-1">Let <var>status</var> be SyntaxDirectedOperation of <emu-nt>SomeNonTerminal</emu-nt>.</li><li>Let <var>someParseNode</var> be the parse of some source text.</li><li id="step-sdo-invocation-example-2">Perform SyntaxDirectedOperation of <var>someParseNode</var>.</li><li id="step-sdo-invocation-example-3">Perform SyntaxDirectedOperation of <var>someParseNode</var> with argument <emu-val>"value"</emu-val>.</li></ol></emu-alg>
-      <p>明示的に別段の指定がない限り、すべての <emu-xref href="#sec-context-free-grammars" id="_ref_1080"><a href="notational-conventions.html#sec-context-free-grammars">chain production</a></emu-xref> は、その production の left-hand side nonterminal に適用されうるあらゆる operation について暗黙の定義を持つ。暗黙の定義は、同じ operation を、同じパラメータがあるならそれとともに、その <emu-xref href="#sec-context-free-grammars" id="_ref_1081"><a href="notational-conventions.html#sec-context-free-grammars">chain production</a></emu-xref> の唯一の right-hand side nonterminal に再適用し、その結果を返すだけである。たとえば、あるアルゴリズムに “Return <emu-xref aoid="Evaluation" id="_ref_1082"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> of <emu-nt id="_ref_15557"><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt>” という形式の手順があり、かつ次の production があるとする。</p>
+      <p>明示的に別段の指定がない限り、すべての <emu-xref href="#sec-context-free-grammars" id="_ref_1080"><a href="notational-conventions.html#sec-context-free-grammars">chain production</a></emu-xref> は、その production の left-hand side nonterminal に適用されうるあらゆる operation について暗黙の定義を持つ。暗黙の定義は、同じ operation を、同じパラメータがあるならそれとともに、その <emu-xref href="#sec-context-free-grammars" id="_ref_1081"><a href="notational-conventions.html#sec-context-free-grammars">chain production</a></emu-xref> の唯一の right-hand side nonterminal に再適用し、その結果を返すだけである。たとえば、あるアルゴリズムに “Return <emu-xref aoid="Evaluation" id="_ref_1082"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> of <emu-nt id="_ref_15556"><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt>” という形式の手順があり、かつ次の production があるとする。</p>
       <emu-grammar example=""><emu-production name="Block">
     <emu-nt><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="z4ljp0ar">
         <emu-t>{</emu-t>
-        <emu-nt id="_ref_15558"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
+        <emu-nt id="_ref_15557"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
         <emu-t>}</emu-t>
     </emu-rhs>
 </emu-production>
@@ -818,12 +818,12 @@
       <emu-grammar example=""><emu-production name="Block" collapsed="">
     <emu-nt><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="z4ljp0ar">
         <emu-t>{</emu-t>
-        <emu-nt id="_ref_15559"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
+        <emu-nt id="_ref_15558"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
         <emu-t>}</emu-t>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <emu-alg example=""><ol><li>Return <emu-xref aoid="Evaluation" id="_ref_1086"><a href="syntax-directed-operations.html#sec-evaluation" class="e-user-code">Evaluation</a></emu-xref> of <emu-nt id="_ref_15560"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>.</li></ol></emu-alg>
+      <emu-alg example=""><ol><li>Return <emu-xref aoid="Evaluation" id="_ref_1086"><a href="syntax-directed-operations.html#sec-evaluation" class="e-user-code">Evaluation</a></emu-xref> of <emu-nt id="_ref_15559"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>.</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics">
@@ -890,9 +890,9 @@
 
     <emu-clause id="sec-static-semantic-rules">
       <h1><span class="secnum">5.2.5</span> 静的意味論</h1>
-      <p>文脈自由文法は、入力要素ストリームが評価可能な有効な ECMAScript <emu-nt id="_ref_15561"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15562"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> を形成するかどうかを定義するすべての規則を表現するには十分に強力ではない。状況によっては、ECMAScript のアルゴリズム規約または文章による要件のいずれかを用いて表現できる追加規則が必要である。そのような規則は常に文法の production に関連付けられ、その production の <dfn tabindex="-1">static semantics</dfn> と呼ばれる。</p>
+      <p>文脈自由文法は、入力要素ストリームが評価可能な有効な ECMAScript <emu-nt id="_ref_15560"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15561"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> を形成するかどうかを定義するすべての規則を表現するには十分に強力ではない。状況によっては、ECMAScript のアルゴリズム規約または文章による要件のいずれかを用いて表現できる追加規則が必要である。そのような規則は常に文法の production に関連付けられ、その production の <dfn tabindex="-1">static semantics</dfn> と呼ばれる。</p>
       <p>Static Semantic Rule には名前があり、通常はアルゴリズムを用いて定義される。名前付き Static Semantic Rule は文法 production に関連付けられ、複数の代替定義を持つ production では、通常、適用可能な各名前付き static semantic rule について、各代替ごとに別個のアルゴリズムがある。</p>
-      <p>static semantic rule の特別な種類として <dfn id="early-error-rule" tabindex="-1">Early Error Rule</dfn> がある。<emu-xref href="#early-error" id="_ref_1131"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule は、特定の文法 production に関連付けられる <emu-xref href="#early-error" id="_ref_1132"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> 条件（節 <emu-xref href="#sec-error-handling-and-language-extensions" id="_ref_43"><a href="error-handling-and-language-extensions.html#sec-error-handling-and-language-extensions">17</a></emu-xref> を参照）を定義する。ほとんどの <emu-xref href="#early-error" id="_ref_1133"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule の評価は、この仕様のアルゴリズム内で明示的に呼び出されない。適合実装は、<emu-nt id="_ref_15563"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15564"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> の最初の評価に先立ち、その <emu-nt id="_ref_15565"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15566"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> の解析に用いられた production のすべての <emu-xref href="#early-error" id="_ref_1134"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule を検証しなければならない。いずれかの <emu-xref href="#early-error" id="_ref_1135"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule に違反している場合、その <emu-nt id="_ref_15567"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15568"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> は無効であり、評価できない。</p>
+      <p>static semantic rule の特別な種類として <dfn id="early-error-rule" tabindex="-1">Early Error Rule</dfn> がある。<emu-xref href="#early-error" id="_ref_1131"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule は、特定の文法 production に関連付けられる <emu-xref href="#early-error" id="_ref_1132"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> 条件（節 <emu-xref href="#sec-error-handling-and-language-extensions" id="_ref_43"><a href="error-handling-and-language-extensions.html#sec-error-handling-and-language-extensions">17</a></emu-xref> を参照）を定義する。ほとんどの <emu-xref href="#early-error" id="_ref_1133"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule の評価は、この仕様のアルゴリズム内で明示的に呼び出されない。適合実装は、<emu-nt id="_ref_15562"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15563"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> の最初の評価に先立ち、その <emu-nt id="_ref_15564"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15565"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> の解析に用いられた production のすべての <emu-xref href="#early-error" id="_ref_1134"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule を検証しなければならない。いずれかの <emu-xref href="#early-error" id="_ref_1135"><a href="error-handling-and-language-extensions.html#early-error">early error</a></emu-xref> rule に違反している場合、その <emu-nt id="_ref_15566"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> または <emu-nt id="_ref_15567"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> は無効であり、評価できない。</p>
     </emu-clause>
 
     <emu-clause id="sec-mathematical-operations">
