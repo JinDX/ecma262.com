@@ -274,7 +274,7 @@
   <p>A conforming implementation of ECMAScript may support program and regular expression syntax not described in this specification. In particular, a conforming implementation of ECMAScript may support program syntax that makes use of any “future reserved words” noted in subclause <emu-xref href="#sec-keywords-and-reserved-words"></emu-xref> of this specification.</p>
   <p>A conforming implementation of ECMAScript must not implement any extension that is listed as a Forbidden Extension in subclause <emu-xref href="#sec-forbidden-extensions"></emu-xref>.</p>
   <p>A conforming implementation of ECMAScript must not redefine any facilities that are not implementation-defined, implementation-approximated, or host-defined.</p>
-  <p>A conforming implementation of ECMAScript may choose to implement or not implement <dfn>Normative Optional</dfn> subclauses, unless otherwise indicated. Web browsers are generally required to implement all normative optional subclauses. (See Annex <emu-xref href="#sec-additional-ecmascript-features-for-web-browsers"></emu-xref>.) If any Normative Optional behaviour is implemented, all of the behaviour in the containing Normative Optional clause must be implemented. A Normative Optional clause is denoted in this specification with the words "Normative Optional" in a coloured box, as shown below.</p>
+  <p>A conforming implementation of ECMAScript may choose to implement or not implement <dfn>Normative Optional</dfn> subclauses, unless otherwise indicated. Web browsers are generally required to implement all normative optional subclauses. (See Annex <emu-xref href="#sec-additional-ecmascript-features-for-web-browsers"></emu-xref>.) If any Normative Optional behaviour is implemented, all of the behaviour in the containing Normative Optional clause must be implemented. A Normative Optional clause is denoted in this specification with the words “Normative Optional” in a coloured box, as shown below.</p>
 
   <emu-clause id="sec-conformance-normative-optional" oldids="sec-conformance.normative-optional" example normative-optional>
     <h1>Example Normative Optional Clause Heading</h1>
@@ -704,12 +704,12 @@
       <emu-note>Parse Nodes are specification artefacts, and implementations are not required to use an analogous data structure.</emu-note>
       <p>Productions of the syntactic grammar are distinguished by having just one colon “<b>:</b>” as punctuation.</p>
       <p>The syntactic grammar as presented in clauses <emu-xref href="#sec-ecmascript-language-expressions"></emu-xref> through <emu-xref href="#sec-ecmascript-language-scripts-and-modules"></emu-xref> is not a complete account of which token sequences are accepted as a correct ECMAScript |Script| or |Module|. Certain additional token sequences are also accepted, namely, those that would be described by the grammar if only semicolons were added to the sequence in certain places (such as before line terminator characters). Furthermore, certain token sequences that are described by the grammar are not considered acceptable if a line terminator character appears in certain “awkward” places.</p>
-      <p>In certain cases, in order to avoid ambiguities, the syntactic grammar uses generalized productions that permit token sequences that do not form a valid ECMAScript |Script| or |Module|. For example, this technique is used for object literals and object destructuring patterns. In such cases a more restrictive <em>supplemental grammar</em> is provided that further restricts the acceptable token sequences. Typically, an early error rule will then state that, in certain contexts, "_p_ <dfn id="must-cover">must cover</dfn> an _n_", where _p_ is a Parse Node (an instance of the generalized production) and _n_ is a nonterminal from the supplemental grammar. This means:</p>
+      <p>In certain cases, in order to avoid ambiguities, the syntactic grammar uses generalized productions that permit token sequences that do not form a valid ECMAScript |Script| or |Module|. For example, this technique is used for object literals and object destructuring patterns. In such cases a more restrictive <em>supplemental grammar</em> is provided that further restricts the acceptable token sequences. Typically, an early error rule will then state that, in certain contexts, “_p_ <dfn id="must-cover">must cover</dfn> an _n_”, where _p_ is a Parse Node (an instance of the generalized production) and _n_ is a nonterminal from the supplemental grammar. This means:</p>
       <ol>
         <li>The sequence of tokens originally matched by _p_ is parsed again using _n_ as the goal symbol. If _n_ takes grammatical parameters, then they are set to the same values used when _p_ was originally parsed.</li>
         <li>If the sequence of tokens can be parsed as a single instance of _n_, with no tokens left over, then:
           <ol>
-            <li>We refer to that instance of _n_ (a Parse Node, unique for a given _p_) as "the _n_ that is <dfn>covered</dfn> by _p_".</li>
+            <li>We refer to that instance of _n_ (a Parse Node, unique for a given _p_) as “the _n_ that is <dfn>covered</dfn> by _p_”.</li>
             <li>All Early Error rules for _n_ and its derived productions also apply to the _n_ that is covered by _p_.</li>
           </ol>
         </li>
@@ -735,7 +735,7 @@
         <p>In contrast, in the syntactic grammar, a contiguous run of fixed-width code points is a single terminal symbol.</p>
         <p>Terminal symbols come in two other forms:</p>
         <ul>
-          <li>In the lexical and RegExp grammars, Unicode code points without a conventional printed representation are instead shown in the form "&lt;ABBREV>" where "ABBREV" is a mnemonic for the code point or set of code points. These forms are defined in <emu-xref href="#sec-unicode-format-control-characters" title></emu-xref>, <emu-xref href="#sec-white-space" title></emu-xref>, and <emu-xref href="#sec-line-terminators" title></emu-xref>.</li>
+          <li>In the lexical and RegExp grammars, Unicode code points without a conventional printed representation are instead shown in the form “&lt;ABBREV>” where “ABBREV” is a mnemonic for the code point or set of code points. These forms are defined in <emu-xref href="#sec-unicode-format-control-characters" title></emu-xref>, <emu-xref href="#sec-white-space" title></emu-xref>, and <emu-xref href="#sec-line-terminators" title></emu-xref>.</li>
           <li>In the syntactic grammar, certain terminal symbols (e.g. |IdentifierName| and |RegularExpressionLiteral|) are shown in italics, as they refer to the nonterminals of the same name in the lexical grammar.</li>
         </ul>
       </emu-clause>
@@ -1011,7 +1011,7 @@
                 1. Subsubsubsubsubstep
     </emu-alg>
     <p>A step or substep may be written as an “if” predicate that conditions its substeps. In this case, the substeps are only applied if the predicate is true. If a step or substep begins with the word “else”, it is a predicate that is the negation of the preceding “if” predicate step at the same level.</p>
-    <p>A step may begin with "For each" or "Repeat" to specify the iterative application of its substeps.</p>
+    <p>A step may begin with “For each” or “Repeat” to specify the iterative application of its substeps.</p>
     <p>A step that begins with “<dfn id="assert">Assert</dfn>:” asserts an invariant condition of its algorithm. Such assertions are used to make explicit algorithmic invariants that would otherwise be implicit. Similarly, a step that begins with “<dfn id="note-step">NOTE</dfn>:” provides pertinent context for nearby steps. Assertion steps and note steps are strictly informative; they add no additional semantic requirements and hence need not be checked by an implementation.</p>
     <p>Algorithm steps may declare named aliases for any value using the form “Let _x_ be _someValue_”. These aliases are reference-like in that both _x_ and _someValue_ refer to the same underlying data and modifications to either are visible to both. Algorithm steps that want to avoid this reference-like behaviour should explicitly make a copy of the right-hand side: “Let _x_ be a copy of _someValue_” creates a shallow copy of _someValue_.</p>
     <p>Once declared, an alias may be referenced in any subsequent steps and must not be referenced from steps prior to the alias's declaration. Aliases may be modified using the form “Set _x_ to _someOtherValue_”.</p>
@@ -1088,7 +1088,7 @@
 
       <emu-clause id="sec-throw-an-exception">
         <h1>Throw</h1>
-        <p>In algorithm steps, the word "throw" is shorthand for returning the result of calling ThrowCompletion. For example,</p>
+        <p>In algorithm steps, the word “throw” is shorthand for returning the result of calling ThrowCompletion. For example,</p>
         <emu-alg example>
           1. If _result_.[[Error]] is not ~none~, throw _result_.[[Error]].
         </emu-alg>
@@ -1108,7 +1108,7 @@
 
       <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt,sec-returnifabrupt-shorthands">
         <h1>Shorthands for Unwrapping Completion Records</h1>
-        <p>Prefix `?` and `!` are used as shorthands which unwrap Completion Records. `?` is used to propagate an abrupt completion to the caller, or otherwise to unwrap a normal completion. `!` is used to assert that a Completion Record is normal and unwrap it. Formally, the step</p>
+        <p>Prefix “?” and “!” are used as shorthands which unwrap Completion Records. “?” is used to propagate an abrupt completion to the caller, or otherwise to unwrap a normal completion. “!” is used to assert that a Completion Record is normal and unwrap it. Formally, the step</p>
         <emu-alg example>
           1. Let _result_ be ? _record_.
         </emu-alg>
@@ -1127,7 +1127,7 @@
           1. Assert: _record_ is a normal completion.
           1. Let _result_ be _record_.[[Value]].
         </emu-alg>
-        <p>When `?` or `!` is used in any other context, first apply the rewrite given in <emu-xref href="#sec-evaluation-order" title></emu-xref> until this rule can be applied, then apply this rule. For example, the step</p>
+        <p>When “?” or “!” is used in any other context, first apply the rewrite given in <emu-xref href="#sec-evaluation-order" title></emu-xref> until this rule can be applied, then apply this rule. For example, the step</p>
         <emu-alg example>
           1. Perform AO(? Other()).
         </emu-alg>
@@ -1201,15 +1201,15 @@
       </ul>
 
       <p>In the language of this specification, numerical values are distinguished among different numeric kinds using subscript suffixes. The subscript <sub>𝔽</sub> refers to Numbers, and the subscript <sub>ℤ</sub> refers to BigInts. Numeric values without a subscript suffix refer to mathematical values. This specification denotes most numeric values in base 10; it also uses numeric values of the form 0x followed by digits 0-9 or A-F as base-16 values.</p>
-      <p>In general, when this specification refers to a numerical value, such as in the phrase, "the length of _y_" or "the integer represented by the four hexadecimal digits ...", without explicitly specifying a numeric kind, the phrase refers to a mathematical value. Phrases which refer to a Number or a BigInt value are explicitly annotated as such; for example, "the Number value for the number of code points in …" or "the BigInt value for …".</p>
+      <p>In general, when this specification refers to a numerical value, such as in the phrase, “the length of _y_” or “the integer represented by the four hexadecimal digits ...”, without explicitly specifying a numeric kind, the phrase refers to a mathematical value. Phrases which refer to a Number or a BigInt value are explicitly annotated as such; for example, “the Number value for the number of code points in …” or “the BigInt value for …”.</p>
       <p>When the term <dfn id="integer" oldids="mathematical integer" variants="integers">integer</dfn> is used in this specification, it refers to a mathematical value which is in the set of integers, unless otherwise stated. When the term <dfn id="integral-number" oldids="sec-isintegralnumber,sec-isinteger" variants="integral Numbers">integral Number</dfn> is used in this specification, it refers to a finite Number value whose mathematical value is in the set of integers.</p>
       <p>Numeric operators such as +, ×, =, and ≥ refer to those operations as determined by the type of the operands. When applied to mathematical values, the operators refer to the usual mathematical operations. When applied to extended mathematical values, the operators refer to the usual mathematical operations over the extended real numbers; indeterminate forms are not defined and their use in this specification should be considered an editorial error. When applied to Numbers, the operators refer to the relevant operations within IEEE 754-2019. When applied to BigInts, the operators refer to the usual mathematical operations applied to the mathematical value of the BigInt. Numeric operators applied to mixed-type operands (such as a Number and a mathematical value) are not defined and should be considered an editorial error in this specification.</p>
-      <p>Conversions between mathematical values and Numbers or BigInts are always explicit in this document. A conversion from a mathematical value or extended mathematical value _x_ to a Number is denoted as "the Number value for _x_" or <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>, and is defined in <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>. A conversion from an integer _x_ to a BigInt is denoted as "the <dfn id="bigint-value-for">BigInt value for</dfn> _x_" or <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>. A conversion from a Number or BigInt _x_ to a mathematical value is denoted as "the <dfn id="mathematical-value-of">mathematical value of</dfn> _x_", or <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>. The mathematical value of *+0*<sub>𝔽</sub> and *-0*<sub>𝔽</sub> is the mathematical value 0. The mathematical value of non-finite values is not defined. The <dfn id="extended-mathematical-value-of">extended mathematical value of</dfn> _x_ is the mathematical value of _x_ for finite values, and is +∞ and -∞ for *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> respectively; it is not defined for *NaN*.</p>
+      <p>Conversions between mathematical values and Numbers or BigInts are always explicit in this document. A conversion from a mathematical value or extended mathematical value _x_ to a Number is denoted as “the Number value for _x_” or <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>, and is defined in <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>. A conversion from an integer _x_ to a BigInt is denoted as “the <dfn id="bigint-value-for">BigInt value for</dfn> _x_” or <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>. A conversion from a Number or BigInt _x_ to a mathematical value is denoted as “the <dfn id="mathematical-value-of">mathematical value of</dfn> _x_”, or <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>. The mathematical value of *+0*<sub>𝔽</sub> and *-0*<sub>𝔽</sub> is the mathematical value 0. The mathematical value of non-finite values is not defined. The <dfn id="extended-mathematical-value-of">extended mathematical value of</dfn> _x_ is the mathematical value of _x_ for finite values, and is +∞ and -∞ for *+∞*<sub>𝔽</sub> and *-∞*<sub>𝔽</sub> respectively; it is not defined for *NaN*.</p>
       <p>The mathematical function <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn> produces the absolute value of _x_, which is <emu-eqn>-_x_</emu-eqn> if _x_ &lt; 0 and otherwise is _x_ itself.</p>
       <p>The mathematical function <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> produces the natural logarithm of _x_. The mathematical function <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> produces the base 10 logarithm of _x_. The mathematical function <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> produces the base 2 logarithm of _x_.</p>
       <p>The mathematical function <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> produces the mathematically smallest of <emu-eqn>_x1_</emu-eqn> through <emu-eqn>_xN_</emu-eqn>. The mathematical function <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> produces the mathematically largest of <emu-eqn>_x1_</emu-eqn> through <emu-eqn>_xN_</emu-eqn>. The domain and range of these mathematical functions are the extended mathematical values.</p>
       <p>The notation “<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>” (_y_ must be finite and non-zero) computes a value _k_ of the same sign as _y_ (or zero) such that <emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn> for some integer _q_.</p>
-      <p>The phrase "the result of <dfn id="clamping">clamping</dfn> _x_ between _lower_ and _upper_" (where _x_ is an extended mathematical value and _lower_ and _upper_ are mathematical values such that _lower_ ≤ _upper_) produces _lower_ if _x_ &lt; _lower_, produces _upper_ if _x_ > _upper_, and otherwise produces _x_.</p>
+      <p>The phrase “the result of <dfn id="clamping">clamping</dfn> _x_ between _lower_ and _upper_” (where _x_ is an extended mathematical value and _lower_ and _upper_ are mathematical values such that _lower_ ≤ _upper_) produces _lower_ if _x_ &lt; _lower_, produces _upper_ if _x_ > _upper_, and otherwise produces _x_.</p>
       <p>The mathematical function <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn> produces the largest integer (closest to +∞) that is not larger than _x_.</p>
       <emu-note>
         <p><emu-eqn>floor(_x_) = _x_ - (_x_ modulo 1)</emu-eqn>.</p>
@@ -1234,7 +1234,7 @@
     <emu-clause id="sec-identity">
       <h1>Identity</h1>
       <p>In this specification, both specification values and ECMAScript language values are compared for equality. When comparing for equality, values fall into one of two categories. <dfn variants="values without identity,value without identity">Values without identity</dfn> are equal to other values without identity if all of their innate characteristics are the same — characteristics such as the magnitude of an integer or the length of a sequence. Values without identity may be manifest without prior reference by fully describing their characteristics. In contrast, each <dfn variants="values with identity">value with identity</dfn> is unique and therefore only equal to itself. Values with identity are like values without identity but with an additional unguessable, unchangeable, universally-unique characteristic called <em>identity</em>. References to existing values with identity cannot be manifest simply by describing them, as the identity itself is indescribable; instead, references to these values must be explicitly passed from one place to another. Some values with identity are mutable and therefore can have their characteristics (except their identity) changed in-place, causing all holders of the value to observe the new characteristics. A value without identity is never equal to a value with identity.</p>
-      <p>From the perspective of this specification, the word “is” is used to compare two values for equality, as in “If _bool_ is *true*, then ...”, and the word “contains” is used to search for a value inside lists using equality comparisons, as in "If _list_ contains a Record _r_ such that _r_.[[Foo]] is *true*, then ...". The <em>specification identity</em> of values determines the result of these comparisons and is axiomatic in this specification.</p>
+      <p>From the perspective of this specification, the word “is” is used to compare two values for equality, as in “If _bool_ is *true*, then ...”, and the word “contains” is used to search for a value inside lists using equality comparisons, as in “If _list_ contains a Record _r_ such that _r_.[[Foo]] is *true*, then ...”. The <em>specification identity</em> of values determines the result of these comparisons and is axiomatic in this specification.</p>
       <p>From the perspective of the ECMAScript language, language values are compared for equality using the SameValue abstract operation and the abstract operations it transitively calls. The algorithms of these comparison abstract operations determine <em>language identity</em> of ECMAScript language values.</p>
       <p>For specification values, examples of values without specification identity include, but are not limited to: mathematical values and extended mathematical values; ECMAScript source text, surrogate pairs, Directive Prologues, etc; UTF-16 code units; Unicode code points; enums; abstract operations, including syntax-directed operations, host hooks, etc; and ordered pairs. Examples of specification values with specification identity include, but are not limited to: any kind of Records, including Property Descriptors, PrivateElements, etc; Parse Nodes; Lists; <emu-xref href="#sec-set-and-relation-specification-type">Sets</emu-xref> and Relations; Abstract Closures; Data Blocks; Private Names; execution contexts and execution context stacks; agent signifiers; and WaiterList Records.</p>
       <p>Specification identity agrees with language identity for all ECMAScript language values except Symbol values produced by <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref>. The ECMAScript language values without specification identity and without language identity are <emu-xref href="#sec-ecmascript-language-types-undefined-type">*undefined*</emu-xref>, <emu-xref href="#sec-ecmascript-language-types-null-type">*null*</emu-xref>, <emu-xref href="#sec-ecmascript-language-types-boolean-type">Booleans</emu-xref>, <emu-xref href="#sec-ecmascript-language-types-string-type">Strings</emu-xref>, <emu-xref href="#sec-ecmascript-language-types-number-type">Numbers</emu-xref>, and <emu-xref href="#sec-ecmascript-language-types-bigint-type">BigInts</emu-xref>. The ECMAScript language values with specification identity and language identity are <emu-xref href="#sec-ecmascript-language-types-symbol-type">Symbols</emu-xref> not produced by <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> and <emu-xref href="#sec-object-type">Objects</emu-xref>. Symbol values produced by <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> have specification identity, but not language identity.</p>
@@ -1284,10 +1284,10 @@
       <emu-note>
         <p>The rationale behind this design was to keep the implementation of Strings as simple and high-performing as possible. If ECMAScript source text is in Normalized Form C, string literals are guaranteed to also be normalized, as long as they do not contain any Unicode escape sequences.</p>
       </emu-note>
-      <p>In this specification, the phrase "the <dfn id="string-concatenation">string-concatenation</dfn> of _A_, _B_, ..." (where each argument is a String value, a code unit, or a sequence of code units) denotes the String value whose sequence of code units is the concatenation of the code units (in order) of each of the arguments (in order).</p>
-      <p>The phrase "the <dfn id="substring">substring</dfn> of _string_ from _inclusiveStart_ to _exclusiveEnd_" (where _string_ is a String value or a sequence of code units and _inclusiveStart_ and _exclusiveEnd_ are integers) denotes the String value consisting of the consecutive code units of _string_ beginning at index _inclusiveStart_ and ending immediately before index _exclusiveEnd_ (which is the empty String when _inclusiveStart_ = _exclusiveEnd_). If the "to" suffix is omitted, the length of _string_ is used as the value of _exclusiveEnd_.</p>
+      <p>In this specification, the phrase “the <dfn id="string-concatenation">string-concatenation</dfn> of _A_, _B_, ...” (where each argument is a String value, a code unit, or a sequence of code units) denotes the String value whose sequence of code units is the concatenation of the code units (in order) of each of the arguments (in order).</p>
+      <p>The phrase “the <dfn id="substring">substring</dfn> of _string_ from _inclusiveStart_ to _exclusiveEnd_” (where _string_ is a String value or a sequence of code units and _inclusiveStart_ and _exclusiveEnd_ are integers) denotes the String value consisting of the consecutive code units of _string_ beginning at index _inclusiveStart_ and ending immediately before index _exclusiveEnd_ (which is the empty String when _inclusiveStart_ = _exclusiveEnd_). If the "to" suffix is omitted, the length of _string_ is used as the value of _exclusiveEnd_.</p>
       <p>
-        The phrase "<dfn id="ASCII-word-characters">the ASCII word characters</dfn>" denotes the following String value, which consists solely of every letter and number in the Unicode Basic Latin block along with U+005F (LOW LINE):<br>
+        The phrase “<dfn id="ASCII-word-characters">the ASCII word characters</dfn>” denotes the following String value, which consists solely of every letter and number in the Unicode Basic Latin block along with U+005F (LOW LINE):<br>
         *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"*.<br>
         For historical reasons, it has significance to various algorithms.
       </p>
@@ -1520,7 +1520,7 @@
 
     <emu-clause id="sec-numeric-types">
       <h1>Numeric Types</h1>
-      <p>ECMAScript has two built-in numeric types: Number and BigInt. The following abstract operations are defined over these numeric types. The "Result" column shows the return type, along with an indication if it is possible for some invocations of the operation to return an abrupt completion.</p>
+      <p>ECMAScript has two built-in numeric types: Number and BigInt. The following abstract operations are defined over these numeric types. The “Result” column shows the return type, along with an indication if it is possible for some invocations of the operation to return an abrupt completion.</p>
       <emu-table id="table-numeric-type-ops" caption="Numeric Type Operations">
         <table>
           <thead>
@@ -3228,7 +3228,7 @@
         <h2>Return value:</h2>
         <p>The value returned by any internal method must be a Completion Record with either:</p>
         <ul>
-          <li>[[Type]] = ~normal~, [[Target]] = ~empty~, and [[Value]] = a value of the "normal return type" shown below for that internal method, or</li>
+          <li>[[Type]] = ~normal~, [[Target]] = ~empty~, and [[Value]] = a value of the “normal return type” shown below for that internal method, or</li>
           <li>[[Type]] = ~throw~, [[Target]] = ~empty~, and [[Value]] = any ECMAScript language value.</li>
         </ul>
         <emu-note>
@@ -3418,10 +3418,10 @@
                 %AggregateError%
               </td>
               <td>
-                `AggregateError`
+                *"AggregateError"*
               </td>
               <td>
-                The `AggregateError` constructor (<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>)
+                The `AggregateError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3429,10 +3429,10 @@
                 %Array%
               </td>
               <td>
-                `Array`
+                *"Array"*
               </td>
               <td>
-                The Array constructor (<emu-xref href="#sec-array-constructor"></emu-xref>)
+                The `Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-array-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3440,10 +3440,10 @@
                 %ArrayBuffer%
               </td>
               <td>
-                `ArrayBuffer`
+                *"ArrayBuffer"*
               </td>
               <td>
-                The ArrayBuffer constructor (<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>)
+                The `ArrayBuffer` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3473,7 +3473,7 @@
               <td>
               </td>
               <td>
-                The constructor of async function objects (<emu-xref href="#sec-async-function-constructor"></emu-xref>)
+                The <emu-not-ref>constructor</emu-not-ref> of async function objects (<emu-xref href="#sec-async-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3483,7 +3483,7 @@
               <td>
               </td>
               <td>
-                The constructor of async generator function objects (<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>)
+                The <emu-not-ref>constructor</emu-not-ref> of async generator function objects (<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3511,7 +3511,7 @@
                 %Atomics%
               </td>
               <td>
-                `Atomics`
+                *"Atomics"*
               </td>
               <td>
                 The `Atomics` object (<emu-xref href="#sec-atomics-object"></emu-xref>)
@@ -3522,10 +3522,10 @@
                 %BigInt%
               </td>
               <td>
-                `BigInt`
+                *"BigInt"*
               </td>
               <td>
-                The BigInt constructor (<emu-xref href="#sec-bigint-constructor"></emu-xref>)
+                The `BigInt` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-bigint-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3533,10 +3533,10 @@
                 %BigInt64Array%
               </td>
               <td>
-                `BigInt64Array`
+                *"BigInt64Array"*
               </td>
               <td>
-                The BigInt64Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `BigInt64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3544,10 +3544,10 @@
                 %BigUint64Array%
               </td>
               <td>
-                `BigUint64Array`
+                *"BigUint64Array"*
               </td>
               <td>
-                The BigUint64Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `BigUint64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3555,10 +3555,10 @@
                 %Boolean%
               </td>
               <td>
-                `Boolean`
+                *"Boolean"*
               </td>
               <td>
-                The Boolean constructor (<emu-xref href="#sec-boolean-constructor"></emu-xref>)
+                The `Boolean` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-boolean-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3566,10 +3566,10 @@
                 %DataView%
               </td>
               <td>
-                `DataView`
+                *"DataView"*
               </td>
               <td>
-                The DataView constructor (<emu-xref href="#sec-dataview-constructor"></emu-xref>)
+                The `DataView` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-dataview-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3577,10 +3577,10 @@
                 %Date%
               </td>
               <td>
-                `Date`
+                *"Date"*
               </td>
               <td>
-                The Date constructor (<emu-xref href="#sec-date-constructor"></emu-xref>)
+                The `Date` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-date-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3588,7 +3588,7 @@
                 %decodeURI%
               </td>
               <td>
-                `decodeURI`
+                *"decodeURI"*
               </td>
               <td>
                 The `decodeURI` function (<emu-xref href="#sec-decodeuri-encodeduri"></emu-xref>)
@@ -3599,7 +3599,7 @@
                 %decodeURIComponent%
               </td>
               <td>
-                `decodeURIComponent`
+                *"decodeURIComponent"*
               </td>
               <td>
                 The `decodeURIComponent` function (<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>)
@@ -3610,7 +3610,7 @@
                 %encodeURI%
               </td>
               <td>
-                `encodeURI`
+                *"encodeURI"*
               </td>
               <td>
                 The `encodeURI` function (<emu-xref href="#sec-encodeuri-uri"></emu-xref>)
@@ -3621,7 +3621,7 @@
                 %encodeURIComponent%
               </td>
               <td>
-                `encodeURIComponent`
+                *"encodeURIComponent"*
               </td>
               <td>
                 The `encodeURIComponent` function (<emu-xref href="#sec-encodeuricomponent-uricomponent"></emu-xref>)
@@ -3632,10 +3632,10 @@
                 %Error%
               </td>
               <td>
-                `Error`
+                *"Error"*
               </td>
               <td>
-                The Error constructor (<emu-xref href="#sec-error-constructor"></emu-xref>)
+                The `Error` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3643,7 +3643,7 @@
                 %eval%
               </td>
               <td>
-                `eval`
+                *"eval"*
               </td>
               <td>
                 The `eval` function (<emu-xref href="#sec-eval-x"></emu-xref>)
@@ -3654,10 +3654,10 @@
                 %EvalError%
               </td>
               <td>
-                `EvalError`
+                *"EvalError"*
               </td>
               <td>
-                The EvalError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>)
+                The `EvalError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3665,10 +3665,10 @@
                 %FinalizationRegistry%
               </td>
               <td>
-                `FinalizationRegistry`
+                *"FinalizationRegistry"*
               </td>
               <td>
-                The FinalizationRegistry constructor (<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>)
+                The `FinalizationRegistry` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3676,10 +3676,10 @@
                 %Float16Array%
               </td>
               <td>
-                `Float16Array`
+                *"Float16Array"*
               </td>
               <td>
-                The Float16Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Float16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3687,10 +3687,10 @@
                 %Float32Array%
               </td>
               <td>
-                `Float32Array`
+                *"Float32Array"*
               </td>
               <td>
-                The Float32Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Float32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3698,10 +3698,10 @@
                 %Float64Array%
               </td>
               <td>
-                `Float64Array`
+                *"Float64Array"*
               </td>
               <td>
-                The Float64Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Float64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3719,10 +3719,10 @@
                 %Function%
               </td>
               <td>
-                `Function`
+                *"Function"*
               </td>
               <td>
-                The Function constructor (<emu-xref href="#sec-function-constructor"></emu-xref>)
+                The `Function` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3732,7 +3732,7 @@
               <td>
               </td>
               <td>
-                The constructor of generator function objects (<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>)
+                The <emu-not-ref>constructor</emu-not-ref> of generator function objects (<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3750,10 +3750,10 @@
                 %Int8Array%
               </td>
               <td>
-                `Int8Array`
+                *"Int8Array"*
               </td>
               <td>
-                The Int8Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Int8Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3761,10 +3761,10 @@
                 %Int16Array%
               </td>
               <td>
-                `Int16Array`
+                *"Int16Array"*
               </td>
               <td>
-                The Int16Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Int16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3772,10 +3772,10 @@
                 %Int32Array%
               </td>
               <td>
-                `Int32Array`
+                *"Int32Array"*
               </td>
               <td>
-                The Int32Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Int32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3783,7 +3783,7 @@
                 %isFinite%
               </td>
               <td>
-                `isFinite`
+                *"isFinite"*
               </td>
               <td>
                 The `isFinite` function (<emu-xref href="#sec-isfinite-number"></emu-xref>)
@@ -3794,7 +3794,7 @@
                 %isNaN%
               </td>
               <td>
-                `isNaN`
+                *"isNaN"*
               </td>
               <td>
                 The `isNaN` function (<emu-xref href="#sec-isnan-number"></emu-xref>)
@@ -3805,10 +3805,10 @@
                 %Iterator%
               </td>
               <td>
-                `Iterator`
+                *"Iterator"*
               </td>
               <td>
-                The `Iterator` constructor (<emu-xref href="#sec-iterator-constructor"></emu-xref>)
+                The `Iterator` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-iterator-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3826,7 +3826,7 @@
                 %JSON%
               </td>
               <td>
-                `JSON`
+                *"JSON"*
               </td>
               <td>
                 The `JSON` object (<emu-xref href="#sec-json-object"></emu-xref>)
@@ -3837,10 +3837,10 @@
                 %Map%
               </td>
               <td>
-                `Map`
+                *"Map"*
               </td>
               <td>
-                The Map constructor (<emu-xref href="#sec-map-constructor"></emu-xref>)
+                The `Map` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-map-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3858,7 +3858,7 @@
                 %Math%
               </td>
               <td>
-                `Math`
+                *"Math"*
               </td>
               <td>
                 The `Math` object (<emu-xref href="#sec-math-object"></emu-xref>)
@@ -3869,10 +3869,10 @@
                 %Number%
               </td>
               <td>
-                `Number`
+                *"Number"*
               </td>
               <td>
-                The Number constructor (<emu-xref href="#sec-number-constructor"></emu-xref>)
+                The `Number` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-number-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3880,10 +3880,10 @@
                 %Object%
               </td>
               <td>
-                `Object`
+                *"Object"*
               </td>
               <td>
-                The Object constructor (<emu-xref href="#sec-object-constructor"></emu-xref>)
+                The `Object` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-object-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3891,7 +3891,7 @@
                 %parseFloat%
               </td>
               <td>
-                `parseFloat`
+                *"parseFloat"*
               </td>
               <td>
                 The `parseFloat` function (<emu-xref href="#sec-parsefloat-string"></emu-xref>)
@@ -3902,7 +3902,7 @@
                 %parseInt%
               </td>
               <td>
-                `parseInt`
+                *"parseInt"*
               </td>
               <td>
                 The `parseInt` function (<emu-xref href="#sec-parseint-string-radix"></emu-xref>)
@@ -3913,10 +3913,10 @@
                 %Promise%
               </td>
               <td>
-                `Promise`
+                *"Promise"*
               </td>
               <td>
-                The Promise constructor (<emu-xref href="#sec-promise-constructor"></emu-xref>)
+                The `Promise` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-promise-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3924,10 +3924,10 @@
                 %Proxy%
               </td>
               <td>
-                `Proxy`
+                *"Proxy"*
               </td>
               <td>
-                The Proxy constructor (<emu-xref href="#sec-proxy-constructor"></emu-xref>)
+                The `Proxy` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-proxy-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3935,10 +3935,10 @@
                 %RangeError%
               </td>
               <td>
-                `RangeError`
+                *"RangeError"*
               </td>
               <td>
-                The RangeError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>)
+                The `RangeError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3946,10 +3946,10 @@
                 %ReferenceError%
               </td>
               <td>
-                `ReferenceError`
+                *"ReferenceError"*
               </td>
               <td>
-                The ReferenceError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>)
+                The `ReferenceError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3957,7 +3957,7 @@
                 %Reflect%
               </td>
               <td>
-                `Reflect`
+                *"Reflect"*
               </td>
               <td>
                 The `Reflect` object (<emu-xref href="#sec-reflect-object"></emu-xref>)
@@ -3968,10 +3968,10 @@
                 %RegExp%
               </td>
               <td>
-                `RegExp`
+                *"RegExp"*
               </td>
               <td>
-                The RegExp constructor (<emu-xref href="#sec-regexp-constructor"></emu-xref>)
+                The `RegExp` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-regexp-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3989,10 +3989,10 @@
                 %Set%
               </td>
               <td>
-                `Set`
+                *"Set"*
               </td>
               <td>
-                The Set constructor (<emu-xref href="#sec-set-constructor"></emu-xref>)
+                The `Set` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-set-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4010,10 +4010,10 @@
                 %SharedArrayBuffer%
               </td>
               <td>
-                `SharedArrayBuffer`
+                *"SharedArrayBuffer"*
               </td>
               <td>
-                The SharedArrayBuffer constructor (<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>)
+                The `SharedArrayBuffer` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4021,10 +4021,10 @@
                 %String%
               </td>
               <td>
-                `String`
+                *"String"*
               </td>
               <td>
-                The String constructor (<emu-xref href="#sec-string-constructor"></emu-xref>)
+                The `String` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-string-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4042,10 +4042,10 @@
                 %Symbol%
               </td>
               <td>
-                `Symbol`
+                *"Symbol"*
               </td>
               <td>
-                The Symbol constructor (<emu-xref href="#sec-symbol-constructor"></emu-xref>)
+                The `Symbol` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-symbol-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4053,10 +4053,10 @@
                 %SyntaxError%
               </td>
               <td>
-                `SyntaxError`
+                *"SyntaxError"*
               </td>
               <td>
-                The SyntaxError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>)
+                The `SyntaxError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4076,7 +4076,7 @@
               <td>
               </td>
               <td>
-                The super class of all typed Array constructors (<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>)
+                The super class of all typed Array <emu-not-ref>constructors</emu-not-ref> (<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4084,10 +4084,10 @@
                 %TypeError%
               </td>
               <td>
-                `TypeError`
+                *"TypeError"*
               </td>
               <td>
-                The TypeError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>)
+                The `TypeError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4095,10 +4095,10 @@
                 %Uint8Array%
               </td>
               <td>
-                `Uint8Array`
+                *"Uint8Array"*
               </td>
               <td>
-                The Uint8Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Uint8Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4106,10 +4106,10 @@
                 %Uint8ClampedArray%
               </td>
               <td>
-                `Uint8ClampedArray`
+                *"Uint8ClampedArray"*
               </td>
               <td>
-                The Uint8ClampedArray constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Uint8ClampedArray` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4117,10 +4117,10 @@
                 %Uint16Array%
               </td>
               <td>
-                `Uint16Array`
+                *"Uint16Array"*
               </td>
               <td>
-                The Uint16Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Uint16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4128,10 +4128,10 @@
                 %Uint32Array%
               </td>
               <td>
-                `Uint32Array`
+                *"Uint32Array"*
               </td>
               <td>
-                The Uint32Array constructor (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                The `Uint32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4139,10 +4139,10 @@
                 %URIError%
               </td>
               <td>
-                `URIError`
+                *"URIError"*
               </td>
               <td>
-                The URIError constructor (<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>)
+                The `URIError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4150,10 +4150,10 @@
                 %WeakMap%
               </td>
               <td>
-                `WeakMap`
+                *"WeakMap"*
               </td>
               <td>
-                The WeakMap constructor (<emu-xref href="#sec-weakmap-constructor"></emu-xref>)
+                The `WeakMap` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weakmap-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4161,10 +4161,10 @@
                 %WeakRef%
               </td>
               <td>
-                `WeakRef`
+                *"WeakRef"*
               </td>
               <td>
-                The WeakRef constructor (<emu-xref href="#sec-weak-ref-constructor"></emu-xref>)
+                The `WeakRef` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weak-ref-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4172,10 +4172,10 @@
                 %WeakSet%
               </td>
               <td>
-                `WeakSet`
+                *"WeakSet"*
               </td>
               <td>
-                The WeakSet constructor (<emu-xref href="#sec-weakset-constructor"></emu-xref>)
+                The `WeakSet` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weakset-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4185,7 +4185,7 @@
               <td>
               </td>
               <td>
-                The prototype of wrapped iterator objects returned by Iterator.from (<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>)
+                The prototype of wrapped iterator objects returned by `Iterator.from` (<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>)
               </td>
             </tr>
           </table>
@@ -4211,8 +4211,8 @@
       <p>The <dfn variants="Lists">List</dfn> type is used to explain the evaluation of argument lists (see <emu-xref href="#sec-argument-lists"></emu-xref>) in `new` expressions, in function calls, and in other algorithms where a simple ordered list of values is needed. Values of the List type are simply ordered sequences of list elements containing the individual values. These sequences may be of any length. The elements of a list may be randomly accessed using 0-origin indices. For notational convenience an array-like syntax can be used to access List elements. For example, _args_[2] is shorthand for saying the 3<sup>rd</sup> element of the List _args_.</p>
       <p>When an algorithm iterates over the elements of a List without specifying an order, the order used is the order of the elements in the List.</p>
       <p>For notational convenience within this specification, a literal syntax can be used to express a new List value. For example, « 1, 2 » defines a List value that has two elements each of which is initialized to a specific value. A new empty List can be expressed as « ».</p>
-      <p>In this specification, the phrase "the <dfn id="list-concatenation">list-concatenation</dfn> of _A_, _B_, ..." (where each argument is a possibly empty List) denotes a new List value whose elements are the concatenation of the elements (in order) of each of the arguments (in order).</p>
-      <p>As applied to a List of Strings, the phrase "sorted according to <dfn id="lexicographic-code-unit-order">lexicographic code unit order</dfn>" means sorting by the numeric value of each code unit up to the length of the shorter string, and sorting the shorter string before the longer string if all are equal, as described in the abstract operation IsLessThan.</p>
+      <p>In this specification, the phrase “the <dfn id="list-concatenation">list-concatenation</dfn> of _A_, _B_, ...” (where each argument is a possibly empty List) denotes a new List value whose elements are the concatenation of the elements (in order) of each of the arguments (in order).</p>
+      <p>As applied to a List of Strings, the phrase “sorted according to <dfn id="lexicographic-code-unit-order">lexicographic code unit order</dfn>” means sorting by the numeric value of each code unit up to the length of the shorter string, and sorting the shorter string before the longer string if all are equal, as described in the abstract operation IsLessThan.</p>
       <p>The <dfn variants="Records">Record</dfn> type is used to describe data aggregations within the algorithms of this specification. A Record type value consists of one or more named fields. The value of each field is an ECMAScript language value or specification value. Field names are always enclosed in double brackets, for example [[Value]].</p>
       <p>For notational convenience within this specification, an object literal-like syntax can be used to express a Record value. For example, { [[Field1]]: 42, [[Field2]]: *false*, [[Field3]]: ~empty~ } defines a Record value that has three fields, each of which is initialized to a specific value. Field name order is not significant. Any fields that are not explicitly listed are considered to be absent.</p>
       <p>In specification text and algorithms, dot notation may be used to refer to a specific field of a Record value. For example, if R is the record shown in the previous paragraph then R.[[Field2]] is shorthand for “the field of R named [[Field2]]”.</p>
@@ -4221,7 +4221,7 @@
 
     <emu-clause id="sec-set-and-relation-specification-type">
       <h1>The Set and Relation Specification Types</h1>
-      <p>The <em>Set</em> type is used to explain a collection of unordered elements for use in the memory model. It is distinct from the ECMAScript collection type of the same name. To disambiguate, instances of the ECMAScript collection are consistently referred to as "Set objects" within this specification. Values of the Set type are simple collections of elements, where no element appears more than once. Elements may be added to and removed from Sets. Sets may be unioned, intersected, or subtracted from each other.</p>
+      <p>The <em>Set</em> type is used to explain a collection of unordered elements for use in the memory model. It is distinct from the ECMAScript collection type of the same name. To disambiguate, instances of the ECMAScript collection are consistently referred to as “Set objects” within this specification. Values of the Set type are simple collections of elements, where no element appears more than once. Elements may be added to and removed from Sets. Sets may be unioned, intersected, or subtracted from each other.</p>
       <p>The <dfn variants="Relations">Relation</dfn> type is used to explain constraints on Sets. Values of the Relation type are Sets of ordered pairs of values from its value domain. For example, a Relation on Memory events is a set of ordered pairs of Memory events. For a Relation _R_ and two values _a_ and _b_ in the value domain of _R_, _a_ _R_ _b_ is shorthand for saying the ordered pair (_a_, _b_) is a member of _R_. A Relation is the <dfn id="least-relation">least Relation</dfn> with respect to some conditions when it is the smallest Relation that satisfies those conditions.</p>
       <p>A <dfn variants="strict partial orders">strict partial order</dfn> is a Relation value _R_ that satisfies the following.</p>
       <ul>
@@ -4737,7 +4737,7 @@
     <emu-clause id="sec-abstract-closure">
       <h1>The Abstract Closure Specification Type</h1>
       <p>The <dfn variants="Abstract Closures">Abstract Closure</dfn> specification type is used to refer to algorithm steps together with a collection of values. Abstract Closures are meta-values and are invoked using function application style such as _closure_(_arg1_, _arg2_). Like abstract operations, invocations perform the algorithm steps described by the Abstract Closure.</p>
-      <p>In algorithm steps that create an Abstract Closure, values are captured with the verb "capture" followed by a list of aliases. When an Abstract Closure is created, it captures the value that is associated with each alias at that time. In steps that specify the algorithm to be performed when an Abstract Closure is called, each captured value is referred to by the alias that was used to capture the value.</p>
+      <p>In algorithm steps that create an Abstract Closure, values are captured with the verb “capture” followed by a list of aliases. When an Abstract Closure is created, it captures the value that is associated with each alias at that time. In steps that specify the algorithm to be performed when an Abstract Closure is called, each captured value is referred to by the alias that was used to capture the value.</p>
       <p>If an Abstract Closure returns a Completion Record, that Completion Record must be either a normal completion or a throw completion.</p>
       <p>Abstract Closures are created inline as part of other algorithms, shown in the following example.</p>
       <emu-alg example>
@@ -5282,7 +5282,7 @@
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>It converts _n_ to a Number in an implementation-defined manner. For the purposes of this abstract operation, a digit is significant if it is not zero or there is a non-zero digit to its left and there is a non-zero digit to its right. For the purposes of this abstract operation, "the mathematical value denoted by" a representation of a mathematical value is the inverse of "the decimal representation of" a mathematical value.</dd>
+            <dd>It converts _n_ to a Number in an implementation-defined manner. For the purposes of this abstract operation, a digit is significant if it is not zero or there is a non-zero digit to its left and there is a non-zero digit to its right. For the purposes of this abstract operation, “the mathematical value denoted by” a representation of a mathematical value is the inverse of “the decimal representation of” a mathematical value.</dd>
           </dl>
           <emu-alg>
             1. If the decimal representation of _n_ has 20 or fewer significant digits, return 𝔽(_n_).
@@ -5971,7 +5971,7 @@
         For expository purposes, some cases are handled separately within this algorithm even if it is unnecessary to do so.
       </emu-note>
       <emu-note>
-        The specifics of what "_x_ is _y_" means are detailed in <emu-xref href="#sec-identity"></emu-xref>.
+        The specifics of what “_x_ is _y_” means are detailed in <emu-xref href="#sec-identity"></emu-xref>.
       </emu-note>
     </emu-clause>
 
@@ -7224,6 +7224,20 @@
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-ifabruptcloseiterators" aoid="IfAbruptCloseIterators">
+      <h1>IfAbruptCloseIterators ( _value_, _iteratorRecords_ )</h1>
+      <p>IfAbruptCloseIterators is a shorthand for a sequence of algorithm steps that use a list of Iterator Records. An algorithm step of the form:</p>
+      <emu-alg>
+        1. IfAbruptCloseIterators(_value_, _iteratorRecords_).
+      </emu-alg>
+      <p>means the same thing as:</p>
+      <emu-alg>
+        1. Assert: _value_ is a Completion Record.
+        1. If _value_ is an abrupt completion, return ? IteratorCloseAll(_iteratorRecords_, _value_).
+        1. Set _value_ to ! _value_.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-asynciteratorclose" type="abstract operation">
       <h1>
         AsyncIteratorClose (
@@ -7338,7 +7352,7 @@
       <dd>user-code</dd>
     </dl>
     <emu-note>
-      The definitions for this operation are distributed over the "ECMAScript Language" sections of this specification. Each definition appears after the defining occurrence of the relevant productions.
+      The definitions for this operation are distributed over the “ECMAScript Language” sections of this specification. Each definition appears after the defining occurrence of the relevant productions.
     </emu-note>
   </emu-clause>
 
@@ -12390,7 +12404,7 @@
     <emu-clause id="sec-weakref-invariants">
       <h1>Objectives</h1>
 
-      <p>This specification does not make any guarantees that any object or symbol will be garbage collected. Objects or symbols which are not live may be released after long periods of time, or never at all. For this reason, this specification uses the term "may" when describing behaviour triggered by garbage collection.</p>
+      <p>This specification does not make any guarantees that any object or symbol will be garbage collected. Objects or symbols which are not live may be released after long periods of time, or never at all. For this reason, this specification uses the term “may” when describing behaviour triggered by garbage collection.</p>
 
       <p>The semantics of WeakRefs and FinalizationRegistrys is based on two operations which happen at particular points in time:</p>
 
@@ -12460,7 +12474,8 @@
             1. Set _ref_.[[WeakRefTarget]] to ~empty~.
           1. For each FinalizationRegistry _fg_ such that _fg_.[[Cells]] contains a Record _cell_ such that _cell_.[[WeakRefTarget]] is _value_, do
             1. Set _cell_.[[WeakRefTarget]] to ~empty~.
-            1. Optionally, perform HostEnqueueFinalizationRegistryCleanupJob(_fg_).
+            1. Let _enqueueCleanup_ be an implementation-defined choice of either *true* or *false*.
+            1. If _enqueueCleanup_ is *true*, perform HostEnqueueFinalizationRegistryCleanupJob(_fg_).
           1. For each WeakMap _map_ such that _map_.[[WeakMapData]] contains a Record _entry_ such that _entry_.[[Key]] is _value_, do
             1. Set _entry_.[[Key]] to ~empty~.
             1. Set _entry_.[[Value]] to ~empty~.
@@ -13726,10 +13741,11 @@
         1. If _func_ has an [[InitialName]] internal slot, then
           1. Set _func_.[[InitialName]] to _name_.
         1. If _prefix_ is present, then
-          1. Set _name_ to the string-concatenation of _prefix_, the code unit 0x0020 (SPACE), and _name_.
+          1. Let _prefixedName_ be the string-concatenation of _prefix_, the code unit 0x0020 (SPACE), and _name_.
           1. If _func_ has an [[InitialName]] internal slot, then
             1. NOTE: The choice in the following step is made independently each time this Abstract Operation is invoked.
-            1. Optionally, set _func_.[[InitialName]] to _name_.
+            1. Set _func_.[[InitialName]] to an implementation-defined choice of either _name_ or _prefixedName_.
+          1. Set _name_ to _prefixedName_.
         1. Perform ! DefinePropertyOrThrow(_func_, *"name"*, PropertyDescriptor { [[Value]]: _name_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }).
         1. Return ~unused~.
       </emu-alg>
@@ -16330,7 +16346,7 @@
       <p>Function code is generally provided as the bodies of Function Definitions (<emu-xref href="#sec-function-definitions"></emu-xref>), Arrow Function Definitions (<emu-xref href="#sec-arrow-function-definitions"></emu-xref>), Method Definitions (<emu-xref href="#sec-method-definitions"></emu-xref>), Generator Function Definitions (<emu-xref href="#sec-generator-function-definitions"></emu-xref>), Async Function Definitions (<emu-xref href="#sec-async-function-definitions"></emu-xref>), Async Generator Function Definitions (<emu-xref href="#sec-async-generator-function-definitions"></emu-xref>), and Async Arrow Functions (<emu-xref href="#sec-async-arrow-function-definitions"></emu-xref>). Function code is also derived from the arguments to the Function constructor (<emu-xref href="#sec-function-p1-p2-pn-body"></emu-xref>), the GeneratorFunction constructor (<emu-xref href="#sec-generatorfunction"></emu-xref>), the AsyncFunction constructor (<emu-xref href="#sec-async-function-constructor-arguments"></emu-xref>), and the AsyncGeneratorFunction constructor (<emu-xref href="#sec-asyncgeneratorfunction"></emu-xref>).</p>
     </emu-note>
     <emu-note>
-      <p>The practical effect of including the |BindingIdentifier| in function code is that the Early Errors for strict mode code are applied to a |BindingIdentifier| that is the name of a function whose body contains a "use strict" directive, even if the surrounding code is not strict mode code.</p>
+      <p>The practical effect of including the |BindingIdentifier| in function code is that the Early Errors for strict mode code are applied to a |BindingIdentifier| that is the name of a function whose body contains a <emu-xref href="#use-strict-directive" title></emu-xref>, even if the surrounding code is not strict mode code.</p>
     </emu-note>
 
     <emu-clause id="sec-directive-prologues-and-the-use-strict-directive">
@@ -16857,7 +16873,7 @@
       </emu-grammar>
       <emu-note>
         <p>Per <emu-xref href="#sec-grammar-notation"></emu-xref>, keywords in the grammar match literal sequences of specific |SourceCharacter| elements. A code point in a keyword cannot be expressed by a `\\` |UnicodeEscapeSequence|.</p>
-        <p>An |IdentifierName| can contain `\\` |UnicodeEscapeSequence|s, but it is not possible to declare a variable named "else" by spelling it `els\u{65}`. The early error rules in <emu-xref href="#sec-identifiers-static-semantics-early-errors"></emu-xref> rule out identifiers with the same StringValue as a reserved word.</p>
+        <p>An |IdentifierName| can contain `\\` |UnicodeEscapeSequence|s, but it is not possible to declare a variable named “else” by spelling it `els\u{65}`. The early error rules in <emu-xref href="#sec-identifiers-static-semantics-early-errors"></emu-xref> rule out identifiers with the same StringValue as a reserved word.</p>
       </emu-note>
       <emu-note>
         <p>`enum` is not currently used as a keyword in this specification. It is a <em>future reserved word</em>, set aside for use as a keyword in future language extensions.</p>
@@ -19920,7 +19936,7 @@
             <dd>It allows hosts to perform any extraordinary operations to prepare the object returned from `import.meta`.</dd>
           </dl>
 
-          <p>Most hosts will be able to simply define HostGetImportMetaProperties, and leave HostFinalizeImportMeta with its default behaviour. However, HostFinalizeImportMeta provides an "escape hatch" for hosts which need to directly manipulate the object before it is exposed to ECMAScript code.</p>
+          <p>Most hosts will be able to simply define HostGetImportMetaProperties, and leave HostFinalizeImportMeta with its default behaviour. However, HostFinalizeImportMeta provides an “escape hatch” for hosts which need to directly manipulate the object before it is exposed to ECMAScript code.</p>
 
           <p>The default implementation of HostFinalizeImportMeta is to return ~unused~.</p>
         </emu-clause>
@@ -21829,7 +21845,7 @@
         `if` `(` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return] `else` Statement[?Yield, ?Await, ?Return]
         `if` `(` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return] [lookahead != `else`]
     </emu-grammar>
-    <emu-note>The lookahead-restriction [lookahead ≠ `else`] resolves the classic "dangling else" problem in the usual way. That is, when the choice of associated `if` is otherwise ambiguous, the `else` is associated with the nearest (innermost) of the candidate `if`s</emu-note>
+    <emu-note>The lookahead-restriction [lookahead ≠ `else`] resolves the classic “dangling else” problem in the usual way. That is, when the choice of associated `if` is otherwise ambiguous, the `else` is associated with the nearest (innermost) of the candidate `if`s</emu-note>
 
     <emu-clause id="sec-if-statement-static-semantics-early-errors">
       <h1>Static Semantics: Early Errors</h1>
@@ -26129,7 +26145,7 @@
     <emu-clause id="sec-parse-script" type="abstract operation">
       <h1>
         ParseScript (
-          _sourceText_: ECMAScript source text,
+          _sourceText_: a String or a sequence of Unicode code points,
           _realm_: a Realm Record,
           _hostDefined_: anything,
         ): a Script Record or a non-empty List of *SyntaxError* objects
@@ -26821,7 +26837,7 @@
                 an integer or ~empty~
               </td>
               <td>
-                Auxiliary field used during Link and Evaluate only. If [[Status]] is either ~linking~ or ~evaluating~, this is either the module's depth-first traversal index or that of an "earlier" module in the same strongly connected component.
+                Auxiliary field used during Link and Evaluate only. If [[Status]] is either ~linking~ or ~evaluating~, this is either the module's depth-first traversal index or that of an “earlier” module in the same strongly connected component.
               </td>
             </tr>
             <tr>
@@ -28425,7 +28441,7 @@
         <emu-clause id="sec-parsemodule" type="abstract operation">
           <h1>
             ParseModule (
-              _sourceText_: ECMAScript source text,
+              _sourceText_: a String or a sequence of Unicode code points,
               _realm_: a Realm Record,
               _hostDefined_: anything,
             ): a Source Text Module Record or a non-empty List of *SyntaxError* objects
@@ -29768,17 +29784,20 @@
 
     <emu-clause id="sec-value-properties-of-the-global-object-infinity">
       <h1>Infinity</h1>
-      <p>The value of `Infinity` is *+∞*<sub>𝔽</sub> (see <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>). This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+      <p>The initial value of the *"Infinity"* property of the global object is *+∞*<sub>𝔽</sub> (see <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>).</p>
+      <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
     </emu-clause>
 
     <emu-clause id="sec-value-properties-of-the-global-object-nan">
       <h1>NaN</h1>
-      <p>The value of `NaN` is *NaN* (see <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>). This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+      <p>The initial value of the *"NaN"* property of the global object is *NaN* (see <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>).</p>
+      <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
     </emu-clause>
 
     <emu-clause id="sec-undefined">
       <h1>undefined</h1>
-      <p>The value of `undefined` is *undefined* (see <emu-xref href="#sec-ecmascript-language-types-undefined-type"></emu-xref>). This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+      <p>The initial value of the *"undefined"* property of the global object is *undefined* (see <emu-xref href="#sec-ecmascript-language-types-undefined-type"></emu-xref>).</p>
+      <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
     </emu-clause>
   </emu-clause>
 
@@ -31974,7 +31993,7 @@
           <p>Each _NativeError_ function performs the following steps when called:</p>
           <emu-alg>
             1. If NewTarget is *undefined*, let _newTarget_ be the active function object; else let _newTarget_ be NewTarget.
-            1. [id="step-nativeerror-ordinarycreatefromconstructor"] Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, <code>"%<var>NativeError</var>.prototype%"</code>, « [[ErrorData]] »).
+            1. [id="step-nativeerror-ordinarycreatefromconstructor"] Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, *"%<var>NativeError</var>.prototype%"*, « [[ErrorData]] »).
             1. If _message_ is not *undefined*, then
               1. Let _messageString_ be ? ToString(_message_).
               1. Perform CreateNonEnumerableDataPropertyOrThrow(_obj_, *"message"*, _messageString_).
@@ -32218,7 +32237,7 @@
       <emu-clause id="sec-number.issafeinteger" type="built-in function">
         <h1>Number.isSafeInteger ( _number_ )</h1>
         <emu-note>
-          <p>An integer _n_ is a "<dfn id="safe-integer">safe integer</dfn>" if and only if the Number value for _n_ is not the Number value for any other integer.</p>
+          <p>An integer _n_ is a “<dfn id="safe-integer">safe integer</dfn>” if and only if the Number value for _n_ is not the Number value for any other integer.</p>
         </emu-note>
         <p>This function performs the following steps when called:</p>
         <emu-alg>
@@ -33253,7 +33272,7 @@
             1. Set _next_ to ? IteratorStepValue(_iteratorRecord_).
             1. If _next_ is not ~done~, then
               1. If _count_ ≥ 2<sup>53</sup> - 1, then
-                1. NOTE: This step is not expected to be reached in practice and is included only so that implementations may rely on inputs being "reasonably sized" without violating this specification.
+                1. NOTE: This step is not expected to be reached in practice and is included only so that implementations may rely on inputs being “reasonably sized” without violating this specification.
                 1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
                 1. Return ? IteratorClose(_iteratorRecord_, _error_).
               1. If _next_ is not a Number, then
@@ -33280,7 +33299,7 @@
           1. Return 𝔽(_sum_).
         </emu-alg>
         <emu-note>
-          <p>The value of _sum_ can be computed without arbitrary-precision arithmetic by a variety of algorithms. One such is the "Grow-Expansion" algorithm given in <i>Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates</i> by Jonathan Richard Shewchuk. A more recent algorithm is given in "<a href="https://arxiv.org/abs/1505.05571">Fast exact summation using small and large superaccumulators</a>", code for which is available at <a href="https://gitlab.com/radfordneal/xsum">https://gitlab.com/radfordneal/xsum</a>.</p>
+          <p>The value of _sum_ can be computed without arbitrary-precision arithmetic by a variety of algorithms. One such is the “Grow-Expansion” algorithm given in <i>Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates</i> by Jonathan Richard Shewchuk. A more recent algorithm is given in “<a href="https://arxiv.org/abs/1505.05571">Fast exact summation using small and large superaccumulators</a>”, code for which is available at <a href="https://gitlab.com/radfordneal/xsum">https://gitlab.com/radfordneal/xsum</a>.</p>
         </emu-note>
       </emu-clause>
 
@@ -33984,7 +34003,7 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It returns the full year associated with the integer part of _year_, interpreting any value in the inclusive interval from 0 to 99 as a count of years since the start of 1900. For alignment with the proleptic Gregorian calendar, "full year" is defined as the signed count of complete years since the start of year 0 (1 B.C.).</dd>
+          <dd>It returns the full year associated with the integer part of _year_, interpreting any value in the inclusive interval from 0 to 99 as a count of years since the start of 1900. For alignment with the proleptic Gregorian calendar, “full year” is defined as the signed count of complete years since the start of year 0 (1 B.C.).</dd>
         </dl>
         <emu-alg>
           1. If _year_ is one of *NaN*, *+∞*<sub>𝔽</sub>, or *-∞*<sub>𝔽</sub>, return *NaN*.
@@ -34129,7 +34148,7 @@ THH:mm:ss.sss
         </pre>
         <p>A string containing out-of-bounds or nonconforming elements is not a valid instance of this format.</p>
         <emu-note>
-          <p>As every day both starts and ends with midnight, the two notations `00:00` and `24:00` are available to distinguish the two midnights that can be associated with one date. This means that the following two notations refer to exactly the same point in time: `1995-02-04T24:00` and `1995-02-05T00:00`. This interpretation of the latter form as "end of a calendar day" is consistent with ISO 8601, even though that specification reserves it for describing time intervals and does not permit it within representations of single points in time.</p>
+          <p>As every day both starts and ends with midnight, the two notations `00:00` and `24:00` are available to distinguish the two midnights that can be associated with one date. This means that the following two notations refer to exactly the same point in time: `1995-02-04T24:00` and `1995-02-05T00:00`. This interpretation of the latter form as “end of a calendar day” is consistent with ISO 8601, even though that specification reserves it for describing time intervals and does not permit it within representations of single points in time.</p>
         </emu-note>
         <emu-note>
           <p>There exists no international standard that specifies abbreviations for civil time zones like CET, EST, etc. and sometimes the same abbreviation is even used for two very different time zones. For this reason, both ISO 8601 and this format specify numeric representations of time zone offsets.</p>
@@ -35309,7 +35328,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.toutcstring" type="built-in function">
         <h1>Date.prototype.toUTCString ( )</h1>
-        <p>This method returns a String value representing the instant in time corresponding to the *this* value. The format of the String is based upon "HTTP-date" from RFC 7231, generalized to support the full range of times supported by ECMAScript Dates.</p>
+        <p>This method returns a String value representing the instant in time corresponding to the *this* value. The format of the String is based upon <code>HTTP-date</code> from RFC 7231, generalized to support the full range of times supported by ECMAScript Dates.</p>
         <p>It performs the following steps when called:</p>
         <emu-alg>
           1. Let _dateObj_ be the *this* value.
@@ -38524,7 +38543,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>Returns a CharSet containing the characters considered "word characters" for the purposes of `\\b`, `\\B`, `\\w`, and `\\W`.</dd>
+            <dd>Returns a CharSet containing the characters considered “word characters” for the purposes of `\\b`, `\\B`, `\\w`, and `\\W`.</dd>
           </dl>
           <emu-alg>
             1. Let _basicWordChars_ be the CharSet containing every character in the ASCII word characters.
@@ -40144,7 +40163,7 @@ THH:mm:ss.sss
           <p>If a _thisArg_ parameter is provided, it will be used as the *this* value for each invocation of _callback_. If it is not provided, *undefined* is used instead.</p>
           <p>_callback_ is called with three arguments: the value of the element, the index of the element, and the object being traversed.</p>
           <p>`every` does not directly mutate the object on which it is called but the object may be mutated by the calls to _callback_.</p>
-          <p>The range of elements processed by `every` is set before the first call to _callback_. Elements which are appended to the array after the call to `every` begins will not be visited by _callback_. If existing elements of the array are changed, their value as passed to _callback_ will be the value at the time `every` visits them; elements that are deleted after the call to `every` begins and before being visited are not visited. `every` acts like the "for all" quantifier in mathematics. In particular, for an empty array, it returns *true*.</p>
+          <p>The range of elements processed by `every` is set before the first call to _callback_. Elements which are appended to the array after the call to `every` begins will not be visited by _callback_. If existing elements of the array are changed, their value as passed to _callback_ will be the value at the time `every` visits them; elements that are deleted after the call to `every` begins and before being visited are not visited. `every` acts like the “for all” quantifier in mathematics. In particular, for an empty array, it returns *true*.</p>
         </emu-note>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
@@ -40852,7 +40871,7 @@ THH:mm:ss.sss
           <p>If a _thisArg_ parameter is provided, it will be used as the *this* value for each invocation of _callback_. If it is not provided, *undefined* is used instead.</p>
           <p>_callback_ is called with three arguments: the value of the element, the index of the element, and the object being traversed.</p>
           <p>`some` does not directly mutate the object on which it is called but the object may be mutated by the calls to _callback_.</p>
-          <p>The range of elements processed by `some` is set before the first call to _callback_. Elements that are appended to the array after the call to `some` begins will not be visited by _callback_. If existing elements of the array are changed, their value as passed to _callback_ will be the value at the time that `some` visits them; elements that are deleted after the call to `some` begins and before being visited are not visited. `some` acts like the "exists" quantifier in mathematics. In particular, for an empty array, it returns *false*.</p>
+          <p>The range of elements processed by `some` is set before the first call to _callback_. Elements that are appended to the array after the call to `some` begins will not be visited by _callback_. If existing elements of the array are changed, their value as passed to _callback_ will be the value at the time that `some` visits them; elements that are deleted after the call to `some` begins and before being visited are not visited. `some` acts like the “exists” quantifier in mathematics. In particular, for an empty array, it returns *false*.</p>
         </emu-note>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
@@ -43385,6 +43404,7 @@ THH:mm:ss.sss
           1. Let _index_ be 0.
           1. Let _length_ be the length of _string_.
           1. Repeat,
+            1. Assert: The number of elements in _bytes_ is evenly divisible by 3.
             1. Set _index_ to SkipAsciiWhitespace(_string_, _index_).
             1. If _index_ = _length_, then
               1. If _chunkLength_ > 0, then
@@ -45543,7 +45563,7 @@ THH:mm:ss.sss
       <h1>Properties of ArrayBuffer Instances</h1>
       <p>ArrayBuffer instances inherit properties from the ArrayBuffer prototype object. ArrayBuffer instances each have an [[ArrayBufferData]] internal slot, an [[ArrayBufferByteLength]] internal slot, and an [[ArrayBufferDetachKey]] internal slot. ArrayBuffer instances which are resizable each have an [[ArrayBufferMaxByteLength]] internal slot.</p>
       <p>ArrayBuffer instances whose [[ArrayBufferData]] is *null* are considered to be detached and all operators to access or modify data contained in the ArrayBuffer instance will fail.</p>
-      <p>ArrayBuffer instances whose [[ArrayBufferDetachKey]] is set to a value other than *undefined* need to have all DetachArrayBuffer calls passing that same "detach key" as an argument, otherwise a TypeError will result. This internal slot is only ever set by certain embedding environments, not by algorithms in this specification.</p>
+      <p>ArrayBuffer instances whose [[ArrayBufferDetachKey]] is set to a value other than *undefined* need to have all DetachArrayBuffer calls passing that same “detach key” as an argument, otherwise a TypeError will result. This internal slot is only ever set by certain embedding environments, not by algorithms in this specification.</p>
     </emu-clause>
 
     <emu-clause id="sec-resizable-arraybuffer-guidelines">
@@ -45659,7 +45679,7 @@ THH:mm:ss.sss
         <p>The implementation of HostGrowSharedArrayBuffer must conform to the following requirements:</p>
         <ul>
           <li>If the abstract operation does not complete normally with ~unhandled~, and _newByteLength_ &lt; the current byte length of the _buffer_ or _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]], throw a *RangeError* exception.</li>
-          <li>Let _agentRecord_ be the Agent Record of the surrounding agent. Let _isLittleEndian_ be _agentRecord_.[[LittleEndian]]. If the abstract operation completes normally with ~handled~, a WriteSharedMemory or ReadModifyWriteSharedMemory event whose [[Order]] is ~seq-cst~, [[Payload]] is NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]] is _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]] is 0, and [[ElementSize]] is 8 is added to the surrounding agent's candidate execution such that racing calls to <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> are not "lost", i.e. silently do nothing.</li>
+          <li>Let _agentRecord_ be the Agent Record of the surrounding agent. Let _isLittleEndian_ be _agentRecord_.[[LittleEndian]]. If the abstract operation completes normally with ~handled~, a WriteSharedMemory or ReadModifyWriteSharedMemory event whose [[Order]] is ~seq-cst~, [[Payload]] is NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]] is _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]] is 0, and [[ElementSize]] is 8 is added to the surrounding agent's candidate execution such that racing calls to <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> are not “lost”, i.e. silently do nothing.</li>
         </ul>
 
         <emu-note>
@@ -45870,7 +45890,7 @@ THH:mm:ss.sss
       <emu-note>
         <p>The following are guidelines for ECMAScript implementers implementing growable SharedArrayBuffer.</p>
         <p>We recommend growable SharedArrayBuffer be implemented as in-place growth via reserving virtual memory up front.</p>
-        <p>Because grow operations can happen in parallel with memory accesses on a growable SharedArrayBuffer, the constraints of the memory model require that even unordered accesses do not "tear" (bits of their values will not be mixed). In practice, this means the underlying data block of a growable SharedArrayBuffer cannot be grown by being copied without stopping the world. We do not recommend stopping the world as an implementation strategy because it introduces a serialization point and is slow.</p>
+        <p>Because grow operations can happen in parallel with memory accesses on a growable SharedArrayBuffer, the constraints of the memory model require that even unordered accesses do not “tear” (bits of their values will not be mixed). In practice, this means the underlying data block of a growable SharedArrayBuffer cannot be grown by being copied without stopping the world. We do not recommend stopping the world as an implementation strategy because it introduces a serialization point and is slow.</p>
         <p>Grown memory must appear zeroed from the moment of its creation, including to any racy accesses in parallel. This can be accomplished via zero-filled-on-demand virtual memory pages, or careful synchronization if manually zeroing memory.</p>
         <p>Integer-indexed property access on TypedArray views of growable SharedArrayBuffers is intended to be optimizable similarly to access on TypedArray views of non-growable SharedArrayBuffers, because integer-indexed property loads on are not synchronizing on the underlying buffer's length (see programmer guidelines above). For example, bounds checks for property accesses may still be hoisted out of loops.</p>
         <p>In practice it is difficult to implement growable SharedArrayBuffer by copying on hosts that do not have virtual memory, such as those running on embedded devices without an MMU. Memory usage behaviour of growable SharedArrayBuffers on such hosts may significantly differ from that of hosts with virtual memory. Such hosts should clearly communicate memory usage expectations to users.</p>
@@ -47087,7 +47107,7 @@ THH:mm:ss.sss
       <emu-note>
         <p>This function is an optimization primitive. The intuition is that if the atomic step of an atomic primitive (`compareExchange`, `load`, `store`, `add`, `sub`, `and`, `or`, `xor`, or `exchange`) on a datum of size _n_ bytes will be performed without the surrounding agent acquiring a lock outside the _n_ bytes comprising the datum, then `Atomics.isLockFree`(_n_) will return *true*. High-performance algorithms will use this function to determine whether to use locks or atomic operations in critical sections. If an atomic primitive is not lock-free then it is often more efficient for an algorithm to provide its own locking.</p>
         <p>`Atomics.isLockFree`(4) always returns *true* as that can be supported on all known relevant hardware. Being able to assume this will generally simplify programs.</p>
-        <p>Regardless of the value returned by this function, all atomic operations are guaranteed to be atomic. For example, they will never have a visible operation take place in the middle of the operation (e.g., "tearing").</p>
+        <p>Regardless of the value returned by this function, all atomic operations are guaranteed to be atomic. For example, they will never have a visible operation take place in the middle of the operation (e.g., “tearing”).</p>
       </emu-note>
     </emu-clause>
 
@@ -47192,6 +47212,24 @@ THH:mm:ss.sss
         1. Let _waitersCount_ be the number of elements in _waiters_.
         1. Return 𝔽(_waitersCount_).
       </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="Atomics.pause">
+      <h1>Atomics.pause ( )</h1>
+      <p>This function provides a hint to the CPU that the program is spin looping while waiting on a value.</p>
+      <p>It performs the following steps when called:</p>
+      <emu-alg>
+        1. If the execution environment of the ECMAScript implementation supports signaling to the operating system or CPU that the current executing code is in a spin-wait loop, send that signal.
+        1. Return *undefined*.
+      </emu-alg>
+      <emu-note>
+        <p>This method is designed for programs implementing spin-wait loops, such as spinlock fast paths inside of mutexes, to provide a hint to the CPU that it is spinning while waiting on a value. It has no observable behaviour other than timing.</p>
+        <p>Implementations are expected to implement a pause or yield instruction if the best practices of the underlying architecture recommends such instructions in spin loops. For example, the <a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a> recommends the <code>pause</code> instruction.</p>
+        <p>Implementations are encouraged to have an internal upper bound on the maximum amount of time paused on the order of tens to hundreds of nanoseconds.</p>
+      </emu-note>
+      <emu-note>
+        <p>Due to the overhead of function calls, it is reasonable that an inlined call to this method in an optimizing compiler waits a different amount of time than a non-inlined call.</p>
+      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.xor" type="built-in function">
@@ -48218,7 +48256,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-iterable-interface">
         <h1>The Iterable Interface</h1>
-        <p>The <dfn variants="iterable,iterables,iterable object,iterable objects">iterable interface</dfn> includes the property described in <emu-xref href="#table-iterable-interface-required-properties"></emu-xref>:</p>
+        <p>The <dfn variants="iterable,iterables,iterable object,iterable objects">iterable interface</dfn> includes the properties described in <emu-xref href="#table-iterable-interface-required-properties"></emu-xref>:</p>
         <emu-table id="table-iterable-interface-required-properties" caption="Iterable Interface Required Properties" oldids="table-52">
           <table>
             <thead>
@@ -48366,7 +48404,7 @@ THH:mm:ss.sss
               <td>
                 <p>The returned promise, when fulfilled, must fulfill with an object that conforms to the IteratorResult interface. If a previous call to the `next` method of an async iterator has returned a promise for an IteratorResult object whose *"done"* property is *true*, then all subsequent calls to the `next` method of that object should also return a promise for an IteratorResult object whose *"done"* property is *true*. However, this requirement is not enforced.</p>
 
-                <p>Additionally, the IteratorResult object that serves as a fulfillment value should have a *"value"* property whose value is not a promise (or "thenable"). However, this requirement is also not enforced.</p>
+                <p>Additionally, the IteratorResult object that serves as a fulfillment value should have a *"value"* property whose value is not a promise (or “thenable”). However, this requirement is also not enforced.</p>
               </td>
             </tr>
           </table>
@@ -48389,7 +48427,7 @@ THH:mm:ss.sss
               <td>
                 <p>The returned promise, when fulfilled, must fulfill with an object that conforms to the IteratorResult interface. Invoking this method notifies the async iterator object that the caller does not intend to make any more `next` method calls to the async iterator. The returned promise will fulfill with an IteratorResult object which will typically have a *"done"* property whose value is *true*, and a *"value"* property with the value passed as the argument of the `return` method. However, this requirement is not enforced.</p>
 
-                <p>Additionally, the IteratorResult object that serves as a fulfillment value should have a *"value"* property whose value is not a promise (or "thenable"). If the argument value is used in the typical manner, then if it is a rejected promise, a promise rejected with the same reason should be returned; if it is a fulfilled promise, then its fulfillment value should be used as the *"value"* property of the returned promise's IteratorResult object fulfillment value. However, these requirements are also not enforced.</p>
+                <p>Additionally, the IteratorResult object that serves as a fulfillment value should have a *"value"* property whose value is not a promise (or “thenable”). If the argument value is used in the typical manner, then if it is a rejected promise, a promise rejected with the same reason should be returned; if it is a fulfilled promise, then its fulfillment value should be used as the *"value"* property of the returned promise's IteratorResult object fulfillment value. However, these requirements are also not enforced.</p>
               </td>
             </tr>
             <tr>
@@ -48398,7 +48436,7 @@ THH:mm:ss.sss
               <td>
                 <p>The returned promise, when fulfilled, must fulfill with an object that conforms to the IteratorResult interface. Invoking this method notifies the async iterator object that the caller has detected an error condition. The argument may be used to identify the error condition and typically will be an exception object. A typical response is to return a rejected promise which rejects with the value passed as the argument.</p>
 
-                <p>If the returned promise is fulfilled, the IteratorResult object fulfillment value will typically have a *"done"* property whose value is *true*. Additionally, it should have a *"value"* property whose value is not a promise (or "thenable"), but this requirement is not enforced.</p>
+                <p>If the returned promise is fulfilled, the IteratorResult object fulfillment value will typically have a *"done"* property whose value is *true*. Additionally, it should have a *"value"* property whose value is not a promise (or “thenable”), but this requirement is not enforced.</p>
               </td>
             </tr>
           </table>
@@ -48608,6 +48646,105 @@ THH:mm:ss.sss
           <h1>Iterator.prototype</h1>
           <p>The initial value of Iterator.prototype is the Iterator prototype object.</p>
           <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.zip" type="built-in function">
+          <h1>Iterator.zip ( _iterables_ [ , _options_ ] )</h1>
+          <p>This function performs the following steps when called:</p>
+          <emu-alg>
+            1. If _iterables_ is not an Object, throw a *TypeError* exception.
+            1. Set _options_ to ? GetOptionsObject(_options_).
+            1. Let _mode_ be ? Get(_options_, *"mode"*).
+            1. If _mode_ is *undefined*, set _mode_ to *"shortest"*.
+            1. If _mode_ is not one of *"shortest"*, *"longest"*, or *"strict"*, throw a *TypeError* exception.
+            1. Let _paddingOption_ be *undefined*.
+            1. If _mode_ is *"longest"*, then
+              1. Set _paddingOption_ to ? Get(_options_, *"padding"*).
+              1. If _paddingOption_ is not *undefined* and _paddingOption_ is not an Object, throw a *TypeError* exception.
+            1. Let _iters_ be a new empty List.
+            1. Let _padding_ be a new empty List.
+            1. Let _inputIter_ be ? GetIterator(_iterables_, ~sync~).
+            1. Let _next_ be ~not-started~.
+            1. Repeat, while _next_ is not ~done~,
+              1. Set _next_ to Completion(IteratorStepValue(_inputIter_)).
+              1. IfAbruptCloseIterators(_next_, _iters_).
+              1. If _next_ is not ~done~, then
+                1. Let _iter_ be Completion(GetIteratorFlattenable(_next_, ~reject-primitives~)).
+                1. Let _needClosing_ be the list-concatenation of « _inputIter_ » and _iters_.
+                1. IfAbruptCloseIterators(_iter_, _needClosing_).
+                1. Append _iter_ to _iters_.
+            1. Let _iterCount_ be the number of elements in _iters_.
+            1. If _mode_ is *"longest"*, then
+              1. If _paddingOption_ is *undefined*, then
+                1. Repeat _iterCount_ times:
+                  1. Append *undefined* to _padding_.
+              1. Else,
+                1. Let _paddingIter_ be Completion(GetIterator(_paddingOption_, ~sync~)).
+                1. IfAbruptCloseIterators(_paddingIter_, _iters_).
+                1. Let _usingIterator_ be *true*.
+                1. Repeat _iterCount_ times:
+                  1. If _usingIterator_ is *true*, then
+                    1. Set _next_ to Completion(IteratorStepValue(_paddingIter_)).
+                    1. IfAbruptCloseIterators(_next_, _iters_).
+                    1. If _next_ is ~done~, then
+                      1. Set _usingIterator_ to *false*.
+                    1. Else,
+                      1. Append _next_ to _padding_.
+                  1. If _usingIterator_ is *false*, append *undefined* to _padding_.
+                1. If _usingIterator_ is *true*, then
+                  1. Let _completion_ be Completion(IteratorClose(_paddingIter_, NormalCompletion(~unused~))).
+                  1. IfAbruptCloseIterators(_completion_, _iters_).
+            1. Let _finishResults_ be a new Abstract Closure with parameters (_results_) that captures nothing and performs the following steps when called:
+              1. Return CreateArrayFromList(_results_).
+            1. Return IteratorZip(_iters_, _mode_, _padding_, _finishResults_).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.zipkeyed" type="built-in function">
+          <h1>Iterator.zipKeyed ( _iterables_ [ , _options_ ] )</h1>
+          <p>This function performs the following steps when called:</p>
+          <emu-alg>
+            1. If _iterables_ is not an Object, throw a *TypeError* exception.
+            1. Set _options_ to ? GetOptionsObject(_options_).
+            1. Let _mode_ be ? Get(_options_, *"mode"*).
+            1. If _mode_ is *undefined*, set _mode_ to *"shortest"*.
+            1. If _mode_ is not one of *"shortest"*, *"longest"*, or *"strict"*, throw a *TypeError* exception.
+            1. Let _paddingOption_ be *undefined*.
+            1. If _mode_ is *"longest"*, then
+              1. Set _paddingOption_ to ? Get(_options_, *"padding"*).
+              1. If _paddingOption_ is not *undefined* and _paddingOption_ is not an Object, throw a *TypeError* exception.
+            1. Let _iters_ be a new empty List.
+            1. Let _padding_ be a new empty List.
+            1. Let _allKeys_ be ? _iterables_.[[OwnPropertyKeys]]().
+            1. Let _keys_ be a new empty List.
+            1. For each element _key_ of _allKeys_, do
+              1. Let _propertyDesc_ be Completion(_iterables_.[[GetOwnProperty]](_key_)).
+              1. IfAbruptCloseIterators(_propertyDesc_, _iters_).
+              1. If _propertyDesc_ is not *undefined* and _propertyDesc_.[[Enumerable]] is *true*, then
+                1. Let _value_ be Completion(Get(_iterables_, _key_)).
+                1. IfAbruptCloseIterators(_value_, _iters_).
+                1. If _value_ is not *undefined*, then
+                  1. Append _key_ to _keys_.
+                  1. Let _iter_ be Completion(GetIteratorFlattenable(_value_, ~reject-primitives~)).
+                  1. IfAbruptCloseIterators(_iter_, _iters_).
+                  1. Append _iter_ to _iters_.
+            1. Let _iterCount_ be the number of elements in _iters_.
+            1. If _mode_ is *"longest"*, then
+              1. If _paddingOption_ is *undefined*, then
+                1. Repeat _iterCount_ times:
+                  1. Append *undefined* to _padding_.
+              1. Else,
+                1. For each element _key_ of _keys_, do
+                  1. Let _value_ be Completion(Get(_paddingOption_, _key_)).
+                  1. IfAbruptCloseIterators(_value_, _iters_).
+                  1. Append _value_ to _padding_.
+            1. Let _finishResults_ be a new Abstract Closure with parameters (_results_) that captures _keys_ and _iterCount_ and performs the following steps when called:
+              1. Let _obj_ be OrdinaryObjectCreate(*null*).
+              1. For each integer _i_ such that 0 ≤ _i_ &lt; _iterCount_, in ascending order, do
+                1. Perform ! CreateDataPropertyOrThrow(_obj_, _keys_[_i_], _results_[_i_]).
+              1. Return _obj_.
+            1. Return IteratorZip(_iters_, _mode_, _padding_, _finishResults_).
+          </emu-alg>
         </emu-clause>
       </emu-clause>
 
@@ -48979,6 +49116,74 @@ THH:mm:ss.sss
           </emu-note>
         </emu-clause>
       </emu-clause>
+
+      <emu-clause id="sec-abstract-operations-for-iterators">
+        <h1>Abstract Operations for Iterators</h1>
+
+        <emu-clause id="sec-iteratorzip" type="abstract operation">
+          <h1>
+            IteratorZip (
+              _iters_: a List of Iterator Records,
+              _mode_: *"shortest"*, *"longest"*, or *"strict"*,
+              _padding_: a List of ECMAScript language values,
+              _finishResults_: an Abstract Closure that takes a List of ECMAScript language values and returns an ECMAScript language value,
+            ): a Generator
+          </h1>
+          <dl class="header">
+          </dl>
+          <emu-alg>
+            1. Let _iterCount_ be the number of elements in _iters_.
+            1. Let _openIters_ be a copy of _iters_.
+            1. Let _closure_ be a new Abstract Closure with no parameters that captures _iters_, _iterCount_, _openIters_, _mode_, _padding_, and _finishResults_ and performs the following steps when called:
+              1. If _iterCount_ = 0, return ReturnCompletion(*undefined*).
+              1. Repeat,
+                1. Let _results_ be a new empty List.
+                1. Assert: _openIters_ is not empty.
+                1. For each integer _i_ such that 0 ≤ _i_ &lt; _iterCount_, in ascending order, do
+                  1. Let _iter_ be _iters_[_i_].
+                  1. If _iter_ is *null*, then
+                    1. Assert: _mode_ is *"longest"*.
+                    1. Let _result_ be _padding_[_i_].
+                  1. Else,
+                    1. Let _result_ be Completion(IteratorStepValue(_iter_)).
+                    1. If _result_ is an abrupt completion, then
+                      1. Remove _iter_ from _openIters_.
+                      1. Return ? IteratorCloseAll(_openIters_, _result_).
+                    1. Set _result_ to ! _result_.
+                    1. If _result_ is ~done~, then
+                      1. Remove _iter_ from _openIters_.
+                      1. If _mode_ is *"shortest"*, then
+                        1. Return ? IteratorCloseAll(_openIters_, ReturnCompletion(*undefined*)).
+                      1. Else if _mode_ is *"strict"*, then
+                        1. If _i_ ≠ 0, then
+                          1. Return ? IteratorCloseAll(_openIters_, ThrowCompletion(a newly created *TypeError* object)).
+                        1. For each integer _k_ such that 1 ≤ _k_ &lt; _iterCount_, in ascending order, do
+                          1. Assert: _iters_[_k_] is not *null*.
+                          1. Let _open_ be Completion(IteratorStep(_iters_[_k_])).
+                          1. If _open_ is an abrupt completion, then
+                            1. Remove _iters_[_k_] from _openIters_.
+                            1. Return ? IteratorCloseAll(_openIters_, _open_).
+                          1. Set _open_ to ! _open_.
+                          1. If _open_ is ~done~, then
+                            1. Remove _iters_[_k_] from _openIters_.
+                          1. Else,
+                            1. Return ? IteratorCloseAll(_openIters_, ThrowCompletion(a newly created *TypeError* object)).
+                        1. Return ReturnCompletion(*undefined*).
+                      1. Else,
+                        1. Assert: _mode_ is *"longest"*.
+                        1. If _openIters_ is empty, return ReturnCompletion(*undefined*).
+                        1. Set _iters_[_i_] to *null*.
+                        1. Set _result_ to _padding_[_i_].
+                  1. Append _result_ to _results_.
+                1. Set _results_ to _finishResults_(_results_).
+                1. Let _completion_ be Completion(Yield(_results_)).
+                1. IfAbruptCloseIterators(_completion_, _openIters_).
+            1. Let _gen_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »).
+            1. Set _gen_.[[UnderlyingIterators]] to _openIters_.
+            1. Return _gen_.
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
@@ -49171,7 +49376,7 @@ THH:mm:ss.sss
           1. Let _unwrap_ be a new Abstract Closure with parameters (_v_) that captures _done_ and performs the following steps when called:
             1. Return CreateIteratorResultObject(_v_, _done_).
           1. Let _onFulfilled_ be CreateBuiltinFunction(_unwrap_, 1, *""*, « »).
-          1. NOTE: _onFulfilled_ is used when processing the *"value"* property of an IteratorResult object in order to wait for its value if it is a promise and re-package the result in a new "unwrapped" IteratorResult object.
+          1. NOTE: _onFulfilled_ is used when processing the *"value"* property of an IteratorResult object in order to wait for its value if it is a promise and re-package the result in a new “unwrapped” IteratorResult object.
           1. If _done_ is *true* or _closeOnRejection_ is *false*, then
             1. Let _onRejected_ be *undefined*.
           1. Else,
@@ -52054,7 +52259,7 @@ THH:mm:ss.sss
 
       <emu-note>
         <p>A Shared Data Block event's [[NoTear]] field is *true* when that event was introduced via accessing an integer TypedArray, and *false* when introduced via accessing a floating point TypedArray or DataView.</p>
-        <p>Intuitively, this requirement says when a memory range is accessed in an aligned fashion via an integer TypedArray, a single write event on that range must "win" when in a data race with other write events with equal ranges. More precisely, this requirement says an aligned read event cannot read a value composed of bytes from multiple, different write events all with equal ranges. It is possible, however, for an aligned read event to read from multiple write events with overlapping ranges.</p>
+        <p>Intuitively, this requirement says when a memory range is accessed in an aligned fashion via an integer TypedArray, a single write event on that range must “win” when in a data race with other write events with equal ranges. More precisely, this requirement says an aligned read event cannot read a value composed of bytes from multiple, different write events all with equal ranges. It is possible, however, for an aligned read event to read from multiple write events with overlapping ranges.</p>
       </emu-note>
     </emu-clause>
 
@@ -52142,7 +52347,7 @@ THH:mm:ss.sss
     <emu-note>
       <p>The following are guidelines for ECMAScript programmers working with shared memory.</p>
       <p>We recommend programs be kept data race free, i.e., make it so that it is impossible for there to be concurrent non-atomic operations on the same memory location. Data race free programs have interleaving semantics where each step in the evaluation semantics of each agent are interleaved with each other. For data race free programs, it is not necessary to understand the details of the memory model. The details are unlikely to build intuition that will help one to better write ECMAScript.</p>
-      <p>More generally, even if a program is not data race free it may have predictable behaviour, so long as atomic operations are not involved in any data races and the operations that race all have the same access size. The simplest way to arrange for atomics not to be involved in races is to ensure that different memory cells are used by atomic and non-atomic operations and that atomic accesses of different sizes are not used to access the same cells at the same time. Effectively, the program should treat shared memory as strongly typed as much as possible. One still cannot depend on the ordering and timing of non-atomic accesses that race, but if memory is treated as strongly typed the racing accesses will not "tear" (bits of their values will not be mixed).</p>
+      <p>More generally, even if a program is not data race free it may have predictable behaviour, so long as atomic operations are not involved in any data races and the operations that race all have the same access size. The simplest way to arrange for atomics not to be involved in races is to ensure that different memory cells are used by atomic and non-atomic operations and that atomic accesses of different sizes are not used to access the same cells at the same time. Effectively, the program should treat shared memory as strongly typed as much as possible. One still cannot depend on the ordering and timing of non-atomic accesses that race, but if memory is treated as strongly typed the racing accesses will not “tear” (bits of their values will not be mixed).</p>
     </emu-note>
 
     <emu-note>
@@ -52649,7 +52854,7 @@ THH:mm:ss.sss
   <h1>Additional ECMAScript Features for Web Browsers</h1>
   <p>The ECMAScript language syntax and semantics defined in this annex are required when the ECMAScript host is a web browser. The content of this annex is normative but optional if the ECMAScript host is not a web browser.</p>
   <p>Some features defined in this annex are specified in this annex, and some are specified in the main body of this document.</p>
-  <p>When a feature is specified in the main body, each point where it affects the document is marked with the words "Normative Optional" in a coloured box. Moreover, where the feature involves particular wording in an algorithm or early error rule, this is guarded by the condition that “<dfn variants="otherwise supports">the host supports</dfn>” the relevant feature. Web browsers are required to support all such features.</p>
+  <p>When a feature is specified in the main body, each point where it affects the document is marked with the words “Normative Optional” in a coloured box. Moreover, where the feature involves particular wording in an algorithm or early error rule, this is guarded by the condition that “<dfn variants="otherwise supports">the host supports</dfn>” the relevant feature. Web browsers are required to support all such features.</p>
   <emu-note>
     <p>This annex describes various legacy features and other characteristics of web browser ECMAScript hosts. All of the language features and behaviours specified in this annex have one or more undesirable characteristics and in the absence of legacy usage would be removed from this specification. However, the usage of these features by large numbers of existing web pages means that web browsers must continue to support them. The specifications in this annex define the requirements for interoperable implementations of these legacy features.</p>
     <p>These features are not considered part of the core ECMAScript language. Programmers should not use or assume the existence of these features and behaviours when writing new ECMAScript code. ECMAScript implementations are discouraged from implementing these features unless the implementation is part of a web browser or is required to run the same legacy ECMAScript code that web browsers encounter.</p>
@@ -53015,7 +53220,7 @@ THH:mm:ss.sss
               %escape%
             </td>
             <td>
-              `escape`
+              *"escape"*
             </td>
             <td>
               The `escape` function (<emu-xref href="#sec-escape-string"></emu-xref>)
@@ -53026,7 +53231,7 @@ THH:mm:ss.sss
               %unescape%
             </td>
             <td>
-              `unescape`
+              *"unescape"*
             </td>
             <td>
               The `unescape` function (<emu-xref href="#sec-unescape-string"></emu-xref>)
