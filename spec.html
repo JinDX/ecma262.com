@@ -12264,10 +12264,17 @@
           <td>an integer</td>
           <td>Initially 0, used to assign unique incrementing values to the [[AsyncEvaluationOrder]] field of modules that are asynchronous or have asynchronous dependencies.</td>
         </tr>
+        <tr>
+          <td>[[GlobalSymbolRegistry]]</td>
+          <td>a List of GlobalSymbolRegistry Records</td>
+          <td>Initially a new empty List, representing the list of Symbol values produced by <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref>.</td>
+        </tr>
       </table>
     </emu-table>
 
     <p>The values of [[LittleEndian]], [[Signifier]], [[IsLockFree1]], [[IsLockFree2]], and [[IsLockFree8]] cannot change.</p>
+
+    <p>The [[GlobalSymbolRegistry]] List is append-only and never reassigned.</p>
 
     <emu-note>
       <p>The values of [[IsLockFree1]], [[IsLockFree2]], and [[IsLockFree8]] are not necessarily determined by the hardware, but may also reflect implementation choices that can vary over time and between ECMAScript implementations.</p>
@@ -31571,53 +31578,15 @@
         <p>This function performs the following steps when called:</p>
         <emu-alg>
           1. Let _stringKey_ be ? ToString(_key_).
-          1. For each element _element_ of the GlobalSymbolRegistry List, do
+          1. Let _agentRecord_ be the Agent Record of the surrounding agent.
+          1. Let _globalSymbolRegistry_ be _agentRecord_.[[GlobalSymbolRegistry]].
+          1. For each element _element_ of _globalSymbolRegistry_, do
             1. If _element_.[[Key]] is _stringKey_, return _element_.[[Symbol]].
-          1. Assert: The GlobalSymbolRegistry List does not currently contain an entry for _stringKey_.
+          1. Assert: _globalSymbolRegistry_ does not currently contain an entry for _stringKey_.
           1. Let _newSymbol_ be a new Symbol whose [[Description]] is _stringKey_.
-          1. Append the GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ } to the GlobalSymbolRegistry List.
+          1. Append the GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ } to _globalSymbolRegistry_.
           1. Return _newSymbol_.
         </emu-alg>
-        <p>The <dfn>GlobalSymbolRegistry List</dfn> is an append-only List that is globally available. It is shared by all realms. Prior to the evaluation of any ECMAScript code, it is initialized as a new empty List. Elements of the GlobalSymbolRegistry List are Records with the structure defined in <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref>.</p>
-        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record Fields" oldids="table-44">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  Field Name
-                </th>
-                <th>
-                  Value
-                </th>
-                <th>
-                  Usage
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                [[Key]]
-              </td>
-              <td>
-                a String
-              </td>
-              <td>
-                A string key used to globally identify a Symbol.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Symbol]]
-              </td>
-              <td>
-                a Symbol
-              </td>
-              <td>
-                A symbol that can be retrieved from any realm.
-              </td>
-            </tr>
-          </table>
-        </emu-table>
       </emu-clause>
 
       <emu-clause id="sec-symbol.hasinstance">
@@ -31812,6 +31781,33 @@
     <emu-clause id="sec-abstract-operations-for-symbols">
       <h1>Abstract Operations for Symbols</h1>
 
+      <emu-clause id="sec-globalsymbolregistry-records">
+        <h1>GlobalSymbolRegistry Records</h1>
+        <p>A <dfn variants="GlobalSymbolRegistry Records">GlobalSymbolRegistry Record</dfn> is a Record value used to associate a String key with a Symbol value registered through <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref>.</p>
+        <p>GlobalSymbolRegistry Records have the fields listed in <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref>.</p>
+        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record Fields" oldids="table-44">
+          <table>
+            <thead>
+              <tr>
+                <th>Field Name</th>
+                <th>Value</th>
+                <th>Usage</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>[[Key]]</td>
+              <td>a String</td>
+              <td>A string key used to globally identify a Symbol.</td>
+            </tr>
+            <tr>
+              <td>[[Symbol]]</td>
+              <td>a Symbol</td>
+              <td>A symbol that can be retrieved from any realm.</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
       <emu-clause id="sec-keyforsymbol" type="abstract operation">
         <h1>
           KeyForSymbol (
@@ -31820,12 +31816,14 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>If _symbol_ is in the GlobalSymbolRegistry List, the String used to register _symbol_ will be returned.</dd>
+          <dd>If _symbol_ is in the surrounding agent's [[GlobalSymbolRegistry]] List, the String used to register _symbol_ will be returned.</dd>
         </dl>
         <emu-alg>
-          1. For each element _element_ of the GlobalSymbolRegistry List, do
+          1. Let _agentRecord_ be the Agent Record of the surrounding agent.
+          1. Let _globalSymbolRegistry_ be _agentRecord_.[[GlobalSymbolRegistry]].
+          1. For each element _element_ of _globalSymbolRegistry_, do
             1. If SameValue(_element_.[[Symbol]], _symbol_) is *true*, return _element_.[[Key]].
-          1. Assert: The GlobalSymbolRegistry List does not currently contain an entry for _symbol_.
+          1. Assert: _globalSymbolRegistry_ does not currently contain an entry for _symbol_.
           1. Return *undefined*.
         </emu-alg>
       </emu-clause>
@@ -42848,7 +42846,7 @@ THH:mm:ss.sss
         <li>is an intrinsic object that has the structure described below, differing only in the name used as the constructor name instead of _TypedArray_, in <emu-xref href="#table-the-typedarray-constructors"></emu-xref>, except where otherwise noted.</li>
         <li>is a function whose behaviour differs based upon the number and types of its arguments. The actual behaviour of a call of _TypedArray_ depends upon the number and kind of arguments that are passed to it.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified _TypedArray_ behaviour must include a `super` call to the _TypedArray_ constructor to create and initialize the subclass instance with the internal state necessary to support the %TypedArray%`.prototype` built-in methods.</li>
+        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified _TypedArray_ behaviour must include a `super` call to the _TypedArray_ constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of %TypedArray%`.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object" type="built-in function">
@@ -43519,7 +43517,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"Map"* property of the global object.</li>
         <li>creates and initializes a new Map when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Map behaviour must include a `super` call to the Map constructor to create and initialize the subclass instance with the internal state necessary to support the `Map.prototype` built-in methods.</li>
+        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Map behaviour must include a `super` call to the Map constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `Map.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-map-iterable" type="built-in function">
@@ -44057,7 +44055,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"Set"* property of the global object.</li>
         <li>creates and initializes a new Set object when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Set behaviour must include a `super` call to the Set constructor to create and initialize the subclass instance with the internal state necessary to support the `Set.prototype` built-in methods.</li>
+        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Set behaviour must include a `super` call to the Set constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `Set.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-set-iterable" type="built-in function">
@@ -44547,7 +44545,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"WeakMap"* property of the global object.</li>
         <li>creates and initializes a new WeakMap when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified WeakMap behaviour must include a `super` call to the WeakMap constructor to create and initialize the subclass instance with the internal state necessary to support the `WeakMap.prototype` built-in methods.</li>
+        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified WeakMap behaviour must include a `super` call to the WeakMap constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `WeakMap.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-weakmap-iterable" type="built-in function">
@@ -44727,7 +44725,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"WeakSet"* property of the global object.</li>
         <li>creates and initializes a new WeakSet when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified WeakSet behaviour must include a `super` call to the WeakSet constructor to create and initialize the subclass instance with the internal state necessary to support the `WeakSet.prototype` built-in methods.</li>
+        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified WeakSet behaviour must include a `super` call to the WeakSet constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `WeakSet.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-weakset-iterable" type="built-in function">
@@ -45355,7 +45353,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"ArrayBuffer"* property of the global object.</li>
         <li>creates and initializes a new ArrayBuffer when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified ArrayBuffer behaviour must include a `super` call to the ArrayBuffer constructor to create and initialize subclass instances with the internal state necessary to support the `ArrayBuffer.prototype` built-in methods.</li>
+        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified ArrayBuffer behaviour must include a `super` call to the ArrayBuffer constructor to create and initialize subclass instances with the internal state necessary to support the built-in methods of `ArrayBuffer.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-arraybuffer-length" type="built-in function">
@@ -45699,7 +45697,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"SharedArrayBuffer"* property of the global object, if that property is present (see below).</li>
         <li>creates and initializes a new SharedArrayBuffer when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified SharedArrayBuffer behaviour must include a `super` call to the SharedArrayBuffer constructor to create and initialize subclass instances with the internal state necessary to support the `SharedArrayBuffer.prototype` built-in methods.</li>
+        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified SharedArrayBuffer behaviour must include a `super` call to the SharedArrayBuffer constructor to create and initialize subclass instances with the internal state necessary to support the built-in methods of `SharedArrayBuffer.prototype`.</li>
       </ul>
 
       <p>Whenever a host does not provide concurrent access to SharedArrayBuffers it may omit the *"SharedArrayBuffer"* property of the global object.</p>
@@ -46087,7 +46085,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"DataView"* property of the global object.</li>
         <li>creates and initializes a new DataView when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified DataView behaviour must include a `super` call to the DataView constructor to create and initialize subclass instances with the internal state necessary to support the `DataView.prototype` built-in methods.</li>
+        <li>may be used as the value of an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified DataView behaviour must include a `super` call to the DataView constructor to create and initialize subclass instances with the internal state necessary to support the built-in methods of `DataView.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-dataview-buffer-byteoffset-bytelength" type="built-in function">
@@ -47123,6 +47121,32 @@ THH:mm:ss.sss
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.notify" type="built-in function">
+      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
+      <p>This function notifies some agents that are sleeping in the wait queue.</p>
+      <p>It performs the following steps when called:</p>
+      <emu-alg>
+        1. Let _taRecord_ be ? ValidateIntegerTypedArray(_ta_, *true*).
+        1. Let _byteIndexInBuffer_ be ? ValidateAtomicAccess(_taRecord_, _index_).
+        1. If _count_ is *undefined*, then
+          1. Set _count_ to +∞.
+        1. Else,
+          1. Let _intCount_ be ? ToIntegerOrInfinity(_count_).
+          1. Set _count_ to max(_intCount_, 0).
+        1. Let _buffer_ be _ta_.[[ViewedArrayBuffer]].
+        1. Let _block_ be _buffer_.[[ArrayBufferData]].
+        1. If IsSharedArrayBuffer(_buffer_) is *false*, return *+0*<sub>𝔽</sub>.
+        1. Let _waiterList_ be GetWaiterList(_block_, _byteIndexInBuffer_).
+        1. Perform EnterCriticalSection(_waiterList_).
+        1. Let _waiters_ be RemoveWaiters(_waiterList_, _count_).
+        1. For each element _waiterRecord_ of _waiters_, do
+          1. Perform NotifyWaiter(_waiterList_, _waiterRecord_).
+        1. Perform LeaveCriticalSection(_waiterList_).
+        1. Let _waitersCount_ be the number of elements in _waiters_.
+        1. Return 𝔽(_waitersCount_).
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.or" type="built-in function">
       <h1>Atomics.or ( _ta_, _index_, _value_ )</h1>
       <p>This function performs the following steps when called:</p>
@@ -47131,6 +47155,24 @@ THH:mm:ss.sss
           1. Return ByteListBitwiseOp(`|`, _xBytes_, _yBytes_).
         1. Return ? AtomicReadModifyWrite(_ta_, _index_, _value_, _or_).
       </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-atomics.pause" type="built-in function">
+      <h1>Atomics.pause ( )</h1>
+      <p>This function provides a hint to the CPU that the program is spin looping while waiting on a value.</p>
+      <p>It performs the following steps when called:</p>
+      <emu-alg>
+        1. If the execution environment of the ECMAScript implementation supports signaling to the operating system or CPU that the current executing code is in a spin-wait loop, send that signal.
+        1. Return *undefined*.
+      </emu-alg>
+      <emu-note>
+        <p>This method is designed for programs implementing spin-wait loops, such as spinlock fast paths inside of mutexes, to provide a hint to the CPU that it is spinning while waiting on a value. It has no observable behaviour other than timing.</p>
+        <p>Implementations are expected to implement a pause or yield instruction if the best practices of the underlying architecture recommends such instructions in spin loops. For example, the <a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a> recommends the <code>pause</code> instruction.</p>
+        <p>Implementations are encouraged to have an internal upper bound on the maximum amount of time paused on the order of tens to hundreds of nanoseconds.</p>
+      </emu-note>
+      <emu-note>
+        <p>Due to the overhead of function calls, it is reasonable that an inlined call to this method in an optimizing compiler waits a different amount of time than a non-inlined call.</p>
+      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.store" type="built-in function">
@@ -47186,50 +47228,6 @@ THH:mm:ss.sss
       <emu-alg>
         1. Return ? DoWait(~async~, _ta_, _index_, _value_, _timeout_).
       </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-atomics.notify" type="built-in function">
-      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
-      <p>This function notifies some agents that are sleeping in the wait queue.</p>
-      <p>It performs the following steps when called:</p>
-      <emu-alg>
-        1. Let _taRecord_ be ? ValidateIntegerTypedArray(_ta_, *true*).
-        1. Let _byteIndexInBuffer_ be ? ValidateAtomicAccess(_taRecord_, _index_).
-        1. If _count_ is *undefined*, then
-          1. Set _count_ to +∞.
-        1. Else,
-          1. Let _intCount_ be ? ToIntegerOrInfinity(_count_).
-          1. Set _count_ to max(_intCount_, 0).
-        1. Let _buffer_ be _ta_.[[ViewedArrayBuffer]].
-        1. Let _block_ be _buffer_.[[ArrayBufferData]].
-        1. If IsSharedArrayBuffer(_buffer_) is *false*, return *+0*<sub>𝔽</sub>.
-        1. Let _waiterList_ be GetWaiterList(_block_, _byteIndexInBuffer_).
-        1. Perform EnterCriticalSection(_waiterList_).
-        1. Let _waiters_ be RemoveWaiters(_waiterList_, _count_).
-        1. For each element _waiterRecord_ of _waiters_, do
-          1. Perform NotifyWaiter(_waiterList_, _waiterRecord_).
-        1. Perform LeaveCriticalSection(_waiterList_).
-        1. Let _waitersCount_ be the number of elements in _waiters_.
-        1. Return 𝔽(_waitersCount_).
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="Atomics.pause">
-      <h1>Atomics.pause ( )</h1>
-      <p>This function provides a hint to the CPU that the program is spin looping while waiting on a value.</p>
-      <p>It performs the following steps when called:</p>
-      <emu-alg>
-        1. If the execution environment of the ECMAScript implementation supports signaling to the operating system or CPU that the current executing code is in a spin-wait loop, send that signal.
-        1. Return *undefined*.
-      </emu-alg>
-      <emu-note>
-        <p>This method is designed for programs implementing spin-wait loops, such as spinlock fast paths inside of mutexes, to provide a hint to the CPU that it is spinning while waiting on a value. It has no observable behaviour other than timing.</p>
-        <p>Implementations are expected to implement a pause or yield instruction if the best practices of the underlying architecture recommends such instructions in spin loops. For example, the <a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a> recommends the <code>pause</code> instruction.</p>
-        <p>Implementations are encouraged to have an internal upper bound on the maximum amount of time paused on the order of tens to hundreds of nanoseconds.</p>
-      </emu-note>
-      <emu-note>
-        <p>Due to the overhead of function calls, it is reasonable that an inlined call to this method in an optimizing compiler waits a different amount of time than a non-inlined call.</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.xor" type="built-in function">
@@ -48001,7 +47999,7 @@ THH:mm:ss.sss
           is not intended to be called as a function and will throw an exception when called in that manner.
         </li>
         <li>
-          may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified `WeakRef` behaviour must include a `super` call to the `WeakRef` constructor to create and initialize the subclass instance with the internal state necessary to support the `WeakRef.prototype` built-in methods.
+          may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified `WeakRef` behaviour must include a `super` call to the `WeakRef` constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `WeakRef.prototype`.
         </li>
       </ul>
 
@@ -48137,7 +48135,7 @@ THH:mm:ss.sss
           is not intended to be called as a function and will throw an exception when called in that manner.
         </li>
         <li>
-          may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified `FinalizationRegistry` behaviour must include a `super` call to the `FinalizationRegistry` constructor to create and initialize the subclass instance with the internal state necessary to support the `FinalizationRegistry.prototype` built-in methods.
+          may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified `FinalizationRegistry` behaviour must include a `super` call to the `FinalizationRegistry` constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `FinalizationRegistry.prototype`.
         </li>
       </ul>
 
@@ -49806,7 +49804,7 @@ THH:mm:ss.sss
         <li>is the initial value of the *"Promise"* property of the global object.</li>
         <li>creates and initializes a new Promise when called as a constructor.</li>
         <li>is not intended to be called as a function and will throw an exception when called in that manner.</li>
-        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Promise behaviour must include a `super` call to the Promise constructor to create and initialize the subclass instance with the internal state necessary to support the `Promise` and `Promise.prototype` built-in methods.</li>
+        <li>may be used as the value in an `extends` clause of a class definition. Subclass constructors that intend to inherit the specified Promise behaviour must include a `super` call to the Promise constructor to create and initialize the subclass instance with the internal state necessary to support the built-in methods of `Promise` and `Promise.prototype`.</li>
       </ul>
 
       <emu-clause id="sec-promise-executor" type="built-in function">
@@ -52164,7 +52162,7 @@ THH:mm:ss.sss
             <li>For events _eventA_ and _eventB_, _eventA_ synchronizes-with _eventB_ in _execution_ if _eventsRecord_.[[AgentSynchronizesWith]] contains (_eventA_, _eventB_).</li>
           </ul>
         </li>
-        <li>For events _eventA_ and _eventB_, _eventA_ synchronizes-with _eventB_ in _execution_ if _execution_.[[HostSynchronizesWith]] contains (_eventA_, _eventB_).</li>
+        <li>For events _eventA_ and _eventB_, _eventA_ synchronizes-with _eventB_ in _execution_ if _eventA_ host-synchronizes-with _eventB_ in _execution_.</li>
       </ul>
 
       <emu-note>
@@ -53859,7 +53857,6 @@ THH:mm:ss.sss
     <p>[[HostDefined]] on Script Records: See <emu-xref href="#table-script-records"></emu-xref>.</p>
     <p>[[HostDefined]] on Module Records: See <emu-xref href="#table-module-record-fields"></emu-xref>.</p>
     <p>[[HostDefined]] on JobCallback Records: See <emu-xref href="#table-jobcallback-records"></emu-xref>.</p>
-    <p>[[HostSynchronizesWith]] on Candidate Executions: See <emu-xref href="#table-candidate-execution-records"></emu-xref>.</p>
     <p>[[IsHTMLDDA]]: See <emu-xref href="#sec-IsHTMLDDA-internal-slot"></emu-xref>.</p>
   </emu-annex>
 
