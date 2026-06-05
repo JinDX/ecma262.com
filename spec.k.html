@@ -12211,64 +12211,71 @@
     </emu-note>
     <p>agent의 executing thread가 algorithmic step을 executing하는 동안, 그 agent는 그 step에 대한 <dfn id="surrounding-agent" variants="surrounding agents">surrounding agent</dfn>입니다. step은 surrounding agent를 사용하여 agent 안에 held된 specification-level execution object, 즉 running execution context, execution context stack, Agent Record의 field에 access합니다.</p>
     <p><dfn variants="agent signifiers">agent signifier</dfn>는 Agent를 identify하는 데 사용되는 globally-unique opaque value입니다.</p>
-    <emu-table id="table-agent-record" caption="Agent Record Fields">
+    <emu-table id="table-agent-record" caption="에이전트 레코드 필드">
       <table>
         <thead>
           <tr>
-            <th>Field Name</th>
-            <th>Value</th>
-            <th>Meaning</th>
+            <th>필드 이름</th>
+            <th>값</th>
+            <th>의미</th>
           </tr>
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>a Boolean</td>
-          <td>GetValueFromBuffer와 SetValueInBuffer algorithm에서 필요할 때 <em>isLittleEndian</em> parameter에 대해 computed되는 default value입니다. choice는 implementation-defined이며 implementation에 가장 efficient한 alternative여야 합니다.</td>
+          <td>Boolean 값</td>
+          <td>GetValueFromBuffer 및 SetValueInBuffer 알고리즘에서 필요할 때 <em>isLittleEndian</em> 매개변수에 대해 계산되는 기본값. 선택은 구현 정의이며, 해당 구현에 가장 효율적인 대안이어야 한다.</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>a Boolean</td>
-          <td>agent가 block할 수 있는지 여부를 determine합니다.</td>
+          <td>Boolean 값</td>
+          <td>에이전트가 블록될 수 있는지 여부를 결정한다.</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>an agent signifier</td>
-          <td>agent cluster 안에서 agent를 uniquely identify합니다.</td>
+          <td>에이전트 표시자</td>
+          <td>에이전트 클러스터 내에서 에이전트를 고유하게 식별한다.</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>a Boolean</td>
-          <td>one-<emu-not-ref>byte value</emu-not-ref>에 대한 atomic operation이 lock-free이면 *true*, 그렇지 않으면 *false*입니다.</td>
+          <td>Boolean 값</td>
+          <td>1<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 그렇지 않으면 *false*.</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>a Boolean</td>
-          <td>two-<emu-not-ref>byte value</emu-not-ref>에 대한 atomic operation이 lock-free이면 *true*, 그렇지 않으면 *false*입니다.</td>
+          <td>Boolean 값</td>
+          <td>2<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 그렇지 않으면 *false*.</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>a Boolean</td>
-          <td>eight-<emu-not-ref>byte value</emu-not-ref>에 대한 atomic operation이 lock-free이면 *true*, 그렇지 않으면 *false*입니다.</td>
+          <td>Boolean 값</td>
+          <td>8<emu-not-ref>바이트 값</emu-not-ref>에 대한 원자적 연산이 lock-free이면 *true*, 그렇지 않으면 *false*.</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>a candidate execution Record</td>
-          <td>memory model을 참조하십시오.</td>
+          <td>candidate execution Record</td>
+          <td>메모리 모델을 참조하라.</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>a List of either Objects or Symbols</td>
-          <td>initially 새 empty List이며, current Job의 end까지 alive로 keep될 object 및/또는 symbol의 list를 represent합니다</td>
+          <td>Object 또는 Symbol의 List</td>
+          <td>처음에는 새 빈 List이며, 현재 Job의 끝까지 살아 있게 유지할 객체 및/또는 심벌의 목록을 나타낸다</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
-          <td>an integer</td>
-          <td>initially 0이며, asynchronous이거나 asynchronous dependency를 가진 module의 [[AsyncEvaluationOrder]] field에 unique incrementing value를 assign하는 데 사용됩니다.</td>
+          <td>정수</td>
+          <td>처음에는 0이며, 비동기이거나 비동기 의존성을 가진 모듈의 [[AsyncEvaluationOrder]] 필드에 고유하게 증가하는 값을 할당하는 데 사용된다.</td>
+        </tr>
+        <tr>
+          <td>[[GlobalSymbolRegistry]]</td>
+          <td>GlobalSymbolRegistry Record의 List</td>
+          <td>처음에는 새 빈 List이며, <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref>에 의해 생성된 Symbol 값의 목록을 나타낸다.</td>
         </tr>
       </table>
     </emu-table>
 
-    <p>[[LittleEndian]], [[Signifier]], [[IsLockFree1]], [[IsLockFree2]], [[IsLockFree8]]의 value는 change할 수 없습니다.</p>
+    <p>[[LittleEndian]], [[Signifier]], [[IsLockFree1]], [[IsLockFree2]], [[IsLockFree8]]의 값은 변경될 수 없다.</p>
+
+    <p>[[GlobalSymbolRegistry]] List는 추가만 가능하며 재할당되지 않는다.</p>
 
     <emu-note>
       <p>[[IsLockFree1]], [[IsLockFree2]], [[IsLockFree8]]의 value는 necessarily hardware에 의해 determined되는 것은 아니며, over time 및 ECMAScript implementation 사이에서 vary할 수 있는 implementation choice를 reflect할 수도 있습니다.</p>
@@ -31571,54 +31578,16 @@
         <h1>Symbol.for ( _key_ )</h1>
         <p>이 function은 called될 때 다음 step을 수행합니다:</p>
         <emu-alg>
-          1. _stringKey_를 ? ToString(_key_)로 둔다.
-          1. GlobalSymbolRegistry List의 각 element _element_에 대해, 다음을 수행한다.
+          1. _stringKey_를 ? ToString(_key_)이라고 하자.
+          1. _agentRecord_를 둘러싸는 에이전트의 Agent Record라고 하자.
+          1. _globalSymbolRegistry_를 _agentRecord_.[[GlobalSymbolRegistry]]라고 하자.
+          1. _globalSymbolRegistry_의 각 요소 _element_에 대해, 다음을 수행한다.
             1. _element_.[[Key]]가 _stringKey_이면, _element_.[[Symbol]]을 반환한다.
-          1. Assert: GlobalSymbolRegistry List는 currently _stringKey_에 대한 entry를 contain하지 않는다.
-          1. _newSymbol_을 [[Description]]이 _stringKey_인 new Symbol로 둔다.
-          1. GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ }을 GlobalSymbolRegistry List에 append한다.
+          1. 단언: _globalSymbolRegistry_는 현재 _stringKey_에 대한 항목을 포함하지 않는다.
+          1. _newSymbol_을 [[Description]]이 _stringKey_인 새 Symbol이라고 하자.
+          1. GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ }를 _globalSymbolRegistry_에 추가한다.
           1. _newSymbol_을 반환한다.
         </emu-alg>
-        <p><dfn>GlobalSymbolRegistry List</dfn>는 globally available한 append-only List입니다. 이는 모든 realm이 share합니다. any ECMAScript code의 evaluation 전에, 새 empty List로 initialized됩니다. GlobalSymbolRegistry List의 element는 <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref>에 defined된 structure를 가진 Record입니다.</p>
-        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record Fields" oldids="table-44">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  Field Name
-                </th>
-                <th>
-                  Value
-                </th>
-                <th>
-                  Usage
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                [[Key]]
-              </td>
-              <td>
-                a String
-              </td>
-              <td>
-                Symbol을 globally identify하기 위해 사용되는 string key입니다.
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Symbol]]
-              </td>
-              <td>
-                a Symbol
-              </td>
-              <td>
-                any realm에서 retrieved될 수 있는 symbol입니다.
-              </td>
-            </tr>
-          </table>
-        </emu-table>
       </emu-clause>
 
       <emu-clause id="sec-symbol.hasinstance">
@@ -31813,6 +31782,33 @@
     <emu-clause id="sec-abstract-operations-for-symbols">
       <h1>Abstract Operations for Symbols</h1>
 
+      <emu-clause id="sec-globalsymbolregistry-records">
+        <h1>GlobalSymbolRegistry 레코드</h1>
+        <p><dfn variants="GlobalSymbolRegistry Records">GlobalSymbolRegistry Record</dfn>는 <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref>를 통해 등록된 Symbol 값과 String 키를 연결하는 데 사용되는 Record 값이다.</p>
+        <p>GlobalSymbolRegistry Records에는 <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref>에 나열된 필드가 있다.</p>
+        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record 필드" oldids="table-44">
+          <table>
+            <thead>
+              <tr>
+                <th>필드 이름</th>
+                <th>값</th>
+                <th>사용법</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>[[Key]]</td>
+              <td>String</td>
+              <td>Symbol을 전역적으로 식별하는 데 사용되는 문자열 키.</td>
+            </tr>
+            <tr>
+              <td>[[Symbol]]</td>
+              <td>Symbol</td>
+              <td>어떤 realm에서도 가져올 수 있는 심벌.</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
       <emu-clause id="sec-keyforsymbol" type="abstract operation">
         <h1>
           KeyForSymbol (
@@ -31821,12 +31817,14 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_symbol_이 GlobalSymbolRegistry List 안에 있으면, _symbol_을 register하는 데 사용된 String이 returned될 것입니다.</dd>
+          <dd>_symbol_이 둘러싸는 에이전트의 [[GlobalSymbolRegistry]] List 안에 있으면, _symbol_을 등록하는 데 사용된 String이 반환된다.</dd>
         </dl>
         <emu-alg>
-          1. GlobalSymbolRegistry List의 각 element _element_에 대해, 다음을 수행한다.
+          1. _agentRecord_를 둘러싸는 에이전트의 Agent Record라고 하자.
+          1. _globalSymbolRegistry_를 _agentRecord_.[[GlobalSymbolRegistry]]라고 하자.
+          1. _globalSymbolRegistry_의 각 요소 _element_에 대해, 다음을 수행한다.
             1. SameValue(_element_.[[Symbol]], _symbol_)가 *true*이면, _element_.[[Key]]를 반환한다.
-          1. Assert: GlobalSymbolRegistry List는 currently _symbol_에 대한 entry를 contain하지 않는다.
+          1. 단언: _globalSymbolRegistry_는 현재 _symbol_에 대한 항목을 포함하지 않는다.
           1. *undefined*를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -42849,7 +42847,7 @@ THH:mm:ss.sss
         <li>otherwise noted된 경우를 제외하고, <emu-xref href="#table-the-typedarray-constructors"></emu-xref>에서 _TypedArray_ 대신 constructor name으로 사용되는 name만 differing하며 below에 described된 structure를 가지는 intrinsic object입니다.</li>
         <li>arguments의 number 및 types에 따라 behaviour가 달라지는 function입니다. _TypedArray_ call의 actual behaviour는 pass된 arguments의 number 및 kind에 depends합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause의 value로 사용될 수 있습니다. specified _TypedArray_ behaviour를 inherit하려는 subclass constructors는 %TypedArray%`.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instance를 create하고 initialize하기 위해 _TypedArray_ constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 _TypedArray_ 동작을 상속하려는 서브클래스 생성자는 %TypedArray%`.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 _TypedArray_ 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object" type="built-in function">
@@ -43520,7 +43518,7 @@ THH:mm:ss.sss
         <li>global object의 *"Map"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new Map을 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause 안의 value로 사용될 수 있습니다. specified Map behaviour를 inherit하려는 subclass constructors는 `Map.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instance를 create하고 initialize하기 위해 Map constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 Map 동작을 상속하려는 서브클래스 생성자는 `Map.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 Map 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-map-iterable" type="built-in function">
@@ -44058,7 +44056,7 @@ THH:mm:ss.sss
         <li>global object의 *"Set"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new Set object를 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause 안의 value로 사용될 수 있습니다. specified Set behaviour를 inherit하려는 subclass constructors는 `Set.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instance를 create하고 initialize하기 위해 Set constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 Set 동작을 상속하려는 서브클래스 생성자는 `Set.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 Set 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-set-iterable" type="built-in function">
@@ -44548,7 +44546,7 @@ THH:mm:ss.sss
         <li>global object의 *"WeakMap"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new WeakMap을 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause 안의 value로 사용될 수 있습니다. specified WeakMap behaviour를 inherit하려는 subclass constructors는 `WeakMap.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instance를 create하고 initialize하기 위해 WeakMap constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 WeakMap 동작을 상속하려는 서브클래스 생성자는 `WeakMap.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 WeakMap 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-weakmap-iterable" type="built-in function">
@@ -44728,7 +44726,7 @@ THH:mm:ss.sss
         <li>global object의 *"WeakSet"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new WeakSet을 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause 안의 value로 사용될 수 있습니다. specified WeakSet behaviour를 inherit하려는 subclass constructors는 `WeakSet.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instance를 create하고 initialize하기 위해 WeakSet constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 WeakSet 동작을 상속하려는 서브클래스 생성자는 `WeakSet.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 WeakSet 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-weakset-iterable" type="built-in function">
@@ -45356,7 +45354,7 @@ THH:mm:ss.sss
         <li>global object의 *"ArrayBuffer"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new ArrayBuffer를 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause의 value로 사용될 수 있습니다. specified ArrayBuffer behaviour를 inherit하려는 subclass constructors는 `ArrayBuffer.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instances를 create하고 initialize하기 위해 ArrayBuffer constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 ArrayBuffer 동작을 상속하려는 서브클래스 생성자는 `ArrayBuffer.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 ArrayBuffer 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-arraybuffer-length" type="built-in function">
@@ -45700,7 +45698,7 @@ THH:mm:ss.sss
         <li>그 property가 present한 경우, global object의 *"SharedArrayBuffer"* property의 initial value입니다(아래 참조).</li>
         <li>constructor로 called될 때 new SharedArrayBuffer를 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause의 value로 사용될 수 있습니다. specified SharedArrayBuffer behaviour를 inherit하려는 subclass constructors는 `SharedArrayBuffer.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instances를 create하고 initialize하기 위해 SharedArrayBuffer constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 SharedArrayBuffer 동작을 상속하려는 서브클래스 생성자는 `SharedArrayBuffer.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 SharedArrayBuffer 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <p>host가 SharedArrayBuffers에 대한 concurrent access를 provide하지 않을 때마다, global object의 *"SharedArrayBuffer"* property를 omit할 수 있습니다.</p>
@@ -46088,7 +46086,7 @@ THH:mm:ss.sss
         <li>global object의 *"DataView"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new DataView를 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, such manner로 called될 때 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause의 value로 사용될 수 있습니다. specified DataView behaviour를 inherit하려는 subclass constructors는 `DataView.prototype` built-in methods를 support하는 데 necessary한 internal state와 함께 subclass instances를 create하고 initialize하기 위해 DataView constructor에 대한 `super` call을 include해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 DataView 동작을 상속하려는 서브클래스 생성자는 `DataView.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 DataView 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-dataview-buffer-byteoffset-bytelength" type="built-in function">
@@ -47124,26 +47122,70 @@ THH:mm:ss.sss
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.notify" type="built-in function">
+      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
+      <p>이 함수는 대기 큐에서 잠자고 있는 일부 에이전트에게 알린다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
+      <emu-alg>
+        1. _taRecord_를 ? ValidateIntegerTypedArray(_ta_, *true*)라고 하자.
+        1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)라고 하자.
+        1. _count_가 *undefined*이면,
+          1. _count_를 +∞로 설정한다.
+        1. 그렇지 않으면,
+          1. _intCount_를 ? ToIntegerOrInfinity(_count_)라고 하자.
+          1. _count_를 max(_intCount_, 0)으로 설정한다.
+        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]라고 하자.
+        1. _block_을 _buffer_.[[ArrayBufferData]]라고 하자.
+        1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *+0*<sub>𝔽</sub>를 반환한다.
+        1. _waiterList_를 GetWaiterList(_block_, _byteIndexInBuffer_)라고 하자.
+        1. EnterCriticalSection(_waiterList_)를 수행한다.
+        1. _waiters_를 RemoveWaiters(_waiterList_, _count_)라고 하자.
+        1. _waiters_의 각 요소 _waiterRecord_에 대해, 다음을 수행한다.
+          1. NotifyWaiter(_waiterList_, _waiterRecord_)를 수행한다.
+        1. LeaveCriticalSection(_waiterList_)를 수행한다.
+        1. _waitersCount_를 _waiters_ 안의 요소 수라고 하자.
+        1. 𝔽(_waitersCount_)를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.or" type="built-in function">
       <h1>Atomics.or ( _ta_, _index_, _value_ )</h1>
-      <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _or_를 parameters (_xBytes_, _yBytes_)를 가지고 nothing을 captures하며 called될 때 atomically 다음 steps를 수행하는 new read-modify-write modification function으로 둔다:
+        1. _or_를 매개변수 (_xBytes_, _yBytes_)를 가지고 아무것도 캡처하지 않으며 호출될 때 다음 단계를 원자적으로 수행하는 새 read-modify-write 수정 함수라고 하자:
           1. ByteListBitwiseOp(`|`, _xBytes_, _yBytes_)를 반환한다.
         1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _or_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.pause" type="built-in function">
+      <h1>Atomics.pause ( )</h1>
+      <p>이 함수는 프로그램이 어떤 값을 기다리면서 스핀 루프 중이라는 힌트를 CPU에 제공한다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
+      <emu-alg>
+        1. ECMAScript 구현의 실행 환경이 현재 실행 중인 코드가 spin-wait 루프 안에 있음을 운영체제나 CPU에 신호로 알리는 것을 지원하면, 그 신호를 보낸다.
+        1. *undefined*를 반환한다.
+      </emu-alg>
+      <emu-note>
+        <p>이 메서드는 뮤텍스 내부의 spinlock fast path와 같이 spin-wait 루프를 구현하는 프로그램이, 어떤 값을 기다리는 동안 스핀 중이라는 힌트를 CPU에 제공하도록 설계되었다. 이 메서드는 타이밍 외에는 관찰 가능한 동작이 없다.</p>
+        <p>기반 아키텍처의 모범 사례가 스핀 루프에서 그러한 명령어를 권장하는 경우, 구현은 pause 또는 yield 명령어를 구현할 것으로 기대된다. 예를 들어, <a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel 최적화 매뉴얼</a>은 <code>pause</code> 명령어를 권장한다.</p>
+        <p>구현은 일시 정지되는 최대 시간에 대해 수십에서 수백 나노초 정도의 내부 상한을 두는 것이 권장된다.</p>
+      </emu-note>
+      <emu-note>
+        <p>함수 호출의 오버헤드 때문에, 최적화 컴파일러에서 이 메서드에 대한 인라인 호출이 인라인되지 않은 호출과 다른 시간 동안 기다리는 것은 합리적이다.</p>
+      </emu-note>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.store" type="built-in function">
       <h1>Atomics.store ( _ta_, _index_, _value_ )</h1>
-      <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _byteIndexInBuffer_를 ? ValidateAtomicAccessOnIntegerTypedArray(_ta_, _index_)로 둔다.
-        1. _ta_.[[ContentType]]이 ~bigint~이면, _coerced_를 ? ToBigInt(_value_)로 둔다.
-        1. 그렇지 않으면, _coerced_를 𝔽(? ToIntegerOrInfinity(_value_))로 둔다.
+        1. _byteIndexInBuffer_를 ? ValidateAtomicAccessOnIntegerTypedArray(_ta_, _index_)라고 하자.
+        1. _ta_.[[ContentType]]이 ~bigint~이면, _coerced_를 ? ToBigInt(_value_)라고 하자.
+        1. 그렇지 않으면, _coerced_를 𝔽(? ToIntegerOrInfinity(_value_))라고 하자.
         1. ? RevalidateAtomicAccess(_ta_, _byteIndexInBuffer_)를 수행한다.
-        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 둔다.
-        1. _elementType_을 TypedArrayElementType(_ta_)로 둔다.
+        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]라고 하자.
+        1. _elementType_을 TypedArrayElementType(_ta_)이라고 하자.
         1. SetValueInBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, _coerced_, *true*, ~seq-cst~)를 수행한다.
         1. _coerced_를 반환한다.
       </emu-alg>
@@ -47151,21 +47193,21 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.sub" type="built-in function">
       <h1>Atomics.sub ( _ta_, _index_, _value_ )</h1>
-      <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _subtract_를 parameters (_xBytes_, _yBytes_)를 가지고 _ta_를 captures하며 called될 때 atomically 다음 steps를 수행하는 new read-modify-write modification function으로 둔다:
-          1. _type_을 TypedArrayElementType(_ta_)로 둔다.
-          1. _agentRecord_를 surrounding agent의 Agent Record로 둔다.
-          1. _isLittleEndian_을 _agentRecord_.[[LittleEndian]]으로 둔다.
-          1. _x_를 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)으로 둔다.
-          1. _y_를 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)으로 둔다.
-          1. _x_가 Number이면, 다음을 수행한다.
-            1. _difference_를 Number::subtract(_x_, _y_)로 둔다.
+        1. _subtract_를 매개변수 (_xBytes_, _yBytes_)를 가지고 _ta_를 캡처하며 호출될 때 다음 단계를 원자적으로 수행하는 새 read-modify-write 수정 함수라고 하자:
+          1. _type_을 TypedArrayElementType(_ta_)이라고 하자.
+          1. _agentRecord_를 둘러싸는 에이전트의 Agent Record라고 하자.
+          1. _isLittleEndian_을 _agentRecord_.[[LittleEndian]]이라고 하자.
+          1. _x_를 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)이라고 하자.
+          1. _y_를 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)이라고 하자.
+          1. _x_가 Number이면,
+            1. _difference_를 Number::subtract(_x_, _y_)라고 하자.
           1. 그렇지 않으면,
-            1. Assert: _x_는 BigInt이다.
-            1. _difference_를 BigInt::subtract(_x_, _y_)로 둔다.
-          1. _differenceBytes_를 NumericToRawBytes(_type_, _difference_, _isLittleEndian_)로 둔다.
-          1. Assert: _differenceBytes_, _xBytes_, 및 _yBytes_는 same number of elements를 가진다.
+            1. 단언: _x_는 BigInt이다.
+            1. _difference_를 BigInt::subtract(_x_, _y_)라고 하자.
+          1. _differenceBytes_를 NumericToRawBytes(_type_, _difference_, _isLittleEndian_)라고 하자.
+          1. 단언: _differenceBytes_, _xBytes_, _yBytes_는 같은 수의 요소를 가진다.
           1. _differenceBytes_를 반환한다.
         1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _subtract_)를 반환한다.
       </emu-alg>
@@ -47173,71 +47215,27 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.wait" type="built-in function">
       <h1>Atomics.wait ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>이 function은 surrounding agent를 wait queue에 puts하고, notified될 때까지 또는 wait가 times out할 때까지 suspend하며, those cases를 differentiating하는 String을 반환합니다.</p>
-      <p>called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 둘러싸는 에이전트를 대기 큐에 넣고 알림을 받거나 대기 시간이 초과될 때까지 이를 일시 중단하며, 이러한 경우를 구분하는 String을 반환한다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. ? DoWait(~sync~, _ta_, _index_, _value_, _timeout_)을 반환한다.
+        1. ? DoWait(~sync~, _ta_, _index_, _value_, _timeout_)를 반환한다.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>이 function은 calling agent가 notified되거나 timeout에 reached될 때 resolved되는 Promise를 반환합니다.</p>
-      <p>called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 호출한 에이전트가 알림을 받거나 timeout에 도달했을 때 해결되는 Promise를 반환한다.</p>
+      <p>호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)을 반환한다.
+        1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)를 반환한다.
       </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-atomics.notify" type="built-in function">
-      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
-      <p>이 function은 wait queue에서 sleeping하고 있는 some agents에게 notifies합니다.</p>
-      <p>called될 때 다음 steps를 수행합니다:</p>
-      <emu-alg>
-        1. _taRecord_를 ? ValidateIntegerTypedArray(_ta_, *true*)로 둔다.
-        1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 둔다.
-        1. _count_가 *undefined*이면, 다음을 수행한다.
-          1. _count_를 +∞로 설정한다.
-        1. 그렇지 않으면,
-          1. _intCount_를 ? ToIntegerOrInfinity(_count_)로 둔다.
-          1. _count_를 max(_intCount_, 0)으로 설정한다.
-        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 둔다.
-        1. _block_을 _buffer_.[[ArrayBufferData]]로 둔다.
-        1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. _waiterList_를 GetWaiterList(_block_, _byteIndexInBuffer_)로 둔다.
-        1. EnterCriticalSection(_waiterList_)를 수행한다.
-        1. _waiters_를 RemoveWaiters(_waiterList_, _count_)로 둔다.
-        1. _waiters_의 each element _waiterRecord_에 대해, 다음을 수행한다.
-          1. NotifyWaiter(_waiterList_, _waiterRecord_)를 수행한다.
-        1. LeaveCriticalSection(_waiterList_)를 수행한다.
-        1. _waitersCount_를 _waiters_ 안의 elements 수로 둔다.
-        1. 𝔽(_waitersCount_)를 반환한다.
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="Atomics.pause">
-      <h1>Atomics.pause ( )</h1>
-      <p>이 function은 program이 value를 waiting하는 동안 spin looping 중임을 CPU에 hint로 제공합니다.</p>
-      <p>called될 때 다음 steps를 수행합니다:</p>
-      <emu-alg>
-        1. ECMAScript implementation의 execution environment가 current executing code가 spin-wait loop 안에 있음을 operating system 또는 CPU에 signaling하는 것을 supports하면, that signal을 send한다.
-        1. *undefined*를 반환한다.
-      </emu-alg>
-      <emu-note>
-        <p>이 method는 mutexes 안의 spinlock fast paths와 같이 spin-wait loops를 implementing하는 programs가 value를 waiting하는 동안 spinning 중임을 CPU에 hint로 제공하도록 designed되었습니다. timing 외에는 observable behaviour가 없습니다.</p>
-        <p>underlying architecture의 best practices가 spin loops에서 such instructions를 recommends하면, implementations는 pause 또는 yield instruction을 implement할 것으로 expected됩니다. 예를 들어, <a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a>은 <code>pause</code> instruction을 recommends합니다.</p>
-        <p>Implementations는 paused되는 maximum amount of time에 대한 internal upper bound를 tens에서 hundreds of nanoseconds order로 가지도록 encouraged됩니다.</p>
-      </emu-note>
-      <emu-note>
-        <p>function calls의 overhead 때문에, optimizing compiler 안에서 이 method에 대한 inlined call이 non-inlined call과 different amount of time을 waits하는 것은 reasonable합니다.</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.xor" type="built-in function">
       <h1>Atomics.xor ( _ta_, _index_, _value_ )</h1>
-      <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
+      <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
       <emu-alg>
-        1. _xor_를 parameters (_xBytes_, _yBytes_)를 가지고 nothing을 captures하며 called될 때 atomically 다음 steps를 수행하는 new read-modify-write modification function으로 둔다:
+        1. _xor_를 매개변수 (_xBytes_, _yBytes_)를 가지고 아무것도 캡처하지 않으며 호출될 때 다음 단계를 원자적으로 수행하는 새 read-modify-write 수정 함수라고 하자:
           1. ByteListBitwiseOp(`^`, _xBytes_, _yBytes_)를 반환한다.
         1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _xor_)를 반환한다.
       </emu-alg>
@@ -47245,8 +47243,8 @@ THH:mm:ss.sss
 
     <emu-clause oldids="sec-atomics-@@tostringtag" id="sec-atomics-%symbol.tostringtag%">
       <h1>Atomics [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% property의 initial value는 String value *"Atomics"*입니다.</p>
-      <p>이 property는 attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }를 가집니다.</p>
+      <p>%Symbol.toStringTag% 속성의 초기값은 String 값 *"Atomics"*이다.</p>
+      <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } 속성을 가진다.</p>
     </emu-clause>
   </emu-clause>
 
@@ -48002,7 +48000,7 @@ THH:mm:ss.sss
           function으로 called되도록 intended되지 않았으며, 그러한 방식으로 called되면 exception을 throw합니다.
         </li>
         <li>
-          class definition의 `extends` clause에서 value로 사용될 수 있습니다. specified `WeakRef` behaviour를 inherit하려는 subclass constructors는 `WeakRef.prototype` built-in methods를 support하는 데 necessary한 internal state로 subclass instance를 create하고 initialize하기 위해 `WeakRef` constructor에 대한 `super` call을 include해야 합니다.
+          클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 `WeakRef` 동작을 상속하려는 서브클래스 생성자는 `WeakRef.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 `WeakRef` 생성자에 대한 `super` 호출을 포함해야 한다.
         </li>
       </ul>
 
@@ -48138,7 +48136,7 @@ THH:mm:ss.sss
           function으로 called되도록 intended되지 않았으며, 그러한 방식으로 called되면 exception을 throw합니다.
         </li>
         <li>
-          class definition의 `extends` clause에서 value로 사용될 수 있습니다. specified `FinalizationRegistry` behaviour를 inherit하려는 subclass constructors는 `FinalizationRegistry.prototype` built-in methods를 support하는 데 necessary한 internal state로 subclass instance를 create하고 initialize하기 위해 `FinalizationRegistry` constructor에 대한 `super` call을 include해야 합니다.
+          클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 `FinalizationRegistry` 동작을 상속하려는 서브클래스 생성자는 `FinalizationRegistry.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 `FinalizationRegistry` 생성자에 대한 `super` 호출을 포함해야 한다.
         </li>
       </ul>
 
@@ -49807,7 +49805,7 @@ THH:mm:ss.sss
         <li>global object의 *"Promise"* property의 initial value입니다.</li>
         <li>constructor로 called될 때 new Promise를 create하고 initialize합니다.</li>
         <li>function으로 called되도록 intended되지 않으며, 그런 방식으로 called되면 exception을 throw합니다.</li>
-        <li>class definition의 `extends` clause 안의 value로 사용될 수 있습니다. specified Promise behaviour를 inherit하려는 subclass constructors는 `super` call을 Promise constructor에 include하여 `Promise` 및 `Promise.prototype` built-in methods를 support하는 데 necessary한 internal state로 subclass instance를 create하고 initialize해야 합니다.</li>
+        <li>클래스 정의의 `extends` 절의 값으로 사용될 수 있다. 지정된 Promise 동작을 상속하려는 서브클래스 생성자는 `Promise` 및 `Promise.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 서브클래스 인스턴스를 생성하고 초기화하기 위해 Promise 생성자에 대한 `super` 호출을 포함해야 한다.</li>
       </ul>
 
       <emu-clause id="sec-promise-executor" type="built-in function">
@@ -52165,7 +52163,7 @@ THH:mm:ss.sss
             <li>events _eventA_ 및 _eventB_에 대해, _eventsRecord_.[[AgentSynchronizesWith]]가 (_eventA_, _eventB_)를 contain하면, _eventA_는 _execution_에서 _eventB_와 synchronizes-with합니다.</li>
           </ul>
         </li>
-        <li>events _eventA_ 및 _eventB_에 대해, _execution_.[[HostSynchronizesWith]]가 (_eventA_, _eventB_)를 contain하면, _eventA_는 _execution_에서 _eventB_와 synchronizes-with합니다.</li>
+        <li>이벤트 _eventA_ 및 _eventB_에 대해, _execution_에서 _eventA_가 _eventB_와 host-synchronizes-with이면, _execution_에서 _eventA_는 _eventB_와 synchronizes-with이다.</li>
       </ul>
 
       <emu-note>
@@ -53860,7 +53858,6 @@ THH:mm:ss.sss
     <p>Script Records의 [[HostDefined]]: <emu-xref href="#table-script-records"></emu-xref> 참조.</p>
     <p>Module Records의 [[HostDefined]]: <emu-xref href="#table-module-record-fields"></emu-xref> 참조.</p>
     <p>JobCallback Records의 [[HostDefined]]: <emu-xref href="#table-jobcallback-records"></emu-xref> 참조.</p>
-    <p>Candidate Executions의 [[HostSynchronizesWith]]: <emu-xref href="#table-candidate-execution-records"></emu-xref> 참조.</p>
     <p>[[IsHTMLDDA]]: <emu-xref href="#sec-IsHTMLDDA-internal-slot"></emu-xref> 참조.</p>
   </emu-annex>
 

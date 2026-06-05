@@ -12211,64 +12211,71 @@
     </emu-note>
     <p>当 agent 的执行线程正在执行算法步骤时，该 agent 是这些步骤的<dfn id="surrounding-agent" variants="surrounding agents">周围 agent</dfn>。这些步骤使用周围 agent 访问该 agent 内持有的规范级执行对象：运行中执行上下文、执行上下文栈，以及 Agent Record 的字段。</p>
     <p><dfn variants="agent signifiers">agent signifier</dfn> 是一个全局唯一的不透明值，用于标识 Agent。</p>
-    <emu-table id="table-agent-record" caption="Agent Record 字段">
+    <emu-table id="table-agent-record" caption="代理记录字段">
       <table>
         <thead>
           <tr>
-            <th>字段名</th>
+            <th>字段名称</th>
             <th>值</th>
             <th>含义</th>
           </tr>
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>a Boolean</td>
-          <td>当算法 GetValueFromBuffer 和 SetValueInBuffer 需要 <em>isLittleEndian</em> 形参时，为其计算的默认值。该选择是实现定义的，并且应当是对实现最高效的替代方案。</td>
+          <td>一个布尔值</td>
+          <td>当算法 GetValueFromBuffer 和 SetValueInBuffer 需要 <em>isLittleEndian</em> 参数时，为该参数计算出的默认值。该选择由实现定义，并且应当是对该实现而言最高效的选项。</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>a Boolean</td>
-          <td>确定该 agent 是否可以阻塞。</td>
+          <td>一个布尔值</td>
+          <td>确定该代理是否可以阻塞。</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>an agent signifier</td>
-          <td>在其 agent cluster 内唯一标识该 agent。</td>
+          <td>一个代理标识符</td>
+          <td>在其代理集群中唯一标识该代理。</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>a Boolean</td>
-          <td>如果对一<emu-not-ref>字节值</emu-not-ref>的原子操作是免锁的，则为 *true*；否则为 *false*。</td>
+          <td>一个布尔值</td>
+          <td>如果对一<emu-not-ref>字节值</emu-not-ref>的原子操作是无锁的，则为 *true*；否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>a Boolean</td>
-          <td>如果对两<emu-not-ref>字节值</emu-not-ref>的原子操作是免锁的，则为 *true*；否则为 *false*。</td>
+          <td>一个布尔值</td>
+          <td>如果对两<emu-not-ref>字节值</emu-not-ref>的原子操作是无锁的，则为 *true*；否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>a Boolean</td>
-          <td>如果对八<emu-not-ref>字节值</emu-not-ref>的原子操作是免锁的，则为 *true*；否则为 *false*。</td>
+          <td>一个布尔值</td>
+          <td>如果对八<emu-not-ref>字节值</emu-not-ref>的原子操作是无锁的，则为 *true*；否则为 *false*。</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>a candidate execution Record</td>
-          <td>参见内存模型。</td>
+          <td>一个候选执行记录</td>
+          <td>见内存模型。</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>a List of either Objects or Symbols</td>
-          <td>初始为一个新的空 List，表示要保持存活直到当前 Job 结束的对象和/或符号的列表</td>
+          <td>一个由对象或 Symbol 组成的列表</td>
+          <td>最初是一个新的空列表，表示要保持活动直到当前 Job 结束的对象和/或 Symbol 的列表</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
-          <td>an integer</td>
-          <td>初始为 0，用于为异步或具有异步依赖的模块的 [[AsyncEvaluationOrder]] 字段分配唯一的递增值。</td>
+          <td>一个整数</td>
+          <td>最初为 0，用于为异步模块或具有异步依赖项的模块的 [[AsyncEvaluationOrder]] 字段分配唯一的递增值。</td>
+        </tr>
+        <tr>
+          <td>[[GlobalSymbolRegistry]]</td>
+          <td>一个 GlobalSymbolRegistry 记录列表</td>
+          <td>最初是一个新的空列表，表示由 <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> 产生的 Symbol 值的列表。</td>
         </tr>
       </table>
     </emu-table>
 
     <p>[[LittleEndian]]、[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]] 和 [[IsLockFree8]] 的值不能改变。</p>
+
+    <p>[[GlobalSymbolRegistry]] 列表只能追加，且绝不会被重新赋值。</p>
 
     <emu-note>
       <p>[[IsLockFree1]]、[[IsLockFree2]] 和 [[IsLockFree8]] 的值不一定由硬件决定，也可以反映会随时间以及 ECMAScript 实现而变化的实现选择。</p>
@@ -31572,53 +31579,15 @@
         <p>此函数在被调用时执行以下步骤：</p>
         <emu-alg>
           1. 令 _stringKey_ 为 ? ToString(_key_)。
-          1. 对 GlobalSymbolRegistry List 的每个元素 _element_，执行：
+          1. 令 _agentRecord_ 为周围代理的代理记录。
+          1. 令 _globalSymbolRegistry_ 为 _agentRecord_.[[GlobalSymbolRegistry]]。
+          1. 对 _globalSymbolRegistry_ 的每个元素 _element_，执行
             1. 如果 _element_.[[Key]] 是 _stringKey_，则返回 _element_.[[Symbol]]。
-          1. 断言：GlobalSymbolRegistry List 当前不包含 _stringKey_ 的条目。
-          1. 令 _newSymbol_ 为一个新的 Symbol，其 [[Description]] 是 _stringKey_。
-          1. 将 GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ } 追加到 GlobalSymbolRegistry List。
+          1. 断言：_globalSymbolRegistry_ 当前不包含 _stringKey_ 的条目。
+          1. 令 _newSymbol_ 为一个新的 Symbol，其 [[Description]] 为 _stringKey_。
+          1. 将 GlobalSymbolRegistry 记录 { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ } 追加到 _globalSymbolRegistry_。
           1. 返回 _newSymbol_。
         </emu-alg>
-        <p><dfn>GlobalSymbolRegistry List</dfn> 是一个只追加的、全局可用的 List。它由所有 realm 共享。在求值任何 ECMAScript 代码之前，它被初始化为新的空 List。GlobalSymbolRegistry List 的元素是具有 <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref> 中定义结构的 Record。</p>
-        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record 字段" oldids="table-44">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  字段名
-                </th>
-                <th>
-                  值
-                </th>
-                <th>
-                  用途
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                [[Key]]
-              </td>
-              <td>
-                a String
-              </td>
-              <td>
-                用于全局标识 Symbol 的字符串键。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Symbol]]
-              </td>
-              <td>
-                a Symbol
-              </td>
-              <td>
-                可以从任何 realm 取得的 symbol。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
       </emu-clause>
 
       <emu-clause id="sec-symbol.hasinstance">
@@ -31813,6 +31782,33 @@
     <emu-clause id="sec-abstract-operations-for-symbols">
       <h1>Symbol 的抽象操作</h1>
 
+      <emu-clause id="sec-globalsymbolregistry-records">
+        <h1>GlobalSymbolRegistry 记录</h1>
+        <p><dfn variants="GlobalSymbolRegistry Records">GlobalSymbolRegistry 记录</dfn>是一个记录值，用于将一个字符串键与通过 <emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> 注册的 Symbol 值相关联。</p>
+        <p>GlobalSymbolRegistry 记录具有 <emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref> 中列出的字段。</p>
+        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry 记录字段" oldids="table-44">
+          <table>
+            <thead>
+              <tr>
+                <th>字段名称</th>
+                <th>值</th>
+                <th>用法</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>[[Key]]</td>
+              <td>一个字符串</td>
+              <td>一个用于全局标识 Symbol 的字符串键。</td>
+            </tr>
+            <tr>
+              <td>[[Symbol]]</td>
+              <td>一个 Symbol</td>
+              <td>一个可从任何 realm 中检索到的 symbol。</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
       <emu-clause id="sec-keyforsymbol" type="abstract operation">
         <h1>
           KeyForSymbol (
@@ -31821,12 +31817,14 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>如果 _symbol_ 在 GlobalSymbolRegistry List 中，则返回用于注册 _symbol_ 的 String。</dd>
+          <dd>如果 _symbol_ 位于周围代理的 [[GlobalSymbolRegistry]] 列表中，则返回用于注册 _symbol_ 的字符串。</dd>
         </dl>
         <emu-alg>
-          1. 对 GlobalSymbolRegistry List 的每个元素 _element_，执行：
-            1. 如果 SameValue(_element_.[[Symbol]], _symbol_) 是 *true*，则返回 _element_.[[Key]]。
-          1. 断言：GlobalSymbolRegistry List 当前不包含 _symbol_ 的条目。
+          1. 令 _agentRecord_ 为周围代理的代理记录。
+          1. 令 _globalSymbolRegistry_ 为 _agentRecord_.[[GlobalSymbolRegistry]]。
+          1. 对 _globalSymbolRegistry_ 的每个元素 _element_，执行
+            1. 如果 SameValue(_element_.[[Symbol]], _symbol_) 为 *true*，则返回 _element_.[[Key]]。
+          1. 断言：_globalSymbolRegistry_ 当前不包含 _symbol_ 的条目。
           1. 返回 *undefined*。
         </emu-alg>
       </emu-clause>
@@ -42849,7 +42847,7 @@ THH:mm:ss.sss
         <li>是具有下述结构的固有对象，除非另有说明，否则只是在 <emu-xref href="#table-the-typedarray-constructors"></emu-xref> 中使用的构造器名称不同，而不是使用 _TypedArray_。</li>
         <li>是一个其行为会根据实参数量和类型而不同的函数。调用 _TypedArray_ 的实际行为取决于传给它的实参的数量和种类。</li>
         <li>不意图作为函数调用，并且在以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句的值。意图继承指定 _TypedArray_ 行为的子类构造器必须包含对 _TypedArray_ 构造器的 `super` 调用，以创建并初始化具有支持 %TypedArray%`.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句的值。打算继承指定 _TypedArray_ 行为的子类构造函数，必须包含一次对 _TypedArray_ 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 %TypedArray%`.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object" type="built-in function">
@@ -43520,7 +43518,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"Map"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 Map。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句中的值。意图继承指定 Map 行为的子类构造器，必须包含对 Map 构造器的 `super` 调用，以创建并初始化具有支持 `Map.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句中的值。打算继承指定 Map 行为的子类构造函数，必须包含一次对 Map 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `Map.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-map-iterable" type="built-in function">
@@ -44058,7 +44056,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"Set"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 Set 对象。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句中的值。意图继承指定 Set 行为的子类构造器，必须包含对 Set 构造器的 `super` 调用，以创建并初始化具有支持 `Set.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句中的值。打算继承指定 Set 行为的子类构造函数，必须包含一次对 Set 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `Set.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-set-iterable" type="built-in function">
@@ -44548,7 +44546,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"WeakMap"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 WeakMap。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句中的值。意图继承指定 WeakMap 行为的子类构造器，必须包含对 WeakMap 构造器的 `super` 调用，以创建并初始化具有支持 `WeakMap.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句中的值。打算继承指定 WeakMap 行为的子类构造函数，必须包含一次对 WeakMap 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `WeakMap.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-weakmap-iterable" type="built-in function">
@@ -44728,7 +44726,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"WeakSet"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 WeakSet。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句中的值。意图继承指定 WeakSet 行为的子类构造器，必须包含对 WeakSet 构造器的 `super` 调用，以创建并初始化具有支持 `WeakSet.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句中的值。打算继承指定 WeakSet 行为的子类构造函数，必须包含一次对 WeakSet 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `WeakSet.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-weakset-iterable" type="built-in function">
@@ -45356,7 +45354,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"ArrayBuffer"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 ArrayBuffer。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句的值。意图继承指定 ArrayBuffer 行为的子类构造器，必须包含对 ArrayBuffer 构造器的 `super` 调用，以创建并初始化具有支持 `ArrayBuffer.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句的值。打算继承指定 ArrayBuffer 行为的子类构造函数，必须包含一次对 ArrayBuffer 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `ArrayBuffer.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-arraybuffer-length" type="built-in function">
@@ -45700,7 +45698,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"SharedArrayBuffer"* 属性的初始值，如果该属性存在（见下文）。</li>
         <li>在作为构造器调用时创建并初始化一个新的 SharedArrayBuffer。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句的值。意图继承指定 SharedArrayBuffer 行为的子类构造器，必须包含对 SharedArrayBuffer 构造器的 `super` 调用，以创建并初始化具有支持 `SharedArrayBuffer.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句的值。打算继承指定 SharedArrayBuffer 行为的子类构造函数，必须包含一次对 SharedArrayBuffer 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `SharedArrayBuffer.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <p>每当宿主不提供对 SharedArrayBuffer 的并发访问时，它可以省略全局对象的 *"SharedArrayBuffer"* 属性。</p>
@@ -46088,7 +46086,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"DataView"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 DataView。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句的值。意图继承指定 DataView 行为的子类构造器，必须包含对 DataView 构造器的 `super` 调用，以创建并初始化具有支持 `DataView.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句的值。打算继承指定 DataView 行为的子类构造函数，必须包含一次对 DataView 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `DataView.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-dataview-buffer-byteoffset-bytelength" type="built-in function">
@@ -47124,19 +47122,63 @@ THH:mm:ss.sss
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.notify" type="built-in function">
+      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
+      <p>此函数会通知一些正在等待队列中休眠的代理。</p>
+      <p>调用时，它执行以下步骤：</p>
+      <emu-alg>
+        1. 令 _taRecord_ 为 ? ValidateIntegerTypedArray(_ta_, *true*)。
+        1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccess(_taRecord_, _index_)。
+        1. 如果 _count_ 是 *undefined*，则
+          1. 将 _count_ 设置为 +∞。
+        1. 否则，
+          1. 令 _intCount_ 为 ? ToIntegerOrInfinity(_count_)。
+          1. 将 _count_ 设置为 max(_intCount_, 0)。
+        1. 令 _buffer_ 为 _ta_.[[ViewedArrayBuffer]]。
+        1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
+        1. 如果 IsSharedArrayBuffer(_buffer_) 为 *false*，则返回 *+0*<sub>𝔽</sub>。
+        1. 令 _waiterList_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
+        1. 执行 EnterCriticalSection(_waiterList_)。
+        1. 令 _waiters_ 为 RemoveWaiters(_waiterList_, _count_)。
+        1. 对 _waiters_ 的每个元素 _waiterRecord_，执行
+          1. 执行 NotifyWaiter(_waiterList_, _waiterRecord_)。
+        1. 执行 LeaveCriticalSection(_waiterList_)。
+        1. 令 _waitersCount_ 为 _waiters_ 中元素的数量。
+        1. 返回 𝔽(_waitersCount_)。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.or" type="built-in function">
       <h1>Atomics.or ( _ta_, _index_, _value_ )</h1>
-      <p>此函数在被调用时执行以下步骤：</p>
+      <p>此函数在调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _or_ 为一个新的读-改-写修改函数，其参数为 (_xBytes_, _yBytes_)，不捕获任何内容，并在被调用时以原子方式执行以下步骤：
+        1. 令 _or_ 为一个新的读-修改-写修改函数，它具有参数 (_xBytes_, _yBytes_)，不捕获任何内容，并在被调用时原子地执行以下步骤：
           1. 返回 ByteListBitwiseOp(`|`, _xBytes_, _yBytes_)。
         1. 返回 ? AtomicReadModifyWrite(_ta_, _index_, _value_, _or_)。
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.pause" type="built-in function">
+      <h1>Atomics.pause ( )</h1>
+      <p>此函数向 CPU 提供一个提示，表明程序正在等待某个值时进行自旋循环。</p>
+      <p>调用时，它执行以下步骤：</p>
+      <emu-alg>
+        1. 如果 ECMAScript 实现的执行环境支持向操作系统或 CPU 发出当前正在执行的代码处于自旋等待循环中的信号，则发送该信号。
+        1. 返回 *undefined*。
+      </emu-alg>
+      <emu-note>
+        <p>此方法是为实现自旋等待循环的程序设计的，例如互斥锁内部的自旋锁快速路径，用于向 CPU 提供一个提示，表明它正在等待某个值时自旋。除计时外，它没有可观察的行为。</p>
+        <p>如果底层架构的最佳实践建议在自旋循环中使用 pause 或 yield 指令，则期望实现实现这样的指令。例如，<a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel 优化手册</a>建议使用 <code>pause</code> 指令。</p>
+        <p>鼓励实现对暂停的最长时间设置内部上限，其量级为数十到数百纳秒。</p>
+      </emu-note>
+      <emu-note>
+        <p>由于函数调用的开销，在优化编译器中对此方法的内联调用等待的时间与非内联调用不同，是合理的。</p>
+      </emu-note>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.store" type="built-in function">
       <h1>Atomics.store ( _ta_, _index_, _value_ )</h1>
-      <p>此函数在被调用时执行以下步骤：</p>
+      <p>此函数在调用时执行以下步骤：</p>
       <emu-alg>
         1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccessOnIntegerTypedArray(_ta_, _index_)。
         1. 如果 _ta_.[[ContentType]] 是 ~bigint~，则令 _coerced_ 为 ? ToBigInt(_value_)。
@@ -47151,18 +47193,18 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.sub" type="built-in function">
       <h1>Atomics.sub ( _ta_, _index_, _value_ )</h1>
-      <p>此函数在被调用时执行以下步骤：</p>
+      <p>此函数在调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _subtract_ 为一个新的读-改-写修改函数，其参数为 (_xBytes_, _yBytes_)，捕获 _ta_，并在被调用时以原子方式执行以下步骤：
+        1. 令 _subtract_ 为一个新的读-修改-写修改函数，它具有参数 (_xBytes_, _yBytes_)，捕获 _ta_，并在被调用时原子地执行以下步骤：
           1. 令 _type_ 为 TypedArrayElementType(_ta_)。
-          1. 令 _agentRecord_ 为 surrounding agent 的 Agent Record。
+          1. 令 _agentRecord_ 为周围代理的代理记录。
           1. 令 _isLittleEndian_ 为 _agentRecord_.[[LittleEndian]]。
           1. 令 _x_ 为 RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)。
           1. 令 _y_ 为 RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)。
-          1. 如果 _x_ 是 Number，则
+          1. 如果 _x_ 是一个 Number，则
             1. 令 _difference_ 为 Number::subtract(_x_, _y_)。
           1. 否则，
-            1. 断言：_x_ 是 BigInt。
+            1. 断言：_x_ 是一个 BigInt。
             1. 令 _difference_ 为 BigInt::subtract(_x_, _y_)。
           1. 令 _differenceBytes_ 为 NumericToRawBytes(_type_, _difference_, _isLittleEndian_)。
           1. 断言：_differenceBytes_、_xBytes_ 和 _yBytes_ 具有相同数量的元素。
@@ -47173,8 +47215,8 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.wait" type="built-in function">
       <h1>Atomics.wait ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>此函数将 surrounding agent 放入等待队列并将其挂起，直到收到通知或等待超时，返回一个区分这些情况的 String。</p>
-      <p>它在被调用时执行以下步骤：</p>
+      <p>此函数将周围代理放入等待队列并将其挂起，直到收到通知或等待超时为止，返回一个用于区分这些情况的字符串。</p>
+      <p>调用时，它执行以下步骤：</p>
       <emu-alg>
         1. 返回 ? DoWait(~sync~, _ta_, _index_, _value_, _timeout_)。
       </emu-alg>
@@ -47182,62 +47224,18 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>此函数返回一个 Promise，该 Promise 会在调用 agent 收到通知或达到超时时被兑现。</p>
-      <p>它在被调用时执行以下步骤：</p>
+      <p>此函数返回一个 Promise，该 Promise 会在调用代理收到通知或达到超时时解析。</p>
+      <p>调用时，它执行以下步骤：</p>
       <emu-alg>
         1. 返回 ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)。
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-atomics.notify" type="built-in function">
-      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
-      <p>此函数通知一些正在等待队列中睡眠的 agent。</p>
-      <p>它在被调用时执行以下步骤：</p>
-      <emu-alg>
-        1. 令 _taRecord_ 为 ? ValidateIntegerTypedArray(_ta_, *true*)。
-        1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccess(_taRecord_, _index_)。
-        1. 如果 _count_ 是 *undefined*，则
-          1. 将 _count_ 设置为 +∞。
-        1. 否则，
-          1. 令 _intCount_ 为 ? ToIntegerOrInfinity(_count_)。
-          1. 将 _count_ 设置为 max(_intCount_, 0)。
-        1. 令 _buffer_ 为 _ta_.[[ViewedArrayBuffer]]。
-        1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
-        1. 如果 IsSharedArrayBuffer(_buffer_) 是 *false*，则返回 *+0*<sub>𝔽</sub>。
-        1. 令 _waiterList_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
-        1. 执行 EnterCriticalSection(_waiterList_)。
-        1. 令 _waiters_ 为 RemoveWaiters(_waiterList_, _count_)。
-        1. 对 _waiters_ 的每个元素 _waiterRecord_，执行：
-          1. 执行 NotifyWaiter(_waiterList_, _waiterRecord_)。
-        1. 执行 LeaveCriticalSection(_waiterList_)。
-        1. 令 _waitersCount_ 为 _waiters_ 中元素的数量。
-        1. 返回 𝔽(_waitersCount_)。
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="Atomics.pause">
-      <h1>Atomics.pause ( )</h1>
-      <p>此函数向 CPU 提供提示，说明程序正在一边等待某个值一边进行自旋循环。</p>
-      <p>它在被调用时执行以下步骤：</p>
-      <emu-alg>
-        1. 如果 ECMAScript 实现的执行环境支持向操作系统或 CPU 发出当前执行代码处于自旋等待循环中的信号，则发送该信号。
-        1. 返回 *undefined*。
-      </emu-alg>
-      <emu-note>
-        <p>此方法设计用于实现自旋等待循环的程序，例如互斥锁内部的自旋锁快速路径，以便向 CPU 提供提示，说明它正在一边等待某个值一边自旋。除了计时之外，它没有可观察行为。</p>
-        <p>如果底层架构的最佳实践建议在自旋循环中使用 pause 或 yield 指令，则期望实现实现这样的指令。例如，<a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a> 推荐使用 <code>pause</code> 指令。</p>
-        <p>鼓励实现对暂停的最大时间量设置内部上限，数量级为数十到数百纳秒。</p>
-      </emu-note>
-      <emu-note>
-        <p>由于函数调用的开销，优化编译器中对此方法的内联调用等待的时间与非内联调用不同，是合理的。</p>
-      </emu-note>
-    </emu-clause>
-
     <emu-clause id="sec-atomics.xor" type="built-in function">
       <h1>Atomics.xor ( _ta_, _index_, _value_ )</h1>
-      <p>此函数在被调用时执行以下步骤：</p>
+      <p>此函数在调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _xor_ 为一个新的读-改-写修改函数，其参数为 (_xBytes_, _yBytes_)，不捕获任何内容，并在被调用时以原子方式执行以下步骤：
+        1. 令 _xor_ 为一个新的读-修改-写修改函数，它具有参数 (_xBytes_, _yBytes_)，不捕获任何内容，并在被调用时原子地执行以下步骤：
           1. 返回 ByteListBitwiseOp(`^`, _xBytes_, _yBytes_)。
         1. 返回 ? AtomicReadModifyWrite(_ta_, _index_, _value_, _xor_)。
       </emu-alg>
@@ -47245,8 +47243,8 @@ THH:mm:ss.sss
 
     <emu-clause oldids="sec-atomics-@@tostringtag" id="sec-atomics-%symbol.tostringtag%">
       <h1>Atomics [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% 属性的初始值是 String 值 *"Atomics"*。</p>
-      <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
+      <p>%Symbol.toStringTag% 属性的初始值是字符串值 *"Atomics"*。</p>
+      <p>此属性具有属性特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
     </emu-clause>
   </emu-clause>
 
@@ -48002,7 +48000,7 @@ THH:mm:ss.sss
           不意图作为函数调用，并且以这种方式调用时会抛出异常。
         </li>
         <li>
-          可以用作类定义的 `extends` 子句的值。意图继承指定 `WeakRef` 行为的子类构造器，必须包含对 `WeakRef` 构造器的 `super` 调用，以创建并初始化具有支持 `WeakRef.prototype` 内置方法所需内部状态的子类实例。
+          可以用作类定义的 `extends` 子句中的值。打算继承指定 `WeakRef` 行为的子类构造函数，必须包含一次对 `WeakRef` 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `WeakRef.prototype` 的内置方法所必需的内部状态。
         </li>
       </ul>
 
@@ -48138,7 +48136,7 @@ THH:mm:ss.sss
           不意图作为函数调用，并且以这种方式调用时会抛出异常。
         </li>
         <li>
-          可以用作类定义的 `extends` 子句的值。意图继承指定 `FinalizationRegistry` 行为的子类构造器，必须包含对 `FinalizationRegistry` 构造器的 `super` 调用，以创建并初始化具有支持 `FinalizationRegistry.prototype` 内置方法所需内部状态的子类实例。
+          可以用作类定义的 `extends` 子句中的值。打算继承指定 `FinalizationRegistry` 行为的子类构造函数，必须包含一次对 `FinalizationRegistry` 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `FinalizationRegistry.prototype` 的内置方法所必需的内部状态。
         </li>
       </ul>
 
@@ -49807,7 +49805,7 @@ THH:mm:ss.sss
         <li>是全局对象的 *"Promise"* 属性的初始值。</li>
         <li>在作为构造器调用时创建并初始化一个新的 Promise。</li>
         <li>不意图作为函数调用，并且以这种方式调用时会抛出异常。</li>
-        <li>可以用作类定义的 `extends` 子句中的值。意图继承指定 Promise 行为的子类构造器，必须包含对 Promise 构造器的 `super` 调用，以创建并初始化具有支持 `Promise` 和 `Promise.prototype` 内置方法所需内部状态的子类实例。</li>
+        <li>可以用作类定义的 `extends` 子句中的值。打算继承指定 Promise 行为的子类构造函数，必须包含一次对 Promise 构造函数的 `super` 调用，以创建并初始化子类实例，使其具备支持 `Promise` 和 `Promise.prototype` 的内置方法所必需的内部状态。</li>
       </ul>
 
       <emu-clause id="sec-promise-executor" type="built-in function">
@@ -52165,7 +52163,7 @@ THH:mm:ss.sss
             <li>对于事件 _eventA_ 和 _eventB_，如果 _eventsRecord_.[[AgentSynchronizesWith]] 包含 (_eventA_, _eventB_)，则 _eventA_ 在 _execution_ 中 synchronizes-with _eventB_。</li>
           </ul>
         </li>
-        <li>对于事件 _eventA_ 和 _eventB_，如果 _execution_.[[HostSynchronizesWith]] 包含 (_eventA_, _eventB_)，则 _eventA_ 在 _execution_ 中 synchronizes-with _eventB_。</li>
+        <li>对于事件 _eventA_ 和 _eventB_，如果 _eventA_ 在 _execution_ 中 host-synchronizes-with _eventB_，则 _eventA_ 在 _execution_ 中 synchronizes-with _eventB_。</li>
       </ul>
 
       <emu-note>
@@ -53860,7 +53858,6 @@ THH:mm:ss.sss
     <p>Script Record 上的 [[HostDefined]]：见 <emu-xref href="#table-script-records"></emu-xref>。</p>
     <p>Module Record 上的 [[HostDefined]]：见 <emu-xref href="#table-module-record-fields"></emu-xref>。</p>
     <p>JobCallback Record 上的 [[HostDefined]]：见 <emu-xref href="#table-jobcallback-records"></emu-xref>。</p>
-    <p>Candidate Execution 上的 [[HostSynchronizesWith]]：见 <emu-xref href="#table-candidate-execution-records"></emu-xref>。</p>
     <p>[[IsHTMLDDA]]：见 <emu-xref href="#sec-IsHTMLDDA-internal-slot"></emu-xref>。</p>
   </emu-annex>
 

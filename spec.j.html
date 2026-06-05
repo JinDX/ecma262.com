@@ -12229,7 +12229,7 @@
     </emu-note>
     <p>agentのexecuting threadがalgorithmic stepsを実行している間、そのagentはそれらのstepsに対する<dfn id="surrounding-agent" variants="surrounding agents">surrounding agent</dfn>です。stepsは、agent内に保持される仕様レベルのexecution objects、すなわちrunning execution context、execution context stack、およびAgent Recordのfieldsにアクセスするためにsurrounding agentを使用します。</p>
     <p><dfn variants="agent signifiers">agent signifier</dfn>は、Agentを識別するために使用されるglobally-unique opaque valueです。</p>
-    <emu-table id="table-agent-record" caption="Agent Record Fields">
+    <emu-table id="table-agent-record" caption="エージェントレコードのフィールド">
       <table>
         <thead>
           <tr>
@@ -12240,53 +12240,60 @@
         </thead>
         <tr>
           <td>[[LittleEndian]]</td>
-          <td>Boolean</td>
-          <td>GetValueFromBufferおよびSetValueInBufferのalgorithmsによって必要とされるときに、<em>isLittleEndian</em> parameterに対して計算されるデフォルト値。選択はimplementation-definedであり、実装にとって最も効率的な選択肢であるべきです。</td>
+          <td>Boolean 値</td>
+          <td>アルゴリズム GetValueFromBuffer および SetValueInBuffer で必要とされるときに、<em>isLittleEndian</em> パラメーターについて計算される既定値。この選択は実装定義であり、実装にとって最も効率的な代替であるべきである。</td>
         </tr>
         <tr>
           <td>[[CanBlock]]</td>
-          <td>Boolean</td>
-          <td>agentがblockできるかどうかを決定します。</td>
+          <td>Boolean 値</td>
+          <td>エージェントがブロックできるかどうかを決定する。</td>
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>agent signifier</td>
-          <td>agent cluster内でagentを一意に識別します。</td>
+          <td>エージェント記号子</td>
+          <td>そのエージェントクラスター内でエージェントを一意に識別する。</td>
         </tr>
         <tr>
           <td>[[IsLockFree1]]</td>
-          <td>Boolean</td>
-          <td>1<emu-not-ref>byte values</emu-not-ref>に対するatomic operationsがlock-freeなら*true*、そうでなければ*false*。</td>
+          <td>Boolean 値</td>
+          <td>1<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであれば *true*、そうでなければ *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree2]]</td>
-          <td>Boolean</td>
-          <td>2<emu-not-ref>byte values</emu-not-ref>に対するatomic operationsがlock-freeなら*true*、そうでなければ*false*。</td>
+          <td>Boolean 値</td>
+          <td>2<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであれば *true*、そうでなければ *false*。</td>
         </tr>
         <tr>
           <td>[[IsLockFree8]]</td>
-          <td>Boolean</td>
-          <td>8<emu-not-ref>byte values</emu-not-ref>に対するatomic operationsがlock-freeなら*true*、そうでなければ*false*。</td>
+          <td>Boolean 値</td>
+          <td>8<emu-not-ref>バイト値</emu-not-ref>に対するアトミック操作がロックフリーであれば *true*、そうでなければ *false*。</td>
         </tr>
         <tr>
           <td>[[CandidateExecution]]</td>
-          <td>candidate execution Record</td>
-          <td>memory modelを参照。</td>
+          <td>候補実行 Record</td>
+          <td>メモリーモデルを参照。</td>
         </tr>
         <tr>
           <td>[[KeptAlive]]</td>
-          <td>ObjectsまたはSymbolsのいずれかのList</td>
-          <td>初期状態では新しい空のListであり、現在のJobの終了までaliveに保持されるobjectsおよび/またはsymbolsのlistを表します</td>
+          <td>Object または Symbol のいずれかの List</td>
+          <td>初期状態では新しい空の List であり、現在の Job の終了まで生存させておくオブジェクトおよび/またはシンボルのリストを表す</td>
         </tr>
         <tr>
           <td>[[ModuleAsyncEvaluationCount]]</td>
-          <td>integer</td>
-          <td>初期状態では0であり、asynchronousであるかasynchronous dependenciesを持つmodulesの[[AsyncEvaluationOrder]]フィールドに一意に増加する値を割り当てるために使用されます。</td>
+          <td>整数</td>
+          <td>初期状態では 0 であり、非同期である、または非同期依存関係を持つモジュールの [[AsyncEvaluationOrder]] フィールドに、一意に増加する値を割り当てるために使用される。</td>
+        </tr>
+        <tr>
+          <td>[[GlobalSymbolRegistry]]</td>
+          <td>GlobalSymbolRegistry Record の List</td>
+          <td>初期状態では新しい空の List であり、<emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> によって生成される Symbol 値のリストを表す。</td>
         </tr>
       </table>
     </emu-table>
 
-    <p>[[LittleEndian]]、[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]]、および[[IsLockFree8]]の値は変更できません。</p>
+    <p>[[LittleEndian]]、[[Signifier]]、[[IsLockFree1]]、[[IsLockFree2]]、および [[IsLockFree8]] の値は変更できない。</p>
+
+    <p>[[GlobalSymbolRegistry]] List は追加専用であり、再割り当てされることはない。</p>
 
     <emu-note>
       <p>[[IsLockFree1]]、[[IsLockFree2]]、および[[IsLockFree8]]の値は、必ずしもhardwareによって決定されるとは限らず、時間の経過やECMAScript実装間で変化し得るimplementation choicesを反映する場合もあります。</p>
@@ -31589,54 +31596,16 @@
         <h1>Symbol.for ( _key_ )</h1>
         <p>このfunctionは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _stringKey_を ? ToString(_key_) とする。
-          1. GlobalSymbolRegistry Listの各要素_element_について、以下を行う
-            1. _element_.[[Key]]が_stringKey_なら、_element_.[[Symbol]]を返す。
-          1. Assert: GlobalSymbolRegistry Listは現在_stringKey_に対するentryを含まない。
-          1. _newSymbol_を、[[Description]]が_stringKey_である新しいSymbolとする。
-          1. GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ }をGlobalSymbolRegistry Listへappendする。
-          1. _newSymbol_を返す。
+          1. _stringKey_ を ? ToString(_key_) とする。
+          1. _agentRecord_ を周囲のエージェントの Agent Record とする。
+          1. _globalSymbolRegistry_ を _agentRecord_.[[GlobalSymbolRegistry]] とする。
+          1. _globalSymbolRegistry_ の各要素 _element_ について、次を行う。
+            1. _element_.[[Key]] が _stringKey_ である場合、_element_.[[Symbol]] を返す。
+          1. Assert: _globalSymbolRegistry_ は現在、_stringKey_ に対するエントリーを含んでいない。
+          1. _newSymbol_ を、[[Description]] が _stringKey_ である新しい Symbol とする。
+          1. GlobalSymbolRegistry Record { [[Key]]: _stringKey_, [[Symbol]]: _newSymbol_ } を _globalSymbolRegistry_ に追加する。
+          1. _newSymbol_ を返す。
         </emu-alg>
-        <p><dfn>GlobalSymbolRegistry List</dfn>は、globallyに利用可能なappend-only Listです。これはすべてのrealmsによってsharedされます。任意のECMAScript codeのevaluationより前に、新しい空のListとしてinitializedされます。GlobalSymbolRegistry Listのelementsは、<emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref>で定義されるstructureを持つRecordsです。</p>
-        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record Fields" oldids="table-44">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  Field Name
-                </th>
-                <th>
-                  Value
-                </th>
-                <th>
-                  Usage
-                </th>
-              </tr>
-            </thead>
-            <tr>
-              <td>
-                [[Key]]
-              </td>
-              <td>
-                a String
-              </td>
-              <td>
-                Symbolをgloballyにidentifyするために使用されるstring key。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Symbol]]
-              </td>
-              <td>
-                a Symbol
-              </td>
-              <td>
-                任意のrealmからretrievedできるsymbol。
-              </td>
-            </tr>
-          </table>
-        </emu-table>
       </emu-clause>
 
       <emu-clause id="sec-symbol.hasinstance">
@@ -31831,6 +31800,33 @@
     <emu-clause id="sec-abstract-operations-for-symbols">
       <h1>Abstract Operations for Symbols</h1>
 
+      <emu-clause id="sec-globalsymbolregistry-records">
+        <h1>GlobalSymbolRegistry Records</h1>
+        <p><dfn variants="GlobalSymbolRegistry Records">GlobalSymbolRegistry Record</dfn> は、<emu-xref href="#sec-symbol.for">Symbol.for</emu-xref> を通じて登録された Symbol 値に String キーを関連付けるために使用される Record 値である。</p>
+        <p>GlobalSymbolRegistry Records は、<emu-xref href="#table-globalsymbolregistry-record-fields"></emu-xref> に列挙されたフィールドを持つ。</p>
+        <emu-table id="table-globalsymbolregistry-record-fields" caption="GlobalSymbolRegistry Record のフィールド" oldids="table-44">
+          <table>
+            <thead>
+              <tr>
+                <th>フィールド名</th>
+                <th>値</th>
+                <th>用途</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>[[Key]]</td>
+              <td>String</td>
+              <td>Symbol をグローバルに識別するために使用される文字列キー。</td>
+            </tr>
+            <tr>
+              <td>[[Symbol]]</td>
+              <td>Symbol</td>
+              <td>任意の realm から取得できるシンボル。</td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
       <emu-clause id="sec-keyforsymbol" type="abstract operation">
         <h1>
           KeyForSymbol (
@@ -31839,13 +31835,15 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_symbol_がGlobalSymbolRegistry List内にある場合、_symbol_をregisterするために使用されたStringが返されます。</dd>
+          <dd>_symbol_ が周囲のエージェントの [[GlobalSymbolRegistry]] List 内にある場合、_symbol_ の登録に使用された String が返される。</dd>
         </dl>
         <emu-alg>
-          1. GlobalSymbolRegistry Listの各要素_element_について、以下を行う
-            1. SameValue(_element_.[[Symbol]], _symbol_)が*true*なら、_element_.[[Key]]を返す。
-          1. Assert: GlobalSymbolRegistry Listは現在_symbol_に対するentryを含まない。
-          1. *undefined*を返す。
+          1. _agentRecord_ を周囲のエージェントの Agent Record とする。
+          1. _globalSymbolRegistry_ を _agentRecord_.[[GlobalSymbolRegistry]] とする。
+          1. _globalSymbolRegistry_ の各要素 _element_ について、次を行う。
+            1. SameValue(_element_.[[Symbol]], _symbol_) が *true* である場合、_element_.[[Key]] を返す。
+          1. Assert: _globalSymbolRegistry_ は現在、_symbol_ に対するエントリーを含んでいない。
+          1. *undefined* を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -42868,7 +42866,7 @@ THH:mm:ss.sss
         <li>otherwise notedされる場合を除き、<emu-xref href="#table-the-typedarray-constructors"></emu-xref>内で、_TypedArray_の代わりにconstructor nameとして使用されるnameのみが異なる、以下でdescribedされるstructureを持つintrinsic objectです。</li>
         <li>argumentsの数およびtypesに基づいてbehaviourが異なるfunctionです。_TypedArray_のcallのactual behaviourは、それにpassedされるargumentsのnumberおよびkindに依存します。</li>
         <li>functionとして呼び出されることを意図しておらず、そのようなmannerで呼び出されるとexceptionをthrowします。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用できます。specified _TypedArray_ behaviourをinheritしようとするsubclass constructorsは、%TypedArray%`.prototype` built-in methodsをsupportするためにnecessaryなinternal stateを持つsubclass instanceを作成およびinitializeするために、_TypedArray_ constructorへの`super` callを含まなければなりません。</li>
+        <li>クラス定義の `extends` 句の値として使用できる。指定された _TypedArray_ の動作を継承しようとするサブクラスコンストラクターは、%TypedArray%`.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、_TypedArray_ コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-typedarray" oldids="sec-typedarray-length,sec-typedarray-object" type="built-in function">
@@ -43539,7 +43537,7 @@ THH:mm:ss.sss
         <li>global objectの*"Map"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいMapをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clause内のvalueとして使用できる。specifiedされたMap behaviourをinheritしようとするsubclass constructorは、`Map.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateしてinitializeするため、Map constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句内の値として使用できる。指定された Map の動作を継承しようとするサブクラスコンストラクターは、`Map.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、Map コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-map-iterable" type="built-in function">
@@ -44077,7 +44075,7 @@ THH:mm:ss.sss
         <li>global objectの*"Set"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいSet objectをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clause内のvalueとして使用できる。specifiedされたSet behaviourをinheritしようとするsubclass constructorは、`Set.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateしてinitializeするため、Set constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句内の値として使用できる。指定された Set の動作を継承しようとするサブクラスコンストラクターは、`Set.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、Set コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-set-iterable" type="built-in function">
@@ -44567,7 +44565,7 @@ THH:mm:ss.sss
         <li>global objectの*"WeakMap"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいWeakMapをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clause内のvalueとして使用できる。specifiedされたWeakMap behaviourをinheritしようとするsubclass constructorは、`WeakMap.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateしてinitializeするため、WeakMap constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句内の値として使用できる。指定された WeakMap の動作を継承しようとするサブクラスコンストラクターは、`WeakMap.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、WeakMap コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-weakmap-iterable" type="built-in function">
@@ -44747,7 +44745,7 @@ THH:mm:ss.sss
         <li>global objectの*"WeakSet"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいWeakSetをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clause内のvalueとして使用できる。specifiedされたWeakSet behaviourをinheritしようとするsubclass constructorは、`WeakSet.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateしてinitializeするため、WeakSet constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句内の値として使用できる。指定された WeakSet の動作を継承しようとするサブクラスコンストラクターは、`WeakSet.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、WeakSet コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-weakset-iterable" type="built-in function">
@@ -45375,7 +45373,7 @@ THH:mm:ss.sss
         <li>global objectの*"ArrayBuffer"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいArrayBufferをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用できる。specifiedされたArrayBuffer behaviourをinheritしようとするsubclass constructorsは、`ArrayBuffer.prototype` built-in methodsをsupportするために必要なinternal stateを持つsubclass instancesをcreateしてinitializeするため、ArrayBuffer constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句の値として使用できる。指定された ArrayBuffer の動作を継承しようとするサブクラスコンストラクターは、`ArrayBuffer.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、ArrayBuffer コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-arraybuffer-length" type="built-in function">
@@ -45719,7 +45717,7 @@ THH:mm:ss.sss
         <li>そのpropertyがpresentである場合（belowを参照）、global objectの*"SharedArrayBuffer"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいSharedArrayBufferをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用できる。specifiedされたSharedArrayBuffer behaviourをinheritしようとするsubclass constructorsは、`SharedArrayBuffer.prototype` built-in methodsをsupportするために必要なinternal stateを持つsubclass instancesをcreateしてinitializeするため、SharedArrayBuffer constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句の値として使用できる。指定された SharedArrayBuffer の動作を継承しようとするサブクラスコンストラクターは、`SharedArrayBuffer.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、SharedArrayBuffer コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <p>hostがSharedArrayBuffersへのconcurrent accessをprovideしない場合はいつでも、global objectの*"SharedArrayBuffer"* propertyをomitしてもよい。</p>
@@ -46107,7 +46105,7 @@ THH:mm:ss.sss
         <li>global objectの*"DataView"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたとき、新しいDataViewをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることは意図されておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用できる。specifiedされたDataView behaviourをinheritしようとするsubclass constructorsは、`DataView.prototype` built-in methodsをsupportするために必要なinternal stateを持つsubclass instancesをcreateしてinitializeするため、DataView constructorへの`super` callを含めなければならない。</li>
+        <li>クラス定義の `extends` 句の値として使用できる。指定された DataView の動作を継承しようとするサブクラスコンストラクターは、`DataView.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、DataView コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-dataview-buffer-byteoffset-bytelength" type="built-in function">
@@ -47143,129 +47141,129 @@ THH:mm:ss.sss
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-atomics.notify" type="built-in function">
+      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
+      <p>この関数は、待機キュー内でスリープしているいくつかのエージェントに通知する。</p>
+      <p>呼び出されたとき、次の手順を実行する。</p>
+      <emu-alg>
+        1. _taRecord_ を ? ValidateIntegerTypedArray(_ta_, *true*) とする。
+        1. _byteIndexInBuffer_ を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
+        1. _count_ が *undefined* である場合、
+          1. _count_ を +∞ に設定する。
+        1. そうでなければ、
+          1. _intCount_ を ? ToIntegerOrInfinity(_count_) とする。
+          1. _count_ を max(_intCount_, 0) に設定する。
+        1. _buffer_ を _ta_.[[ViewedArrayBuffer]] とする。
+        1. _block_ を _buffer_.[[ArrayBufferData]] とする。
+        1. IsSharedArrayBuffer(_buffer_) が *false* である場合、*+0*<sub>𝔽</sub> を返す。
+        1. _waiterList_ を GetWaiterList(_block_, _byteIndexInBuffer_) とする。
+        1. EnterCriticalSection(_waiterList_) を実行する。
+        1. _waiters_ を RemoveWaiters(_waiterList_, _count_) とする。
+        1. _waiters_ の各要素 _waiterRecord_ について、次を行う。
+          1. NotifyWaiter(_waiterList_, _waiterRecord_) を実行する。
+        1. LeaveCriticalSection(_waiterList_) を実行する。
+        1. _waitersCount_ を _waiters_ 内の要素数とする。
+        1. 𝔽(_waitersCount_) を返す。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-atomics.or" type="built-in function">
       <h1>Atomics.or ( _ta_, _index_, _value_ )</h1>
-      <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. _or_を、parameters (_xBytes_, _yBytes_)を持ち、nothingをcapturesし、calledされたときに以下のstepsをatomicallyに実行するnew read-modify-write modification functionとする：
-          1. ByteListBitwiseOp(`|`, _xBytes_, _yBytes_)を返す。
-        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _or_)を返す。
+        1. _or_ を、パラメーター (_xBytes_, _yBytes_) を持ち、何もキャプチャせず、呼び出されたときに次の手順をアトミックに実行する、新しい読み取り-変更-書き込み変更関数とする。
+          1. ByteListBitwiseOp(`|`, _xBytes_, _yBytes_) を返す。
+        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _or_) を返す。
       </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-atomics.pause" type="built-in function">
+      <h1>Atomics.pause ( )</h1>
+      <p>この関数は、値を待機している間プログラムがスピンループしていることを CPU に示すヒントを提供する。</p>
+      <p>呼び出されたとき、次の手順を実行する。</p>
+      <emu-alg>
+        1. ECMAScript 実装の実行環境が、現在実行中のコードがスピン待機ループ内にあることをオペレーティングシステムまたは CPU に通知することをサポートしている場合、その信号を送る。
+        1. *undefined* を返す。
+      </emu-alg>
+      <emu-note>
+        <p>このメソッドは、mutex 内の spinlock 高速パスなど、スピン待機ループを実装するプログラムが、値を待機している間スピンしていることを CPU に示すヒントを提供するために設計されている。これはタイミング以外に観測可能な動作を持たない。</p>
+        <p>実装は、基盤となるアーキテクチャのベストプラクティスがスピンループ内でそのような命令を推奨している場合、pause または yield 命令を実装することが期待される。例えば、<a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel 最適化マニュアル</a>は <code>pause</code> 命令を推奨している。</p>
+        <p>実装には、一時停止する最大時間について、数十から数百ナノ秒程度の内部上限を持つことが推奨される。</p>
+      </emu-note>
+      <emu-note>
+        <p>関数呼び出しのオーバーヘッドにより、最適化コンパイラーにおけるこのメソッドへのインライン化された呼び出しが、インライン化されていない呼び出しとは異なる時間だけ待機することは妥当である。</p>
+      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.store" type="built-in function">
       <h1>Atomics.store ( _ta_, _index_, _value_ )</h1>
-      <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. _byteIndexInBuffer_を ? ValidateAtomicAccessOnIntegerTypedArray(_ta_, _index_) とする。
-        1. _ta_.[[ContentType]]が~bigint~なら、_coerced_を ? ToBigInt(_value_) とする。
-        1. そうでなければ、_coerced_を𝔽(? ToIntegerOrInfinity(_value_))とする。
-        1. ? RevalidateAtomicAccess(_ta_, _byteIndexInBuffer_)を実行する。
-        1. _buffer_を_ta_.[[ViewedArrayBuffer]]とする。
-        1. _elementType_をTypedArrayElementType(_ta_)とする。
-        1. SetValueInBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, _coerced_, *true*, ~seq-cst~)を実行する。
-        1. _coerced_を返す。
+        1. _byteIndexInBuffer_ を ? ValidateAtomicAccessOnIntegerTypedArray(_ta_, _index_) とする。
+        1. _ta_.[[ContentType]] が ~bigint~ である場合、_coerced_ を ? ToBigInt(_value_) とする。
+        1. そうでなければ、_coerced_ を 𝔽(? ToIntegerOrInfinity(_value_)) とする。
+        1. ? RevalidateAtomicAccess(_ta_, _byteIndexInBuffer_) を実行する。
+        1. _buffer_ を _ta_.[[ViewedArrayBuffer]] とする。
+        1. _elementType_ を TypedArrayElementType(_ta_) とする。
+        1. SetValueInBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, _coerced_, *true*, ~seq-cst~) を実行する。
+        1. _coerced_ を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-atomics.sub" type="built-in function">
       <h1>Atomics.sub ( _ta_, _index_, _value_ )</h1>
-      <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. _subtract_を、parameters (_xBytes_, _yBytes_)を持ち、_ta_をcapturesし、calledされたときに以下のstepsをatomicallyに実行するnew read-modify-write modification functionとする：
-          1. _type_をTypedArrayElementType(_ta_)とする。
-          1. _agentRecord_をsurrounding agentのAgent Recordとする。
-          1. _isLittleEndian_を_agentRecord_.[[LittleEndian]]とする。
-          1. _x_をRawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_)とする。
-          1. _y_をRawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_)とする。
-          1. _x_がNumberなら、
-            1. _difference_をNumber::subtract(_x_, _y_)とする。
+        1. _subtract_ を、パラメーター (_xBytes_, _yBytes_) を持ち、_ta_ をキャプチャし、呼び出されたときに次の手順をアトミックに実行する、新しい読み取り-変更-書き込み変更関数とする。
+          1. _type_ を TypedArrayElementType(_ta_) とする。
+          1. _agentRecord_ を周囲のエージェントの Agent Record とする。
+          1. _isLittleEndian_ を _agentRecord_.[[LittleEndian]] とする。
+          1. _x_ を RawBytesToNumeric(_type_, _xBytes_, _isLittleEndian_) とする。
+          1. _y_ を RawBytesToNumeric(_type_, _yBytes_, _isLittleEndian_) とする。
+          1. _x_ が Number である場合、
+            1. _difference_ を Number::subtract(_x_, _y_) とする。
           1. そうでなければ、
-            1. Assert: _x_はBigIntである。
-            1. _difference_をBigInt::subtract(_x_, _y_)とする。
-          1. _differenceBytes_をNumericToRawBytes(_type_, _difference_, _isLittleEndian_)とする。
-          1. Assert: _differenceBytes_、_xBytes_、および_yBytes_は同じnumberのelementsを持つ。
-          1. _differenceBytes_を返す。
-        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _subtract_)を返す。
+            1. Assert: _x_ は BigInt である。
+            1. _difference_ を BigInt::subtract(_x_, _y_) とする。
+          1. _differenceBytes_ を NumericToRawBytes(_type_, _difference_, _isLittleEndian_) とする。
+          1. Assert: _differenceBytes_、_xBytes_、および _yBytes_ は同じ数の要素を持つ。
+          1. _differenceBytes_ を返す。
+        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _subtract_) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-atomics.wait" type="built-in function">
       <h1>Atomics.wait ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>このfunctionは、surrounding agentをwait queueに入れ、notifiedされるまで、またはwaitがtimes outするまでそれをsuspendし、それらの場合をdifferentiateするStringを返す。</p>
-      <p>これは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、周囲のエージェントを待機キューに入れ、通知されるか待機がタイムアウトするまでそのエージェントを一時停止し、それらの場合を区別する String を返す。</p>
+      <p>呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. ? DoWait(~sync~, _ta_, _index_, _value_, _timeout_)を返す。
+        1. ? DoWait(~sync~, _ta_, _index_, _value_, _timeout_) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>このfunctionは、calling agentがnotifiedされたとき、またはtimeoutにreachedしたときにresolvedされるPromiseを返す。</p>
-      <p>これは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、呼び出し元エージェントが通知されるかタイムアウトに達したときに解決される Promise を返す。</p>
+      <p>呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)を返す。
+        1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_) を返す。
       </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-atomics.notify" type="built-in function">
-      <h1>Atomics.notify ( _ta_, _index_, _count_ )</h1>
-      <p>このfunctionは、wait queue内でsleepingしているsome agentsにnotifyする。</p>
-      <p>これは、呼び出されたときに以下のstepsを実行する：</p>
-      <emu-alg>
-        1. _taRecord_を ? ValidateIntegerTypedArray(_ta_, *true*) とする。
-        1. _byteIndexInBuffer_を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
-        1. _count_が*undefined*なら、
-          1. _count_を+∞に設定する。
-        1. そうでなければ、
-          1. _intCount_を ? ToIntegerOrInfinity(_count_) とする。
-          1. _count_をmax(_intCount_, 0)に設定する。
-        1. _buffer_を_ta_.[[ViewedArrayBuffer]]とする。
-        1. _block_を_buffer_.[[ArrayBufferData]]とする。
-        1. IsSharedArrayBuffer(_buffer_)が*false*なら、*+0*<sub>𝔽</sub>を返す。
-        1. _waiterList_をGetWaiterList(_block_, _byteIndexInBuffer_)とする。
-        1. EnterCriticalSection(_waiterList_)を実行する。
-        1. _waiters_をRemoveWaiters(_waiterList_, _count_)とする。
-        1. _waiters_の各element _waiterRecord_について、
-          1. NotifyWaiter(_waiterList_, _waiterRecord_)を実行する。
-        1. LeaveCriticalSection(_waiterList_)を実行する。
-        1. _waitersCount_を_waiters_内のelementsのnumberとする。
-        1. 𝔽(_waitersCount_)を返す。
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="Atomics.pause">
-      <h1>Atomics.pause ( )</h1>
-      <p>このfunctionは、programがvalue上でwaitingしながらspin loopingしていることをCPUにhintとしてprovideする。</p>
-      <p>これは、呼び出されたときに以下のstepsを実行する：</p>
-      <emu-alg>
-        1. ECMAScript implementationのexecution environmentが、current executing codeがspin-wait loop内にあることをoperating systemまたはCPUへsignalingすることをsupportするなら、そのsignalをsendする。
-        1. *undefined*を返す。
-      </emu-alg>
-      <emu-note>
-        <p>このmethodは、mutexes内のspinlock fast pathsのようなspin-wait loopsをimplementingするprogramsのために、valueをwaitingしている間にspinningしていることをCPUへhintとしてprovideするようdesignedされている。timing以外のobservable behaviourは持たない。</p>
-        <p>underlying architectureのbest practicesがspin loops内でそのようなinstructionsをrecommendする場合、implementationsはpauseまたはyield instructionをimplementすることがexpectedされる。例えば、<a href="https://www.intel.com/content/www/us/en/content-details/671488/intel-64-and-ia-32-architectures-optimization-reference-manual-volume-1.html">Intel Optimization Manual</a>は<code>pause</code> instructionをrecommendしている。</p>
-        <p>implementationsは、pausedされる最大timeに対して、tensからhundreds of nanoseconds程度のinternal upper boundを持つことがencouragedされる。</p>
-      </emu-note>
-      <emu-note>
-        <p>function callsのoverheadにより、optimizing compiler内でこのmethodへのinlined callが、non-inlined callとは異なるamount of timeをwaitすることはreasonableである。</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-atomics.xor" type="built-in function">
       <h1>Atomics.xor ( _ta_, _index_, _value_ )</h1>
-      <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
+      <p>この関数は、呼び出されたとき、次の手順を実行する。</p>
       <emu-alg>
-        1. _xor_を、parameters (_xBytes_, _yBytes_)を持ち、nothingをcapturesし、calledされたときに以下のstepsをatomicallyに実行するnew read-modify-write modification functionとする：
-          1. ByteListBitwiseOp(`^`, _xBytes_, _yBytes_)を返す。
-        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _xor_)を返す。
+        1. _xor_ を、パラメーター (_xBytes_, _yBytes_) を持ち、何もキャプチャせず、呼び出されたときに次の手順をアトミックに実行する、新しい読み取り-変更-書き込み変更関数とする。
+          1. ByteListBitwiseOp(`^`, _xBytes_, _yBytes_) を返す。
+        1. ? AtomicReadModifyWrite(_ta_, _index_, _value_, _xor_) を返す。
       </emu-alg>
     </emu-clause>
 
     <emu-clause oldids="sec-atomics-@@tostringtag" id="sec-atomics-%symbol.tostringtag%">
       <h1>Atomics [ %Symbol.toStringTag% ]</h1>
-      <p>%Symbol.toStringTag% propertyのinitial valueはString value *"Atomics"*である。</p>
-      <p>このpropertyはattributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }を持つ。</p>
+      <p>%Symbol.toStringTag% プロパティの初期値は String 値 *"Atomics"* である。</p>
+      <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
     </emu-clause>
   </emu-clause>
 
@@ -48021,7 +48019,7 @@ THH:mm:ss.sss
           functionとして呼び出されることを意図しておらず、そのように呼び出された場合はexceptionをthrowする。
         </li>
         <li>
-          class definitionの`extends` clause内のvalueとして使用できる。specifiedされた`WeakRef` behaviourをinheritしようとするsubclass constructorsは、`WeakRef.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateおよびinitializeするために、`WeakRef` constructorへの`super` callをincludeしなければならない。
+          クラス定義の `extends` 句内の値として使用できる。指定された `WeakRef` の動作を継承しようとするサブクラスコンストラクターは、`WeakRef.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、`WeakRef` コンストラクターへの `super` 呼び出しを含めなければならない。
         </li>
       </ul>
 
@@ -48157,7 +48155,7 @@ THH:mm:ss.sss
           functionとして呼び出されることを意図しておらず、そのように呼び出された場合はexceptionをthrowする。
         </li>
         <li>
-          class definitionの`extends` clause内のvalueとして使用できる。specifiedされた`FinalizationRegistry` behaviourをinheritしようとするsubclass constructorsは、`FinalizationRegistry.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateおよびinitializeするために、`FinalizationRegistry` constructorへの`super` callをincludeしなければならない。
+          クラス定義の `extends` 句内の値として使用できる。指定された `FinalizationRegistry` の動作を継承しようとするサブクラスコンストラクターは、`FinalizationRegistry.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、`FinalizationRegistry` コンストラクターへの `super` 呼び出しを含めなければならない。
         </li>
       </ul>
 
@@ -49826,7 +49824,7 @@ THH:mm:ss.sss
         <li>global objectの*"Promise"* propertyのinitial valueである。</li>
         <li>constructorとして呼び出されたときにnew Promiseをcreateしてinitializeする。</li>
         <li>functionとして呼び出されることを意図しておらず、そのように呼び出された場合はexceptionをthrowする。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用してもよい。指定されたPromise behaviourをinheritすることを意図するsubclass constructorsは、`Promise`および`Promise.prototype` built-in methodsをsupportするために必要なinternal stateでsubclass instanceをcreateしてinitializeするため、Promise constructorへの`super` callを含まなければならない。</li>
+        <li>クラス定義の `extends` 句内の値として使用できる。指定された Promise の動作を継承しようとするサブクラスコンストラクターは、`Promise` および `Promise.prototype` の組み込みメソッドをサポートするために必要な内部状態でサブクラスインスタンスを作成し初期化するため、Promise コンストラクターへの `super` 呼び出しを含めなければならない。</li>
       </ul>
 
       <emu-clause id="sec-promise-executor" type="built-in function">
@@ -52184,7 +52182,7 @@ THH:mm:ss.sss
             <li>events _eventA_および_eventB_について、_eventsRecord_.[[AgentSynchronizesWith]]が(_eventA_, _eventB_)を含むなら、_eventA_は_execution_において_eventB_とsynchronizes-withである。</li>
           </ul>
         </li>
-        <li>events _eventA_および_eventB_について、_execution_.[[HostSynchronizesWith]]が(_eventA_, _eventB_)を含むなら、_eventA_は_execution_において_eventB_とsynchronizes-withである。</li>
+        <li>イベント _eventA_ および _eventB_ について、_execution_ 内で _eventA_ が _eventB_ と host-synchronizes-with する場合、_execution_ 内で _eventA_ は _eventB_ と synchronizes-with する。</li>
       </ul>
 
       <emu-note>
@@ -53879,7 +53877,6 @@ THH:mm:ss.sss
     <p>Script Records上の[[HostDefined]]：<emu-xref href="#table-script-records"></emu-xref>を参照。</p>
     <p>Module Records上の[[HostDefined]]：<emu-xref href="#table-module-record-fields"></emu-xref>を参照。</p>
     <p>JobCallback Records上の[[HostDefined]]：<emu-xref href="#table-jobcallback-records"></emu-xref>を参照。</p>
-    <p>Candidate Executions上の[[HostSynchronizesWith]]：<emu-xref href="#table-candidate-execution-records"></emu-xref>を参照。</p>
     <p>[[IsHTMLDDA]]：<emu-xref href="#sec-IsHTMLDDA-internal-slot"></emu-xref>を参照。</p>
   </emu-annex>
 
