@@ -2786,13 +2786,13 @@
               1. _x_를 (_x_ - _xDigit_) / 2로 설정한다.
               1. _y_를 (_y_ - _yDigit_) / 2로 설정한다.
             1. _op_가 `&amp;`이면, 다음을 수행한다.
-              1. _tmp_를 BinaryAnd(_x_ modulo 2, _y_ modulo 2)로 둔다.
+              1. _signBit_를 BinaryAnd(_x_ modulo 2, _y_ modulo 2)로 둔다.
             1. 그렇지 않고 _op_가 `|`이면, 다음을 수행한다.
-              1. _tmp_를 BinaryOr(_x_ modulo 2, _y_ modulo 2)로 둔다.
+              1. _signBit_를 BinaryOr(_x_ modulo 2, _y_ modulo 2)로 둔다.
             1. 그렇지 않으면,
               1. Assert: _op_는 `^`이다.
-              1. _tmp_를 BinaryXor(_x_ modulo 2, _y_ modulo 2)로 둔다.
-            1. _tmp_ ≠ 0이면, 다음을 수행한다.
+              1. _signBit_를 BinaryXor(_x_ modulo 2, _y_ modulo 2)로 둔다.
+            1. _signBit_ ≠ 0이면, 다음을 수행한다.
               1. _result_를 _result_ - 2<sup>_shift_</sup>로 설정한다.
               1. NOTE: 이는 sign을 extends한다.
             1. _result_에 대한 BigInt value를 반환한다.
@@ -4753,7 +4753,7 @@
     <emu-clause id="sec-data-blocks">
       <h1>Data Blocks</h1>
       <p><dfn variants="Data Blocks">Data Block</dfn> specification type은 byte-sized(8 bit) numeric value의 distinct하고 mutable한 sequence를 설명하는 데 사용됩니다. <dfn variants="byte values">byte value</dfn>는 0부터 255까지의 inclusive interval에 있는 integer입니다. Data Block value는 fixed number of byte로 생성되며, 각 byte의 initial value는 0입니다.</p>
-      <p>이 명세 안에서 notation 편의를 위해 array-like syntax를 사용하여 Data Block value의 individual byte에 access할 수 있습니다. 이 notation은 Data Block value를 byte의 0-based <emu-not-ref>integer-indexed</emu-not-ref> sequence로 나타냅니다. 예를 들어 _db_가 5 byte Data Block value이면 _db_[2]를 사용하여 그 3<sup>rd</sup> byte에 access할 수 있습니다.</p>
+      <p>이 명세 안에서 notation 편의를 위해 array-like syntax를 사용하여 Data Block value의 individual byte에 access할 수 있습니다. 이 notation은 Data Block value를 byte의 0-based <emu-not-ref>integer-indexed</emu-not-ref> sequence로 나타냅니다. 예를 들어 _dataBlock_가 5 byte Data Block value이면 _dataBlock_[2]를 사용하여 그 3<sup>rd</sup> byte에 access할 수 있습니다.</p>
       <p>여러 agent에서 concurrently referenced될 수 있는 memory에 resides하는 data block은 <dfn variants="Shared Data Blocks">Shared Data Block</dfn>으로 지정됩니다. Shared Data Block은 (Shared Data Block value의 equality testing 목적상) <em>address-free</em>인 identity를 가집니다. 이는 block이 어떤 process에 mapped되는 virtual address에 묶이는 것이 아니라, block이 나타내는 memory의 location set에 묶입니다. 두 data block은 자신들이 포함하는 location set이 equal할 때만 equal합니다. 그렇지 않으면 equal하지 않으며 자신들이 포함하는 location set의 intersection은 empty입니다. 마지막으로, Shared Data Block은 Data Block과 distinguished될 수 있습니다.</p>
       <p>Shared Data Block의 semantics는 memory model에 의해 Shared Data Block event를 사용하여 정의됩니다. 아래 abstract operation은 Shared Data Block event를 도입하며 evaluation semantics와 memory model의 event semantics 사이의 interface로 동작합니다. event는 candidate execution을 형성하고, memory model은 그 위에서 filter로 동작합니다. full semantics는 memory model을 참조하십시오.</p>
       <p>Shared Data Block event는 memory model에 정의된 Record로 modelled됩니다.</p>
@@ -4769,9 +4769,9 @@
         </dl>
         <emu-alg>
           1. _size_ > 2<sup>53</sup> - 1이면, *RangeError* exception을 throw한다.
-          1. _db_를 _size_ byte로 구성된 새 Data Block value로 둔다. 그러한 Data Block을 생성하는 것이 impossible하면, *RangeError* exception을 throw한다.
-          1. _db_의 모든 byte를 0으로 설정한다.
-          1. _db_를 반환한다.
+          1. _dataBlock_를 _size_ byte로 구성된 새 Data Block value로 둔다. 그러한 Data Block을 생성하는 것이 impossible하면, *RangeError* exception을 throw한다.
+          1. _dataBlock_의 모든 byte를 0으로 설정한다.
+          1. _dataBlock_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -4784,14 +4784,14 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _db_를 _size_ byte로 구성된 새 Shared Data Block value로 둔다. 그러한 Shared Data Block을 생성하는 것이 impossible하면, *RangeError* exception을 throw한다.
+          1. _dataBlock_를 _size_ byte로 구성된 새 Shared Data Block value로 둔다. 그러한 Shared Data Block을 생성하는 것이 impossible하면, *RangeError* exception을 throw한다.
           1. _agentRecord_를 surrounding agent의 Agent Record로 둔다.
           1. _execution_을 _agentRecord_.[[CandidateExecution]]으로 둔다.
           1. _eventsRecord_를 [[AgentSignifier]]가 AgentSignifier()인 _execution_.[[EventsRecords]]의 Agent Events Record로 둔다.
           1. _zero_를 « 0 »로 둔다.
-          1. _db_의 각 index _index_에 대해, 다음을 수행한다.
-            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ }를 _eventsRecord_.[[EventList]]에 append한다.
-          1. _db_를 반환한다.
+          1. _dataBlock_의 각 index _index_에 대해, 다음을 수행한다.
+            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _dataBlock_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ }를 _eventsRecord_.[[EventList]]에 append한다.
+          1. _dataBlock_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -6670,8 +6670,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _obj_.[[PrivateElements]]가 _pe_.[[Key]]가 _privateName_인 PrivateElement _pe_를 contain하면, 다음을 수행한다.
-          1. _pe_를 반환한다.
+        1. _obj_.[[PrivateElements]]가 _entry_.[[Key]]가 _privateName_인 PrivateElement _entry_를 contain하면, 다음을 수행한다.
+          1. _entry_를 반환한다.
         1. ~empty~를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -12126,7 +12126,7 @@
       <h1>
         HostCallJobCallback (
           _jobCallback_: a JobCallback Record,
-          _value_: an ECMAScript language value,
+          _thisValue_: an ECMAScript language value,
           _argList_: a List of ECMAScript language values,
         ): either a normal completion containing an ECMAScript language value or a throw completion
       </h1>
@@ -12134,7 +12134,7 @@
       </dl>
       <p>HostCallJobCallback의 implementation은 다음 requirement를 conform해야 합니다:</p>
       <ul>
-        <li>Call(_jobCallback_.[[Callback]], _value_, _argList_)의 result를 perform하고 반환해야 합니다.</li>
+        <li>Call(_jobCallback_.[[Callback]], _thisValue_, _argList_)의 result를 perform하고 반환해야 합니다.</li>
       </ul>
       <emu-note>
         <p>이 requirement는 host가 이 명세에 정의된 function object의 [[Call]] behaviour를 change할 수 없음을 의미합니다.</p>
@@ -12142,7 +12142,7 @@
       <p>HostCallJobCallback의 default implementation은 called될 때 다음 step을 수행합니다:</p>
       <emu-alg>
         1. Assert: IsCallable(_jobCallback_.[[Callback]])은 *true*이다.
-        1. ? Call(_jobCallback_.[[Callback]], _value_, _argList_)를 반환한다.
+        1. ? Call(_jobCallback_.[[Callback]], _thisValue_, _argList_)를 반환한다.
       </emu-alg>
       <p>web browser가 아닌 ECMAScript host는 HostCallJobCallback의 default implementation을 사용해야 합니다.</p>
     </emu-clause>
@@ -12480,10 +12480,10 @@
         1. _objSet_의 각 element _value_에 대해, 다음을 수행한다.
           1. _ref_.[[WeakRefTarget]]이 _value_인 각 WeakRef _ref_에 대해, 다음을 수행한다.
             1. _ref_.[[WeakRefTarget]]를 ~empty~로 설정한다.
-          1. _fg_.[[Cells]]가 _cell_.[[WeakRefTarget]]이 _value_인 Record _cell_을 contain하는 각 FinalizationRegistry _fg_에 대해, 다음을 수행한다.
+          1. _finalizationRegistry_.[[Cells]]가 _cell_.[[WeakRefTarget]]이 _value_인 Record _cell_을 contain하는 각 FinalizationRegistry _finalizationRegistry_에 대해, 다음을 수행한다.
             1. _cell_.[[WeakRefTarget]]를 ~empty~로 설정한다.
             1. _enqueueCleanup_을 *true* 또는 *false* 중 하나의 implementation-defined choice로 둔다.
-            1. _enqueueCleanup_이 *true*이면, HostEnqueueFinalizationRegistryCleanupJob(_fg_)를 수행한다.
+            1. _enqueueCleanup_이 *true*이면, HostEnqueueFinalizationRegistryCleanupJob(_finalizationRegistry_)를 수행한다.
           1. _map_.[[WeakMapData]]가 _entry_.[[Key]]가 _value_인 Record _entry_를 contain하는 각 WeakMap _map_에 대해, 다음을 수행한다.
             1. _entry_.[[Key]]를 ~empty~로 설정한다.
             1. _entry_.[[Value]]를 ~empty~로 설정한다.
@@ -13793,131 +13793,131 @@
       </emu-note>
       <p>called될 때 다음 step을 수행합니다:</p>
       <emu-alg>
-        1. _calleeContext_를 running execution context로 둔다.
-        1. _code_를 _func_.[[ECMAScriptCode]]로 둔다.
-        1. _strict_를 _func_.[[Strict]]로 둔다.
-        1. _formals_를 _func_.[[FormalParameters]]로 둔다.
-        1. _paramNames_를 _formals_의 BoundNames로 둔다.
-        1. _paramNames_가 duplicate entry를 가지면, _hasDuplicates_를 *true*로 둔다; 그렇지 않으면 _hasDuplicates_를 *false*로 둔다.
-        1. _simpleParamList_를 _formals_의 IsSimpleParameterList로 둔다.
-        1. _hasParamExprs_를 _formals_의 ContainsExpression으로 둔다.
-        1. _variableNames_를 _code_의 VarDeclaredNames로 둔다.
-        1. _variableDecls_를 _code_의 VarScopedDeclarations로 둔다.
-        1. _lexicalNames_를 _code_의 LexicallyDeclaredNames로 둔다.
-        1. _funcNames_를 새 empty List로 둔다.
-        1. _funcsToInitialize_를 새 empty List로 둔다.
-        1. _variableDecls_의 각 element _variableDecl_에 대해, reverse List order로 다음을 수행한다.
-          1. _variableDecl_이 |VariableDeclaration|도 |ForBinding|도 |BindingIdentifier|도 아니면, 다음을 수행한다.
+        1. _calleeContext_를 실행 중인 실행 컨텍스트라고 하자.
+        1. _code_를 _func_.[[ECMAScriptCode]]라고 하자.
+        1. _strict_를 _func_.[[Strict]]라고 하자.
+        1. _formals_를 _func_.[[FormalParameters]]라고 하자.
+        1. _paramNames_를 _formals_의 BoundNames라고 하자.
+        1. _paramNames_에 중복 항목이 있으면 _hasDuplicates_를 *true*라고 하고, 그렇지 않으면 _hasDuplicates_를 *false*라고 하자.
+        1. _simpleParamList_를 _formals_의 IsSimpleParameterList라고 하자.
+        1. _hasParamExprs_를 _formals_의 ContainsExpression이라고 하자.
+        1. _variableNames_를 _code_의 VarDeclaredNames라고 하자.
+        1. _variableDecls_를 _code_의 VarScopedDeclarations라고 하자.
+        1. _lexicalNames_를 _code_의 LexicallyDeclaredNames라고 하자.
+        1. _funcNames_를 새로운 빈 List라고 하자.
+        1. _funcsToInitialize_를 새로운 빈 List라고 하자.
+        1. _variableDecls_의 각 요소 _variableDecl_에 대해, List의 역순으로 다음을 수행한다.
+          1. _variableDecl_이 |VariableDeclaration|도 |ForBinding|도 |BindingIdentifier|도 아니면,
             1. Assert: _variableDecl_은 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이다.
-            1. _funcName_을 _variableDecl_의 BoundNames의 sole element로 둔다.
-            1. _funcNames_가 _funcName_을 contain하지 않으면, 다음을 수행한다.
-              1. _funcName_을 _funcNames_의 first element로 insert한다.
-              1. NOTE: 같은 name에 대한 multiple function declaration이 있으면, last declaration이 사용됩니다.
-              1. _variableDecl_을 _funcsToInitialize_의 first element로 insert한다.
-        1. _argumentsObjNeeded_를 *true*로 둔다.
-        1. _func_.[[ThisMode]]가 ~lexical~이면, 다음을 수행한다.
-          1. NOTE: Arrow function은 결코 arguments object를 가지지 않습니다.
+            1. _funcName_을 _variableDecl_의 BoundNames의 유일한 요소라고 하자.
+            1. _funcNames_가 _funcName_을 포함하지 않으면,
+              1. _funcName_을 _funcNames_의 첫 번째 요소로 삽입한다.
+              1. NOTE: 같은 이름에 대해 여러 함수 선언이 있으면, 마지막 선언이 사용된다.
+              1. _variableDecl_을 _funcsToInitialize_의 첫 번째 요소로 삽입한다.
+        1. _argumentsObjNeeded_를 *true*라고 하자.
+        1. _func_.[[ThisMode]]가 ~lexical~이면,
+          1. NOTE: 화살표 함수는 arguments 객체를 갖지 않는다.
           1. _argumentsObjNeeded_를 *false*로 설정한다.
-        1. 그렇지 않고 _paramNames_가 *"arguments"*를 contain하면, 다음을 수행한다.
+        1. 그렇지 않고 _paramNames_가 *"arguments"*를 포함하면,
           1. _argumentsObjNeeded_를 *false*로 설정한다.
-        1. 그렇지 않고 _hasParamExprs_가 *false*이면, 다음을 수행한다.
-          1. _funcNames_가 *"arguments"*를 contain하거나 _lexicalNames_가 *"arguments"*를 contain하면, 다음을 수행한다.
+        1. 그렇지 않고 _hasParamExprs_가 *false*이면,
+          1. _funcNames_가 *"arguments"*를 포함하거나 _lexicalNames_가 *"arguments"*를 포함하면,
             1. _argumentsObjNeeded_를 *false*로 설정한다.
-        1. _strict_가 *true*이거나 _hasParamExprs_가 *false*이면, 다음을 수행한다.
-          1. NOTE: strict mode code 안의 `eval` call은 `eval` 밖에서 visible한 new binding을 create할 수 없으므로, parameter에는 single Environment Record만 필요합니다.
-          1. _envRecord_를 _calleeContext_의 LexicalEnvironment로 둔다.
+        1. _strict_가 *true*이거나 _hasParamExprs_가 *false*이면,
+          1. NOTE: 매개변수에는 단일 Environment Record만 필요하다. strict mode 코드의 `eval` 호출은 `eval` 밖에서 보이는 새 바인딩을 만들 수 없기 때문이다.
+          1. _envRecord_를 _calleeContext_의 LexicalEnvironment라고 하자.
         1. 그렇지 않으면,
-          1. NOTE: formal parameter list 안의 direct eval call에 의해 created된 binding이 parameter가 declared되는 environment 밖에 있도록 ensure하기 위해 separate Environment Record가 필요합니다.
-          1. _calleeEnv_를 _calleeContext_의 LexicalEnvironment로 둔다.
-          1. _envRecord_를 NewDeclarativeEnvironment(_calleeEnv_)로 둔다.
+          1. NOTE: formal parameter list 안의 direct eval 호출로 생성된 바인딩이 매개변수가 선언된 환경 밖에 있도록 보장하기 위해 별도의 Environment Record가 필요하다.
+          1. _calleeEnv_를 _calleeContext_의 LexicalEnvironment라고 하자.
+          1. _envRecord_를 NewDeclarativeEnvironment(_calleeEnv_)라고 하자.
           1. Assert: _calleeContext_의 VariableEnvironment와 _calleeEnv_는 같은 Environment Record이다.
           1. _calleeContext_의 LexicalEnvironment를 _envRecord_로 설정한다.
-        1. _paramNames_의 각 String _paramName_에 대해, 다음을 수행한다.
-          1. _alreadyDeclared_를 ! _envRecord_.HasBinding(_paramName_)로 둔다.
-          1. NOTE: Early error는 duplicate parameter name이 parameter default value 또는 rest parameter를 가지지 않는 non-strict function에서만 occur할 수 있음을 ensure합니다.
-          1. _alreadyDeclared_가 *false*이면, 다음을 수행한다.
+        1. _paramNames_의 각 String _paramName_에 대해 다음을 수행한다.
+          1. _alreadyDeclared_를 ! _envRecord_.HasBinding(_paramName_)이라고 하자.
+          1. NOTE: Early errors는 중복 매개변수 이름이 기본 매개변수 값이나 rest 매개변수가 없는 non-strict 함수에서만 발생할 수 있음을 보장한다.
+          1. _alreadyDeclared_가 *false*이면,
             1. ! _envRecord_.CreateMutableBinding(_paramName_, *false*)를 수행한다.
-            1. _hasDuplicates_가 *true*이면, 다음을 수행한다.
+            1. _hasDuplicates_가 *true*이면,
               1. ! _envRecord_.InitializeBinding(_paramName_, *undefined*)를 수행한다.
-        1. _argumentsObjNeeded_가 *true*이면, 다음을 수행한다.
-          1. _strict_가 *true*이거나 _simpleParamList_가 *false*이면, 다음을 수행한다.
-            1. _argumentsObj_를 CreateUnmappedArgumentsObject(_argList_)로 둔다.
+        1. _argumentsObjNeeded_가 *true*이면,
+          1. _strict_가 *true*이거나 _simpleParamList_가 *false*이면,
+            1. _argumentsObj_를 CreateUnmappedArgumentsObject(_argList_)라고 하자.
           1. 그렇지 않으면,
-            1. NOTE: mapped argument object는 rest parameter, parameter default value initializer, destructured parameter가 없는 non-strict function에 대해서만 provided됩니다.
-            1. _argumentsObj_를 CreateMappedArgumentsObject(_func_, _formals_, _argList_, _envRecord_)로 둔다.
-          1. _strict_가 *true*이면, 다음을 수행한다.
+            1. NOTE: mapped argument object는 rest 매개변수, 매개변수 기본값 초기화자, 구조 분해 매개변수가 없는 non-strict 함수에만 제공된다.
+            1. _argumentsObj_를 CreateMappedArgumentsObject(_func_, _formals_, _argList_, _envRecord_)라고 하자.
+          1. _strict_가 *true*이면,
             1. ! _envRecord_.CreateImmutableBinding(*"arguments"*, *false*)를 수행한다.
-            1. NOTE: strict mode code에서는 early error가 이 binding에 assign하려는 attempt를 prevent하므로, 그 mutability는 observable하지 않습니다.
+            1. NOTE: strict mode 코드에서는 Early Errors가 이 바인딩에 할당하려는 시도를 방지하므로, 그 가변성은 관찰 가능하지 않다.
           1. 그렇지 않으면,
             1. ! _envRecord_.CreateMutableBinding(*"arguments"*, *false*)를 수행한다.
           1. ! _envRecord_.InitializeBinding(*"arguments"*, _argumentsObj_)를 수행한다.
-          1. _paramBindings_를 _paramNames_와 « *"arguments"* »의 list-concatenation으로 둔다.
+          1. _paramBindings_를 _paramNames_와 « *"arguments"* »의 list-concatenation이라고 하자.
         1. 그렇지 않으면,
-          1. _paramBindings_를 _paramNames_로 둔다.
-        1. _iteratorRecord_를 CreateListIteratorRecord(_argList_)로 둔다.
-        1. _hasDuplicates_가 *true*이면, 다음을 수행한다.
-          1. _usedEnv_를 *undefined*로 둔다.
+          1. _paramBindings_를 _paramNames_라고 하자.
+        1. _iteratorRecord_를 CreateListIteratorRecord(_argList_)라고 하자.
+        1. _hasDuplicates_가 *true*이면,
+          1. _usedEnv_를 *undefined*라고 하자.
         1. 그렇지 않으면,
-          1. _usedEnv_를 _envRecord_로 둔다.
-        1. NOTE: 다음 step은 ReturnCompletion을 반환할 수 없습니다. 그러한 completion이 expression position에서 arise할 수 있는 유일한 방법은 |YieldExpression| 사용이지만, 이는 <emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref> 및 <emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref>의 Early Error rule에 의해 parameter list에서 forbidden됩니다.
-        1. arguments _iteratorRecord_와 _usedEnv_를 가진 _formals_의 IteratorBindingInitialization을 ? 수행한다.
-        1. _hasParamExprs_가 *false*이면, 다음을 수행한다.
-          1. NOTE: parameter와 top-level var에는 single Environment Record만 필요합니다.
-          1. _instantiatedVariableNames_를 List _paramBindings_의 copy로 둔다.
-          1. _variableNames_의 각 element _n_에 대해, 다음을 수행한다.
-            1. _instantiatedVariableNames_가 _n_을 contain하지 않으면, 다음을 수행한다.
-              1. _n_을 _instantiatedVariableNames_에 append한다.
-              1. ! _envRecord_.CreateMutableBinding(_n_, *false*)를 수행한다.
-              1. ! _envRecord_.InitializeBinding(_n_, *undefined*)를 수행한다.
-          1. _variableEnv_를 _envRecord_로 둔다.
+          1. _usedEnv_를 _envRecord_라고 하자.
+        1. NOTE: 다음 단계는 ReturnCompletion을 반환할 수 없다. 그러한 completion이 expression 위치에서 발생할 수 있는 유일한 방법은 |YieldExpression| 사용뿐인데, 이는 <emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref> 및 <emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref>의 Early Error 규칙에 의해 parameter list에서 금지되기 때문이다.
+        1. _formals_의 IteratorBindingInitialization을 인수 _iteratorRecord_ 및 _usedEnv_와 함께 수행한다. 완료가 갑작스러운 완료이면 전파한다.
+        1. _hasParamExprs_가 *false*이면,
+          1. NOTE: 매개변수와 최상위 vars에는 단일 Environment Record만 필요하다.
+          1. _instantiatedVariableNames_를 List _paramBindings_의 복사본이라고 하자.
+          1. _variableNames_의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _instantiatedVariableNames_가 _name_을 포함하지 않으면,
+              1. _name_을 _instantiatedVariableNames_에 추가한다.
+              1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
+              1. ! _envRecord_.InitializeBinding(_name_, *undefined*)를 수행한다.
+          1. _variableEnv_를 _envRecord_라고 하자.
         1. 그렇지 않으면,
-          1. NOTE: formal parameter list 안의 expression이 created한 closure가 function body 안의 declaration을 볼 수 없도록 ensure하기 위해 separate Environment Record가 필요합니다.
-          1. _variableEnv_를 NewDeclarativeEnvironment(_envRecord_)로 둔다.
+          1. NOTE: formal parameter list 안의 표현식으로 생성된 클로저가 함수 본문의 선언을 볼 수 없도록 보장하기 위해 별도의 Environment Record가 필요하다.
+          1. _variableEnv_를 NewDeclarativeEnvironment(_envRecord_)라고 하자.
           1. _calleeContext_의 VariableEnvironment를 _variableEnv_로 설정한다.
-          1. _instantiatedVariableNames_를 새 empty List로 둔다.
-          1. _variableNames_의 각 element _n_에 대해, 다음을 수행한다.
-            1. _instantiatedVariableNames_가 _n_을 contain하지 않으면, 다음을 수행한다.
-              1. _n_을 _instantiatedVariableNames_에 append한다.
-              1. ! _variableEnv_.CreateMutableBinding(_n_, *false*)를 수행한다.
-              1. _paramBindings_가 _n_을 contain하지 않거나 _funcNames_가 _n_을 contain하면, 다음을 수행한다.
-                1. _initialValue_를 *undefined*로 둔다.
+          1. _instantiatedVariableNames_를 새로운 빈 List라고 하자.
+          1. _variableNames_의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _instantiatedVariableNames_가 _name_을 포함하지 않으면,
+              1. _name_을 _instantiatedVariableNames_에 추가한다.
+              1. ! _variableEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
+              1. _paramBindings_가 _name_을 포함하지 않거나 _funcNames_가 _name_을 포함하면,
+                1. _initialValue_를 *undefined*라고 하자.
               1. 그렇지 않으면,
-                1. _initialValue_를 ! _envRecord_.GetBindingValue(_n_, *false*)로 둔다.
-              1. ! _variableEnv_.InitializeBinding(_n_, _initialValue_)를 수행한다.
-              1. NOTE: formal parameter와 같은 name을 가진 var는 initially corresponding initialized parameter와 같은 value를 가집니다.
-        1. _strict_가 *true*이면, 다음을 수행한다.
-          1. _lexicalEnv_를 _variableEnv_로 둔다.
+                1. _initialValue_를 ! _envRecord_.GetBindingValue(_name_, *false*)라고 하자.
+              1. ! _variableEnv_.InitializeBinding(_name_, _initialValue_)를 수행한다.
+              1. NOTE: formal parameter와 같은 이름의 var는 처음에 해당 초기화된 매개변수와 같은 값을 갖는다.
+        1. _strict_가 *true*이면,
+          1. _lexicalEnv_를 _variableEnv_라고 하자.
         1. 그렇지 않으면,
-          1. [id="step-functiondeclarationinstantiation-web-compat-insertion-point", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 support하면, 다음을 수행한다.
-            1. _code_ Contains _x_가 *true*인 |Block|, |CaseClause|, 또는 |DefaultClause| _x_의 |StatementList| 안에 directly contained된 각 |FunctionDeclaration| _funcDecl_에 대해, 다음을 수행한다.
-              1. _funcName_을 _funcDecl_의 |BindingIdentifier|의 StringValue로 둔다.
-              1. |FunctionDeclaration| _funcDecl_을 _funcName_을 |BindingIdentifier|로 가지는 |VariableStatement|로 replacing해도 _func_에 대해 Early Error가 produce되지 않고 _paramNames_가 _funcName_을 contain하지 않으면, 다음을 수행한다.
-                1. NOTE: _funcName_에 대한 var binding은 그것이 VarDeclaredName도 formal parameter의 name도 다른 |FunctionDeclaration|도 아닌 경우에만 여기서 instantiated됩니다.
-                1. _instantiatedVariableNames_가 _funcName_을 contain하지 않고 _funcName_이 *"arguments"*가 아니면, 다음을 수행한다.
+          1. [id="step-functiondeclarationinstantiation-web-compat-insertion-point", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 지원하면,
+            1. _code_ Contains _x_가 *true*인 |Block|, |CaseClause| 또는 |DefaultClause| _x_의 |StatementList|에 직접 포함된 각 |FunctionDeclaration| _funcDecl_에 대해 다음을 수행한다.
+              1. _funcName_을 _funcDecl_의 |BindingIdentifier|의 StringValue라고 하자.
+              1. |FunctionDeclaration| _funcDecl_을 _funcName_을 |BindingIdentifier|로 갖는 |VariableStatement|로 대체해도 _func_에 대한 Early Errors가 생성되지 않고 _paramNames_가 _funcName_을 포함하지 않으면,
+                1. NOTE: _funcName_에 대한 var 바인딩은 그것이 VarDeclaredName, formal parameter의 이름 또는 다른 |FunctionDeclaration|이 아닐 때에만 여기서 인스턴스화된다.
+                1. _instantiatedVariableNames_가 _funcName_을 포함하지 않고 _funcName_이 *"arguments"*가 아니면,
                   1. ! _variableEnv_.CreateMutableBinding(_funcName_, *false*)를 수행한다.
                   1. ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)를 수행한다.
-                  1. _funcName_을 _instantiatedVariableNames_에 append한다.
-                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_이 evaluated될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 제공된 |FunctionDeclaration| Evaluation algorithm 대신 다음 step을 수행한다:
-                  1. _fEnv_를 running execution context의 VariableEnvironment로 둔다.
-                  1. _bEnv_를 running execution context의 LexicalEnvironment로 둔다.
-                  1. _fObj_를 ! _bEnv_.GetBindingValue(_funcName_, *false*)로 둔다.
-                  1. ! _fEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)를 수행한다.
+                  1. _funcName_을 _instantiatedVariableNames_에 추가한다.
+                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_이 평가될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 제공된 |FunctionDeclaration| Evaluation 알고리즘 대신 다음 단계를 수행한다.
+                  1. _funcEnv_를 실행 중인 실행 컨텍스트의 VariableEnvironment라고 하자.
+                  1. _blockEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+                  1. _funcObj_를 ! _blockEnv_.GetBindingValue(_funcName_, *false*)라고 하자.
+                  1. ! _funcEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)를 수행한다.
                   1. ~unused~를 반환한다.
-          1. _lexicalEnv_를 NewDeclarativeEnvironment(_variableEnv_)로 둔다.
-          1. NOTE: non-strict function은 top-level lexical declaration에 대해 separate Environment Record를 사용하여, direct eval이 eval code에 의해 introduced된 var scoped declaration이 pre-existing top-level lexically scoped declaration과 conflict하는지 determine할 수 있게 합니다. strict direct eval은 항상 모든 declaration을 새 Environment Record 안에 place하므로 strict function에서는 이것이 필요하지 않습니다.
+          1. _lexicalEnv_를 NewDeclarativeEnvironment(_variableEnv_)라고 하자.
+          1. NOTE: non-strict 함수는 최상위 lexical 선언에 대해 별도의 Environment Record를 사용하므로, direct eval은 eval 코드가 도입한 var scoped 선언이 기존의 최상위 lexically scoped 선언과 충돌하는지 판단할 수 있다. strict 함수에는 이것이 필요하지 않다. strict direct eval은 항상 모든 선언을 새로운 Environment Record에 두기 때문이다.
         1. _calleeContext_의 LexicalEnvironment를 _lexicalEnv_로 설정한다.
-        1. _lexicalDecls_를 _code_의 LexicallyScopedDeclarations로 둔다.
-        1. _lexicalDecls_의 각 element _lexicalDecl_에 대해, 다음을 수행한다.
-          1. NOTE: lexically declared name은 function/generator declaration, formal parameter 또는 var name과 같을 수 없습니다. Lexically declared name은 여기서 instantiated만 되고 initialized되지는 않습니다.
-          1. _lexicalDecl_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-            1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면, 다음을 수행한다.
-              1. ! _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+        1. _lexicalDecls_를 _code_의 LexicallyScopedDeclarations라고 하자.
+        1. _lexicalDecls_의 각 요소 _lexicalDecl_에 대해 다음을 수행한다.
+          1. NOTE: lexically declared name은 function/generator 선언, formal parameter 또는 var 이름과 같을 수 없다. Lexically declared name은 여기서 인스턴스화만 되고 초기화되지는 않는다.
+          1. _lexicalDecl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면,
+              1. ! _lexicalEnv_.CreateImmutableBinding(_name_, *true*)를 수행한다.
             1. 그렇지 않으면,
-              1. ! _lexicalEnv_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-        1. _privateEnv_를 _calleeContext_의 PrivateEnvironment로 둔다.
-        1. _funcsToInitialize_의 각 Parse Node _funcDecl_에 대해, 다음을 수행한다.
-          1. _funcName_을 _funcDecl_의 BoundNames의 sole element로 둔다.
-          1. _funcObj_를 arguments _lexicalEnv_와 _privateEnv_를 가진 _funcDecl_의 InstantiateFunctionObject로 둔다.
+              1. ! _lexicalEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
+        1. _privateEnv_를 _calleeContext_의 PrivateEnvironment라고 하자.
+        1. _funcsToInitialize_의 각 Parse Node _funcDecl_에 대해 다음을 수행한다.
+          1. _funcName_을 _funcDecl_의 BoundNames의 유일한 요소라고 하자.
+          1. _funcObj_를 _funcDecl_의 InstantiateFunctionObject에 인수 _lexicalEnv_ 및 _privateEnv_를 전달한 결과라고 하자.
           1. ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
@@ -16808,9 +16808,9 @@
         </emu-alg>
         <emu-grammar>IdentifierName :: IdentifierName IdentifierPart</emu-grammar>
         <emu-alg>
-          1. _cps_를 derived |IdentifierName|의 IdentifierCodePoints로 둔다.
+          1. _codePoints_ 를 derived |IdentifierName|의 IdentifierCodePoints로 둔다.
           1. _codePoint_를 |IdentifierPart|의 IdentifierCodePoint로 둔다.
-          1. _cps_와 « _codePoint_ »의 list-concatenation을 반환한다.
+          1. _codePoints_ 와 « _codePoint_ »의 list-concatenation을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -19909,8 +19909,8 @@
           1. _importMeta_가 ~empty~이면, 다음을 수행한다.
             1. _importMeta_를 OrdinaryObjectCreate(*null*)로 설정한다.
             1. _importMetaValues_를 HostGetImportMetaProperties(_module_)로 둔다.
-            1. _importMetaValues_의 각 Record { [[Key]], [[Value]] } _p_에 대해, 다음을 수행한다.
-              1. ! CreateDataPropertyOrThrow(_importMeta_, _p_.[[Key]], _p_.[[Value]])를 수행한다.
+            1. _importMetaValues_의 각 Record { [[Key]], [[Value]] } _entry_에 대해, 다음을 수행한다.
+              1. ! CreateDataPropertyOrThrow(_importMeta_, _entry_.[[Key]], _entry_.[[Value]])를 수행한다.
             1. HostFinalizeImportMeta(_importMeta_, _module_)를 수행한다.
             1. _module_.[[ImportMeta]]를 _importMeta_로 설정한다.
             1. _importMeta_를 반환한다.
@@ -21491,29 +21491,29 @@
       </emu-note>
       <p>called될 때 다음 step을 수행합니다:</p>
       <emu-alg>
-        1. _decls_를 _code_의 LexicallyScopedDeclarations로 둔다.
-        1. _privateEnv_를 running execution context의 PrivateEnvironment로 둔다.
-        1. _decls_의 각 element _decl_에 대해, 다음을 수행한다.
-          1. _decl_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-            1. _decl_의 IsConstantDeclaration이 *true*이면, 다음을 수행한다.
-              1. ! _envRecord_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+        1. _decls_를 _code_의 LexicallyScopedDeclarations라고 하자.
+        1. _privateEnv_를 실행 중인 실행 컨텍스트의 PrivateEnvironment라고 하자.
+        1. _decls_의 각 요소 _decl_에 대해 다음을 수행한다.
+          1. _decl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _decl_의 IsConstantDeclaration이 *true*이면,
+              1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)를 수행한다.
             1. 그렇지 않으면,
-              1. [id="step-blockdeclarationinstantiation-createmutablebinding", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 support하면, 다음을 수행한다.
-                1. ! _envRecord_.HasBinding(_dn_)이 *false*이면, 다음을 수행한다.
-                  1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)를 수행한다.
+              1. [id="step-blockdeclarationinstantiation-createmutablebinding", normative-optional] host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 지원하면,
+                1. ! _envRecord_.HasBinding(_name_)이 *false*이면,
+                  1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
               1. 그렇지 않으면,
-                1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-          1. _decl_이 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이면, 다음을 수행한다.
-            1. _func_를 _decl_의 BoundNames의 sole element로 둔다.
-            1. _funcObj_를 arguments _envRecord_와 _privateEnv_를 가진 _decl_의 InstantiateFunctionObject로 둔다.
-            1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 support하면, 다음을 수행한다.
-              1. _envRecord_ 안의 _func_에 대한 binding이 uninitialized binding이면, 다음을 수행한다.
-                1. ! _envRecord_.InitializeBinding(_func_, _funcObj_)를 수행한다.
+                1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
+          1. _decl_이 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이면,
+            1. _funcName_을 _decl_의 BoundNames의 유일한 요소라고 하자.
+            1. _funcObj_를 _decl_의 InstantiateFunctionObject에 인수 _envRecord_ 및 _privateEnv_를 전달한 결과라고 하자.
+            1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 지원하면,
+              1. _envRecord_에서 _funcName_에 대한 바인딩이 초기화되지 않은 바인딩이면,
+                1. ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)를 수행한다.
               1. 그렇지 않으면,
                 1. Assert: _decl_은 |FunctionDeclaration|이다.
-                1. ! _envRecord_.SetMutableBinding(_func_, _funcObj_, *false*)를 수행한다.
+                1. ! _envRecord_.SetMutableBinding(_funcName_, _funcObj_, *false*)를 수행한다.
             1. 그렇지 않으면,
-              1. ! _envRecord_.InitializeBinding(_func_, _funcObj_)를 수행한다.
+              1. ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -22108,25 +22108,25 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. _oldEnv_를 running execution context의 LexicalEnvironment로 둔다.
-          1. _loopEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 둔다.
-          1. _isConst_를 |LexicalDeclaration|의 IsConstantDeclaration로 둔다.
-          1. _boundNames_를 |LexicalDeclaration|의 BoundNames로 둔다.
-          1. _boundNames_의 각 element _dn_에 대해, 다음을 수행한다.
-            1. _isConst_가 *true*이면, 다음을 수행한다.
-              1. ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+          1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+          1. _loopEnv_를 NewDeclarativeEnvironment(_oldEnv_)라고 하자.
+          1. _isConst_를 |LexicalDeclaration|의 IsConstantDeclaration이라고 하자.
+          1. _boundNames_를 |LexicalDeclaration|의 BoundNames라고 하자.
+          1. _boundNames_의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _isConst_가 *true*이면,
+              1. ! _loopEnv_.CreateImmutableBinding(_name_, *true*)를 수행한다.
             1. 그렇지 않으면,
-              1. ! _loopEnv_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-          1. running execution context의 LexicalEnvironment를 _loopEnv_로 설정한다.
-          1. _forDecl_을 |LexicalDeclaration|의 Evaluation의 Completion으로 둔다.
-          1. _forDecl_이 abrupt completion이면, 다음을 수행한다.
-            1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
+              1. ! _loopEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _loopEnv_로 설정한다.
+          1. _forDecl_을 |LexicalDeclaration|의 Evaluation의 Completion이라고 하자.
+          1. _forDecl_이 abrupt completion이면,
+            1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
             1. ? _forDecl_을 반환한다.
-          1. _isConst_가 *false*이면 _perIterationLets_를 _boundNames_로 둔다; 그렇지 않으면 _perIterationLets_를 새 empty List로 둔다.
-          1. first |Expression|이 present이면 _test_를 first |Expression|으로 둔다; 그렇지 않으면 _test_를 ~empty~로 둔다.
-          1. second |Expression|이 present이면 _increment_를 second |Expression|으로 둔다; 그렇지 않으면 _increment_를 ~empty~로 둔다.
-          1. _bodyResult_를 ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_)의 Completion으로 둔다.
-          1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
+          1. _isConst_가 *false*이면 _perIterationLets_를 _boundNames_라고 하고, 그렇지 않으면 _perIterationLets_를 새로운 빈 List라고 하자.
+          1. 첫 번째 |Expression|이 있으면 _test_를 첫 번째 |Expression|이라고 하고, 그렇지 않으면 _test_를 ~empty~라고 하자.
+          1. 두 번째 |Expression|이 있으면 _increment_를 두 번째 |Expression|이라고 하고, 그렇지 않으면 _increment_를 ~empty~라고 하자.
+          1. _bodyResult_를 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))이라고 하자.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
           1. ? _bodyResult_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -22170,16 +22170,16 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _perIterationBindings_가 어떤 element를 가지면, 다음을 수행한다.
-            1. _lastIterationEnv_를 running execution context의 LexicalEnvironment로 둔다.
-            1. _outer_를 _lastIterationEnv_.[[OuterEnv]]로 둔다.
+          1. _perIterationBindings_에 요소가 있으면,
+            1. _lastIterationEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+            1. _outer_를 _lastIterationEnv_.[[OuterEnv]]라고 하자.
             1. Assert: _outer_는 *null*이 아니다.
-            1. _thisIterationEnv_를 NewDeclarativeEnvironment(_outer_)로 둔다.
-            1. _perIterationBindings_의 각 element _bn_에 대해, 다음을 수행한다.
-              1. ! _thisIterationEnv_.CreateMutableBinding(_bn_, *false*)를 수행한다.
-              1. _lastValue_를 ? _lastIterationEnv_.GetBindingValue(_bn_, *true*)로 둔다.
-              1. ! _thisIterationEnv_.InitializeBinding(_bn_, _lastValue_)를 수행한다.
-            1. running execution context의 LexicalEnvironment를 _thisIterationEnv_로 설정한다.
+            1. _thisIterationEnv_를 NewDeclarativeEnvironment(_outer_)라고 하자.
+            1. _perIterationBindings_의 각 요소 _name_에 대해 다음을 수행한다.
+              1. ! _thisIterationEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
+              1. _lastValue_를 ? _lastIterationEnv_.GetBindingValue(_name_, *true*)라고 하자.
+              1. ! _thisIterationEnv_.InitializeBinding(_name_, _lastValue_)를 수행한다.
+            1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _thisIterationEnv_로 설정한다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -25054,11 +25054,11 @@
       </dl>
       <emu-grammar>ClassStaticBlock : `static` `{` ClassStaticBlockBody `}`</emu-grammar>
       <emu-alg>
-        1. _lexical_을 running execution context의 LexicalEnvironment로 둔다.
-        1. _privateEnv_를 running execution context의 PrivateEnvironment로 둔다.
-        1. _sourceText_를 Unicode code point의 empty sequence로 둔다.
-        1. _formalParams_를 production <emu-grammar>FormalParameters : [empty]</emu-grammar>의 instance로 둔다.
-        1. [id="step-synthetic-class-static-block-fn"] _bodyFunc_를 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexical_, _privateEnv_)로 둔다.
+        1. _lexicalEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+        1. _privateEnv_를 실행 중인 실행 컨텍스트의 PrivateEnvironment라고 하자.
+        1. _sourceText_를 Unicode 코드 포인트의 빈 시퀀스라고 하자.
+        1. _formalParams_를 생성식 <emu-grammar>FormalParameters : [empty]</emu-grammar>의 인스턴스라고 하자.
+        1. [id="step-synthetic-class-static-block-fn"] _bodyFunc_를 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexicalEnv_, _privateEnv_)라고 하자.
         1. MakeMethod(_bodyFunc_, _homeObj_)를 수행한다.
         1. ClassStaticBlockDefinition Record { [[BodyFunction]]: _bodyFunc_ }를 반환한다.
       </emu-alg>
@@ -25139,118 +25139,118 @@
       </emu-note>
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody? `}`</emu-grammar>
       <emu-alg>
-        1. _envRecord_를 running execution context의 LexicalEnvironment로 둔다.
-        1. _classEnv_를 NewDeclarativeEnvironment(_envRecord_)로 둔다.
-        1. _classBinding_이 *undefined*가 아니면, 다음을 수행한다.
+        1. _envRecord_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+        1. _classEnv_를 NewDeclarativeEnvironment(_envRecord_)라고 하자.
+        1. _classBinding_이 *undefined*가 아니면,
           1. ! _classEnv_.CreateImmutableBinding(_classBinding_, *true*)를 수행한다.
-        1. _outerPrivateEnv_를 running execution context의 PrivateEnvironment로 둔다.
-        1. _classPrivateEnv_를 NewPrivateEnvironment(_outerPrivateEnv_)로 둔다.
-        1. |ClassBody|가 present하면, 다음을 수행한다.
-          1. |ClassBody|의 PrivateBoundIdentifiers의 각 String _dn_에 대해, 다음을 수행한다.
-            1. _classPrivateEnv_.[[Names]]가 [[Description]]이 _dn_인 Private Name _privateName_을 contain하면, 다음을 수행한다.
-              1. Assert: 이는 getter/setter pair에 대해서만 possible하다.
+        1. _outerPrivateEnv_를 실행 중인 실행 컨텍스트의 PrivateEnvironment라고 하자.
+        1. _classPrivateEnv_를 NewPrivateEnvironment(_outerPrivateEnv_)라고 하자.
+        1. |ClassBody|가 있으면,
+          1. |ClassBody|의 PrivateBoundIdentifiers의 각 String _description_에 대해 다음을 수행한다.
+            1. _classPrivateEnv_.[[Names]]가 [[Description]]이 _description_인 Private Name _privateName_을 포함하면,
+              1. Assert: 이것은 getter/setter 쌍에 대해서만 가능하다.
             1. 그렇지 않으면,
-              1. _name_을 [[Description]]이 _dn_인 new Private Name으로 둔다.
-              1. _name_을 _classPrivateEnv_.[[Names]]에 append한다.
-        1. |ClassHeritage|가 present하지 않으면, 다음을 수행한다.
-          1. _protoParent_를 %Object.prototype%으로 둔다.
-          1. _ctorParent_를 %Function.prototype%으로 둔다.
+              1. _name_을 [[Description]]이 _description_인 새로운 Private Name이라고 하자.
+              1. _name_을 _classPrivateEnv_.[[Names]]에 추가한다.
+        1. |ClassHeritage|가 없으면,
+          1. _protoParent_를 %Object.prototype%이라고 하자.
+          1. _ctorParent_를 %Function.prototype%이라고 하자.
         1. 그렇지 않으면,
-          1. running execution context의 LexicalEnvironment를 _classEnv_로 설정한다.
-          1. NOTE: |ClassHeritage|를 evaluating할 때 running execution context의 PrivateEnvironment는 _outerPrivateEnv_이다.
-          1. _superclassRef_를 |ClassHeritage|의 Evaluation의 Completion으로 둔다.
-          1. running execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-          1. _superclass_를 ? GetValue(? _superclassRef_)로 둔다.
-          1. _superclass_가 *null*이면, 다음을 수행한다.
-            1. _protoParent_를 *null*로 둔다.
-            1. _ctorParent_를 %Function.prototype%으로 둔다.
-          1. 그렇지 않고 IsConstructor(_superclass_)가 *false*이면, 다음을 수행한다.
-            1. *TypeError* exception을 throw한다.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _classEnv_로 설정한다.
+          1. NOTE: |ClassHeritage|를 평가할 때 실행 중인 실행 컨텍스트의 PrivateEnvironment는 _outerPrivateEnv_이다.
+          1. _superclassRef_를 |ClassHeritage|의 Evaluation의 Completion이라고 하자.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+          1. _superclass_를 ? GetValue(? _superclassRef_)라고 하자.
+          1. _superclass_가 *null*이면,
+            1. _protoParent_를 *null*이라고 하자.
+            1. _ctorParent_를 %Function.prototype%이라고 하자.
+          1. 그렇지 않고 IsConstructor(_superclass_)가 *false*이면,
+            1. *TypeError* 예외를 던진다.
           1. 그렇지 않으면,
-            1. _protoParent_를 ? Get(_superclass_, *"prototype"*)로 둔다.
-            1. _protoParent_가 Object가 아니고 _protoParent_가 *null*도 아니면, *TypeError* exception을 throw한다.
-            1. _ctorParent_를 _superclass_로 둔다.
-        1. _proto_를 OrdinaryObjectCreate(_protoParent_)로 둔다.
-        1. |ClassBody|가 present하지 않으면 _ctor_를 ~empty~로 둔다.
-        1. 그렇지 않으면, _ctor_를 |ClassBody|의 ConstructorMethod로 둔다.
-        1. running execution context의 LexicalEnvironment를 _classEnv_로 설정한다.
-        1. running execution context의 PrivateEnvironment를 _classPrivateEnv_로 설정한다.
-        1. _ctor_가 ~empty~이면, 다음을 수행한다.
-          1. _defaultCtor_를, parameter가 없고 아무것도 capture하지 않으며 called될 때 다음 step을 수행하는 새 Abstract Closure로 둔다:
-            1. _args_를 [[Call]] 또는 [[Construct]]에 의해 이 function에 passed된 argument의 List로 둔다.
-            1. NewTarget이 *undefined*이면, *TypeError* exception을 throw한다.
-            1. _ctorFunc_를 active function object로 둔다.
-            1. _ctorFunc_.[[ConstructorKind]]가 ~derived~이면, 다음을 수행한다.
-              1. NOTE: 이 branch는 `constructor(...args) { super(...args); }`와 similar하게 behave한다. 가장 notable한 distinction은 aforementioned ECMAScript source text가 `%Array.prototype%`의 %Symbol.iterator% method를 observably call하는 반면, 이 function은 그렇지 않다는 점이다.
-              1. _func_를 ! _ctorFunc_.[[GetPrototypeOf]]()로 둔다.
-              1. IsConstructor(_func_)가 *false*이면, *TypeError* exception을 throw한다.
-              1. _result_를 ? Construct(_func_, _args_, NewTarget)로 둔다.
+            1. _protoParent_를 ? Get(_superclass_, *"prototype"*)라고 하자.
+            1. _protoParent_가 Object가 아니고 _protoParent_가 *null*도 아니면, *TypeError* 예외를 던진다.
+            1. _ctorParent_를 _superclass_라고 하자.
+        1. _proto_를 OrdinaryObjectCreate(_protoParent_)라고 하자.
+        1. |ClassBody|가 없으면 _ctor_를 ~empty~라고 하자.
+        1. 그렇지 않으면, _ctor_를 |ClassBody|의 ConstructorMethod라고 하자.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _classEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _classPrivateEnv_로 설정한다.
+        1. _ctor_가 ~empty~이면,
+          1. _defaultCtor_를 매개변수가 없고 아무것도 캡처하지 않으며 호출될 때 다음 단계를 수행하는 새로운 Abstract Closure라고 하자.
+            1. _args_를 [[Call]] 또는 [[Construct]]가 이 함수에 전달한 인수의 List라고 하자.
+            1. NewTarget이 *undefined*이면, *TypeError* 예외를 던진다.
+            1. _ctorFunc_를 활성 함수 객체라고 하자.
+            1. _ctorFunc_.[[ConstructorKind]]가 ~derived~이면,
+              1. NOTE: 이 분기는 `constructor(...args) { super(...args); }`와 유사하게 동작한다. 가장 두드러진 차이점은 앞의 ECMAScript 소스 텍스트는 관찰 가능하게 `%Array.prototype%`의 %Symbol.iterator% 메서드를 호출하지만, 이 함수는 그렇지 않다는 점이다.
+              1. _func_를 ! _ctorFunc_.[[GetPrototypeOf]]()라고 하자.
+              1. IsConstructor(_func_)가 *false*이면, *TypeError* 예외를 던진다.
+              1. _result_를 ? Construct(_func_, _args_, NewTarget)라고 하자.
             1. 그렇지 않으면,
-              1. NOTE: 이 branch는 `constructor() {}`와 similar하게 behave한다.
-              1. _result_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)로 둔다.
+              1. NOTE: 이 분기는 `constructor() {}`와 유사하게 동작한다.
+              1. _result_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)라고 하자.
             1. ? InitializeInstanceElements(_result_, _ctorFunc_)를 수행한다.
             1. NormalCompletion(_result_)를 반환한다.
-          1. _ctorFunc_를 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _ctorParent_)로 둔다.
+          1. _ctorFunc_를 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _ctorParent_)라고 하자.
         1. 그렇지 않으면,
-          1. _ctorInfo_를 arguments _proto_와 _ctorParent_를 가진 _ctor_의 DefineMethod로 ! 둔다.
-          1. _ctorFunc_를 _ctorInfo_.[[Closure]]로 둔다.
+          1. _ctorInfo_를 _ctor_의 DefineMethod에 인수 _proto_ 및 _ctorParent_를 전달한 결과라고 하자.
+          1. _ctorFunc_를 _ctorInfo_.[[Closure]]라고 하자.
           1. MakeClassConstructor(_ctorFunc_)를 수행한다.
-          1. SetFunctionName(_ctorFunc_, _className_)을 수행한다.
+          1. SetFunctionName(_ctorFunc_, _className_)를 수행한다.
         1. _ctorFunc_.[[SourceText]]를 _sourceText_로 설정한다.
         1. MakeConstructor(_ctorFunc_, *false*, _proto_)를 수행한다.
-        1. |ClassHeritage|가 present하면, _ctorFunc_.[[ConstructorKind]]를 ~derived~로 설정한다.
+        1. |ClassHeritage|가 있으면, _ctorFunc_.[[ConstructorKind]]를 ~derived~로 설정한다.
         1. ! DefineMethodProperty(_proto_, *"constructor"*, _ctorFunc_, *false*)를 수행한다.
-        1. |ClassBody|가 present하지 않으면, _classElements_를 새 empty List로 둔다.
-        1. 그렇지 않으면, _classElements_를 |ClassBody|의 NonConstructorElements로 둔다.
-        1. _instancePrivateMethods_를 새 empty List로 둔다.
-        1. _staticPrivateMethods_를 새 empty List로 둔다.
-        1. _instanceFields_를 새 empty List로 둔다.
-        1. _staticElements_를 새 empty List로 둔다.
-        1. _classElements_의 각 |ClassElement| _classElement_에 대해, 다음을 수행한다.
-          1. _classElement_의 IsStatic이 *false*이면, 다음을 수행한다.
-            1. _element_를 argument _proto_를 가진 _classElement_의 ClassElementEvaluation의 Completion으로 둔다.
+        1. |ClassBody|가 없으면 _classElements_를 새로운 빈 List라고 하자.
+        1. 그렇지 않으면, _classElements_를 |ClassBody|의 NonConstructorElements라고 하자.
+        1. _instancePrivateMethods_를 새로운 빈 List라고 하자.
+        1. _staticPrivateMethods_를 새로운 빈 List라고 하자.
+        1. _instanceFields_를 새로운 빈 List라고 하자.
+        1. _staticElements_를 새로운 빈 List라고 하자.
+        1. _classElements_의 각 |ClassElement| _classElement_에 대해 다음을 수행한다.
+          1. _classElement_의 IsStatic이 *false*이면,
+            1. _element_를 인수 _proto_를 사용한 _classElement_의 ClassElementEvaluation의 Completion이라고 하자.
           1. 그렇지 않으면,
-            1. _element_를 argument _ctorFunc_를 가진 _classElement_의 ClassElementEvaluation의 Completion으로 둔다.
-          1. _element_가 abrupt completion이면, 다음을 수행한다.
-            1. running execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-            1. running execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+            1. _element_를 인수 _ctorFunc_를 사용한 _classElement_의 ClassElementEvaluation의 Completion이라고 하자.
+          1. _element_가 abrupt completion이면,
+            1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+            1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
             1. ? _element_를 반환한다.
           1. _element_를 ! _element_로 설정한다.
-          1. _element_가 PrivateElement이면, 다음을 수행한다.
+          1. _element_가 PrivateElement이면,
             1. Assert: _element_.[[Kind]]는 ~method~ 또는 ~accessor~ 중 하나이다.
-            1. _classElement_의 IsStatic이 *false*이면 _container_를 _instancePrivateMethods_로 둔다.
-            1. 그렇지 않으면, _container_를 _staticPrivateMethods_로 둔다.
-            1. _container_가 _pe_.[[Key]]가 _element_.[[Key]]인 PrivateElement _pe_를 contain하면, 다음을 수행한다.
-              1. Assert: _element_.[[Kind]]와 _pe_.[[Kind]]는 둘 다 ~accessor~이다.
-              1. _element_.[[Get]]이 *undefined*이면, 다음을 수행한다.
-                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _pe_.[[Get]], [[Set]]: _element_.[[Set]] }로 둔다.
+            1. _classElement_의 IsStatic이 *false*이면 _container_를 _instancePrivateMethods_라고 하자.
+            1. 그렇지 않으면, _container_를 _staticPrivateMethods_라고 하자.
+            1. _container_가 [[Key]]가 _element_.[[Key]]인 PrivateElement _existingElement_를 포함하면,
+              1. Assert: _element_.[[Kind]]와 _existingElement_.[[Kind]]는 둘 다 ~accessor~이다.
+              1. _element_.[[Get]]이 *undefined*이면,
+                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _existingElement_.[[Get]], [[Set]]: _element_.[[Set]] }라고 하자.
               1. 그렇지 않으면,
-                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _pe_.[[Set]] }로 둔다.
-              1. _container_ 안의 _pe_를 _combined_로 replace한다.
+                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _existingElement_.[[Set]] }라고 하자.
+              1. _container_의 _existingElement_를 _combined_로 대체한다.
             1. 그렇지 않으면,
-              1. _element_를 _container_에 append한다.
-          1. 그렇지 않고 _element_가 ClassFieldDefinition Record이면, 다음을 수행한다.
-            1. _classElement_의 IsStatic이 *false*이면, _element_를 _instanceFields_에 append한다.
-            1. 그렇지 않으면, _element_를 _staticElements_에 append한다.
-          1. 그렇지 않고 _element_가 ClassStaticBlockDefinition Record이면, 다음을 수행한다.
-            1. _element_를 _staticElements_에 append한다.
-        1. running execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-        1. _classBinding_이 *undefined*가 아니면, 다음을 수행한다.
+              1. _element_를 _container_에 추가한다.
+          1. 그렇지 않고 _element_가 ClassFieldDefinition Record이면,
+            1. _classElement_의 IsStatic이 *false*이면, _element_를 _instanceFields_에 추가한다.
+            1. 그렇지 않으면, _element_를 _staticElements_에 추가한다.
+          1. 그렇지 않고 _element_가 ClassStaticBlockDefinition Record이면,
+            1. _element_를 _staticElements_에 추가한다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+        1. _classBinding_이 *undefined*가 아니면,
           1. ! _classEnv_.InitializeBinding(_classBinding_, _ctorFunc_)를 수행한다.
         1. _ctorFunc_.[[PrivateMethods]]를 _instancePrivateMethods_로 설정한다.
         1. _ctorFunc_.[[Fields]]를 _instanceFields_로 설정한다.
-        1. _staticPrivateMethods_의 각 PrivateElement _method_에 대해, 다음을 수행한다.
+        1. _staticPrivateMethods_의 각 PrivateElement _method_에 대해 다음을 수행한다.
           1. ! PrivateMethodOrAccessorAdd(_ctorFunc_, _method_)를 수행한다.
-        1. _staticElements_의 각 element _elementRecord_에 대해, 다음을 수행한다.
-          1. _elementRecord_가 ClassFieldDefinition Record이면, 다음을 수행한다.
-            1. _result_를 DefineField(_ctorFunc_, _elementRecord_)의 Completion으로 둔다.
+        1. _staticElements_의 각 요소 _elementRecord_에 대해 다음을 수행한다.
+          1. _elementRecord_가 ClassFieldDefinition Record이면,
+            1. _result_를 Completion(DefineField(_ctorFunc_, _elementRecord_))라고 하자.
           1. 그렇지 않으면,
             1. Assert: _elementRecord_는 ClassStaticBlockDefinition Record이다.
-            1. _result_를 Call(_elementRecord_.[[BodyFunction]], _ctorFunc_)의 Completion으로 둔다.
-          1. _result_가 abrupt completion이면, 다음을 수행한다.
-            1. running execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+            1. _result_를 Completion(Call(_elementRecord_.[[BodyFunction]], _ctorFunc_))라고 하자.
+          1. _result_가 abrupt completion이면,
+            1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
             1. ? _result_를 반환한다.
-        1. running execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
         1. _ctorFunc_를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -26222,73 +26222,73 @@
       </emu-note>
       <p>called될 때 다음 step을 수행합니다:</p>
       <emu-alg>
-        1. _lexicalNames_를 _script_의 LexicallyDeclaredNames로 둔다.
-        1. _variableNames_를 _script_의 VarDeclaredNames로 둔다.
-        1. _lexicalNames_의 각 element _name_에 대해, 다음을 수행한다.
-          1. HasLexicalDeclaration(_envRecord_, _name_)이 *true*이면, *SyntaxError* exception을 throw한다.
-          1. _hasRestrictedGlobal_을 ? HasRestrictedGlobalProperty(_envRecord_, _name_)로 둔다.
-          1. NOTE: Global `var` 및 `function` binding은(non-strict direct eval에 의해 introduced되는 것은 제외) non-configurable이므로 restricted global property입니다.
-          1. _hasRestrictedGlobal_이 *true*이면, *SyntaxError* exception을 throw한다.
-        1. _variableNames_의 각 element _name_에 대해, 다음을 수행한다.
-          1. HasLexicalDeclaration(_envRecord_, _name_)이 *true*이면, *SyntaxError* exception을 throw한다.
-        1. _variableDecls_를 _script_의 VarScopedDeclarations로 둔다.
-        1. _funcsToInitialize_를 새 empty List로 둔다.
-        1. _declaredFuncNames_를 새 empty List로 둔다.
-        1. _variableDecls_의 각 element _variableDecl_에 대해, reverse List order로 다음을 수행한다.
-          1. _variableDecl_가 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 어느 것도 아니면, 다음을 수행한다.
-            1. Assert: _variableDecl_는 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이다.
-            1. NOTE: same name에 대한 multiple function declaration이 있으면, last declaration이 사용됩니다.
-            1. _func_를 _variableDecl_의 BoundNames의 sole element로 둔다.
-            1. _declaredFuncNames_가 _func_를 contain하지 않으면, 다음을 수행한다.
-              1. _funcDefinable_을 ? CanDeclareGlobalFunction(_envRecord_, _func_)로 둔다.
-              1. _funcDefinable_이 *false*이면, *TypeError* exception을 throw한다.
-              1. _func_를 _declaredFuncNames_에 append한다.
-              1. _variableDecl_를 _funcsToInitialize_의 first element로 insert한다.
-        1. _declaredVariableNames_를 새 empty List로 둔다.
-        1. _variableDecls_의 각 element _variableDecl_에 대해, 다음을 수행한다.
-          1. _variableDecl_가 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 하나이면, 다음을 수행한다.
-            1. _variableDecl_의 BoundNames의 각 String _vn_에 대해, 다음을 수행한다.
-              1. _declaredFuncNames_가 _vn_을 contain하지 않으면, 다음을 수행한다.
-                1. _vnDefinable_을 ? CanDeclareGlobalVar(_envRecord_, _vn_)로 둔다.
-                1. _vnDefinable_이 *false*이면, *TypeError* exception을 throw한다.
-                1. _declaredVariableNames_가 _vn_을 contain하지 않으면, 다음을 수행한다.
-                  1. _vn_을 _declaredVariableNames_에 append한다.
-        1. NOTE: global object가 ordinary object이면 이 algorithm step 이후 abnormal termination은 occur하지 않습니다. 그러나 global object가 Proxy exotic object이면 다음 step 중 일부에서 abnormal termination을 cause하는 behaviour를 exhibit할 수 있습니다.
-        1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 support하면, 다음을 수행한다.
-          1. _strict_를 _script_의 ScriptIsStrict로 둔다.
-          1. _strict_가 *false*이면, 다음을 수행한다.
-            1. _declaredFuncOrVariableNames_를 _declaredFuncNames_와 _declaredVariableNames_의 list-concatenation으로 둔다.
-            1. _script_ Contains _x_가 *true*인 어떤 |Block|, |CaseClause| 또는 |DefaultClause| _x_의 |StatementList| 안에 directly contained된 각 |FunctionDeclaration| _f_에 대해, 다음을 수행한다.
-              1. _funcName_을 _f_의 |BindingIdentifier|의 StringValue로 둔다.
-              1. |FunctionDeclaration| _f_를 _funcName_을 |BindingIdentifier|로 가진 |VariableStatement|로 replacing해도 _script_에 대해 any Early Error를 produce하지 않으면, 다음을 수행한다.
-                1. HasLexicalDeclaration(_envRecord_, _funcName_)이 *false*이면, 다음을 수행한다.
-                  1. _funcDefinable_을 ? CanDeclareGlobalVar(_envRecord_, _funcName_)로 둔다.
-                  1. _funcDefinable_이 *true*이면, 다음을 수행한다.
-                    1. NOTE: _funcName_에 대한 var binding은 그것이 VarDeclaredName도 다른 |FunctionDeclaration|의 name도 아닌 경우에만 여기에서 instantiated됩니다.
-                    1. _declaredFuncOrVariableNames_가 _funcName_을 contain하지 않으면, 다음을 수행한다.
+        1. _lexicalNames_를 _script_의 LexicallyDeclaredNames라고 하자.
+        1. _variableNames_를 _script_의 VarDeclaredNames라고 하자.
+        1. _lexicalNames_의 각 요소 _name_에 대해 다음을 수행한다.
+          1. HasLexicalDeclaration(_envRecord_, _name_)이 *true*이면, *SyntaxError* 예외를 던진다.
+          1. _hasRestrictedGlobal_을 ? HasRestrictedGlobalProperty(_envRecord_, _name_)라고 하자.
+          1. NOTE: 전역 `var` 및 `function` 바인딩은 non-strict direct eval에 의해 도입된 것을 제외하고는 non-configurable이므로 restricted global properties이다.
+          1. _hasRestrictedGlobal_이 *true*이면, *SyntaxError* 예외를 던진다.
+        1. _variableNames_의 각 요소 _name_에 대해 다음을 수행한다.
+          1. HasLexicalDeclaration(_envRecord_, _name_)이 *true*이면, *SyntaxError* 예외를 던진다.
+        1. _variableDecls_를 _script_의 VarScopedDeclarations라고 하자.
+        1. _funcsToInitialize_를 새로운 빈 List라고 하자.
+        1. _declaredFuncNames_를 새로운 빈 List라고 하자.
+        1. _variableDecls_의 각 요소 _variableDecl_에 대해, List의 역순으로 다음을 수행한다.
+          1. _variableDecl_이 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 어느 것도 아니면,
+            1. Assert: _variableDecl_은 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이다.
+            1. NOTE: 같은 이름에 대해 여러 함수 선언이 있으면, 마지막 선언이 사용된다.
+            1. _funcName_을 _variableDecl_의 BoundNames의 유일한 요소라고 하자.
+            1. _declaredFuncNames_가 _funcName_을 포함하지 않으면,
+              1. _funcDefinable_을 ? CanDeclareGlobalFunction(_envRecord_, _funcName_)이라고 하자.
+              1. _funcDefinable_이 *false*이면, *TypeError* 예외를 던진다.
+              1. _funcName_을 _declaredFuncNames_에 추가한다.
+              1. _variableDecl_을 _funcsToInitialize_의 첫 번째 요소로 삽입한다.
+        1. _declaredVariableNames_를 새로운 빈 List라고 하자.
+        1. _variableDecls_의 각 요소 _variableDecl_에 대해 다음을 수행한다.
+          1. _variableDecl_이 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 하나이면,
+            1. _variableDecl_의 BoundNames의 각 String _name_에 대해 다음을 수행한다.
+              1. _declaredFuncNames_가 _name_을 포함하지 않으면,
+                1. _variableDefinable_을 ? CanDeclareGlobalVar(_envRecord_, _name_)라고 하자.
+                1. _variableDefinable_이 *false*이면, *TypeError* 예외를 던진다.
+                1. _declaredVariableNames_가 _name_을 포함하지 않으면,
+                  1. _name_을 _declaredVariableNames_에 추가한다.
+        1. NOTE: 전역 객체가 ordinary object이면 이 알고리즘 단계 이후에는 abnormal termination이 발생하지 않는다. 하지만 전역 객체가 Proxy exotic object이면 다음 단계 중 일부에서 abnormal termination을 유발하는 동작을 보일 수 있다.
+        1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point", normative-optional] host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 지원하면,
+          1. _strict_를 _script_의 ScriptIsStrict라고 하자.
+          1. _strict_가 *false*이면,
+            1. _declaredFuncOrVariableNames_를 _declaredFuncNames_와 _declaredVariableNames_의 list-concatenation이라고 하자.
+            1. _script_ Contains _x_가 *true*인 |Block|, |CaseClause| 또는 |DefaultClause| _x_의 |StatementList|에 직접 포함된 각 |FunctionDeclaration| _funcDecl_에 대해 다음을 수행한다.
+              1. _funcName_을 _funcDecl_의 |BindingIdentifier|의 StringValue라고 하자.
+              1. |FunctionDeclaration| _funcDecl_을 _funcName_을 |BindingIdentifier|로 갖는 |VariableStatement|로 대체해도 _script_에 대한 Early Errors가 생성되지 않으면,
+                1. HasLexicalDeclaration(_envRecord_, _funcName_)이 *false*이면,
+                  1. _funcDefinable_을 ? CanDeclareGlobalVar(_envRecord_, _funcName_)라고 하자.
+                  1. _funcDefinable_이 *true*이면,
+                    1. NOTE: _funcName_에 대한 var 바인딩은 그것이 VarDeclaredName도 아니고 다른 |FunctionDeclaration|의 이름도 아닐 때에만 여기서 인스턴스화된다.
+                    1. _declaredFuncOrVariableNames_가 _funcName_을 포함하지 않으면,
                       1. ? CreateGlobalVarBinding(_envRecord_, _funcName_, *false*)를 수행한다.
-                      1. _funcName_을 _declaredFuncOrVariableNames_에 append한다.
-                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _f_가 evaluated될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 provided된 |FunctionDeclaration| Evaluation algorithm 대신 다음 step을 수행한다:
-                      1. _gEnv_를 running execution context의 VariableEnvironment로 둔다.
-                      1. _bEnv_를 running execution context의 LexicalEnvironment로 둔다.
-                      1. _fObj_를 ! _bEnv_.GetBindingValue(_funcName_, *false*)로 둔다.
-                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>를 수행한다.
+                      1. _funcName_을 _declaredFuncOrVariableNames_에 추가한다.
+                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_이 평가될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 제공된 |FunctionDeclaration| Evaluation 알고리즘 대신 다음 단계를 수행한다.
+                      1. _globalEnv_를 실행 중인 실행 컨텍스트의 VariableEnvironment라고 하자.
+                      1. _blockEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+                      1. _funcObj_를 ! _blockEnv_.GetBindingValue(_funcName_, *false*)라고 하자.
+                      1. ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>를 수행한다.
                       1. ~unused~를 반환한다.
-        1. _lexicalDecls_를 _script_의 LexicallyScopedDeclarations로 둔다.
-        1. _privateEnv_를 *null*로 둔다.
-        1. _lexicalDecls_의 각 element _lexicalDecl_에 대해, 다음을 수행한다.
-          1. NOTE: Lexically declared name은 여기에서 instantiated만 되고 initialized되지는 않습니다.
-          1. _lexicalDecl_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-            1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면, 다음을 수행한다.
-              1. ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_dn_, *true*)</emu-meta>를 수행한다.
+        1. _lexicalDecls_를 _script_의 LexicallyScopedDeclarations라고 하자.
+        1. _privateEnv_를 *null*이라고 하자.
+        1. _lexicalDecls_의 각 요소 _lexicalDecl_에 대해 다음을 수행한다.
+          1. NOTE: Lexically declared name은 여기서 인스턴스화만 되고 초기화되지는 않는다.
+          1. _lexicalDecl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+            1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면,
+              1. ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_name_, *true*)</emu-meta>를 수행한다.
             1. 그렇지 않으면,
-              1. ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_dn_, *false*)</emu-meta>를 수행한다.
-        1. _funcsToInitialize_의 각 Parse Node _f_에 대해, 다음을 수행한다.
-          1. _func_를 _f_의 BoundNames의 sole element로 둔다.
-          1. _funcObj_를 arguments _envRecord_와 _privateEnv_를 가진 _f_의 InstantiateFunctionObject로 둔다.
-          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _func_, _funcObj_, *false*)</emu-meta>를 수행한다.
-        1. _declaredVariableNames_의 각 String _vn_에 대해, 다음을 수행한다.
-          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _vn_, *false*)</emu-meta>를 수행한다.
+              1. ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_name_, *false*)</emu-meta>를 수행한다.
+        1. _funcsToInitialize_의 각 Parse Node _funcDecl_에 대해 다음을 수행한다.
+          1. _funcName_을 _funcDecl_의 BoundNames의 유일한 요소라고 하자.
+          1. _funcObj_를 _funcDecl_의 InstantiateFunctionObject에 인수 _envRecord_ 및 _privateEnv_를 전달한 결과라고 하자.
+          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _funcName_, _funcObj_, *false*)</emu-meta>를 수행한다.
+        1. _declaredVariableNames_의 각 String _variableName_에 대해 다음을 수행한다.
+          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _variableName_, *false*)</emu-meta>를 수행한다.
         1. ~unused~를 반환한다.
       </emu-alg>
       <emu-note>
@@ -26380,9 +26380,9 @@
           <dd>_importEntries_에 의해 defined된 모든 local name binding의 List를 create합니다.</dd>
         </dl>
         <emu-alg>
-          1. _localNames_를 새 empty List로 둔다.
-          1. _importEntries_의 각 ImportEntry Record _i_에 대해, 다음을 수행한다.
-            1. _i_.[[LocalName]]을 _localNames_에 append한다.
+          1. _localNames_를 새로운 빈 List라고 하자.
+          1. _importEntries_의 각 ImportEntry Record _importEntry_에 대해 다음을 수행한다.
+            1. _importEntry_.[[LocalName]]을 _localNames_에 추가한다.
           1. _localNames_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -26558,11 +26558,11 @@
         </emu-alg>
         <emu-grammar>ModuleItemList : ModuleItemList ModuleItem</emu-grammar>
         <emu-alg>
-          1. _requests_를 |ModuleItemList|의 ModuleRequests로 둔다.
-          1. _additionalRequests_를 |ModuleItem|의 ModuleRequests로 둔다.
-          1. _additionalRequests_의 각 ModuleRequest Record _mr_에 대해, 다음을 수행한다.
-            1. _requests_가 ModuleRequestsEqual(_mr_, _mr2_)이 *true*인 ModuleRequest Record _mr2_를 contain하지 않으면, 다음을 수행한다.
-              1. _mr_를 _requests_에 append한다.
+          1. _requests_를 |ModuleItemList|의 ModuleRequests라고 하자.
+          1. _additionalRequests_를 |ModuleItem|의 ModuleRequests라고 하자.
+          1. _additionalRequests_의 각 ModuleRequest Record _moduleRequest_에 대해 다음을 수행한다.
+            1. _requests_가 ModuleRequestsEqual(_moduleRequest_, _otherModuleRequest_)이 *true*인 ModuleRequest Record _otherModuleRequest_를 포함하지 않으면,
+              1. _moduleRequest_를 _requests_에 추가한다.
           1. _requests_를 반환한다.
         </emu-alg>
         <emu-grammar>ModuleItem : StatementListItem</emu-grammar>
@@ -27161,17 +27161,17 @@
             </dl>
 
             <emu-alg>
-              1. Assert: _module_.[[Status]]는 ~unlinked~, ~linked~, ~evaluating-async~, 또는 ~evaluated~ 중 하나이다.
-              1. _stack_을 새 empty List로 둔다.
-              1. _result_를 Completion(InnerModuleLinking(_module_, _stack_, 0))으로 둔다.
-              1. _result_가 abrupt completion이면, 다음을 수행한다.
-                1. _stack_의 각 Cyclic Module Record _m_에 대해, 다음을 수행한다.
-                  1. Assert: _m_.[[Status]]는 ~linking~이다.
-                  1. _m_.[[Status]]를 ~unlinked~로 설정한다.
+              1. Assert: _module_.[[Status]]는 ~unlinked~, ~linked~, ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
+              1. _stack_을 새로운 빈 List라고 하자.
+              1. _result_를 Completion(InnerModuleLinking(_module_, _stack_, 0))이라고 하자.
+              1. _result_가 abrupt completion이면,
+                1. _stack_의 각 Cyclic Module Record _requiredModule_에 대해 다음을 수행한다.
+                  1. Assert: _requiredModule_.[[Status]]는 ~linking~이다.
+                  1. _requiredModule_.[[Status]]를 ~unlinked~로 설정한다.
                 1. Assert: _module_.[[Status]]는 ~unlinked~이다.
                 1. ? _result_를 반환한다.
-              1. Assert: _module_.[[Status]]는 ~linked~, ~evaluating-async~, 또는 ~evaluated~ 중 하나이다.
-              1. Assert: _stack_은 empty이다.
+              1. Assert: _module_.[[Status]]는 ~linked~, ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
+              1. Assert: _stack_은 비어 있다.
               1. ~unused~를 반환한다.
             </emu-alg>
 
@@ -27235,35 +27235,35 @@
             </dl>
 
             <emu-alg>
-              1. Assert: Evaluate에 대한 이 call은 surrounding agent 안에서 Evaluate에 대한 another call과 same time에 happening하지 않는다.
-              1. Assert: _module_.[[Status]]는 ~linked~, ~evaluating-async~, 또는 ~evaluated~ 중 하나이다.
-              1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~ 중 하나이면, 다음을 수행한다.
-                1. _module_.[[CycleRoot]]가 ~empty~가 아니면, 다음을 수행한다.
+              1. Assert: 이 Evaluate 호출은 주변 agent 내의 다른 Evaluate 호출과 동시에 발생하고 있지 않다.
+              1. Assert: _module_.[[Status]]는 ~linked~, ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
+              1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~ 중 하나이면,
+                1. _module_.[[CycleRoot]]가 ~empty~가 아니면,
                   1. _module_을 _module_.[[CycleRoot]]로 설정한다.
                 1. 그렇지 않으면,
                   1. Assert: _module_.[[Status]]는 ~evaluated~이고 _module_.[[EvaluationError]]는 throw completion이다.
-              1. _module_.[[TopLevelCapability]]가 ~empty~가 아니면, 다음을 수행한다.
+              1. _module_.[[TopLevelCapability]]가 ~empty~가 아니면,
                 1. _module_.[[TopLevelCapability]].[[Promise]]를 반환한다.
-              1. _stack_을 새 empty List로 둔다.
-              1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
+              1. _stack_을 새로운 빈 List라고 하자.
+              1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)라고 하자.
               1. _module_.[[TopLevelCapability]]를 _promiseCapability_로 설정한다.
-              1. _result_를 Completion(InnerModuleEvaluation(_module_, _stack_, 0))으로 둔다.
-              1. _result_가 abrupt completion이면, 다음을 수행한다.
-                1. _stack_의 각 Cyclic Module Record _m_에 대해, 다음을 수행한다.
-                  1. Assert: _m_.[[Status]]는 ~evaluating~이다.
-                  1. _m_.[[Status]]를 ~evaluated~로 설정한다.
-                  1. _m_.[[EvaluationError]]를 _result_로 설정한다.
+              1. _result_를 Completion(InnerModuleEvaluation(_module_, _stack_, 0))이라고 하자.
+              1. _result_가 abrupt completion이면,
+                1. _stack_의 각 Cyclic Module Record _requiredModule_에 대해 다음을 수행한다.
+                  1. Assert: _requiredModule_.[[Status]]는 ~evaluating~이다.
+                  1. _requiredModule_.[[Status]]를 ~evaluated~로 설정한다.
+                  1. _requiredModule_.[[EvaluationError]]를 _result_로 설정한다.
                 1. Assert: _module_.[[Status]]는 ~evaluated~이다.
-                1. Assert: _module_.[[EvaluationError]]와 _result_는 same Completion Record이다.
+                1. Assert: _module_.[[EvaluationError]]와 _result_는 같은 Completion Record이다.
                 1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)를 수행한다.
               1. 그렇지 않으면,
                 1. Assert: _module_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
                 1. Assert: _module_.[[EvaluationError]]는 ~empty~이다.
-                1. _module_.[[Status]]가 ~evaluated~이면, 다음을 수행한다.
+                1. _module_.[[Status]]가 ~evaluated~이면,
                   1. Assert: _module_.[[AsyncEvaluationOrder]]는 ~unset~ 또는 ~done~ 중 하나이다.
-                  1. NOTE: _module_.[[AsyncEvaluationOrder]]가 ~done~인 것은 _module_이 이미 evaluated되었고 그 evaluation이 asynchronous였던 경우에만, 그리고 그 경우에만 true이다.
+                  1. NOTE: _module_.[[AsyncEvaluationOrder]]는 _module_이 이미 평가되었고 그 평가가 비동기였던 경우에만 ~done~이다.
                   1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
-                1. Assert: _stack_은 empty이다.
+                1. Assert: _stack_은 비어 있다.
               1. _promiseCapability_.[[Promise]]를 반환한다.
             </emu-alg>
 
@@ -28459,29 +28459,29 @@
             <dd>_sourceText_를 |Module|로 parsing한 result를 기반으로 Source Text Module Record를 create합니다.</dd>
           </dl>
           <emu-alg>
-            1. _body_를 ParseText(_sourceText_, |Module|)로 둔다.
-            1. _body_가 error의 List이면, _body_를 반환한다.
-            1. _requestedModules_를 _body_의 ModuleRequests로 둔다.
-            1. _importEntries_를 _body_의 ImportEntries로 둔다.
-            1. _importedBoundNames_를 ImportedLocalNames(_importEntries_)로 둔다.
-            1. _indirectExportEntries_를 새 empty List로 둔다.
-            1. _localExportEntries_를 새 empty List로 둔다.
-            1. _starExportEntries_를 새 empty List로 둔다.
-            1. _exportEntries_를 _body_의 ExportEntries로 둔다.
-            1. _exportEntries_의 각 ExportEntry Record _exportEntry_에 대해, 다음을 수행한다.
-              1. _exportEntry_.[[ModuleRequest]]가 *null*이면, 다음을 수행한다.
-                1. _importedBoundNames_가 _exportEntry_.[[LocalName]]을 contain하지 않으면, 다음을 수행한다.
-                  1. _exportEntry_를 _localExportEntries_에 append한다.
+            1. _body_를 ParseText(_sourceText_, |Module|)라고 하자.
+            1. _body_가 errors의 List이면, _body_를 반환한다.
+            1. _requestedModules_를 _body_의 ModuleRequests라고 하자.
+            1. _importEntries_를 _body_의 ImportEntries라고 하자.
+            1. _importedBoundNames_를 ImportedLocalNames(_importEntries_)라고 하자.
+            1. _indirectExportEntries_를 새로운 빈 List라고 하자.
+            1. _localExportEntries_를 새로운 빈 List라고 하자.
+            1. _starExportEntries_를 새로운 빈 List라고 하자.
+            1. _exportEntries_를 _body_의 ExportEntries라고 하자.
+            1. _exportEntries_의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+              1. _exportEntry_.[[ModuleRequest]]가 *null*이면,
+                1. _importedBoundNames_가 _exportEntry_.[[LocalName]]을 포함하지 않으면,
+                  1. _exportEntry_를 _localExportEntries_에 추가한다.
                 1. 그렇지 않으면,
-                  1. NOTE: original module에서 imported된 binding 또는 namespace object를 exporting할 때, ExportEntry Record는 imported된 뒤 exported된 것이 아니라 original module에서 directly re-exported된 경우의 form과 match하도록 rewritten된다. 이를 통해 `export * from`을 통해 same name 아래 same binding 또는 namespace를 twice exporting함으로써 arise하는 conflict가 <emu-xref href="#sec-resolveexport">Source Text Module Records의 ResolveExport concrete method</emu-xref>의 step <emu-xref href="#step-resolveexport-conflict"></emu-xref>에서 ambiguous로 treated되는 대신 ignored될 수 있다.
-                  1. _ie_를 [[LocalName]]이 _exportEntry_.[[LocalName]]인 _importEntries_의 element로 둔다.
-                  1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] }을 _indirectExportEntries_에 append한다.
-              1. 그렇지 않고 _exportEntry_.[[ImportName]]이 ~all-but-default~이면, 다음을 수행한다.
+                  1. NOTE: 원래 다른 모듈에서 가져온 바인딩 또는 namespace 객체를 내보낼 때, ExportEntry Record는 바인딩 또는 namespace 객체가 가져온 뒤 내보내진 것이 아니라 원래 모듈에서 직접 다시 내보내졌다면 가졌을 형식과 일치하도록 다시 작성된다. 이를 통해 `export * from`을 통해 같은 이름으로 같은 바인딩 또는 namespace를 두 번 내보내면서 발생하는 충돌이 <emu-xref href="#sec-resolveexport">Source Text Module Records의 ResolveExport 구체 메서드</emu-xref>의 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 단계에서 모호한 것으로 처리되지 않고 무시될 수 있다.
+                  1. _importEntry_를 [[LocalName]]이 _exportEntry_.[[LocalName]]인 _importEntries_의 요소라고 하자.
+                  1. ExportEntry Record { [[ModuleRequest]]: _importEntry_.[[ModuleRequest]], [[ImportName]]: _importEntry_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] }를 _indirectExportEntries_에 추가한다.
+              1. 그렇지 않고 _exportEntry_.[[ImportName]]이 ~all-but-default~이면,
                 1. Assert: _exportEntry_.[[ExportName]]은 *null*이다.
-                1. _exportEntry_를 _starExportEntries_에 append한다.
+                1. _exportEntry_를 _starExportEntries_에 추가한다.
               1. 그렇지 않으면,
-                1. _exportEntry_를 _indirectExportEntries_에 append한다.
-            1. _async_를 _body_ Contains `await`로 둔다.
+                1. _exportEntry_를 _indirectExportEntries_에 추가한다.
+            1. _async_를 _body_ Contains `await`라고 하자.
             1. Source Text Module Record { [[Realm]]: _realm_, [[Environment]]: ~empty~, [[Namespace]]: ~empty~, [[CycleRoot]]: ~empty~, [[HasTLA]]: _async_, [[AsyncEvaluationOrder]]: ~unset~, [[TopLevelCapability]]: ~empty~, [[AsyncParentModules]]: « », [[PendingAsyncDependencies]]: ~empty~, [[Status]]: ~new~, [[EvaluationError]]: ~empty~, [[HostDefined]]: _hostDefined_, [[ECMAScriptCode]]: _body_, [[Context]]: ~empty~, [[ImportMeta]]: ~empty~, [[RequestedModules]]: _requestedModules_, [[LoadedModules]]: « », [[ImportEntries]]: _importEntries_, [[LocalExportEntries]]: _localExportEntries_, [[IndirectExportEntries]]: _indirectExportEntries_, [[StarExportEntries]]: _starExportEntries_, [[DFSAncestorIndex]]: ~empty~ }를 반환한다.
           </emu-alg>
           <emu-note>
@@ -28506,28 +28506,28 @@
             </dl>
             <emu-alg>
               1. Assert: _module_.[[Status]]는 ~new~가 아니다.
-              1. _exportStarSet_이 present하지 않으면, _exportStarSet_을 새 empty List로 설정한다.
-              1. _exportStarSet_이 _module_을 contain하면, 다음을 수행한다.
-                1. Assert: 우리는 `export *` circularity의 starting point에 reached했다.
-                1. 새 empty List를 반환한다.
-              1. _module_을 _exportStarSet_에 append한다.
-              1. _exportedNames_를 새 empty List로 둔다.
-              1. _module_.[[LocalExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. Assert: _module_은 이 export에 대한 direct binding을 provide한다.
-                1. Assert: _e_.[[ExportName]]은 *null*이 아니다.
-                1. _e_.[[ExportName]]을 _exportedNames_에 append한다.
-              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. Assert: _module_은 이 export에 대한 specific binding을 import한다.
-                1. Assert: _e_.[[ExportName]]은 *null*이 아니다.
-                1. _e_.[[ExportName]]을 _exportedNames_에 append한다.
-              1. _module_.[[StarExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. Assert: _e_.[[ModuleRequest]]는 *null*이 아니다.
-                1. _requestedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
-                1. _starNames_를 _requestedModule_.GetExportedNames(_exportStarSet_)로 둔다.
-                1. _starNames_의 각 element _n_에 대해, 다음을 수행한다.
-                  1. _n_이 *"default"*가 아니면, 다음을 수행한다.
-                    1. _exportedNames_가 _n_을 contain하지 않으면, 다음을 수행한다.
-                      1. _n_을 _exportedNames_에 append한다.
+              1. _exportStarSet_이 없으면, _exportStarSet_을 새로운 빈 List로 설정한다.
+              1. _exportStarSet_이 _module_을 포함하면,
+                1. Assert: `export *` 순환성의 시작점에 도달했다.
+                1. 새로운 빈 List를 반환한다.
+              1. _module_을 _exportStarSet_에 추가한다.
+              1. _exportedNames_를 새로운 빈 List라고 하자.
+              1. _module_.[[LocalExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. Assert: _module_은 이 export에 대한 direct binding을 제공한다.
+                1. Assert: _exportEntry_.[[ExportName]]은 *null*이 아니다.
+                1. _exportEntry_.[[ExportName]]을 _exportedNames_에 추가한다.
+              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. Assert: _module_은 이 export에 대한 특정 binding을 가져온다.
+                1. Assert: _exportEntry_.[[ExportName]]은 *null*이 아니다.
+                1. _exportEntry_.[[ExportName]]을 _exportedNames_에 추가한다.
+              1. _module_.[[StarExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. Assert: _exportEntry_.[[ModuleRequest]]는 *null*이 아니다.
+                1. _requestedModule_을 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])라고 하자.
+                1. _starNames_를 _requestedModule_.GetExportedNames(_exportStarSet_)라고 하자.
+                1. _starNames_의 각 요소 _name_에 대해 다음을 수행한다.
+                  1. _name_이 *"default"*가 아니면,
+                    1. _exportedNames_가 _name_을 포함하지 않으면,
+                      1. _name_을 _exportedNames_에 추가한다.
               1. _exportedNames_를 반환한다.
             </emu-alg>
             <emu-note>
@@ -28555,43 +28555,43 @@
 
             <emu-alg>
               1. Assert: _module_.[[Status]]는 ~new~가 아니다.
-              1. _resolveSet_이 present하지 않으면, _resolveSet_을 새 empty List로 설정한다.
-              1. _resolveSet_의 각 Record { [[Module]], [[ExportName]] } _record_에 대해, 다음을 수행한다.
-                1. _module_과 _record_.[[Module]]이 same Module Record이고 _exportName_이 _record_.[[ExportName]]이면, 다음을 수행한다.
-                  1. Assert: 이는 circular import request이다.
+              1. _resolveSet_이 없으면, _resolveSet_을 새로운 빈 List로 설정한다.
+              1. _resolveSet_의 각 Record { [[Module]], [[ExportName]] } _record_에 대해 다음을 수행한다.
+                1. _module_과 _record_.[[Module]]이 같은 Module Record이고 _exportName_이 _record_.[[ExportName]]이면,
+                  1. Assert: 이것은 순환 import 요청이다.
                   1. *null*을 반환한다.
-              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }을 _resolveSet_에 append한다.
-              1. _module_.[[LocalExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. _e_.[[ExportName]]이 _exportName_이면, 다음을 수행한다.
-                  1. Assert: _module_은 이 export에 대한 direct binding을 provide한다.
-                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }을 반환한다.
-              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. _e_.[[ExportName]]이 _exportName_이면, 다음을 수행한다.
-                  1. Assert: _e_.[[ModuleRequest]]는 *null*이 아니다.
-                  1. _importedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
-                  1. _e_.[[ImportName]]이 ~namespace~이면, 다음을 수행한다.
-                    1. Assert: _module_은 이 export에 대한 direct binding을 provide하지 않는다.
+              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }를 _resolveSet_에 추가한다.
+              1. _module_.[[LocalExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. _exportEntry_.[[ExportName]]이 _exportName_이면,
+                  1. Assert: _module_은 이 export에 대한 direct binding을 제공한다.
+                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _exportEntry_.[[LocalName]] }를 반환한다.
+              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. _exportEntry_.[[ExportName]]이 _exportName_이면,
+                  1. Assert: _exportEntry_.[[ModuleRequest]]는 *null*이 아니다.
+                  1. _importedModule_을 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])라고 하자.
+                  1. _exportEntry_.[[ImportName]]이 ~namespace~이면,
+                    1. Assert: _module_은 이 export에 대한 direct binding을 제공하지 않는다.
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }를 반환한다.
-                  1. Assert: _module_은 이 export에 대한 specific binding을 import한다.
-                  1. Assert: _e_.[[ImportName]]은 String이다.
-                  1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)를 반환한다.
-              1. _exportName_이 *"default"*이면, 다음을 수행한다.
-                1. Assert: `default` export는 이 module에 의해 explicitly defined되지 않았다.
+                  1. Assert: _module_은 이 export에 대한 특정 binding을 가져온다.
+                  1. Assert: _exportEntry_.[[ImportName]]은 String이다.
+                  1. _importedModule_.ResolveExport(_exportEntry_.[[ImportName]], _resolveSet_)를 반환한다.
+              1. _exportName_이 *"default"*이면,
+                1. Assert: `default` export는 이 모듈에 의해 명시적으로 정의되지 않았다.
                 1. *null*을 반환한다.
-                1. NOTE: `default` export는 `export * from "mod"` declaration에 의해 provided될 수 없다.
-              1. _starResolution_을 *null*로 둔다.
-              1. _module_.[[StarExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. Assert: _e_.[[ModuleRequest]]는 *null*이 아니다.
-                1. _importedModule_을 GetImportedModule(_module_, _e_.[[ModuleRequest]])로 둔다.
-                1. _resolution_을 _importedModule_.ResolveExport(_exportName_, _resolveSet_)로 둔다.
+                1. NOTE: `default` export는 `export * from "mod"` 선언에 의해 제공될 수 없다.
+              1. _starResolution_을 *null*이라고 하자.
+              1. _module_.[[StarExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. Assert: _exportEntry_.[[ModuleRequest]]는 *null*이 아니다.
+                1. _importedModule_을 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])라고 하자.
+                1. _resolution_을 _importedModule_.ResolveExport(_exportName_, _resolveSet_)라고 하자.
                 1. _resolution_이 ~ambiguous~이면, ~ambiguous~를 반환한다.
-                1. _resolution_이 *null*이 아니면, 다음을 수행한다.
+                1. _resolution_이 *null*이 아니면,
                   1. Assert: _resolution_은 ResolvedBinding Record이다.
-                  1. _starResolution_이 *null*이면, 다음을 수행한다.
-                    1. _starResolution_을 _resolution_로 설정한다.
+                  1. _starResolution_이 *null*이면,
+                    1. _starResolution_을 _resolution_으로 설정한다.
                   1. [id="step-resolveexport-conflict"] 그렇지 않으면,
-                    1. Assert: requested name을 include하는 `*` export가 more than one 있다.
-                    1. _resolution_.[[Module]]과 _starResolution_.[[Module]]이 same Module Record가 아니면, ~ambiguous~를 반환한다.
+                    1. Assert: 요청된 이름을 포함하는 `*` export가 둘 이상 있다.
+                    1. _resolution_.[[Module]]과 _starResolution_.[[Module]]이 같은 Module Record가 아니면, ~ambiguous~를 반환한다.
                     1. _resolution_.[[BindingName]]이 _starResolution_.[[BindingName]]이 아니면, ~ambiguous~를 반환한다.
               1. _starResolution_을 반환한다.
             </emu-alg>
@@ -28611,63 +28611,63 @@
             </dl>
 
             <emu-alg>
-              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _e_에 대해, 다음을 수행한다.
-                1. Assert: _e_.[[ExportName]]은 *null*이 아니다.
-                1. _resolution_을 _module_.ResolveExport(_e_.[[ExportName]])로 둔다.
-                1. _resolution_이 *null* 또는 ~ambiguous~ 중 하나이면, *SyntaxError* exception을 throw한다.
+              1. _module_.[[IndirectExportEntries]]의 각 ExportEntry Record _exportEntry_에 대해 다음을 수행한다.
+                1. Assert: _exportEntry_.[[ExportName]]은 *null*이 아니다.
+                1. _resolution_을 _module_.ResolveExport(_exportEntry_.[[ExportName]])라고 하자.
+                1. _resolution_이 *null* 또는 ~ambiguous~ 중 하나이면, *SyntaxError* 예외를 던진다.
                 1. Assert: _resolution_은 ResolvedBinding Record이다.
-              1. Assert: _module_의 all named exports are resolvable.
-              1. _realm_을 _module_.[[Realm]]로 둔다.
+              1. Assert: _module_의 모든 named export는 resolve 가능하다.
+              1. _realm_을 _module_.[[Realm]]이라고 하자.
               1. Assert: _realm_은 *undefined*가 아니다.
-              1. _envRecord_를 NewModuleEnvironment(_realm_.[[GlobalEnv]])로 둔다.
+              1. _envRecord_를 NewModuleEnvironment(_realm_.[[GlobalEnv]])라고 하자.
               1. _module_.[[Environment]]를 _envRecord_로 설정한다.
-              1. _module_.[[ImportEntries]]의 각 ImportEntry Record _in_에 대해, 다음을 수행한다.
-                1. _importedModule_을 GetImportedModule(_module_, _in_.[[ModuleRequest]])로 둔다.
-                1. _in_.[[ImportName]]이 ~namespace~이면, 다음을 수행한다.
-                  1. _namespace_를 GetModuleNamespace(_importedModule_)로 둔다.
-                  1. ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)를 수행한다.
-                  1. ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)를 수행한다.
+              1. _module_.[[ImportEntries]]의 각 ImportEntry Record _importEntry_에 대해 다음을 수행한다.
+                1. _importedModule_을 GetImportedModule(_module_, _importEntry_.[[ModuleRequest]])라고 하자.
+                1. _importEntry_.[[ImportName]]이 ~namespace~이면,
+                  1. _namespace_를 GetModuleNamespace(_importedModule_)라고 하자.
+                  1. ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)를 수행한다.
+                  1. ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)를 수행한다.
                 1. 그렇지 않으면,
-                  1. Assert: _in_.[[ImportName]]은 String이다.
-                  1. _resolution_을 _importedModule_.ResolveExport(_in_.[[ImportName]])로 둔다.
-                  1. _resolution_이 *null* 또는 ~ambiguous~ 중 하나이면, *SyntaxError* exception을 throw한다.
-                  1. _resolution_.[[BindingName]]이 ~namespace~이면, 다음을 수행한다.
-                    1. _namespace_를 GetModuleNamespace(_resolution_.[[Module]])로 둔다.
-                    1. ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)를 수행한다.
-                    1. ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)를 수행한다.
+                  1. Assert: _importEntry_.[[ImportName]]은 String이다.
+                  1. _resolution_을 _importedModule_.ResolveExport(_importEntry_.[[ImportName]])라고 하자.
+                  1. _resolution_이 *null* 또는 ~ambiguous~ 중 하나이면, *SyntaxError* 예외를 던진다.
+                  1. _resolution_.[[BindingName]]이 ~namespace~이면,
+                    1. _namespace_를 GetModuleNamespace(_resolution_.[[Module]])라고 하자.
+                    1. ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)를 수행한다.
+                    1. ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)를 수행한다.
                   1. 그렇지 않으면,
-                    1. CreateImportBinding(_envRecord_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])을 수행한다.
-              1. _moduleContext_를 새 ECMAScript code execution context로 둔다.
+                    1. CreateImportBinding(_envRecord_, _importEntry_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])을 수행한다.
+              1. _moduleContext_를 새로운 ECMAScript code execution context라고 하자.
               1. _moduleContext_의 Function을 *null*로 설정한다.
               1. Assert: _module_.[[Realm]]은 *undefined*가 아니다.
-              1. _moduleContext_의 Realm을 _module_.[[Realm]]로 설정한다.
+              1. _moduleContext_의 Realm을 _module_.[[Realm]]으로 설정한다.
               1. _moduleContext_의 ScriptOrModule을 _module_로 설정한다.
               1. _moduleContext_의 VariableEnvironment를 _module_.[[Environment]]로 설정한다.
               1. _moduleContext_의 LexicalEnvironment를 _module_.[[Environment]]로 설정한다.
               1. _moduleContext_의 PrivateEnvironment를 *null*로 설정한다.
               1. _module_.[[Context]]를 _moduleContext_로 설정한다.
-              1. _moduleContext_를 execution context stack에 push한다; _moduleContext_는 이제 running execution context이다.
-              1. _code_를 _module_.[[ECMAScriptCode]]로 둔다.
-              1. _variableDecls_를 _code_의 VarScopedDeclarations로 둔다.
-              1. _declaredVariableNames_를 새 empty List로 둔다.
-              1. _variableDecls_의 각 element _d_에 대해, 다음을 수행한다.
-                1. _d_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-                  1. _declaredVariableNames_가 _dn_을 contain하지 않으면, 다음을 수행한다.
-                    1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-                    1. ! _envRecord_.InitializeBinding(_dn_, *undefined*)를 수행한다.
-                    1. _dn_을 _declaredVariableNames_에 append한다.
-              1. _lexicalDecls_를 _code_의 LexicallyScopedDeclarations로 둔다.
-              1. _privateEnv_를 *null*로 둔다.
-              1. _lexicalDecls_의 각 element _d_에 대해, 다음을 수행한다.
-                1. _d_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-                  1. _d_의 IsConstantDeclaration이 *true*이면, 다음을 수행한다.
-                    1. ! _envRecord_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+              1. _moduleContext_를 execution context stack에 push한다. _moduleContext_는 이제 실행 중인 실행 컨텍스트이다.
+              1. _code_를 _module_.[[ECMAScriptCode]]라고 하자.
+              1. _variableDecls_를 _code_의 VarScopedDeclarations라고 하자.
+              1. _declaredVariableNames_를 새로운 빈 List라고 하자.
+              1. _variableDecls_의 각 요소 _variableDecl_에 대해 다음을 수행한다.
+                1. _variableDecl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+                  1. _declaredVariableNames_가 _name_을 포함하지 않으면,
+                    1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
+                    1. ! _envRecord_.InitializeBinding(_name_, *undefined*)를 수행한다.
+                    1. _name_을 _declaredVariableNames_에 추가한다.
+              1. _lexicalDecls_를 _code_의 LexicallyScopedDeclarations라고 하자.
+              1. _privateEnv_를 *null*이라고 하자.
+              1. _lexicalDecls_의 각 요소 _lexicalDecl_에 대해 다음을 수행한다.
+                1. _lexicalDecl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+                  1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면,
+                    1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)를 수행한다.
                   1. 그렇지 않으면,
-                    1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-                  1. _d_가 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이면, 다음을 수행한다.
-                    1. _funcObj_를 arguments _envRecord_와 _privateEnv_를 가진 _d_의 InstantiateFunctionObject로 둔다.
-                    1. ! _envRecord_.InitializeBinding(_dn_, _funcObj_)를 수행한다.
-              1. execution context stack에서 _moduleContext_를 remove한다.
+                    1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
+                  1. _lexicalDecl_이 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이면,
+                    1. _funcObj_를 _lexicalDecl_의 InstantiateFunctionObject에 인수 _envRecord_ 및 _privateEnv_를 전달한 결과라고 하자.
+                    1. ! _envRecord_.InitializeBinding(_name_, _funcObj_)를 수행한다.
+              1. _moduleContext_를 execution context stack에서 제거한다.
               1. ~unused~를 반환한다.
             </emu-alg>
           </emu-clause>
@@ -29927,126 +29927,126 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _variableNames_를 _body_의 VarDeclaredNames로 둔다.
-          1. _variableDecls_를 _body_의 VarScopedDeclarations로 둔다.
-          1. _strict_가 *false*이면, 다음을 수행한다.
-            1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-              1. _variableNames_의 각 element _name_에 대해, 다음을 수행한다.
-                1. HasLexicalDeclaration(_variableEnv_, _name_)이 *true*이면, *SyntaxError* exception을 throw한다.
-                1. NOTE: `eval`은 global lexical declaration에 의해 shadowed될 global var declaration을 create하지 않는다.
-            1. _thisEnv_를 _lexicalEnv_로 둔다.
-            1. Assert: 다음 loop는 terminate할 것이다.
-            1. Repeat, _thisEnv_와 _variableEnv_가 same Environment Record가 아닌 동안,
-              1. _thisEnv_가 Object Environment Record가 아니면, 다음을 수행한다.
-                1. NOTE: with statement의 environment는 어떤 lexical declaration도 contain할 수 없으므로 var/let hoisting conflict에 대해 checked될 필요가 없다.
-                1. _variableNames_의 각 element _name_에 대해, 다음을 수행한다.
-                  1. ! _thisEnv_.HasBinding(_name_)이 *true*이면, 다음을 수행한다.
-                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>를 support하면, 다음을 수행한다.
-                      1. _thisEnv_가 |Catch| clause에 대한 Environment Record가 아니면, *SyntaxError* exception을 throw한다.
+          1. _variableNames_를 _body_의 VarDeclaredNames라고 하자.
+          1. _variableDecls_를 _body_의 VarScopedDeclarations라고 하자.
+          1. _strict_가 *false*이면,
+            1. _variableEnv_가 Global Environment Record이면,
+              1. _variableNames_의 각 요소 _name_에 대해 다음을 수행한다.
+                1. HasLexicalDeclaration(_variableEnv_, _name_)이 *true*이면, *SyntaxError* 예외를 던진다.
+                1. NOTE: `eval`은 전역 lexical 선언에 의해 가려질 전역 var 선언을 생성하지 않는다.
+            1. _thisEnv_를 _lexicalEnv_라고 하자.
+            1. Assert: 다음 루프는 종료된다.
+            1. _thisEnv_와 _variableEnv_가 같은 Environment Record가 아닌 동안 반복한다.
+              1. _thisEnv_가 Object Environment Record가 아니면,
+                1. NOTE: with 문장의 환경은 어떤 lexical 선언도 포함할 수 없으므로 var/let 호이스팅 충돌을 검사할 필요가 없다.
+                1. _variableNames_의 각 요소 _name_에 대해 다음을 수행한다.
+                  1. ! _thisEnv_.HasBinding(_name_)이 *true*이면,
+                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>를 지원하면,
+                      1. _thisEnv_가 |Catch| 절에 대한 Environment Record가 아니면, *SyntaxError* 예외를 던진다.
                     1. 그렇지 않으면,
-                      1. *SyntaxError* exception을 throw한다.
-                  1. NOTE: direct eval은 like-named lexical declaration 위로 var declaration을 hoist하지 않을 것이다.
+                      1. *SyntaxError* 예외를 던진다.
+                  1. NOTE: direct eval은 var 선언을 같은 이름의 lexical 선언 위로 호이스팅하지 않는다.
               1. _thisEnv_를 _thisEnv_.[[OuterEnv]]로 설정한다.
-          1. _privateIdentifiers_를 새 empty List로 둔다.
-          1. _pointer_를 _privateEnv_로 둔다.
-          1. Repeat, _pointer_가 *null*이 아닌 동안,
-            1. _pointer_.[[Names]]의 각 Private Name _binding_에 대해, 다음을 수행한다.
-              1. _privateIdentifiers_가 _binding_.[[Description]]을 contain하지 않으면, _binding_.[[Description]]을 _privateIdentifiers_에 append한다.
+          1. _privateIdentifiers_를 새로운 빈 List라고 하자.
+          1. _pointer_를 _privateEnv_라고 하자.
+          1. _pointer_가 *null*이 아닌 동안 반복한다.
+            1. _pointer_.[[Names]]의 각 Private Name _binding_에 대해 다음을 수행한다.
+              1. _privateIdentifiers_가 _binding_.[[Description]]을 포함하지 않으면, _binding_.[[Description]]을 _privateIdentifiers_에 추가한다.
             1. _pointer_를 _pointer_.[[OuterPrivateEnvironment]]로 설정한다.
-          1. argument _privateIdentifiers_를 가진 _body_의 AllPrivateIdentifiersValid가 *false*이면, *SyntaxError* exception을 throw한다.
-          1. _funcsToInitialize_를 새 empty List로 둔다.
-          1. _declaredFuncNames_를 새 empty List로 둔다.
-          1. _variableDecls_의 각 element _d_에 대해, reverse List order로 다음을 수행한다.
-            1. _d_가 |VariableDeclaration|, |ForBinding|, 또는 |BindingIdentifier| 중 어느 것도 아니면, 다음을 수행한다.
-              1. Assert: _d_는 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, 또는 |AsyncGeneratorDeclaration| 중 하나이다.
-              1. NOTE: same name에 대한 multiple function declaration이 있으면, last declaration이 사용된다.
-              1. _func_를 _d_의 BoundNames의 sole element로 둔다.
-              1. _declaredFuncNames_가 _func_를 contain하지 않으면, 다음을 수행한다.
-                1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-                  1. _funcDefinable_을 ? CanDeclareGlobalFunction(_variableEnv_, _func_)로 둔다.
-                  1. _funcDefinable_이 *false*이면, *TypeError* exception을 throw한다.
-                1. _func_를 _declaredFuncNames_에 append한다.
-                1. _d_를 _funcsToInitialize_의 first element로 insert한다.
-          1. _declaredVariableNames_를 새 empty List로 둔다.
-          1. _variableDecls_의 각 element _d_에 대해, 다음을 수행한다.
-            1. _d_가 |VariableDeclaration|, |ForBinding|, 또는 |BindingIdentifier| 중 하나이면, 다음을 수행한다.
-              1. _d_의 BoundNames의 각 String _vn_에 대해, 다음을 수행한다.
-                1. _declaredFuncNames_가 _vn_을 contain하지 않으면, 다음을 수행한다.
-                  1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-                    1. _vnDefinable_을 ? CanDeclareGlobalVar(_variableEnv_, _vn_)로 둔다.
-                    1. _vnDefinable_이 *false*이면, *TypeError* exception을 throw한다.
-                  1. _declaredVariableNames_가 _vn_을 contain하지 않으면, 다음을 수행한다.
-                    1. _vn_을 _declaredVariableNames_에 append한다.
-          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] _strict_가 *false*이고 host가 web browser이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 support하면, 다음을 수행한다.
-            1. _declaredFuncOrVariableNames_를 _declaredFuncNames_와 _declaredVariableNames_의 list-concatenation으로 둔다.
-            1. _body_ Contains _x_가 *true*인 어떤 |Block|, |CaseClause|, 또는 |DefaultClause| _x_의 |StatementList| 안에 directly contained된 각 |FunctionDeclaration| _f_에 대해, 다음을 수행한다.
-              1. _funcName_을 _f_의 |BindingIdentifier|의 StringValue로 둔다.
-              1. |FunctionDeclaration| _f_를 _funcName_을 |BindingIdentifier|로 가진 |VariableStatement|로 replacing해도 _body_에 대해 any Early Error를 produce하지 않으면, 다음을 수행한다.
-                1. _bindingExists_를 *false*로 둔다.
+          1. _body_의 AllPrivateIdentifiersValid에 인수 _privateIdentifiers_를 전달한 결과가 *false*이면, *SyntaxError* 예외를 던진다.
+          1. _funcsToInitialize_를 새로운 빈 List라고 하자.
+          1. _declaredFuncNames_를 새로운 빈 List라고 하자.
+          1. _variableDecls_의 각 요소 _variableDecl_에 대해, List의 역순으로 다음을 수행한다.
+            1. _variableDecl_이 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 어느 것도 아니면,
+              1. Assert: _variableDecl_은 |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration| 또는 |AsyncGeneratorDeclaration| 중 하나이다.
+              1. NOTE: 같은 이름에 대해 여러 함수 선언이 있으면, 마지막 선언이 사용된다.
+              1. _funcName_을 _variableDecl_의 BoundNames의 유일한 요소라고 하자.
+              1. _declaredFuncNames_가 _funcName_을 포함하지 않으면,
+                1. _variableEnv_가 Global Environment Record이면,
+                  1. _funcDefinable_을 ? CanDeclareGlobalFunction(_variableEnv_, _funcName_)이라고 하자.
+                  1. _funcDefinable_이 *false*이면, *TypeError* 예외를 던진다.
+                1. _funcName_을 _declaredFuncNames_에 추가한다.
+                1. _variableDecl_을 _funcsToInitialize_의 첫 번째 요소로 삽입한다.
+          1. _declaredVariableNames_를 새로운 빈 List라고 하자.
+          1. _variableDecls_의 각 요소 _variableDecl_에 대해 다음을 수행한다.
+            1. _variableDecl_이 |VariableDeclaration|, |ForBinding| 또는 |BindingIdentifier| 중 하나이면,
+              1. _variableDecl_의 BoundNames의 각 String _name_에 대해 다음을 수행한다.
+                1. _declaredFuncNames_가 _name_을 포함하지 않으면,
+                  1. _variableEnv_가 Global Environment Record이면,
+                    1. _variableDefinable_을 ? CanDeclareGlobalVar(_variableEnv_, _name_)라고 하자.
+                    1. _variableDefinable_이 *false*이면, *TypeError* 예외를 던진다.
+                  1. _declaredVariableNames_가 _name_을 포함하지 않으면,
+                    1. _name_을 _declaredVariableNames_에 추가한다.
+          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] _strict_가 *false*이고 host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>를 지원하면,
+            1. _declaredFuncOrVariableNames_를 _declaredFuncNames_와 _declaredVariableNames_의 list-concatenation이라고 하자.
+            1. _body_ Contains _x_가 *true*인 |Block|, |CaseClause| 또는 |DefaultClause| _x_의 |StatementList|에 직접 포함된 각 |FunctionDeclaration| _funcDecl_에 대해 다음을 수행한다.
+              1. _funcName_을 _funcDecl_의 |BindingIdentifier|의 StringValue라고 하자.
+              1. |FunctionDeclaration| _funcDecl_을 _funcName_을 |BindingIdentifier|로 갖는 |VariableStatement|로 대체해도 _body_에 대한 Early Errors가 생성되지 않으면,
+                1. _bindingExists_를 *false*라고 하자.
                 1. _thisEnv_를 _lexicalEnv_로 설정한다.
-                1. Assert: 다음 loop는 terminate할 것이다.
-                1. Repeat, _thisEnv_가 _variableEnv_가 아닌 동안,
-                  1. _thisEnv_가 Object Environment Record가 아니면, 다음을 수행한다.
-                    1. ! _thisEnv_.HasBinding(_funcName_)이 *true*이면, 다음을 수행한다.
-                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] host가 web browser이거나 그 밖에 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>를 support하면, 다음을 수행한다.
-                        1. _thisEnv_가 |Catch| clause에 대한 Environment Record가 아니면, _bindingExists_를 *true*로 설정한다.
+                1. Assert: 다음 루프는 종료된다.
+                1. _thisEnv_가 _variableEnv_가 아닌 동안 반복한다.
+                  1. _thisEnv_가 Object Environment Record가 아니면,
+                    1. ! _thisEnv_.HasBinding(_funcName_)이 *true*이면,
+                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] host가 웹 브라우저이거나 그 밖에 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>를 지원하면,
+                        1. _thisEnv_가 |Catch| 절에 대한 Environment Record가 아니면, _bindingExists_를 *true*로 설정한다.
                       1. 그렇지 않으면,
                         1. _bindingExists_를 *true*로 설정한다.
                   1. _thisEnv_를 _thisEnv_.[[OuterEnv]]로 설정한다.
-                1. _bindingExists_가 *false*이고 _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-                  1. HasLexicalDeclaration(_variableEnv_, _funcName_)이 *false*이면, 다음을 수행한다.
-                    1. _funcDefinable_을 ? CanDeclareGlobalVar(_variableEnv_, _funcName_)로 둔다.
+                1. _bindingExists_가 *false*이고 _variableEnv_가 Global Environment Record이면,
+                  1. HasLexicalDeclaration(_variableEnv_, _funcName_)이 *false*이면,
+                    1. _funcDefinable_을 ? CanDeclareGlobalVar(_variableEnv_, _funcName_)라고 하자.
                   1. 그렇지 않으면,
-                    1. _funcDefinable_을 *false*로 둔다.
+                    1. _funcDefinable_을 *false*라고 하자.
                 1. 그렇지 않으면,
-                  1. _funcDefinable_을 *true*로 둔다.
-                1. _bindingExists_가 *false*이고 _funcDefinable_이 *true*이면, 다음을 수행한다.
-                  1. _declaredFuncOrVariableNames_가 _funcName_을 contain하지 않으면, 다음을 수행한다.
-                    1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
+                  1. _funcDefinable_을 *true*라고 하자.
+                1. _bindingExists_가 *false*이고 _funcDefinable_이 *true*이면,
+                  1. _declaredFuncOrVariableNames_가 _funcName_을 포함하지 않으면,
+                    1. _variableEnv_가 Global Environment Record이면,
                       1. ? CreateGlobalVarBinding(_variableEnv_, _funcName_, *true*)를 수행한다.
                     1. 그렇지 않으면,
                       1. _bindingExists_를 ! _variableEnv_.HasBinding(_funcName_)으로 설정한다.
-                      1. _bindingExists_가 *false*이면, 다음을 수행한다.
+                      1. _bindingExists_가 *false*이면,
                         1. ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)를 수행한다.
                         1. ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)를 수행한다.
-                    1. _funcName_을 _declaredFuncOrVariableNames_에 append한다.
-                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _f_가 evaluated될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 provided된 |FunctionDeclaration| Evaluation algorithm 대신 다음 step을 수행한다:
-                    1. _gEnv_를 running execution context의 VariableEnvironment로 둔다.
-                    1. _bEnv_를 running execution context의 LexicalEnvironment로 둔다.
-                    1. _fObj_를 ! _bEnv_.GetBindingValue(_funcName_, *false*)로 둔다.
-                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>를 수행한다.
+                    1. _funcName_을 _declaredFuncOrVariableNames_에 추가한다.
+                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_이 평가될 때, <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>에 제공된 |FunctionDeclaration| Evaluation 알고리즘 대신 다음 단계를 수행한다.
+                    1. _globalEnv_를 실행 중인 실행 컨텍스트의 VariableEnvironment라고 하자.
+                    1. _blockEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
+                    1. _funcObj_를 ! _blockEnv_.GetBindingValue(_funcName_, *false*)라고 하자.
+                    1. ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>를 수행한다.
                     1. ~unused~를 반환한다.
-          1. [id="step-evaldeclarationinstantiation-post-validation"] NOTE: 이 algorithm step 이후 abnormal termination은 _variableEnv_가 Global Environment Record이고 global object가 Proxy exotic object인 경우가 아니면 occur하지 않는다.
-          1. _lexicalDecls_를 _body_의 LexicallyScopedDeclarations로 둔다.
-          1. _lexicalDecls_의 각 element _d_에 대해, 다음을 수행한다.
-            1. NOTE: Lexically declared name은 여기에서 instantiated만 되고 initialized되지는 않는다.
-            1. _d_의 BoundNames의 각 element _dn_에 대해, 다음을 수행한다.
-              1. _d_의 IsConstantDeclaration이 *true*이면, 다음을 수행한다.
-                1. ? _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)를 수행한다.
+          1. [id="step-evaldeclarationinstantiation-post-validation"] NOTE: _variableEnv_가 Global Environment Record이고 전역 객체가 Proxy exotic object인 경우가 아니면, 이 알고리즘 단계 이후에는 abnormal termination이 발생하지 않는다.
+          1. _lexicalDecls_를 _body_의 LexicallyScopedDeclarations라고 하자.
+          1. _lexicalDecls_의 각 요소 _lexicalDecl_에 대해 다음을 수행한다.
+            1. NOTE: Lexically declared name은 여기서 인스턴스화만 되고 초기화되지는 않는다.
+            1. _lexicalDecl_의 BoundNames의 각 요소 _name_에 대해 다음을 수행한다.
+              1. _lexicalDecl_의 IsConstantDeclaration이 *true*이면,
+                1. ? _lexicalEnv_.CreateImmutableBinding(_name_, *true*)를 수행한다.
               1. 그렇지 않으면,
-                1. ? _lexicalEnv_.CreateMutableBinding(_dn_, *false*)를 수행한다.
-          1. _funcsToInitialize_의 각 Parse Node _f_에 대해, 다음을 수행한다.
-            1. _func_를 _f_의 BoundNames의 sole element로 둔다.
-            1. _funcObj_를 arguments _lexicalEnv_와 _privateEnv_를 가진 _f_의 InstantiateFunctionObject로 둔다.
-            1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-              1. ? CreateGlobalFunctionBinding(_variableEnv_, _func_, _funcObj_, *true*)를 수행한다.
+                1. ? _lexicalEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
+          1. _funcsToInitialize_의 각 Parse Node _funcDecl_에 대해 다음을 수행한다.
+            1. _funcName_을 _funcDecl_의 BoundNames의 유일한 요소라고 하자.
+            1. _funcObj_를 _funcDecl_의 InstantiateFunctionObject에 인수 _lexicalEnv_ 및 _privateEnv_를 전달한 결과라고 하자.
+            1. _variableEnv_가 Global Environment Record이면,
+              1. ? CreateGlobalFunctionBinding(_variableEnv_, _funcName_, _funcObj_, *true*)를 수행한다.
             1. 그렇지 않으면,
-              1. _bindingExists_를 ! _variableEnv_.HasBinding(_func_)으로 둔다.
-              1. _bindingExists_가 *false*이면, 다음을 수행한다.
-                1. NOTE: 다음 invocation은 step <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> preceding validation 때문에 abrupt completion을 return할 수 없다.
-                1. ! _variableEnv_.CreateMutableBinding(_func_, *true*)를 수행한다.
-                1. ! _variableEnv_.InitializeBinding(_func_, _funcObj_)를 수행한다.
+              1. _bindingExists_를 ! _variableEnv_.HasBinding(_funcName_)이라고 하자.
+              1. _bindingExists_가 *false*이면,
+                1. NOTE: 다음 호출은 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 단계 이전의 검증 때문에 abrupt completion을 반환할 수 없다.
+                1. ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)를 수행한다.
+                1. ! _variableEnv_.InitializeBinding(_funcName_, _funcObj_)를 수행한다.
               1. 그렇지 않으면,
-                1. ! _variableEnv_.SetMutableBinding(_func_, _funcObj_, *false*)를 수행한다.
-          1. _declaredVariableNames_의 각 String _vn_에 대해, 다음을 수행한다.
-            1. _variableEnv_가 Global Environment Record이면, 다음을 수행한다.
-              1. ? CreateGlobalVarBinding(_variableEnv_, _vn_, *true*)를 수행한다.
+                1. ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)를 수행한다.
+          1. _declaredVariableNames_의 각 String _variableName_에 대해 다음을 수행한다.
+            1. _variableEnv_가 Global Environment Record이면,
+              1. ? CreateGlobalVarBinding(_variableEnv_, _variableName_, *true*)를 수행한다.
             1. 그렇지 않으면,
-              1. _bindingExists_를 ! _variableEnv_.HasBinding(_vn_)으로 둔다.
-              1. _bindingExists_가 *false*이면, 다음을 수행한다.
-                1. NOTE: 다음 invocation은 step <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> preceding validation 때문에 abrupt completion을 return할 수 없다.
-                1. ! _variableEnv_.CreateMutableBinding(_vn_, *true*)를 수행한다.
-                1. ! _variableEnv_.InitializeBinding(_vn_, *undefined*)를 수행한다.
+              1. _bindingExists_를 ! _variableEnv_.HasBinding(_variableName_)이라고 하자.
+              1. _bindingExists_가 *false*이면,
+                1. NOTE: 다음 호출은 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 단계 이전의 검증 때문에 abrupt completion을 반환할 수 없다.
+                1. ! _variableEnv_.CreateMutableBinding(_variableName_, *true*)를 수행한다.
+                1. ! _variableEnv_.InitializeBinding(_variableName_, *undefined*)를 수행한다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -30587,18 +30587,18 @@
         <p>이 function은 one or more source object에서 _target_ object로 모든 enumerable own property의 value를 copy합니다.</p>
         <p>called될 때 다음 step을 수행합니다:</p>
         <emu-alg>
-          1. _to_를 ? ToObject(_target_)로 둔다.
-          1. only one argument가 passed되었으면, _to_를 반환한다.
-          1. _sources_의 각 element _nextSource_에 대해, 다음을 수행한다.
-            1. _nextSource_가 *undefined*도 아니고 *null*도 아니면, 다음을 수행한다.
-              1. _from_을 ! ToObject(_nextSource_)로 둔다.
-              1. _keys_를 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>로 둔다.
-              1. _keys_의 각 element _nextKey_에 대해, 다음을 수행한다.
-                1. _propertyDesc_를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>로 둔다.
-                1. _propertyDesc_가 *undefined*가 아니고 _propertyDesc_.[[Enumerable]]이 *true*이면, 다음을 수행한다.
-                  1. _propertyValue_를 ? Get(_from_, _nextKey_)로 둔다.
-                  1. ? Set(_to_, _nextKey_, _propertyValue_, *true*)를 수행한다.
-          1. _to_를 반환한다.
+          1. _targetObj_를 ? ToObject(_target_)라고 하자.
+          1. 인수가 하나만 전달되었으면 _targetObj_를 반환한다.
+          1. _sources_의 각 요소 _nextSource_에 대해 다음을 수행한다.
+            1. _nextSource_가 *undefined*도 *null*도 아니면,
+              1. _from_을 ! ToObject(_nextSource_)라고 하자.
+              1. _keys_를 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>라고 하자.
+              1. _keys_의 각 요소 _nextKey_에 대해 다음을 수행한다.
+                1. _propertyDesc_를 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>라고 하자.
+                1. _propertyDesc_가 *undefined*가 아니고 _propertyDesc_.[[Enumerable]]이 *true*이면,
+                  1. _propertyValue_를 ? Get(_from_, _nextKey_)라고 하자.
+                  1. ? Set(_targetObj_, _nextKey_, _propertyValue_, *true*)를 수행한다.
+          1. _targetObj_를 반환한다.
         </emu-alg>
         <p>이 function의 *"length"* property는 *2*<sub>𝔽</sub>입니다.</p>
       </emu-clause>
@@ -30784,11 +30784,11 @@
         </emu-note>
         <p>이 function은 called될 때 다음 step을 수행합니다:</p>
         <emu-alg>
-          1. _groups_를 ? GroupBy(_items_, _callback_, ~property~)로 둔다.
-          1. _obj_를 OrdinaryObjectCreate(*null*)로 둔다.
-          1. _groups_의 각 Record { [[Key]], [[Elements]] } _g_에 대해, 다음을 수행한다.
-            1. _elements_를 CreateArrayFromList(_g_.[[Elements]])로 둔다.
-            1. ! CreateDataPropertyOrThrow(_obj_, _g_.[[Key]], _elements_)를 수행한다.
+          1. _groups_를 ? GroupBy(_items_, _callback_, ~property~)라고 하자.
+          1. _obj_를 OrdinaryObjectCreate(*null*)라고 하자.
+          1. _groups_의 각 Record { [[Key]], [[Elements]] } _group_에 대해 다음을 수행한다.
+            1. _elements_를 CreateArrayFromList(_group_.[[Elements]])라고 하자.
+            1. ! CreateDataPropertyOrThrow(_obj_, _group_.[[Key]], _elements_)를 수행한다.
           1. _obj_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -31719,10 +31719,10 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _propertyDesc_를 _symbol_.[[Description]]으로 둔다.
-            1. _propertyDesc_가 *undefined*이면, _propertyDesc_를 empty String으로 설정한다.
-            1. Assert: _propertyDesc_는 String이다.
-            1. *"Symbol("*, _propertyDesc_, 및 *")"*의 string-concatenation을 반환한다.
+            1. _description_을 _symbol_.[[Description]]이라고 하자.
+            1. _description_이 *undefined*이면, _description_을 빈 String으로 설정한다.
+            1. Assert: _description_은 String이다.
+            1. *"Symbol("*, _description_ 및 *")"*의 string-concatenation을 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -32576,9 +32576,9 @@
         <emu-alg>
           1. _bits_를 ? ToIndex(_bits_)로 설정한다.
           1. _bigint_를 ? ToBigInt(_bigint_)로 설정한다.
-          1. _module_을 ℝ(_bigint_) modulo 2<sup>_bits_</sup>로 둔다.
-          1. _module_ ≥ 2<sup>_bits_ - 1</sup>이면, ℤ(_module_ - 2<sup>_bits_</sup>)를 반환한다.
-          1. ℤ(_module_)을 반환한다.
+          1. _remainder_를 ℝ(_bigint_) modulo 2<sup>_bits_</sup>라고 하자.
+          1. _remainder_ ≥ 2<sup>_bits_ - 1</sup>이면, ℤ(_remainder_ - 2<sup>_bits_</sup>)를 반환한다.
+          1. ℤ(_remainder_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -37353,9 +37353,9 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>RegExpIdentifierName :: RegExpIdentifierName RegExpIdentifierPart</emu-grammar>
         <emu-alg>
-          1. _cps_를 derived |RegExpIdentifierName|의 RegExpIdentifierCodePoints로 둔다.
-          1. _codePoint_를 |RegExpIdentifierPart|의 RegExpIdentifierCodePoint로 둔다.
-          1. _cps_와 « _codePoint_ »의 list-concatenation을 반환한다.
+          1. _codePoints_를 파생된 |RegExpIdentifierName|의 RegExpIdentifierCodePoints라고 하자.
+          1. _codePoint_를 |RegExpIdentifierPart|의 RegExpIdentifierCodePoint라고 하자.
+          1. _codePoints_와 « _codePoint_ »의 list-concatenation을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -48144,13 +48144,13 @@ THH:mm:ss.sss
         <h1>FinalizationRegistry ( _cleanupCallback_ )</h1>
         <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. NewTarget이 *undefined*이면, *TypeError* exception을 throw한다.
-          1. IsCallable(_cleanupCallback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _finalizationRegistry_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%FinalizationRegistry.prototype%"*, « [[Realm]], [[CleanupCallback]], [[Cells]] »)로 둔다.
-          1. _func_를 active function object로 둔다.
-          1. _finalizationRegistry_.[[Realm]]을 _func_.[[Realm]]으로 설정한다.
+          1. NewTarget이 *undefined*이면, *TypeError* 예외를 던진다.
+          1. IsCallable(_cleanupCallback_)이 *false*이면, *TypeError* 예외를 던진다.
+          1. _finalizationRegistry_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%FinalizationRegistry.prototype%"*, « [[Realm]], [[CleanupCallback]], [[Cells]] »)라고 하자.
+          1. _activeFunc_를 활성 함수 객체라고 하자.
+          1. _finalizationRegistry_.[[Realm]]을 _activeFunc_.[[Realm]]으로 설정한다.
           1. _finalizationRegistry_.[[CleanupCallback]]을 HostMakeJobCallback(_cleanupCallback_)으로 설정한다.
-          1. _finalizationRegistry_.[[Cells]]를 new empty List로 설정한다.
+          1. _finalizationRegistry_.[[Cells]]를 새로운 빈 List로 설정한다.
           1. _finalizationRegistry_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -51724,19 +51724,19 @@ THH:mm:ss.sss
         <p>이 function은 revocable Proxy object를 생성합니다.</p>
         <p>호출될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _proxy_를 ? ProxyCreate(_target_, _handler_)로 둔다.
-          1. _revokerClosure_를 parameters가 없고 아무것도 captures하지 않으며 호출될 때 다음 steps를 수행하는 new Abstract Closure로 둔다:
-            1. _activeFunc_를 active function object로 둔다.
-            1. _p_를 _activeFunc_.[[RevocableProxy]]로 둔다.
-            1. _p_가 *null*이면, NormalCompletion(*undefined*)를 반환한다.
+          1. _proxy_를 ? ProxyCreate(_target_, _handler_)라고 하자.
+          1. _revokerClosure_를 매개변수가 없고 아무것도 캡처하지 않으며 호출될 때 다음 단계를 수행하는 새로운 Abstract Closure라고 하자.
+            1. _activeFunc_를 활성 함수 객체라고 하자.
+            1. _revocableProxy_를 _activeFunc_.[[RevocableProxy]]라고 하자.
+            1. _revocableProxy_가 *null*이면, NormalCompletion(*undefined*)을 반환한다.
             1. _activeFunc_.[[RevocableProxy]]를 *null*로 설정한다.
-            1. Assert: _p_는 Proxy exotic object이다.
-            1. _p_.[[ProxyTarget]]을 *null*로 설정한다.
-            1. _p_.[[ProxyHandler]]를 *null*로 설정한다.
-            1. NormalCompletion(*undefined*)를 반환한다.
-          1. _revoker_를 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)로 둔다.
+            1. Assert: _revocableProxy_는 Proxy exotic object이다.
+            1. _revocableProxy_.[[ProxyTarget]]을 *null*로 설정한다.
+            1. _revocableProxy_.[[ProxyHandler]]를 *null*로 설정한다.
+            1. NormalCompletion(*undefined*)을 반환한다.
+          1. _revoker_를 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)라고 하자.
           1. _revoker_.[[RevocableProxy]]를 _proxy_로 설정한다.
-          1. _result_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
+          1. _result_를 OrdinaryObjectCreate(%Object.prototype%)라고 하자.
           1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)를 수행한다.
           1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)를 수행한다.
           1. _result_를 반환한다.
@@ -52006,8 +52006,8 @@ THH:mm:ss.sss
       </dl>
       <emu-alg>
         1. _events_를 empty Set으로 둔다.
-        1. _execution_.[[EventsRecords]]의 각 Agent Events Record _aer_에 대해, 다음을 수행한다.
-          1. _aer_.[[EventList]]의 각 Memory event _event_에 대해, 다음을 수행한다.
+        1. _execution_.[[EventsRecords]]의 각 Agent Events Record _eventsRecord_에 대해, 다음을 수행한다.
+          1. _eventsRecord_.[[EventList]]의 각 Memory event _event_에 대해, 다음을 수행한다.
             1. _event_를 _events_에 Add한다.
         1. _events_를 반환한다.
       </emu-alg>
@@ -52103,7 +52103,7 @@ THH:mm:ss.sss
       <h1>is-agent-order-before</h1>
       <p>candidate execution _execution_에 대해, 그 <dfn>is-agent-order-before</dfn> Relation은 다음을 satisfies하는 Memory events에 대한 least Relation입니다.</p>
       <ul>
-        <li>events _eventA_ 및 _eventB_에 대해, _execution_.[[EventsRecords]] 안에 _eventA_와 _eventB_ 둘 다를 contain하는 some Agent Events Record _aer_가 있고 _eventA_가 _aer_.[[EventList]]의 List order에서 _eventB_보다 before이면, _eventA_는 _execution_에서 _eventB_보다 is-agent-order-before입니다.</li>
+        <li>이벤트 _eventA_와 _eventB_에 대해, _execution_.[[EventsRecords]] 안에 어떤 Agent Events Record _eventsRecord_가 있어서 _eventsRecord_.[[EventList]]가 _eventA_와 _eventB_를 모두 포함하고, _eventA_가 _eventsRecord_.[[EventList]]의 List 순서에서 _eventB_보다 앞에 있으면, _eventA_는 _execution_에서 _eventB_보다 is-agent-order-before이다.</li>
       </ul>
 
       <emu-note>

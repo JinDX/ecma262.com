@@ -2784,13 +2784,13 @@
               1. _x_を(_x_ - _xDigit_) / 2に設定する。
               1. _y_を(_y_ - _yDigit_) / 2に設定する。
             1. _op_が`&amp;`なら、
-              1. _tmp_をBinaryAnd(_x_ modulo 2, _y_ modulo 2)とする。
+              1. _signBit_をBinaryAnd(_x_ modulo 2, _y_ modulo 2)とする。
             1. そうでなく、_op_が`|`なら、
-              1. _tmp_をBinaryOr(_x_ modulo 2, _y_ modulo 2)とする。
+              1. _signBit_をBinaryOr(_x_ modulo 2, _y_ modulo 2)とする。
             1. そうでなければ、
               1. Assert: _op_は`^`である。
-              1. _tmp_をBinaryXor(_x_ modulo 2, _y_ modulo 2)とする。
-            1. _tmp_ ≠ 0なら、
+              1. _signBit_をBinaryXor(_x_ modulo 2, _y_ modulo 2)とする。
+            1. _signBit_ ≠ 0なら、
               1. _result_を_result_ - 2<sup>_shift_</sup>に設定する。
               1. NOTE: これは符号を拡張します。
             1. _result_のBigInt valueを返す。
@@ -4751,7 +4751,7 @@
     <emu-clause id="sec-data-blocks">
       <h1>Data Blocks</h1>
       <p><dfn variants="Data Blocks">Data Block</dfn>仕様型は、byte-sized（8 bit）の数値の、別個で可変な列を記述するために使用されます。<dfn variants="byte values">byte value</dfn>は、0から255までの包含区間内の整数です。Data Block値は、各byteが初期値0を持つ固定数のbytesで作成されます。</p>
-      <p>この仕様内では、表記上の便宜のため、Data Block値の個々のbytesへアクセスするためにarray-like syntaxを使用できます。この表記は、Data Block値を0-basedの<emu-not-ref>integer-indexed</emu-not-ref>なbytes列として提示します。たとえば、_db_が5 byteのData Block値である場合、_db_[2]を使用してその3<sup>rd</sup> byteへアクセスできます。</p>
+      <p>この仕様内では、表記上の便宜のため、Data Block値の個々のbytesへアクセスするためにarray-like syntaxを使用できます。この表記は、Data Block値を0-basedの<emu-not-ref>integer-indexed</emu-not-ref>なbytes列として提示します。たとえば、_dataBlock_が5 byteのData Block値である場合、_dataBlock_[2]を使用してその3<sup>rd</sup> byteへアクセスできます。</p>
       <p>複数のagentsから同時に参照できるメモリ内に存在するdata blockは、<dfn variants="Shared Data Blocks">Shared Data Block</dfn>と指定されます。Shared Data Blockは、（Shared Data Block値の等価性テストの目的で）<em>address-free</em>であるidentityを持ちます。すなわち、それはblockが任意のprocess内でマップされるvirtual addressesに結び付くのではなく、そのblockが表すメモリ内のlocationsの集合に結び付きます。2つのdata blocksは、それらが含むlocationsの集合が等しい場合に限り等しく、それ以外の場合は等しくなく、それらが含むlocationsの集合のintersectionは空です。最後に、Shared Data BlocksはData Blocksから区別できます。</p>
       <p>Shared Data Blocksの意味論は、memory modelによってShared Data Block eventsを使用して定義されます。以下の抽象操作はShared Data Block eventsを導入し、評価意味論とmemory modelのevent semanticsとの間のinterfaceとして機能します。eventsはcandidate executionを形成し、その上でmemory modelがfilterとして機能します。完全な意味論についてはmemory modelを参照してください。</p>
       <p>Shared Data Block eventsは、memory modelで定義されるRecordsによってモデル化されます。</p>
@@ -4767,9 +4767,9 @@
         </dl>
         <emu-alg>
           1. _size_ > 2<sup>53</sup> - 1なら、*RangeError*例外をthrowする。
-          1. _db_を_size_ bytesからなる新しいData Block値とする。そのようなData Blockを作成することが不可能な場合、*RangeError*例外をthrowする。
-          1. _db_のすべてのbytesを0に設定する。
-          1. _db_を返す。
+          1. _dataBlock_を_size_ bytesからなる新しいData Block値とする。そのようなData Blockを作成することが不可能な場合、*RangeError*例外をthrowする。
+          1. _dataBlock_のすべてのbytesを0に設定する。
+          1. _dataBlock_を返す。
         </emu-alg>
       </emu-clause>
 
@@ -4782,14 +4782,14 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _db_を_size_ bytesからなる新しいShared Data Block値とする。そのようなShared Data Blockを作成することが不可能な場合、*RangeError*例外をthrowする。
+          1. _dataBlock_を_size_ bytesからなる新しいShared Data Block値とする。そのようなShared Data Blockを作成することが不可能な場合、*RangeError*例外をthrowする。
           1. _agentRecord_をsurrounding agentのAgent Recordとする。
           1. _execution_を_agentRecord_.[[CandidateExecution]]とする。
           1. _eventsRecord_を、[[AgentSignifier]]がAgentSignifier()である_execution_.[[EventsRecords]]のAgent Events Recordとする。
           1. _zero_を« 0 »とする。
-          1. _db_の各index _index_について、以下を行う
-            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ }を_eventsRecord_.[[EventList]]へappendする。
-          1. _db_を返す。
+          1. _dataBlock_の各index _index_について、以下を行う
+            1. WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _dataBlock_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ }を_eventsRecord_.[[EventList]]へappendする。
+          1. _dataBlock_を返す。
         </emu-alg>
       </emu-clause>
 
@@ -6668,8 +6668,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. _obj_.[[PrivateElements]]が、_pe_.[[Key]]が_privateName_であるようなPrivateElement _pe_を含むなら、
-          1. _pe_を返す。
+        1. _obj_.[[PrivateElements]]が、_entry_.[[Key]]が_privateName_であるようなPrivateElement _entry_を含むなら、
+          1. _entry_を返す。
         1. ~empty~を返す。
       </emu-alg>
     </emu-clause>
@@ -12144,7 +12144,7 @@
       <h1>
         HostCallJobCallback (
           _jobCallback_: a JobCallback Record,
-          _value_: an ECMAScript language value,
+          _thisValue_: an ECMAScript language value,
           _argList_: a List of ECMAScript language values,
         ): either a normal completion containing an ECMAScript language value or a throw completion
       </h1>
@@ -12152,7 +12152,7 @@
       </dl>
       <p>HostCallJobCallbackの実装は、次の要件に適合しなければなりません：</p>
       <ul>
-        <li>Call(_jobCallback_.[[Callback]], _value_, _argList_)の結果を実行して返さなければならない。</li>
+        <li>Call(_jobCallback_.[[Callback]], _thisValue_, _argList_)の結果を実行して返さなければならない。</li>
       </ul>
       <emu-note>
         <p>この要件は、hostsがこの仕様で定義されるfunction objectsの[[Call]] behaviourを変更できないことを意味します。</p>
@@ -12160,7 +12160,7 @@
       <p>HostCallJobCallbackのデフォルト実装は、呼び出されたときに次のstepsを実行します：</p>
       <emu-alg>
         1. Assert: IsCallable(_jobCallback_.[[Callback]])は*true*である。
-        1. ? Call(_jobCallback_.[[Callback]], _value_, _argList_)を返す。
+        1. ? Call(_jobCallback_.[[Callback]], _thisValue_, _argList_)を返す。
       </emu-alg>
       <p>web browsersでないECMAScript hostsは、HostCallJobCallbackのデフォルト実装を使用しなければなりません。</p>
     </emu-clause>
@@ -12498,10 +12498,10 @@
         1. _objSet_の各要素_value_について、以下を行う
           1. _ref_.[[WeakRefTarget]]が_value_であるような各WeakRef _ref_について、以下を行う
             1. _ref_.[[WeakRefTarget]]を~empty~に設定する。
-          1. _fg_.[[Cells]]が、_cell_.[[WeakRefTarget]]が_value_であるようなRecord _cell_を含む各FinalizationRegistry _fg_について、以下を行う
+          1. _finalizationRegistry_.[[Cells]]が、_cell_.[[WeakRefTarget]]が_value_であるようなRecord _cell_を含む各FinalizationRegistry _finalizationRegistry_について、以下を行う
             1. _cell_.[[WeakRefTarget]]を~empty~に設定する。
             1. _enqueueCleanup_を、*true*または*false*のいずれかのimplementation-defined choiceとする。
-            1. _enqueueCleanup_が*true*なら、HostEnqueueFinalizationRegistryCleanupJob(_fg_)を実行する。
+            1. _enqueueCleanup_が*true*なら、HostEnqueueFinalizationRegistryCleanupJob(_finalizationRegistry_)を実行する。
           1. _map_.[[WeakMapData]]が、_entry_.[[Key]]が_value_であるようなRecord _entry_を含む各WeakMap _map_について、以下を行う
             1. _entry_.[[Key]]を~empty~に設定する。
             1. _entry_.[[Value]]を~empty~に設定する。
@@ -13811,131 +13811,131 @@
       </emu-note>
       <p>呼び出されたとき、次のstepsを実行します：</p>
       <emu-alg>
-        1. _calleeContext_をrunning execution contextとする。
-        1. _code_を_func_.[[ECMAScriptCode]]とする。
-        1. _strict_を_func_.[[Strict]]とする。
-        1. _formals_を_func_.[[FormalParameters]]とする。
-        1. _paramNames_を_formals_のBoundNamesとする。
-        1. _paramNames_に重複entriesがあるなら、_hasDuplicates_を*true*とする；そうでなければ、_hasDuplicates_を*false*とする。
-        1. _simpleParamList_を_formals_のIsSimpleParameterListとする。
-        1. _hasParamExprs_を_formals_のContainsExpressionとする。
-        1. _variableNames_を_code_のVarDeclaredNamesとする。
-        1. _variableDecls_を_code_のVarScopedDeclarationsとする。
-        1. _lexicalNames_を_code_のLexicallyDeclaredNamesとする。
+        1. 実行中の実行コンテキストを_calleeContext_とする。
+        1. _func_.[[ECMAScriptCode]]を_code_とする。
+        1. _func_.[[Strict]]を_strict_とする。
+        1. _func_.[[FormalParameters]]を_formals_とする。
+        1. _formals_のBoundNamesを_paramNames_とする。
+        1. _paramNames_に重複するエントリがある場合、_hasDuplicates_を*true*とする。そうでなければ、_hasDuplicates_を*false*とする。
+        1. _formals_のIsSimpleParameterListを_simpleParamList_とする。
+        1. _formals_のContainsExpressionを_hasParamExprs_とする。
+        1. _code_のVarDeclaredNamesを_variableNames_とする。
+        1. _code_のVarScopedDeclarationsを_variableDecls_とする。
+        1. _code_のLexicallyDeclaredNamesを_lexicalNames_とする。
         1. _funcNames_を新しい空のListとする。
         1. _funcsToInitialize_を新しい空のListとする。
-        1. _variableDecls_の各要素_variableDecl_について、reverse List orderで、以下を行う
-          1. _variableDecl_が|VariableDeclaration|でも|ForBinding|でも|BindingIdentifier|でもないなら、
-            1. Assert: _variableDecl_は|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
-            1. _funcName_を_variableDecl_のBoundNamesの唯一の要素とする。
-            1. _funcNames_が_funcName_を含まないなら、
-              1. _funcName_を_funcNames_の最初の要素としてinsertする。
-              1. NOTE: 同じ名前に対して複数のfunction declarationsがある場合、最後のdeclarationが使用される。
-              1. _variableDecl_を_funcsToInitialize_の最初の要素としてinsertする。
+        1. _variableDecls_の各要素_variableDecl_について、Listの逆順で、次を行う。
+          1. _variableDecl_が|VariableDeclaration|、|ForBinding|、|BindingIdentifier|のいずれでもない場合、
+            1. Assert: _variableDecl_は、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
+            1. _variableDecl_のBoundNamesの唯一の要素を_funcName_とする。
+            1. _funcNames_が_funcName_を含まない場合、
+              1. _funcName_を_funcNames_の最初の要素として挿入する。
+              1. NOTE: 同じ名前に対して複数の関数宣言がある場合、最後の宣言が使用される。
+              1. _variableDecl_を_funcsToInitialize_の最初の要素として挿入する。
         1. _argumentsObjNeeded_を*true*とする。
-        1. _func_.[[ThisMode]]が~lexical~なら、
-          1. NOTE: Arrow functionsはarguments objectを決して持たない。
+        1. _func_.[[ThisMode]]が~lexical~である場合、
+          1. NOTE: アロー関数はargumentsオブジェクトを持たない。
           1. _argumentsObjNeeded_を*false*に設定する。
-        1. そうでなく、_paramNames_が*"arguments"*を含むなら、
+        1. そうでなく、_paramNames_が*"arguments"*を含む場合、
           1. _argumentsObjNeeded_を*false*に設定する。
-        1. そうでなく、_hasParamExprs_が*false*なら、
-          1. _funcNames_が*"arguments"*を含む、または_lexicalNames_が*"arguments"*を含むなら、
+        1. そうでなく、_hasParamExprs_が*false*である場合、
+          1. _funcNames_が*"arguments"*を含む、または_lexicalNames_が*"arguments"*を含む場合、
             1. _argumentsObjNeeded_を*false*に設定する。
-        1. _strict_が*true*または_hasParamExprs_が*false*なら、
-          1. NOTE: parametersには単一のEnvironment Recordのみが必要である。なぜならstrict mode code内の`eval`呼び出しは、`eval`の外側で可視な新しいbindingsを作成できないからである。
-          1. _envRecord_を_calleeContext_のLexicalEnvironmentとする。
+        1. _strict_が*true*である、または_hasParamExprs_が*false*である場合、
+          1. NOTE: パラメータには単一のEnvironment Recordだけが必要である。これは、strict modeコード内の`eval`への呼び出しが、`eval`の外側で可視となる新しい束縛を作成できないためである。
+          1. _calleeContext_のLexicalEnvironmentを_envRecord_とする。
         1. そうでなければ、
-          1. NOTE: formal parameter list内のdirect eval callsによって作成されたbindingsが、parametersが宣言されるenvironmentの外側にあることを保証するため、別個のEnvironment Recordが必要である。
-          1. _calleeEnv_を_calleeContext_のLexicalEnvironmentとする。
-          1. _envRecord_をNewDeclarativeEnvironment(_calleeEnv_)とする。
+          1. NOTE: 仮引数リスト内のdirect eval呼び出しによって作成された束縛が、パラメータが宣言される環境の外側にあることを保証するため、別個のEnvironment Recordが必要である。
+          1. _calleeContext_のLexicalEnvironmentを_calleeEnv_とする。
+          1. NewDeclarativeEnvironment(_calleeEnv_)を_envRecord_とする。
           1. Assert: _calleeContext_のVariableEnvironmentと_calleeEnv_は同じEnvironment Recordである。
           1. _calleeContext_のLexicalEnvironmentを_envRecord_に設定する。
-        1. _paramNames_の各String _paramName_について、以下を行う
-          1. _alreadyDeclared_を ! _envRecord_.HasBinding(_paramName_) とする。
-          1. NOTE: Early errorsは、duplicate parameter namesが、parameter default valuesまたはrest parametersを持たないnon-strict functionsでのみ発生できることを保証する。
-          1. _alreadyDeclared_が*false*なら、
+        1. _paramNames_の各String _paramName_について、次を行う。
+          1. ! _envRecord_.HasBinding(_paramName_)を_alreadyDeclared_とする。
+          1. NOTE: Early errorにより、重複するパラメータ名は、パラメータ既定値またはrestパラメータを持たない非strict関数でのみ発生できることが保証される。
+          1. _alreadyDeclared_が*false*である場合、
             1. ! _envRecord_.CreateMutableBinding(_paramName_, *false*)を実行する。
-            1. _hasDuplicates_が*true*なら、
+            1. _hasDuplicates_が*true*である場合、
               1. ! _envRecord_.InitializeBinding(_paramName_, *undefined*)を実行する。
-        1. _argumentsObjNeeded_が*true*なら、
-          1. _strict_が*true*または_simpleParamList_が*false*なら、
-            1. _argumentsObj_をCreateUnmappedArgumentsObject(_argList_)とする。
+        1. _argumentsObjNeeded_が*true*である場合、
+          1. _strict_が*true*である、または_simpleParamList_が*false*である場合、
+            1. CreateUnmappedArgumentsObject(_argList_)を_argumentsObj_とする。
           1. そうでなければ、
-            1. NOTE: mapped argument objectは、rest parameter、parameter default value initializers、またはdestructured parametersを持たないnon-strict functionsに対してのみ提供される。
-            1. _argumentsObj_をCreateMappedArgumentsObject(_func_, _formals_, _argList_, _envRecord_)とする。
-          1. _strict_が*true*なら、
+            1. NOTE: マップされたargumentsオブジェクトは、restパラメータ、パラメータ既定値初期化子、または分割代入パラメータを持たない非strict関数に対してのみ提供される。
+            1. CreateMappedArgumentsObject(_func_, _formals_, _argList_, _envRecord_)を_argumentsObj_とする。
+          1. _strict_が*true*である場合、
             1. ! _envRecord_.CreateImmutableBinding(*"arguments"*, *false*)を実行する。
-            1. NOTE: strict mode codeでは、このbindingへの代入を試みることはearly errorsによって防がれるため、そのmutabilityは観測可能ではない。
+            1. NOTE: strict modeコードでは、この束縛に代入しようとすることがEarly errorによって防止されるため、その可変性は観測できない。
           1. そうでなければ、
             1. ! _envRecord_.CreateMutableBinding(*"arguments"*, *false*)を実行する。
           1. ! _envRecord_.InitializeBinding(*"arguments"*, _argumentsObj_)を実行する。
-          1. _paramBindings_を_paramNames_と« *"arguments"* »のlist-concatenationとする。
+          1. _paramNames_と« *"arguments"* »のlist-concatenationを_paramBindings_とする。
         1. そうでなければ、
-          1. _paramBindings_を_paramNames_とする。
-        1. _iteratorRecord_をCreateListIteratorRecord(_argList_)とする。
-        1. _hasDuplicates_が*true*なら、
+          1. _paramNames_を_paramBindings_とする。
+        1. CreateListIteratorRecord(_argList_)を_iteratorRecord_とする。
+        1. _hasDuplicates_が*true*である場合、
           1. _usedEnv_を*undefined*とする。
         1. そうでなければ、
-          1. _usedEnv_を_envRecord_とする。
-        1. NOTE: 次のstepはReturnCompletionを返すことはできない。なぜなら、そのようなcompletionがexpression positionで生じ得る唯一の方法は|YieldExpression|の使用によるものであり、それは<emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref>および<emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref>のEarly Error rulesによってparameter lists内では禁止されているからである。
-        1. 引数_iteratorRecord_および_usedEnv_を伴う_formals_のIteratorBindingInitializationを ? で実行する。
-        1. _hasParamExprs_が*false*なら、
-          1. NOTE: parametersおよびtop-level varsには単一のEnvironment Recordのみが必要である。
-          1. _instantiatedVariableNames_をList _paramBindings_のcopyとする。
-          1. _variableNames_の各要素_n_について、以下を行う
-            1. _instantiatedVariableNames_が_n_を含まないなら、
-              1. _n_を_instantiatedVariableNames_へappendする。
-              1. ! _envRecord_.CreateMutableBinding(_n_, *false*)を実行する。
-              1. ! _envRecord_.InitializeBinding(_n_, *undefined*)を実行する。
-          1. _variableEnv_を_envRecord_とする。
+          1. _envRecord_を_usedEnv_とする。
+        1. NOTE: 次のステップはReturnCompletionを返すことができない。これは、式位置でそのようなcompletionが発生する唯一の方法は|YieldExpression|の使用によるものであり、これは<emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref>および<emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref>のEarly Error規則により、パラメータリストでは禁止されているためである。
+        1. _iteratorRecord_および_usedEnv_を引数として、_formals_のIteratorBindingInitializationを実行する。
+        1. _hasParamExprs_が*false*である場合、
+          1. NOTE: パラメータとトップレベルのvarには単一のEnvironment Recordだけが必要である。
+          1. List _paramBindings_のコピーを_instantiatedVariableNames_とする。
+          1. _variableNames_の各要素_name_について、次を行う。
+            1. _instantiatedVariableNames_が_name_を含まない場合、
+              1. _name_を_instantiatedVariableNames_に追加する。
+              1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
+              1. ! _envRecord_.InitializeBinding(_name_, *undefined*)を実行する。
+          1. _envRecord_を_variableEnv_とする。
         1. そうでなければ、
-          1. NOTE: formal parameter list内のexpressionsによって作成されたclosuresがfunction body内のdeclarationsを可視にしないことを保証するため、別個のEnvironment Recordが必要である。
-          1. _variableEnv_をNewDeclarativeEnvironment(_envRecord_)とする。
+          1. NOTE: 仮引数リスト内の式によって作成されたクロージャが、関数本体内の宣言を可視にしないことを保証するため、別個のEnvironment Recordが必要である。
+          1. NewDeclarativeEnvironment(_envRecord_)を_variableEnv_とする。
           1. _calleeContext_のVariableEnvironmentを_variableEnv_に設定する。
           1. _instantiatedVariableNames_を新しい空のListとする。
-          1. _variableNames_の各要素_n_について、以下を行う
-            1. _instantiatedVariableNames_が_n_を含まないなら、
-              1. _n_を_instantiatedVariableNames_へappendする。
-              1. ! _variableEnv_.CreateMutableBinding(_n_, *false*)を実行する。
-              1. _paramBindings_が_n_を含まない、または_funcNames_が_n_を含むなら、
+          1. _variableNames_の各要素_name_について、次を行う。
+            1. _instantiatedVariableNames_が_name_を含まない場合、
+              1. _name_を_instantiatedVariableNames_に追加する。
+              1. ! _variableEnv_.CreateMutableBinding(_name_, *false*)を実行する。
+              1. _paramBindings_が_name_を含まない、または_funcNames_が_name_を含む場合、
                 1. _initialValue_を*undefined*とする。
               1. そうでなければ、
-                1. _initialValue_を ! _envRecord_.GetBindingValue(_n_, *false*) とする。
-              1. ! _variableEnv_.InitializeBinding(_n_, _initialValue_)を実行する。
-              1. NOTE: formal parameterと同じ名前のvarは、初期状態で対応する初期化済みparameterと同じ値を持つ。
-        1. _strict_が*true*なら、
-          1. _lexicalEnv_を_variableEnv_とする。
+                1. ! _envRecord_.GetBindingValue(_name_, *false*)を_initialValue_とする。
+              1. ! _variableEnv_.InitializeBinding(_name_, _initialValue_)を実行する。
+              1. NOTE: 仮引数と同じ名前を持つvarは、最初は対応する初期化済みパラメータと同じ値を持つ。
+        1. _strict_が*true*である場合、
+          1. _variableEnv_を_lexicalEnv_とする。
         1. そうでなければ、
-          1. [id="step-functiondeclarationinstantiation-web-compat-insertion-point", normative-optional] hostがweb browserであるか、または他の方法で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートしているなら、
-            1. |Block|、|CaseClause|、または|DefaultClause| _x_の任意の|StatementList|に直接含まれる各|FunctionDeclaration| _funcDecl_について、_code_ Contains _x_が*true*であるようなものについて、以下を行う
-              1. _funcName_を_funcDecl_の|BindingIdentifier|のStringValueとする。
-              1. |FunctionDeclaration| _funcDecl_を、_funcName_を|BindingIdentifier|として持つ|VariableStatement|で置き換えても_func_に対するEarly Errorsを一切生成せず、かつ_paramNames_が_funcName_を含まないなら、
-                1. NOTE: _funcName_に対するvar bindingは、それがVarDeclaredName、formal parameterの名前、または別の|FunctionDeclaration|のいずれでもない場合にのみ、ここでinstantiateされる。
-                1. _instantiatedVariableNames_が_funcName_を含まず、かつ_funcName_が*"arguments"*でないなら、
+          1. [id="step-functiondeclarationinstantiation-web-compat-insertion-point", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートする場合、
+            1. _code_ Contains _x_が*true*であるような任意の|Block|、|CaseClause|、または|DefaultClause| _x_の|StatementList|に直接含まれる各|FunctionDeclaration| _funcDecl_について、次を行う。
+              1. _funcDecl_の|BindingIdentifier|のStringValueを_funcName_とする。
+              1. |FunctionDeclaration| _funcDecl_を、_funcName_を|BindingIdentifier|として持つ|VariableStatement|に置き換えても、_func_に対してEarly Errorsが発生せず、かつ_paramNames_が_funcName_を含まない場合、
+                1. NOTE: _funcName_に対するvar束縛は、それがVarDeclaredName、仮引数の名前、または別の|FunctionDeclaration|のいずれでもない場合にのみ、ここでインスタンス化される。
+                1. _instantiatedVariableNames_が_funcName_を含まず、かつ_funcName_が*"arguments"*でない場合、
                   1. ! _variableEnv_.CreateMutableBinding(_funcName_, *false*)を実行する。
                   1. ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)を実行する。
-                  1. _funcName_を_instantiatedVariableNames_へappendする。
-                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_が評価されるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluation algorithmの代わりに、次のstepsを実行する：
-                  1. _fEnv_をrunning execution contextのVariableEnvironmentとする。
-                  1. _bEnv_をrunning execution contextのLexicalEnvironmentとする。
-                  1. _fObj_を ! _bEnv_.GetBindingValue(_funcName_, *false*) とする。
-                  1. ! _fEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)を実行する。
+                  1. _funcName_を_instantiatedVariableNames_に追加する。
+                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_が評価されるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluationアルゴリズムの代わりに、次のステップを実行する。
+                  1. 実行中の実行コンテキストのVariableEnvironmentを_funcEnv_とする。
+                  1. 実行中の実行コンテキストのLexicalEnvironmentを_blockEnv_とする。
+                  1. ! _blockEnv_.GetBindingValue(_funcName_, *false*)を_funcObj_とする。
+                  1. ! _funcEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)を実行する。
                   1. ~unused~を返す。
-          1. _lexicalEnv_をNewDeclarativeEnvironment(_variableEnv_)とする。
-          1. NOTE: Non-strict functionsはtop-level lexical declarationsのために別個のEnvironment Recordを使用する。これにより、direct evalは、eval codeによって導入されたvar scoped declarationsが既存のtop-level lexically scoped declarationsと衝突するかどうかを判定できる。strict direct evalは常にすべてのdeclarationsを新しいEnvironment Record内に置くため、strict functionsではこれは不要である。
+          1. NewDeclarativeEnvironment(_variableEnv_)を_lexicalEnv_とする。
+          1. NOTE: 非strict関数は、トップレベルのlexical宣言に別個のEnvironment Recordを使用する。これにより、direct evalは、evalコードによって導入されたvar scoped宣言が、既存のトップレベルのlexically scoped宣言と競合するかどうかを判断できる。strict関数では、strict direct evalが常にすべての宣言を新しいEnvironment Recordに配置するため、これは不要である。
         1. _calleeContext_のLexicalEnvironmentを_lexicalEnv_に設定する。
-        1. _lexicalDecls_を_code_のLexicallyScopedDeclarationsとする。
-        1. _lexicalDecls_の各要素_lexicalDecl_について、以下を行う
-          1. NOTE: lexically declared nameは、function/generator declaration、formal parameter、またはvar nameと同じにはなれない。Lexically declared namesはここでinstantiateされるだけで、initializeはされない。
-          1. _lexicalDecl_のBoundNamesの各要素_dn_について、以下を行う
-            1. _lexicalDecl_のIsConstantDeclarationが*true*なら、
-              1. ! _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)を実行する。
+        1. _code_のLexicallyScopedDeclarationsを_lexicalDecls_とする。
+        1. _lexicalDecls_の各要素_lexicalDecl_について、次を行う。
+          1. NOTE: lexically declared nameは、関数/ジェネレータ宣言、仮引数、またはvar名と同じにすることはできない。Lexically declared nameはここでインスタンス化されるだけで、初期化はされない。
+          1. _lexicalDecl_のBoundNamesの各要素_name_について、次を行う。
+            1. _lexicalDecl_のIsConstantDeclarationが*true*である場合、
+              1. ! _lexicalEnv_.CreateImmutableBinding(_name_, *true*)を実行する。
             1. そうでなければ、
-              1. ! _lexicalEnv_.CreateMutableBinding(_dn_, *false*)を実行する。
-        1. _privateEnv_を_calleeContext_のPrivateEnvironmentとする。
-        1. _funcsToInitialize_の各Parse Node _funcDecl_について、以下を行う
-          1. _funcName_を_funcDecl_のBoundNamesの唯一の要素とする。
-          1. _funcObj_を、引数_lexicalEnv_および_privateEnv_を伴う_funcDecl_のInstantiateFunctionObjectとする。
+              1. ! _lexicalEnv_.CreateMutableBinding(_name_, *false*)を実行する。
+        1. _calleeContext_のPrivateEnvironmentを_privateEnv_とする。
+        1. _funcsToInitialize_の各Parse Node _funcDecl_について、次を行う。
+          1. _funcDecl_のBoundNamesの唯一の要素を_funcName_とする。
+          1. _lexicalEnv_および_privateEnv_を引数として、_funcDecl_のInstantiateFunctionObjectを_funcObj_とする。
           1. ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)を実行する。
         1. ~unused~を返す。
       </emu-alg>
@@ -16826,9 +16826,9 @@
         </emu-alg>
         <emu-grammar>IdentifierName :: IdentifierName IdentifierPart</emu-grammar>
         <emu-alg>
-          1. _cps_をderived |IdentifierName|のIdentifierCodePointsとする。
+          1. _codePoints_ をderived |IdentifierName|のIdentifierCodePointsとする。
           1. _codePoint_を|IdentifierPart|のIdentifierCodePointとする。
-          1. _cps_と« _codePoint_ »のlist-concatenationを返す。
+          1. _codePoints_ と« _codePoint_ »のlist-concatenationを返す。
         </emu-alg>
       </emu-clause>
 
@@ -19927,8 +19927,8 @@
           1. _importMeta_が~empty~なら、
             1. _importMeta_をOrdinaryObjectCreate(*null*)に設定する。
             1. _importMetaValues_をHostGetImportMetaProperties(_module_)とする。
-            1. _importMetaValues_の各Record { [[Key]], [[Value]] } _p_について、以下を行う
-              1. ! CreateDataPropertyOrThrow(_importMeta_, _p_.[[Key]], _p_.[[Value]])を実行する。
+            1. _importMetaValues_の各Record { [[Key]], [[Value]] } _entry_について、以下を行う
+              1. ! CreateDataPropertyOrThrow(_importMeta_, _entry_.[[Key]], _entry_.[[Value]])を実行する。
             1. HostFinalizeImportMeta(_importMeta_, _module_)を実行する。
             1. _module_.[[ImportMeta]]を_importMeta_に設定する。
             1. _importMeta_を返す。
@@ -21509,29 +21509,29 @@
       </emu-note>
       <p>これは呼び出されたとき、次のstepsを実行します：</p>
       <emu-alg>
-        1. _decls_を_code_のLexicallyScopedDeclarationsとする。
-        1. _privateEnv_をrunning execution contextのPrivateEnvironmentとする。
-        1. _decls_の各要素_decl_について、以下を行う
-          1. _decl_のBoundNamesの各要素_dn_について、以下を行う
-            1. _decl_のIsConstantDeclarationが*true*なら、
-              1. ! _envRecord_.CreateImmutableBinding(_dn_, *true*)を実行する。
+        1. _code_のLexicallyScopedDeclarationsを_decls_とする。
+        1. 実行中の実行コンテキストのPrivateEnvironmentを_privateEnv_とする。
+        1. _decls_の各要素_decl_について、次を行う。
+          1. _decl_のBoundNamesの各要素_name_について、次を行う。
+            1. _decl_のIsConstantDeclarationが*true*である場合、
+              1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)を実行する。
             1. そうでなければ、
-              1. [id="step-blockdeclarationinstantiation-createmutablebinding", normative-optional] hostがweb browserである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートするなら、
-                1. ! _envRecord_.HasBinding(_dn_)が*false*なら、
-                  1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)を実行する。
+              1. [id="step-blockdeclarationinstantiation-createmutablebinding", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートする場合、
+                1. ! _envRecord_.HasBinding(_name_)が*false*である場合、
+                  1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
               1. そうでなければ、
-                1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)を実行する。
-          1. _decl_が|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかなら、
-            1. _func_を_decl_のBoundNamesの唯一の要素とする。
-            1. _funcObj_を、引数_envRecord_および_privateEnv_を伴う_decl_のInstantiateFunctionObjectとする。
-            1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] hostがweb browserである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートするなら、
-              1. _envRecord_内の_func_に対するbindingがuninitialized bindingであるなら、
-                1. ! _envRecord_.InitializeBinding(_func_, _funcObj_)を実行する。
+                1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
+          1. _decl_が|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである場合、
+            1. _decl_のBoundNamesの唯一の要素を_funcName_とする。
+            1. _envRecord_および_privateEnv_を引数として、_decl_のInstantiateFunctionObjectを_funcObj_とする。
+            1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートする場合、
+              1. _envRecord_内の_funcName_に対する束縛が未初期化束縛である場合、
+                1. ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)を実行する。
               1. そうでなければ、
                 1. Assert: _decl_は|FunctionDeclaration|である。
-                1. ! _envRecord_.SetMutableBinding(_func_, _funcObj_, *false*)を実行する。
+                1. ! _envRecord_.SetMutableBinding(_funcName_, _funcObj_, *false*)を実行する。
             1. そうでなければ、
-              1. ! _envRecord_.InitializeBinding(_func_, _funcObj_)を実行する。
+              1. ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)を実行する。
         1. ~unused~を返す。
       </emu-alg>
     </emu-clause>
@@ -22126,25 +22126,25 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. _oldEnv_をrunning execution contextのLexicalEnvironmentとする。
-          1. _loopEnv_をNewDeclarativeEnvironment(_oldEnv_)とする。
-          1. _isConst_を|LexicalDeclaration|のIsConstantDeclarationとする。
-          1. _boundNames_を|LexicalDeclaration|のBoundNamesとする。
-          1. _boundNames_の各要素_dn_について、以下を行う
-            1. _isConst_が*true*なら、
-              1. ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)を実行する。
+          1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_とする。
+          1. NewDeclarativeEnvironment(_oldEnv_)を_loopEnv_とする。
+          1. |LexicalDeclaration|のIsConstantDeclarationを_isConst_とする。
+          1. |LexicalDeclaration|のBoundNamesを_boundNames_とする。
+          1. _boundNames_の各要素_name_について、次を行う。
+            1. _isConst_が*true*である場合、
+              1. ! _loopEnv_.CreateImmutableBinding(_name_, *true*)を実行する。
             1. そうでなければ、
-              1. ! _loopEnv_.CreateMutableBinding(_dn_, *false*)を実行する。
-          1. running execution contextのLexicalEnvironmentを_loopEnv_に設定する。
-          1. _forDecl_を|LexicalDeclaration|のEvaluationのCompletionとする。
-          1. _forDecl_がabrupt completionなら、
-            1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
+              1. ! _loopEnv_.CreateMutableBinding(_name_, *false*)を実行する。
+          1. 実行中の実行コンテキストのLexicalEnvironmentを_loopEnv_に設定する。
+          1. |LexicalDeclaration|のEvaluationのCompletionを_forDecl_とする。
+          1. _forDecl_がabrupt completionである場合、
+            1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_に設定する。
             1. ? _forDecl_を返す。
-          1. _isConst_が*false*なら、_perIterationLets_を_boundNames_とする；そうでなければ、_perIterationLets_を新しい空のListとする。
-          1. 最初の|Expression|が存在するなら、_test_を最初の|Expression|とする；そうでなければ、_test_を~empty~とする。
-          1. 2番目の|Expression|が存在するなら、_increment_を2番目の|Expression|とする；そうでなければ、_increment_を~empty~とする。
-          1. _bodyResult_をForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_)のCompletionとする。
-          1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
+          1. _isConst_が*false*である場合、_perIterationLets_を_boundNames_とする。そうでなければ、_perIterationLets_を新しい空のListとする。
+          1. 最初の|Expression|が存在する場合、_test_を最初の|Expression|とする。そうでなければ、_test_を~empty~とする。
+          1. 2番目の|Expression|が存在する場合、_increment_を2番目の|Expression|とする。そうでなければ、_increment_を~empty~とする。
+          1. Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))を_bodyResult_とする。
+          1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_に設定する。
           1. ? _bodyResult_を返す。
         </emu-alg>
       </emu-clause>
@@ -22188,16 +22188,16 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _perIterationBindings_が何らかの要素を持つなら、
-            1. _lastIterationEnv_をrunning execution contextのLexicalEnvironmentとする。
-            1. _outer_を_lastIterationEnv_.[[OuterEnv]]とする。
-            1. Assert: _outer_は*null*でない。
-            1. _thisIterationEnv_をNewDeclarativeEnvironment(_outer_)とする。
-            1. _perIterationBindings_の各要素_bn_について、以下を行う
-              1. ! _thisIterationEnv_.CreateMutableBinding(_bn_, *false*)を実行する。
-              1. _lastValue_を ? _lastIterationEnv_.GetBindingValue(_bn_, *true*) とする。
-              1. ! _thisIterationEnv_.InitializeBinding(_bn_, _lastValue_)を実行する。
-            1. running execution contextのLexicalEnvironmentを_thisIterationEnv_に設定する。
+          1. _perIterationBindings_に要素がある場合、
+            1. 実行中の実行コンテキストのLexicalEnvironmentを_lastIterationEnv_とする。
+            1. _lastIterationEnv_.[[OuterEnv]]を_outer_とする。
+            1. Assert: _outer_は*null*ではない。
+            1. NewDeclarativeEnvironment(_outer_)を_thisIterationEnv_とする。
+            1. _perIterationBindings_の各要素_name_について、次を行う。
+              1. ! _thisIterationEnv_.CreateMutableBinding(_name_, *false*)を実行する。
+              1. ? _lastIterationEnv_.GetBindingValue(_name_, *true*)を_lastValue_とする。
+              1. ! _thisIterationEnv_.InitializeBinding(_name_, _lastValue_)を実行する。
+            1. 実行中の実行コンテキストのLexicalEnvironmentを_thisIterationEnv_に設定する。
           1. ~unused~を返す。
         </emu-alg>
       </emu-clause>
@@ -25072,11 +25072,11 @@
       </dl>
       <emu-grammar>ClassStaticBlock : `static` `{` ClassStaticBlockBody `}`</emu-grammar>
       <emu-alg>
-        1. _lexical_をrunning execution contextのLexicalEnvironmentとする。
-        1. _privateEnv_をrunning execution contextのPrivateEnvironmentとする。
-        1. _sourceText_をUnicode code pointsのempty sequenceとする。
-        1. _formalParams_をproduction <emu-grammar>FormalParameters : [empty]</emu-grammar>のinstanceとする。
-        1. [id="step-synthetic-class-static-block-fn"] _bodyFunc_をOrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexical_, _privateEnv_)とする。
+        1. 実行中の実行コンテキストのLexicalEnvironmentを_lexicalEnv_とする。
+        1. 実行中の実行コンテキストのPrivateEnvironmentを_privateEnv_とする。
+        1. 空のUnicode符号点列を_sourceText_とする。
+        1. 生成規則<emu-grammar>FormalParameters : [empty]</emu-grammar>のインスタンスを_formalParams_とする。
+        1. [id="step-synthetic-class-static-block-fn"] OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexicalEnv_, _privateEnv_)を_bodyFunc_とする。
         1. MakeMethod(_bodyFunc_, _homeObj_)を実行する。
         1. ClassStaticBlockDefinition Record { [[BodyFunction]]: _bodyFunc_ }を返す。
       </emu-alg>
@@ -25164,11 +25164,11 @@
         1. _outerPrivateEnv_をrunning execution contextのPrivateEnvironmentとする。
         1. _classPrivateEnv_をNewPrivateEnvironment(_outerPrivateEnv_)とする。
         1. |ClassBody|が存在するなら、
-          1. |ClassBody|のPrivateBoundIdentifiersの各String _dn_について、以下を行う
-            1. _classPrivateEnv_.[[Names]]が、[[Description]]が_dn_であるPrivate Name _privateName_を含むなら、
+          1. |ClassBody|のPrivateBoundIdentifiersの各String _description_について、以下を行う
+            1. _classPrivateEnv_.[[Names]]が、[[Description]]が_description_であるPrivate Name _privateName_を含むなら、
               1. Assert: これはgetter/setter pairsの場合にのみ可能である。
             1. そうでなければ、
-              1. _name_を、その[[Description]]が_dn_である新しいPrivate Nameとする。
+              1. _name_を、その[[Description]]が_description_である新しいPrivate Nameとする。
               1. _name_を_classPrivateEnv_.[[Names]]へappendする。
         1. |ClassHeritage|が存在しないなら、
           1. _protoParent_を%Object.prototype%とする。
@@ -25238,13 +25238,13 @@
             1. Assert: _element_.[[Kind]]は~method~または~accessor~のいずれかである。
             1. _classElement_のIsStaticが*false*なら、_container_を_instancePrivateMethods_とする。
             1. そうでなければ、_container_を_staticPrivateMethods_とする。
-            1. _container_が、その[[Key]]が_element_.[[Key]]であるPrivateElement _pe_を含むなら、
-              1. Assert: _element_.[[Kind]]と_pe_.[[Kind]]は両方とも~accessor~である。
+            1. _container_が、その[[Key]]が_element_.[[Key]]であるPrivateElement _existingElement_を含むなら、
+              1. Assert: _element_.[[Kind]]と_existingElement_.[[Kind]]は両方とも~accessor~である。
               1. _element_.[[Get]]が*undefined*なら、
-                1. _combined_をPrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _pe_.[[Get]], [[Set]]: _element_.[[Set]] }とする。
+                1. _combined_をPrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _existingElement_.[[Get]], [[Set]]: _element_.[[Set]] }とする。
               1. そうでなければ、
-                1. _combined_をPrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _pe_.[[Set]] }とする。
-              1. _container_内の_pe_を_combined_で置き換える。
+                1. _combined_をPrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _existingElement_.[[Set]] }とする。
+              1. _container_内の_existingElement_を_combined_で置き換える。
             1. そうでなければ、
               1. _element_を_container_へappendする。
           1. そうでなく、_element_がClassFieldDefinition Recordなら、
@@ -26240,73 +26240,73 @@
       </emu-note>
       <p>これは呼び出されたとき、次のstepsを実行します：</p>
       <emu-alg>
-        1. _lexicalNames_を_script_のLexicallyDeclaredNamesとする。
-        1. _variableNames_を_script_のVarDeclaredNamesとする。
-        1. _lexicalNames_の各要素_name_について、以下を行う
-          1. HasLexicalDeclaration(_envRecord_, _name_)が*true*なら、*SyntaxError*例外をthrowする。
-          1. _hasRestrictedGlobal_を ? HasRestrictedGlobalProperty(_envRecord_, _name_) とする。
-          1. NOTE: Global `var`および`function` bindings（non-strict direct evalによってintroducedされるものを除く）はnon-configurableであり、したがってrestricted global propertiesです。
-          1. _hasRestrictedGlobal_が*true*なら、*SyntaxError*例外をthrowする。
-        1. _variableNames_の各要素_name_について、以下を行う
-          1. HasLexicalDeclaration(_envRecord_, _name_)が*true*なら、*SyntaxError*例外をthrowする。
-        1. _variableDecls_を_script_のVarScopedDeclarationsとする。
+        1. _script_のLexicallyDeclaredNamesを_lexicalNames_とする。
+        1. _script_のVarDeclaredNamesを_variableNames_とする。
+        1. _lexicalNames_の各要素_name_について、次を行う。
+          1. HasLexicalDeclaration(_envRecord_, _name_)が*true*である場合、*SyntaxError*例外を投げる。
+          1. ? HasRestrictedGlobalProperty(_envRecord_, _name_)を_hasRestrictedGlobal_とする。
+          1. NOTE: グローバル`var`および`function`束縛（非strict direct evalによって導入されるものを除く）は構成不可であり、したがって制限されたグローバルプロパティである。
+          1. _hasRestrictedGlobal_が*true*である場合、*SyntaxError*例外を投げる。
+        1. _variableNames_の各要素_name_について、次を行う。
+          1. HasLexicalDeclaration(_envRecord_, _name_)が*true*である場合、*SyntaxError*例外を投げる。
+        1. _script_のVarScopedDeclarationsを_variableDecls_とする。
         1. _funcsToInitialize_を新しい空のListとする。
         1. _declaredFuncNames_を新しい空のListとする。
-        1. _variableDecls_の各要素_variableDecl_について、reverse List orderで、以下を行う
-          1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれでもないなら、
-            1. Assert: _variableDecl_は|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
-            1. NOTE: 同じnameに対して複数のfunction declarationsがある場合、最後のdeclarationが使用される。
-            1. _func_を_variableDecl_のBoundNamesの唯一の要素とする。
-            1. _declaredFuncNames_が_func_を含まないなら、
-              1. _funcDefinable_を ? CanDeclareGlobalFunction(_envRecord_, _func_) とする。
-              1. _funcDefinable_が*false*なら、*TypeError*例外をthrowする。
-              1. _func_を_declaredFuncNames_へappendする。
-              1. _variableDecl_を_funcsToInitialize_の最初の要素としてinsertする。
+        1. _variableDecls_の各要素_variableDecl_について、Listの逆順で、次を行う。
+          1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれでもない場合、
+            1. Assert: _variableDecl_は、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
+            1. NOTE: 同じ名前に対して複数の関数宣言がある場合、最後の宣言が使用される。
+            1. _variableDecl_のBoundNamesの唯一の要素を_funcName_とする。
+            1. _declaredFuncNames_が_funcName_を含まない場合、
+              1. ? CanDeclareGlobalFunction(_envRecord_, _funcName_)を_funcDefinable_とする。
+              1. _funcDefinable_が*false*である場合、*TypeError*例外を投げる。
+              1. _funcName_を_declaredFuncNames_に追加する。
+              1. _variableDecl_を_funcsToInitialize_の最初の要素として挿入する。
         1. _declaredVariableNames_を新しい空のListとする。
-        1. _variableDecls_の各要素_variableDecl_について、以下を行う
-          1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれかなら、
-            1. _variableDecl_のBoundNamesの各String _vn_について、以下を行う
-              1. _declaredFuncNames_が_vn_を含まないなら、
-                1. _vnDefinable_を ? CanDeclareGlobalVar(_envRecord_, _vn_) とする。
-                1. _vnDefinable_が*false*なら、*TypeError*例外をthrowする。
-                1. _declaredVariableNames_が_vn_を含まないなら、
-                  1. _vn_を_declaredVariableNames_へappendする。
-        1. NOTE: global objectがordinary objectである場合、このalgorithm step以後はabnormal terminationsは発生しない。ただし、global objectがProxy exotic objectである場合、以下のstepsのいくつかでabnormal terminationsを引き起こすbehavioursを示す可能性がある。
-        1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point", normative-optional] hostがweb browserである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートするなら、
-          1. _strict_を_script_のScriptIsStrictとする。
-          1. _strict_が*false*なら、
-            1. _declaredFuncOrVariableNames_を_declaredFuncNames_と_declaredVariableNames_のlist-concatenationとする。
-            1. _script_ Contains _x_が*true*であるような任意の|Block|、|CaseClause|、または|DefaultClause| _x_の|StatementList|内に直接含まれる各|FunctionDeclaration| _f_について、以下を行う
-              1. _funcName_を_f_の|BindingIdentifier|のStringValueとする。
-              1. |FunctionDeclaration| _f_を_funcName_を|BindingIdentifier|として持つ|VariableStatement|で置き換えても_script_に対してEarly Errorsが生成されないなら、
-                1. HasLexicalDeclaration(_envRecord_, _funcName_)が*false*なら、
-                  1. _funcDefinable_を ? CanDeclareGlobalVar(_envRecord_, _funcName_) とする。
-                  1. _funcDefinable_が*true*なら、
-                    1. NOTE: _funcName_に対するvar bindingは、それがVarDeclaredNameでも別の|FunctionDeclaration|のnameでもない場合にのみ、ここでinstantiatedされる。
-                    1. _declaredFuncOrVariableNames_が_funcName_を含まないなら、
+        1. _variableDecls_の各要素_variableDecl_について、次を行う。
+          1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれかである場合、
+            1. _variableDecl_のBoundNamesの各String _name_について、次を行う。
+              1. _declaredFuncNames_が_name_を含まない場合、
+                1. ? CanDeclareGlobalVar(_envRecord_, _name_)を_variableDefinable_とする。
+                1. _variableDefinable_が*false*である場合、*TypeError*例外を投げる。
+                1. _declaredVariableNames_が_name_を含まない場合、
+                  1. _name_を_declaredVariableNames_に追加する。
+        1. NOTE: グローバルオブジェクトがordinary objectである場合、このアルゴリズムステップ以降で異常終了は発生しない。しかし、グローバルオブジェクトがProxy exotic objectである場合、以下のステップの一部で異常終了を引き起こす挙動を示すことがある。
+        1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートする場合、
+          1. _script_のScriptIsStrictを_strict_とする。
+          1. _strict_が*false*である場合、
+            1. _declaredFuncNames_と_declaredVariableNames_のlist-concatenationを_declaredFuncOrVariableNames_とする。
+            1. _script_ Contains _x_が*true*であるような任意の|Block|、|CaseClause|、または|DefaultClause| _x_の|StatementList|に直接含まれる各|FunctionDeclaration| _funcDecl_について、次を行う。
+              1. _funcDecl_の|BindingIdentifier|のStringValueを_funcName_とする。
+              1. |FunctionDeclaration| _funcDecl_を、_funcName_を|BindingIdentifier|として持つ|VariableStatement|に置き換えても、_script_に対してEarly Errorsが発生しない場合、
+                1. HasLexicalDeclaration(_envRecord_, _funcName_)が*false*である場合、
+                  1. ? CanDeclareGlobalVar(_envRecord_, _funcName_)を_funcDefinable_とする。
+                  1. _funcDefinable_が*true*である場合、
+                    1. NOTE: _funcName_に対するvar束縛は、それがVarDeclaredNameでも別の|FunctionDeclaration|の名前でもない場合にのみ、ここでインスタンス化される。
+                    1. _declaredFuncOrVariableNames_が_funcName_を含まない場合、
                       1. ? CreateGlobalVarBinding(_envRecord_, _funcName_, *false*)を実行する。
-                      1. _funcName_を_declaredFuncOrVariableNames_へappendする。
-                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _f_が評価されるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluation algorithmの代わりに、次のstepsを実行する：
-                      1. _gEnv_をrunning execution contextのVariableEnvironmentとする。
-                      1. _bEnv_をrunning execution contextのLexicalEnvironmentとする。
-                      1. _fObj_を ! _bEnv_.GetBindingValue(_funcName_, *false*) とする。
-                      1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>を実行する。
+                      1. _funcName_を_declaredFuncOrVariableNames_に追加する。
+                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_が評価されるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluationアルゴリズムの代わりに、次のステップを実行する。
+                      1. 実行中の実行コンテキストのVariableEnvironmentを_globalEnv_とする。
+                      1. 実行中の実行コンテキストのLexicalEnvironmentを_blockEnv_とする。
+                      1. ! _blockEnv_.GetBindingValue(_funcName_, *false*)を_funcObj_とする。
+                      1. ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>を実行する。
                       1. ~unused~を返す。
-        1. _lexicalDecls_を_script_のLexicallyScopedDeclarationsとする。
+        1. _script_のLexicallyScopedDeclarationsを_lexicalDecls_とする。
         1. _privateEnv_を*null*とする。
-        1. _lexicalDecls_の各要素_lexicalDecl_について、以下を行う
-          1. NOTE: Lexically declared namesはここでinstantiatedされるだけで、initializedされない。
-          1. _lexicalDecl_のBoundNamesの各要素_dn_について、以下を行う
-            1. _lexicalDecl_のIsConstantDeclarationが*true*なら、
-              1. ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_dn_, *true*)</emu-meta>を実行する。
+        1. _lexicalDecls_の各要素_lexicalDecl_について、次を行う。
+          1. NOTE: Lexically declared nameは、ここでインスタンス化されるだけで、初期化されない。
+          1. _lexicalDecl_のBoundNamesの各要素_name_について、次を行う。
+            1. _lexicalDecl_のIsConstantDeclarationが*true*である場合、
+              1. ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_name_, *true*)</emu-meta>を実行する。
             1. そうでなければ、
-              1. ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_dn_, *false*)</emu-meta>を実行する。
-        1. _funcsToInitialize_の各Parse Node _f_について、以下を行う
-          1. _func_を_f_のBoundNamesの唯一の要素とする。
-          1. _funcObj_を、arguments _envRecord_および_privateEnv_を伴う_f_のInstantiateFunctionObjectとする。
-          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _func_, _funcObj_, *false*)</emu-meta>を実行する。
-        1. _declaredVariableNames_の各String _vn_について、以下を行う
-          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _vn_, *false*)</emu-meta>を実行する。
+              1. ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_name_, *false*)</emu-meta>を実行する。
+        1. _funcsToInitialize_の各Parse Node _funcDecl_について、次を行う。
+          1. _funcDecl_のBoundNamesの唯一の要素を_funcName_とする。
+          1. _envRecord_および_privateEnv_を引数として、_funcDecl_のInstantiateFunctionObjectを_funcObj_とする。
+          1. ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _funcName_, _funcObj_, *false*)</emu-meta>を実行する。
+        1. _declaredVariableNames_の各String _variableName_について、次を行う。
+          1. ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _variableName_, *false*)</emu-meta>を実行する。
         1. ~unused~を返す。
       </emu-alg>
       <emu-note>
@@ -26399,8 +26399,8 @@
         </dl>
         <emu-alg>
           1. _localNames_を新しい空のListとする。
-          1. _importEntries_の各ImportEntry Record _i_について、以下を行う
-            1. _i_.[[LocalName]]を_localNames_へappendする。
+          1. _importEntries_の各ImportEntry Record _importEntry_について、次を行う。
+            1. _importEntry_.[[LocalName]]を_localNames_に追加する。
           1. _localNames_を返す。
         </emu-alg>
       </emu-clause>
@@ -26576,11 +26576,11 @@
         </emu-alg>
         <emu-grammar>ModuleItemList : ModuleItemList ModuleItem</emu-grammar>
         <emu-alg>
-          1. _requests_を|ModuleItemList|のModuleRequestsとする。
-          1. _additionalRequests_を|ModuleItem|のModuleRequestsとする。
-          1. _additionalRequests_の各ModuleRequest Record _mr_について、以下を行う
-            1. _requests_が、ModuleRequestsEqual(_mr_, _mr2_)が*true*であるようなModuleRequest Record _mr2_を含まないなら、
-              1. _mr_を_requests_へappendする。
+          1. |ModuleItemList|のModuleRequestsを_requests_とする。
+          1. |ModuleItem|のModuleRequestsを_additionalRequests_とする。
+          1. _additionalRequests_の各ModuleRequest Record _moduleRequest_について、次を行う。
+            1. ModuleRequestsEqual(_moduleRequest_, _otherModuleRequest_)が*true*であるようなModuleRequest Record _otherModuleRequest_を_requests_が含まない場合、
+              1. _moduleRequest_を_requests_に追加する。
           1. _requests_を返す。
         </emu-alg>
         <emu-grammar>ModuleItem : StatementListItem</emu-grammar>
@@ -27181,11 +27181,11 @@
             <emu-alg>
               1. Assert: _module_.[[Status]]は~unlinked~、~linked~、~evaluating-async~、または~evaluated~のいずれかである。
               1. _stack_を新しい空のListとする。
-              1. _result_をCompletion(InnerModuleLinking(_module_, _stack_, 0))とする。
-              1. _result_がabrupt completionなら、
-                1. _stack_の各Cyclic Module Record _m_について、以下を行う
-                  1. Assert: _m_.[[Status]]は~linking~である。
-                  1. _m_.[[Status]]を~unlinked~に設定する。
+              1. Completion(InnerModuleLinking(_module_, _stack_, 0))を_result_とする。
+              1. _result_がabrupt completionである場合、
+                1. _stack_の各Cyclic Module Record _requiredModule_について、次を行う。
+                  1. Assert: _requiredModule_.[[Status]]は~linking~である。
+                  1. _requiredModule_.[[Status]]を~unlinked~に設定する。
                 1. Assert: _module_.[[Status]]は~unlinked~である。
                 1. ? _result_を返す。
               1. Assert: _module_.[[Status]]は~linked~、~evaluating-async~、または~evaluated~のいずれかである。
@@ -27253,33 +27253,33 @@
             </dl>
 
             <emu-alg>
-              1. Assert: このEvaluateへのcallは、surrounding agent内の別のEvaluateへのcallと同時に発生していない。
+              1. Assert: このEvaluateへの呼び出しは、周囲のagent内の別のEvaluateへの呼び出しと同時には発生していない。
               1. Assert: _module_.[[Status]]は~linked~、~evaluating-async~、または~evaluated~のいずれかである。
-              1. _module_.[[Status]]が~evaluating-async~または~evaluated~のいずれかなら、
-                1. _module_.[[CycleRoot]]が~empty~でないなら、
+              1. _module_.[[Status]]が~evaluating-async~または~evaluated~のいずれかである場合、
+                1. _module_.[[CycleRoot]]が~empty~でない場合、
                   1. _module_を_module_.[[CycleRoot]]に設定する。
                 1. そうでなければ、
                   1. Assert: _module_.[[Status]]は~evaluated~であり、_module_.[[EvaluationError]]はthrow completionである。
-              1. _module_.[[TopLevelCapability]]が~empty~でないなら、
+              1. _module_.[[TopLevelCapability]]が~empty~でない場合、
                 1. _module_.[[TopLevelCapability]].[[Promise]]を返す。
               1. _stack_を新しい空のListとする。
-              1. _promiseCapability_を ! NewPromiseCapability(%Promise%) とする。
+              1. ! NewPromiseCapability(%Promise%)を_promiseCapability_とする。
               1. _module_.[[TopLevelCapability]]を_promiseCapability_に設定する。
-              1. _result_をCompletion(InnerModuleEvaluation(_module_, _stack_, 0))とする。
-              1. _result_がabrupt completionなら、
-                1. _stack_の各Cyclic Module Record _m_について、以下を行う
-                  1. Assert: _m_.[[Status]]は~evaluating~である。
-                  1. _m_.[[Status]]を~evaluated~に設定する。
-                  1. _m_.[[EvaluationError]]を_result_に設定する。
+              1. Completion(InnerModuleEvaluation(_module_, _stack_, 0))を_result_とする。
+              1. _result_がabrupt completionである場合、
+                1. _stack_の各Cyclic Module Record _requiredModule_について、次を行う。
+                  1. Assert: _requiredModule_.[[Status]]は~evaluating~である。
+                  1. _requiredModule_.[[Status]]を~evaluated~に設定する。
+                  1. _requiredModule_.[[EvaluationError]]を_result_に設定する。
                 1. Assert: _module_.[[Status]]は~evaluated~である。
                 1. Assert: _module_.[[EvaluationError]]と_result_は同じCompletion Recordである。
                 1. ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)を実行する。
               1. そうでなければ、
                 1. Assert: _module_.[[Status]]は~evaluating-async~または~evaluated~のいずれかである。
                 1. Assert: _module_.[[EvaluationError]]は~empty~である。
-                1. _module_.[[Status]]が~evaluated~なら、
+                1. _module_.[[Status]]が~evaluated~である場合、
                   1. Assert: _module_.[[AsyncEvaluationOrder]]は~unset~または~done~のいずれかである。
-                  1. NOTE: _module_.[[AsyncEvaluationOrder]]が~done~であるのは、_module_がすでにevaluatedされ、かつそのevaluationがasynchronousであった場合に限る。
+                  1. NOTE: _module_.[[AsyncEvaluationOrder]]が~done~であるのは、_module_が既に評価済みであり、かつその評価が非同期であった場合に限る。
                   1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)を実行する。
                 1. Assert: _stack_は空である。
               1. _promiseCapability_.[[Promise]]を返す。
@@ -28492,8 +28492,8 @@
                   1. _exportEntry_を_localExportEntries_へappendする。
                 1. そうでなければ、
                   1. NOTE: もともと別のmoduleからimportされたbindingまたはnamespace objectをexportするとき、ExportEntry Recordは、bindingまたはnamespace objectがimportされてからexportされるのではなく、original moduleから直接re-exportされていた場合のformにmatchするようにrewrittenされる。これにより、`export * from`を通じて同じbindingまたはnamespaceを同じnameで2回exportすることから生じるconflictsは、<emu-xref href="#sec-resolveexport">Source Text Module RecordsのResolveExport concrete method</emu-xref>のstep <emu-xref href="#step-resolveexport-conflict"></emu-xref>でambiguousとして扱われるのではなく、ignoredできる。
-                  1. _ie_を_importEntries_のうち[[LocalName]]が_exportEntry_.[[LocalName]]である要素とする。
-                  1. ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] }を_indirectExportEntries_へappendする。
+                  1. _importEntry_を_importEntries_のうち[[LocalName]]が_exportEntry_.[[LocalName]]である要素とする。
+                  1. ExportEntry Record { [[ModuleRequest]]: _importEntry_.[[ModuleRequest]], [[ImportName]]: _importEntry_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] }を_indirectExportEntries_へappendする。
               1. そうでなく、_exportEntry_.[[ImportName]]が~all-but-default~なら、
                 1. Assert: _exportEntry_.[[ExportName]]は*null*である。
                 1. _exportEntry_を_starExportEntries_へappendする。
@@ -28523,29 +28523,29 @@
               <dd>a Source Text Module Record _module_</dd>
             </dl>
             <emu-alg>
-              1. Assert: _module_.[[Status]]は~new~でない。
-              1. _exportStarSet_が存在しないなら、_exportStarSet_を新しい空のListに設定する。
-              1. _exportStarSet_が_module_を含むなら、
-                1. Assert: `export *` circularityのstarting pointに到達している。
+              1. Assert: _module_.[[Status]]は~new~ではない。
+              1. _exportStarSet_が存在しない場合、_exportStarSet_を新しい空のListに設定する。
+              1. _exportStarSet_が_module_を含む場合、
+                1. Assert: `export *`の循環の開始点に到達している。
                 1. 新しい空のListを返す。
-              1. _module_を_exportStarSet_へappendする。
+              1. _module_を_exportStarSet_に追加する。
               1. _exportedNames_を新しい空のListとする。
-              1. _module_.[[LocalExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. Assert: _module_はこのexportに対するdirect bindingを提供する。
-                1. Assert: _e_.[[ExportName]]は*null*でない。
-                1. _e_.[[ExportName]]を_exportedNames_へappendする。
-              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. Assert: _module_はこのexportのためにspecific bindingをimportする。
-                1. Assert: _e_.[[ExportName]]は*null*でない。
-                1. _e_.[[ExportName]]を_exportedNames_へappendする。
-              1. _module_.[[StarExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. Assert: _e_.[[ModuleRequest]]は*null*でない。
-                1. _requestedModule_をGetImportedModule(_module_, _e_.[[ModuleRequest]])とする。
-                1. _starNames_を_requestedModule_.GetExportedNames(_exportStarSet_)とする。
-                1. _starNames_の各要素_n_について、以下を行う
-                  1. _n_が*"default"*でないなら、
-                    1. _exportedNames_が_n_を含まないなら、
-                      1. _n_を_exportedNames_へappendする。
+              1. _module_.[[LocalExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. Assert: _module_はこのエクスポートに対する直接束縛を提供する。
+                1. Assert: _exportEntry_.[[ExportName]]は*null*ではない。
+                1. _exportEntry_.[[ExportName]]を_exportedNames_に追加する。
+              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. Assert: _module_はこのエクスポートに対する特定の束縛をインポートしている。
+                1. Assert: _exportEntry_.[[ExportName]]は*null*ではない。
+                1. _exportEntry_.[[ExportName]]を_exportedNames_に追加する。
+              1. _module_.[[StarExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. Assert: _exportEntry_.[[ModuleRequest]]は*null*ではない。
+                1. GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])を_requestedModule_とする。
+                1. _requestedModule_.GetExportedNames(_exportStarSet_)を_starNames_とする。
+                1. _starNames_の各要素_name_について、次を行う。
+                  1. _name_が*"default"*でない場合、
+                    1. _exportedNames_が_name_を含まない場合、
+                      1. _name_を_exportedNames_に追加する。
               1. _exportedNames_を返す。
             </emu-alg>
             <emu-note>
@@ -28572,45 +28572,45 @@
             </dl>
 
             <emu-alg>
-              1. Assert: _module_.[[Status]]は~new~でない。
-              1. _resolveSet_が存在しないなら、_resolveSet_を新しい空のListに設定する。
-              1. _resolveSet_の各Record { [[Module]], [[ExportName]] } _record_について、以下を行う
-                1. _module_と_record_.[[Module]]が同じModule Recordであり、かつ_exportName_が_record_.[[ExportName]]であるなら、
-                  1. Assert: これはcircular import requestである。
+              1. Assert: _module_.[[Status]]は~new~ではない。
+              1. _resolveSet_が存在しない場合、_resolveSet_を新しい空のListに設定する。
+              1. _resolveSet_の各Record { [[Module]], [[ExportName]] } _record_について、次を行う。
+                1. _module_と_record_.[[Module]]が同じModule Recordであり、かつ_exportName_が_record_.[[ExportName]]である場合、
+                  1. Assert: これは循環import要求である。
                   1. *null*を返す。
-              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }を_resolveSet_へappendする。
-              1. _module_.[[LocalExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. _e_.[[ExportName]]が_exportName_であるなら、
-                  1. Assert: _module_はこのexportに対するdirect bindingを提供する。
-                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }を返す。
-              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. _e_.[[ExportName]]が_exportName_であるなら、
-                  1. Assert: _e_.[[ModuleRequest]]は*null*でない。
-                  1. _importedModule_をGetImportedModule(_module_, _e_.[[ModuleRequest]])とする。
-                  1. _e_.[[ImportName]]が~namespace~なら、
-                    1. Assert: _module_はこのexportに対するdirect bindingを提供しない。
+              1. Record { [[Module]]: _module_, [[ExportName]]: _exportName_ }を_resolveSet_に追加する。
+              1. _module_.[[LocalExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. _exportEntry_.[[ExportName]]が_exportName_である場合、
+                  1. Assert: _module_はこのエクスポートに対する直接束縛を提供する。
+                  1. ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _exportEntry_.[[LocalName]] }を返す。
+              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. _exportEntry_.[[ExportName]]が_exportName_である場合、
+                  1. Assert: _exportEntry_.[[ModuleRequest]]は*null*ではない。
+                  1. GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])を_importedModule_とする。
+                  1. _exportEntry_.[[ImportName]]が~namespace~である場合、
+                    1. Assert: _module_はこのエクスポートに対する直接束縛を提供しない。
                     1. ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }を返す。
-                  1. Assert: _module_はこのexportのためにspecific bindingをimportする。
-                  1. Assert: _e_.[[ImportName]]はStringである。
-                  1. _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)を返す。
-              1. _exportName_が*"default"*なら、
-                1. Assert: `default` exportはこのmoduleによってexplicitlyには定義されていなかった。
+                  1. Assert: _module_はこのエクスポートに対する特定の束縛をインポートしている。
+                  1. Assert: _exportEntry_.[[ImportName]]はStringである。
+                  1. _importedModule_.ResolveExport(_exportEntry_.[[ImportName]], _resolveSet_)を返す。
+              1. _exportName_が*"default"*である場合、
+                1. Assert: `default`エクスポートはこのモジュールによって明示的に定義されていなかった。
                 1. *null*を返す。
-                1. NOTE: `default` exportは`export * from "mod"` declarationによって提供されることはできない。
+                1. NOTE: `default`エクスポートは`export * from "mod"`宣言によって提供されることはできない。
               1. _starResolution_を*null*とする。
-              1. _module_.[[StarExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. Assert: _e_.[[ModuleRequest]]は*null*でない。
-                1. _importedModule_をGetImportedModule(_module_, _e_.[[ModuleRequest]])とする。
-                1. _resolution_を_importedModule_.ResolveExport(_exportName_, _resolveSet_)とする。
-                1. _resolution_が~ambiguous~なら、~ambiguous~を返す。
-                1. _resolution_が*null*でないなら、
+              1. _module_.[[StarExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. Assert: _exportEntry_.[[ModuleRequest]]は*null*ではない。
+                1. GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])を_importedModule_とする。
+                1. _importedModule_.ResolveExport(_exportName_, _resolveSet_)を_resolution_とする。
+                1. _resolution_が~ambiguous~である場合、~ambiguous~を返す。
+                1. _resolution_が*null*でない場合、
                   1. Assert: _resolution_はResolvedBinding Recordである。
-                  1. _starResolution_が*null*なら、
+                  1. _starResolution_が*null*である場合、
                     1. _starResolution_を_resolution_に設定する。
                   1. [id="step-resolveexport-conflict"] そうでなければ、
-                    1. Assert: requested nameを含む`*` exportが複数ある。
-                    1. _resolution_.[[Module]]と_starResolution_.[[Module]]が同じModule Recordでないなら、~ambiguous~を返す。
-                    1. _resolution_.[[BindingName]]が_starResolution_.[[BindingName]]でないなら、~ambiguous~を返す。
+                    1. Assert: 要求された名前を含む`*`エクスポートが複数存在する。
+                    1. _resolution_.[[Module]]と_starResolution_.[[Module]]が同じModule Recordでない場合、~ambiguous~を返す。
+                    1. _resolution_.[[BindingName]]が_starResolution_.[[BindingName]]でない場合、~ambiguous~を返す。
               1. _starResolution_を返す。
             </emu-alg>
           </emu-clause>
@@ -28629,63 +28629,63 @@
             </dl>
 
             <emu-alg>
-              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _e_について、以下を行う
-                1. Assert: _e_.[[ExportName]]は*null*でない。
-                1. _resolution_を_module_.ResolveExport(_e_.[[ExportName]])とする。
-                1. _resolution_が*null*または~ambiguous~のいずれかなら、*SyntaxError*例外をthrowする。
+              1. _module_.[[IndirectExportEntries]]の各ExportEntry Record _exportEntry_について、次を行う。
+                1. Assert: _exportEntry_.[[ExportName]]は*null*ではない。
+                1. _module_.ResolveExport(_exportEntry_.[[ExportName]])を_resolution_とする。
+                1. _resolution_が*null*または~ambiguous~のいずれかである場合、*SyntaxError*例外を投げる。
                 1. Assert: _resolution_はResolvedBinding Recordである。
-              1. Assert: _module_からのすべてのnamed exportsはresolvableである。
-              1. _realm_を_module_.[[Realm]]とする。
-              1. Assert: _realm_は*undefined*でない。
-              1. _envRecord_をNewModuleEnvironment(_realm_.[[GlobalEnv]])とする。
+              1. Assert: _module_からのすべての名前付きエクスポートは解決可能である。
+              1. _module_.[[Realm]]を_realm_とする。
+              1. Assert: _realm_は*undefined*ではない。
+              1. NewModuleEnvironment(_realm_.[[GlobalEnv]])を_envRecord_とする。
               1. _module_.[[Environment]]を_envRecord_に設定する。
-              1. _module_.[[ImportEntries]]の各ImportEntry Record _in_について、以下を行う
-                1. _importedModule_をGetImportedModule(_module_, _in_.[[ModuleRequest]])とする。
-                1. _in_.[[ImportName]]が~namespace~なら、
-                  1. _namespace_をGetModuleNamespace(_importedModule_)とする。
-                  1. ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)を実行する。
-                  1. ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)を実行する。
+              1. _module_.[[ImportEntries]]の各ImportEntry Record _importEntry_について、次を行う。
+                1. GetImportedModule(_module_, _importEntry_.[[ModuleRequest]])を_importedModule_とする。
+                1. _importEntry_.[[ImportName]]が~namespace~である場合、
+                  1. GetModuleNamespace(_importedModule_)を_namespace_とする。
+                  1. ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)を実行する。
+                  1. ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)を実行する。
                 1. そうでなければ、
-                  1. Assert: _in_.[[ImportName]]はStringである。
-                  1. _resolution_を_importedModule_.ResolveExport(_in_.[[ImportName]])とする。
-                  1. _resolution_が*null*または~ambiguous~のいずれかなら、*SyntaxError*例外をthrowする。
-                  1. _resolution_.[[BindingName]]が~namespace~なら、
-                    1. _namespace_をGetModuleNamespace(_resolution_.[[Module]])とする。
-                    1. ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)を実行する。
-                    1. ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)を実行する。
+                  1. Assert: _importEntry_.[[ImportName]]はStringである。
+                  1. _importedModule_.ResolveExport(_importEntry_.[[ImportName]])を_resolution_とする。
+                  1. _resolution_が*null*または~ambiguous~のいずれかである場合、*SyntaxError*例外を投げる。
+                  1. _resolution_.[[BindingName]]が~namespace~である場合、
+                    1. GetModuleNamespace(_resolution_.[[Module]])を_namespace_とする。
+                    1. ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)を実行する。
+                    1. ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)を実行する。
                   1. そうでなければ、
-                    1. CreateImportBinding(_envRecord_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])を実行する。
-              1. _moduleContext_を新しいECMAScript code execution contextとする。
+                    1. CreateImportBinding(_envRecord_, _importEntry_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])を実行する。
+              1. _moduleContext_を新しいECMAScriptコード実行コンテキストとする。
               1. _moduleContext_のFunctionを*null*に設定する。
-              1. Assert: _module_.[[Realm]]は*undefined*でない。
+              1. Assert: _module_.[[Realm]]は*undefined*ではない。
               1. _moduleContext_のRealmを_module_.[[Realm]]に設定する。
               1. _moduleContext_のScriptOrModuleを_module_に設定する。
               1. _moduleContext_のVariableEnvironmentを_module_.[[Environment]]に設定する。
               1. _moduleContext_のLexicalEnvironmentを_module_.[[Environment]]に設定する。
               1. _moduleContext_のPrivateEnvironmentを*null*に設定する。
               1. _module_.[[Context]]を_moduleContext_に設定する。
-              1. _moduleContext_をexecution context stackへpushする；_moduleContext_は現在running execution contextである。
-              1. _code_を_module_.[[ECMAScriptCode]]とする。
-              1. _variableDecls_を_code_のVarScopedDeclarationsとする。
+              1. _moduleContext_を実行コンテキストスタックにプッシュする。_moduleContext_は現在、実行中の実行コンテキストである。
+              1. _module_.[[ECMAScriptCode]]を_code_とする。
+              1. _code_のVarScopedDeclarationsを_variableDecls_とする。
               1. _declaredVariableNames_を新しい空のListとする。
-              1. _variableDecls_の各要素_d_について、以下を行う
-                1. _d_のBoundNamesの各要素_dn_について、以下を行う
-                  1. _declaredVariableNames_が_dn_を含まないなら、
-                    1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)を実行する。
-                    1. ! _envRecord_.InitializeBinding(_dn_, *undefined*)を実行する。
-                    1. _dn_を_declaredVariableNames_へappendする。
-              1. _lexicalDecls_を_code_のLexicallyScopedDeclarationsとする。
+              1. _variableDecls_の各要素_variableDecl_について、次を行う。
+                1. _variableDecl_のBoundNamesの各要素_name_について、次を行う。
+                  1. _declaredVariableNames_が_name_を含まない場合、
+                    1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
+                    1. ! _envRecord_.InitializeBinding(_name_, *undefined*)を実行する。
+                    1. _name_を_declaredVariableNames_に追加する。
+              1. _code_のLexicallyScopedDeclarationsを_lexicalDecls_とする。
               1. _privateEnv_を*null*とする。
-              1. _lexicalDecls_の各要素_d_について、以下を行う
-                1. _d_のBoundNamesの各要素_dn_について、以下を行う
-                  1. _d_のIsConstantDeclarationが*true*なら、
-                    1. ! _envRecord_.CreateImmutableBinding(_dn_, *true*)を実行する。
+              1. _lexicalDecls_の各要素_lexicalDecl_について、次を行う。
+                1. _lexicalDecl_のBoundNamesの各要素_name_について、次を行う。
+                  1. _lexicalDecl_のIsConstantDeclarationが*true*である場合、
+                    1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)を実行する。
                   1. そうでなければ、
-                    1. ! _envRecord_.CreateMutableBinding(_dn_, *false*)を実行する。
-                  1. _d_が|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかなら、
-                    1. _funcObj_を、arguments _envRecord_および_privateEnv_を伴う_d_のInstantiateFunctionObjectとする。
-                    1. ! _envRecord_.InitializeBinding(_dn_, _funcObj_)を実行する。
-              1. _moduleContext_をexecution context stackからremoveする。
+                    1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
+                  1. _lexicalDecl_が|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである場合、
+                    1. _envRecord_および_privateEnv_を引数として、_lexicalDecl_のInstantiateFunctionObjectを_funcObj_とする。
+                    1. ! _envRecord_.InitializeBinding(_name_, _funcObj_)を実行する。
+              1. _moduleContext_を実行コンテキストスタックから取り除く。
               1. ~unused~を返す。
             </emu-alg>
           </emu-clause>
@@ -29945,126 +29945,126 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _variableNames_を_body_のVarDeclaredNamesとする。
-          1. _variableDecls_を_body_のVarScopedDeclarationsとする。
-          1. _strict_が*false*なら、
-            1. _variableEnv_がGlobal Environment Recordなら、
-              1. _variableNames_の各要素_name_について、以下を行う
-                1. HasLexicalDeclaration(_variableEnv_, _name_)が*true*なら、*SyntaxError*例外をthrowする。
-                1. NOTE: `eval`はglobal lexical declarationによってshadowされるglobal var declarationを作成しない。
-            1. _thisEnv_を_lexicalEnv_とする。
-            1. Assert: 次のloopはterminateする。
-            1. _thisEnv_と_variableEnv_が同じEnvironment Recordでない間、繰り返す
-              1. _thisEnv_がObject Environment Recordでないなら、
-                1. NOTE: with statementsのenvironmentはlexical declarationを含むことができないので、var/let hoisting conflictsについてcheckする必要はない。
-                1. _variableNames_の各要素_name_について、以下を行う
-                  1. ! _thisEnv_.HasBinding(_name_)が*true*なら、
-                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] hostがweb browserであるか、または他の形で<emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>をsupportするなら、
-                      1. _thisEnv_が|Catch| clauseに対するEnvironment Recordでないなら、*SyntaxError*例外をthrowする。
+          1. _body_のVarDeclaredNamesを_variableNames_とする。
+          1. _body_のVarScopedDeclarationsを_variableDecls_とする。
+          1. _strict_が*false*である場合、
+            1. _variableEnv_がGlobal Environment Recordである場合、
+              1. _variableNames_の各要素_name_について、次を行う。
+                1. HasLexicalDeclaration(_variableEnv_, _name_)が*true*である場合、*SyntaxError*例外を投げる。
+                1. NOTE: `eval`は、グローバルlexical宣言によってシャドーイングされることになるグローバルvar宣言を作成しない。
+            1. _lexicalEnv_を_thisEnv_とする。
+            1. Assert: 次のループは終了する。
+            1. _thisEnv_と_variableEnv_が同じEnvironment Recordでない間、繰り返す。
+              1. _thisEnv_がObject Environment Recordでない場合、
+                1. NOTE: with文の環境はlexical宣言を含むことができないため、var/letの巻き上げの競合を確認する必要はない。
+                1. _variableNames_の各要素_name_について、次を行う。
+                  1. ! _thisEnv_.HasBinding(_name_)が*true*である場合、
+                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>をサポートする場合、
+                      1. _thisEnv_が|Catch|節のEnvironment Recordでない場合、*SyntaxError*例外を投げる。
                     1. そうでなければ、
-                      1. *SyntaxError*例外をThrowする。
-                  1. NOTE: direct evalは同名のlexical declarationを越えてvar declarationをhoistしない。
+                      1. *SyntaxError*例外を投げる。
+                  1. NOTE: direct evalは、同名のlexical宣言を越えてvar宣言を巻き上げない。
               1. _thisEnv_を_thisEnv_.[[OuterEnv]]に設定する。
           1. _privateIdentifiers_を新しい空のListとする。
-          1. _pointer_を_privateEnv_とする。
-          1. _pointer_が*null*でない間、繰り返す
-            1. _pointer_.[[Names]]の各Private Name _binding_について、以下を行う
-              1. _privateIdentifiers_が_binding_.[[Description]]を含まないなら、_binding_.[[Description]]を_privateIdentifiers_へappendする。
+          1. _privateEnv_を_pointer_とする。
+          1. _pointer_が*null*でない間、繰り返す。
+            1. _pointer_.[[Names]]の各Private Name _binding_について、次を行う。
+              1. _privateIdentifiers_が_binding_.[[Description]]を含まない場合、_binding_.[[Description]]を_privateIdentifiers_に追加する。
             1. _pointer_を_pointer_.[[OuterPrivateEnvironment]]に設定する。
-          1. argument _privateIdentifiers_を伴う_body_のAllPrivateIdentifiersValidが*false*なら、*SyntaxError*例外をthrowする。
+          1. _privateIdentifiers_を引数とする_body_のAllPrivateIdentifiersValidが*false*である場合、*SyntaxError*例外を投げる。
           1. _funcsToInitialize_を新しい空のListとする。
           1. _declaredFuncNames_を新しい空のListとする。
-          1. _variableDecls_の各要素_d_について、reverse List orderで以下を行う
-            1. _d_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれでもないなら、
-              1. Assert: _d_は|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
-              1. NOTE: 同じnameに対して複数のfunction declarationsがある場合、last declarationが使用される。
-              1. _func_を_d_のBoundNamesの唯一の要素とする。
-              1. _declaredFuncNames_が_func_を含まないなら、
-                1. _variableEnv_がGlobal Environment Recordなら、
-                  1. _funcDefinable_を ? CanDeclareGlobalFunction(_variableEnv_, _func_) とする。
-                  1. _funcDefinable_が*false*なら、*TypeError*例外をthrowする。
-                1. _func_を_declaredFuncNames_へappendする。
-                1. _d_を_funcsToInitialize_の最初の要素としてinsertする。
+          1. _variableDecls_の各要素_variableDecl_について、Listの逆順で、次を行う。
+            1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれでもない場合、
+              1. Assert: _variableDecl_は、|FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、または|AsyncGeneratorDeclaration|のいずれかである。
+              1. NOTE: 同じ名前に対して複数の関数宣言がある場合、最後の宣言が使用される。
+              1. _variableDecl_のBoundNamesの唯一の要素を_funcName_とする。
+              1. _declaredFuncNames_が_funcName_を含まない場合、
+                1. _variableEnv_がGlobal Environment Recordである場合、
+                  1. ? CanDeclareGlobalFunction(_variableEnv_, _funcName_)を_funcDefinable_とする。
+                  1. _funcDefinable_が*false*である場合、*TypeError*例外を投げる。
+                1. _funcName_を_declaredFuncNames_に追加する。
+                1. _variableDecl_を_funcsToInitialize_の最初の要素として挿入する。
           1. _declaredVariableNames_を新しい空のListとする。
-          1. _variableDecls_の各要素_d_について、以下を行う
-            1. _d_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれかなら、
-              1. _d_のBoundNamesの各String _vn_について、以下を行う
-                1. _declaredFuncNames_が_vn_を含まないなら、
-                  1. _variableEnv_がGlobal Environment Recordなら、
-                    1. _vnDefinable_を ? CanDeclareGlobalVar(_variableEnv_, _vn_) とする。
-                    1. _vnDefinable_が*false*なら、*TypeError*例外をthrowする。
-                  1. _declaredVariableNames_が_vn_を含まないなら、
-                    1. _vn_を_declaredVariableNames_へappendする。
-          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] _strict_が*false*であり、hostがweb browserであるか、または他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をsupportするなら、
-            1. _declaredFuncOrVariableNames_を_declaredFuncNames_と_declaredVariableNames_のlist-concatenationとする。
-            1. _body_ Contains _x_が*true*であるような任意の|Block|、|CaseClause|、または|DefaultClause| _x_の|StatementList|内にdirectly containedされる各|FunctionDeclaration| _f_について、以下を行う
-              1. _funcName_を_f_の|BindingIdentifier|のStringValueとする。
-              1. |FunctionDeclaration| _f_を_funcName_を|BindingIdentifier|として持つ|VariableStatement|に置き換えても、_body_に対してEarly Errorsをproduceしないなら、
+          1. _variableDecls_の各要素_variableDecl_について、次を行う。
+            1. _variableDecl_が|VariableDeclaration|、|ForBinding|、または|BindingIdentifier|のいずれかである場合、
+              1. _variableDecl_のBoundNamesの各String _name_について、次を行う。
+                1. _declaredFuncNames_が_name_を含まない場合、
+                  1. _variableEnv_がGlobal Environment Recordである場合、
+                    1. ? CanDeclareGlobalVar(_variableEnv_, _name_)を_variableDefinable_とする。
+                    1. _variableDefinable_が*false*である場合、*TypeError*例外を投げる。
+                  1. _declaredVariableNames_が_name_を含まない場合、
+                    1. _name_を_declaredVariableNames_に追加する。
+          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] _strict_が*false*であり、かつホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>をサポートする場合、
+            1. _declaredFuncNames_と_declaredVariableNames_のlist-concatenationを_declaredFuncOrVariableNames_とする。
+            1. _body_ Contains _x_が*true*であるような任意の|Block|、|CaseClause|、または|DefaultClause| _x_の|StatementList|に直接含まれる各|FunctionDeclaration| _funcDecl_について、次を行う。
+              1. _funcDecl_の|BindingIdentifier|のStringValueを_funcName_とする。
+              1. |FunctionDeclaration| _funcDecl_を、_funcName_を|BindingIdentifier|として持つ|VariableStatement|に置き換えても、_body_に対してEarly Errorsが発生しない場合、
                 1. _bindingExists_を*false*とする。
                 1. _thisEnv_を_lexicalEnv_に設定する。
-                1. Assert: 次のloopはterminateする。
-                1. _thisEnv_が_variableEnv_でない間、繰り返す
-                  1. _thisEnv_がObject Environment Recordでないなら、
-                    1. ! _thisEnv_.HasBinding(_funcName_)が*true*なら、
-                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] hostがweb browserであるか、または他の形で<emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>をsupportするなら、
-                        1. _thisEnv_が|Catch| clauseに対するEnvironment Recordでないなら、_bindingExists_を*true*に設定する。
+                1. Assert: 次のループは終了する。
+                1. _thisEnv_が_variableEnv_でない間、繰り返す。
+                  1. _thisEnv_がObject Environment Recordでない場合、
+                    1. ! _thisEnv_.HasBinding(_funcName_)が*true*である場合、
+                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] ホストがWebブラウザである、またはその他の形で<emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>をサポートする場合、
+                        1. _thisEnv_が|Catch|節のEnvironment Recordでない場合、_bindingExists_を*true*に設定する。
                       1. そうでなければ、
                         1. _bindingExists_を*true*に設定する。
                   1. _thisEnv_を_thisEnv_.[[OuterEnv]]に設定する。
-                1. _bindingExists_が*false*であり、_variableEnv_がGlobal Environment Recordなら、
-                  1. HasLexicalDeclaration(_variableEnv_, _funcName_)が*false*なら、
-                    1. _funcDefinable_を ? CanDeclareGlobalVar(_variableEnv_, _funcName_) とする。
+                1. _bindingExists_が*false*であり、かつ_variableEnv_がGlobal Environment Recordである場合、
+                  1. HasLexicalDeclaration(_variableEnv_, _funcName_)が*false*である場合、
+                    1. ? CanDeclareGlobalVar(_variableEnv_, _funcName_)を_funcDefinable_とする。
                   1. そうでなければ、
                     1. _funcDefinable_を*false*とする。
                 1. そうでなければ、
                   1. _funcDefinable_を*true*とする。
-                1. _bindingExists_が*false*であり、_funcDefinable_が*true*なら、
-                  1. _declaredFuncOrVariableNames_が_funcName_を含まないなら、
-                    1. _variableEnv_がGlobal Environment Recordなら、
+                1. _bindingExists_が*false*であり、かつ_funcDefinable_が*true*である場合、
+                  1. _declaredFuncOrVariableNames_が_funcName_を含まない場合、
+                    1. _variableEnv_がGlobal Environment Recordである場合、
                       1. ? CreateGlobalVarBinding(_variableEnv_, _funcName_, *true*)を実行する。
                     1. そうでなければ、
-                      1. _bindingExists_を ! _variableEnv_.HasBinding(_funcName_) に設定する。
-                      1. _bindingExists_が*false*なら、
+                      1. ! _variableEnv_.HasBinding(_funcName_)を_bindingExists_に設定する。
+                      1. _bindingExists_が*false*である場合、
                         1. ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)を実行する。
                         1. ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)を実行する。
-                    1. _funcName_を_declaredFuncOrVariableNames_へappendする。
-                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _f_がevaluatedされるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluation algorithmの代わりに、次のstepsを実行する：
-                    1. _gEnv_をrunning execution contextのVariableEnvironmentとする。
-                    1. _bEnv_をrunning execution contextのLexicalEnvironmentとする。
-                    1. _fObj_を ! _bEnv_.GetBindingValue(_funcName_, *false*) とする。
-                    1. ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>を実行する。
+                    1. _funcName_を_declaredFuncOrVariableNames_に追加する。
+                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] |FunctionDeclaration| _funcDecl_が評価されるとき、<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref>で提供される|FunctionDeclaration| Evaluationアルゴリズムの代わりに、次のステップを実行する。
+                    1. 実行中の実行コンテキストのVariableEnvironmentを_globalEnv_とする。
+                    1. 実行中の実行コンテキストのLexicalEnvironmentを_blockEnv_とする。
+                    1. ! _blockEnv_.GetBindingValue(_funcName_, *false*)を_funcObj_とする。
+                    1. ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>を実行する。
                     1. ~unused~を返す。
-          1. [id="step-evaldeclarationinstantiation-post-validation"] NOTE: _variableEnv_がGlobal Environment Recordであり、global objectがProxy exotic objectである場合を除き、このalgorithm step以降でabnormal terminationsは発生しない。
-          1. _lexicalDecls_を_body_のLexicallyScopedDeclarationsとする。
-          1. _lexicalDecls_の各要素_d_について、以下を行う
-            1. NOTE: Lexically declared namesはここでinstantiateされるだけで、initializeはされない。
-            1. _d_のBoundNamesの各要素_dn_について、以下を行う
-              1. _d_のIsConstantDeclarationが*true*なら、
-                1. ? _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)を実行する。
+          1. [id="step-evaldeclarationinstantiation-post-validation"] NOTE: _variableEnv_がGlobal Environment Recordであり、かつグローバルオブジェクトがProxy exotic objectである場合を除き、このアルゴリズムステップ以降に異常終了は発生しない。
+          1. _body_のLexicallyScopedDeclarationsを_lexicalDecls_とする。
+          1. _lexicalDecls_の各要素_lexicalDecl_について、次を行う。
+            1. NOTE: Lexically declared nameは、ここでインスタンス化されるだけで、初期化されない。
+            1. _lexicalDecl_のBoundNamesの各要素_name_について、次を行う。
+              1. _lexicalDecl_のIsConstantDeclarationが*true*である場合、
+                1. ? _lexicalEnv_.CreateImmutableBinding(_name_, *true*)を実行する。
               1. そうでなければ、
-                1. ? _lexicalEnv_.CreateMutableBinding(_dn_, *false*)を実行する。
-          1. _funcsToInitialize_の各Parse Node _f_について、以下を行う
-            1. _func_を_f_のBoundNamesの唯一の要素とする。
-            1. _funcObj_を、arguments _lexicalEnv_および_privateEnv_を伴う_f_のInstantiateFunctionObjectとする。
-            1. _variableEnv_がGlobal Environment Recordなら、
-              1. ? CreateGlobalFunctionBinding(_variableEnv_, _func_, _funcObj_, *true*)を実行する。
+                1. ? _lexicalEnv_.CreateMutableBinding(_name_, *false*)を実行する。
+          1. _funcsToInitialize_の各Parse Node _funcDecl_について、次を行う。
+            1. _funcDecl_のBoundNamesの唯一の要素を_funcName_とする。
+            1. _lexicalEnv_および_privateEnv_を引数として、_funcDecl_のInstantiateFunctionObjectを_funcObj_とする。
+            1. _variableEnv_がGlobal Environment Recordである場合、
+              1. ? CreateGlobalFunctionBinding(_variableEnv_, _funcName_, _funcObj_, *true*)を実行する。
             1. そうでなければ、
-              1. _bindingExists_を ! _variableEnv_.HasBinding(_func_) とする。
-              1. _bindingExists_が*false*なら、
-                1. NOTE: 次のinvocationは、step <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref>より前のvalidationのため、abrupt completionを返すことができない。
-                1. ! _variableEnv_.CreateMutableBinding(_func_, *true*)を実行する。
-                1. ! _variableEnv_.InitializeBinding(_func_, _funcObj_)を実行する。
+              1. ! _variableEnv_.HasBinding(_funcName_)を_bindingExists_とする。
+              1. _bindingExists_が*false*である場合、
+                1. NOTE: 次の呼び出しは、ステップ<emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref>に先立つ検証により、abrupt completionを返すことができない。
+                1. ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)を実行する。
+                1. ! _variableEnv_.InitializeBinding(_funcName_, _funcObj_)を実行する。
               1. そうでなければ、
-                1. ! _variableEnv_.SetMutableBinding(_func_, _funcObj_, *false*)を実行する。
-          1. _declaredVariableNames_の各String _vn_について、以下を行う
-            1. _variableEnv_がGlobal Environment Recordなら、
-              1. ? CreateGlobalVarBinding(_variableEnv_, _vn_, *true*)を実行する。
+                1. ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)を実行する。
+          1. _declaredVariableNames_の各String _variableName_について、次を行う。
+            1. _variableEnv_がGlobal Environment Recordである場合、
+              1. ? CreateGlobalVarBinding(_variableEnv_, _variableName_, *true*)を実行する。
             1. そうでなければ、
-              1. _bindingExists_を ! _variableEnv_.HasBinding(_vn_) とする。
-              1. _bindingExists_が*false*なら、
-                1. NOTE: 次のinvocationは、step <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref>より前のvalidationのため、abrupt completionを返すことができない。
-                1. ! _variableEnv_.CreateMutableBinding(_vn_, *true*)を実行する。
-                1. ! _variableEnv_.InitializeBinding(_vn_, *undefined*)を実行する。
+              1. ! _variableEnv_.HasBinding(_variableName_)を_bindingExists_とする。
+              1. _bindingExists_が*false*である場合、
+                1. NOTE: 次の呼び出しは、ステップ<emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref>に先立つ検証により、abrupt completionを返すことができない。
+                1. ! _variableEnv_.CreateMutableBinding(_variableName_, *true*)を実行する。
+                1. ! _variableEnv_.InitializeBinding(_variableName_, *undefined*)を実行する。
           1. ~unused~を返す。
         </emu-alg>
       </emu-clause>
@@ -30605,18 +30605,18 @@
         <p>このfunctionは、1つ以上のsource objectsからすべてのenumerable own propertiesのvaluesを_target_ objectへcopyします。</p>
         <p>これは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _to_を ? ToObject(_target_) とする。
-          1. 渡されたargumentが1つだけなら、_to_を返す。
-          1. _sources_の各要素_nextSource_について、以下を行う
-            1. _nextSource_が*undefined*でも*null*でもないなら、
-              1. _from_を ! ToObject(_nextSource_) とする。
-              1. _keys_を ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta> とする。
-              1. _keys_の各要素_nextKey_について、以下を行う
-                1. _propertyDesc_を ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta> とする。
-                1. _propertyDesc_が*undefined*でなく、_propertyDesc_.[[Enumerable]]が*true*なら、
-                  1. _propertyValue_を ? Get(_from_, _nextKey_) とする。
-                  1. ? Set(_to_, _nextKey_, _propertyValue_, *true*)を実行する。
-          1. _to_を返す。
+          1. ? ToObject(_target_)を_targetObj_とする。
+          1. 引数が1個だけ渡された場合、_targetObj_を返す。
+          1. _sources_の各要素_nextSource_について、次を行う。
+            1. _nextSource_が*undefined*でも*null*でもない場合、
+              1. ! ToObject(_nextSource_)を_from_とする。
+              1. ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>を_keys_とする。
+              1. _keys_の各要素_nextKey_について、次を行う。
+                1. ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>を_propertyDesc_とする。
+                1. _propertyDesc_が*undefined*でなく、かつ_propertyDesc_.[[Enumerable]]が*true*である場合、
+                  1. ? Get(_from_, _nextKey_)を_propertyValue_とする。
+                  1. ? Set(_targetObj_, _nextKey_, _propertyValue_, *true*)を実行する。
+          1. _targetObj_を返す。
         </emu-alg>
         <p>このfunctionの*"length"* propertyは*2*<sub>𝔽</sub>です。</p>
       </emu-clause>
@@ -30802,11 +30802,11 @@
         </emu-note>
         <p>このfunctionは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _groups_を ? GroupBy(_items_, _callback_, ~property~) とする。
-          1. _obj_をOrdinaryObjectCreate(*null*)とする。
-          1. _groups_の各Record { [[Key]], [[Elements]] } _g_について、以下を行う
-            1. _elements_をCreateArrayFromList(_g_.[[Elements]])とする。
-            1. ! CreateDataPropertyOrThrow(_obj_, _g_.[[Key]], _elements_)を実行する。
+          1. ? GroupBy(_items_, _callback_, ~property~)を_groups_とする。
+          1. OrdinaryObjectCreate(*null*)を_obj_とする。
+          1. _groups_の各Record { [[Key]], [[Elements]] } _group_について、次を行う。
+            1. CreateArrayFromList(_group_.[[Elements]])を_elements_とする。
+            1. ! CreateDataPropertyOrThrow(_obj_, _group_.[[Key]], _elements_)を実行する。
           1. _obj_を返す。
         </emu-alg>
       </emu-clause>
@@ -31737,10 +31737,10 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _propertyDesc_を_symbol_.[[Description]]とする。
-            1. _propertyDesc_が*undefined*なら、_propertyDesc_をempty Stringに設定する。
-            1. Assert: _propertyDesc_はStringである。
-            1. *"Symbol("*、_propertyDesc_、および*")"*のstring-concatenationを返す。
+            1. _symbol_.[[Description]]を_description_とする。
+            1. _description_が*undefined*である場合、_description_を空のStringに設定する。
+            1. Assert: _description_はStringである。
+            1. *"Symbol("*、_description_、および*")"*のstring-concatenationを返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -32592,11 +32592,11 @@
         <h1>BigInt.asIntN ( _bits_, _bigint_ )</h1>
         <p>このfunctionは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _bits_を ? ToIndex(_bits_) に設定する。
-          1. _bigint_を ? ToBigInt(_bigint_) に設定する。
-          1. _module_をℝ(_bigint_) modulo 2<sup>_bits_</sup>とする。
-          1. _module_ ≥ 2<sup>_bits_ - 1</sup>なら、ℤ(_module_ - 2<sup>_bits_</sup>)を返す。
-          1. ℤ(_module_)を返す。
+          1. _bits_を? ToIndex(_bits_)に設定する。
+          1. _bigint_を? ToBigInt(_bigint_)に設定する。
+          1. ℝ(_bigint_) modulo 2<sup>_bits_</sup>を_remainder_とする。
+          1. _remainder_ ≥ 2<sup>_bits_ - 1</sup>である場合、ℤ(_remainder_ - 2<sup>_bits_</sup>)を返す。
+          1. ℤ(_remainder_)を返す。
         </emu-alg>
       </emu-clause>
 
@@ -37371,9 +37371,9 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>RegExpIdentifierName :: RegExpIdentifierName RegExpIdentifierPart</emu-grammar>
         <emu-alg>
-          1. _cps_をderived |RegExpIdentifierName|のRegExpIdentifierCodePointsとする。
-          1. _codePoint_を|RegExpIdentifierPart|のRegExpIdentifierCodePointとする。
-          1. _cps_と« _codePoint_ »のlist-concatenationを返す。
+          1. 派生した|RegExpIdentifierName|のRegExpIdentifierCodePointsを_codePoints_とする。
+          1. |RegExpIdentifierPart|のRegExpIdentifierCodePointを_codePoint_とする。
+          1. _codePoints_と« _codePoint_ »のlist-concatenationを返す。
         </emu-alg>
       </emu-clause>
 
@@ -48163,13 +48163,13 @@ THH:mm:ss.sss
         <h1>FinalizationRegistry ( _cleanupCallback_ )</h1>
         <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
         <emu-alg>
-          1. NewTargetが*undefined*なら、*TypeError*例外をthrowする。
-          1. IsCallable(_cleanupCallback_)が*false*なら、*TypeError*例外をthrowする。
-          1. _finalizationRegistry_を ? OrdinaryCreateFromConstructor(NewTarget, *"%FinalizationRegistry.prototype%"*, « [[Realm]], [[CleanupCallback]], [[Cells]] ») とする。
-          1. _func_をactive function objectとする。
-          1. _finalizationRegistry_.[[Realm]]を_func_.[[Realm]]に設定する。
+          1. NewTargetが*undefined*である場合、*TypeError*例外を投げる。
+          1. IsCallable(_cleanupCallback_)が*false*である場合、*TypeError*例外を投げる。
+          1. ? OrdinaryCreateFromConstructor(NewTarget, *"%FinalizationRegistry.prototype%"*, « [[Realm]], [[CleanupCallback]], [[Cells]] »)を_finalizationRegistry_とする。
+          1. アクティブな関数オブジェクトを_activeFunc_とする。
+          1. _finalizationRegistry_.[[Realm]]を_activeFunc_.[[Realm]]に設定する。
           1. _finalizationRegistry_.[[CleanupCallback]]をHostMakeJobCallback(_cleanupCallback_)に設定する。
-          1. _finalizationRegistry_.[[Cells]]をnew empty Listに設定する。
+          1. _finalizationRegistry_.[[Cells]]を新しい空のListに設定する。
           1. _finalizationRegistry_を返す。
         </emu-alg>
       </emu-clause>
@@ -51743,19 +51743,19 @@ THH:mm:ss.sss
         <p>このfunctionはrevocable Proxy objectを作成する。</p>
         <p>これは、呼び出されたときに以下のstepsを実行する：</p>
         <emu-alg>
-          1. _proxy_を ? ProxyCreate(_target_, _handler_) とする。
-          1. _revokerClosure_を、parametersを持たず、何もcaptureせず、呼び出されたときに以下のstepsを実行するnew Abstract Closureとする：
-            1. _activeFunc_をactive function objectとする。
-            1. _p_を_activeFunc_.[[RevocableProxy]]とする。
-            1. _p_が*null*なら、NormalCompletion(*undefined*)を返す。
+          1. ? ProxyCreate(_target_, _handler_)を_proxy_とする。
+          1. パラメータを持たず、何も捕捉せず、呼び出されたときに次のステップを実行する新しいAbstract Closureを_revokerClosure_とする。
+            1. アクティブな関数オブジェクトを_activeFunc_とする。
+            1. _activeFunc_.[[RevocableProxy]]を_revocableProxy_とする。
+            1. _revocableProxy_が*null*である場合、NormalCompletion(*undefined*)を返す。
             1. _activeFunc_.[[RevocableProxy]]を*null*に設定する。
-            1. Assert: _p_はProxy exotic objectである。
-            1. _p_.[[ProxyTarget]]を*null*に設定する。
-            1. _p_.[[ProxyHandler]]を*null*に設定する。
+            1. Assert: _revocableProxy_はProxy exotic objectである。
+            1. _revocableProxy_.[[ProxyTarget]]を*null*に設定する。
+            1. _revocableProxy_.[[ProxyHandler]]を*null*に設定する。
             1. NormalCompletion(*undefined*)を返す。
-          1. _revoker_をCreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)とする。
+          1. CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)を_revoker_とする。
           1. _revoker_.[[RevocableProxy]]を_proxy_に設定する。
-          1. _result_をOrdinaryObjectCreate(%Object.prototype%)とする。
+          1. OrdinaryObjectCreate(%Object.prototype%)を_result_とする。
           1. ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)を実行する。
           1. ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)を実行する。
           1. _result_を返す。
@@ -52025,8 +52025,8 @@ THH:mm:ss.sss
       </dl>
       <emu-alg>
         1. _events_をempty Setとする。
-        1. _execution_.[[EventsRecords]]の各Agent Events Record _aer_について、
-          1. _aer_.[[EventList]]の各Memory event _event_について、
+        1. _execution_.[[EventsRecords]]の各Agent Events Record _eventsRecord_について、
+          1. _eventsRecord_.[[EventList]]の各Memory event _event_について、
             1. _event_を_events_にaddする。
         1. _events_を返す。
       </emu-alg>
@@ -52122,7 +52122,7 @@ THH:mm:ss.sss
       <h1>is-agent-order-before</h1>
       <p>candidate execution _execution_について、その<dfn>is-agent-order-before</dfn> Relationは、以下をsatisfyするMemory events上のleast Relationである。</p>
       <ul>
-        <li>events _eventA_および_eventB_について、_execution_.[[EventsRecords]]内に、_eventA_と_eventB_の両方を含む_aer_.[[EventList]]を持つ何らかのAgent Events Record _aer_があり、かつ_aer_.[[EventList]]のList orderにおいて_eventA_が_eventB_より前であるなら、_eventA_は_execution_において_eventB_のis-agent-order-beforeである。</li>
+        <li>events _eventA_および_eventB_について、_execution_.[[EventsRecords]]内に、_eventA_と_eventB_の両方を含む_eventsRecord_.[[EventList]]を持つ何らかのAgent Events Record _eventsRecord_があり、かつ_eventsRecord_.[[EventList]]のList orderにおいて_eventA_が_eventB_より前であるなら、_eventA_は_execution_において_eventB_のis-agent-order-beforeである。</li>
       </ul>
 
       <emu-note>

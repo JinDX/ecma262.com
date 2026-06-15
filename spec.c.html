@@ -2786,13 +2786,13 @@
               1. 将 _x_ 设置为 (_x_ - _xDigit_) / 2。
               1. 将 _y_ 设置为 (_y_ - _yDigit_) / 2。
             1. 如果 _op_ 是 `&amp;`，则
-              1. 令 _tmp_ 为 BinaryAnd(_x_ modulo 2, _y_ modulo 2)。
+              1. 令 _signBit_ 为 BinaryAnd(_x_ modulo 2, _y_ modulo 2)。
             1. 否则如果 _op_ 是 `|`，则
-              1. 令 _tmp_ 为 BinaryOr(_x_ modulo 2, _y_ modulo 2)。
+              1. 令 _signBit_ 为 BinaryOr(_x_ modulo 2, _y_ modulo 2)。
             1. 否则，
               1. 断言：_op_ 是 `^`。
-              1. 令 _tmp_ 为 BinaryXor(_x_ modulo 2, _y_ modulo 2)。
-            1. 如果 _tmp_ ≠ 0，则
+              1. 令 _signBit_ 为 BinaryXor(_x_ modulo 2, _y_ modulo 2)。
+            1. 如果 _signBit_ ≠ 0，则
               1. 将 _result_ 设置为 _result_ - 2<sup>_shift_</sup>。
               1. 注记：这会扩展符号。
             1. 返回 _result_ 的 BigInt 值。
@@ -4753,7 +4753,7 @@
     <emu-clause id="sec-data-blocks">
       <h1>Data Blocks</h1>
       <p><dfn variants="Data Blocks">Data Block</dfn> 规范类型用于描述一个由字节大小（8 位）数值组成的、不同且可变的序列。<dfn variants="byte values">字节值</dfn>是从 0 到 255 的闭区间内的整数。Data Block 值以固定数量的字节创建，每个字节的初始值均为 0。</p>
-      <p>为了本规范中的记号方便，可以使用类似数组的语法来访问 Data Block 值的各个字节。此记号将 Data Block 值呈现为一个从 0 开始的<emu-not-ref>整数索引</emu-not-ref>字节序列。例如，如果 _db_ 是一个 5 字节的 Data Block 值，则 _db_[2] 可用于访问其第 3<sup>rd</sup> 个字节。</p>
+      <p>为了本规范中的记号方便，可以使用类似数组的语法来访问 Data Block 值的各个字节。此记号将 Data Block 值呈现为一个从 0 开始的<emu-not-ref>整数索引</emu-not-ref>字节序列。例如，如果 _dataBlock_ 是一个 5 字节的 Data Block 值，则 _dataBlock_[2] 可用于访问其第 3<sup>rd</sup> 个字节。</p>
       <p>驻留在可由多个 agents 并发引用的内存中的数据块被称为 <dfn variants="Shared Data Blocks">Shared Data Block</dfn>。Shared Data Block 具有一个身份（用于相等性测试 Shared Data Block 值），该身份是<em>地址无关的</em>：它不绑定到该块映射到任何进程中的虚拟地址，而是绑定到该块所表示的内存位置集合。两个数据块只有在它们包含的位置集合相等时才相等；否则，它们不相等，并且它们所包含的位置集合的交集为空。最后，Shared Data Blocks 可以与 Data Blocks 区分开来。</p>
       <p>Shared Data Blocks 的语义由内存模型使用 Shared Data Block 事件定义。下面的抽象操作引入 Shared Data Block 事件，并作为求值语义与内存模型事件语义之间的接口。事件形成一个候选执行，内存模型将其作为过滤器作用于该候选执行。完整语义请参阅内存模型。</p>
       <p>Shared Data Block 事件由内存模型中定义的 Records 建模。</p>
@@ -4769,9 +4769,9 @@
         </dl>
         <emu-alg>
           1. 如果 _size_ > 2<sup>53</sup> - 1，则抛出 *RangeError* 异常。
-          1. 令 _db_ 为一个由 _size_ 个字节组成的新 Data Block 值。如果无法创建这样的 Data Block，则抛出 *RangeError* 异常。
-          1. 将 _db_ 的所有字节设置为 0。
-          1. 返回 _db_。
+          1. 令 _dataBlock_ 为一个由 _size_ 个字节组成的新 Data Block 值。如果无法创建这样的 Data Block，则抛出 *RangeError* 异常。
+          1. 将 _dataBlock_ 的所有字节设置为 0。
+          1. 返回 _dataBlock_。
         </emu-alg>
       </emu-clause>
 
@@ -4784,14 +4784,14 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _db_ 为一个由 _size_ 个字节组成的新 Shared Data Block 值。如果无法创建这样的 Shared Data Block，则抛出 *RangeError* 异常。
+          1. 令 _dataBlock_ 为一个由 _size_ 个字节组成的新 Shared Data Block 值。如果无法创建这样的 Shared Data Block，则抛出 *RangeError* 异常。
           1. 令 _agentRecord_ 为周围 agent 的 Agent Record。
           1. 令 _execution_ 为 _agentRecord_.[[CandidateExecution]]。
           1. 令 _eventsRecord_ 为 _execution_.[[EventsRecords]] 中 [[AgentSignifier]] 为 AgentSignifier() 的 Agent Events Record。
           1. 令 _zero_ 为 « 0 »。
-          1. 对 _db_ 的每个索引 _index_，执行：
-            1. 将 WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _db_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ } 追加到 _eventsRecord_.[[EventList]]。
-          1. 返回 _db_。
+          1. 对 _dataBlock_ 的每个索引 _index_，执行：
+            1. 将 WriteSharedMemory { [[Order]]: ~init~, [[NoTear]]: *true*, [[Block]]: _dataBlock_, [[ByteIndex]]: _index_, [[ElementSize]]: 1, [[Payload]]: _zero_ } 追加到 _eventsRecord_.[[EventList]]。
+          1. 返回 _dataBlock_。
         </emu-alg>
       </emu-clause>
 
@@ -6670,8 +6670,8 @@
       <dl class="header">
       </dl>
       <emu-alg>
-        1. 如果 _obj_.[[PrivateElements]] 包含一个 PrivateElement _pe_，使得 _pe_.[[Key]] 是 _privateName_，则
-          1. 返回 _pe_。
+        1. 如果 _obj_.[[PrivateElements]] 包含一个 PrivateElement _entry_，使得 _entry_.[[Key]] 是 _privateName_，则
+          1. 返回 _entry_。
         1. 返回 ~empty~。
       </emu-alg>
     </emu-clause>
@@ -12126,7 +12126,7 @@
       <h1>
         HostCallJobCallback (
           _jobCallback_: a JobCallback Record,
-          _value_: an ECMAScript language value,
+          _thisValue_: an ECMAScript language value,
           _argList_: a List of ECMAScript language values,
         ): either a normal completion containing an ECMAScript language value or a throw completion
       </h1>
@@ -12134,7 +12134,7 @@
       </dl>
       <p>HostCallJobCallback 的实现必须符合以下要求：</p>
       <ul>
-        <li>它必须执行并返回 Call(_jobCallback_.[[Callback]], _value_, _argList_) 的结果。</li>
+        <li>它必须执行并返回 Call(_jobCallback_.[[Callback]], _thisValue_, _argList_) 的结果。</li>
       </ul>
       <emu-note>
         <p>此要求意味着宿主不能改变本规范中定义的函数对象的 [[Call]] 行为。</p>
@@ -12142,7 +12142,7 @@
       <p>HostCallJobCallback 的默认实现在被调用时执行以下步骤：</p>
       <emu-alg>
         1. 断言：IsCallable(_jobCallback_.[[Callback]]) 是 *true*。
-        1. 返回 ? Call(_jobCallback_.[[Callback]], _value_, _argList_)。
+        1. 返回 ? Call(_jobCallback_.[[Callback]], _thisValue_, _argList_)。
       </emu-alg>
       <p>不是 Web 浏览器的 ECMAScript 宿主必须使用 HostCallJobCallback 的默认实现。</p>
     </emu-clause>
@@ -12480,10 +12480,10 @@
         1. 对 _objSet_ 的每个元素 _value_，执行：
           1. 对每个 WeakRef _ref_，如果 _ref_.[[WeakRefTarget]] 是 _value_，则执行：
             1. 将 _ref_.[[WeakRefTarget]] 设置为 ~empty~。
-          1. 对每个 FinalizationRegistry _fg_，如果 _fg_.[[Cells]] 包含一个 Record _cell_，使得 _cell_.[[WeakRefTarget]] 是 _value_，则执行：
+          1. 对每个 FinalizationRegistry _finalizationRegistry_，如果 _finalizationRegistry_.[[Cells]] 包含一个 Record _cell_，使得 _cell_.[[WeakRefTarget]] 是 _value_，则执行：
             1. 将 _cell_.[[WeakRefTarget]] 设置为 ~empty~。
             1. 令 _enqueueCleanup_ 为一个实现定义的选择，其值为 *true* 或 *false*。
-            1. 如果 _enqueueCleanup_ 是 *true*，则执行 HostEnqueueFinalizationRegistryCleanupJob(_fg_)。
+            1. 如果 _enqueueCleanup_ 是 *true*，则执行 HostEnqueueFinalizationRegistryCleanupJob(_finalizationRegistry_)。
           1. 对每个 WeakMap _map_，如果 _map_.[[WeakMapData]] 包含一个 Record _entry_，使得 _entry_.[[Key]] 是 _value_，则执行：
             1. 将 _entry_.[[Key]] 设置为 ~empty~。
             1. 将 _entry_.[[Value]] 设置为 ~empty~。
@@ -13793,131 +13793,131 @@
       </emu-note>
       <p>它在被调用时执行以下步骤：</p>
       <emu-alg>
-        1. 令 _calleeContext_ 为运行中执行上下文。
+        1. 令 _calleeContext_ 为正在运行的执行上下文。
         1. 令 _code_ 为 _func_.[[ECMAScriptCode]]。
         1. 令 _strict_ 为 _func_.[[Strict]]。
         1. 令 _formals_ 为 _func_.[[FormalParameters]]。
         1. 令 _paramNames_ 为 _formals_ 的 BoundNames。
-        1. 如果 _paramNames_ 有任何重复项，则令 _hasDuplicates_ 为 *true*；否则令 _hasDuplicates_ 为 *false*。
+        1. 如果 _paramNames_ 有任何重复条目，令 _hasDuplicates_ 为 *true*；否则令 _hasDuplicates_ 为 *false*。
         1. 令 _simpleParamList_ 为 _formals_ 的 IsSimpleParameterList。
         1. 令 _hasParamExprs_ 为 _formals_ 的 ContainsExpression。
         1. 令 _variableNames_ 为 _code_ 的 VarDeclaredNames。
         1. 令 _variableDecls_ 为 _code_ 的 VarScopedDeclarations。
         1. 令 _lexicalNames_ 为 _code_ 的 LexicallyDeclaredNames。
-        1. 令 _funcNames_ 为新的空 List。
-        1. 令 _funcsToInitialize_ 为新的空 List。
-        1. 按 List 反向顺序，对 _variableDecls_ 的每个元素 _variableDecl_，执行：
-          1. 如果 _variableDecl_ 既不是 |VariableDeclaration|，也不是 |ForBinding|，也不是 |BindingIdentifier|，则
-            1. 断言：_variableDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一。
+        1. 令 _funcNames_ 为一个新的空 List。
+        1. 令 _funcsToInitialize_ 为一个新的空 List。
+        1. 对 _variableDecls_ 的每个元素 _variableDecl_，按 List 的逆序执行：
+          1. 如果 _variableDecl_ 既不是 |VariableDeclaration|、也不是 |ForBinding|、也不是 |BindingIdentifier|，则
+            1. 断言：_variableDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|。
             1. 令 _funcName_ 为 _variableDecl_ 的 BoundNames 的唯一元素。
             1. 如果 _funcNames_ 不包含 _funcName_，则
-              1. 将 _funcName_ 插入为 _funcNames_ 的第一个元素。
-              1. 注：如果存在多个同名函数声明，则使用最后一个声明。
-              1. 将 _variableDecl_ 插入为 _funcsToInitialize_ 的第一个元素。
+              1. 将 _funcName_ 作为 _funcNames_ 的第一个元素插入。
+              1. 注：如果同一名称有多个函数声明，则使用最后一个声明。
+              1. 将 _variableDecl_ 作为 _funcsToInitialize_ 的第一个元素插入。
         1. 令 _argumentsObjNeeded_ 为 *true*。
         1. 如果 _func_.[[ThisMode]] 是 ~lexical~，则
           1. 注：箭头函数永远没有 arguments 对象。
-          1. 将 _argumentsObjNeeded_ 设置为 *false*。
-        1. 否则如果 _paramNames_ 包含 *"arguments"*，则
-          1. 将 _argumentsObjNeeded_ 设置为 *false*。
-        1. 否则如果 _hasParamExprs_ 是 *false*，则
+          1. 将 _argumentsObjNeeded_ 设为 *false*。
+        1. 否则，如果 _paramNames_ 包含 *"arguments"*，则
+          1. 将 _argumentsObjNeeded_ 设为 *false*。
+        1. 否则，如果 _hasParamExprs_ 为 *false*，则
           1. 如果 _funcNames_ 包含 *"arguments"* 或 _lexicalNames_ 包含 *"arguments"*，则
-            1. 将 _argumentsObjNeeded_ 设置为 *false*。
-        1. 如果 _strict_ 是 *true* 或 _hasParamExprs_ 是 *false*，则
-          1. 注：参数只需要单个 Environment Record，因为严格模式代码中的 `eval` 调用不能创建在 `eval` 外部可见的新绑定。
+            1. 将 _argumentsObjNeeded_ 设为 *false*。
+        1. 如果 _strict_ 为 *true* 或 _hasParamExprs_ 为 *false*，则
+          1. 注：参数只需要一个 Environment Record，因为严格模式代码中对 `eval` 的调用不能创建在 `eval` 外部可见的新绑定。
           1. 令 _envRecord_ 为 _calleeContext_ 的 LexicalEnvironment。
         1. 否则，
-          1. 注：需要单独的 Environment Record，以确保由形式参数列表中的直接 eval 调用创建的绑定位于声明参数的环境之外。
+          1. 注：需要一个单独的 Environment Record，以确保在形式参数列表中的直接 eval 调用所创建的绑定位于声明参数的环境之外。
           1. 令 _calleeEnv_ 为 _calleeContext_ 的 LexicalEnvironment。
           1. 令 _envRecord_ 为 NewDeclarativeEnvironment(_calleeEnv_)。
-          1. 断言：_calleeContext_ 的 VariableEnvironment 和 _calleeEnv_ 是同一个 Environment Record。
-          1. 将 _calleeContext_ 的 LexicalEnvironment 设置为 _envRecord_。
+          1. 断言：_calleeContext_ 的 VariableEnvironment 与 _calleeEnv_ 是同一个 Environment Record。
+          1. 将 _calleeContext_ 的 LexicalEnvironment 设为 _envRecord_。
         1. 对 _paramNames_ 的每个 String _paramName_，执行：
           1. 令 _alreadyDeclared_ 为 ! _envRecord_.HasBinding(_paramName_)。
-          1. 注：早期错误确保重复参数名只能出现在没有参数默认值或 rest 参数的非严格函数中。
-          1. 如果 _alreadyDeclared_ 是 *false*，则
+          1. 注：早期错误确保重复的参数名称只能出现在没有参数默认值或剩余参数的非严格函数中。
+          1. 如果 _alreadyDeclared_ 为 *false*，则
             1. 执行 ! _envRecord_.CreateMutableBinding(_paramName_, *false*)。
-            1. 如果 _hasDuplicates_ 是 *true*，则
+            1. 如果 _hasDuplicates_ 为 *true*，则
               1. 执行 ! _envRecord_.InitializeBinding(_paramName_, *undefined*)。
-        1. 如果 _argumentsObjNeeded_ 是 *true*，则
-          1. 如果 _strict_ 是 *true* 或 _simpleParamList_ 是 *false*，则
+        1. 如果 _argumentsObjNeeded_ 为 *true*，则
+          1. 如果 _strict_ 为 *true* 或 _simpleParamList_ 为 *false*，则
             1. 令 _argumentsObj_ 为 CreateUnmappedArgumentsObject(_argList_)。
           1. 否则，
-            1. 注：映射 arguments 对象仅为没有 rest 参数、任何参数默认值初始化器或任何解构参数的非严格函数提供。
+            1. 注：映射 arguments 对象只为没有 rest 参数、任何参数默认值初始化器或任何解构参数的非严格函数提供。
             1. 令 _argumentsObj_ 为 CreateMappedArgumentsObject(_func_, _formals_, _argList_, _envRecord_)。
-          1. 如果 _strict_ 是 *true*，则
+          1. 如果 _strict_ 为 *true*，则
             1. 执行 ! _envRecord_.CreateImmutableBinding(*"arguments"*, *false*)。
-            1. 注：在严格模式代码中，早期错误会阻止尝试赋值给此绑定，因此其可变性不可观察。
+            1. 注：在严格模式代码中，早期错误会阻止尝试向此绑定赋值，因此其可变性不可观察。
           1. 否则，
             1. 执行 ! _envRecord_.CreateMutableBinding(*"arguments"*, *false*)。
           1. 执行 ! _envRecord_.InitializeBinding(*"arguments"*, _argumentsObj_)。
-          1. 令 _paramBindings_ 为 _paramNames_ 和 « *"arguments"* » 的列表连接。
+          1. 令 _paramBindings_ 为 _paramNames_ 与 « *"arguments"* » 的列表连接。
         1. 否则，
           1. 令 _paramBindings_ 为 _paramNames_。
         1. 令 _iteratorRecord_ 为 CreateListIteratorRecord(_argList_)。
-        1. 如果 _hasDuplicates_ 是 *true*，则
+        1. 如果 _hasDuplicates_ 为 *true*，则
           1. 令 _usedEnv_ 为 *undefined*。
         1. 否则，
           1. 令 _usedEnv_ 为 _envRecord_。
-        1. 注：以下步骤不能返回 ReturnCompletion，因为这类完成在表达式位置出现的唯一方式是使用 |YieldExpression|，而参数列表中使用它会被 <emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref> 和 <emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref> 中的 Early Error 规则禁止。
-        1. 执行 ? _formals_ 带实参 _iteratorRecord_ 和 _usedEnv_ 的 IteratorBindingInitialization。
-        1. 如果 _hasParamExprs_ 是 *false*，则
-          1. 注：参数和顶层 vars 只需要单个 Environment Record。
+        1. 注：以下步骤不能返回 ReturnCompletion，因为这种完成在表达式位置出现的唯一方式是使用 |YieldExpression|，而早期错误规则在 <emu-xref href="#sec-generator-function-definitions-static-semantics-early-errors"></emu-xref> 和 <emu-xref href="#sec-async-generator-function-definitions-static-semantics-early-errors"></emu-xref> 中禁止其出现在参数列表中。
+        1. 使用参数 _iteratorRecord_ 和 _usedEnv_ 执行 ? _formals_ 的 IteratorBindingInitialization。
+        1. 如果 _hasParamExprs_ 为 *false*，则
+          1. 注：参数和顶层 vars 只需要一个 Environment Record。
           1. 令 _instantiatedVariableNames_ 为 List _paramBindings_ 的副本。
-          1. 对 _variableNames_ 的每个元素 _n_，执行：
-            1. 如果 _instantiatedVariableNames_ 不包含 _n_，则
-              1. 将 _n_ 追加到 _instantiatedVariableNames_。
-              1. 执行 ! _envRecord_.CreateMutableBinding(_n_, *false*)。
-              1. 执行 ! _envRecord_.InitializeBinding(_n_, *undefined*)。
+          1. 对 _variableNames_ 的每个元素 _name_，执行：
+            1. 如果 _instantiatedVariableNames_ 不包含 _name_，则
+              1. 将 _name_ 追加到 _instantiatedVariableNames_。
+              1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
+              1. 执行 ! _envRecord_.InitializeBinding(_name_, *undefined*)。
           1. 令 _variableEnv_ 为 _envRecord_。
         1. 否则，
-          1. 注：需要单独的 Environment Record，以确保形式参数列表中由表达式创建的闭包看不到函数体中的声明。
+          1. 注：需要一个单独的 Environment Record，以确保由形式参数列表中的表达式创建的闭包看不到函数体中的声明。
           1. 令 _variableEnv_ 为 NewDeclarativeEnvironment(_envRecord_)。
-          1. 将 _calleeContext_ 的 VariableEnvironment 设置为 _variableEnv_。
-          1. 令 _instantiatedVariableNames_ 为新的空 List。
-          1. 对 _variableNames_ 的每个元素 _n_，执行：
-            1. 如果 _instantiatedVariableNames_ 不包含 _n_，则
-              1. 将 _n_ 追加到 _instantiatedVariableNames_。
-              1. 执行 ! _variableEnv_.CreateMutableBinding(_n_, *false*)。
-              1. 如果 _paramBindings_ 不包含 _n_ 或 _funcNames_ 包含 _n_，则
+          1. 将 _calleeContext_ 的 VariableEnvironment 设为 _variableEnv_。
+          1. 令 _instantiatedVariableNames_ 为一个新的空 List。
+          1. 对 _variableNames_ 的每个元素 _name_，执行：
+            1. 如果 _instantiatedVariableNames_ 不包含 _name_，则
+              1. 将 _name_ 追加到 _instantiatedVariableNames_。
+              1. 执行 ! _variableEnv_.CreateMutableBinding(_name_, *false*)。
+              1. 如果 _paramBindings_ 不包含 _name_ 或 _funcNames_ 包含 _name_，则
                 1. 令 _initialValue_ 为 *undefined*。
               1. 否则，
-                1. 令 _initialValue_ 为 ! _envRecord_.GetBindingValue(_n_, *false*)。
-              1. 执行 ! _variableEnv_.InitializeBinding(_n_, _initialValue_)。
-              1. 注：与形式参数同名的 var 初始时具有与对应已初始化参数相同的值。
-        1. 如果 _strict_ 是 *true*，则
+                1. 令 _initialValue_ 为 ! _envRecord_.GetBindingValue(_name_, *false*)。
+              1. 执行 ! _variableEnv_.InitializeBinding(_name_, _initialValue_)。
+              1. 注：与形式参数同名的 var 最初具有与相应已初始化参数相同的值。
+        1. 如果 _strict_ 为 *true*，则
           1. 令 _lexicalEnv_ 为 _variableEnv_。
         1. 否则，
           1. [id="step-functiondeclarationinstantiation-web-compat-insertion-point", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
-            1. 对每个 |FunctionDeclaration| _funcDecl_，如果它直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中，且 _code_ Contains _x_ 是 *true*，则执行：
+            1. 对每个 |FunctionDeclaration| _funcDecl_，其直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中，且 _code_ Contains _x_ 为 *true*，执行：
               1. 令 _funcName_ 为 _funcDecl_ 的 |BindingIdentifier| 的 StringValue。
-              1. 如果将 |FunctionDeclaration| _funcDecl_ 替换为具有 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 不会为 _func_ 产生任何 Early Errors，且 _paramNames_ 不包含 _funcName_，则
-                1. 注：只有在 _funcName_ 既不是 VarDeclaredName、形式参数名，也不是另一个 |FunctionDeclaration| 的名称时，才在这里实例化 _funcName_ 的 var 绑定。
+              1. 如果将 |FunctionDeclaration| _funcDecl_ 替换为以 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 不会为 _func_ 产生任何早期错误，并且 _paramNames_ 不包含 _funcName_，则
+                1. 注：只有当 _funcName_ 既不是 VarDeclaredName、形式参数名称，也不是另一个 |FunctionDeclaration| 的名称时，才在此处实例化 _funcName_ 的 var 绑定。
                 1. 如果 _instantiatedVariableNames_ 不包含 _funcName_ 且 _funcName_ 不是 *"arguments"*，则
                   1. 执行 ! _variableEnv_.CreateMutableBinding(_funcName_, *false*)。
                   1. 执行 ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)。
                   1. 将 _funcName_ 追加到 _instantiatedVariableNames_。
-                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _funcDecl_ 被求值时，执行以下步骤以替代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
-                  1. 令 _fEnv_ 为运行中执行上下文的 VariableEnvironment。
-                  1. 令 _bEnv_ 为运行中执行上下文的 LexicalEnvironment。
-                  1. 令 _fObj_ 为 ! _bEnv_.GetBindingValue(_funcName_, *false*)。
-                  1. 执行 ! _fEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)。
+                1. [id="step-functiondeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _funcDecl_ 被求值时，执行以下步骤以取代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
+                  1. 令 _funcEnv_ 为正在运行的执行上下文的 VariableEnvironment。
+                  1. 令 _blockEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
+                  1. 令 _funcObj_ 为 ! _blockEnv_.GetBindingValue(_funcName_, *false*)。
+                  1. 执行 ! _funcEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)。
                   1. 返回 ~unused~。
           1. 令 _lexicalEnv_ 为 NewDeclarativeEnvironment(_variableEnv_)。
-          1. 注：非严格函数对顶层词法声明使用单独的 Environment Record，使得 direct eval 可以确定由 eval 代码引入的任何 var 作用域声明是否与预先存在的顶层词法作用域声明冲突。严格函数不需要这样做，因为严格 direct eval 始终会将所有声明放入新的 Environment Record。
-        1. 将 _calleeContext_ 的 LexicalEnvironment 设置为 _lexicalEnv_。
+          1. 注：非严格函数为顶层词法声明使用单独的 Environment Record，使得直接 eval 可以确定 eval 代码引入的任何 var 作用域声明是否与既有的顶层词法作用域声明冲突。严格函数不需要这样做，因为严格的直接 eval 总是将所有声明放入新的 Environment Record。
+        1. 将 _calleeContext_ 的 LexicalEnvironment 设为 _lexicalEnv_。
         1. 令 _lexicalDecls_ 为 _code_ 的 LexicallyScopedDeclarations。
         1. 对 _lexicalDecls_ 的每个元素 _lexicalDecl_，执行：
-          1. 注：词法声明的名称不能与函数/生成器声明、形式参数或 var 名称相同。词法声明的名称只在这里被实例化，但不会被初始化。
-          1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _dn_，执行：
-            1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 是 *true*，则
-              1. 执行 ! _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)。
+          1. 注：词法声明的名称不能与函数/生成器声明、形式参数或 var 名称相同。词法声明的名称仅在此处实例化，但不初始化。
+          1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _name_，执行：
+            1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 为 *true*，则
+              1. 执行 ! _lexicalEnv_.CreateImmutableBinding(_name_, *true*)。
             1. 否则，
-              1. 执行 ! _lexicalEnv_.CreateMutableBinding(_dn_, *false*)。
+              1. 执行 ! _lexicalEnv_.CreateMutableBinding(_name_, *false*)。
         1. 令 _privateEnv_ 为 _calleeContext_ 的 PrivateEnvironment。
         1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行：
           1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
-          1. 令 _funcObj_ 为 _funcDecl_ 带实参 _lexicalEnv_ 和 _privateEnv_ 的 InstantiateFunctionObject。
+          1. 令 _funcObj_ 为使用参数 _lexicalEnv_ 和 _privateEnv_ 对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
           1. 执行 ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)。
         1. 返回 ~unused~。
       </emu-alg>
@@ -16808,9 +16808,9 @@
         </emu-alg>
         <emu-grammar>IdentifierName :: IdentifierName IdentifierPart</emu-grammar>
         <emu-alg>
-          1. 令 _cps_ 为派生的 |IdentifierName| 的 IdentifierCodePoints。
+          1. 令 _codePoints_ 为派生的 |IdentifierName| 的 IdentifierCodePoints。
           1. 令 _codePoint_ 为 |IdentifierPart| 的 IdentifierCodePoint。
-          1. 返回 _cps_ 和 « _codePoint_ » 的列表连接。
+          1. 返回 _codePoints_ 和 « _codePoint_ » 的列表连接。
         </emu-alg>
       </emu-clause>
 
@@ -19909,8 +19909,8 @@
           1. 如果 _importMeta_ 是 ~empty~，则
             1. 将 _importMeta_ 设置为 OrdinaryObjectCreate(*null*)。
             1. 令 _importMetaValues_ 为 HostGetImportMetaProperties(_module_)。
-            1. 对 _importMetaValues_ 的每个 Record { [[Key]], [[Value]] } _p_，执行：
-              1. 执行 ! CreateDataPropertyOrThrow(_importMeta_, _p_.[[Key]], _p_.[[Value]])。
+            1. 对 _importMetaValues_ 的每个 Record { [[Key]], [[Value]] } _entry_，执行：
+              1. 执行 ! CreateDataPropertyOrThrow(_importMeta_, _entry_.[[Key]], _entry_.[[Value]])。
             1. 执行 HostFinalizeImportMeta(_importMeta_, _module_)。
             1. 将 _module_.[[ImportMeta]] 设置为 _importMeta_。
             1. 返回 _importMeta_。
@@ -21492,28 +21492,28 @@
       <p>它在被调用时执行以下步骤：</p>
       <emu-alg>
         1. 令 _decls_ 为 _code_ 的 LexicallyScopedDeclarations。
-        1. 令 _privateEnv_ 为运行中的执行上下文的 PrivateEnvironment。
+        1. 令 _privateEnv_ 为正在运行的执行上下文的 PrivateEnvironment。
         1. 对 _decls_ 的每个元素 _decl_，执行：
-          1. 对 _decl_ 的 BoundNames 的每个元素 _dn_，执行：
-            1. 如果 _decl_ 的 IsConstantDeclaration 是 *true*，则
-              1. 执行 ! _envRecord_.CreateImmutableBinding(_dn_, *true*)。
+          1. 对 _decl_ 的 BoundNames 的每个元素 _name_，执行：
+            1. 如果 _decl_ 的 IsConstantDeclaration 为 *true*，则
+              1. 执行 ! _envRecord_.CreateImmutableBinding(_name_, *true*)。
             1. 否则，
               1. [id="step-blockdeclarationinstantiation-createmutablebinding", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
-                1. 如果 ! _envRecord_.HasBinding(_dn_) 是 *false*，则
-                  1. 执行 ! _envRecord_.CreateMutableBinding(_dn_, *false*)。
+                1. 如果 ! _envRecord_.HasBinding(_name_) 为 *false*，则
+                  1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
               1. 否则，
-                1. 执行 ! _envRecord_.CreateMutableBinding(_dn_, *false*)。
-          1. 如果 _decl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一，则
-            1. 令 _func_ 为 _decl_ 的 BoundNames 的唯一元素。
-            1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为实参执行 _decl_ 的 InstantiateFunctionObject。
+                1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
+          1. 如果 _decl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|，则
+            1. 令 _funcName_ 为 _decl_ 的 BoundNames 的唯一元素。
+            1. 令 _funcObj_ 为使用参数 _envRecord_ 和 _privateEnv_ 对 _decl_ 执行 InstantiateFunctionObject 的结果。
             1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
-              1. 如果 _envRecord_ 中 _func_ 的绑定是未初始化绑定，则
-                1. 执行 ! _envRecord_.InitializeBinding(_func_, _funcObj_)。
+              1. 如果 _envRecord_ 中 _funcName_ 的绑定是未初始化绑定，则
+                1. 执行 ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)。
               1. 否则，
                 1. 断言：_decl_ 是 |FunctionDeclaration|。
-                1. 执行 ! _envRecord_.SetMutableBinding(_func_, _funcObj_, *false*)。
+                1. 执行 ! _envRecord_.SetMutableBinding(_funcName_, _funcObj_, *false*)。
             1. 否则，
-              1. 执行 ! _envRecord_.InitializeBinding(_func_, _funcObj_)。
+              1. 执行 ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)。
         1. 返回 ~unused~。
       </emu-alg>
     </emu-clause>
@@ -22108,25 +22108,25 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 令 _oldEnv_ 为运行中的执行上下文的 LexicalEnvironment。
+          1. 令 _oldEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
           1. 令 _loopEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
           1. 令 _isConst_ 为 |LexicalDeclaration| 的 IsConstantDeclaration。
           1. 令 _boundNames_ 为 |LexicalDeclaration| 的 BoundNames。
-          1. 对 _boundNames_ 的每个元素 _dn_，执行：
-            1. 如果 _isConst_ 是 *true*，则
-              1. 执行 ! _loopEnv_.CreateImmutableBinding(_dn_, *true*)。
+          1. 对 _boundNames_ 的每个元素 _name_，执行：
+            1. 如果 _isConst_ 为 *true*，则
+              1. 执行 ! _loopEnv_.CreateImmutableBinding(_name_, *true*)。
             1. 否则，
-              1. 执行 ! _loopEnv_.CreateMutableBinding(_dn_, *false*)。
-          1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _loopEnv_。
-          1. 令 _forDecl_ 为 Completion(|LexicalDeclaration| 的 Evaluation)。
-          1. 如果 _forDecl_ 是 abrupt completion，则
-            1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+              1. 执行 ! _loopEnv_.CreateMutableBinding(_name_, *false*)。
+          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _loopEnv_。
+          1. 令 _forDecl_ 为 |LexicalDeclaration| 的 Completion(Evaluation)。
+          1. 如果 _forDecl_ 是一个突然完成，则
+            1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _oldEnv_。
             1. 返回 ? _forDecl_。
-          1. 如果 _isConst_ 是 *false*，则令 _perIterationLets_ 为 _boundNames_；否则令 _perIterationLets_ 为新的空 List。
-          1. 如果存在第一个 |Expression|，则令 _test_ 为第一个 |Expression|；否则令 _test_ 为 ~empty~。
-          1. 如果存在第二个 |Expression|，则令 _increment_ 为第二个 |Expression|；否则令 _increment_ 为 ~empty~。
+          1. 如果 _isConst_ 为 *false*，则令 _perIterationLets_ 为 _boundNames_；否则令 _perIterationLets_ 为一个新的空 List。
+          1. 如果第一个 |Expression| 存在，则令 _test_ 为第一个 |Expression|；否则令 _test_ 为 ~empty~。
+          1. 如果第二个 |Expression| 存在，则令 _increment_ 为第二个 |Expression|；否则令 _increment_ 为 ~empty~。
           1. 令 _bodyResult_ 为 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))。
-          1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _oldEnv_。
           1. 返回 ? _bodyResult_。
         </emu-alg>
       </emu-clause>
@@ -22171,15 +22171,15 @@
         </dl>
         <emu-alg>
           1. 如果 _perIterationBindings_ 有任何元素，则
-            1. 令 _lastIterationEnv_ 为运行中的执行上下文的 LexicalEnvironment。
+            1. 令 _lastIterationEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
             1. 令 _outer_ 为 _lastIterationEnv_.[[OuterEnv]]。
             1. 断言：_outer_ 不是 *null*。
             1. 令 _thisIterationEnv_ 为 NewDeclarativeEnvironment(_outer_)。
-            1. 对 _perIterationBindings_ 的每个元素 _bn_，执行：
-              1. 执行 ! _thisIterationEnv_.CreateMutableBinding(_bn_, *false*)。
-              1. 令 _lastValue_ 为 ? _lastIterationEnv_.GetBindingValue(_bn_, *true*)。
-              1. 执行 ! _thisIterationEnv_.InitializeBinding(_bn_, _lastValue_)。
-            1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _thisIterationEnv_。
+            1. 对 _perIterationBindings_ 的每个元素 _name_，执行：
+              1. 执行 ! _thisIterationEnv_.CreateMutableBinding(_name_, *false*)。
+              1. 令 _lastValue_ 为 ? _lastIterationEnv_.GetBindingValue(_name_, *true*)。
+              1. 执行 ! _thisIterationEnv_.InitializeBinding(_name_, _lastValue_)。
+            1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _thisIterationEnv_。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -25054,11 +25054,11 @@
       </dl>
       <emu-grammar>ClassStaticBlock : `static` `{` ClassStaticBlockBody `}`</emu-grammar>
       <emu-alg>
-        1. 令 _lexical_ 为运行中的执行上下文的 LexicalEnvironment。
-        1. 令 _privateEnv_ 为运行中的执行上下文的 PrivateEnvironment。
+        1. 令 _lexicalEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
+        1. 令 _privateEnv_ 为正在运行的执行上下文的 PrivateEnvironment。
         1. 令 _sourceText_ 为空的 Unicode 码点序列。
-        1. 令 _formalParams_ 为产生式 <emu-grammar>FormalParameters : [empty]</emu-grammar> 的实例。
-        1. [id="step-synthetic-class-static-block-fn"] 令 _bodyFunc_ 为 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexical_, _privateEnv_)。
+        1. 令 _formalParams_ 为产生式 <emu-grammar>FormalParameters : [empty]</emu-grammar> 的一个实例。
+        1. [id="step-synthetic-class-static-block-fn"] 令 _bodyFunc_ 为 OrdinaryFunctionCreate(%Function.prototype%, _sourceText_, _formalParams_, |ClassStaticBlockBody|, ~non-lexical-this~, _lexicalEnv_, _privateEnv_)。
         1. 执行 MakeMethod(_bodyFunc_, _homeObj_)。
         1. 返回 ClassStaticBlockDefinition Record { [[BodyFunction]]: _bodyFunc_ }。
       </emu-alg>
@@ -25139,106 +25139,106 @@
       </emu-note>
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody? `}`</emu-grammar>
       <emu-alg>
-        1. 令 _envRecord_ 为运行中的执行上下文的 LexicalEnvironment。
+        1. 令 _envRecord_ 为正在运行的执行上下文的 LexicalEnvironment。
         1. 令 _classEnv_ 为 NewDeclarativeEnvironment(_envRecord_)。
         1. 如果 _classBinding_ 不是 *undefined*，则
           1. 执行 ! _classEnv_.CreateImmutableBinding(_classBinding_, *true*)。
-        1. 令 _outerPrivateEnv_ 为运行中的执行上下文的 PrivateEnvironment。
+        1. 令 _outerPrivateEnv_ 为正在运行的执行上下文的 PrivateEnvironment。
         1. 令 _classPrivateEnv_ 为 NewPrivateEnvironment(_outerPrivateEnv_)。
-        1. 如果存在 |ClassBody|，则
-          1. 对 |ClassBody| 的 PrivateBoundIdentifiers 的每个 String _dn_，执行：
-            1. 如果 _classPrivateEnv_.[[Names]] 包含一个 Private Name _privateName_，使得 _privateName_.[[Description]] 是 _dn_，则
+        1. 如果 |ClassBody| 存在，则
+          1. 对 |ClassBody| 的 PrivateBoundIdentifiers 的每个 String _description_，执行：
+            1. 如果 _classPrivateEnv_.[[Names]] 包含一个 Private Name _privateName_，使得 _privateName_.[[Description]] 是 _description_，则
               1. 断言：这只可能用于 getter/setter 对。
             1. 否则，
-              1. 令 _name_ 为一个新的 Private Name，其 [[Description]] 为 _dn_。
+              1. 令 _name_ 为一个新的 Private Name，其 [[Description]] 为 _description_。
               1. 将 _name_ 追加到 _classPrivateEnv_.[[Names]]。
-        1. 如果不存在 |ClassHeritage|，则
+        1. 如果 |ClassHeritage| 不存在，则
           1. 令 _protoParent_ 为 %Object.prototype%。
           1. 令 _ctorParent_ 为 %Function.prototype%。
         1. 否则，
-          1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _classEnv_。
-          1. 注：求值 |ClassHeritage| 时，运行中的执行上下文的 PrivateEnvironment 是 _outerPrivateEnv_。
-          1. 令 _superclassRef_ 为 Completion(|ClassHeritage| 的 Evaluation)。
-          1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _envRecord_。
+          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _classEnv_。
+          1. 注：在对 |ClassHeritage| 求值时，正在运行的执行上下文的 PrivateEnvironment 是 _outerPrivateEnv_。
+          1. 令 _superclassRef_ 为 |ClassHeritage| 的 Completion(Evaluation)。
+          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
           1. 令 _superclass_ 为 ? GetValue(? _superclassRef_)。
-          1. 如果 _superclass_ 是 *null*，则
+          1. 如果 _superclass_ 为 *null*，则
             1. 令 _protoParent_ 为 *null*。
             1. 令 _ctorParent_ 为 %Function.prototype%。
-          1. 否则，如果 IsConstructor(_superclass_) 是 *false*，则
-            1. 抛出 *TypeError* 异常。
+          1. 否则，如果 IsConstructor(_superclass_) 为 *false*，则
+            1. 抛出一个 *TypeError* 异常。
           1. 否则，
             1. 令 _protoParent_ 为 ? Get(_superclass_, *"prototype"*)。
-            1. 如果 _protoParent_ 不是 Object 且 _protoParent_ 不是 *null*，则抛出 *TypeError* 异常。
+            1. 如果 _protoParent_ 不是 Object 且 _protoParent_ 不是 *null*，则抛出一个 *TypeError* 异常。
             1. 令 _ctorParent_ 为 _superclass_。
         1. 令 _proto_ 为 OrdinaryObjectCreate(_protoParent_)。
-        1. 如果不存在 |ClassBody|，则令 _ctor_ 为 ~empty~。
+        1. 如果 |ClassBody| 不存在，则令 _ctor_ 为 ~empty~。
         1. 否则，令 _ctor_ 为 |ClassBody| 的 ConstructorMethod。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _classEnv_。
-        1. 将运行中的执行上下文的 PrivateEnvironment 设置为 _classPrivateEnv_。
-        1. 如果 _ctor_ 是 ~empty~，则
-          1. 令 _defaultCtor_ 为一个没有参数的新的 Abstract Closure，它不捕获任何内容，并在被调用时执行以下步骤：
-            1. 令 _args_ 为由 [[Call]] 或 [[Construct]] 传给此函数的实参 List。
-            1. 如果 NewTarget 是 *undefined*，则抛出 *TypeError* 异常。
+        1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _classEnv_。
+        1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _classPrivateEnv_。
+        1. 如果 _ctor_ 为 ~empty~，则
+          1. 令 _defaultCtor_ 为一个新的 Abstract Closure，它没有参数、不捕获任何内容，并在被调用时执行以下步骤：
+            1. 令 _args_ 为由 [[Call]] 或 [[Construct]] 传递给此函数的参数 List。
+            1. 如果 NewTarget 为 *undefined*，则抛出一个 *TypeError* 异常。
             1. 令 _ctorFunc_ 为活动函数对象。
-            1. 如果 _ctorFunc_.[[ConstructorKind]] 是 ~derived~，则
-              1. 注：此分支的行为类似于 `constructor(...args) { super(...args); }`。最显著的区别是，虽然前述 ECMAScript 源文本会可观察地调用 `%Array.prototype%` 上的 %Symbol.iterator% 方法，但此函数不会。
+            1. 如果 _ctorFunc_.[[ConstructorKind]] 为 ~derived~，则
+              1. 注：此分支的行为类似于 `constructor(...args) { super(...args); }`。最显著的区别是，虽然前述 ECMAScript 源文本可观察地调用 `%Array.prototype%` 上的 %Symbol.iterator% 方法，但此函数不会。
               1. 令 _func_ 为 ! _ctorFunc_.[[GetPrototypeOf]]()。
-              1. 如果 IsConstructor(_func_) 是 *false*，则抛出 *TypeError* 异常。
+              1. 如果 IsConstructor(_func_) 为 *false*，则抛出一个 *TypeError* 异常。
               1. 令 _result_ 为 ? Construct(_func_, _args_, NewTarget)。
             1. 否则，
               1. 注：此分支的行为类似于 `constructor() {}`。
               1. 令 _result_ 为 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)。
             1. 执行 ? InitializeInstanceElements(_result_, _ctorFunc_)。
             1. 返回 NormalCompletion(_result_)。
-          1. 令 _ctorFunc_ 为 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _ctorParent_)。
+          1. 令 _ctorFunc_ 为 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », 当前 Realm Record, _ctorParent_)。
         1. 否则，
-          1. 令 _ctorInfo_ 为 ! 以 _proto_ 和 _ctorParent_ 为实参执行 _ctor_ 的 DefineMethod。
+          1. 令 _ctorInfo_ 为以 _proto_ 和 _ctorParent_ 为参数对 _ctor_ 执行 ! DefineMethod 的结果。
           1. 令 _ctorFunc_ 为 _ctorInfo_.[[Closure]]。
           1. 执行 MakeClassConstructor(_ctorFunc_)。
           1. 执行 SetFunctionName(_ctorFunc_, _className_)。
-        1. 将 _ctorFunc_.[[SourceText]] 设置为 _sourceText_。
+        1. 将 _ctorFunc_.[[SourceText]] 设为 _sourceText_。
         1. 执行 MakeConstructor(_ctorFunc_, *false*, _proto_)。
-        1. 如果存在 |ClassHeritage|，则将 _ctorFunc_.[[ConstructorKind]] 设置为 ~derived~。
+        1. 如果 |ClassHeritage| 存在，则将 _ctorFunc_.[[ConstructorKind]] 设为 ~derived~。
         1. 执行 ! DefineMethodProperty(_proto_, *"constructor"*, _ctorFunc_, *false*)。
-        1. 如果不存在 |ClassBody|，则令 _classElements_ 为新的空 List。
+        1. 如果 |ClassBody| 不存在，则令 _classElements_ 为一个新的空 List。
         1. 否则，令 _classElements_ 为 |ClassBody| 的 NonConstructorElements。
-        1. 令 _instancePrivateMethods_ 为新的空 List。
-        1. 令 _staticPrivateMethods_ 为新的空 List。
-        1. 令 _instanceFields_ 为新的空 List。
-        1. 令 _staticElements_ 为新的空 List。
+        1. 令 _instancePrivateMethods_ 为一个新的空 List。
+        1. 令 _staticPrivateMethods_ 为一个新的空 List。
+        1. 令 _instanceFields_ 为一个新的空 List。
+        1. 令 _staticElements_ 为一个新的空 List。
         1. 对 _classElements_ 的每个 |ClassElement| _classElement_，执行：
-          1. 如果 _classElement_ 的 IsStatic 是 *false*，则
-            1. 令 _element_ 为 Completion(以 _proto_ 为实参执行 _classElement_ 的 ClassElementEvaluation)。
+          1. 如果 _classElement_ 的 IsStatic 为 *false*，则
+            1. 令 _element_ 为以 _proto_ 为参数对 _classElement_ 执行 ClassElementEvaluation 的 Completion。
           1. 否则，
-            1. 令 _element_ 为 Completion(以 _ctorFunc_ 为实参执行 _classElement_ 的 ClassElementEvaluation)。
-          1. 如果 _element_ 是 abrupt completion，则
-            1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _envRecord_。
-            1. 将运行中的执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
+            1. 令 _element_ 为以 _ctorFunc_ 为参数对 _classElement_ 执行 ClassElementEvaluation 的 Completion。
+          1. 如果 _element_ 是一个突然完成，则
+            1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
+            1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
             1. 返回 ? _element_。
-          1. 将 _element_ 设置为 ! _element_。
+          1. 将 _element_ 设为 ! _element_。
           1. 如果 _element_ 是 PrivateElement，则
-            1. 断言：_element_.[[Kind]] 是 ~method~ 或 ~accessor~。
-            1. 如果 _classElement_ 的 IsStatic 是 *false*，则令 _container_ 为 _instancePrivateMethods_。
+            1. 断言：_element_.[[Kind]] 为 ~method~ 或 ~accessor~。
+            1. 如果 _classElement_ 的 IsStatic 为 *false*，则令 _container_ 为 _instancePrivateMethods_。
             1. 否则，令 _container_ 为 _staticPrivateMethods_。
-            1. 如果 _container_ 包含一个 PrivateElement _pe_，使得 _pe_.[[Key]] 是 _element_.[[Key]]，则
-              1. 断言：_element_.[[Kind]] 和 _pe_.[[Kind]] 都是 ~accessor~。
-              1. 如果 _element_.[[Get]] 是 *undefined*，则
-                1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _pe_.[[Get]], [[Set]]: _element_.[[Set]] }。
+            1. 如果 _container_ 包含一个 PrivateElement _existingElement_，使得 _existingElement_.[[Key]] 是 _element_.[[Key]]，则
+              1. 断言：_element_.[[Kind]] 和 _existingElement_.[[Kind]] 都为 ~accessor~。
+              1. 如果 _element_.[[Get]] 为 *undefined*，则
+                1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _existingElement_.[[Get]], [[Set]]: _element_.[[Set]] }。
               1. 否则，
-                1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _pe_.[[Set]] }。
-              1. 在 _container_ 中用 _combined_ 替换 _pe_。
+                1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Get]]: _element_.[[Get]], [[Set]]: _existingElement_.[[Set]] }。
+              1. 用 _combined_ 替换 _container_ 中的 _existingElement_。
             1. 否则，
               1. 将 _element_ 追加到 _container_。
           1. 否则，如果 _element_ 是 ClassFieldDefinition Record，则
-            1. 如果 _classElement_ 的 IsStatic 是 *false*，则将 _element_ 追加到 _instanceFields_。
+            1. 如果 _classElement_ 的 IsStatic 为 *false*，则将 _element_ 追加到 _instanceFields_。
             1. 否则，将 _element_ 追加到 _staticElements_。
           1. 否则，如果 _element_ 是 ClassStaticBlockDefinition Record，则
             1. 将 _element_ 追加到 _staticElements_。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _envRecord_。
+        1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
         1. 如果 _classBinding_ 不是 *undefined*，则
           1. 执行 ! _classEnv_.InitializeBinding(_classBinding_, _ctorFunc_)。
-        1. 将 _ctorFunc_.[[PrivateMethods]] 设置为 _instancePrivateMethods_。
-        1. 将 _ctorFunc_.[[Fields]] 设置为 _instanceFields_。
+        1. 将 _ctorFunc_.[[PrivateMethods]] 设为 _instancePrivateMethods_。
+        1. 将 _ctorFunc_.[[Fields]] 设为 _instanceFields_。
         1. 对 _staticPrivateMethods_ 的每个 PrivateElement _method_，执行：
           1. 执行 ! PrivateMethodOrAccessorAdd(_ctorFunc_, _method_)。
         1. 对 _staticElements_ 的每个元素 _elementRecord_，执行：
@@ -25247,10 +25247,10 @@
           1. 否则，
             1. 断言：_elementRecord_ 是 ClassStaticBlockDefinition Record。
             1. 令 _result_ 为 Completion(Call(_elementRecord_.[[BodyFunction]], _ctorFunc_))。
-          1. 如果 _result_ 是 abrupt completion，则
-            1. 将运行中的执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
+          1. 如果 _result_ 是一个突然完成，则
+            1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
             1. 返回 ? _result_。
-        1. 将运行中的执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
+        1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
         1. 返回 _ctorFunc_。
       </emu-alg>
     </emu-clause>
@@ -26225,70 +26225,70 @@
         1. 令 _lexicalNames_ 为 _script_ 的 LexicallyDeclaredNames。
         1. 令 _variableNames_ 为 _script_ 的 VarDeclaredNames。
         1. 对 _lexicalNames_ 的每个元素 _name_，执行：
-          1. 如果 HasLexicalDeclaration(_envRecord_, _name_) 是 *true*，则抛出 *SyntaxError* 异常。
+          1. 如果 HasLexicalDeclaration(_envRecord_, _name_) 为 *true*，则抛出一个 *SyntaxError* 异常。
           1. 令 _hasRestrictedGlobal_ 为 ? HasRestrictedGlobalProperty(_envRecord_, _name_)。
-          1. 注：全局 `var` 和 `function` 绑定（由非严格直接 eval 引入的绑定除外）是不可配置的，因此是受限全局属性。
-          1. 如果 _hasRestrictedGlobal_ 是 *true*，则抛出 *SyntaxError* 异常。
+          1. 注：全局 `var` 和 `function` 绑定（由非严格直接 eval 引入的那些绑定除外）是不可配置的，因此是受限制的全局属性。
+          1. 如果 _hasRestrictedGlobal_ 为 *true*，则抛出一个 *SyntaxError* 异常。
         1. 对 _variableNames_ 的每个元素 _name_，执行：
-          1. 如果 HasLexicalDeclaration(_envRecord_, _name_) 是 *true*，则抛出 *SyntaxError* 异常。
+          1. 如果 HasLexicalDeclaration(_envRecord_, _name_) 为 *true*，则抛出一个 *SyntaxError* 异常。
         1. 令 _variableDecls_ 为 _script_ 的 VarScopedDeclarations。
-        1. 令 _funcsToInitialize_ 为新的空 List。
-        1. 令 _declaredFuncNames_ 为新的空 List。
-        1. 对 _variableDecls_ 中按 List 逆序排列的每个元素 _variableDecl_，执行：
-          1. 如果 _variableDecl_ 既不是 |VariableDeclaration|、|ForBinding|，也不是 |BindingIdentifier|，则
-            1. 断言：_variableDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一。
-            1. 注：如果同一名称存在多个函数声明，则使用最后一个声明。
-            1. 令 _func_ 为 _variableDecl_ 的 BoundNames 的唯一元素。
-            1. 如果 _declaredFuncNames_ 不包含 _func_，则
-              1. 令 _funcDefinable_ 为 ? CanDeclareGlobalFunction(_envRecord_, _func_)。
-              1. 如果 _funcDefinable_ 是 *false*，则抛出 *TypeError* 异常。
-              1. 将 _func_ 追加到 _declaredFuncNames_。
-              1. 将 _variableDecl_ 作为第一个元素插入到 _funcsToInitialize_。
-        1. 令 _declaredVariableNames_ 为新的空 List。
+        1. 令 _funcsToInitialize_ 为一个新的空 List。
+        1. 令 _declaredFuncNames_ 为一个新的空 List。
+        1. 对 _variableDecls_ 的每个元素 _variableDecl_，按 List 的逆序执行：
+          1. 如果 _variableDecl_ 不是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 中的任一者，则
+            1. 断言：_variableDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|。
+            1. 注：如果同一名称有多个函数声明，则使用最后一个声明。
+            1. 令 _funcName_ 为 _variableDecl_ 的 BoundNames 的唯一元素。
+            1. 如果 _declaredFuncNames_ 不包含 _funcName_，则
+              1. 令 _funcDefinable_ 为 ? CanDeclareGlobalFunction(_envRecord_, _funcName_)。
+              1. 如果 _funcDefinable_ 为 *false*，则抛出一个 *TypeError* 异常。
+              1. 将 _funcName_ 追加到 _declaredFuncNames_。
+              1. 将 _variableDecl_ 作为 _funcsToInitialize_ 的第一个元素插入。
+        1. 令 _declaredVariableNames_ 为一个新的空 List。
         1. 对 _variableDecls_ 的每个元素 _variableDecl_，执行：
-          1. 如果 _variableDecl_ 是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 之一，则
-            1. 对 _variableDecl_ 的 BoundNames 的每个 String _vn_，执行：
-              1. 如果 _declaredFuncNames_ 不包含 _vn_，则
-                1. 令 _vnDefinable_ 为 ? CanDeclareGlobalVar(_envRecord_, _vn_)。
-                1. 如果 _vnDefinable_ 是 *false*，则抛出 *TypeError* 异常。
-                1. 如果 _declaredVariableNames_ 不包含 _vn_，则
-                  1. 将 _vn_ 追加到 _declaredVariableNames_。
-        1. 注：如果全局对象是普通对象，则在此算法步骤之后不会发生异常终止。不过，如果全局对象是 Proxy 异质对象，则它可能表现出会导致以下某些步骤中异常终止的行为。
+          1. 如果 _variableDecl_ 是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 中的任一者，则
+            1. 对 _variableDecl_ 的 BoundNames 的每个 String _name_，执行：
+              1. 如果 _declaredFuncNames_ 不包含 _name_，则
+                1. 令 _variableDefinable_ 为 ? CanDeclareGlobalVar(_envRecord_, _name_)。
+                1. 如果 _variableDefinable_ 为 *false*，则抛出一个 *TypeError* 异常。
+                1. 如果 _declaredVariableNames_ 不包含 _name_，则
+                  1. 将 _name_ 追加到 _declaredVariableNames_。
+        1. 注：如果全局对象是普通对象，则在此算法步骤之后不会发生异常终止。但是，如果全局对象是 Proxy 异质对象，它可能表现出会导致以下某些步骤中发生异常终止的行为。
         1. [id="step-globaldeclarationinstantiation-web-compat-insertion-point", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
           1. 令 _strict_ 为 _script_ 的 ScriptIsStrict。
-          1. 如果 _strict_ 是 *false*，则
+          1. 如果 _strict_ 为 *false*，则
             1. 令 _declaredFuncOrVariableNames_ 为 _declaredFuncNames_ 和 _declaredVariableNames_ 的列表连接。
-            1. 对每个 |FunctionDeclaration| _f_，若 _f_ 直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中，且 _script_ Contains _x_ 是 *true*，则执行：
-              1. 令 _funcName_ 为 _f_ 的 |BindingIdentifier| 的 StringValue。
-              1. 如果用一个以 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 替换 |FunctionDeclaration| _f_ 不会为 _script_ 产生任何早期错误，则
-                1. 如果 HasLexicalDeclaration(_envRecord_, _funcName_) 是 *false*，则
+            1. 对每个 |FunctionDeclaration| _funcDecl_，其直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中，且 _script_ Contains _x_ 为 *true*，执行：
+              1. 令 _funcName_ 为 _funcDecl_ 的 |BindingIdentifier| 的 StringValue。
+              1. 如果将 |FunctionDeclaration| _funcDecl_ 替换为以 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 不会为 _script_ 产生任何早期错误，则
+                1. 如果 HasLexicalDeclaration(_envRecord_, _funcName_) 为 *false*，则
                   1. 令 _funcDefinable_ 为 ? CanDeclareGlobalVar(_envRecord_, _funcName_)。
-                  1. 如果 _funcDefinable_ 是 *true*，则
-                    1. 注：只有当 _funcName_ 既不是 VarDeclaredName，也不是另一个 |FunctionDeclaration| 的名称时，才会在此处实例化 _funcName_ 的 var 绑定。
+                  1. 如果 _funcDefinable_ 为 *true*，则
+                    1. 注：只有当 _funcName_ 既不是 VarDeclaredName、也不是另一个 |FunctionDeclaration| 的名称时，才在此处实例化 _funcName_ 的 var 绑定。
                     1. 如果 _declaredFuncOrVariableNames_ 不包含 _funcName_，则
                       1. 执行 ? CreateGlobalVarBinding(_envRecord_, _funcName_, *false*)。
                       1. 将 _funcName_ 追加到 _declaredFuncOrVariableNames_。
-                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _f_ 被求值时，执行以下步骤来替代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
-                      1. 令 _gEnv_ 为运行中的执行上下文的 VariableEnvironment。
-                      1. 令 _bEnv_ 为运行中的执行上下文的 LexicalEnvironment。
-                      1. 令 _fObj_ 为 ! _bEnv_.GetBindingValue(_funcName_, *false*)。
-                      1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>。
+                    1. [id="step-globaldeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _funcDecl_ 被求值时，执行以下步骤以取代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
+                      1. 令 _globalEnv_ 为正在运行的执行上下文的 VariableEnvironment。
+                      1. 令 _blockEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
+                      1. 令 _funcObj_ 为 ! _blockEnv_.GetBindingValue(_funcName_, *false*)。
+                      1. 执行 ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>。
                       1. 返回 ~unused~。
         1. 令 _lexicalDecls_ 为 _script_ 的 LexicallyScopedDeclarations。
         1. 令 _privateEnv_ 为 *null*。
         1. 对 _lexicalDecls_ 的每个元素 _lexicalDecl_，执行：
-          1. 注：词法声明的名称只在此处实例化，但不会初始化。
-          1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _dn_，执行：
-            1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 是 *true*，则
-              1. 执行 ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_dn_, *true*)</emu-meta>。
+          1. 注：词法声明的名称仅在此处实例化，但不初始化。
+          1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _name_，执行：
+            1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 为 *true*，则
+              1. 执行 ? <emu-meta effects="user-code">_envRecord_.CreateImmutableBinding(_name_, *true*)</emu-meta>。
             1. 否则，
-              1. 执行 ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_dn_, *false*)</emu-meta>。
-        1. 对 _funcsToInitialize_ 的每个 Parse Node _f_，执行：
-          1. 令 _func_ 为 _f_ 的 BoundNames 的唯一元素。
-          1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为实参执行 _f_ 的 InstantiateFunctionObject。
-          1. 执行 ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _func_, _funcObj_, *false*)</emu-meta>。
-        1. 对 _declaredVariableNames_ 的每个 String _vn_，执行：
-          1. 执行 ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _vn_, *false*)</emu-meta>。
+              1. 执行 ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_name_, *false*)</emu-meta>。
+        1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行：
+          1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
+          1. 令 _funcObj_ 为使用参数 _envRecord_ 和 _privateEnv_ 对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
+          1. 执行 ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _funcName_, _funcObj_, *false*)</emu-meta>。
+        1. 对 _declaredVariableNames_ 的每个 String _variableName_，执行：
+          1. 执行 ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _variableName_, *false*)</emu-meta>。
         1. 返回 ~unused~。
       </emu-alg>
       <emu-note>
@@ -26380,9 +26380,9 @@
           <dd>它创建由 _importEntries_ 定义的所有本地名称绑定的 List。</dd>
         </dl>
         <emu-alg>
-          1. 令 _localNames_ 为新的空 List。
-          1. 对 _importEntries_ 的每个 ImportEntry Record _i_，执行：
-            1. 将 _i_.[[LocalName]] 追加到 _localNames_。
+          1. 令 _localNames_ 为一个新的空 List。
+          1. 对 _importEntries_ 的每个 ImportEntry Record _importEntry_，执行：
+            1. 将 _importEntry_.[[LocalName]] 追加到 _localNames_。
           1. 返回 _localNames_。
         </emu-alg>
       </emu-clause>
@@ -26560,9 +26560,9 @@
         <emu-alg>
           1. 令 _requests_ 为 |ModuleItemList| 的 ModuleRequests。
           1. 令 _additionalRequests_ 为 |ModuleItem| 的 ModuleRequests。
-          1. 对 _additionalRequests_ 的每个 ModuleRequest Record _mr_，执行：
-            1. 如果 _requests_ 不包含一个 ModuleRequest Record _mr2_，使得 ModuleRequestsEqual(_mr_, _mr2_) 是 *true*，则
-              1. 将 _mr_ 追加到 _requests_。
+          1. 对 _additionalRequests_ 的每个 ModuleRequest Record _moduleRequest_，执行：
+            1. 如果 _requests_ 不包含这样的 ModuleRequest Record _otherModuleRequest_，使得 ModuleRequestsEqual(_moduleRequest_, _otherModuleRequest_) 为 *true*，则
+              1. 将 _moduleRequest_ 追加到 _requests_。
           1. 返回 _requests_。
         </emu-alg>
         <emu-grammar>ModuleItem : StatementListItem</emu-grammar>
@@ -27162,16 +27162,16 @@
 
             <emu-alg>
               1. 断言：_module_.[[Status]] 是 ~unlinked~、~linked~、~evaluating-async~ 或 ~evaluated~ 之一。
-              1. 令 _stack_ 为新的空 List。
+              1. 令 _stack_ 为一个新的空 List。
               1. 令 _result_ 为 Completion(InnerModuleLinking(_module_, _stack_, 0))。
-              1. 如果 _result_ 是 abrupt completion，则
-                1. 对 _stack_ 的每个 Cyclic Module Record _m_，执行：
-                  1. 断言：_m_.[[Status]] 是 ~linking~。
-                  1. 将 _m_.[[Status]] 设置为 ~unlinked~。
-                1. 断言：_module_.[[Status]] 是 ~unlinked~。
+              1. 如果 _result_ 是一个突然完成，则
+                1. 对 _stack_ 的每个 Cyclic Module Record _requiredModule_，执行：
+                  1. 断言：_requiredModule_.[[Status]] 为 ~linking~。
+                  1. 将 _requiredModule_.[[Status]] 设为 ~unlinked~。
+                1. 断言：_module_.[[Status]] 为 ~unlinked~。
                 1. 返回 ? _result_。
               1. 断言：_module_.[[Status]] 是 ~linked~、~evaluating-async~ 或 ~evaluated~ 之一。
-              1. 断言：_stack_ 是空的。
+              1. 断言：_stack_ 为空。
               1. 返回 ~unused~。
             </emu-alg>
 
@@ -27235,35 +27235,35 @@
             </dl>
 
             <emu-alg>
-              1. 断言：此次 Evaluate 调用未与同一周围 agent 内的另一次 Evaluate 调用同时发生。
+              1. 断言：对 Evaluate 的此调用不会与周围 agent 内对 Evaluate 的另一个调用同时发生。
               1. 断言：_module_.[[Status]] 是 ~linked~、~evaluating-async~ 或 ~evaluated~ 之一。
-              1. 如果 _module_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~，则
+              1. 如果 _module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~，则
                 1. 如果 _module_.[[CycleRoot]] 不是 ~empty~，则
-                  1. 将 _module_ 设置为 _module_.[[CycleRoot]]。
+                  1. 将 _module_ 设为 _module_.[[CycleRoot]]。
                 1. 否则，
-                  1. 断言：_module_.[[Status]] 是 ~evaluated~，且 _module_.[[EvaluationError]] 是 throw completion。
+                  1. 断言：_module_.[[Status]] 为 ~evaluated~，且 _module_.[[EvaluationError]] 是一个 throw completion。
               1. 如果 _module_.[[TopLevelCapability]] 不是 ~empty~，则
                 1. 返回 _module_.[[TopLevelCapability]].[[Promise]]。
-              1. 令 _stack_ 为新的空 List。
+              1. 令 _stack_ 为一个新的空 List。
               1. 令 _promiseCapability_ 为 ! NewPromiseCapability(%Promise%)。
-              1. 将 _module_.[[TopLevelCapability]] 设置为 _promiseCapability_。
+              1. 将 _module_.[[TopLevelCapability]] 设为 _promiseCapability_。
               1. 令 _result_ 为 Completion(InnerModuleEvaluation(_module_, _stack_, 0))。
-              1. 如果 _result_ 是 abrupt completion，则
-                1. 对 _stack_ 的每个 Cyclic Module Record _m_，执行：
-                  1. 断言：_m_.[[Status]] 是 ~evaluating~。
-                  1. 将 _m_.[[Status]] 设置为 ~evaluated~。
-                  1. 将 _m_.[[EvaluationError]] 设置为 _result_。
-                1. 断言：_module_.[[Status]] 是 ~evaluated~。
+              1. 如果 _result_ 是一个突然完成，则
+                1. 对 _stack_ 的每个 Cyclic Module Record _requiredModule_，执行：
+                  1. 断言：_requiredModule_.[[Status]] 为 ~evaluating~。
+                  1. 将 _requiredModule_.[[Status]] 设为 ~evaluated~。
+                  1. 将 _requiredModule_.[[EvaluationError]] 设为 _result_。
+                1. 断言：_module_.[[Status]] 为 ~evaluated~。
                 1. 断言：_module_.[[EvaluationError]] 和 _result_ 是同一个 Completion Record。
                 1. 执行 ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »)。
               1. 否则，
-                1. 断言：_module_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~。
-                1. 断言：_module_.[[EvaluationError]] 是 ~empty~。
-                1. 如果 _module_.[[Status]] 是 ~evaluated~，则
-                  1. 断言：_module_.[[AsyncEvaluationOrder]] 是 ~unset~ 或 ~done~。
-                  1. 注：当且仅当 _module_ 已经被求值且该求值是异步的时，_module_.[[AsyncEvaluationOrder]] 是 ~done~。
+                1. 断言：_module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~。
+                1. 断言：_module_.[[EvaluationError]] 为 ~empty~。
+                1. 如果 _module_.[[Status]] 为 ~evaluated~，则
+                  1. 断言：_module_.[[AsyncEvaluationOrder]] 为 ~unset~ 或 ~done~。
+                  1. 注：当且仅当 _module_ 已经被求值且该求值是异步的，_module_.[[AsyncEvaluationOrder]] 才为 ~done~。
                   1. 执行 ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)。
-                1. 断言：_stack_ 是空的。
+                1. 断言：_stack_ 为空。
               1. 返回 _promiseCapability_.[[Promise]]。
             </emu-alg>
 
@@ -28460,24 +28460,24 @@
           </dl>
           <emu-alg>
             1. 令 _body_ 为 ParseText(_sourceText_, |Module|)。
-            1. 如果 _body_ 是错误列表，则返回 _body_。
+            1. 如果 _body_ 是错误 List，则返回 _body_。
             1. 令 _requestedModules_ 为 _body_ 的 ModuleRequests。
             1. 令 _importEntries_ 为 _body_ 的 ImportEntries。
             1. 令 _importedBoundNames_ 为 ImportedLocalNames(_importEntries_)。
-            1. 令 _indirectExportEntries_ 为新的空 List。
-            1. 令 _localExportEntries_ 为新的空 List。
-            1. 令 _starExportEntries_ 为新的空 List。
+            1. 令 _indirectExportEntries_ 为一个新的空 List。
+            1. 令 _localExportEntries_ 为一个新的空 List。
+            1. 令 _starExportEntries_ 为一个新的空 List。
             1. 令 _exportEntries_ 为 _body_ 的 ExportEntries。
             1. 对 _exportEntries_ 的每个 ExportEntry Record _exportEntry_，执行：
-              1. 如果 _exportEntry_.[[ModuleRequest]] 是 *null*，则
+              1. 如果 _exportEntry_.[[ModuleRequest]] 为 *null*，则
                 1. 如果 _importedBoundNames_ 不包含 _exportEntry_.[[LocalName]]，则
                   1. 将 _exportEntry_ 追加到 _localExportEntries_。
                 1. 否则，
-                  1. 注：当导出最初从另一个模块导入的绑定或命名空间对象时，会重写 ExportEntry Record，使其匹配如果该绑定或命名空间对象直接从原始模块重导出、而不是先导入再导出时本应具有的形式。这允许通过 `export * from` 以相同名称导出同一绑定或命名空间两次而产生的冲突被忽略，而不是在 <emu-xref href="#sec-resolveexport">Source Text Module Record 的 ResolveExport 具体方法</emu-xref> 的步骤 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 中被视为 ambiguous。
-                  1. 令 _ie_ 为 _importEntries_ 中 [[LocalName]] 是 _exportEntry_.[[LocalName]] 的元素。
-                  1. 将 ExportEntry Record { [[ModuleRequest]]: _ie_.[[ModuleRequest]], [[ImportName]]: _ie_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] } 追加到 _indirectExportEntries_。
-              1. 否则，如果 _exportEntry_.[[ImportName]] 是 ~all-but-default~，则
-                1. 断言：_exportEntry_.[[ExportName]] 是 *null*。
+                  1. 注：当导出最初从另一个模块导入的绑定或命名空间对象时，会重写 ExportEntry Record，使其匹配该绑定或命名空间对象若直接从原始模块重新导出、而不是先导入再导出时所具有的形式。这允许通过 `export * from` 以同一名称两次导出同一绑定或命名空间所产生的冲突被忽略，而不是在 <emu-xref href="#sec-resolveexport">Source Text Module Records 的 ResolveExport 具体方法</emu-xref> 的步骤 <emu-xref href="#step-resolveexport-conflict"></emu-xref> 中被视为歧义。
+                  1. 令 _importEntry_ 为 _importEntries_ 中 [[LocalName]] 为 _exportEntry_.[[LocalName]] 的元素。
+                  1. 将 ExportEntry Record { [[ModuleRequest]]: _importEntry_.[[ModuleRequest]], [[ImportName]]: _importEntry_.[[ImportName]], [[LocalName]]: *null*, [[ExportName]]: _exportEntry_.[[ExportName]] } 追加到 _indirectExportEntries_。
+              1. 否则，如果 _exportEntry_.[[ImportName]] 为 ~all-but-default~，则
+                1. 断言：_exportEntry_.[[ExportName]] 为 *null*。
                 1. 将 _exportEntry_ 追加到 _starExportEntries_。
               1. 否则，
                 1. 将 _exportEntry_ 追加到 _indirectExportEntries_。
@@ -28506,28 +28506,28 @@
             </dl>
             <emu-alg>
               1. 断言：_module_.[[Status]] 不是 ~new~。
-              1. 如果 _exportStarSet_ 不存在，则将 _exportStarSet_ 设置为新的空 List。
+              1. 如果 _exportStarSet_ 不存在，则将 _exportStarSet_ 设为一个新的空 List。
               1. 如果 _exportStarSet_ 包含 _module_，则
-                1. 断言：我们已经到达 `export *` 循环性的起点。
-                1. 返回新的空 List。
+                1. 断言：我们已到达 `export *` 循环的起点。
+                1. 返回一个新的空 List。
               1. 将 _module_ 追加到 _exportStarSet_。
-              1. 令 _exportedNames_ 为新的空 List。
-              1. 对 _module_.[[LocalExportEntries]] 的每个 ExportEntry Record _e_，执行：
+              1. 令 _exportedNames_ 为一个新的空 List。
+              1. 对 _module_.[[LocalExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
                 1. 断言：_module_ 为此导出提供直接绑定。
-                1. 断言：_e_.[[ExportName]] 不是 *null*。
-                1. 将 _e_.[[ExportName]] 追加到 _exportedNames_。
-              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 断言：_module_ 为此导入了一个特定绑定。
-                1. 断言：_e_.[[ExportName]] 不是 *null*。
-                1. 将 _e_.[[ExportName]] 追加到 _exportedNames_。
-              1. 对 _module_.[[StarExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
-                1. 令 _requestedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
+                1. 断言：_exportEntry_.[[ExportName]] 不是 *null*。
+                1. 将 _exportEntry_.[[ExportName]] 追加到 _exportedNames_。
+              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 断言：_module_ 为此导入一个特定绑定。
+                1. 断言：_exportEntry_.[[ExportName]] 不是 *null*。
+                1. 将 _exportEntry_.[[ExportName]] 追加到 _exportedNames_。
+              1. 对 _module_.[[StarExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 断言：_exportEntry_.[[ModuleRequest]] 不是 *null*。
+                1. 令 _requestedModule_ 为 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])。
                 1. 令 _starNames_ 为 _requestedModule_.GetExportedNames(_exportStarSet_)。
-                1. 对 _starNames_ 的每个元素 _n_，执行：
-                  1. 如果 _n_ 不是 *"default"*，则
-                    1. 如果 _exportedNames_ 不包含 _n_，则
-                      1. 将 _n_ 追加到 _exportedNames_。
+                1. 对 _starNames_ 的每个元素 _name_，执行：
+                  1. 如果 _name_ 不是 *"default"*，则
+                    1. 如果 _exportedNames_ 不包含 _name_，则
+                      1. 将 _name_ 追加到 _exportedNames_。
               1. 返回 _exportedNames_。
             </emu-alg>
             <emu-note>
@@ -28555,42 +28555,42 @@
 
             <emu-alg>
               1. 断言：_module_.[[Status]] 不是 ~new~。
-              1. 如果 _resolveSet_ 不存在，则将 _resolveSet_ 设置为新的空 List。
+              1. 如果 _resolveSet_ 不存在，则将 _resolveSet_ 设为一个新的空 List。
               1. 对 _resolveSet_ 的每个 Record { [[Module]], [[ExportName]] } _record_，执行：
                 1. 如果 _module_ 和 _record_.[[Module]] 是同一个 Module Record，且 _exportName_ 是 _record_.[[ExportName]]，则
                   1. 断言：这是一个循环导入请求。
                   1. 返回 *null*。
               1. 将 Record { [[Module]]: _module_, [[ExportName]]: _exportName_ } 追加到 _resolveSet_。
-              1. 对 _module_.[[LocalExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 如果 _e_.[[ExportName]] 是 _exportName_，则
+              1. 对 _module_.[[LocalExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 如果 _exportEntry_.[[ExportName]] 是 _exportName_，则
                   1. 断言：_module_ 为此导出提供直接绑定。
-                  1. 返回 ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _e_.[[LocalName]] }。
-              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 如果 _e_.[[ExportName]] 是 _exportName_，则
-                  1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
-                  1. 令 _importedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
-                  1. 如果 _e_.[[ImportName]] 是 ~namespace~，则
+                  1. 返回 ResolvedBinding Record { [[Module]]: _module_, [[BindingName]]: _exportEntry_.[[LocalName]] }。
+              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 如果 _exportEntry_.[[ExportName]] 是 _exportName_，则
+                  1. 断言：_exportEntry_.[[ModuleRequest]] 不是 *null*。
+                  1. 令 _importedModule_ 为 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])。
+                  1. 如果 _exportEntry_.[[ImportName]] 为 ~namespace~，则
                     1. 断言：_module_ 不为此导出提供直接绑定。
                     1. 返回 ResolvedBinding Record { [[Module]]: _importedModule_, [[BindingName]]: ~namespace~ }。
-                  1. 断言：_module_ 为此导入了一个特定绑定。
-                  1. 断言：_e_.[[ImportName]] 是 String。
-                  1. 返回 _importedModule_.ResolveExport(_e_.[[ImportName]], _resolveSet_)。
+                  1. 断言：_module_ 为此导入一个特定绑定。
+                  1. 断言：_exportEntry_.[[ImportName]] 是一个 String。
+                  1. 返回 _importedModule_.ResolveExport(_exportEntry_.[[ImportName]], _resolveSet_)。
               1. 如果 _exportName_ 是 *"default"*，则
                 1. 断言：此模块未显式定义 `default` 导出。
                 1. 返回 *null*。
                 1. 注：`default` 导出不能由 `export * from "mod"` 声明提供。
               1. 令 _starResolution_ 为 *null*。
-              1. 对 _module_.[[StarExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 断言：_e_.[[ModuleRequest]] 不是 *null*。
-                1. 令 _importedModule_ 为 GetImportedModule(_module_, _e_.[[ModuleRequest]])。
+              1. 对 _module_.[[StarExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 断言：_exportEntry_.[[ModuleRequest]] 不是 *null*。
+                1. 令 _importedModule_ 为 GetImportedModule(_module_, _exportEntry_.[[ModuleRequest]])。
                 1. 令 _resolution_ 为 _importedModule_.ResolveExport(_exportName_, _resolveSet_)。
-                1. 如果 _resolution_ 是 ~ambiguous~，则返回 ~ambiguous~。
+                1. 如果 _resolution_ 为 ~ambiguous~，则返回 ~ambiguous~。
                 1. 如果 _resolution_ 不是 *null*，则
-                  1. 断言：_resolution_ 是 ResolvedBinding Record。
-                  1. 如果 _starResolution_ 是 *null*，则
-                    1. 将 _starResolution_ 设置为 _resolution_。
+                  1. 断言：_resolution_ 是一个 ResolvedBinding Record。
+                  1. 如果 _starResolution_ 为 *null*，则
+                    1. 将 _starResolution_ 设为 _resolution_。
                   1. [id="step-resolveexport-conflict"] 否则，
-                    1. 断言：存在超过一个包含请求名称的 `*` 导出。
+                    1. 断言：存在多个包含所请求名称的 `*` 导出。
                     1. 如果 _resolution_.[[Module]] 和 _starResolution_.[[Module]] 不是同一个 Module Record，则返回 ~ambiguous~。
                     1. 如果 _resolution_.[[BindingName]] 不是 _starResolution_.[[BindingName]]，则返回 ~ambiguous~。
               1. 返回 _starResolution_。
@@ -28611,63 +28611,63 @@
             </dl>
 
             <emu-alg>
-              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _e_，执行：
-                1. 断言：_e_.[[ExportName]] 不是 *null*。
-                1. 令 _resolution_ 为 _module_.ResolveExport(_e_.[[ExportName]])。
-                1. 如果 _resolution_ 是 *null* 或 ~ambiguous~，则抛出 *SyntaxError* 异常。
-                1. 断言：_resolution_ 是 ResolvedBinding Record。
-              1. 断言：来自 _module_ 的所有命名导出都是可解析的。
+              1. 对 _module_.[[IndirectExportEntries]] 的每个 ExportEntry Record _exportEntry_，执行：
+                1. 断言：_exportEntry_.[[ExportName]] 不是 *null*。
+                1. 令 _resolution_ 为 _module_.ResolveExport(_exportEntry_.[[ExportName]])。
+                1. 如果 _resolution_ 为 *null* 或 ~ambiguous~，则抛出一个 *SyntaxError* 异常。
+                1. 断言：_resolution_ 是一个 ResolvedBinding Record。
+              1. 断言：来自 _module_ 的所有具名导出都是可解析的。
               1. 令 _realm_ 为 _module_.[[Realm]]。
               1. 断言：_realm_ 不是 *undefined*。
               1. 令 _envRecord_ 为 NewModuleEnvironment(_realm_.[[GlobalEnv]])。
-              1. 将 _module_.[[Environment]] 设置为 _envRecord_。
-              1. 对 _module_.[[ImportEntries]] 的每个 ImportEntry Record _in_，执行：
-                1. 令 _importedModule_ 为 GetImportedModule(_module_, _in_.[[ModuleRequest]])。
-                1. 如果 _in_.[[ImportName]] 是 ~namespace~，则
+              1. 将 _module_.[[Environment]] 设为 _envRecord_。
+              1. 对 _module_.[[ImportEntries]] 的每个 ImportEntry Record _importEntry_，执行：
+                1. 令 _importedModule_ 为 GetImportedModule(_module_, _importEntry_.[[ModuleRequest]])。
+                1. 如果 _importEntry_.[[ImportName]] 为 ~namespace~，则
                   1. 令 _namespace_ 为 GetModuleNamespace(_importedModule_)。
-                  1. 执行 ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
-                  1. 执行 ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
+                  1. 执行 ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)。
+                  1. 执行 ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)。
                 1. 否则，
-                  1. 断言：_in_.[[ImportName]] 是 String。
-                  1. 令 _resolution_ 为 _importedModule_.ResolveExport(_in_.[[ImportName]])。
-                  1. 如果 _resolution_ 是 *null* 或 ~ambiguous~，则抛出 *SyntaxError* 异常。
-                  1. 如果 _resolution_.[[BindingName]] 是 ~namespace~，则
+                  1. 断言：_importEntry_.[[ImportName]] 是一个 String。
+                  1. 令 _resolution_ 为 _importedModule_.ResolveExport(_importEntry_.[[ImportName]])。
+                  1. 如果 _resolution_ 为 *null* 或 ~ambiguous~，则抛出一个 *SyntaxError* 异常。
+                  1. 如果 _resolution_.[[BindingName]] 为 ~namespace~，则
                     1. 令 _namespace_ 为 GetModuleNamespace(_resolution_.[[Module]])。
-                    1. 执行 ! _envRecord_.CreateImmutableBinding(_in_.[[LocalName]], *true*)。
-                    1. 执行 ! _envRecord_.InitializeBinding(_in_.[[LocalName]], _namespace_)。
+                    1. 执行 ! _envRecord_.CreateImmutableBinding(_importEntry_.[[LocalName]], *true*)。
+                    1. 执行 ! _envRecord_.InitializeBinding(_importEntry_.[[LocalName]], _namespace_)。
                   1. 否则，
-                    1. 执行 CreateImportBinding(_envRecord_, _in_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])。
-              1. 令 _moduleContext_ 为新的 ECMAScript 代码执行上下文。
-              1. 将 _moduleContext_ 的 Function 设置为 *null*。
+                    1. 执行 CreateImportBinding(_envRecord_, _importEntry_.[[LocalName]], _resolution_.[[Module]], _resolution_.[[BindingName]])。
+              1. 令 _moduleContext_ 为一个新的 ECMAScript 代码执行上下文。
+              1. 将 _moduleContext_ 的 Function 设为 *null*。
               1. 断言：_module_.[[Realm]] 不是 *undefined*。
-              1. 将 _moduleContext_ 的 Realm 设置为 _module_.[[Realm]]。
-              1. 将 _moduleContext_ 的 ScriptOrModule 设置为 _module_。
-              1. 将 _moduleContext_ 的 VariableEnvironment 设置为 _module_.[[Environment]]。
-              1. 将 _moduleContext_ 的 LexicalEnvironment 设置为 _module_.[[Environment]]。
-              1. 将 _moduleContext_ 的 PrivateEnvironment 设置为 *null*。
-              1. 将 _module_.[[Context]] 设置为 _moduleContext_。
-              1. 将 _moduleContext_ 压入执行上下文栈；_moduleContext_ 现在是运行中的执行上下文。
+              1. 将 _moduleContext_ 的 Realm 设为 _module_.[[Realm]]。
+              1. 将 _moduleContext_ 的 ScriptOrModule 设为 _module_。
+              1. 将 _moduleContext_ 的 VariableEnvironment 设为 _module_.[[Environment]]。
+              1. 将 _moduleContext_ 的 LexicalEnvironment 设为 _module_.[[Environment]]。
+              1. 将 _moduleContext_ 的 PrivateEnvironment 设为 *null*。
+              1. 将 _module_.[[Context]] 设为 _moduleContext_。
+              1. 将 _moduleContext_ 推入执行上下文栈；_moduleContext_ 现在是正在运行的执行上下文。
               1. 令 _code_ 为 _module_.[[ECMAScriptCode]]。
               1. 令 _variableDecls_ 为 _code_ 的 VarScopedDeclarations。
-              1. 令 _declaredVariableNames_ 为新的空 List。
-              1. 对 _variableDecls_ 的每个元素 _d_，执行：
-                1. 对 _d_ 的 BoundNames 的每个元素 _dn_，执行：
-                  1. 如果 _declaredVariableNames_ 不包含 _dn_，则
-                    1. 执行 ! _envRecord_.CreateMutableBinding(_dn_, *false*)。
-                    1. 执行 ! _envRecord_.InitializeBinding(_dn_, *undefined*)。
-                    1. 将 _dn_ 追加到 _declaredVariableNames_。
+              1. 令 _declaredVariableNames_ 为一个新的空 List。
+              1. 对 _variableDecls_ 的每个元素 _variableDecl_，执行：
+                1. 对 _variableDecl_ 的 BoundNames 的每个元素 _name_，执行：
+                  1. 如果 _declaredVariableNames_ 不包含 _name_，则
+                    1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
+                    1. 执行 ! _envRecord_.InitializeBinding(_name_, *undefined*)。
+                    1. 将 _name_ 追加到 _declaredVariableNames_。
               1. 令 _lexicalDecls_ 为 _code_ 的 LexicallyScopedDeclarations。
               1. 令 _privateEnv_ 为 *null*。
-              1. 对 _lexicalDecls_ 的每个元素 _d_，执行：
-                1. 对 _d_ 的 BoundNames 的每个元素 _dn_，执行：
-                  1. 如果 _d_ 的 IsConstantDeclaration 是 *true*，则
-                    1. 执行 ! _envRecord_.CreateImmutableBinding(_dn_, *true*)。
+              1. 对 _lexicalDecls_ 的每个元素 _lexicalDecl_，执行：
+                1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _name_，执行：
+                  1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 为 *true*，则
+                    1. 执行 ! _envRecord_.CreateImmutableBinding(_name_, *true*)。
                   1. 否则，
-                    1. 执行 ! _envRecord_.CreateMutableBinding(_dn_, *false*)。
-                  1. 如果 _d_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一，则
-                    1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为实参执行 _d_ 的 InstantiateFunctionObject。
-                    1. 执行 ! _envRecord_.InitializeBinding(_dn_, _funcObj_)。
-              1. 将 _moduleContext_ 从执行上下文栈中移除。
+                    1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
+                  1. 如果 _lexicalDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|，则
+                    1. 令 _funcObj_ 为使用参数 _envRecord_ 和 _privateEnv_ 对 _lexicalDecl_ 执行 InstantiateFunctionObject 的结果。
+                    1. 执行 ! _envRecord_.InitializeBinding(_name_, _funcObj_)。
+              1. 从执行上下文栈中移除 _moduleContext_。
               1. 返回 ~unused~。
             </emu-alg>
           </emu-clause>
@@ -29929,124 +29929,124 @@
         <emu-alg>
           1. 令 _variableNames_ 为 _body_ 的 VarDeclaredNames。
           1. 令 _variableDecls_ 为 _body_ 的 VarScopedDeclarations。
-          1. 如果 _strict_ 是 *false*，则
-            1. 如果 _variableEnv_ 是 Global Environment Record，则
+          1. 如果 _strict_ 为 *false*，则
+            1. 如果 _variableEnv_ 是一个 Global Environment Record，则
               1. 对 _variableNames_ 的每个元素 _name_，执行：
-                1. 如果 HasLexicalDeclaration(_variableEnv_, _name_) 是 *true*，则抛出 *SyntaxError* 异常。
+                1. 如果 HasLexicalDeclaration(_variableEnv_, _name_) 为 *true*，则抛出一个 *SyntaxError* 异常。
                 1. 注：`eval` 不会创建会被全局词法声明遮蔽的全局 var 声明。
             1. 令 _thisEnv_ 为 _lexicalEnv_。
             1. 断言：以下循环将会终止。
-            1. 重复，只要 _thisEnv_ 和 _variableEnv_ 不是同一个 Environment Record，
+            1. 重复，直到 _thisEnv_ 和 _variableEnv_ 是同一个 Environment Record，
               1. 如果 _thisEnv_ 不是 Object Environment Record，则
                 1. 注：with 语句的环境不能包含任何词法声明，因此不需要检查 var/let 提升冲突。
                 1. 对 _variableNames_ 的每个元素 _name_，执行：
-                  1. 如果 ! _thisEnv_.HasBinding(_name_) 是 *true*，则
-                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] 如果宿主是 Web 浏览器或以其他方式支持 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>，则
-                      1. 如果 _thisEnv_ 不是 |Catch| 子句的 Environment Record，则抛出 *SyntaxError* 异常。
+                  1. 如果 ! _thisEnv_.HasBinding(_name_) 为 *true*，则
+                    1. [id="step-evaldeclarationinstantiation-throw-duplicate-binding", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>，则
+                      1. 如果 _thisEnv_ 不是 |Catch| 子句的 Environment Record，则抛出一个 *SyntaxError* 异常。
                     1. 否则，
-                      1. 抛出 *SyntaxError* 异常。
+                      1. 抛出一个 *SyntaxError* 异常。
                   1. 注：直接 eval 不会把 var 声明提升到同名词法声明之上。
-              1. 将 _thisEnv_ 设置为 _thisEnv_.[[OuterEnv]]。
-          1. 令 _privateIdentifiers_ 为新的空 List。
+              1. 将 _thisEnv_ 设为 _thisEnv_.[[OuterEnv]]。
+          1. 令 _privateIdentifiers_ 为一个新的空 List。
           1. 令 _pointer_ 为 _privateEnv_。
-          1. 重复，只要 _pointer_ 不是 *null*，
+          1. 重复，直到 _pointer_ 为 *null*，
             1. 对 _pointer_.[[Names]] 的每个 Private Name _binding_，执行：
               1. 如果 _privateIdentifiers_ 不包含 _binding_.[[Description]]，则将 _binding_.[[Description]] 追加到 _privateIdentifiers_。
-            1. 将 _pointer_ 设置为 _pointer_.[[OuterPrivateEnvironment]]。
-          1. 如果以 _privateIdentifiers_ 为实参执行 _body_ 的 AllPrivateIdentifiersValid 是 *false*，则抛出 *SyntaxError* 异常。
-          1. 令 _funcsToInitialize_ 为新的空 List。
-          1. 令 _declaredFuncNames_ 为新的空 List。
-          1. 按逆 List 顺序，对 _variableDecls_ 的每个元素 _d_，执行：
-            1. 如果 _d_ 不是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 之一，则
-              1. 断言：_d_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一。
+            1. 将 _pointer_ 设为 _pointer_.[[OuterPrivateEnvironment]]。
+          1. 如果以 _privateIdentifiers_ 为参数对 _body_ 执行 AllPrivateIdentifiersValid 的结果为 *false*，则抛出一个 *SyntaxError* 异常。
+          1. 令 _funcsToInitialize_ 为一个新的空 List。
+          1. 令 _declaredFuncNames_ 为一个新的空 List。
+          1. 对 _variableDecls_ 的每个元素 _variableDecl_，按 List 的逆序执行：
+            1. 如果 _variableDecl_ 不是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 中的任一者，则
+              1. 断言：_variableDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration|。
               1. 注：如果同一名称有多个函数声明，则使用最后一个声明。
-              1. 令 _func_ 为 _d_ 的 BoundNames 的唯一元素。
-              1. 如果 _declaredFuncNames_ 不包含 _func_，则
-                1. 如果 _variableEnv_ 是 Global Environment Record，则
-                  1. 令 _funcDefinable_ 为 ? CanDeclareGlobalFunction(_variableEnv_, _func_)。
-                  1. 如果 _funcDefinable_ 是 *false*，则抛出 *TypeError* 异常。
-                1. 将 _func_ 追加到 _declaredFuncNames_。
-                1. 将 _d_ 插入为 _funcsToInitialize_ 的第一个元素。
-          1. 令 _declaredVariableNames_ 为新的空 List。
-          1. 对 _variableDecls_ 的每个元素 _d_，执行：
-            1. 如果 _d_ 是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 之一，则
-              1. 对 _d_ 的 BoundNames 的每个 String _vn_，执行：
-                1. 如果 _declaredFuncNames_ 不包含 _vn_，则
-                  1. 如果 _variableEnv_ 是 Global Environment Record，则
-                    1. 令 _vnDefinable_ 为 ? CanDeclareGlobalVar(_variableEnv_, _vn_)。
-                    1. 如果 _vnDefinable_ 是 *false*，则抛出 *TypeError* 异常。
-                  1. 如果 _declaredVariableNames_ 不包含 _vn_，则
-                    1. 将 _vn_ 追加到 _declaredVariableNames_。
-          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] 如果 _strict_ 是 *false* 且宿主是 Web 浏览器或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
+              1. 令 _funcName_ 为 _variableDecl_ 的 BoundNames 的唯一元素。
+              1. 如果 _declaredFuncNames_ 不包含 _funcName_，则
+                1. 如果 _variableEnv_ 是一个 Global Environment Record，则
+                  1. 令 _funcDefinable_ 为 ? CanDeclareGlobalFunction(_variableEnv_, _funcName_)。
+                  1. 如果 _funcDefinable_ 为 *false*，则抛出一个 *TypeError* 异常。
+                1. 将 _funcName_ 追加到 _declaredFuncNames_。
+                1. 将 _variableDecl_ 作为 _funcsToInitialize_ 的第一个元素插入。
+          1. 令 _declaredVariableNames_ 为一个新的空 List。
+          1. 对 _variableDecls_ 的每个元素 _variableDecl_，执行：
+            1. 如果 _variableDecl_ 是 |VariableDeclaration|、|ForBinding| 或 |BindingIdentifier| 中的任一者，则
+              1. 对 _variableDecl_ 的 BoundNames 的每个 String _name_，执行：
+                1. 如果 _declaredFuncNames_ 不包含 _name_，则
+                  1. 如果 _variableEnv_ 是一个 Global Environment Record，则
+                    1. 令 _variableDefinable_ 为 ? CanDeclareGlobalVar(_variableEnv_, _name_)。
+                    1. 如果 _variableDefinable_ 为 *false*，则抛出一个 *TypeError* 异常。
+                  1. 如果 _declaredVariableNames_ 不包含 _name_，则
+                    1. 将 _name_ 追加到 _declaredVariableNames_。
+          1. [id="step-evaldeclarationinstantiation-web-compat-insertion-point", normative-optional] 如果 _strict_ 为 *false*，且宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
             1. 令 _declaredFuncOrVariableNames_ 为 _declaredFuncNames_ 和 _declaredVariableNames_ 的列表连接。
-            1. 对直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中的每个 |FunctionDeclaration| _f_，若 _body_ Contains _x_ 是 *true*，执行：
-              1. 令 _funcName_ 为 _f_ 的 |BindingIdentifier| 的 StringValue。
-              1. 如果用以 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 替换 |FunctionDeclaration| _f_ 不会为 _body_ 产生任何早期错误，则
+            1. 对每个 |FunctionDeclaration| _funcDecl_，其直接包含在任何 |Block|、|CaseClause| 或 |DefaultClause| _x_ 的 |StatementList| 中，且 _body_ Contains _x_ 为 *true*，执行：
+              1. 令 _funcName_ 为 _funcDecl_ 的 |BindingIdentifier| 的 StringValue。
+              1. 如果将 |FunctionDeclaration| _funcDecl_ 替换为以 _funcName_ 作为 |BindingIdentifier| 的 |VariableStatement| 不会为 _body_ 产生任何早期错误，则
                 1. 令 _bindingExists_ 为 *false*。
-                1. 将 _thisEnv_ 设置为 _lexicalEnv_。
+                1. 将 _thisEnv_ 设为 _lexicalEnv_。
                 1. 断言：以下循环将会终止。
-                1. 重复，只要 _thisEnv_ 不是 _variableEnv_，
+                1. 重复，直到 _thisEnv_ 为 _variableEnv_，
                   1. 如果 _thisEnv_ 不是 Object Environment Record，则
-                    1. 如果 ! _thisEnv_.HasBinding(_funcName_) 是 *true*，则
-                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] 如果宿主是 Web 浏览器或以其他方式支持 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>，则
-                        1. 如果 _thisEnv_ 不是 |Catch| 子句的 Environment Record，则将 _bindingExists_ 设置为 *true*。
+                    1. 如果 ! _thisEnv_.HasBinding(_funcName_) 为 *true*，则
+                      1. [id="step-evaldeclarationinstantiation-web-compat-bindingexists", normative-optional] 如果宿主是 Web 浏览器，或以其他方式支持 <emu-xref href="#sec-variablestatements-in-catch-blocks" title></emu-xref>，则
+                        1. 如果 _thisEnv_ 不是 |Catch| 子句的 Environment Record，则将 _bindingExists_ 设为 *true*。
                       1. 否则，
-                        1. 将 _bindingExists_ 设置为 *true*。
-                  1. 将 _thisEnv_ 设置为 _thisEnv_.[[OuterEnv]]。
-                1. 如果 _bindingExists_ 是 *false* 且 _variableEnv_ 是 Global Environment Record，则
-                  1. 如果 HasLexicalDeclaration(_variableEnv_, _funcName_) 是 *false*，则
+                        1. 将 _bindingExists_ 设为 *true*。
+                  1. 将 _thisEnv_ 设为 _thisEnv_.[[OuterEnv]]。
+                1. 如果 _bindingExists_ 为 *false* 且 _variableEnv_ 是一个 Global Environment Record，则
+                  1. 如果 HasLexicalDeclaration(_variableEnv_, _funcName_) 为 *false*，则
                     1. 令 _funcDefinable_ 为 ? CanDeclareGlobalVar(_variableEnv_, _funcName_)。
                   1. 否则，
                     1. 令 _funcDefinable_ 为 *false*。
                 1. 否则，
                   1. 令 _funcDefinable_ 为 *true*。
-                1. 如果 _bindingExists_ 是 *false* 且 _funcDefinable_ 是 *true*，则
+                1. 如果 _bindingExists_ 为 *false* 且 _funcDefinable_ 为 *true*，则
                   1. 如果 _declaredFuncOrVariableNames_ 不包含 _funcName_，则
-                    1. 如果 _variableEnv_ 是 Global Environment Record，则
+                    1. 如果 _variableEnv_ 是一个 Global Environment Record，则
                       1. 执行 ? CreateGlobalVarBinding(_variableEnv_, _funcName_, *true*)。
                     1. 否则，
-                      1. 将 _bindingExists_ 设置为 ! _variableEnv_.HasBinding(_funcName_)。
-                      1. 如果 _bindingExists_ 是 *false*，则
+                      1. 将 _bindingExists_ 设为 ! _variableEnv_.HasBinding(_funcName_)。
+                      1. 如果 _bindingExists_ 为 *false*，则
                         1. 执行 ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)。
                         1. 执行 ! _variableEnv_.InitializeBinding(_funcName_, *undefined*)。
                     1. 将 _funcName_ 追加到 _declaredFuncOrVariableNames_。
-                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _f_ 被求值时，执行以下步骤以替代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
-                    1. 令 _gEnv_ 为运行中执行上下文的 VariableEnvironment。
-                    1. 令 _bEnv_ 为运行中执行上下文的 LexicalEnvironment。
-                    1. 令 _fObj_ 为 ! _bEnv_.GetBindingValue(_funcName_, *false*)。
-                    1. 执行 ? <emu-meta effects="user-code">_gEnv_.SetMutableBinding(_funcName_, _fObj_, *false*)</emu-meta>。
+                  1. [id="step-evaldeclarationinstantiation-alt-funcdecl-eval"] 当 |FunctionDeclaration| _funcDecl_ 被求值时，执行以下步骤以取代 <emu-xref href="#sec-function-definitions-runtime-semantics-evaluation"></emu-xref> 中提供的 |FunctionDeclaration| Evaluation 算法：
+                    1. 令 _globalEnv_ 为正在运行的执行上下文的 VariableEnvironment。
+                    1. 令 _blockEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
+                    1. 令 _funcObj_ 为 ! _blockEnv_.GetBindingValue(_funcName_, *false*)。
+                    1. 执行 ? <emu-meta effects="user-code">_globalEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)</emu-meta>。
                     1. 返回 ~unused~。
-          1. [id="step-evaldeclarationinstantiation-post-validation"] 注：在此算法步骤之后不会发生 abnormal termination，除非 _variableEnv_ 是 Global Environment Record 且全局对象是 Proxy 奇异对象。
+          1. [id="step-evaldeclarationinstantiation-post-validation"] 注：除非 _variableEnv_ 是 Global Environment Record 且全局对象是 Proxy 异质对象，否则在此算法步骤之后不会发生异常终止。
           1. 令 _lexicalDecls_ 为 _body_ 的 LexicallyScopedDeclarations。
-          1. 对 _lexicalDecls_ 的每个元素 _d_，执行：
-            1. 注：词法声明名称只在这里实例化，但不初始化。
-            1. 对 _d_ 的 BoundNames 的每个元素 _dn_，执行：
-              1. 如果 _d_ 的 IsConstantDeclaration 是 *true*，则
-                1. 执行 ? _lexicalEnv_.CreateImmutableBinding(_dn_, *true*)。
+          1. 对 _lexicalDecls_ 的每个元素 _lexicalDecl_，执行：
+            1. 注：词法声明的名称仅在此处实例化，但不初始化。
+            1. 对 _lexicalDecl_ 的 BoundNames 的每个元素 _name_，执行：
+              1. 如果 _lexicalDecl_ 的 IsConstantDeclaration 为 *true*，则
+                1. 执行 ? _lexicalEnv_.CreateImmutableBinding(_name_, *true*)。
               1. 否则，
-                1. 执行 ? _lexicalEnv_.CreateMutableBinding(_dn_, *false*)。
-          1. 对 _funcsToInitialize_ 的每个 Parse Node _f_，执行：
-            1. 令 _func_ 为 _f_ 的 BoundNames 的唯一元素。
-            1. 令 _funcObj_ 为以 _lexicalEnv_ 和 _privateEnv_ 为实参执行 _f_ 的 InstantiateFunctionObject。
-            1. 如果 _variableEnv_ 是 Global Environment Record，则
-              1. 执行 ? CreateGlobalFunctionBinding(_variableEnv_, _func_, _funcObj_, *true*)。
+                1. 执行 ? _lexicalEnv_.CreateMutableBinding(_name_, *false*)。
+          1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行：
+            1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
+            1. 令 _funcObj_ 为使用参数 _lexicalEnv_ 和 _privateEnv_ 对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
+            1. 如果 _variableEnv_ 是一个 Global Environment Record，则
+              1. 执行 ? CreateGlobalFunctionBinding(_variableEnv_, _funcName_, _funcObj_, *true*)。
             1. 否则，
-              1. 令 _bindingExists_ 为 ! _variableEnv_.HasBinding(_func_)。
-              1. 如果 _bindingExists_ 是 *false*，则
-                1. 注：由于步骤 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 之前的验证，以下调用不能返回 abrupt completion。
-                1. 执行 ! _variableEnv_.CreateMutableBinding(_func_, *true*)。
-                1. 执行 ! _variableEnv_.InitializeBinding(_func_, _funcObj_)。
+              1. 令 _bindingExists_ 为 ! _variableEnv_.HasBinding(_funcName_)。
+              1. 如果 _bindingExists_ 为 *false*，则
+                1. 注：由于步骤 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 之前的验证，以下调用不能返回突然完成。
+                1. 执行 ! _variableEnv_.CreateMutableBinding(_funcName_, *true*)。
+                1. 执行 ! _variableEnv_.InitializeBinding(_funcName_, _funcObj_)。
               1. 否则，
-                1. 执行 ! _variableEnv_.SetMutableBinding(_func_, _funcObj_, *false*)。
-          1. 对 _declaredVariableNames_ 的每个 String _vn_，执行：
-            1. 如果 _variableEnv_ 是 Global Environment Record，则
-              1. 执行 ? CreateGlobalVarBinding(_variableEnv_, _vn_, *true*)。
+                1. 执行 ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)。
+          1. 对 _declaredVariableNames_ 的每个 String _variableName_，执行：
+            1. 如果 _variableEnv_ 是一个 Global Environment Record，则
+              1. 执行 ? CreateGlobalVarBinding(_variableEnv_, _variableName_, *true*)。
             1. 否则，
-              1. 令 _bindingExists_ 为 ! _variableEnv_.HasBinding(_vn_)。
-              1. 如果 _bindingExists_ 是 *false*，则
-                1. 注：由于步骤 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 之前的验证，以下调用不能返回 abrupt completion。
-                1. 执行 ! _variableEnv_.CreateMutableBinding(_vn_, *true*)。
-                1. 执行 ! _variableEnv_.InitializeBinding(_vn_, *undefined*)。
+              1. 令 _bindingExists_ 为 ! _variableEnv_.HasBinding(_variableName_)。
+              1. 如果 _bindingExists_ 为 *false*，则
+                1. 注：由于步骤 <emu-xref href="#step-evaldeclarationinstantiation-post-validation"></emu-xref> 之前的验证，以下调用不能返回突然完成。
+                1. 执行 ! _variableEnv_.CreateMutableBinding(_variableName_, *true*)。
+                1. 执行 ! _variableEnv_.InitializeBinding(_variableName_, *undefined*)。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -30587,18 +30587,18 @@
         <p>此函数把一个或多个源对象的所有可枚举自身属性的值复制到 _target_ 对象。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _to_ 为 ? ToObject(_target_)。
-          1. 如果只传入了一个实参，则返回 _to_。
+          1. 令 _targetObj_ 为 ? ToObject(_target_)。
+          1. 如果只传入了一个参数，则返回 _targetObj_。
           1. 对 _sources_ 的每个元素 _nextSource_，执行：
             1. 如果 _nextSource_ 既不是 *undefined* 也不是 *null*，则
               1. 令 _from_ 为 ! ToObject(_nextSource_)。
               1. 令 _keys_ 为 ? <emu-meta effects="user-code">_from_.[[OwnPropertyKeys]]()</emu-meta>。
               1. 对 _keys_ 的每个元素 _nextKey_，执行：
                 1. 令 _propertyDesc_ 为 ? <emu-meta effects="user-code">_from_.[[GetOwnProperty]](_nextKey_)</emu-meta>。
-                1. 如果 _propertyDesc_ 不是 *undefined* 且 _propertyDesc_.[[Enumerable]] 是 *true*，则
+                1. 如果 _propertyDesc_ 不是 *undefined* 且 _propertyDesc_.[[Enumerable]] 为 *true*，则
                   1. 令 _propertyValue_ 为 ? Get(_from_, _nextKey_)。
-                  1. 执行 ? Set(_to_, _nextKey_, _propertyValue_, *true*)。
-          1. 返回 _to_。
+                  1. 执行 ? Set(_targetObj_, _nextKey_, _propertyValue_, *true*)。
+          1. 返回 _targetObj_。
         </emu-alg>
         <p>此函数的 *"length"* 属性是 *2*<sub>𝔽</sub>。</p>
       </emu-clause>
@@ -30786,9 +30786,9 @@
         <emu-alg>
           1. 令 _groups_ 为 ? GroupBy(_items_, _callback_, ~property~)。
           1. 令 _obj_ 为 OrdinaryObjectCreate(*null*)。
-          1. 对 _groups_ 的每个 Record { [[Key]], [[Elements]] } _g_，执行：
-            1. 令 _elements_ 为 CreateArrayFromList(_g_.[[Elements]])。
-            1. 执行 ! CreateDataPropertyOrThrow(_obj_, _g_.[[Key]], _elements_)。
+          1. 对 _groups_ 的每个 Record { [[Key]], [[Elements]] } _group_，执行：
+            1. 令 _elements_ 为 CreateArrayFromList(_group_.[[Elements]])。
+            1. 执行 ! CreateDataPropertyOrThrow(_obj_, _group_.[[Key]], _elements_)。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -31719,10 +31719,10 @@
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _propertyDesc_ 为 _symbol_.[[Description]]。
-            1. 如果 _propertyDesc_ 是 *undefined*，则将 _propertyDesc_ 设置为空 String。
-            1. 断言：_propertyDesc_ 是 String。
-            1. 返回 *"Symbol("*、_propertyDesc_ 和 *")"* 的字符串连接。
+            1. 令 _description_ 为 _symbol_.[[Description]]。
+            1. 如果 _description_ 为 *undefined*，则将 _description_ 设为空 String。
+            1. 断言：_description_ 是一个 String。
+            1. 返回 *"Symbol("*、_description_ 和 *")"* 的字符串连接。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -32574,11 +32574,11 @@
         <h1>BigInt.asIntN ( _bits_, _bigint_ )</h1>
         <p>此函数在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 将 _bits_ 设置为 ? ToIndex(_bits_)。
-          1. 将 _bigint_ 设置为 ? ToBigInt(_bigint_)。
-          1. 令 _module_ 为 ℝ(_bigint_) 对 2<sup>_bits_</sup> 取模。
-          1. 如果 _module_ ≥ 2<sup>_bits_ - 1</sup>，则返回 ℤ(_module_ - 2<sup>_bits_</sup>)。
-          1. 返回 ℤ(_module_)。
+          1. 将 _bits_ 设为 ? ToIndex(_bits_)。
+          1. 将 _bigint_ 设为 ? ToBigInt(_bigint_)。
+          1. 令 _remainder_ 为 ℝ(_bigint_) 模 2<sup>_bits_</sup>。
+          1. 如果 _remainder_ ≥ 2<sup>_bits_ - 1</sup>，则返回 ℤ(_remainder_ - 2<sup>_bits_</sup>)。
+          1. 返回 ℤ(_remainder_)。
         </emu-alg>
       </emu-clause>
 
@@ -37353,9 +37353,9 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>RegExpIdentifierName :: RegExpIdentifierName RegExpIdentifierPart</emu-grammar>
         <emu-alg>
-          1. 令 _cps_ 为派生的 |RegExpIdentifierName| 的 RegExpIdentifierCodePoints。
+          1. 令 _codePoints_ 为派生的 |RegExpIdentifierName| 的 RegExpIdentifierCodePoints。
           1. 令 _codePoint_ 为 |RegExpIdentifierPart| 的 RegExpIdentifierCodePoint。
-          1. 返回 _cps_ 和 « _codePoint_ » 的列表连接。
+          1. 返回 _codePoints_ 和 « _codePoint_ » 的列表连接。
         </emu-alg>
       </emu-clause>
 
@@ -48144,13 +48144,13 @@ THH:mm:ss.sss
         <h1>FinalizationRegistry ( _cleanupCallback_ )</h1>
         <p>此函数在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 如果 NewTarget 是 *undefined*，则抛出 *TypeError* 异常。
-          1. 如果 IsCallable(_cleanupCallback_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 如果 NewTarget 为 *undefined*，则抛出一个 *TypeError* 异常。
+          1. 如果 IsCallable(_cleanupCallback_) 为 *false*，则抛出一个 *TypeError* 异常。
           1. 令 _finalizationRegistry_ 为 ? OrdinaryCreateFromConstructor(NewTarget, *"%FinalizationRegistry.prototype%"*, « [[Realm]], [[CleanupCallback]], [[Cells]] »)。
-          1. 令 _func_ 为活动函数对象。
-          1. 将 _finalizationRegistry_.[[Realm]] 设置为 _func_.[[Realm]]。
-          1. 将 _finalizationRegistry_.[[CleanupCallback]] 设置为 HostMakeJobCallback(_cleanupCallback_)。
-          1. 将 _finalizationRegistry_.[[Cells]] 设置为新的空 List。
+          1. 令 _activeFunc_ 为活动函数对象。
+          1. 将 _finalizationRegistry_.[[Realm]] 设为 _activeFunc_.[[Realm]]。
+          1. 将 _finalizationRegistry_.[[CleanupCallback]] 设为 HostMakeJobCallback(_cleanupCallback_)。
+          1. 将 _finalizationRegistry_.[[Cells]] 设为一个新的空 List。
           1. 返回 _finalizationRegistry_。
         </emu-alg>
       </emu-clause>
@@ -51725,17 +51725,17 @@ THH:mm:ss.sss
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
           1. 令 _proxy_ 为 ? ProxyCreate(_target_, _handler_)。
-          1. 令 _revokerClosure_ 为一个新的无参数 Abstract Closure，它不捕获任何内容，并在被调用时执行以下步骤：
+          1. 令 _revokerClosure_ 为一个新的 Abstract Closure，它没有参数、不捕获任何内容，并在被调用时执行以下步骤：
             1. 令 _activeFunc_ 为活动函数对象。
-            1. 令 _p_ 为 _activeFunc_.[[RevocableProxy]]。
-            1. 如果 _p_ 是 *null*，则返回 NormalCompletion(*undefined*)。
-            1. 将 _activeFunc_.[[RevocableProxy]] 设置为 *null*。
-            1. 断言：_p_ 是 Proxy exotic object。
-            1. 将 _p_.[[ProxyTarget]] 设置为 *null*。
-            1. 将 _p_.[[ProxyHandler]] 设置为 *null*。
+            1. 令 _revocableProxy_ 为 _activeFunc_.[[RevocableProxy]]。
+            1. 如果 _revocableProxy_ 为 *null*，则返回 NormalCompletion(*undefined*)。
+            1. 将 _activeFunc_.[[RevocableProxy]] 设为 *null*。
+            1. 断言：_revocableProxy_ 是一个 Proxy 异质对象。
+            1. 将 _revocableProxy_.[[ProxyTarget]] 设为 *null*。
+            1. 将 _revocableProxy_.[[ProxyHandler]] 设为 *null*。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _revoker_ 为 CreateBuiltinFunction(_revokerClosure_, 0, *""*, « [[RevocableProxy]] »)。
-          1. 将 _revoker_.[[RevocableProxy]] 设置为 _proxy_。
+          1. 将 _revoker_.[[RevocableProxy]] 设为 _proxy_。
           1. 令 _result_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_result_, *"proxy"*, _proxy_)。
           1. 执行 ! CreateDataPropertyOrThrow(_result_, *"revoke"*, _revoker_)。
@@ -52006,8 +52006,8 @@ THH:mm:ss.sss
       </dl>
       <emu-alg>
         1. 令 _events_ 为空 Set。
-        1. 对 _execution_.[[EventsRecords]] 的每个 Agent Events Record _aer_，执行：
-          1. 对 _aer_.[[EventList]] 的每个 Memory event _event_，执行：
+        1. 对 _execution_.[[EventsRecords]] 的每个 Agent Events Record _eventsRecord_，执行：
+          1. 对 _eventsRecord_.[[EventList]] 的每个 Memory event _event_，执行：
             1. 将 _event_ 添加到 _events_。
         1. 返回 _events_。
       </emu-alg>
@@ -52103,7 +52103,7 @@ THH:mm:ss.sss
       <h1>is-agent-order-before</h1>
       <p>对于 candidate execution _execution_，其 <dfn>is-agent-order-before</dfn> 关系是 Memory event 上满足以下条件的最小关系。</p>
       <ul>
-        <li>对于事件 _eventA_ 和 _eventB_，如果在 _execution_.[[EventsRecords]] 中存在某个 Agent Events Record _aer_，使得 _aer_.[[EventList]] 同时包含 _eventA_ 和 _eventB_，并且 _eventA_ 在 _aer_.[[EventList]] 的 List 顺序中位于 _eventB_ 之前，则 _eventA_ 在 _execution_ 中 is-agent-order-before _eventB_。</li>
+        <li>对于事件 _eventA_ 和 _eventB_，如果在 _execution_.[[EventsRecords]] 中存在某个 Agent Events Record _eventsRecord_，使得 _eventsRecord_.[[EventList]] 同时包含 _eventA_ 和 _eventB_，并且 _eventA_ 在 _eventsRecord_.[[EventList]] 的 List 顺序中位于 _eventB_ 之前，则 _eventA_ 在 _execution_ 中 is-agent-order-before _eventB_。</li>
       </ul>
 
       <emu-note>
