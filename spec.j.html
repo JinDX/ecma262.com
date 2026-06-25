@@ -12426,6 +12426,28 @@
         1. Completion(_result_)を返す。
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-runcallercontext" type="abstract operation">
+      <h1>
+        RunCallerContext (
+          _value_: ECMAScript言語値または~empty~,
+        ): Completion Record
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>これは呼び出し元コンテキストを再開し（再開値として_value_を送信する）、もしあればその結果を待つ。</dd>
+      </dl>
+      <emu-alg>
+        1. _genContext_を、実行中の実行コンテキストとする。
+        1. 実行コンテキストスタックから_genContext_を取り除き、実行コンテキストスタックの先頭にある実行コンテキストを実行中の実行コンテキストとして復元する。
+        1. _callerContext_を、実行中の実行コンテキストとする。
+        1. NormalCompletion(_value_)を渡して、_callerContext_を再開する。
+        1. NOTE: 上記の手順は制御を_callerContext_に移し、一時停止する。このアルゴリズムで一時停止が解除され、後続の手順へ制御が進む唯一の方法は、_genContext_が再び再開されることであり、それは決して起こらない可能性がある。
+        1. Assert: _genContext_は実行中の実行コンテキストである。
+        1. _result_を、_genContext_がたった今再開されたときのCompletion Recordとする。
+        1. Completion(_result_)を返す。
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-jobs" oldids="sec-jobs-and-job-queues,sec-enqueuejob,sec-runjobs,job-queue">
@@ -52064,20 +52086,14 @@ THH:mm:ss.sss
           ): either a normal completion containing an ECMAScript language value or an abrupt completion
         </h1>
         <dl class="header">
-          <dt>skip return checks</dt>
-          <dd>true</dd>
         </dl>
         <emu-alg>
-          1. _genContext_をrunning execution contextとする。
-          1. Assert: _genContext_はgeneratorのexecution contextである。
-          1. _gen_を_genContext_のGenerator componentのvalueとする。
+          1. _genContext_を、実行中の実行コンテキストとする。
+          1. Assert: _genContext_はジェネレータの実行コンテキストである。
+          1. _gen_を、_genContext_のGeneratorコンポーネントの値とする。
           1. Assert: GetGeneratorKind()は~sync~である。
           1. _gen_.[[GeneratorState]]を~suspended-yield~に設定する。
-          1. _genContext_をexecution context stackからremoveし、execution context stackのtopにあるexecution contextをrunning execution contextとしてrestoreする。
-          1. _callerContext_をrunning execution contextとする。
-          1. NormalCompletion(_iteratorResult_)を渡して_callerContext_をResumeする。_genContext_が再びresumedされたなら、それがresumedされたCompletion Recordを_resumptionValue_とする。
-          1. Assert: controlがここに到達したなら、_genContext_は再びrunning execution contextである。
-          1. _resumptionValue_を返す。
+          1. Return ? RunCallerContext(_iteratorResult_)。
         </emu-alg>
       </emu-clause>
 
@@ -52440,27 +52456,24 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _genContext_をrunning execution contextとする。
-          1. Assert: _genContext_はgeneratorのexecution contextである。
-          1. _gen_を_genContext_のGenerator componentのvalueとする。
+          1. _genContext_を、実行中の実行コンテキストとする。
+          1. Assert: _genContext_はジェネレータの実行コンテキストである。
+          1. _gen_を、_genContext_のGeneratorコンポーネントの値とする。
           1. Assert: GetGeneratorKind()は~async~である。
-          1. _completion_をNormalCompletion(_arg_)とする。
-          1. Assert: execution context stackは少なくとも2つのelementsを持つ。
-          1. _previousContext_をexecution context stackの上から2番目のelementとする。
-          1. _previousRealm_を_previousContext_のRealmとする。
+          1. _completion_を、NormalCompletion(_arg_)とする。
+          1. Assert: 実行コンテキストスタックには少なくとも2つの要素がある。
+          1. _previousContext_を、実行コンテキストスタックの先頭から2番目の要素とする。
+          1. _previousRealm_を、_previousContext_のRealmとする。
           1. AsyncGeneratorCompleteStep(_gen_, _completion_, *false*, _previousRealm_)を実行する。
-          1. _queue_を_gen_.[[AsyncGeneratorQueue]]とする。
-          1. _queue_がemptyでないなら、
-            1. NOTE: Executionはgeneratorをsuspendingすることなくcontinueする。
-            1. _toYield_を_queue_のfirst elementとする。
-            1. _resumptionValue_をCompletion(_toYield_.[[Completion]])とする。
-            1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)を返す。
+          1. _queue_を、_gen_.[[AsyncGeneratorQueue]]とする。
+          1. _queue_が空でない場合、
+            1. NOTE: 実行はジェネレータを中断せずに継続する。
+            1. _toYield_を、_queue_の最初の要素とする。
+            1. _resumptionValue_を、Completion(_toYield_.[[Completion]])とする。
+            1. Return ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
           1. _gen_.[[AsyncGeneratorState]]を~suspended-yield~に設定する。
-          1. _genContext_をexecution context stackからremoveし、execution context stackのtopにあるexecution contextをrunning execution contextとしてrestoreする。
-          1. _callerContext_をrunning execution contextとする。
-          1. *undefined*を渡して_callerContext_をResumeする。_genContext_が再びresumedされたなら、それがresumedされたCompletion Recordを_resumptionValue_とする。
-          1. Assert: controlがここに到達したなら、_genContext_は再びrunning execution contextである。
-          1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)を返す。
+          1. _resumptionValue_を、Completion(RunCallerContext(*undefined*))とする。
+          1. Return ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
         </emu-alg>
       </emu-clause>
 
@@ -52694,24 +52707,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _asyncContext_をrunning execution contextとする。
-          1. _promise_を ? PromiseResolve(%Promise%, _arg_) とする。
-          1. _fulfilledClosure_を、parameters (_v_)を持ち、_asyncContext_をcaptureし、呼び出されたときに以下のstepsを実行するnew Abstract Closureとする：
+          1. _asyncContext_を、実行中の実行コンテキストとする。
+          1. _promise_を、? PromiseResolve(%Promise%, _arg_)とする。
+          1. _fulfilledClosure_を、_asyncContext_をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ(_v_)を持つ新しいAbstract Closureとする。
             1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))を実行する。
-            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的にignoredされる。
+            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的に無視される。
             1. NormalCompletion(*undefined*)を返す。
-          1. _onFulfilled_をCreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)とする。
-          1. _rejectedClosure_を、parameters (_reason_)を持ち、_asyncContext_をcaptureし、呼び出されたときに以下のstepsを実行するnew Abstract Closureとする：
+          1. _onFulfilled_を、CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)とする。
+          1. _rejectedClosure_を、_asyncContext_をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ(_reason_)を持つ新しいAbstract Closureとする。
             1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))を実行する。
-            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的にignoredされる。
+            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的に無視される。
             1. NormalCompletion(*undefined*)を返す。
-          1. _onRejected_をCreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)とする。
+          1. _onRejected_を、CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)とする。
           1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)を実行する。
-          1. _asyncContext_をexecution context stackからremoveし、execution context stackのtopにあるexecution contextをrunning execution contextとしてrestoreする。
-          1. _callerContext_をrunning execution contextとする。
-          1. ~empty~を渡して_callerContext_をResumeする。_asyncContext_が再びresumedされたなら、それがresumedされたCompletion Recordを_completion_とする。
-          1. Assert: controlがここに到達したなら、_asyncContext_は再びrunning execution contextである。
-          1. _completion_を返す。
+          1. Return ? RunCallerContext(~empty~)。
         </emu-alg>
       </emu-clause>
     </emu-clause>

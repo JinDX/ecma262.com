@@ -12408,6 +12408,28 @@
         1. Completion(_result_)를 반환한다.
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-runcallercontext" type="abstract operation">
+      <h1>
+        RunCallerContext (
+          _value_: ECMAScript 언어 값 또는 ~empty~,
+        ): Completion Record
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>호출자 컨텍스트를 재개하고(_value_를 재개 값으로 보냄), 결과가 있으면 그 결과를 기다린다.</dd>
+      </dl>
+      <emu-alg>
+        1. _genContext_를 실행 중인 실행 컨텍스트라 하자.
+        1. 실행 컨텍스트 스택에서 _genContext_를 제거하고, 실행 컨텍스트 스택의 맨 위에 있는 실행 컨텍스트를 실행 중인 실행 컨텍스트로 복원한다.
+        1. _callerContext_를 실행 중인 실행 컨텍스트라 하자.
+        1. _callerContext_를 재개하며, NormalCompletion(_value_)를 전달한다.
+        1. NOTE: 위 단계는 제어를 _callerContext_로 이전하고 일시 중지한다. 이것이 일시 중지를 해제하고 이 알고리즘의 이후 단계로 제어가 진행되게 하는 유일한 방법은 _genContext_가 다시 재개되는 것이며, 이는 결코 일어나지 않을 수도 있다.
+        1. Assert: _genContext_는 실행 중인 실행 컨텍스트이다.
+        1. _result_를 _genContext_가 방금 재개될 때 함께 전달된 Completion Record라 하자.
+        1. Completion(_result_)를 반환한다.
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-jobs" oldids="sec-jobs-and-job-queues,sec-enqueuejob,sec-runjobs,job-queue">
@@ -52045,20 +52067,14 @@ THH:mm:ss.sss
           ): either a normal completion containing an ECMAScript language value or an abrupt completion
         </h1>
         <dl class="header">
-          <dt>skip return checks</dt>
-          <dd>true</dd>
         </dl>
         <emu-alg>
-          1. _genContext_를 running execution context로 둔다.
-          1. Assert: _genContext_는 generator의 execution context이다.
-          1. _gen_을 _genContext_의 Generator component의 value로 둔다.
+          1. _genContext_를 실행 중인 실행 컨텍스트라 하자.
+          1. Assert: _genContext_는 제너레이터의 실행 컨텍스트이다.
+          1. _gen_을 _genContext_의 Generator 컴포넌트 값이라 하자.
           1. Assert: GetGeneratorKind()는 ~sync~이다.
           1. _gen_.[[GeneratorState]]를 ~suspended-yield~로 설정한다.
-          1. execution context stack에서 _genContext_를 remove하고, execution context stack의 top에 있는 execution context를 running execution context로 restore한다.
-          1. _callerContext_를 running execution context로 둔다.
-          1. NormalCompletion(_iteratorResult_)를 passing하여 _callerContext_를 Resume한다. _genContext_가 ever resumed again되면, _resumptionValue_를 그것이 resumed되는 Completion Record로 둔다.
-          1. Assert: control이 여기 도달하면, _genContext_는 다시 running execution context이다.
-          1. _resumptionValue_를 반환한다.
+          1. ? RunCallerContext(_iteratorResult_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -52421,26 +52437,23 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _genContext_를 running execution context로 둔다.
-          1. Assert: _genContext_는 generator의 execution context이다.
-          1. _gen_을 _genContext_의 Generator component의 value로 둔다.
+          1. _genContext_를 실행 중인 실행 컨텍스트라 하자.
+          1. Assert: _genContext_는 제너레이터의 실행 컨텍스트이다.
+          1. _gen_을 _genContext_의 Generator 컴포넌트 값이라 하자.
           1. Assert: GetGeneratorKind()는 ~async~이다.
-          1. _completion_을 NormalCompletion(_arg_)로 둔다.
-          1. Assert: execution context stack은 at least two elements를 가진다.
-          1. _previousContext_를 execution context stack의 second to top element로 둔다.
-          1. _previousRealm_을 _previousContext_의 Realm으로 둔다.
+          1. _completion_을 NormalCompletion(_arg_)이라 하자.
+          1. Assert: 실행 컨텍스트 스택에는 최소 두 개의 요소가 있다.
+          1. _previousContext_를 실행 컨텍스트 스택의 위에서 두 번째 요소라 하자.
+          1. _previousRealm_을 _previousContext_의 Realm이라 하자.
           1. AsyncGeneratorCompleteStep(_gen_, _completion_, *false*, _previousRealm_)을 수행한다.
-          1. _queue_를 _gen_.[[AsyncGeneratorQueue]]로 둔다.
-          1. _queue_가 empty가 아니면, 다음을 수행한다.
-            1. NOTE: Execution은 generator를 suspending하지 않고 continues한다.
-            1. _toYield_를 _queue_의 first element로 둔다.
-            1. _resumptionValue_를 Completion(_toYield_.[[Completion]])로 둔다.
+          1. _queue_를 _gen_.[[AsyncGeneratorQueue]]라 하자.
+          1. _queue_가 비어 있지 않으면,
+            1. NOTE: 실행은 제너레이터를 일시 중단하지 않고 계속된다.
+            1. _toYield_를 _queue_의 첫 번째 요소라 하자.
+            1. _resumptionValue_를 Completion(_toYield_.[[Completion]])이라 하자.
             1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)를 반환한다.
           1. _gen_.[[AsyncGeneratorState]]를 ~suspended-yield~로 설정한다.
-          1. execution context stack에서 _genContext_를 remove하고, execution context stack의 top에 있는 execution context를 running execution context로 restore한다.
-          1. _callerContext_를 running execution context로 둔다.
-          1. *undefined*를 passing하여 _callerContext_를 Resume한다. _genContext_가 ever resumed again되면, _resumptionValue_를 그것이 resumed되는 Completion Record로 둔다.
-          1. Assert: control이 여기 도달하면, _genContext_는 다시 running execution context이다.
+          1. _resumptionValue_를 Completion(RunCallerContext(*undefined*))이라 하자.
           1. ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -52675,24 +52688,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _asyncContext_를 running execution context로 둔다.
-          1. _promise_를 ? PromiseResolve(%Promise%, _arg_)로 둔다.
-          1. _fulfilledClosure_를 parameters (_v_)를 가지고 _asyncContext_를 captures하며 호출될 때 다음 steps를 수행하는 new Abstract Closure로 둔다:
-            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))를 수행한다.
-            1. NOTE: RunSuspendedContext가 반환하는 Completion Record는 intentionally ignored된다.
-            1. NormalCompletion(*undefined*)를 반환한다.
-          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)로 둔다.
-          1. _rejectedClosure_를 parameters (_reason_)를 가지고 _asyncContext_를 captures하며 호출될 때 다음 steps를 수행하는 new Abstract Closure로 둔다:
-            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))를 수행한다.
-            1. NOTE: RunSuspendedContext가 반환하는 Completion Record는 intentionally ignored된다.
-            1. NormalCompletion(*undefined*)를 반환한다.
-          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)로 둔다.
-          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)를 수행한다.
-          1. execution context stack에서 _asyncContext_를 remove하고, execution context stack의 top에 있는 execution context를 running execution context로 restore한다.
-          1. _callerContext_를 running execution context로 둔다.
-          1. ~empty~를 passing하여 _callerContext_를 Resume한다. _asyncContext_가 ever resumed again되면, _completion_을 그것이 resumed되는 Completion Record로 둔다.
-          1. Assert: control이 여기 도달하면, _asyncContext_는 다시 running execution context이다.
-          1. _completion_을 반환한다.
+          1. _asyncContext_를 실행 중인 실행 컨텍스트라 하자.
+          1. _promise_를 ? PromiseResolve(%Promise%, _arg_)라 하자.
+          1. _fulfilledClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_v_)를 갖는 새로운 Abstract Closure라 하자.
+            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))을 수행한다.
+            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
+            1. NormalCompletion(*undefined*)을 반환한다.
+          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)라 하자.
+          1. _rejectedClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_reason_)를 갖는 새로운 Abstract Closure라 하자.
+            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))을 수행한다.
+            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
+            1. NormalCompletion(*undefined*)을 반환한다.
+          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)라 하자.
+          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)을 수행한다.
+          1. ? RunCallerContext(~empty~)를 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>

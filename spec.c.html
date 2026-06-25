@@ -12408,6 +12408,28 @@
         1. 返回 Completion(_result_)。
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-runcallercontext" type="abstract operation">
+      <h1>
+        RunCallerContext (
+          _value_: 一个 ECMAScript 语言值或 ~empty~,
+        ): 一个完成记录
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>它恢复调用方上下文（将 _value_ 作为恢复值发送给它），并等待结果（如果有）。</dd>
+      </dl>
+      <emu-alg>
+        1. 令 _genContext_ 为运行中的执行上下文。
+        1. 从执行上下文栈中移除 _genContext_，并将位于执行上下文栈顶部的执行上下文恢复为运行中的执行上下文。
+        1. 令 _callerContext_ 为运行中的执行上下文。
+        1. 恢复 _callerContext_，传入 NormalCompletion(_value_)。
+        1. 注：上述步骤将控制转移给 _callerContext_ 并暂停。使其解除暂停并让控制继续到此算法后续步骤的唯一方式，是再次恢复 _genContext_，而这可能永远不会发生。
+        1. 断言：_genContext_ 是运行中的执行上下文。
+        1. 令 _result_ 为 _genContext_ 刚刚被恢复时所用的完成记录。
+        1. 返回 Completion(_result_)。
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-jobs" oldids="sec-jobs-and-job-queues,sec-enqueuejob,sec-runjobs,job-queue">
@@ -52045,20 +52067,14 @@ THH:mm:ss.sss
           ): either a normal completion containing an ECMAScript language value or an abrupt completion
         </h1>
         <dl class="header">
-          <dt>skip return checks</dt>
-          <dd>true</dd>
         </dl>
         <emu-alg>
           1. 令 _genContext_ 为运行中的执行上下文。
-          1. 断言：_genContext_ 是 generator 的执行上下文。
+          1. 断言：_genContext_ 是一个生成器的执行上下文。
           1. 令 _gen_ 为 _genContext_ 的 Generator 组件的值。
           1. 断言：GetGeneratorKind() 是 ~sync~。
           1. 将 _gen_.[[GeneratorState]] 设置为 ~suspended-yield~。
-          1. 从执行上下文栈中移除 _genContext_，并将执行上下文栈顶部的执行上下文恢复为运行中的执行上下文。
-          1. 令 _callerContext_ 为运行中的执行上下文。
-          1. 恢复 _callerContext_，并传入 NormalCompletion(_iteratorResult_)。如果 _genContext_ 再次被恢复，则令 _resumptionValue_ 为恢复它所用的 Completion Record。
-          1. 断言：如果控制流到达这里，则 _genContext_ 再次是运行中的执行上下文。
-          1. 返回 _resumptionValue_。
+          1. 返回 ? RunCallerContext(_iteratorResult_)。
         </emu-alg>
       </emu-clause>
 
@@ -52422,7 +52438,7 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 令 _genContext_ 为运行中的执行上下文。
-          1. 断言：_genContext_ 是 generator 的执行上下文。
+          1. 断言：_genContext_ 是一个生成器的执行上下文。
           1. 令 _gen_ 为 _genContext_ 的 Generator 组件的值。
           1. 断言：GetGeneratorKind() 是 ~async~。
           1. 令 _completion_ 为 NormalCompletion(_arg_)。
@@ -52431,16 +52447,13 @@ THH:mm:ss.sss
           1. 令 _previousRealm_ 为 _previousContext_ 的 Realm。
           1. 执行 AsyncGeneratorCompleteStep(_gen_, _completion_, *false*, _previousRealm_)。
           1. 令 _queue_ 为 _gen_.[[AsyncGeneratorQueue]]。
-          1. 如果 _queue_ 不是空，则
-            1. 注：执行继续进行而不挂起 generator。
+          1. 如果 _queue_ 非空，则
+            1. 注：执行会继续，而不会挂起该生成器。
             1. 令 _toYield_ 为 _queue_ 的第一个元素。
             1. 令 _resumptionValue_ 为 Completion(_toYield_.[[Completion]])。
             1. 返回 ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
           1. 将 _gen_.[[AsyncGeneratorState]] 设置为 ~suspended-yield~。
-          1. 从执行上下文栈中移除 _genContext_，并将执行上下文栈顶部的执行上下文恢复为运行中的执行上下文。
-          1. 令 _callerContext_ 为运行中的执行上下文。
-          1. 恢复 _callerContext_，并传入 *undefined*。如果 _genContext_ 再次被恢复，则令 _resumptionValue_ 为恢复它所用的 Completion Record。
-          1. 断言：如果控制流到达这里，则 _genContext_ 再次是运行中的执行上下文。
+          1. 令 _resumptionValue_ 为 Completion(RunCallerContext(*undefined*))。
           1. 返回 ? AsyncGeneratorUnwrapYieldResumption(_resumptionValue_)。
         </emu-alg>
       </emu-clause>
@@ -52677,22 +52690,18 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _asyncContext_ 为运行中的执行上下文。
           1. 令 _promise_ 为 ? PromiseResolve(%Promise%, _arg_)。
-          1. 令 _fulfilledClosure_ 为一个新的 Abstract Closure，其参数为 (_v_)，捕获 _asyncContext_，并在被调用时执行以下步骤：
+          1. 令 _fulfilledClosure_ 为一个新的抽象闭包，其参数为 (_v_)，它捕获 _asyncContext_ 并在被调用时执行以下步骤：
             1. 执行 Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))。
-            1. 注：有意忽略 RunSuspendedContext 返回的 Completion Record。
+            1. 注：RunSuspendedContext 返回的完成记录会被有意忽略。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)。
-          1. 令 _rejectedClosure_ 为一个新的 Abstract Closure，其参数为 (_reason_)，捕获 _asyncContext_，并在被调用时执行以下步骤：
+          1. 令 _rejectedClosure_ 为一个新的抽象闭包，其参数为 (_reason_)，它捕获 _asyncContext_ 并在被调用时执行以下步骤：
             1. 执行 Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))。
-            1. 注：有意忽略 RunSuspendedContext 返回的 Completion Record。
+            1. 注：RunSuspendedContext 返回的完成记录会被有意忽略。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _onRejected_ 为 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)。
           1. 执行 PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)。
-          1. 从执行上下文栈中移除 _asyncContext_，并将执行上下文栈顶部的执行上下文恢复为运行中的执行上下文。
-          1. 令 _callerContext_ 为运行中的执行上下文。
-          1. 恢复 _callerContext_，并传入 ~empty~。如果 _asyncContext_ 再次被恢复，则令 _completion_ 为恢复它所用的 Completion Record。
-          1. 断言：如果控制流到达这里，则 _asyncContext_ 再次是运行中的执行上下文。
-          1. 返回 _completion_。
+          1. 返回 ? RunCallerContext(~empty~)。
         </emu-alg>
       </emu-clause>
     </emu-clause>
