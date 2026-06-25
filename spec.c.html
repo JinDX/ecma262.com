@@ -1356,7 +1356,7 @@
         <p>众所周知的 symbols 是由本规范的算法显式引用的内置 Symbol 值。它们通常用作属性的键，而这些属性的值充当规范算法的扩展点。除非另有规定，众所周知的 symbol 值由所有 realms 共享（<emu-xref href="#sec-code-realms"></emu-xref>）。</p>
         <p>在本规范中，使用标准<emu-xref href="#sec-well-known-intrinsic-objects">内在记号</emu-xref>引用众所周知的 symbol，其中该内在是 <emu-xref href="#table-well-known-symbols"></emu-xref> 中列出的值之一。</p>
         <emu-note>本规范的早期版本使用形如 @@name 的记号，而当前版本会使用 `%Symbol.name%`。特别地，曾使用以下名称：@@asyncIterator、@@hasInstance、@@isConcatSpreadable、@@<emu-not-ref>iterator</emu-not-ref>、@@match、@@matchAll、@@replace、@@search、@@species、@@split、@@toPrimitive、@@toStringTag 和 @@unscopables。</emu-note>
-        <emu-table id="table-well-known-symbols" caption="Well-known Symbols" oldids="table-1">
+        <emu-table id="table-well-known-symbols" caption="众所周知的 Symbol" oldids="table-1">
           <table>
             <thead>
               <tr>
@@ -1364,7 +1364,7 @@
                   规范名称
                 </th>
                 <th>
-                  [[Description]]
+                  [[描述]]
                 </th>
                 <th>
                   值和用途
@@ -1373,13 +1373,35 @@
             </thead>
             <tr>
               <td>
+                <dfn>%Symbol.asyncDispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.asyncDispose"*
+              </td>
+              <td>
+                一个方法，用于在对象上异步执行资源清理。当其包含作用域的求值完成时，由 AsyncDisposableStack 对象和 `await using` 声明调用。
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <dfn>%Symbol.asyncIterator%</dfn>
               </td>
               <td>
                 *"Symbol.asyncIterator"*
               </td>
               <td>
-                返回对象默认 async iterator 的方法。由 `for`-`await`-`of` 语句的语义调用。
+                一个方法，用于返回对象的默认异步迭代器。由 `for`-`await`-`of` 语句的语义调用。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dfn>%Symbol.dispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.dispose"*
+              </td>
+              <td>
+                一个方法，用于在对象上执行显式资源清理。当其包含作用域的求值完成时，由 DisposableStack 对象、AsyncDisposableStack 对象和 `using` 声明调用。
               </td>
             </tr>
             <tr>
@@ -1390,7 +1412,7 @@
                 *"Symbol.hasInstance"*
               </td>
               <td>
-                判断构造函数对象是否将某对象识别为该构造函数实例之一的方法。由 `instanceof` 运算符的语义调用。
+                一个方法，用于确定构造函数对象是否将某个对象识别为该构造函数的实例之一。由 `instanceof` 运算符的语义调用。
               </td>
             </tr>
             <tr>
@@ -1401,7 +1423,7 @@
                 *"Symbol.isConcatSpreadable"*
               </td>
               <td>
-                一个 Boolean 值属性，如果为 true，则表示对象应由 <emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref> 扁平化为其数组元素。
+                一个 Boolean 值属性，如果为 true，则指示对象应由 <emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref> 展平为其数组元素。
               </td>
             </tr>
             <tr>
@@ -1412,7 +1434,7 @@
                 *"Symbol.iterator"*
               </td>
               <td>
-                返回对象默认 iterator 的方法。由 for-of 语句的语义调用。
+                一个方法，用于返回对象的默认迭代器。由 for-of 语句的语义调用。
               </td>
             </tr>
             <tr>
@@ -1423,7 +1445,7 @@
                 *"Symbol.match"*
               </td>
               <td>
-                将正则表达式与字符串进行匹配的正则表达式方法。由 <emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref> 方法调用。
+                一个正则表达式方法，用于将正则表达式与字符串进行匹配。由 <emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref> 方法调用。
               </td>
             </tr>
             <tr>
@@ -1434,7 +1456,7 @@
                 *"Symbol.matchAll"*
               </td>
               <td>
-                返回一个迭代器的正则表达式方法，该迭代器产生正则表达式对字符串的匹配。由 <emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref> 方法调用。
+                一个正则表达式方法，用于返回一个迭代器，该迭代器产出正则表达式与字符串匹配的结果。由 <emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref> 方法调用。
               </td>
             </tr>
             <tr>
@@ -1445,7 +1467,7 @@
                 *"Symbol.replace"*
               </td>
               <td>
-                替换字符串中匹配子字符串的正则表达式方法。由 <emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref> 方法调用。
+                一个正则表达式方法，用于替换字符串中匹配的子字符串。由 <emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref> 方法调用。
               </td>
             </tr>
             <tr>
@@ -1456,7 +1478,7 @@
                 *"Symbol.search"*
               </td>
               <td>
-                返回字符串内匹配正则表达式的索引的正则表达式方法。由 <emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref> 方法调用。
+                一个正则表达式方法，用于返回字符串中与正则表达式匹配的位置索引。由 <emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref> 方法调用。
               </td>
             </tr>
             <tr>
@@ -1467,7 +1489,7 @@
                 *"Symbol.species"*
               </td>
               <td>
-                一个函数值属性，是用于创建派生对象的构造函数。
+                一个 function 值属性，它是用于创建派生对象的构造函数。
               </td>
             </tr>
             <tr>
@@ -1478,7 +1500,7 @@
                 *"Symbol.split"*
               </td>
               <td>
-                在匹配正则表达式的索引处拆分字符串的正则表达式方法。由 <emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref> 方法调用。
+                一个正则表达式方法，用于在与正则表达式匹配的索引处拆分字符串。由 <emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref> 方法调用。
               </td>
             </tr>
             <tr>
@@ -1489,7 +1511,7 @@
                 *"Symbol.toPrimitive"*
               </td>
               <td>
-                将对象转换为对应原始值的方法。由 ToPrimitive 抽象操作调用。
+                一个方法，用于将对象转换为对应的原始值。由 ToPrimitive 抽象操作调用。
               </td>
             </tr>
             <tr>
@@ -1511,7 +1533,7 @@
                 *"Symbol.unscopables"*
               </td>
               <td>
-                一个对象值属性，其自身和继承的属性名是从关联对象的 `with` 环境绑定中排除的属性名。
+                一个 object 值属性，其自身和继承的属性名，是要从关联对象的 `with` 环境绑定中排除的属性名。
               </td>
             </tr>
           </table>
@@ -3459,6 +3481,17 @@
             </tr>
             <tr>
               <td>
+                %AsyncDisposableStack%
+              </td>
+              <td>
+                *"AsyncDisposableStack"*
+              </td>
+              <td>
+                `AsyncDisposableStack` <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>）
+              </td>
+            </tr>
+            <tr>
+              <td>
                 %AsyncFromSyncIteratorPrototype%
               </td>
               <td>
@@ -3474,7 +3507,7 @@
               <td>
               </td>
               <td>
-                async 函数对象的<emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-async-function-constructor"></emu-xref>）
+                async function 对象的 <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-async-function-constructor"></emu-xref>）
               </td>
             </tr>
             <tr>
@@ -3484,7 +3517,7 @@
               <td>
               </td>
               <td>
-                async generator 函数对象的<emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>）
+                async generator function 对象的 <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>）
               </td>
             </tr>
             <tr>
@@ -3504,7 +3537,7 @@
               <td>
               </td>
               <td>
-                所有标准内置 async iterator 对象间接继承自的对象
+                所有标准内置 async iterator 对象都间接继承自的对象
               </td>
             </tr>
             <tr>
@@ -3604,6 +3637,17 @@
               </td>
               <td>
                 `decodeURIComponent` 函数（<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>）
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %DisposableStack%
+              </td>
+              <td>
+                *"DisposableStack"*
+              </td>
+              <td>
+                `DisposableStack` <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-disposablestack-constructor"></emu-xref>）
               </td>
             </tr>
             <tr>
@@ -3733,7 +3777,7 @@
               <td>
               </td>
               <td>
-                generator 函数对象的<emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>）
+                generator function 对象的 <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>）
               </td>
             </tr>
             <tr>
@@ -4040,6 +4084,17 @@
             </tr>
             <tr>
               <td>
+                %SuppressedError%
+              </td>
+              <td>
+                *"SuppressedError"*
+              </td>
+              <td>
+                `SuppressedError` <emu-not-ref>构造函数</emu-not-ref>（<emu-xref href="#sec-suppressederror-constructor"></emu-xref>）
+              </td>
+            </tr>
+            <tr>
+              <td>
                 %Symbol%
               </td>
               <td>
@@ -4186,7 +4241,7 @@
               <td>
               </td>
               <td>
-                由 `Iterator.from` 返回的包装 iterator 对象的原型（<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>）
+                `Iterator.from` 返回的 wrapped iterator 对象的原型（<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>）
               </td>
             </tr>
           </table>
@@ -7340,6 +7395,186 @@
       </emu-alg>
     </emu-clause>
   </emu-clause>
+
+  <emu-clause id="sec-operations-on-disposable-objects">
+    <h1>对可处置对象的操作</h1>
+    <p>参见通用资源管理接口（<emu-xref href="#sec-common-resource-management-interfaces"></emu-xref>）。</p>
+
+    <emu-clause id="sec-disposableresource-records">
+      <h1>DisposableResource 记录</h1>
+      <p><dfn variants="DisposableResource Records">DisposableResource 记录</dfn>是一个记录值，用于封装一个可处置对象以及用于处置该对象的方法。DisposableResource 记录由 CreateDisposableResource 抽象操作产生。</p>
+      <p>DisposableResource 记录具有 <emu-xref href="#table-disposableresource-record-fields"></emu-xref> 中列出的字段：</p>
+      <emu-table id="table-disposableresource-record-fields" caption="DisposableResource 记录字段">
+        <table>
+          <tr>
+            <th>
+              字段名
+            </th>
+            <th>
+              值
+            </th>
+            <th>
+              含义
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[ResourceValue]]
+            </td>
+            <td>
+              一个对象或 *undefined*
+            </td>
+            <td>
+              要被处置的值。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[Kind]]
+            </td>
+            <td>
+              ~sync-dispose~ 或 ~async-dispose~
+            </td>
+            <td>
+              指示资源是由 `using` 声明或 DisposableStack 对象添加的（~sync-dispose~），还是由 `await using` 声明或 AsyncDisposableStack 对象添加的（~async-dispose~）。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposeMethod]]
+            </td>
+            <td>
+              一个函数对象或 *undefined*
+            </td>
+            <td>
+              当资源被处置时，将以 [[ResourceValue]] 作为其 *this* 值调用的函数对象。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+
+    <emu-clause id="sec-adddisposableresource" type="abstract operation">
+      <h1>
+        AddDisposableResource (
+          _disposableResourceStack_: DisposableResource 记录的列表，,
+          _value_: ECMAScript 语言值，,
+          _kind_: ~sync-dispose~ 或 ~async-dispose~，,
+          optional _method_: 函数对象，,
+        ): 含有 ~unused~ 的正常完成，或抛出完成
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 如果存在 _method_，则
+          1. 断言：_value_ 是 *undefined*。
+          1. 令 _resource_ 为 ? CreateDisposableResource(*undefined*, _kind_, _method_)。
+        1. 否则，
+          1. 如果 _value_ 是 *null* 或 *undefined*，且 _kind_ 是 ~sync-dispose~，则返回 ~unused~。
+          1. 注：当 _value_ 是 *null* 或 *undefined*，且 _kind_ 是 ~async-dispose~ 时，我们会记录该资源已被求值，以确保稍后处置资源时仍将执行 Await。
+          1. 令 _resource_ 为 ? CreateDisposableResource(_value_, _kind_)。
+        1. 将 _resource_ 追加到 _disposableResourceStack_。
+        1. 返回 ~unused~。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-createdisposableresource" type="abstract operation">
+      <h1>
+        CreateDisposableResource (
+          _value_: ECMAScript 语言值，,
+          _kind_: ~sync-dispose~ 或 ~async-dispose~，,
+          optional _method_: 函数对象，,
+        ): 含有 DisposableResource 记录的正常完成，或抛出完成
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 如果不存在 _method_，则
+          1. 如果 _value_ 是 *null* 或 *undefined*，则
+            1. 将 _value_ 设置为 *undefined*。
+            1. 将 _method_ 设置为 *undefined*。
+          1. 否则，
+            1. 将 _method_ 设置为 ? GetDisposeMethod(_value_, _kind_)。
+            1. 如果 _method_ 是 *undefined*，则抛出 *TypeError* 异常。
+        1. 返回 DisposableResource 记录 { [[ResourceValue]]: _value_, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ }。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getdisposemethod" type="abstract operation">
+      <h1>
+        GetDisposeMethod (
+          _value_: ECMAScript 语言值，,
+          _kind_: ~sync-dispose~ 或 ~async-dispose~，,
+        ): 含有函数对象或 *undefined* 的正常完成，或抛出完成
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 如果 _value_ 不是对象，则抛出 *TypeError* 异常。
+        1. 如果 _kind_ 是 ~sync-dispose~，则返回 ? GetMethod(_value_, %Symbol.dispose%)。
+        1. 断言：_kind_ 是 ~async-dispose~。
+        1. 令 _asyncMethod_ 为 ? GetMethod(_value_, %Symbol.asyncDispose%)。
+        1. 如果 _asyncMethod_ 不是 *undefined*，则返回 _asyncMethod_。
+        1. 令 _syncMethod_ 为 ? GetMethod(_value_, %Symbol.dispose%)。
+        1. 如果 _syncMethod_ 是 *undefined*，则返回 *undefined*。
+        1. 令 _closure_ 为一个新的抽象闭包，该闭包没有参数，捕获 _syncMethod_，并在被调用时执行以下步骤：
+          1. 令 _obj_ 为 *this* 值。
+          1. 令 _promiseCapability_ 为 ! NewPromiseCapability(%Promise%)。
+          1. 令 _result_ 为 Completion(Call(_syncMethod_, _obj_))。
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_)。
+          1. 执行 ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)。
+          1. 返回 _promiseCapability_.[[Promise]]。
+        1. 注：此函数对用户代码不可观察。它用于确保从同步 `%Symbol.dispose%` 方法返回的 Promise 不会被 awaited，并且同步异常会被转换为被拒绝的 Promise。
+        1. 返回 CreateBuiltinFunction(_closure_, 0, *""*, « »)。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-disposeresources" type="abstract operation">
+      <h1>
+        DisposeResources (
+          _disposableResourceStack_: DisposableResource 记录的列表，,
+          _completion_: 含有 ECMAScript 语言值或 ~empty~ 的正常完成，或突兀完成，,
+        ): 含有 ECMAScript 语言值或 ~empty~ 的正常完成，或突兀完成
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 令 _needsAwait_ 为 *false*。
+        1. 令 _hasAwaited_ 为 *false*。
+        1. 令 _outputCompletion_ 为 _completion_。
+        1. 对 _disposableResourceStack_ 的每个元素 _resource_，按列表逆序执行
+          1. 令 _value_ 为 _resource_.[[ResourceValue]]。
+          1. 令 _kind_ 为 _resource_.[[Kind]]。
+          1. 令 _method_ 为 _resource_.[[DisposeMethod]]。
+          1. 如果 _kind_ 是 ~sync-dispose~、_needsAwait_ 是 *true*，并且 _hasAwaited_ 是 *false*，则
+            1. 执行 ! Await(*undefined*)。
+            1. 将 _needsAwait_ 设置为 *false*。
+          1. 如果 _method_ 不是 *undefined*，则
+            1. 令 _result_ 为 Completion(Call(_method_, _value_))。
+            1. 如果 _result_ 是正常完成且 _kind_ 是 ~async-dispose~，则
+              1. 将 _result_ 设置为 Completion(Await(_result_.[[Value]]))。
+              1. 将 _hasAwaited_ 设置为 *true*。
+            1. 如果 _result_ 是抛出完成，则
+              1. 如果 _outputCompletion_ 是抛出完成，则
+                1. 将 _result_ 设置为 _result_.[[Value]]。
+                1. 令 _suppressed_ 为 _outputCompletion_.[[Value]]。
+                1. 令 _error_ 为新创建的 *SuppressedError* 对象。
+                1. 执行 CreateNonEnumerableDataPropertyOrThrow(_error_, *"error"*, _result_)。
+                1. 执行 CreateNonEnumerableDataPropertyOrThrow(_error_, *"suppressed"*, _suppressed_)。
+                1. 将 _outputCompletion_ 设置为 ThrowCompletion(_error_)。
+              1. 否则，
+                1. 将 _outputCompletion_ 设置为 _result_。
+          1. 否则，
+            1. 断言：_kind_ 是 ~async-dispose~。
+            1. 将 _needsAwait_ 设置为 *true*。
+            1. 注：这只能表示 `await using` 声明的初始化值为 *null* 或 *undefined* 的情况。
+        1. 如果 _needsAwait_ 是 *true* 且 _hasAwaited_ 是 *false*，则
+          1. 执行 ! Await(*undefined*)。
+        1. 注：此时 _disposableResourceStack_ 将永远不会再被使用。在实现中可以丢弃 _disposableResourceStack_ 的内容，例如通过垃圾回收。
+        1. 返回 ? _outputCompletion_。
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-syntax-directed-operations">
@@ -7380,6 +7615,16 @@
         1. 返回 « *"await"* »。
       </emu-alg>
       <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 |BindingList| 的 BoundNames。
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
       <emu-alg>
         1. 返回 |BindingList| 的 BoundNames。
       </emu-alg>
@@ -7658,6 +7903,16 @@
         1. 返回 *true*。
       </emu-alg>
       <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>
         FunctionDeclaration :
           `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
           `function` `(` FormalParameters `)` `{` FunctionBody `}`
@@ -7697,6 +7952,124 @@
       <emu-note>
         <p>无需将 `export default` |AssignmentExpression| 视为常量声明，因为没有语法允许对用于引用模块默认对象的内部绑定名称进行赋值。</p>
       </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>
+        ForDeclaration :
+          `using` ForBinding
+          `await` `using` ForBinding
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isawaitusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsAwaitUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-static-semantics-lexicallydeclarednames" oldids="sec-block-static-semantics-lexicallydeclarednames,sec-switch-statement-static-semantics-lexicallydeclarednames,sec-labelled-statements-static-semantics-lexicallydeclarednames,sec-function-definitions-static-semantics-lexicallydeclarednames,sec-arrow-function-definitions-static-semantics-lexicallydeclarednames,sec-async-arrow-function-definitions-static-semantics-LexicallyDeclaredNames,sec-scripts-static-semantics-lexicallydeclarednames,sec-module-semantics-static-semantics-lexicallydeclarednames" type="sdo">
@@ -9172,7 +9545,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -9960,7 +10333,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -10114,6 +10487,28 @@
       </emu-grammar>
       <emu-alg>
         1. 返回 ~empty~。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-containsusing" type="sdo">
+      <h1>Static Semantics: ContainsUsing ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
+      <emu-alg>
+        1. 如果派生的 |StatementList| 的 ContainsUsing 是 *true*，则返回 *true*。
+        1. 如果 |StatementListItem| 的 ContainsUsing 是 *true*，则返回 *true*。
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>StatementListItem : Statement</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
+      </emu-alg>
+      <emu-grammar>StatementListItem : Declaration</emu-grammar>
+      <emu-alg>
+        1. 如果 |Declaration| 的 IsUsingDeclaration 是 *true*，则返回 *true*。
+        1. 如果 |Declaration| 的 IsAwaitUsingDeclaration 是 *true*，则返回 *true*。
+        1. 返回 *false*。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -10322,6 +10717,7 @@
       <emu-clause id="sec-declarative-environment-records">
         <h1>声明式环境记录</h1>
         <p>每个 <dfn variants="Declarative Environment Records">Declarative Environment Record</dfn> 都与一个 ECMAScript 程序作用域相关联，该作用域包含变量、常量、let、class、module、import 和/或 function 声明。Declarative Environment Record 绑定其作用域内包含的声明所定义的一组标识符。</p>
+        <p>每个声明式环境记录也都有一个 [[DisposableResourceStack]] 字段，其中包含一个 DisposableResource 记录的列表。此列表中的元素由 `using` 声明和 `await using` 声明跟踪，并且必须在构造该环境记录的求值步骤完成时被处置。</p>
 
         <emu-clause id="sec-declarative-environment-records-hasbinding-n" type="concrete method">
           <h1>
@@ -11440,8 +11836,9 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _envRecord_ 为一个不含绑定的新 Declarative Environment Record。
+          1. 令 _envRecord_ 为一个不包含任何绑定的新声明式环境记录。
           1. 将 _envRecord_.[[OuterEnv]] 设置为 _outerEnv_。
+          1. 将 _envRecord_.[[DisposableResourceStack]] 设置为一个新的空列表。
           1. 返回 _envRecord_。
         </emu-alg>
       </emu-clause>
@@ -11475,12 +11872,13 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _envRecord_ 为一个不含绑定的新 Function Environment Record。
+          1. 令 _envRecord_ 为一个不包含任何绑定的新函数环境记录。
           1. 将 _envRecord_.[[FunctionObject]] 设置为 _func_。
           1. 如果 _func_.[[ThisMode]] 是 ~lexical~，则将 _envRecord_.[[ThisBindingStatus]] 设置为 ~lexical~。
           1. 否则，将 _envRecord_.[[ThisBindingStatus]] 设置为 ~uninitialized~。
           1. 将 _envRecord_.[[NewTarget]] 设置为 _newTarget_。
           1. 将 _envRecord_.[[OuterEnv]] 设置为 _func_.[[Environment]]。
+          1. 将 _envRecord_.[[DisposableResourceStack]] 设置为一个新的空列表。
           1. 返回 _envRecord_。
         </emu-alg>
       </emu-clause>
@@ -11515,8 +11913,9 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _envRecord_ 为一个不含绑定的新 Module Environment Record。
+          1. 令 _envRecord_ 为一个不包含任何绑定的新模块环境记录。
           1. 将 _envRecord_.[[OuterEnv]] 设置为 _outerEnv_。
+          1. 将 _envRecord_.[[DisposableResourceStack]] 设置为一个新的空列表。
           1. 返回 _envRecord_。
         </emu-alg>
       </emu-clause>
@@ -17968,6 +18367,9 @@
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `++`
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `--`
 
+          UsingDeclaration[In, Yield, Await] :
+            `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
+
           ContinueStatement[Yield, Await] :
             `continue` `;`
             `continue` [no LineTerminator here] LabelIdentifier[?Yield, ?Await] `;`
@@ -18021,37 +18423,43 @@
         <p>这些受限产生式的实际效果如下：</p>
         <ul>
           <li>
-            当遇到解析器会将其作为后缀运算符处理的 `++` 或 `--` token，且前一个 token 与该 `++` 或 `--` token 之间至少出现了一个 |LineTerminator| 时，会在该 `++` 或 `--` token 之前自动插入分号。
+            当在解析器会将 `++` 或 `--` 标记视为后缀运算符的位置遇到该标记，并且前一个标记与 `++` 或 `--` 标记之间至少出现了一个 |LineTerminator| 时，会在 `++` 或 `--` 标记之前自动插入分号。
           </li>
           <li>
-            当遇到 `continue`、`break`、`return`、`throw` 或 `yield` token，并且在下一个 token 之前遇到 |LineTerminator| 时，会在 `continue`、`break`、`return`、`throw` 或 `yield` token 之后自动插入分号。
+            当遇到 `using` 标记，并且在 |IdentifierName| 标记之前遇到 |LineTerminator| 时，会在 `using` 标记之后自动插入分号。
           </li>
           <li>
-            当箭头函数形参后面在 `=>` token 之前跟随 |LineTerminator| 时，会自动插入分号，并且该标点符会导致语法错误。
+            当遇到 `continue`、`break`、`return`、`throw` 或 `yield` 标记，并且在下一个标记之前遇到 |LineTerminator| 时，会在 `continue`、`break`、`return`、`throw` 或 `yield` 标记之后自动插入分号。
           </li>
           <li>
-            当 `async` token 后面在 `function`、|IdentifierName| 或 `(` token 之前跟随 |LineTerminator| 时，会自动插入分号，并且该 `async` token 不会被当作与后续 token 属于同一表达式或类元素的一部分。
+            当箭头函数形参后面在 `=>` 标记之前跟着 |LineTerminator| 时，会自动插入分号，并且该标点符会导致语法错误。
           </li>
           <li>
-            当 `async` token 后面在 `*` token 之前跟随 |LineTerminator| 时，会自动插入分号，并且该标点符会导致语法错误。
+            当 `async` 标记后面在 `function`、|IdentifierName| 或 `(` 标记之前跟着 |LineTerminator| 时，会自动插入分号，并且 `async` 标记不会被视为与后续标记属于同一个表达式或类元素。
+          </li>
+          <li>
+            当 `async` 标记后面在 `*` 标记之前跟着 |LineTerminator| 时，会自动插入分号，并且该标点符会导致语法错误。
           </li>
         </ul>
-        <p>由此给 ECMAScript 程序员的实用建议是：</p>
+        <p>由此给 ECMAScript 程序员得出的实际建议是：</p>
         <ul>
           <li>
             后缀 `++` 或 `--` 运算符应与其操作数位于同一行。
           </li>
           <li>
-            `return` 或 `throw` 语句中的 |Expression|，或 `yield` 表达式中的 |AssignmentExpression|，应与 `return`、`throw` 或 `yield` token 从同一行开始。
+            `using` 声明中的 |BindingList| 应与 `using` 标记在同一行开始。
           </li>
           <li>
-            `break` 或 `continue` 语句中的 |LabelIdentifier| 应与 `break` 或 `continue` token 位于同一行。
+            `return` 或 `throw` 语句中的 |Expression|，或者 `yield` 表达式中的 |AssignmentExpression|，应与 `return`、`throw` 或 `yield` 标记在同一行开始。
           </li>
           <li>
-            箭头函数形参的结尾及其 `=>` 应位于同一行。
+            `break` 或 `continue` 语句中的 |LabelIdentifier| 应与 `break` 或 `continue` 标记位于同一行。
           </li>
           <li>
-            异步函数或方法前面的 `async` token 应与紧随其后的 token 位于同一行。
+            箭头函数形参的末尾及其 `=>` 应位于同一行。
+          </li>
+          <li>
+            异步函数或方法之前的 `async` 标记应与紧随其后的标记位于同一行。
           </li>
         </ul>
       </emu-note>
@@ -20087,7 +20495,21 @@
         `-` UnaryExpression[?Yield, ?Await]
         `~` UnaryExpression[?Yield, ?Await]
         `!` UnaryExpression[?Yield, ?Await]
-        [+Await] AwaitExpression[?Yield]
+        [+Await] CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] #awaitusingcover
+
+      CoverAwaitExpressionAndAwaitUsingDeclarationHead[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
+    </emu-grammar>
+
+    <h2>补充语法</h2>
+    <p>
+      在处理产生式<br>
+      <emu-grammar>UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead</emu-grammar><br>
+      的实例时，|CoverAwaitExpressionAndAwaitUsingDeclarationHead| 的解释使用以下语法进行细化：
+    </p>
+    <emu-grammar>
+      AwaitExpression[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
     </emu-grammar>
 
     <emu-clause id="sec-delete-operator">
@@ -21448,12 +21870,13 @@
       </emu-alg>
       <emu-grammar>Block : `{` StatementList `}`</emu-grammar>
       <emu-alg>
-        1. 令 _oldEnv_ 为运行中的执行上下文的 LexicalEnvironment。
+        1. 令 _oldEnv_ 为运行中执行上下文的 LexicalEnvironment。
         1. 令 _blockEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
         1. 执行 BlockDeclarationInstantiation(|StatementList|, _blockEnv_)。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _blockEnv_。
-        1. 令 _blockValue_ 为 Completion(|StatementList| 的 Evaluation)。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+        1. 将运行中执行上下文的 LexicalEnvironment 设置为 _blockEnv_。
+        1. 令 _blockValue_ 为 Completion(|StatementList| 的求值)。
+        1. 将 _blockValue_ 设置为 Completion(DisposeResources(_blockEnv_.[[DisposableResourceStack]], _blockValue_))。
+        1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
         1. 返回 ? _blockValue_。
       </emu-alg>
       <emu-note>
@@ -21523,26 +21946,45 @@
     <h1>声明和变量语句</h1>
 
     <emu-clause id="sec-let-and-const-declarations">
-      <h1>Let 和 Const 声明</h1>
+      <h1>Let、Const、Using 和 Await Using 声明</h1>
       <emu-note>
-        <p>`let` 和 `const` 声明定义的变量，其作用域限定在运行中的执行上下文的 LexicalEnvironment 内。这些变量会在其所在 Environment Record 被实例化时创建，但在该变量的 |LexicalBinding| 被求值之前，不得以任何方式访问。由带有 |Initializer| 的 |LexicalBinding| 定义的变量，会在 |LexicalBinding| 被求值时被赋予其 |Initializer| 的 |AssignmentExpression| 的值，而不是在变量被创建时。如果 `let` 声明中的 |LexicalBinding| 没有 |Initializer|，则在该 |LexicalBinding| 被求值时，该变量会被赋值为 *undefined*。</p>
+        <p>`let`、`const`、`using` 和 `await using` 声明定义的变量，其作用域为运行中执行上下文的 LexicalEnvironment。这些变量会在其包含的环境记录实例化时创建，但在变量的 |LexicalBinding| 被求值之前，不得以任何方式访问。由带有 |Initializer| 的 |LexicalBinding| 定义的变量，会在 |LexicalBinding| 被求值时被赋予其 |Initializer| 的 |AssignmentExpression| 的值，而不是在变量创建时赋值。如果 `let` 声明中的 |LexicalBinding| 没有 |Initializer|，则该变量会在 |LexicalBinding| 被求值时被赋值为 *undefined*。</p>
       </emu-note>
       <h2>语法</h2>
       <emu-grammar type="definition">
         LexicalDeclaration[In, Yield, Await] :
-          LetOrConst BindingList[?In, ?Yield, ?Await] `;`
+          LetOrConst BindingList[?In, ?Yield, ?Await, +Pattern] `;`
+          UsingDeclaration[?In, ?Yield, ?Await]
+          [+Await] AwaitUsingDeclaration[?In, ?Yield]
 
         LetOrConst :
           `let`
           `const`
 
-        BindingList[In, Yield, Await] :
-          LexicalBinding[?In, ?Yield, ?Await]
-          BindingList[?In, ?Yield, ?Await] `,` LexicalBinding[?In, ?Yield, ?Await]
+        UsingDeclaration[In, Yield, Await] :
+          `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
 
-        LexicalBinding[In, Yield, Await] :
+        AwaitUsingDeclaration[In, Yield] :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] [no LineTerminator here] BindingList[?In, ?Yield, +Await, ~Pattern] `;`
+
+        BindingList[In, Yield, Await, Pattern] :
+          LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+          BindingList[?In, ?Yield, ?Await, ?Pattern] `,` LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+
+        LexicalBinding[In, Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]?
-          BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+      </emu-grammar>
+
+      <h2>补充语法</h2>
+      <p>
+        在处理产生式<br>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar><br>
+        的实例时，|CoverAwaitExpressionAndAwaitUsingDeclarationHead| 的解释使用以下语法进行细化：
+      </p>
+      <emu-grammar type="definition">
+        AwaitUsingDeclarationHead :
+          `await` [no LineTerminator here] `using`
       </emu-grammar>
 
       <emu-clause id="sec-let-and-const-declarations-static-semantics-early-errors">
@@ -21556,53 +21998,105 @@
             如果 |BindingList| 的 BoundNames 包含任何重复项，则为语法错误。
           </li>
         </ul>
+        <emu-grammar>
+          UsingDeclaration :
+            `using` BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>
+            如果 |BindingList| 的 BoundNames 包含 *"let"*，则为语法错误。
+          </li>
+          <li>
+            如果 |BindingList| 的 BoundNames 包含任何重复项，则为语法错误。
+          </li>
+        </ul>
+        <emu-grammar>
+          AwaitUsingDeclaration :
+            CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>|CoverAwaitExpressionAndAwaitUsingDeclarationHead| 必须覆盖一个 |AwaitUsingDeclarationHead|。</li>
+          <li>
+            如果 |BindingList| 的 BoundNames 包含 *"let"*，则为语法错误。
+          </li>
+          <li>
+            如果 |BindingList| 的 BoundNames 包含任何重复项，则为语法错误。
+          </li>
+        </ul>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer?</emu-grammar>
         <ul>
           <li>
-            如果不存在 |Initializer|，且包含此 |LexicalBinding| 的 |LexicalDeclaration| 的 IsConstantDeclaration 是 *true*，则为语法错误。
+            如果 |Initializer| 不存在，且包含此 |LexicalBinding| 的 |LexicalDeclaration| 的 IsConstantDeclaration 为 *true*，则为语法错误。
           </li>
         </ul>
       </emu-clause>
 
       <emu-clause id="sec-let-and-const-declarations-runtime-semantics-evaluation" type="sdo">
-        <h1>Runtime Semantics: Evaluation</h1>
+        <h1>Runtime Semantics: 求值</h1>
         <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
         <emu-alg>
-          1. 执行 ? |BindingList| 的 Evaluation。
+          1. 执行以 ~normal~ 为参数的 |BindingList| 的 ? BindingEvaluation。
           1. 返回 ~empty~。
         </emu-alg>
+        <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 执行以 ~sync-dispose~ 为参数的 |BindingList| 的 ? BindingEvaluation。
+          1. 返回 ~empty~。
+        </emu-alg>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 执行以 ~async-dispose~ 为参数的 |BindingList| 的 ? BindingEvaluation。
+          1. 返回 ~empty~。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-bindingevaluation" type="sdo">
+        <h1>
+          Runtime Semantics: BindingEvaluation (
+            _kind_: ~normal~、~sync-dispose~ 或 ~async-dispose~，,
+          ): 含有 ~unused~ 的正常完成，或突兀完成
+        </h1>
+        <dl class="header">
+        </dl>
         <emu-grammar>BindingList : BindingList `,` LexicalBinding</emu-grammar>
         <emu-alg>
-          1. 执行 ? |BindingList| 的 Evaluation。
-          1. 返回 ? |LexicalBinding| 的 Evaluation。
+          1. 执行以 _kind_ 为参数的派生 |BindingList| 的 ? BindingEvaluation。
+          1. 返回以 _kind_ 为参数的 |LexicalBinding| 的 ? BindingEvaluation。
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingIdentifier</emu-grammar>
         <emu-alg>
+          1. 断言：_kind_ 是 ~normal~。
           1. 令 _lhs_ 为 ! ResolveBinding(|BindingIdentifier| 的 StringValue)。
           1. 执行 ! InitializeReferencedBinding(_lhs_, *undefined*)。
-          1. 返回 ~empty~。
+          1. 返回 ~unused~。
         </emu-alg>
         <emu-note>
-          <p>一条静态语义规则确保这种形式的 |LexicalBinding| 永远不会出现在 `const` 声明中。</p>
+          <p>一条静态语义规则确保这种形式的 |LexicalBinding| 永远不会出现在 `const`、`using` 或 `await using` 声明中。</p>
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
           1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
           1. 令 _lhs_ 为 ! ResolveBinding(_bindingId_)。
           1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-            1. 令 _value_ 为 ? 以 _bindingId_ 为实参执行 |Initializer| 的 NamedEvaluation。
+            1. 令 _value_ 为以 _bindingId_ 为参数的 |Initializer| 的 ? NamedEvaluation。
           1. 否则，
-            1. 令 _rhs_ 为 ? |Initializer| 的 Evaluation。
+            1. 令 _rhs_ 为 |Initializer| 的 ? Evaluation。
             1. 令 _value_ 为 ? GetValue(_rhs_)。
-          1. 执行 ! InitializeReferencedBinding(_lhs_, _value_)。
-          1. 返回 ~empty~。
+          1. 如果 _kind_ 不是 ~normal~，则
+            1. 断言：IsUnresolvableReference(_lhs_) 是 *false*。
+            1. 令 _base_ 为 _lhs_.[[Base]]。
+            1. 断言：_base_ 是声明式环境记录。
+            1. 执行 ? AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_)。
+          1. 执行 ? InitializeReferencedBinding(_lhs_, _value_)。
+          1. 返回 ~unused~。
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingPattern Initializer</emu-grammar>
         <emu-alg>
-          1. 令 _rhs_ 为 ? |Initializer| 的 Evaluation。
+          1. 断言：_kind_ 是 ~normal~。
+          1. 令 _rhs_ 为 |Initializer| 的 ? Evaluation。
           1. 令 _value_ 为 ? GetValue(_rhs_)。
-          1. 令 _envRecord_ 为运行中的执行上下文的 LexicalEnvironment。
-          1. 返回 ? 以 _value_ 和 _envRecord_ 为实参执行 |BindingPattern| 的 BindingInitialization。
+          1. 令 _envRecord_ 为运行中执行上下文的 LexicalEnvironment。
+          1. 返回以 _value_ 和 _envRecord_ 为参数的 |BindingPattern| 的 ? BindingInitialization。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -22108,25 +22602,29 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 令 _oldEnv_ 为正在运行的执行上下文的 LexicalEnvironment。
+          1. 令 _oldEnv_ 为运行中执行上下文的 LexicalEnvironment。
           1. 令 _loopEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
           1. 令 _isConst_ 为 |LexicalDeclaration| 的 IsConstantDeclaration。
           1. 令 _boundNames_ 为 |LexicalDeclaration| 的 BoundNames。
-          1. 对 _boundNames_ 的每个元素 _name_，执行：
-            1. 如果 _isConst_ 为 *true*，则
+          1. 对 _boundNames_ 的每个元素 _name_，执行
+            1. 如果 _isConst_ 是 *true*，则
               1. 执行 ! _loopEnv_.CreateImmutableBinding(_name_, *true*)。
             1. 否则，
               1. 执行 ! _loopEnv_.CreateMutableBinding(_name_, *false*)。
-          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _loopEnv_。
-          1. 令 _forDecl_ 为 |LexicalDeclaration| 的 Completion(Evaluation)。
-          1. 如果 _forDecl_ 是一个突然完成，则
-            1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _oldEnv_。
+          1. 将运行中执行上下文的 LexicalEnvironment 设置为 _loopEnv_。
+          1. 令 _forDecl_ 为 Completion(|LexicalDeclaration| 的求值)。
+          1. 如果 _forDecl_ 是突兀完成，则
+            1. 将 _forDecl_ 设置为 Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _forDecl_))。
+            1. 断言：_forDecl_ 是突兀完成。
+            1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
             1. 返回 ? _forDecl_。
-          1. 如果 _isConst_ 为 *false*，则令 _perIterationLets_ 为 _boundNames_；否则令 _perIterationLets_ 为一个新的空 List。
+          1. 如果 _isConst_ 是 *false*，则令 _perIterationLets_ 为 _boundNames_；否则令 _perIterationLets_ 为一个新的空列表。
           1. 如果第一个 |Expression| 存在，则令 _test_ 为第一个 |Expression|；否则令 _test_ 为 ~empty~。
           1. 如果第二个 |Expression| 存在，则令 _increment_ 为第二个 |Expression|；否则令 _increment_ 为 ~empty~。
           1. 令 _bodyResult_ 为 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))。
-          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _oldEnv_。
+          1. 将 _bodyResult_ 设置为 Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _bodyResult_))。
+          1. 断言：如果 _bodyResult_ 是正常完成，则 _bodyResult_.[[Value]] 不是 ~empty~。
+          1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
           1. 返回 ? _bodyResult_。
         </emu-alg>
       </emu-clause>
@@ -22191,21 +22689,23 @@
       <emu-grammar type="definition">
         ForInOfStatement[Yield, Await, Return] :
           `for` `(` [lookahead != `let` `[`] LeftHandSideExpression[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` ForDeclaration[?Yield, ?Await, ~Using] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           `for` `(` [lookahead &notin; { `let`, `async` `of` }] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           [+Await] `for` `await` `(` [lookahead != `let`] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
 
-        ForDeclaration[Yield, Await] :
-          LetOrConst ForBinding[?Yield, ?Await]
+        ForDeclaration[Yield, Await, Using] :
+          LetOrConst ForBinding[?Yield, ?Await, +Pattern]
+          [+Using] `using` [no LineTerminator here] ForBinding[?Yield, ?Await, ~Pattern]
+          [+Using, +Await] `await` [no LineTerminator here] `using` [no LineTerminator here] ForBinding[?Yield, +Await, ~Pattern]
 
-        ForBinding[Yield, Await] :
+        ForBinding[Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await]
-          BindingPattern[?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await]
       </emu-grammar>
       <emu-note>
         <p>本节由附录 <emu-xref href="#sec-initializers-in-forin-statement-heads"></emu-xref> 扩展。</p>
@@ -22325,6 +22825,14 @@
         <emu-alg>
           1. 返回 ? 以 _value_ 和 _envRecord_ 为实参执行 |ForBinding| 的 BindingInitialization。
         </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. 抛出 *SyntaxError* 异常。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-runtime-semantics-fordeclarationbindinginstantiation" oldids="sec-runtime-semantics-bindinginstantiation" type="sdo">
@@ -22342,6 +22850,16 @@
               1. 执行 ! _envRecord_.CreateImmutableBinding(_name_, *true*)。
             1. 否则，
               1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
+          1. 返回 ~unused~。
+        </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. 对 |ForBinding| 的 BoundNames 的每个元素 _name_，执行
+            1. 执行 ! _envRecord_.CreateImmutableBinding(_name_, *true*)。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -22461,55 +22979,79 @@
         </dl>
         <emu-alg>
           1. 如果 _iteratorKind_ 不存在，则将 _iteratorKind_ 设置为 ~sync~。
-          1. 令 _oldEnv_ 为运行中的执行上下文的 LexicalEnvironment。
+          1. 令 _oldEnv_ 为运行中执行上下文的 LexicalEnvironment。
           1. 令 _iterationResult_ 为 *undefined*。
+          1. 如果 _lhsKind_ 是 ~lexical-binding~，则
+            1. 断言：_lhs_ 是一个 |ForDeclaration|。
+            1. 如果 _lhs_ 的 IsAwaitUsingDeclaration 是 *true*，则
+              1. 令 _declarationKind_ 为 ~async-dispose~。
+            1. 否则如果 _lhs_ 的 IsUsingDeclaration 是 *true*，则
+              1. 令 _declarationKind_ 为 ~sync-dispose~。
+            1. 否则，
+              1. 令 _declarationKind_ 为 ~normal~。
+          1. 否则，
+            1. 令 _declarationKind_ 为 ~normal~。
           1. 令 _destructuring_ 为 _lhs_ 的 IsDestructuring。
           1. 如果 _destructuring_ 是 *true* 且 _lhsKind_ 是 ~assignment~，则
-            1. 断言：_lhs_ 是 |LeftHandSideExpression|。
-            1. 令 _assignmentPattern_ 为由 _lhs_ 覆盖的 |AssignmentPattern|。
-          1. 重复：
+            1. 断言：_lhs_ 是一个 |LeftHandSideExpression|。
+            1. 令 _assignmentPattern_ 为 _lhs_ 所覆盖的 |AssignmentPattern|。
+          1. 重复，
             1. 令 _nextResult_ 为 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])。
             1. 如果 _iteratorKind_ 是 ~async~，则将 _nextResult_ 设置为 ? Await(_nextResult_)。
-            1. 如果 _nextResult_ 不是 Object，则抛出 *TypeError* 异常。
+            1. 如果 _nextResult_ 不是对象，则抛出 *TypeError* 异常。
             1. 令 _done_ 为 ? IteratorComplete(_nextResult_)。
             1. 如果 _done_ 是 *true*，则返回 _iterationResult_。
             1. 令 _nextValue_ 为 ? IteratorValue(_nextResult_)。
             1. 如果 _lhsKind_ 是 ~assignment~ 或 ~var-binding~，则
               1. 如果 _destructuring_ 是 *true*，则
                 1. 如果 _lhsKind_ 是 ~assignment~，则
-                  1. 令 _status_ 为 Completion(以 _nextValue_ 为实参执行 _assignmentPattern_ 的 DestructuringAssignmentEvaluation)。
+                  1. 令 _status_ 为以 _nextValue_ 为参数的 _assignmentPattern_ 的 DestructuringAssignmentEvaluation 的 Completion。
                 1. 否则，
                   1. 断言：_lhsKind_ 是 ~var-binding~。
-                  1. 断言：_lhs_ 是 |ForBinding|。
-                  1. 令 _status_ 为 Completion(以 _nextValue_ 和 *undefined* 为实参执行 _lhs_ 的 BindingInitialization)。
+                  1. 断言：_lhs_ 是一个 |ForBinding|。
+                  1. 令 _status_ 为以 _nextValue_ 和 *undefined* 为参数的 _lhs_ 的 BindingInitialization 的 Completion。
               1. 否则，
-                1. 令 _lhsRef_ 为 Completion(_lhs_ 的 Evaluation)。（它可以被反复求值。）
+                1. 令 _lhsRef_ 为 _lhs_ 的求值的 Completion。（它可能会被重复求值。）
                 1. 如果 _lhsKind_ 是 ~assignment~ 且 _lhs_ 的 AssignmentTargetType 是 ~web-compat~，则抛出 *ReferenceError* 异常。
-                1. 如果 _lhsRef_ 是 abrupt completion，则
+                1. 如果 _lhsRef_ 是突兀完成，则
                   1. 令 _status_ 为 _lhsRef_。
                 1. 否则，
                   1. 令 _status_ 为 Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))。
+              1. 令 _iterationEnv_ 为 *undefined*。
             1. 否则，
               1. 断言：_lhsKind_ 是 ~lexical-binding~。
-              1. 断言：_lhs_ 是 |ForDeclaration|。
+              1. 断言：_lhs_ 是一个 |ForDeclaration|。
               1. 令 _iterationEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
-              1. 以 _iterationEnv_ 为实参执行 _lhs_ 的 ForDeclarationBindingInstantiation。
-              1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _iterationEnv_。
+              1. 执行以 _iterationEnv_ 为参数的 _lhs_ 的 ForDeclarationBindingInstantiation。
+              1. 将运行中执行上下文的 LexicalEnvironment 设置为 _iterationEnv_。
               1. 如果 _destructuring_ 是 *true*，则
-                1. 令 _status_ 为 Completion(以 _nextValue_ 和 _iterationEnv_ 为实参执行 _lhs_ 的 ForDeclarationBindingInitialization)。
+                1. 令 _status_ 为以 _nextValue_ 和 _iterationEnv_ 为参数的 _lhs_ 的 ForDeclarationBindingInitialization 的 Completion。
               1. 否则，
                 1. 断言：_lhs_ 绑定单个名称。
                 1. 令 _lhsName_ 为 _lhs_ 的 BoundNames 的唯一元素。
                 1. 令 _lhsRef_ 为 ! ResolveBinding(_lhsName_)。
-                1. 令 _status_ 为 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))。
-            1. 如果 _status_ 是 abrupt completion，则
-              1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+                1. 如果 _declarationKind_ 不是 ~normal~，则
+                  1. 断言：IsUnresolvableReference(_lhsRef_) 是 *false*。
+                  1. 令 _base_ 为 _lhsRef_.[[Base]]。
+                  1. 断言：_base_ 是声明式环境记录。
+                  1. 令 _status_ 为 Completion(AddDisposableResource(_base_.[[DisposableResourceStack]], _nextValue_, _declarationKind_))。
+                1. 否则，
+                  1. 令 _status_ 为 NormalCompletion(~unused~)。
+                1. 如果 _status_ 是正常完成，则
+                  1. 将 _status_ 设置为 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))。
+            1. 如果 _status_ 是突兀完成，则
+              1. 如果 _iterationEnv_ 不是 *undefined*，则
+                1. 将 _status_ 设置为 Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _status_))。
+                1. 断言：_status_ 是突兀完成。
+              1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
               1. 如果 _iterationKind_ 是 ~enumerate~，则返回 ? _status_。
               1. 断言：_iterationKind_ 是 ~iterate~。
               1. 如果 _iteratorKind_ 是 ~async~，则返回 ? AsyncIteratorClose(_iteratorRecord_, _status_)。
               1. 返回 ? IteratorClose(_iteratorRecord_, _status_)。
-            1. 令 _result_ 为 Completion(_stmt_ 的 Evaluation)。
-            1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+            1. 令 _result_ 为 _stmt_ 的求值的 Completion。
+            1. 如果 _iterationEnv_ 不是 *undefined*，则
+              1. 将 _result_ 设置为 Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _result_))。
+            1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
             1. 如果 LoopContinues(_result_, _labelSet_) 是 *false*，则
               1. 将 _status_ 设置为 Completion(UpdateEmpty(_result_, _iterationResult_))。
               1. 如果 _iterationKind_ 是 ~enumerate~，则返回 ? _status_。
@@ -22901,6 +23443,18 @@
           如果 |CaseBlock| 的 LexicallyDeclaredNames 的任何元素也出现在 |CaseBlock| 的 VarDeclaredNames 中，则为语法错误。
         </li>
       </ul>
+      <emu-grammar>CaseClause : `case` Expression `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          如果 |StatementList| 的 ContainsUsing 是 *true*，则为语法错误。
+        </li>
+      </ul>
+      <emu-grammar>DefaultClause : `default` `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          如果 |StatementList| 的 ContainsUsing 是 *true*，则为语法错误。
+        </li>
+      </ul>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics-caseblockevaluation" type="sdo">
@@ -22996,14 +23550,15 @@
       <h1>Runtime Semantics: Evaluation</h1>
       <emu-grammar>SwitchStatement : `switch` `(` Expression `)` CaseBlock</emu-grammar>
       <emu-alg>
-        1. 令 _exprRef_ 为 ? |Expression| 的 Evaluation。
+        1. 令 _exprRef_ 为 |Expression| 的 ? Evaluation。
         1. 令 _switchValue_ 为 ? GetValue(_exprRef_)。
-        1. 令 _oldEnv_ 为运行中的执行上下文的 LexicalEnvironment。
+        1. 令 _oldEnv_ 为运行中执行上下文的 LexicalEnvironment。
         1. 令 _blockEnv_ 为 NewDeclarativeEnvironment(_oldEnv_)。
         1. 执行 BlockDeclarationInstantiation(|CaseBlock|, _blockEnv_)。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _blockEnv_。
-        1. 令 _blockResult_ 为 Completion(以 _switchValue_ 为实参执行 |CaseBlock| 的 CaseBlockEvaluation)。
-        1. 将运行中的执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
+        1. 将运行中执行上下文的 LexicalEnvironment 设置为 _blockEnv_。
+        1. 令 _blockResult_ 为以 _switchValue_ 为参数的 |CaseBlock| 的 CaseBlockEvaluation 的 Completion。
+        1. 断言：_blockEnv_.[[DisposableResourceStack]] 是一个空列表。
+        1. 将运行中执行上下文的 LexicalEnvironment 设置为 _oldEnv_。
         1. 返回 _blockResult_。
       </emu-alg>
       <emu-note>
@@ -23790,6 +24345,13 @@
       <emu-grammar>FunctionStatementList : [empty]</emu-grammar>
       <emu-alg>
         1. 返回 *undefined*。
+      </emu-alg>
+      <emu-grammar>FunctionStatementList : StatementList</emu-grammar>
+      <emu-alg>
+        1. 令 _result_ 为 |StatementList| 的求值的 Completion。
+        1. 令 _env_ 为运行中执行上下文的 LexicalEnvironment。
+        1. 断言：_env_ 是声明式环境记录。
+        1. 返回 ? DisposeResources(_env_.[[DisposableResourceStack]], _result_)。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -25075,9 +25637,12 @@
       </dl>
       <emu-grammar>ClassStaticBlockBody : ClassStaticBlockStatementList</emu-grammar>
       <emu-alg>
-        1. 断言：_funcObj_ 是由 ClassStaticBlockDefinitionEvaluation 的步骤 <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref> 创建的合成函数。
+        1. 断言：_funcObj_ 是由 ClassStaticBlockDefinitionEvaluation 步骤 <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref> 创建的合成函数。
         1. 执行 ! FunctionDeclarationInstantiation(_funcObj_, « »)。
-        1. 执行 ? |ClassStaticBlockStatementList| 的 Evaluation。
+        1. 令 _result_ 为 |ClassStaticBlockStatementList| 的求值的 Completion。
+        1. 令 _envRecord_ 为运行中执行上下文的 LexicalEnvironment。
+        1. 断言：_envRecord_ 是声明式环境记录。
+        1. 执行 ? DisposeResources(_envRecord_.[[DisposableResourceStack]], _result_)。
         1. 返回 ReturnCompletion(*undefined*)。
       </emu-alg>
     </emu-clause>
@@ -25490,6 +26055,13 @@
         1. 返回 |AsyncFunctionExpression| 的 InstantiateAsyncFunctionExpression。
       </emu-alg>
       <emu-grammar>
+        UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead
+      </emu-grammar>
+      <emu-alg>
+        1. 令 _expr_ 为 |CoverAwaitExpressionAndAwaitUsingDeclarationHead| 所覆盖的 |AwaitExpression|。
+        1. 返回 _expr_ 的 ? Evaluation。
+      </emu-alg>
+      <emu-grammar>
         AwaitExpression : `await` UnaryExpression
       </emu-grammar>
       <emu-alg>
@@ -25672,17 +26244,21 @@
       <dl class="header">
       </dl>
       <emu-note>
-        <p>_call_ 是表示特定源文本范围的 Parse Node。当以下算法将 _call_ 与另一个 Parse Node 比较时，这是在测试它们是否表示相同的源文本。</p>
+        <p>_call_ 是一个解析节点，表示源文本的一个特定范围。当以下算法将 _call_ 与另一个解析节点进行比较时，这是在测试它们是否表示同一段源文本。</p>
       </emu-note>
       <emu-note>
-        <p>紧随其后会返回该调用结果的 GetValue 的潜在尾位置调用，也是一种可能的尾位置调用。函数调用不能返回 Reference Record，因此这样的 GetValue 操作始终会返回与实际函数调用结果相同的值。</p>
+        <p>紧跟着返回调用结果的 GetValue 的潜在尾位置调用，也是一个可能的尾位置调用。函数调用不能返回 Reference Record，因此这样的 GetValue 操作总是会返回与实际函数调用结果相同的值。</p>
+      </emu-note>
+      <emu-note>
+        <p>在同一个 |Block|、|ForStatement|、|ForInOfStatement|、|FunctionBody|、|GeneratorBody|、|AsyncGeneratorBody|、|AsyncFunctionBody| 或 |ClassStaticBlockBody| 中，位于某个调用之前的 `using` 声明或 `await using` 声明会阻止该调用成为可能的尾位置调用。</p>
       </emu-note>
 
       <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
       <emu-alg>
-        1. 令 _has_ 为以 _call_ 为实参执行 |StatementList| 的 HasCallInTailPosition。
+        1. 令 _has_ 为以 _call_ 为参数的派生 |StatementList| 的 HasCallInTailPosition。
         1. 如果 _has_ 是 *true*，则返回 *true*。
-        1. 返回以 _call_ 为实参执行 |StatementListItem| 的 HasCallInTailPosition。
+        1. 如果派生 |StatementList| 的 ContainsUsing 是 *true*，则返回 *false*。
+        1. 返回以 _call_ 为参数的 |StatementListItem| 的 HasCallInTailPosition。
       </emu-alg>
       <emu-grammar>
         FunctionStatementList :
@@ -25873,7 +26449,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         CallExpression :
           SuperCall
@@ -26059,6 +26635,9 @@
         </li>
         <li>
           如果以 « » 为实参执行 |StatementList| 的 AllPrivateIdentifiersValid 是 *false*，则为语法错误，除非包含 |ScriptBody| 的源文本是正在由直接 eval 处理的 eval 代码。
+        </li>
+        <li>
+          如果 |StatementList| 的 ContainsUsing 是 *true*，则为语法错误。
         </li>
       </ul>
     </emu-clause>
@@ -28688,15 +29267,17 @@
               1. 令 _moduleContext_ 为 _module_.[[Context]]。
               1. 如果 _module_.[[HasTLA]] 是 *false*，则
                 1. 断言：_capability_ 不存在。
-                1. 挂起运行中的执行上下文。
-                1. 将 _moduleContext_ 压入执行上下文栈；_moduleContext_ 现在是运行中的执行上下文。
-                1. 令 _result_ 为 Completion(_module_.[[ECMAScriptCode]] 的 Evaluation)。
-                1. 挂起 _moduleContext_ 并将其从执行上下文栈中移除。
-                1. 恢复当前位于执行上下文栈顶部的上下文作为运行中的执行上下文。
-                1. 如果 _result_ 是 abrupt completion，则
+                1. 令 _env_ 为 _module_.[[Environment]]。
+                1. 挂起运行中执行上下文。
+                1. 将 _moduleContext_ 推入执行上下文栈；_moduleContext_ 现在是运行中执行上下文。
+                1. 令 _result_ 为 _module_.[[ECMAScriptCode]] 的求值的 Completion。
+                1. 将 _result_ 设置为 Completion(DisposeResources(_env_.[[DisposableResourceStack]], _result_))。
+                1. 挂起 _moduleContext_，并将其从执行上下文栈中移除。
+                1. 恢复当前位于执行上下文栈顶部的上下文作为运行中执行上下文。
+                1. 如果 _result_ 是突兀完成，则
                   1. 返回 ? _result_。
               1. 否则，
-                1. 断言：_capability_ 是 PromiseCapability Record。
+                1. 断言：_capability_ 是 PromiseCapability 记录。
                 1. 执行 AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_)。
               1. 返回 ~unused~。
             </emu-alg>
@@ -29303,7 +29884,7 @@
           `export` ExportFromClause FromClause WithClause? `;`
           `export` NamedExports `;`
           `export` VariableStatement[~Yield, +Await]
-          `export` Declaration[~Yield, +Await]
+          `export` [lookahead &notin; { `using`, `await` }] Declaration[~Yield, +Await]
           `export` `default` HoistableDeclaration[~Yield, +Await, +Default]
           `export` `default` ClassDeclaration[~Yield, +Await, +Default]
           `export` `default` [lookahead &notin; { `function`, `async` [no LineTerminator here] `function`, `class` }] AssignmentExpression[+In, ~Yield, +Await] `;`
@@ -30324,6 +30905,11 @@
       <p>见 <emu-xref href="#sec-arraybuffer-constructor"></emu-xref>。</p>
     </emu-clause>
 
+    <emu-clause id="sec-constructor-properties-of-the-global-object-asyncdisposablestack">
+      <h1>AsyncDisposableStack ( . . . )</h1>
+      <p>见 <emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>。</p>
+    </emu-clause>
+
     <emu-clause id="sec-constructor-properties-of-the-global-object-bigint">
       <h1>BigInt ( . . . )</h1>
       <p>见 <emu-xref href="#sec-bigint-constructor"></emu-xref>。</p>
@@ -30352,6 +30938,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-date">
       <h1>Date ( . . . )</h1>
       <p>见 <emu-xref href="#sec-date-constructor"></emu-xref>。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-disposablestack">
+      <h1>DisposableStack ( . . . )</h1>
+      <p>见 <emu-xref href="#sec-disposablestack-constructor"></emu-xref>。</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-error">
@@ -30462,6 +31053,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-string">
       <h1>String ( . . . )</h1>
       <p>见 <emu-xref href="#sec-string-constructor"></emu-xref>。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-suppressederror">
+      <h1>SuppressedError ( . . . )</h1>
+      <p>见 <emu-xref href="#sec-suppressederror-constructor"></emu-xref>。</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-symbol">
@@ -31834,7 +32430,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error 对象</h1>
     <p>运行时错误发生时，Error 对象的实例会作为异常被抛出。Error 对象也可以作为用户定义异常类的基对象。</p>
-    <p>当 ECMAScript 实现检测到运行时错误时，它会抛出 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> 中定义的某个 _NativeError_ 对象的新实例，或 <emu-xref href="#sec-aggregate-error-objects"></emu-xref> 中定义的 AggregateError 对象的新实例。</p>
+    <p>当 ECMAScript 实现检测到运行时错误时，它会抛出 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> 中定义的某个 _NativeError_ 对象的新实例，或抛出 <emu-xref href="#sec-aggregate-error-objects"></emu-xref> 中定义的 AggregateError 对象的新实例，或 <emu-xref href="#sec-suppressederror-objects"></emu-xref> 中定义的 SuppressedError 对象的新实例。这些对象中的每一个都具有下述结构，区别仅在于：用作构造函数名称的名称不同，而不是 _NativeError_；原型对象的 *"name"* 属性不同；原型对象中由实现定义的 *"message"* 属性不同；以及是否存在 %AggregateError% 专用的 *"errors"* 属性，或 %SuppressedError% 专用的 *"error"* 和 *"suppressed"* 属性。</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>Error 构造器</h1>
@@ -31930,12 +32526,12 @@
 
     <emu-clause id="sec-properties-of-error-instances">
       <h1>Error 实例的属性</h1>
-      <p>Error 实例是继承自 Error 原型对象属性的普通对象，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 的唯一规定用途是在 `Object.prototype.toString` 和 `Error.isError` 内部把 Error、AggregateError 和 _NativeError_ 实例识别为 Error 对象。</p>
+      <p>Error 实例是普通对象，它们从 Error 原型对象继承属性，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 唯一规定的用途，是在 `Object.prototype.toString` 和 `Error.isError` 中将 Error、AggregateError、SuppressedError 和 _NativeError_ 实例识别为 Error 对象。</p>
     </emu-clause>
 
     <emu-clause id="sec-native-error-types-used-in-this-standard">
       <h1>本标准使用的原生错误类型</h1>
-      <p>检测到运行时错误时，会抛出以下某个 _NativeError_ 对象或 AggregateError 对象的新实例。所有 _NativeError_ 对象共享 <emu-xref href="#sec-nativeerror-object-structure"></emu-xref> 中所述的相同结构。</p>
+      <p>当检测到运行时错误时，会抛出以下某个 _NativeError_ 对象的新实例，或者 AggregateError 对象或 SuppressedError 对象的新实例。所有 _NativeError_ 对象共享相同结构，如 <emu-xref href="#sec-nativeerror-object-structure"></emu-xref> 中所述。</p>
 
       <emu-clause id="sec-native-error-types-used-in-this-standard-evalerror">
         <h1>EvalError</h1>
@@ -32046,7 +32642,7 @@
 
       <emu-clause id="sec-properties-of-nativeerror-instances">
         <h1>_NativeError_ 实例的属性</h1>
-        <p>_NativeError_ 实例是继承自其 _NativeError_ 原型对象属性的普通对象，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 的唯一规定用途是在 `Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）和 `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）中识别 Error、AggregateError 或 _NativeError_ 实例。</p>
+        <p>_NativeError_ 实例是普通对象，它们从其 _NativeError_ 原型对象继承属性，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 唯一规定的用途，是由 `Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）和 `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）用于识别 Error、AggregateError、SuppressedError 或 _NativeError_ 实例。</p>
       </emu-clause>
     </emu-clause>
 
@@ -32123,7 +32719,83 @@
 
       <emu-clause id="sec-properties-of-aggregate-error-instances">
         <h1>AggregateError 实例的属性</h1>
-        <p>AggregateError 实例是继承自其 AggregateError 原型对象属性的普通对象，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 的唯一规定用途是在 `Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）和 `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）中识别 Error、AggregateError 或 _NativeError_ 实例。</p>
+        <p>AggregateError 实例是普通对象，它们从其 AggregateError 原型对象继承属性，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 唯一规定的用途，是由 `Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）和 `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）用于识别 Error、AggregateError、SuppressedError 或 _NativeError_ 实例。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-suppressederror-objects">
+      <h1>SuppressedError 对象</h1>
+
+      <emu-clause id="sec-suppressederror-constructor">
+        <h1>SuppressedError 构造函数</h1>
+        <p>SuppressedError 构造函数：</p>
+        <ul>
+          <li>是 <dfn>%SuppressedError%</dfn>。</li>
+          <li>是全局对象的 *"SuppressedError"* 属性的初始值。</li>
+          <li>在作为函数而非构造函数调用时，创建并初始化一个新的 SuppressedError 对象。因此，函数调用 `SuppressedError(…)` 等价于带有相同实参的对象创建表达式 `new SuppressedError(…)`。</li>
+          <li>可用作类定义的 `extends` 子句的值。意图继承指定 SuppressedError 行为的子类构造函数，必须包含一次对 SuppressedError 构造函数的 `super` 调用，以创建并初始化带有 [[ErrorData]] 内部槽的子类实例。</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror" type="built-in function">
+          <h1>SuppressedError ( _error_, _suppressed_, _message_ )</h1>
+          <p>调用此函数时，它执行以下步骤：</p>
+          <emu-alg>
+            1. 如果 NewTarget 是 *undefined*，则令 _newTarget_ 为活动函数对象；否则令 _newTarget_ 为 NewTarget。
+            1. 令 _obj_ 为 ? OrdinaryCreateFromConstructor(_newTarget_, *"%SuppressedError.prototype%"*, « [[ErrorData]] »)。
+            1. 如果 _message_ 不是 *undefined*，则
+              1. 令 _messageString_ 为 ? ToString(_message_)。
+              1. 执行 CreateNonEnumerableDataPropertyOrThrow(_obj_, *"message"*, _messageString_)。
+            1. 执行 CreateNonEnumerableDataPropertyOrThrow(_obj_, *"error"*, _error_)。
+            1. 执行 CreateNonEnumerableDataPropertyOrThrow(_obj_, *"suppressed"*, _suppressed_)。
+            1. 返回 _obj_。
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-constructor">
+        <h1>SuppressedError 构造函数的属性</h1>
+        <p>SuppressedError 构造函数：</p>
+        <ul>
+          <li>具有一个值为 %Error% 的 [[Prototype]] 内部槽。</li>
+          <li>具有以下属性：</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype">
+          <h1>SuppressedError.prototype</h1>
+          <p>`SuppressedError.prototype` 的初始值是 SuppressedError 原型对象。</p>
+          <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-prototype-object">
+        <h1>SuppressedError 原型对象的属性</h1>
+        <p><dfn>SuppressedError 原型对象</dfn>：</p>
+        <ul>
+          <li>是 <dfn>%SuppressedError.prototype%</dfn>。</li>
+          <li>是一个普通对象。</li>
+          <li>不是 Error 实例，也不是 SuppressedError 实例，并且没有 [[ErrorData]] 内部槽。</li>
+          <li>具有一个值为 %Error.prototype% 的 [[Prototype]] 内部槽。</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype.constructor">
+          <h1>SuppressedError.prototype.constructor</h1>
+          <p>`SuppressedError.prototype.constructor` 的初始值是 %SuppressedError%。</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.message">
+          <h1>SuppressedError.prototype.message</h1>
+          <p>`SuppressedError.prototype.message` 的初始值是空 String。</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.name">
+          <h1>SuppressedError.prototype.name</h1>
+          <p>`SuppressedError.prototype.name` 的初始值是 *"SuppressedError"*。</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-suppressederror-instances">
+        <h1>SuppressedError 实例的属性</h1>
+        <p>SuppressedError 实例是普通对象，它们从其 SuppressedError 原型对象继承属性，并具有一个值为 *undefined* 的 [[ErrorData]] 内部槽。[[ErrorData]] 唯一规定的用途，是在 `Object.prototype.toString` 和 `Error.isError` 中将 Error、AggregateError、SuppressedError 和 _NativeError_ 实例识别为 Error 对象。</p>
       </emu-clause>
     </emu-clause>
 
@@ -49080,6 +49752,19 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype-%symbol.dispose%" type="built-in function">
+          <h1>Iterator.prototype [ %Symbol.dispose% ] ( )</h1>
+          <p>调用此方法时，它执行以下步骤：</p>
+          <emu-alg>
+            1. 令 _obj_ 为 *this* 值。
+            1. 令 _return_ 为 ? GetMethod(_obj_, *"return"*)。
+            1. 如果 _return_ 不是 *undefined*，则
+              1. 执行 ? Call(_return_, _obj_)。
+            1. 返回 *undefined*。
+          </emu-alg>
+          <p>此方法的 *"name"* 属性的值是 *"[Symbol.dispose]"*。</p>
+        </emu-clause>
+
         <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%" type="built-in function">
           <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
           <p>此函数在被调用时执行以下步骤：</p>
@@ -49195,6 +49880,30 @@ THH:mm:ss.sss
       <emu-note>
         <p>本规范中定义的所有实现 async iterator 接口的对象也都继承自 %AsyncIteratorPrototype%。ECMAScript 代码也可以定义继承自 %AsyncIteratorPrototype% 的对象。%AsyncIteratorPrototype% 对象提供了一个位置，可在其中添加适用于所有 async iterator 对象的其他方法。</p>
       </emu-note>
+
+      <emu-clause id="sec-%asynciteratorprototype%-%symbol.asyncdispose%" type="built-in function">
+        <h1>%AsyncIteratorPrototype% [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _obj_ 为 *this* 值。
+          1. 令 _promiseCapability_ 为 ! NewPromiseCapability(%Promise%)。
+          1. 令 _return_ 为 Completion(GetMethod(_obj_, *"return"*))。
+          1. IfAbruptRejectPromise(_return_, _promiseCapability_)。
+          1. 如果 _return_ 是 *undefined*，则
+            1. 执行 ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)。
+          1. 否则，
+            1. 令 _result_ 为 Completion(Call(_return_, _obj_, « »))。
+            1. IfAbruptRejectPromise(_result_, _promiseCapability_)。
+            1. 令 _resultWrapper_ 为 Completion(PromiseResolve(%Promise%, _result_))。
+            1. IfAbruptRejectPromise(_resultWrapper_, _promiseCapability_)。
+            1. 令 _unwrap_ 为一个新的抽象闭包，该闭包没有参数，不捕获任何内容，并在被调用时执行以下步骤：
+              1. 返回 *undefined*。
+            1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)。
+            1. 执行 PerformPromiseThen(_resultWrapper_, _onFulfilled_, *undefined*, _promiseCapability_)。
+          1. 返回 _promiseCapability_.[[Promise]]。
+        </emu-alg>
+        <p>此方法的 *"name"* 属性的值是 *"[Symbol.asyncDispose]"*。</p>
+      </emu-clause>
 
       <emu-clause oldids="sec-asynciteratorprototype-asynciterator" id="sec-%asynciteratorprototype%-%symbol.asynciterator%" type="built-in function">
         <h1>%AsyncIteratorPrototype% [ %Symbol.asyncIterator% ] ( )</h1>
@@ -49387,6 +50096,468 @@ THH:mm:ss.sss
           1. 返回 _promiseCapability_.[[Promise]]。
         </emu-alg>
       </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-resource-management">
+    <h1>资源管理</h1>
+
+    <emu-clause id="sec-common-resource-management-interfaces">
+      <h1>通用资源管理接口</h1>
+
+      <emu-clause id="sec-disposable-interface">
+        <h1>Disposable 接口</h1>
+        <p><dfn>Disposable</dfn> 接口包含 <emu-xref href="#table-disposable-interface-required-properties"></emu-xref> 中描述的属性：</p>
+        <emu-table id="table-disposable-interface-required-properties" caption="Disposable 接口必需属性">
+          <table>
+            <tr>
+              <th>
+                属性
+              </th>
+              <th>
+                值
+              </th>
+              <th>
+                要求
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.dispose%`
+              </td>
+              <td>
+                一个函数对象
+              </td>
+              <td>
+                <p>调用此方法会通知 Disposable 对象：调用者不打算继续使用此对象。此方法应执行任何必要逻辑，以对资源执行显式清理，包括但不限于文件系统句柄、流、宿主对象等。当此方法抛出异常时，通常意味着无法显式释放该资源。</p>
+                <p>对同一个对象多次调用此方法时，应避免对已经处置的资源重复执行清理逻辑，并且不应抛出异常，即使第一次调用时曾抛出异常也是如此。不过，此要求不会被强制执行。</p>
+                <p>当通过 `using` 或 `await using` 声明使用 Disposable 对象时，在直接包含该声明的 |Block| 或 |Module| 求值完成后，该资源将被自动处置。</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposable-interface">
+        <h1>AsyncDisposable 接口</h1>
+        <p><dfn>AsyncDisposable</dfn> 接口包含 <emu-xref href="#table-asyncdisposable-interface-required-properties"></emu-xref> 中描述的属性：</p>
+        <emu-table id="table-asyncdisposable-interface-required-properties" caption="AsyncDisposable 接口必需属性">
+          <table>
+            <tr>
+              <th>
+                属性
+              </th>
+              <th>
+                值
+              </th>
+              <th>
+                要求
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.asyncDispose%`
+              </td>
+              <td>
+                一个返回 promise 的函数对象
+              </td>
+              <td>
+                <p>调用此方法会通知 AsyncDisposable 对象：调用者不打算继续使用此对象。此方法应执行任何必要逻辑，以对资源执行显式清理，包括但不限于文件系统句柄、流、宿主对象等。当此方法返回的 promise 被拒绝时，通常意味着无法显式释放该资源。直到所得 Promise 被兑现前，AsyncDisposable 对象不被视为已“处置”。</p>
+                <p>对同一个对象多次调用此方法时，应避免对已经处置的资源重复执行清理逻辑，并且不应抛出异常或返回被拒绝的 promise，即使第一次调用时曾抛出异常或返回被拒绝的 promise 也是如此。不过，此要求不会被强制执行。</p>
+                <p>当通过 `await using` 声明使用 AsyncDisposable 对象时，在直接包含该声明的 |Block| 或 |Module| 求值完成后，该资源将被自动处置。</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-disposablestack-objects">
+    <h1>DisposableStack 对象</h1>
+    <p>DisposableStack 是一个对象，可用于容纳一个或多个应一起处置的资源。</p>
+    <p>任何 DisposableStack 对象都处于两个互斥状态之一：<em>已处置</em>或<em>待处理</em>。当且仅当既未对可处置栈 `d` 调用 `d.dispose()`，也未对其调用 `d.move()` 时，`d` 是待处理的。</p>
+
+    <emu-clause id="sec-disposablestack-constructor">
+      <h1>DisposableStack 构造函数</h1>
+      <p>DisposableStack 构造函数：</p>
+      <ul>
+        <li>是 <dfn>%DisposableStack%</dfn>。</li>
+        <li>是全局对象的 *"DisposableStack"* 属性的初始值。</li>
+        <li>在作为构造函数调用时，创建并初始化一个新的 DisposableStack。</li>
+        <li>不旨在作为函数调用，并且在以这种方式调用时会抛出异常。</li>
+        <li>可用作类定义的 `extends` 子句中的值。意图继承指定 DisposableStack 行为的子类构造函数，必须包含一次对 DisposableStack 构造函数的 `super` 调用，以创建并初始化带有必要内部状态的子类实例，从而支持 `DisposableStack.prototype` 的内置方法。</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack" type="built-in function">
+        <h1>DisposableStack ( )</h1>
+        <p>调用此函数时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 如果 NewTarget 是 *undefined*，则抛出 *TypeError* 异常。
+          1. 令 _disposableStack_ 为 ? OrdinaryCreateFromConstructor(NewTarget, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] »)。
+          1. 将 _disposableStack_.[[DisposableState]] 设置为 ~pending~。
+          1. 将 _disposableStack_.[[DisposableResourceStack]] 设置为一个新的空列表。
+          1. 返回 _disposableStack_。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-constructor">
+      <h1>DisposableStack 构造函数的属性</h1>
+      <p>DisposableStack 构造函数：</p>
+      <ul>
+        <li>具有一个值为 %Function.prototype% 的 [[Prototype]] 内部槽。</li>
+        <li>具有以下属性：</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype">
+        <h1>DisposableStack.prototype</h1>
+        <p>`DisposableStack.prototype` 的初始值是 DisposableStack 原型对象。</p>
+        <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-prototype-object">
+      <h1>DisposableStack 原型对象的属性</h1>
+      <p><dfn>DisposableStack 原型对象</dfn>：</p>
+      <ul>
+        <li>是 <dfn>%DisposableStack.prototype%</dfn>。</li>
+        <li>具有一个值为 %Object.prototype% 的 [[Prototype]] 内部槽。</li>
+        <li>是一个普通对象。</li>
+        <li>没有 [[DisposableState]] 内部槽，也没有 DisposableStack 实例的任何其他内部槽。</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype.adopt" type="built-in function">
+        <h1>DisposableStack.prototype.adopt ( _value_, _onDispose_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 如果 IsCallable(_onDispose_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 令 _closure_ 为一个新的抽象闭包，该闭包没有参数，捕获 _value_ 和 _onDispose_，并在被调用时执行以下步骤：
+            1. 返回 ? Call(_onDispose_, *undefined*, « _value_ »)。
+          1. 令 _func_ 为 CreateBuiltinFunction(_closure_, 0, *""*, « »)。
+          1. 执行 ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _func_)。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.constructor">
+        <h1>DisposableStack.prototype.constructor</h1>
+        <p>`DisposableStack.prototype.constructor` 的初始值是 %DisposableStack%。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.defer" type="built-in function">
+        <h1>DisposableStack.prototype.defer ( _onDispose_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 如果 IsCallable(_onDispose_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 执行 ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _onDispose_)。
+          1. 返回 *undefined*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.dispose" type="built-in function">
+        <h1>DisposableStack.prototype.dispose ( )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则返回 *undefined*。
+          1. 将 _disposableStack_.[[DisposableState]] 设置为 ~disposed~。
+          1. 返回 ? DisposeResources(_disposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*))。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-disposablestack.prototype.disposed" type="built-in function">
+        <h1>get DisposableStack.prototype.disposed</h1>
+        <p>`DisposableStack.prototype.disposed` 是一个访问器属性，其 set 访问器函数为 *undefined*。调用其 get 访问器函数时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则返回 *true*。
+          1. 返回 *false*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.move" type="built-in function">
+        <h1>DisposableStack.prototype.move ( )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 令 _newDisposableStack_ 为 ? OrdinaryCreateFromConstructor(%DisposableStack%, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] »)。
+          1. 将 _newDisposableStack_.[[DisposableState]] 设置为 ~pending~。
+          1. 将 _newDisposableStack_.[[DisposableResourceStack]] 设置为 _disposableStack_.[[DisposableResourceStack]]。
+          1. 将 _disposableStack_.[[DisposableResourceStack]] 设置为一个新的空列表。
+          1. 将 _disposableStack_.[[DisposableState]] 设置为 ~disposed~。
+          1. 返回 _newDisposableStack_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.use" type="built-in function">
+        <h1>DisposableStack.prototype.use ( _value_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _disposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
+          1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 执行 ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], _value_, ~sync-dispose~)。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.dispose%">
+        <h1>DisposableStack.prototype [ %Symbol.dispose% ] ( )</h1>
+        <p>`%Symbol.dispose%` 属性的初始值是 %DisposableStack.prototype.dispose%，定义于 <emu-xref href="#sec-disposablestack.prototype.dispose"></emu-xref>。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.tostringtag%">
+        <h1>DisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` 属性的初始值是 String 值 *"DisposableStack"*。</p>
+        <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-disposablestack-instances">
+      <h1>DisposableStack 实例的属性</h1>
+      <p>DisposableStack 实例是普通对象，它们从 DisposableStack 原型对象（内在对象 %DisposableStack.prototype%）继承属性。DisposableStack 实例最初创建时带有 <emu-xref href="#table-internal-slots-of-disposablestack-instances"></emu-xref> 中描述的内部槽。</p>
+      <emu-table id="table-internal-slots-of-disposablestack-instances" caption="DisposableStack 实例的内部槽">
+        <table>
+          <tr>
+            <th>
+              内部槽
+            </th>
+            <th>
+              类型
+            </th>
+            <th>
+              描述
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableState]]
+            </td>
+            <td>
+              ~pending~ 或 ~disposed~
+            </td>
+            <td>
+              支配可处置栈将如何响应对其 `%Symbol.dispose%` 方法的传入调用。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              一个 DisposableResource 记录的列表
+            </td>
+            <td>
+              在可处置栈被处置时要处置的资源。资源按其初始化顺序添加，并按相反顺序处置。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-asyncdisposablestack-objects">
+    <h1>AsyncDisposableStack 对象</h1>
+    <p>AsyncDisposableStack 是一个对象，可用于容纳一个或多个应一起异步处置的资源。</p>
+    <p>任何 AsyncDisposableStack 对象都处于两个互斥状态之一：<em>已处置</em>或<em>待处理</em>。当且仅当既未对异步可处置栈 `d` 调用 `d.disposeAsync()`，也未对其调用 `d.move()` 时，`d` 是待处理的。</p>
+
+    <emu-clause id="sec-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack 构造函数</h1>
+      <p>AsyncDisposableStack 构造函数：</p>
+      <ul>
+        <li>是 <dfn>%AsyncDisposableStack%</dfn>。</li>
+        <li>是全局对象的 *"AsyncDisposableStack"* 属性的初始值。</li>
+        <li>在作为构造函数调用时，创建并初始化一个新的 AsyncDisposableStack。</li>
+        <li>不旨在作为函数调用，并且在以这种方式调用时会抛出异常。</li>
+        <li>可用作类定义的 `extends` 子句中的值。意图继承指定 AsyncDisposableStack 行为的子类构造函数，必须包含一次对 AsyncDisposableStack 构造函数的 `super` 调用，以创建并初始化带有必要内部状态的子类实例，从而支持 `AsyncDisposableStack.prototype` 的内置方法。</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack" type="built-in function">
+        <h1>AsyncDisposableStack ( )</h1>
+        <p>调用此函数时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 如果 NewTarget 是 *undefined*，则抛出 *TypeError* 异常。
+          1. 令 _asyncDisposableStack_ 为 ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)。
+          1. 将 _asyncDisposableStack_.[[AsyncDisposableState]] 设置为 ~pending~。
+          1. 将 _asyncDisposableStack_.[[DisposableResourceStack]] 设置为一个新的空列表。
+          1. 返回 _asyncDisposableStack_。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack 构造函数的属性</h1>
+      <p>AsyncDisposableStack 构造函数：</p>
+      <ul>
+        <li>具有一个值为 %Function.prototype% 的 [[Prototype]] 内部槽。</li>
+        <li>具有以下属性：</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype">
+        <h1>AsyncDisposableStack.prototype</h1>
+        <p>`AsyncDisposableStack.prototype` 的初始值是 AsyncDisposableStack 原型对象。</p>
+        <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-prototype-object">
+      <h1>AsyncDisposableStack 原型对象的属性</h1>
+      <p><dfn>AsyncDisposableStack 原型对象</dfn>：</p>
+      <ul>
+        <li>是 <dfn>%AsyncDisposableStack.prototype%</dfn>。</li>
+        <li>具有一个值为 %Object.prototype% 的 [[Prototype]] 内部槽。</li>
+        <li>是一个普通对象。</li>
+        <li>没有 [[AsyncDisposableState]] 内部槽，也没有 AsyncDisposableStack 实例的任何其他内部槽。</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.adopt" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.adopt ( _value_, _onDisposeAsync_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 如果 IsCallable(_onDisposeAsync_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 令 _closure_ 为一个新的抽象闭包，该闭包没有参数，捕获 _value_ 和 _onDisposeAsync_，并在被调用时执行以下步骤：
+            1. 返回 ? Call(_onDisposeAsync_, *undefined*, « _value_ »)。
+          1. 令 _func_ 为 CreateBuiltinFunction(_closure_, 0, *""*, « »)。
+          1. 执行 ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _func_)。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.constructor">
+        <h1>AsyncDisposableStack.prototype.constructor</h1>
+        <p>`AsyncDisposableStack.prototype.constructor` 的初始值是 %AsyncDisposableStack%。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.defer" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.defer ( _onDisposeAsync_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 如果 IsCallable(_onDisposeAsync_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 执行 ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _onDisposeAsync_)。
+          1. 返回 *undefined*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.disposeAsync" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.disposeAsync ( )</h1>
+        <p>调用此 async 方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则返回 *undefined*。
+          1. 将 _asyncDisposableStack_.[[AsyncDisposableState]] 设置为 ~disposed~。
+          1. 返回 ? DisposeResources(_asyncDisposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*))。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-asyncdisposablestack.prototype.disposed" type="built-in function">
+        <h1>get AsyncDisposableStack.prototype.disposed</h1>
+        <p>`AsyncDisposableStack.prototype.disposed` 是一个访问器属性，其 set 访问器函数为 *undefined*。调用其 get 访问器函数时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则返回 *true*。
+          1. 返回 *false*。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.move" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.move ( )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 令 _newAsyncDisposableStack_ 为 ? OrdinaryCreateFromConstructor(%AsyncDisposableStack%, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)。
+          1. 将 _newAsyncDisposableStack_.[[AsyncDisposableState]] 设置为 ~pending~。
+          1. 将 _newAsyncDisposableStack_.[[DisposableResourceStack]] 设置为 _asyncDisposableStack_.[[DisposableResourceStack]]。
+          1. 将 _asyncDisposableStack_.[[DisposableResourceStack]] 设置为一个新的空列表。
+          1. 将 _asyncDisposableStack_.[[AsyncDisposableState]] 设置为 ~disposed~。
+          1. 返回 _newAsyncDisposableStack_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.use" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.use ( _value_ )</h1>
+        <p>调用此方法时，它执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _asyncDisposableStack_ 为 *this* 值。
+          1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
+          1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
+          1. 执行 ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], _value_, ~async-dispose~)。
+          1. 返回 _value_。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.asyncdispose%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>`%Symbol.asyncDispose%` 属性的初始值是 %AsyncDisposableStack.prototype.disposeAsync%，定义于 <emu-xref href="#sec-asyncdisposablestack.prototype.disposeAsync"></emu-xref>。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.tostringtag%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` 属性的初始值是 String 值 *"AsyncDisposableStack"*。</p>
+        <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-asyncdisposablestack-instances">
+      <h1>AsyncDisposableStack 实例的属性</h1>
+      <p>AsyncDisposableStack 实例是普通对象，它们从 AsyncDisposableStack 原型对象（内在对象 %AsyncDisposableStack.prototype%）继承属性。AsyncDisposableStack 实例最初创建时带有 <emu-xref href="#table-internal-slots-of-asyncdisposablestack-instances"></emu-xref> 中描述的内部槽。</p>
+      <emu-table id="table-internal-slots-of-asyncdisposablestack-instances" caption="AsyncDisposableStack 实例的内部槽">
+        <table>
+          <tr>
+            <th>
+              内部槽
+            </th>
+            <th>
+              类型
+            </th>
+            <th>
+              描述
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[AsyncDisposableState]]
+            </td>
+            <td>
+              ~pending~ 或 ~disposed~
+            </td>
+            <td>
+              支配可处置栈将如何响应对其 `%Symbol.asyncDispose%` 方法的传入调用。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              一个 DisposableResource 记录的列表
+            </td>
+            <td>
+              在可处置栈被处置时要处置的资源。资源按其初始化顺序添加，并按相反顺序处置。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
     </emu-clause>
   </emu-clause>
 
@@ -52571,6 +53742,14 @@ THH:mm:ss.sss
     <emu-prodref name="LeftHandSideExpression"></emu-prodref>
     <emu-prodref name="UpdateExpression"></emu-prodref>
     <emu-prodref name="UnaryExpression"></emu-prodref>
+    <emu-prodref name="CoverAwaitExpressionAndAwaitUsingDeclarationHead"></emu-prodref>
+    <p>
+      在处理产生式<br>
+      <emu-prodref name="UnaryExpression" a="awaitusingcover"></emu-prodref><br>
+      的实例时，|CoverAwaitExpressionAndAwaitUsingDeclarationHead| 的解释使用以下语法进行细化：
+    </p>
+    <emu-prodref name="AwaitExpression"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="ExponentiationExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeOperator"></emu-prodref>
@@ -52621,8 +53800,17 @@ THH:mm:ss.sss
     <emu-prodref name="StatementListItem"></emu-prodref>
     <emu-prodref name="LexicalDeclaration"></emu-prodref>
     <emu-prodref name="LetOrConst"></emu-prodref>
+    <emu-prodref name="UsingDeclaration"></emu-prodref>
+    <emu-prodref name="AwaitUsingDeclaration"></emu-prodref>
     <emu-prodref name="BindingList"></emu-prodref>
     <emu-prodref name="LexicalBinding"></emu-prodref>
+    <p>
+      在处理产生式<br>
+      <emu-prodref name="AwaitUsingDeclaration"></emu-prodref><br>
+      的实例时，|CoverAwaitExpressionAndAwaitUsingDeclarationHead| 的解释使用以下语法进行细化：
+    </p>
+    <emu-prodref name="AwaitUsingDeclarationHead"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="VariableStatement"></emu-prodref>
     <emu-prodref name="VariableDeclarationList"></emu-prodref>
     <emu-prodref name="VariableDeclaration"></emu-prodref>

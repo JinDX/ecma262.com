@@ -1356,7 +1356,7 @@
         <p>well-known symbolsは、この仕様のアルゴリズムによって明示的に参照される組み込みSymbol値です。それらは通常、仕様アルゴリズムの拡張点として機能する値を持つプロパティのキーとして使用されます。別途指定されない限り、well-known symbols値はすべてのrealmsによって共有されます（<emu-xref href="#sec-code-realms"></emu-xref>）。</p>
         <p>この仕様内では、well-known symbolは、<emu-xref href="#table-well-known-symbols"></emu-xref>に列挙される値の1つであるintrinsicを用いて、標準の<emu-xref href="#sec-well-known-intrinsic-objects">intrinsic notation</emu-xref>で参照されます。</p>
         <emu-note>この仕様の以前の版では、現在の版で`%Symbol.name%`を使用する箇所に@@nameという形式の記法を使用していました。特に、以下の名前が使用されていました：@@asyncIterator、@@hasInstance、@@isConcatSpreadable、@@<emu-not-ref>iterator</emu-not-ref>、@@match、@@matchAll、@@replace、@@search、@@species、@@split、@@toPrimitive、@@toStringTag、および@@unscopables。</emu-note>
-        <emu-table id="table-well-known-symbols" caption="Well-known Symbols" oldids="table-1">
+        <emu-table id="table-well-known-symbols" caption="よく知られたシンボル" oldids="table-1">
           <table>
             <thead>
               <tr>
@@ -1373,13 +1373,35 @@
             </thead>
             <tr>
               <td>
+                <dfn>%Symbol.asyncDispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.asyncDispose"*
+              </td>
+              <td>
+                オブジェクト上で非同期にリソースのクリーンアップを実行するメソッド。それを含むスコープの評価が完了したときに、AsyncDisposableStack オブジェクトおよび `await using` 宣言によって呼び出される。
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <dfn>%Symbol.asyncIterator%</dfn>
               </td>
               <td>
                 *"Symbol.asyncIterator"*
               </td>
               <td>
-                オブジェクトのデフォルトasync iteratorを返すメソッド。`for`-`await`-`of`文の意味論によって呼び出されます。
+                オブジェクトのデフォルト非同期イテレータを返すメソッド。`for`-`await`-`of` 文のセマンティクスによって呼び出される。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dfn>%Symbol.dispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.dispose"*
+              </td>
+              <td>
+                オブジェクト上で明示的なリソースのクリーンアップを実行するメソッド。それを含むスコープの評価が完了したときに、DisposableStack オブジェクト、AsyncDisposableStack オブジェクト、および `using` 宣言によって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1390,7 +1412,7 @@
                 *"Symbol.hasInstance"*
               </td>
               <td>
-                constructor objectが、あるオブジェクトをそのconstructorのinstancesの1つとして認識するかを決定するメソッド。`instanceof`演算子の意味論によって呼び出されます。
+                コンストラクタオブジェクトが、あるオブジェクトをそのコンストラクタのインスタンスの1つとして認識するかどうかを判定するメソッド。`instanceof` 演算子のセマンティクスによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1401,7 +1423,7 @@
                 *"Symbol.isConcatSpreadable"*
               </td>
               <td>
-                trueの場合、オブジェクトが<emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref>によってその配列要素へ平坦化されるべきであることを示すBoolean値のプロパティ。
+                true の場合、オブジェクトが <emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref> によってその配列要素へと平坦化されるべきことを示す Boolean 値のプロパティ。
               </td>
             </tr>
             <tr>
@@ -1412,7 +1434,7 @@
                 *"Symbol.iterator"*
               </td>
               <td>
-                オブジェクトのデフォルトiteratorを返すメソッド。for-of文の意味論によって呼び出されます。
+                オブジェクトのデフォルトイテレータを返すメソッド。for-of 文のセマンティクスによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1423,7 +1445,7 @@
                 *"Symbol.match"*
               </td>
               <td>
-                regular expressionを文字列に対して照合するregular expressionメソッド。<emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref>メソッドによって呼び出されます。
+                正規表現を文字列に照合する正規表現メソッド。<emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref> メソッドによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1434,7 +1456,7 @@
                 *"Symbol.matchAll"*
               </td>
               <td>
-                regular expressionを文字列に対して照合した結果をyieldするiteratorを返すregular expressionメソッド。<emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref>メソッドによって呼び出されます。
+                文字列に対する正規表現の一致を yield するイテレータを返す正規表現メソッド。<emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref> メソッドによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1445,7 +1467,7 @@
                 *"Symbol.replace"*
               </td>
               <td>
-                文字列の一致した部分文字列を置き換えるregular expressionメソッド。<emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref>メソッドによって呼び出されます。
+                文字列の一致した部分文字列を置換する正規表現メソッド。<emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref> メソッドによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1456,7 +1478,7 @@
                 *"Symbol.search"*
               </td>
               <td>
-                regular expressionに一致する文字列内のindexを返すregular expressionメソッド。<emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref>メソッドによって呼び出されます。
+                正規表現に一致する文字列内のインデックスを返す正規表現メソッド。<emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref> メソッドによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1467,7 +1489,7 @@
                 *"Symbol.species"*
               </td>
               <td>
-                派生オブジェクトを作成するために使用されるconstructor functionである関数値プロパティ。
+                派生オブジェクトを作成するために使用されるコンストラクタ関数である、関数値のプロパティ。
               </td>
             </tr>
             <tr>
@@ -1478,7 +1500,7 @@
                 *"Symbol.split"*
               </td>
               <td>
-                regular expressionに一致するindexで文字列を分割するregular expressionメソッド。<emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref>メソッドによって呼び出されます。
+                正規表現に一致するインデックスで文字列を分割する正規表現メソッド。<emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref> メソッドによって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1489,7 +1511,7 @@
                 *"Symbol.toPrimitive"*
               </td>
               <td>
-                オブジェクトを対応するprimitive valueへ変換するメソッド。ToPrimitive抽象操作によって呼び出されます。
+                オブジェクトを対応するプリミティブ値へ変換するメソッド。ToPrimitive 抽象操作によって呼び出される。
               </td>
             </tr>
             <tr>
@@ -1500,7 +1522,7 @@
                 *"Symbol.toStringTag"*
               </td>
               <td>
-                オブジェクトのデフォルト文字列記述の作成に使用されるString値プロパティ。組み込みメソッド<emu-xref href="#sec-object.prototype.tostring">`Object.prototype.toString`</emu-xref>によってアクセスされます。
+                オブジェクトのデフォルトの文字列表現を作成する際に使用される String 値のプロパティ。組み込みメソッド <emu-xref href="#sec-object.prototype.tostring">`Object.prototype.toString`</emu-xref> によってアクセスされる。
               </td>
             </tr>
             <tr>
@@ -1511,7 +1533,7 @@
                 *"Symbol.unscopables"*
               </td>
               <td>
-                関連付けられたオブジェクトの`with`環境束縛から除外されるproperty namesを、ownおよびinherited property namesとして持つオブジェクト値プロパティ。
+                自身および継承されたプロパティ名が、関連付けられたオブジェクトの `with` 環境束縛から除外されるプロパティ名である、オブジェクト値のプロパティ。
               </td>
             </tr>
           </table>
@@ -3397,18 +3419,18 @@
         <h1>Well-Known Intrinsic Objects</h1>
         <p>well-known intrinsicsは、この仕様のアルゴリズムによって明示的に参照される組み込みオブジェクトであり、通常realm固有のidentityを持ちます。別途指定されない限り、各intrinsic objectは実際には、realmごとに1つずつ、類似したオブジェクトの集合に対応します。</p>
         <p>この仕様内では、%name%のような参照は、current realmに関連付けられ、そのnameに対応するintrinsic objectを意味します。%name.a.b%のような参照は、ECMAScriptコードが評価される前にintrinsic object %name%の*"a"*プロパティの値の*"b"*プロパティにアクセスしたかのように意味します。current realmおよびそのintrinsicsの決定は<emu-xref href="#sec-execution-contexts"></emu-xref>で記述されます。well-known intrinsicsは<emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>に列挙されます。</p>
-        <emu-table id="table-well-known-intrinsic-objects" caption="Well-Known Intrinsic Objects" oldids="table-7">
+        <emu-table id="table-well-known-intrinsic-objects" caption="よく知られた組込みオブジェクト" oldids="table-7">
           <table>
             <thead>
               <tr>
                 <th>
-                  Intrinsic Name
+                  組込み名
                 </th>
                 <th>
-                  Global Name
+                  グローバル名
                 </th>
                 <th>
-                  ECMAScript言語との関連
+                  ECMAScript 言語での関連付け
                 </th>
               </tr>
             </thead>
@@ -3420,7 +3442,7 @@
                 *"AggregateError"*
               </td>
               <td>
-                `AggregateError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>）
+                `AggregateError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3431,7 +3453,7 @@
                 *"Array"*
               </td>
               <td>
-                `Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-array-constructor"></emu-xref>）
+                `Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-array-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3442,7 +3464,7 @@
                 *"ArrayBuffer"*
               </td>
               <td>
-                `ArrayBuffer` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>）
+                `ArrayBuffer` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3452,7 +3474,18 @@
               <td>
               </td>
               <td>
-                Array Iterator objectsのprototype（<emu-xref href="#sec-array-iterator-objects"></emu-xref>）
+                Array Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-array-iterator-objects"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %AsyncDisposableStack%
+              </td>
+              <td>
+                *"AsyncDisposableStack"*
+              </td>
+              <td>
+                `AsyncDisposableStack` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3462,7 +3495,7 @@
               <td>
               </td>
               <td>
-                Async-from-Sync Iterator objectsのprototype（<emu-xref href="#sec-async-from-sync-iterator-objects"></emu-xref>）
+                Async-from-Sync Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-async-from-sync-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3472,7 +3505,7 @@
               <td>
               </td>
               <td>
-                async function objectsの<emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-async-function-constructor"></emu-xref>）
+                async 関数オブジェクトの<emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-async-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3482,7 +3515,7 @@
               <td>
               </td>
               <td>
-                async generator function objectsの<emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>）
+                async generator 関数オブジェクトの<emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3492,7 +3525,7 @@
               <td>
               </td>
               <td>
-                async generator objectsのprototype（<emu-xref href="#sec-asyncgenerator-objects"></emu-xref>）
+                async generator オブジェクトのプロトタイプ (<emu-xref href="#sec-asyncgenerator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3502,7 +3535,7 @@
               <td>
               </td>
               <td>
-                すべての標準組み込みasync iterator objectsが間接的に継承するオブジェクト
+                すべての標準組込み async iterator オブジェクトが間接的に継承するオブジェクト
               </td>
             </tr>
             <tr>
@@ -3513,7 +3546,7 @@
                 *"Atomics"*
               </td>
               <td>
-                `Atomics`オブジェクト（<emu-xref href="#sec-atomics-object"></emu-xref>）
+                `Atomics` オブジェクト (<emu-xref href="#sec-atomics-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3524,7 +3557,7 @@
                 *"BigInt"*
               </td>
               <td>
-                `BigInt` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-bigint-constructor"></emu-xref>）
+                `BigInt` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-bigint-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3535,7 +3568,7 @@
                 *"BigInt64Array"*
               </td>
               <td>
-                `BigInt64Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `BigInt64Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3546,7 +3579,7 @@
                 *"BigUint64Array"*
               </td>
               <td>
-                `BigUint64Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `BigUint64Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3557,7 +3590,7 @@
                 *"Boolean"*
               </td>
               <td>
-                `Boolean` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-boolean-constructor"></emu-xref>）
+                `Boolean` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-boolean-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3568,7 +3601,7 @@
                 *"DataView"*
               </td>
               <td>
-                `DataView` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-dataview-constructor"></emu-xref>）
+                `DataView` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-dataview-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3579,7 +3612,7 @@
                 *"Date"*
               </td>
               <td>
-                `Date` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-date-constructor"></emu-xref>）
+                `Date` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-date-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3590,7 +3623,7 @@
                 *"decodeURI"*
               </td>
               <td>
-                `decodeURI`関数（<emu-xref href="#sec-decodeuri-encodeduri"></emu-xref>）
+                `decodeURI` 関数 (<emu-xref href="#sec-decodeuri-encodeduri"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3601,7 +3634,18 @@
                 *"decodeURIComponent"*
               </td>
               <td>
-                `decodeURIComponent`関数（<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>）
+                `decodeURIComponent` 関数 (<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %DisposableStack%
+              </td>
+              <td>
+                *"DisposableStack"*
+              </td>
+              <td>
+                `DisposableStack` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-disposablestack-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3612,7 +3656,7 @@
                 *"encodeURI"*
               </td>
               <td>
-                `encodeURI`関数（<emu-xref href="#sec-encodeuri-uri"></emu-xref>）
+                `encodeURI` 関数 (<emu-xref href="#sec-encodeuri-uri"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3623,7 +3667,7 @@
                 *"encodeURIComponent"*
               </td>
               <td>
-                `encodeURIComponent`関数（<emu-xref href="#sec-encodeuricomponent-uricomponent"></emu-xref>）
+                `encodeURIComponent` 関数 (<emu-xref href="#sec-encodeuricomponent-uricomponent"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3634,7 +3678,7 @@
                 *"Error"*
               </td>
               <td>
-                `Error` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-error-constructor"></emu-xref>）
+                `Error` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3645,7 +3689,7 @@
                 *"eval"*
               </td>
               <td>
-                `eval`関数（<emu-xref href="#sec-eval-x"></emu-xref>）
+                `eval` 関数 (<emu-xref href="#sec-eval-x"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3656,7 +3700,7 @@
                 *"EvalError"*
               </td>
               <td>
-                `EvalError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>）
+                `EvalError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3667,7 +3711,7 @@
                 *"FinalizationRegistry"*
               </td>
               <td>
-                `FinalizationRegistry` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>）
+                `FinalizationRegistry` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3678,7 +3722,7 @@
                 *"Float16Array"*
               </td>
               <td>
-                `Float16Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Float16Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3689,7 +3733,7 @@
                 *"Float32Array"*
               </td>
               <td>
-                `Float32Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Float32Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3700,7 +3744,7 @@
                 *"Float64Array"*
               </td>
               <td>
-                `Float64Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Float64Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3710,7 +3754,7 @@
               <td>
               </td>
               <td>
-                For-In Iterator objectsのprototype（<emu-xref href="#sec-for-in-iterator-objects"></emu-xref>）
+                For-In Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-for-in-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3721,7 +3765,7 @@
                 *"Function"*
               </td>
               <td>
-                `Function` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-function-constructor"></emu-xref>）
+                `Function` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3731,7 +3775,7 @@
               <td>
               </td>
               <td>
-                generator function objectsの<emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>）
+                generator 関数オブジェクトの<emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3741,7 +3785,7 @@
               <td>
               </td>
               <td>
-                generator objectsのprototype（<emu-xref href="#sec-generator-objects"></emu-xref>）
+                generator オブジェクトのプロトタイプ (<emu-xref href="#sec-generator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3752,7 +3796,7 @@
                 *"Int8Array"*
               </td>
               <td>
-                `Int8Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Int8Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3763,7 +3807,7 @@
                 *"Int16Array"*
               </td>
               <td>
-                `Int16Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Int16Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3774,7 +3818,7 @@
                 *"Int32Array"*
               </td>
               <td>
-                `Int32Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Int32Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3785,7 +3829,7 @@
                 *"isFinite"*
               </td>
               <td>
-                `isFinite`関数（<emu-xref href="#sec-isfinite-number"></emu-xref>）
+                `isFinite` 関数 (<emu-xref href="#sec-isfinite-number"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3796,7 +3840,7 @@
                 *"isNaN"*
               </td>
               <td>
-                `isNaN`関数（<emu-xref href="#sec-isnan-number"></emu-xref>）
+                `isNaN` 関数 (<emu-xref href="#sec-isnan-number"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3807,7 +3851,7 @@
                 *"Iterator"*
               </td>
               <td>
-                `Iterator` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-iterator-constructor"></emu-xref>）
+                `Iterator` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-iterator-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3817,7 +3861,7 @@
               <td>
               </td>
               <td>
-                Iterator Helper objectsのprototype（<emu-xref href="#sec-%iteratorhelperprototype%-object"></emu-xref>）
+                Iterator Helper オブジェクトのプロトタイプ (<emu-xref href="#sec-%iteratorhelperprototype%-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3828,7 +3872,7 @@
                 *"JSON"*
               </td>
               <td>
-                `JSON`オブジェクト（<emu-xref href="#sec-json-object"></emu-xref>）
+                `JSON` オブジェクト (<emu-xref href="#sec-json-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3839,7 +3883,7 @@
                 *"Map"*
               </td>
               <td>
-                `Map` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-map-constructor"></emu-xref>）
+                `Map` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-map-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3849,7 +3893,7 @@
               <td>
               </td>
               <td>
-                Map Iterator objectsのprototype（<emu-xref href="#sec-map-iterator-objects"></emu-xref>）
+                Map Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-map-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3860,7 +3904,7 @@
                 *"Math"*
               </td>
               <td>
-                `Math`オブジェクト（<emu-xref href="#sec-math-object"></emu-xref>）
+                `Math` オブジェクト (<emu-xref href="#sec-math-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3871,7 +3915,7 @@
                 *"Number"*
               </td>
               <td>
-                `Number` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-number-constructor"></emu-xref>）
+                `Number` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-number-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3882,7 +3926,7 @@
                 *"Object"*
               </td>
               <td>
-                `Object` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-object-constructor"></emu-xref>）
+                `Object` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-object-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3893,7 +3937,7 @@
                 *"parseFloat"*
               </td>
               <td>
-                `parseFloat`関数（<emu-xref href="#sec-parsefloat-string"></emu-xref>）
+                `parseFloat` 関数 (<emu-xref href="#sec-parsefloat-string"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3904,7 +3948,7 @@
                 *"parseInt"*
               </td>
               <td>
-                `parseInt`関数（<emu-xref href="#sec-parseint-string-radix"></emu-xref>）
+                `parseInt` 関数 (<emu-xref href="#sec-parseint-string-radix"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3915,7 +3959,7 @@
                 *"Promise"*
               </td>
               <td>
-                `Promise` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-promise-constructor"></emu-xref>）
+                `Promise` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-promise-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3926,7 +3970,7 @@
                 *"Proxy"*
               </td>
               <td>
-                `Proxy` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-proxy-constructor"></emu-xref>）
+                `Proxy` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-proxy-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3937,7 +3981,7 @@
                 *"RangeError"*
               </td>
               <td>
-                `RangeError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>）
+                `RangeError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3948,7 +3992,7 @@
                 *"ReferenceError"*
               </td>
               <td>
-                `ReferenceError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>）
+                `ReferenceError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3959,7 +4003,7 @@
                 *"Reflect"*
               </td>
               <td>
-                `Reflect`オブジェクト（<emu-xref href="#sec-reflect-object"></emu-xref>）
+                `Reflect` オブジェクト (<emu-xref href="#sec-reflect-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3970,7 +4014,7 @@
                 *"RegExp"*
               </td>
               <td>
-                `RegExp` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-regexp-constructor"></emu-xref>）
+                `RegExp` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-regexp-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3980,7 +4024,7 @@
               <td>
               </td>
               <td>
-                RegExp String Iterator objectsのprototype（<emu-xref href="#sec-regexp-string-iterator-objects"></emu-xref>）
+                RegExp String Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-regexp-string-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3991,7 +4035,7 @@
                 *"Set"*
               </td>
               <td>
-                `Set` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-set-constructor"></emu-xref>）
+                `Set` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-set-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4001,7 +4045,7 @@
               <td>
               </td>
               <td>
-                Set Iterator objectsのprototype（<emu-xref href="#sec-set-iterator-objects"></emu-xref>）
+                Set Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-set-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4012,7 +4056,7 @@
                 *"SharedArrayBuffer"*
               </td>
               <td>
-                `SharedArrayBuffer` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>）
+                `SharedArrayBuffer` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4023,7 +4067,7 @@
                 *"String"*
               </td>
               <td>
-                `String` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-string-constructor"></emu-xref>）
+                `String` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-string-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4033,7 +4077,18 @@
               <td>
               </td>
               <td>
-                String Iterator objectsのprototype（<emu-xref href="#sec-string-iterator-objects"></emu-xref>）
+                String Iterator オブジェクトのプロトタイプ (<emu-xref href="#sec-string-iterator-objects"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %SuppressedError%
+              </td>
+              <td>
+                *"SuppressedError"*
+              </td>
+              <td>
+                `SuppressedError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-suppressederror-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4044,7 +4099,7 @@
                 *"Symbol"*
               </td>
               <td>
-                `Symbol` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-symbol-constructor"></emu-xref>）
+                `Symbol` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-symbol-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4055,7 +4110,7 @@
                 *"SyntaxError"*
               </td>
               <td>
-                `SyntaxError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>）
+                `SyntaxError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4065,7 +4120,7 @@
               <td>
               </td>
               <td>
-                無条件に%TypeError%の新しいインスタンスをthrowするfunction object
+                無条件に %TypeError% の新しいインスタンスを投げる関数オブジェクト
               </td>
             </tr>
             <tr>
@@ -4075,7 +4130,7 @@
               <td>
               </td>
               <td>
-                すべてのtyped Array <emu-not-ref>constructors</emu-not-ref>のsuper class（<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>）
+                すべての typed Array <emu-not-ref>コンストラクタ</emu-not-ref>のスーパークラス (<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4086,7 +4141,7 @@
                 *"TypeError"*
               </td>
               <td>
-                `TypeError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>）
+                `TypeError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4097,7 +4152,7 @@
                 *"Uint8Array"*
               </td>
               <td>
-                `Uint8Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Uint8Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4108,7 +4163,7 @@
                 *"Uint8ClampedArray"*
               </td>
               <td>
-                `Uint8ClampedArray` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Uint8ClampedArray` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4119,7 +4174,7 @@
                 *"Uint16Array"*
               </td>
               <td>
-                `Uint16Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Uint16Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4130,7 +4185,7 @@
                 *"Uint32Array"*
               </td>
               <td>
-                `Uint32Array` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-typedarray-objects"></emu-xref>）
+                `Uint32Array` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4141,7 +4196,7 @@
                 *"URIError"*
               </td>
               <td>
-                `URIError` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>）
+                `URIError` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4152,7 +4207,7 @@
                 *"WeakMap"*
               </td>
               <td>
-                `WeakMap` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-weakmap-constructor"></emu-xref>）
+                `WeakMap` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-weakmap-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4163,7 +4218,7 @@
                 *"WeakRef"*
               </td>
               <td>
-                `WeakRef` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-weak-ref-constructor"></emu-xref>）
+                `WeakRef` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-weak-ref-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4174,7 +4229,7 @@
                 *"WeakSet"*
               </td>
               <td>
-                `WeakSet` <emu-not-ref>constructor</emu-not-ref>（<emu-xref href="#sec-weakset-constructor"></emu-xref>）
+                `WeakSet` <emu-not-ref>コンストラクタ</emu-not-ref> (<emu-xref href="#sec-weakset-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4184,7 +4239,7 @@
               <td>
               </td>
               <td>
-                `Iterator.from`によって返されるwrapped iterator objectsのprototype（<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>）
+                `Iterator.from` によって返されるラップ済みイテレータオブジェクトのプロトタイプ (<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>)
               </td>
             </tr>
           </table>
@@ -7338,6 +7393,186 @@
       </emu-alg>
     </emu-clause>
   </emu-clause>
+
+  <emu-clause id="sec-operations-on-disposable-objects">
+    <h1>Disposable オブジェクトに対する操作</h1>
+    <p>共通リソース管理インターフェイスを参照（<emu-xref href="#sec-common-resource-management-interfaces"></emu-xref>）。</p>
+
+    <emu-clause id="sec-disposableresource-records">
+      <h1>DisposableResource レコード</h1>
+      <p><dfn variants="DisposableResource Records">DisposableResource レコード</dfn>は、破棄可能なオブジェクトを、そのオブジェクトを破棄するために使用されるメソッドとともにカプセル化するために使用される Record 値である。DisposableResource レコードは、CreateDisposableResource 抽象操作によって生成される。</p>
+      <p>DisposableResource レコードは、<emu-xref href="#table-disposableresource-record-fields"></emu-xref> に列挙されるフィールドを持つ:</p>
+      <emu-table id="table-disposableresource-record-fields" caption="DisposableResource レコードのフィールド">
+        <table>
+          <tr>
+            <th>
+              フィールド名
+            </th>
+            <th>
+              値
+            </th>
+            <th>
+              意味
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[ResourceValue]]
+            </td>
+            <td>
+              Object または *undefined*
+            </td>
+            <td>
+              破棄される値。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[Kind]]
+            </td>
+            <td>
+              ~sync-dispose~ または ~async-dispose~
+            </td>
+            <td>
+              リソースが `using` 宣言または DisposableStack オブジェクトによって追加されたか（~sync-dispose~）、それとも `await using` 宣言または AsyncDisposableStack オブジェクトによって追加されたか（~async-dispose~）を示す。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposeMethod]]
+            </td>
+            <td>
+              関数オブジェクトまたは *undefined*
+            </td>
+            <td>
+              リソースが破棄されるときに、[[ResourceValue]] をその *this* 値として呼び出される関数オブジェクト。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+
+    <emu-clause id="sec-adddisposableresource" type="abstract operation">
+      <h1>
+        AddDisposableResource (
+          _disposableResourceStack_: DisposableResource レコードの List,
+          _value_: ECMAScript 言語値,
+          _kind_: ~sync-dispose~ または ~async-dispose~,
+          optional _method_: 関数オブジェクト,
+        ): ~unused~ を含む normal completion または throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _method_ が存在する場合、then
+          1. Assert: _value_ は *undefined* である。
+          1. Let _resource_ be ? CreateDisposableResource(*undefined*, _kind_, _method_).
+        1. Else,
+          1. _value_ が *null* または *undefined* のいずれかであり、かつ _kind_ が ~sync-dispose~ である場合、~unused~ を返す。
+          1. NOTE: _value_ が *null* または *undefined* のいずれかであり、かつ _kind_ が ~async-dispose~ である場合、後でリソースが破棄されるときにも Await が実行されることを確保するため、そのリソースが評価されたことを記録する。
+          1. Let _resource_ be ? CreateDisposableResource(_value_, _kind_).
+        1. _resource_ を _disposableResourceStack_ に追加する。
+        1. Return ~unused~.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-createdisposableresource" type="abstract operation">
+      <h1>
+        CreateDisposableResource (
+          _value_: ECMAScript 言語値,
+          _kind_: ~sync-dispose~ または ~async-dispose~,
+          optional _method_: 関数オブジェクト,
+        ): DisposableResource レコードを含む normal completion または throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _method_ が存在しない場合、then
+          1. _value_ が *null* または *undefined* のいずれかである場合、then
+            1. Set _value_ to *undefined*.
+            1. Set _method_ to *undefined*.
+          1. Else,
+            1. Set _method_ to ? GetDisposeMethod(_value_, _kind_).
+            1. _method_ が *undefined* である場合、*TypeError* 例外を投げる。
+        1. Return the DisposableResource Record { [[ResourceValue]]: _value_, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ }.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getdisposemethod" type="abstract operation">
+      <h1>
+        GetDisposeMethod (
+          _value_: ECMAScript 言語値,
+          _kind_: ~sync-dispose~ または ~async-dispose~,
+        ): 関数オブジェクトまたは *undefined* のいずれかを含む normal completion、または throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _value_ が Object でない場合、*TypeError* 例外を投げる。
+        1. _kind_ が ~sync-dispose~ である場合、return ? GetMethod(_value_, %Symbol.dispose%).
+        1. Assert: _kind_ は ~async-dispose~ である。
+        1. Let _asyncMethod_ be ? GetMethod(_value_, %Symbol.asyncDispose%).
+        1. _asyncMethod_ が *undefined* でない場合、_asyncMethod_ を返す。
+        1. Let _syncMethod_ be ? GetMethod(_value_, %Symbol.dispose%).
+        1. _syncMethod_ が *undefined* である場合、*undefined* を返す。
+        1. Let _closure_ be a new Abstract Closure with no parameters that captures _syncMethod_ and performs the following steps when called:
+          1. Let _obj_ be the *this* value.
+          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+          1. Let _result_ be Completion(Call(_syncMethod_, _obj_)).
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+          1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »).
+          1. Return _promiseCapability_.[[Promise]].
+        1. NOTE: この関数はユーザーコードから観測できない。この関数は、同期的な `%Symbol.dispose%` メソッドから返された Promise が await されないこと、および同期的な例外が rejected Promise に変換されることを確保するために使用される。
+        1. Return CreateBuiltinFunction(_closure_, 0, *""*, « »).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-disposeresources" type="abstract operation">
+      <h1>
+        DisposeResources (
+          _disposableResourceStack_: DisposableResource レコードの List,
+          _completion_: ECMAScript 言語値または ~empty~ のいずれかを含む normal completion、または abrupt completion,
+        ): ECMAScript 言語値または ~empty~ のいずれかを含む normal completion、または abrupt completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. Let _needsAwait_ be *false*.
+        1. Let _hasAwaited_ be *false*.
+        1. Let _outputCompletion_ be _completion_.
+        1. _disposableResourceStack_ の各要素 _resource_ について、List の逆順で、do
+          1. Let _value_ be _resource_.[[ResourceValue]].
+          1. Let _kind_ be _resource_.[[Kind]].
+          1. Let _method_ be _resource_.[[DisposeMethod]].
+          1. _kind_ が ~sync-dispose~ であり、_needsAwait_ が *true* であり、かつ _hasAwaited_ が *false* である場合、then
+            1. Perform ! Await(*undefined*).
+            1. Set _needsAwait_ to *false*.
+          1. _method_ が *undefined* でない場合、then
+            1. Let _result_ be Completion(Call(_method_, _value_)).
+            1. _result_ が normal completion であり、かつ _kind_ が ~async-dispose~ である場合、then
+              1. Set _result_ to Completion(Await(_result_.[[Value]])).
+              1. Set _hasAwaited_ to *true*.
+            1. _result_ が throw completion である場合、then
+              1. _outputCompletion_ が throw completion である場合、then
+                1. Set _result_ to _result_.[[Value]].
+                1. Let _suppressed_ be _outputCompletion_.[[Value]].
+                1. Let _error_ be a newly created *SuppressedError* object.
+                1. Perform CreateNonEnumerableDataPropertyOrThrow(_error_, *"error"*, _result_).
+                1. Perform CreateNonEnumerableDataPropertyOrThrow(_error_, *"suppressed"*, _suppressed_).
+                1. Set _outputCompletion_ to ThrowCompletion(_error_).
+              1. Else,
+                1. Set _outputCompletion_ to _result_.
+          1. Else,
+            1. Assert: _kind_ は ~async-dispose~ である。
+            1. Set _needsAwait_ to *true*.
+            1. NOTE: これは、`await using` 宣言の初期化値が *null* または *undefined* のいずれかであった場合にのみ起こり得ることを示す。
+        1. _needsAwait_ が *true* であり、かつ _hasAwaited_ が *false* である場合、then
+          1. Perform ! Await(*undefined*).
+        1. NOTE: この時点で _disposableResourceStack_ は二度と使用されない。_disposableResourceStack_ の内容は、ガベージコレクションなどにより、実装内で破棄できる。
+        1. Return ? _outputCompletion_.
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-syntax-directed-operations">
@@ -7378,6 +7613,16 @@
         1. « *"await"* »を返す。
       </emu-alg>
       <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. |BindingList| の BoundNames を返す。
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
       <emu-alg>
         1. |BindingList|のBoundNamesを返す。
       </emu-alg>
@@ -7653,6 +7898,16 @@
       </emu-alg>
       <emu-grammar>LetOrConst : `const`</emu-grammar>
       <emu-alg>
+        1. *true* を返す。
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
         1. *true*を返す。
       </emu-alg>
       <emu-grammar>
@@ -7695,6 +7950,124 @@
       <emu-note>
         <p>`export default` |AssignmentExpression|をconstant declarationとして扱う必要はありません。なぜなら、moduleのdefault objectを参照するために使用される内部束縛名への代入を許可する構文は存在しないからです。</p>
       </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
+        1. *true* を返す。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>
+        ForDeclaration :
+          `using` ForBinding
+          `await` `using` ForBinding
+      </emu-grammar>
+      <emu-alg>
+        1. *true* を返す。
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isawaitusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsAwaitUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *true* を返す。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *true* を返す。
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-static-semantics-lexicallydeclarednames" oldids="sec-block-static-semantics-lexicallydeclarednames,sec-switch-statement-static-semantics-lexicallydeclarednames,sec-labelled-statements-static-semantics-lexicallydeclarednames,sec-function-definitions-static-semantics-lexicallydeclarednames,sec-arrow-function-definitions-static-semantics-lexicallydeclarednames,sec-async-arrow-function-definitions-static-semantics-LexicallyDeclaredNames,sec-scripts-static-semantics-lexicallydeclarednames,sec-module-semantics-static-semantics-lexicallydeclarednames" type="sdo">
@@ -9190,7 +9563,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -9978,7 +10351,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -10132,6 +10505,28 @@
       </emu-grammar>
       <emu-alg>
         1. ~empty~を返す。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-containsusing" type="sdo">
+      <h1>Static Semantics: ContainsUsing ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
+      <emu-alg>
+        1. 派生した |StatementList| の ContainsUsing が *true* である場合、*true* を返す。
+        1. |StatementListItem| の ContainsUsing が *true* である場合、*true* を返す。
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>StatementListItem : Statement</emu-grammar>
+      <emu-alg>
+        1. *false* を返す。
+      </emu-alg>
+      <emu-grammar>StatementListItem : Declaration</emu-grammar>
+      <emu-alg>
+        1. |Declaration| の IsUsingDeclaration が *true* である場合、*true* を返す。
+        1. |Declaration| の IsAwaitUsingDeclaration が *true* である場合、*true* を返す。
+        1. *false* を返す。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -10340,6 +10735,7 @@
       <emu-clause id="sec-declarative-environment-records">
         <h1>Declarative Environment Records</h1>
         <p>各<dfn variants="Declarative Environment Records">Declarative Environment Record</dfn>は、variable、constant、let、class、module、import、および/またはfunction declarationsを含むECMAScriptプログラムscopeに関連付けられます。Declarative Environment Recordは、そのscope内に含まれるdeclarationsによって定義される識別子集合をbindします。</p>
+        <p>すべての Declarative Environment Record はまた [[DisposableResourceStack]] フィールドを持ち、これは DisposableResource Records の List を含む。このリストの要素は、Environment Record を構築した Evaluation ステップが完了したときに破棄されなければならない `using` 宣言および `await using` 宣言によって追跡される。</p>
 
         <emu-clause id="sec-declarative-environment-records-hasbinding-n" type="concrete method">
           <h1>
@@ -11458,9 +11854,10 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _envRecord_を、bindingsを持たない新しいDeclarative Environment Recordとする。
-          1. _envRecord_.[[OuterEnv]]を_outerEnv_に設定する。
-          1. _envRecord_を返す。
+          1. _envRecord_ を、束縛を含まない新しい Declarative Environment Record とする。
+          1. _envRecord_.[[OuterEnv]] を _outerEnv_ に設定する。
+          1. _envRecord_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _envRecord_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -11493,13 +11890,14 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _envRecord_を、bindingsを持たない新しいFunction Environment Recordとする。
-          1. _envRecord_.[[FunctionObject]]を_func_に設定する。
-          1. _func_.[[ThisMode]]が~lexical~なら、_envRecord_.[[ThisBindingStatus]]を~lexical~に設定する。
-          1. そうでなければ、_envRecord_.[[ThisBindingStatus]]を~uninitialized~に設定する。
-          1. _envRecord_.[[NewTarget]]を_newTarget_に設定する。
-          1. _envRecord_.[[OuterEnv]]を_func_.[[Environment]]に設定する。
-          1. _envRecord_を返す。
+          1. _envRecord_ を、束縛を含まない新しい Function Environment Record とする。
+          1. _envRecord_.[[FunctionObject]] を _func_ に設定する。
+          1. _func_.[[ThisMode]] が ~lexical~ である場合、_envRecord_.[[ThisBindingStatus]] を ~lexical~ に設定する。
+          1. Else, _envRecord_.[[ThisBindingStatus]] を ~uninitialized~ に設定する。
+          1. _envRecord_.[[NewTarget]] を _newTarget_ に設定する。
+          1. _envRecord_.[[OuterEnv]] を _func_.[[Environment]] に設定する。
+          1. _envRecord_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _envRecord_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -11533,9 +11931,10 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _envRecord_を、bindingsを持たない新しいModule Environment Recordとする。
-          1. _envRecord_.[[OuterEnv]]を_outerEnv_に設定する。
-          1. _envRecord_を返す。
+          1. _envRecord_ を、束縛を含まない新しい Module Environment Record とする。
+          1. _envRecord_.[[OuterEnv]] を _outerEnv_ に設定する。
+          1. _envRecord_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _envRecord_ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -17986,6 +18385,9 @@
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `++`
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `--`
 
+          UsingDeclaration[In, Yield, Await] :
+            `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
+
           ContinueStatement[Yield, Await] :
             `continue` `;`
             `continue` [no LineTerminator here] LabelIdentifier[?Yield, ?Await] `;`
@@ -18039,37 +18441,43 @@
         <p>これらのrestricted productionsの実際上の効果は次のとおりです：</p>
         <ul>
           <li>
-            parserがpostfix operatorとして扱う位置で`++`または`--` tokenに遭遇し、preceding tokenと`++`または`--` tokenの間に少なくとも1つの|LineTerminator|が出現した場合、`++`または`--` tokenの前にsemicolonが自動的に挿入されます。
+            パーサが後置演算子として扱う位置で `++` または `--` トークンに遭遇し、直前のトークンと `++` または `--` トークンの間に少なくとも1つの |LineTerminator| が出現していた場合、セミコロンは `++` または `--` トークンの前に自動的に挿入される。
           </li>
           <li>
-            `continue`、`break`、`return`、`throw`、または`yield` tokenに遭遇し、次のtokenの前に|LineTerminator|に遭遇した場合、`continue`、`break`、`return`、`throw`、または`yield` tokenの後にsemicolonが自動的に挿入されます。
+            `using` トークンに遭遇し、|IdentifierName| トークンの前に |LineTerminator| が遭遇された場合、セミコロンは `using` トークンの後に自動的に挿入される。
           </li>
           <li>
-            arrow function parameter(s)の後、`=>` tokenの前に|LineTerminator|が続く場合、semicolonが自動的に挿入され、そのpunctuatorはsyntax errorを引き起こします。
+            `continue`、`break`、`return`、`throw`、または `yield` トークンに遭遇し、次のトークンの前に |LineTerminator| が遭遇された場合、セミコロンは `continue`、`break`、`return`、`throw`、または `yield` トークンの後に自動的に挿入される。
           </li>
           <li>
-            `async` tokenの後、`function`、|IdentifierName|、または`(` tokenの前に|LineTerminator|が続く場合、semicolonが自動的に挿入され、`async` tokenは後続tokensと同じexpressionまたはclass elementの一部として扱われません。
+            アロー関数のパラメータが `=>` トークンの前の |LineTerminator| に続く場合、セミコロンが自動的に挿入され、その区切り子は構文エラーを引き起こす。
           </li>
           <li>
-            `async` tokenの後、`*` tokenの前に|LineTerminator|が続く場合、semicolonが自動的に挿入され、そのpunctuatorはsyntax errorを引き起こします。
+            `async` トークンの後に、`function`、|IdentifierName|、または `(` トークンの前の |LineTerminator| が続く場合、セミコロンが自動的に挿入され、`async` トークンは後続のトークンと同じ式またはクラス要素の一部として扱われない。
+          </li>
+          <li>
+            `async` トークンの後に、`*` トークンの前の |LineTerminator| が続く場合、セミコロンが自動的に挿入され、その区切り子は構文エラーを引き起こす。
           </li>
         </ul>
-        <p>ECMAScript programmersへの結果としての実際的な助言は次のとおりです：</p>
+        <p>結果として、ECMAScript プログラマに対する実践的な助言は次のとおりである:</p>
         <ul>
           <li>
-            postfix `++`または`--` operatorは、そのoperandと同じ行に置くべきです。
+            後置 `++` または `--` 演算子は、そのオペランドと同じ行に置かれるべきである。
           </li>
           <li>
-            `return`または`throw` statement内の|Expression|、または`yield` expression内の|AssignmentExpression|は、`return`、`throw`、または`yield` tokenと同じ行で開始するべきです。
+            `using` 宣言内の |BindingList| は、`using` トークンと同じ行で開始するべきである。
           </li>
           <li>
-            `break`または`continue` statement内の|LabelIdentifier|は、`break`または`continue` tokenと同じ行に置くべきです。
+            `return` または `throw` 文内の |Expression|、または `yield` 式内の |AssignmentExpression| は、`return`、`throw`、または `yield` トークンと同じ行で開始するべきである。
           </li>
           <li>
-            arrow functionのparameter(s)の終端とその`=>`は、同じ行に置くべきです。
+            `break` または `continue` 文内の |LabelIdentifier| は、`break` または `continue` トークンと同じ行に置かれるべきである。
           </li>
           <li>
-            asynchronous functionまたはmethodに先行する`async` tokenは、直後に続くtokenと同じ行に置くべきです。
+            アロー関数のパラメータの終端とその `=>` は、同じ行に置かれるべきである。
+          </li>
+          <li>
+            非同期関数またはメソッドの前にある `async` トークンは、直後に続くトークンと同じ行に置かれるべきである。
           </li>
         </ul>
       </emu-note>
@@ -20105,7 +20513,21 @@
         `-` UnaryExpression[?Yield, ?Await]
         `~` UnaryExpression[?Yield, ?Await]
         `!` UnaryExpression[?Yield, ?Await]
-        [+Await] AwaitExpression[?Yield]
+        [+Await] CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] #awaitusingcover
+
+      CoverAwaitExpressionAndAwaitUsingDeclarationHead[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
+    </emu-grammar>
+
+    <h2>補足構文</h2>
+    <p>
+      生成規則のインスタンスを処理する際<br>
+      <emu-grammar>UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead</emu-grammar><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead| の解釈は、次の文法を使用して精緻化される:
+    </p>
+    <emu-grammar>
+      AwaitExpression[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
     </emu-grammar>
 
     <emu-clause id="sec-delete-operator">
@@ -21466,13 +21888,14 @@
       </emu-alg>
       <emu-grammar>Block : `{` StatementList `}`</emu-grammar>
       <emu-alg>
-        1. _oldEnv_をrunning execution contextのLexicalEnvironmentとする。
-        1. _blockEnv_をNewDeclarativeEnvironment(_oldEnv_)とする。
-        1. BlockDeclarationInstantiation(|StatementList|, _blockEnv_)を実行する。
-        1. running execution contextのLexicalEnvironmentを_blockEnv_に設定する。
-        1. _blockValue_を|StatementList|のEvaluationのCompletionとする。
-        1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
-        1. ? _blockValue_を返す。
+        1. _oldEnv_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _blockEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
+        1. BlockDeclarationInstantiation(|StatementList|, _blockEnv_) を実行する。
+        1. 実行中の実行コンテキストの LexicalEnvironment を _blockEnv_ に設定する。
+        1. _blockValue_ を |StatementList| の Evaluation の Completion とする。
+        1. _blockValue_ を Completion(DisposeResources(_blockEnv_.[[DisposableResourceStack]], _blockValue_)) に設定する。
+        1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+        1. Return ? _blockValue_.
       </emu-alg>
       <emu-note>
         <p>controlがどのように|Block|から離れても、LexicalEnvironmentは常に以前のstateへ復元されます。</p>
@@ -21541,43 +21964,87 @@
     <h1>Declarations and the Variable Statement</h1>
 
     <emu-clause id="sec-let-and-const-declarations">
-      <h1>Let and Const Declarations</h1>
+      <h1>Let、Const、Using、および Await Using 宣言</h1>
       <emu-note>
-        <p>`let`および`const` declarationsは、running execution contextのLexicalEnvironmentにscopedされるvariablesを定義します。variablesは、それらを含むEnvironment Recordがinstantiatedされるときに作成されますが、variableの|LexicalBinding|が評価されるまでは、いかなる方法でもaccessできません。|Initializer|を持つ|LexicalBinding|によって定義されるvariableには、variableが作成されたときではなく、|LexicalBinding|が評価されるときに、その|Initializer|の|AssignmentExpression|の値が割り当てられます。`let` declaration内の|LexicalBinding|に|Initializer|がない場合、|LexicalBinding|が評価されるときにvariableには値*undefined*が割り当てられます。</p>
+        <p>`let`、`const`、`using`、および `await using` 宣言は、実行中の実行コンテキストの LexicalEnvironment にスコープされる変数を定義する。変数は、それを含む Environment Record がインスタンス化されるときに作成されるが、その変数の |LexicalBinding| が評価されるまで、いかなる方法でもアクセスできない。|Initializer| を持つ |LexicalBinding| によって定義される変数には、変数が作成されるときではなく、|LexicalBinding| が評価されるときに、その |Initializer| の |AssignmentExpression| の値が代入される。`let` 宣言内の |LexicalBinding| が |Initializer| を持たない場合、その |LexicalBinding| が評価されるときに、変数には値 *undefined* が代入される。</p>
       </emu-note>
-      <h2>Syntax</h2>
+      <h2>構文</h2>
       <emu-grammar type="definition">
         LexicalDeclaration[In, Yield, Await] :
-          LetOrConst BindingList[?In, ?Yield, ?Await] `;`
+          LetOrConst BindingList[?In, ?Yield, ?Await, +Pattern] `;`
+          UsingDeclaration[?In, ?Yield, ?Await]
+          [+Await] AwaitUsingDeclaration[?In, ?Yield]
 
         LetOrConst :
           `let`
           `const`
 
-        BindingList[In, Yield, Await] :
-          LexicalBinding[?In, ?Yield, ?Await]
-          BindingList[?In, ?Yield, ?Await] `,` LexicalBinding[?In, ?Yield, ?Await]
+        UsingDeclaration[In, Yield, Await] :
+          `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
 
-        LexicalBinding[In, Yield, Await] :
+        AwaitUsingDeclaration[In, Yield] :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] [no LineTerminator here] BindingList[?In, ?Yield, +Await, ~Pattern] `;`
+
+        BindingList[In, Yield, Await, Pattern] :
+          LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+          BindingList[?In, ?Yield, ?Await, ?Pattern] `,` LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+
+        LexicalBinding[In, Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]?
-          BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+      </emu-grammar>
+
+      <h2>補足構文</h2>
+      <p>
+        生成規則のインスタンスを処理する際<br>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar><br>
+        |CoverAwaitExpressionAndAwaitUsingDeclarationHead| の解釈は、次の文法を使用して精緻化される:
+      </p>
+      <emu-grammar type="definition">
+        AwaitUsingDeclarationHead :
+          `await` [no LineTerminator here] `using`
       </emu-grammar>
 
       <emu-clause id="sec-let-and-const-declarations-static-semantics-early-errors">
-        <h1>Static Semantics: Early Errors</h1>
+        <h1>Static Semantics: 早期エラー</h1>
         <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
         <ul>
           <li>
-            |BindingList|のBoundNamesが*"let"*を含む場合、それはSyntax Errorです。
+            |BindingList| の BoundNames が *"let"* を含む場合、Syntax Error である。
           </li>
           <li>
-            |BindingList|のBoundNamesが重複entriesを含む場合、それはSyntax Errorです。
+            |BindingList| の BoundNames が重複する項目を含む場合、Syntax Error である。
+          </li>
+        </ul>
+        <emu-grammar>
+          UsingDeclaration :
+            `using` BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>
+            |BindingList| の BoundNames が *"let"* を含む場合、Syntax Error である。
+          </li>
+          <li>
+            |BindingList| の BoundNames が重複する項目を含む場合、Syntax Error である。
+          </li>
+        </ul>
+        <emu-grammar>
+          AwaitUsingDeclaration :
+            CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>|CoverAwaitExpressionAndAwaitUsingDeclarationHead| は |AwaitUsingDeclarationHead| をカバーしなければならない。</li>
+          <li>
+            |BindingList| の BoundNames が *"let"* を含む場合、Syntax Error である。
+          </li>
+          <li>
+            |BindingList| の BoundNames が重複する項目を含む場合、Syntax Error である。
           </li>
         </ul>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer?</emu-grammar>
         <ul>
           <li>
-            |Initializer|が存在せず、かつこの|LexicalBinding|を含む|LexicalDeclaration|のIsConstantDeclarationが*true*である場合、それはSyntax Errorです。
+            |Initializer| が存在せず、かつこの |LexicalBinding| を含む |LexicalDeclaration| の IsConstantDeclaration が *true* である場合、Syntax Error である。
           </li>
         </ul>
       </emu-clause>
@@ -21586,41 +22053,68 @@
         <h1>Runtime Semantics: Evaluation</h1>
         <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
         <emu-alg>
-          1. |BindingList|の ? Evaluationを実行する。
-          1. ~empty~を返す。
+          1. 引数 ~normal~ で |BindingList| の BindingEvaluation を実行する。
+          1. ~empty~ を返す。
         </emu-alg>
+        <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 引数 ~sync-dispose~ で |BindingList| の BindingEvaluation を実行する。
+          1. ~empty~ を返す。
+        </emu-alg>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 引数 ~async-dispose~ で |BindingList| の BindingEvaluation を実行する。
+          1. ~empty~ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-bindingevaluation" type="sdo">
+        <h1>
+          Runtime Semantics: BindingEvaluation (
+          _kind_: ~normal~、~sync-dispose~、または ~async-dispose~,
+          ): ~unused~ を含む normal completion または abrupt completion
+        </h1>
+        <dl class="header">
+        </dl>
         <emu-grammar>BindingList : BindingList `,` LexicalBinding</emu-grammar>
         <emu-alg>
-          1. |BindingList|の ? Evaluationを実行する。
-          1. |LexicalBinding|の ? Evaluationを返す。
+          1. 引数 _kind_ で、派生した |BindingList| の BindingEvaluation を実行する。
+          1. 引数 _kind_ で |LexicalBinding| の BindingEvaluation を返す。
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingIdentifier</emu-grammar>
         <emu-alg>
-          1. _lhs_を ! ResolveBinding(|BindingIdentifier|のStringValue) とする。
-          1. ! InitializeReferencedBinding(_lhs_, *undefined*)を実行する。
-          1. ~empty~を返す。
+          1. Assert: _kind_ は ~normal~ である。
+          1. _lhs_ を ! ResolveBinding(|BindingIdentifier| の StringValue) とする。
+          1. ! InitializeReferencedBinding(_lhs_, *undefined*) を実行する。
+          1. ~unused~ を返す。
         </emu-alg>
         <emu-note>
-          <p>static semantics ruleにより、この形式の|LexicalBinding|は`const` declaration内では決して出現しないことが保証されます。</p>
+          <p>静的意味論の規則により、この形式の |LexicalBinding| は `const`、`using`、または `await using` 宣言では決して発生しないことが保証される。</p>
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. _bindingId_を|BindingIdentifier|のStringValueとする。
-          1. _lhs_を ! ResolveBinding(_bindingId_) とする。
-          1. IsAnonymousFunctionDefinition(|Initializer|)が*true*なら、
-            1. _value_を、引数_bindingId_を伴う|Initializer|の ? NamedEvaluationとする。
-          1. そうでなければ、
-            1. _rhs_を|Initializer|の ? Evaluationとする。
-            1. _value_を ? GetValue(_rhs_) とする。
-          1. ! InitializeReferencedBinding(_lhs_, _value_)を実行する。
-          1. ~empty~を返す。
+          1. _bindingId_ を |BindingIdentifier| の StringValue とする。
+          1. _lhs_ を ! ResolveBinding(_bindingId_) とする。
+          1. IsAnonymousFunctionDefinition(|Initializer|) が *true* である場合、then
+            1. _value_ を、引数 _bindingId_ で |Initializer| の NamedEvaluation とする。
+          1. Else,
+            1. _rhs_ を |Initializer| の Evaluation とする。
+            1. _value_ を ? GetValue(_rhs_) とする。
+          1. _kind_ が ~normal~ でない場合、then
+            1. Assert: IsUnresolvableReference(_lhs_) は *false* である。
+            1. _base_ を _lhs_.[[Base]] とする。
+            1. Assert: _base_ は Declarative Environment Record である。
+            1. ? AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_) を実行する。
+          1. ? InitializeReferencedBinding(_lhs_, _value_) を実行する。
+          1. ~unused~ を返す。
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingPattern Initializer</emu-grammar>
         <emu-alg>
-          1. _rhs_を|Initializer|の ? Evaluationとする。
-          1. _value_を ? GetValue(_rhs_) とする。
-          1. _envRecord_をrunning execution contextのLexicalEnvironmentとする。
-          1. 引数_value_および_envRecord_を伴う|BindingPattern|の ? BindingInitializationを返す。
+          1. Assert: _kind_ は ~normal~ である。
+          1. _rhs_ を |Initializer| の Evaluation とする。
+          1. _value_ を ? GetValue(_rhs_) とする。
+          1. _envRecord_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+          1. 引数 _value_ および _envRecord_ で、|BindingPattern| の BindingInitialization を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -22126,26 +22620,30 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_とする。
-          1. NewDeclarativeEnvironment(_oldEnv_)を_loopEnv_とする。
-          1. |LexicalDeclaration|のIsConstantDeclarationを_isConst_とする。
-          1. |LexicalDeclaration|のBoundNamesを_boundNames_とする。
-          1. _boundNames_の各要素_name_について、次を行う。
-            1. _isConst_が*true*である場合、
-              1. ! _loopEnv_.CreateImmutableBinding(_name_, *true*)を実行する。
-            1. そうでなければ、
-              1. ! _loopEnv_.CreateMutableBinding(_name_, *false*)を実行する。
-          1. 実行中の実行コンテキストのLexicalEnvironmentを_loopEnv_に設定する。
-          1. |LexicalDeclaration|のEvaluationのCompletionを_forDecl_とする。
-          1. _forDecl_がabrupt completionである場合、
-            1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_に設定する。
-            1. ? _forDecl_を返す。
-          1. _isConst_が*false*である場合、_perIterationLets_を_boundNames_とする。そうでなければ、_perIterationLets_を新しい空のListとする。
-          1. 最初の|Expression|が存在する場合、_test_を最初の|Expression|とする。そうでなければ、_test_を~empty~とする。
-          1. 2番目の|Expression|が存在する場合、_increment_を2番目の|Expression|とする。そうでなければ、_increment_を~empty~とする。
-          1. Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))を_bodyResult_とする。
-          1. 実行中の実行コンテキストのLexicalEnvironmentを_oldEnv_に設定する。
-          1. ? _bodyResult_を返す。
+          1. _oldEnv_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+          1. _loopEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
+          1. _isConst_ を |LexicalDeclaration| の IsConstantDeclaration とする。
+          1. _boundNames_ を |LexicalDeclaration| の BoundNames とする。
+          1. _boundNames_ の各要素 _name_ について、do
+            1. _isConst_ が *true* である場合、then
+              1. ! _loopEnv_.CreateImmutableBinding(_name_, *true*) を実行する。
+            1. Else,
+              1. ! _loopEnv_.CreateMutableBinding(_name_, *false*) を実行する。
+          1. 実行中の実行コンテキストの LexicalEnvironment を _loopEnv_ に設定する。
+          1. _forDecl_ を |LexicalDeclaration| の Evaluation の Completion とする。
+          1. _forDecl_ が abrupt completion である場合、then
+            1. _forDecl_ を Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _forDecl_)) に設定する。
+            1. Assert: _forDecl_ は abrupt completion である。
+            1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+            1. Return ? _forDecl_.
+          1. _isConst_ が *false* である場合、_perIterationLets_ を _boundNames_ とする。そうでなければ、_perIterationLets_ を新しい空の List とする。
+          1. 最初の |Expression| が存在する場合、_test_ を最初の |Expression| とする。そうでなければ、_test_ を ~empty~ とする。
+          1. 2番目の |Expression| が存在する場合、_increment_ を2番目の |Expression| とする。そうでなければ、_increment_ を ~empty~ とする。
+          1. _bodyResult_ を Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_)) とする。
+          1. _bodyResult_ を Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _bodyResult_)) に設定する。
+          1. Assert: _bodyResult_ が normal completion である場合、_bodyResult_.[[Value]] は ~empty~ でない。
+          1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+          1. Return ? _bodyResult_.
         </emu-alg>
       </emu-clause>
 
@@ -22209,21 +22707,23 @@
       <emu-grammar type="definition">
         ForInOfStatement[Yield, Await, Return] :
           `for` `(` [lookahead != `let` `[`] LeftHandSideExpression[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` ForDeclaration[?Yield, ?Await, ~Using] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           `for` `(` [lookahead &notin; { `let`, `async` `of` }] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           [+Await] `for` `await` `(` [lookahead != `let`] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
 
-        ForDeclaration[Yield, Await] :
-          LetOrConst ForBinding[?Yield, ?Await]
+        ForDeclaration[Yield, Await, Using] :
+          LetOrConst ForBinding[?Yield, ?Await, +Pattern]
+          [+Using] `using` [no LineTerminator here] ForBinding[?Yield, ?Await, ~Pattern]
+          [+Using, +Await] `await` [no LineTerminator here] `using` [no LineTerminator here] ForBinding[?Yield, +Await, ~Pattern]
 
-        ForBinding[Yield, Await] :
+        ForBinding[Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await]
-          BindingPattern[?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await]
       </emu-grammar>
       <emu-note>
         <p>このsectionはAnnex <emu-xref href="#sec-initializers-in-forin-statement-heads"></emu-xref>によって拡張されます。</p>
@@ -22343,6 +22843,14 @@
         <emu-alg>
           1. 引数_value_および_envRecord_を伴う|ForBinding|の ? BindingInitializationを返す。
         </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. *SyntaxError* 例外を投げる。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-runtime-semantics-fordeclarationbindinginstantiation" oldids="sec-runtime-semantics-bindinginstantiation" type="sdo">
@@ -22361,6 +22869,16 @@
             1. そうでなければ、
               1. ! _envRecord_.CreateMutableBinding(_name_, *false*)を実行する。
           1. ~unused~を返す。
+        </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. |ForBinding| の BoundNames の各要素 _name_ について、do
+            1. ! _envRecord_.CreateImmutableBinding(_name_, *true*) を実行する。
+          1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -22478,63 +22996,87 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_が存在しないなら、_iteratorKind_を~sync~に設定する。
-          1. _oldEnv_をrunning execution contextのLexicalEnvironmentとする。
-          1. _iterationResult_を*undefined*とする。
-          1. _destructuring_を_lhs_のIsDestructuringとする。
-          1. _destructuring_が*true*であり、かつ_lhsKind_が~assignment~なら、
-            1. Assert: _lhs_は|LeftHandSideExpression|である。
-            1. _assignmentPattern_を_lhs_によってcoverされる|AssignmentPattern|とする。
-          1. 繰り返す
-            1. _nextResult_を ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]]) とする。
-            1. _iteratorKind_が~async~なら、_nextResult_を ? Await(_nextResult_) に設定する。
-            1. _nextResult_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _done_を ? IteratorComplete(_nextResult_) とする。
-            1. _done_が*true*なら、_iterationResult_を返す。
-            1. _nextValue_を ? IteratorValue(_nextResult_) とする。
-            1. _lhsKind_が~assignment~または~var-binding~のいずれかなら、
-              1. _destructuring_が*true*なら、
-                1. _lhsKind_が~assignment~なら、
-                  1. _status_を、引数_nextValue_を伴う_assignmentPattern_のDestructuringAssignmentEvaluationのCompletionとする。
-                1. そうでなければ、
-                  1. Assert: _lhsKind_は~var-binding~である。
-                  1. Assert: _lhs_は|ForBinding|である。
-                  1. _status_を、引数_nextValue_および*undefined*を伴う_lhs_のBindingInitializationのCompletionとする。
-              1. そうでなければ、
-                1. _lhsRef_を_lhs_のEvaluationのCompletionとする。（これは繰り返し評価される可能性があります。）
-                1. _lhsKind_が~assignment~であり、かつ_lhs_のAssignmentTargetTypeが~web-compat~なら、*ReferenceError*例外をthrowする。
-                1. _lhsRef_がabrupt completionなら、
-                  1. _status_を_lhsRef_とする。
-                1. そうでなければ、
-                  1. _status_をPutValue(_lhsRef_.[[Value]], _nextValue_)のCompletionとする。
-            1. そうでなければ、
-              1. Assert: _lhsKind_は~lexical-binding~である。
-              1. Assert: _lhs_は|ForDeclaration|である。
-              1. _iterationEnv_をNewDeclarativeEnvironment(_oldEnv_)とする。
-              1. 引数_iterationEnv_を伴う_lhs_のForDeclarationBindingInstantiationを実行する。
-              1. running execution contextのLexicalEnvironmentを_iterationEnv_に設定する。
-              1. _destructuring_が*true*なら、
-                1. _status_を、引数_nextValue_および_iterationEnv_を伴う_lhs_のForDeclarationBindingInitializationのCompletionとする。
-              1. そうでなければ、
-                1. Assert: _lhs_は単一のnameをbindする。
-                1. _lhsName_を_lhs_のBoundNamesの唯一の要素とする。
-                1. _lhsRef_を ! ResolveBinding(_lhsName_) とする。
-                1. _status_をInitializeReferencedBinding(_lhsRef_, _nextValue_)のCompletionとする。
-            1. _status_がabrupt completionなら、
-              1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
-              1. _iterationKind_が~enumerate~なら、? _status_を返す。
-              1. Assert: _iterationKind_は~iterate~である。
-              1. _iteratorKind_が~async~なら、? AsyncIteratorClose(_iteratorRecord_, _status_)を返す。
-              1. ? IteratorClose(_iteratorRecord_, _status_)を返す。
-            1. _result_を_stmt_のEvaluationのCompletionとする。
-            1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
-            1. LoopContinues(_result_, _labelSet_)が*false*なら、
-              1. _status_をUpdateEmpty(_result_, _iterationResult_)のCompletionに設定する。
-              1. _iterationKind_が~enumerate~なら、? _status_を返す。
-              1. Assert: _iterationKind_は~iterate~である。
-              1. _iteratorKind_が~async~なら、? AsyncIteratorClose(_iteratorRecord_, _status_)を返す。
-              1. ? IteratorClose(_iteratorRecord_, _status_)を返す。
-            1. _result_.[[Value]]が~empty~でないなら、_iterationResult_を_result_.[[Value]]に設定する。
+          1. _iteratorKind_ が存在しない場合、_iteratorKind_ を ~sync~ に設定する。
+          1. _oldEnv_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+          1. _iterationResult_ を *undefined* とする。
+          1. _lhsKind_ が ~lexical-binding~ である場合、then
+            1. Assert: _lhs_ は |ForDeclaration| である。
+            1. _lhs_ の IsAwaitUsingDeclaration が *true* である場合、then
+              1. _declarationKind_ を ~async-dispose~ とする。
+            1. Else if _lhs_ の IsUsingDeclaration が *true* である場合、then
+              1. _declarationKind_ を ~sync-dispose~ とする。
+            1. Else,
+              1. _declarationKind_ を ~normal~ とする。
+          1. Else,
+            1. _declarationKind_ を ~normal~ とする。
+          1. _destructuring_ を _lhs_ の IsDestructuring とする。
+          1. _destructuring_ が *true* であり、かつ _lhsKind_ が ~assignment~ である場合、then
+            1. Assert: _lhs_ は |LeftHandSideExpression| である。
+            1. _assignmentPattern_ を、_lhs_ によってカバーされる |AssignmentPattern| とする。
+          1. Repeat,
+            1. _nextResult_ を ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]]) とする。
+            1. _iteratorKind_ が ~async~ である場合、_nextResult_ を ? Await(_nextResult_) に設定する。
+            1. _nextResult_ が Object でない場合、*TypeError* 例外を投げる。
+            1. _done_ を ? IteratorComplete(_nextResult_) とする。
+            1. _done_ が *true* である場合、_iterationResult_ を返す。
+            1. _nextValue_ を ? IteratorValue(_nextResult_) とする。
+            1. _lhsKind_ が ~assignment~ または ~var-binding~ のいずれかである場合、then
+              1. _destructuring_ が *true* である場合、then
+                1. _lhsKind_ が ~assignment~ である場合、then
+                  1. _status_ を、引数 _nextValue_ で _assignmentPattern_ の DestructuringAssignmentEvaluation の Completion とする。
+                1. Else,
+                  1. Assert: _lhsKind_ は ~var-binding~ である。
+                  1. Assert: _lhs_ は |ForBinding| である。
+                  1. _status_ を、引数 _nextValue_ および *undefined* で _lhs_ の BindingInitialization の Completion とする。
+              1. Else,
+                1. _lhsRef_ を _lhs_ の Evaluation の Completion とする。（これは繰り返し評価されることがある。）
+                1. _lhsKind_ が ~assignment~ であり、かつ _lhs_ の AssignmentTargetType が ~web-compat~ である場合、*ReferenceError* 例外を投げる。
+                1. _lhsRef_ が abrupt completion である場合、then
+                  1. _status_ を _lhsRef_ とする。
+                1. Else,
+                  1. _status_ を Completion(PutValue(_lhsRef_.[[Value]], _nextValue_)) とする。
+              1. _iterationEnv_ を *undefined* とする。
+            1. Else,
+              1. Assert: _lhsKind_ は ~lexical-binding~ である。
+              1. Assert: _lhs_ は |ForDeclaration| である。
+              1. _iterationEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
+              1. 引数 _iterationEnv_ で _lhs_ の ForDeclarationBindingInstantiation を実行する。
+              1. 実行中の実行コンテキストの LexicalEnvironment を _iterationEnv_ に設定する。
+              1. _destructuring_ が *true* である場合、then
+                1. _status_ を、引数 _nextValue_ および _iterationEnv_ で _lhs_ の ForDeclarationBindingInitialization の Completion とする。
+              1. Else,
+                1. Assert: _lhs_ は単一の名前を束縛する。
+                1. _lhsName_ を _lhs_ の BoundNames の唯一の要素とする。
+                1. _lhsRef_ を ! ResolveBinding(_lhsName_) とする。
+                1. _declarationKind_ が ~normal~ でない場合、then
+                  1. Assert: IsUnresolvableReference(_lhsRef_) は *false* である。
+                  1. _base_ を _lhsRef_.[[Base]] とする。
+                  1. Assert: _base_ は Declarative Environment Record である。
+                  1. _status_ を Completion(AddDisposableResource(_base_.[[DisposableResourceStack]], _nextValue_, _declarationKind_)) とする。
+                1. Else,
+                  1. _status_ を NormalCompletion(~unused~) とする。
+                1. _status_ が normal completion である場合、then
+                  1. _status_ を Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_)) に設定する。
+            1. _status_ が abrupt completion である場合、then
+              1. _iterationEnv_ が *undefined* でない場合、then
+                1. _status_ を Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _status_)) に設定する。
+                1. Assert: _status_ は abrupt completion である。
+              1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+              1. _iterationKind_ が ~enumerate~ である場合、return ? _status_.
+              1. Assert: _iterationKind_ は ~iterate~ である。
+              1. _iteratorKind_ が ~async~ である場合、return ? AsyncIteratorClose(_iteratorRecord_, _status_).
+              1. Return ? IteratorClose(_iteratorRecord_, _status_).
+            1. _result_ を _stmt_ の Evaluation の Completion とする。
+            1. _iterationEnv_ が *undefined* でない場合、then
+              1. _result_ を Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _result_)) に設定する。
+            1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+            1. LoopContinues(_result_, _labelSet_) が *false* である場合、then
+              1. _status_ を Completion(UpdateEmpty(_result_, _iterationResult_)) に設定する。
+              1. _iterationKind_ が ~enumerate~ である場合、return ? _status_.
+              1. Assert: _iterationKind_ は ~iterate~ である。
+              1. _iteratorKind_ が ~async~ である場合、return ? AsyncIteratorClose(_iteratorRecord_, _status_).
+              1. Return ? IteratorClose(_iteratorRecord_, _status_).
+            1. _result_.[[Value]] が ~empty~ でない場合、_iterationResult_ を _result_.[[Value]] に設定する。
         </emu-alg>
       </emu-clause>
 
@@ -22919,6 +23461,18 @@
           |CaseBlock|のLexicallyDeclaredNamesのいずれかの要素が|CaseBlock|のVarDeclaredNamesにも出現する場合、それはSyntax Errorです。
         </li>
       </ul>
+      <emu-grammar>CaseClause : `case` Expression `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          |StatementList| の ContainsUsing が *true* である場合、Syntax Error である。
+        </li>
+      </ul>
+      <emu-grammar>DefaultClause : `default` `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          |StatementList| の ContainsUsing が *true* である場合、Syntax Error である。
+        </li>
+      </ul>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics-caseblockevaluation" type="sdo">
@@ -23014,15 +23568,16 @@
       <h1>Runtime Semantics: Evaluation</h1>
       <emu-grammar>SwitchStatement : `switch` `(` Expression `)` CaseBlock</emu-grammar>
       <emu-alg>
-        1. _exprRef_を|Expression|の ? Evaluationとする。
-        1. _switchValue_を ? GetValue(_exprRef_) とする。
-        1. _oldEnv_をrunning execution contextのLexicalEnvironmentとする。
-        1. _blockEnv_をNewDeclarativeEnvironment(_oldEnv_)とする。
-        1. BlockDeclarationInstantiation(|CaseBlock|, _blockEnv_)を実行する。
-        1. running execution contextのLexicalEnvironmentを_blockEnv_に設定する。
-        1. _blockResult_を、引数_switchValue_を伴う|CaseBlock|のCaseBlockEvaluationのCompletionとする。
-        1. running execution contextのLexicalEnvironmentを_oldEnv_に設定する。
-        1. _blockResult_を返す。
+        1. _exprRef_ を |Expression| の Evaluation とする。
+        1. _switchValue_ を ? GetValue(_exprRef_) とする。
+        1. _oldEnv_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. _blockEnv_ を NewDeclarativeEnvironment(_oldEnv_) とする。
+        1. BlockDeclarationInstantiation(|CaseBlock|, _blockEnv_) を実行する。
+        1. 実行中の実行コンテキストの LexicalEnvironment を _blockEnv_ に設定する。
+        1. _blockResult_ を、引数 _switchValue_ で |CaseBlock| の CaseBlockEvaluation の Completion とする。
+        1. Assert: _blockEnv_.[[DisposableResourceStack]] は空の List である。
+        1. 実行中の実行コンテキストの LexicalEnvironment を _oldEnv_ に設定する。
+        1. Return _blockResult_.
       </emu-alg>
       <emu-note>
         <p>controlがどのように|SwitchStatement|から離れても、LexicalEnvironmentは常に以前のstateへ復元されます。</p>
@@ -23808,6 +24363,13 @@
       <emu-grammar>FunctionStatementList : [empty]</emu-grammar>
       <emu-alg>
         1. *undefined*を返す。
+      </emu-alg>
+      <emu-grammar>FunctionStatementList : StatementList</emu-grammar>
+      <emu-alg>
+        1. _result_ を |StatementList| の Evaluation の Completion とする。
+        1. _env_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. Assert: _env_ は Declarative Environment Record である。
+        1. Return ? DisposeResources(_env_.[[DisposableResourceStack]], _result_).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -25093,10 +25655,13 @@
       </dl>
       <emu-grammar>ClassStaticBlockBody : ClassStaticBlockStatementList</emu-grammar>
       <emu-alg>
-        1. Assert: _funcObj_はClassStaticBlockDefinitionEvaluation step <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref>によって作成されたsynthetic functionである。
-        1. ! FunctionDeclarationInstantiation(_funcObj_, « »)を実行する。
-        1. |ClassStaticBlockStatementList|の ? Evaluationを実行する。
-        1. ReturnCompletion(*undefined*)を返す。
+        1. Assert: _funcObj_ は ClassStaticBlockDefinitionEvaluation ステップ <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref> によって作成された合成関数である。
+        1. ! FunctionDeclarationInstantiation(_funcObj_, « ») を実行する。
+        1. _result_ を |ClassStaticBlockStatementList| の Evaluation の Completion とする。
+        1. _envRecord_ を、実行中の実行コンテキストの LexicalEnvironment とする。
+        1. Assert: _envRecord_ は Declarative Environment Record である。
+        1. ? DisposeResources(_envRecord_.[[DisposableResourceStack]], _result_) を実行する。
+        1. ReturnCompletion(*undefined*) を返す。
       </emu-alg>
     </emu-clause>
 
@@ -25508,6 +26073,13 @@
         1. |AsyncFunctionExpression|のInstantiateAsyncFunctionExpressionを返す。
       </emu-alg>
       <emu-grammar>
+        UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead
+      </emu-grammar>
+      <emu-alg>
+        1. _expr_ を、|CoverAwaitExpressionAndAwaitUsingDeclarationHead| によってカバーされる |AwaitExpression| とする。
+        1. Return ? Evaluation of _expr_.
+      </emu-alg>
+      <emu-grammar>
         AwaitExpression : `await` UnaryExpression
       </emu-grammar>
       <emu-alg>
@@ -25690,17 +26262,21 @@
       <dl class="header">
       </dl>
       <emu-note>
-        <p>_call_は、source textの特定の範囲を表すParse Nodeです。次のalgorithmsが_call_を別のParse Nodeと比較する場合、それらが同じsource textを表すかどうかのtestです。</p>
+        <p>_call_ は、ソーステキストの特定の範囲を表す Parse Node である。次のアルゴリズムが _call_ を別の Parse Node と比較する場合、それらが同じソーステキストを表しているかどうかのテストである。</p>
       </emu-note>
       <emu-note>
-        <p>return GetValue of the call resultが直後に続くpotential tail position callも、possible tail position callです。function callはReference Recordを返すことができないため、そのようなGetValue operationは常に実際のfunction call resultと同じ値を返します。</p>
+        <p>呼び出し結果の return GetValue が直後に続く可能な末尾位置呼び出しも、可能な末尾位置呼び出しである。関数呼び出しは Reference Record を返すことができないため、そのような GetValue 操作は常に、実際の関数呼び出し結果と同じ値を返す。</p>
+      </emu-note>
+      <emu-note>
+        <p>同じ |Block|、|ForStatement|、|ForInOfStatement|、|FunctionBody|、|GeneratorBody|、|AsyncGeneratorBody|、|AsyncFunctionBody|、または |ClassStaticBlockBody| 内で呼び出しに先行する `using` 宣言または `await using` 宣言は、その呼び出しが可能な末尾位置呼び出しになることを防ぐ。</p>
       </emu-note>
 
       <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
       <emu-alg>
-        1. _has_を、argument _call_を伴う|StatementList|のHasCallInTailPositionとする。
-        1. _has_が*true*なら、*true*を返す。
-        1. argument _call_を伴う|StatementListItem|のHasCallInTailPositionを返す。
+        1. _has_ を、引数 _call_ で派生した |StatementList| の HasCallInTailPosition とする。
+        1. _has_ が *true* である場合、*true* を返す。
+        1. 派生した |StatementList| の ContainsUsing が *true* である場合、*false* を返す。
+        1. 引数 _call_ で |StatementListItem| の HasCallInTailPosition を返す。
       </emu-alg>
       <emu-grammar>
         FunctionStatementList :
@@ -25891,7 +26467,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         CallExpression :
           SuperCall
@@ -26077,6 +26653,9 @@
         </li>
         <li>
           |ScriptBody|を含むsource textがdirect evalによって処理されているeval codeでない限り、argument « »を伴う|StatementList|のAllPrivateIdentifiersValidが*false*である場合、それはSyntax Errorです。
+        </li>
+        <li>
+          |StatementList| の ContainsUsing が *true* である場合、Syntax Error である。
         </li>
       </ul>
     </emu-clause>
@@ -28702,21 +29281,23 @@
             </dl>
 
             <emu-alg>
-              1. Assert: _module_はlinkedされ、そのmodule environment内のdeclarationsはinstantiatedされている。
-              1. _moduleContext_を_module_.[[Context]]とする。
-              1. _module_.[[HasTLA]]が*false*なら、
-                1. Assert: _capability_は存在しない。
-                1. running execution contextをsuspendする。
-                1. _moduleContext_をexecution context stackへpushする；_moduleContext_は現在running execution contextである。
-                1. _result_をCompletion(_module_.[[ECMAScriptCode]]のEvaluation)とする。
-                1. _moduleContext_をsuspendし、それをexecution context stackからremoveする。
-                1. execution context stackのtopにあるcontextをrunning execution contextとしてresumeする。
-                1. _result_がabrupt completionなら、
-                  1. ? _result_を返す。
-              1. そうでなければ、
-                1. Assert: _capability_はPromiseCapability Recordである。
-                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_)を実行する。
-              1. ~unused~を返す。
+              1. Assert: _module_ はリンク済みであり、そのモジュール環境内の宣言はインスタンス化済みである。
+              1. _moduleContext_ を _module_.[[Context]] とする。
+              1. _module_.[[HasTLA]] が *false* である場合、then
+                1. Assert: _capability_ は存在しない。
+                1. _env_ を _module_.[[Environment]] とする。
+                1. 実行中の実行コンテキストを一時停止する。
+                1. _moduleContext_ を実行コンテキストスタックにプッシュする。_moduleContext_ は今や実行中の実行コンテキストである。
+                1. _result_ を _module_.[[ECMAScriptCode]] の Evaluation の Completion とする。
+                1. _result_ を Completion(DisposeResources(_env_.[[DisposableResourceStack]], _result_)) に設定する。
+                1. _moduleContext_ を一時停止し、それを実行コンテキストスタックから取り除く。
+                1. 現在実行コンテキストスタックの最上位にあるコンテキストを、実行中の実行コンテキストとして再開する。
+                1. _result_ が abrupt completion である場合、then
+                  1. Return ? _result_.
+              1. Else,
+                1. Assert: _capability_ は PromiseCapability Record である。
+                1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_) を実行する。
+              1. ~unused~ を返す。
             </emu-alg>
           </emu-clause>
         </emu-clause>
@@ -29321,7 +29902,7 @@
           `export` ExportFromClause FromClause WithClause? `;`
           `export` NamedExports `;`
           `export` VariableStatement[~Yield, +Await]
-          `export` Declaration[~Yield, +Await]
+          `export` [lookahead &notin; { `using`, `await` }] Declaration[~Yield, +Await]
           `export` `default` HoistableDeclaration[~Yield, +Await, +Default]
           `export` `default` ClassDeclaration[~Yield, +Await, +Default]
           `export` `default` [lookahead &notin; { `function`, `async` [no LineTerminator here] `function`, `class` }] AssignmentExpression[+In, ~Yield, +Await] `;`
@@ -30342,6 +30923,11 @@
       <p><emu-xref href="#sec-arraybuffer-constructor"></emu-xref>を参照してください。</p>
     </emu-clause>
 
+    <emu-clause id="sec-constructor-properties-of-the-global-object-asyncdisposablestack">
+      <h1>AsyncDisposableStack ( . . . )</h1>
+      <p><emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>を参照してください。</p>
+    </emu-clause>
+
     <emu-clause id="sec-constructor-properties-of-the-global-object-bigint">
       <h1>BigInt ( . . . )</h1>
       <p><emu-xref href="#sec-bigint-constructor"></emu-xref>を参照してください。</p>
@@ -30370,6 +30956,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-date">
       <h1>Date ( . . . )</h1>
       <p><emu-xref href="#sec-date-constructor"></emu-xref>を参照してください。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-disposablestack">
+      <h1>DisposableStack ( . . . )</h1>
+      <p><emu-xref href="#sec-disposablestack-constructor"></emu-xref>を参照してください。</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-error">
@@ -30480,6 +31071,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-string">
       <h1>String ( . . . )</h1>
       <p><emu-xref href="#sec-string-constructor"></emu-xref>を参照してください。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-suppressederror">
+      <h1>SuppressedError ( . . . )</h1>
+      <p><emu-xref href="#sec-suppressederror-constructor"></emu-xref>を参照してください。</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-symbol">
@@ -31852,7 +32448,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error Objects</h1>
     <p>runtime errorsが発生したとき、Error objectsのinstancesはexceptionsとしてthrownされます。Error objectsはuser-defined exception classesのbase objectsとしてもserveする場合があります。</p>
-    <p>ECMAScript implementationがruntime errorをdetectしたとき、<emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref>で定義される_NativeError_ objectsのいずれかの新しいinstance、または<emu-xref href="#sec-aggregate-error-objects"></emu-xref>で定義されるAggregateError objectの新しいinstanceをthrowします。</p>
+    <p>ECMAScript 実装が実行時エラーを検出した場合、<emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> で定義される _NativeError_ オブジェクトのいずれかの新しいインスタンス、または <emu-xref href="#sec-aggregate-error-objects"></emu-xref> で定義される AggregateError オブジェクト、もしくは <emu-xref href="#sec-suppressederror-objects"></emu-xref> で定義される SuppressedError オブジェクトの新しいインスタンスを投げる。これらの各オブジェクトは以下に記述される構造を持ち、違いは _NativeError_ の代わりにコンストラクタ名として使用される名前、プロトタイプオブジェクトの *"name"* プロパティ、プロトタイプオブジェクトの実装定義の *"message"* プロパティ、および %AggregateError% 固有の *"errors"* プロパティまたは %SuppressedError% 固有の *"error"* および *"suppressed"* プロパティの存在のみである。</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>The Error Constructor</h1>
@@ -31948,12 +32544,12 @@
 
     <emu-clause id="sec-properties-of-error-instances">
       <h1>Properties of Error Instances</h1>
-      <p>Error instancesは、Error prototype objectからpropertiesをinheritするordinary objectsであり、valueが*undefined*である[[ErrorData]] internal slotを持ちます。[[ErrorData]]の唯一のspecified useは、`Object.prototype.toString`および`Error.isError`内でError、AggregateError、および_NativeError_ instancesをError objectsとしてidentifyすることです。</p>
+      <p>Error インスタンスは、Error プロトタイプオブジェクトからプロパティを継承し、値が *undefined* である [[ErrorData]] 内部スロットを持つ通常のオブジェクトである。[[ErrorData]] の唯一の仕様上の用途は、`Object.prototype.toString` および `Error.isError` において、Error、AggregateError、SuppressedError、および _NativeError_ インスタンスを Error オブジェクトとして識別することである。</p>
     </emu-clause>
 
     <emu-clause id="sec-native-error-types-used-in-this-standard">
       <h1>Native Error Types Used in This Standard</h1>
-      <p>runtime errorがdetectedされたとき、下記の_NativeError_ objectsのいずれか、またはAggregateError objectの新しいinstanceがthrowされます。すべての_NativeError_ objectsは、<emu-xref href="#sec-nativeerror-object-structure"></emu-xref>で記述されるように同じstructureを共有します。</p>
+      <p>実行時エラーが検出された場合、以下の _NativeError_ オブジェクトのいずれか、または AggregateError オブジェクトもしくは SuppressedError オブジェクトの新しいインスタンスが投げられる。すべての _NativeError_ オブジェクトは、<emu-xref href="#sec-nativeerror-object-structure"></emu-xref> に記述される同じ構造を共有する。</p>
 
       <emu-clause id="sec-native-error-types-used-in-this-standard-evalerror">
         <h1>EvalError</h1>
@@ -32064,7 +32660,7 @@
 
       <emu-clause id="sec-properties-of-nativeerror-instances">
         <h1>Properties of _NativeError_ Instances</h1>
-        <p>_NativeError_ instancesは、それらの_NativeError_ prototype objectからpropertiesをinheritするordinary objectsであり、valueが*undefined*である[[ErrorData]] internal slotを持ちます。[[ErrorData]]の唯一のspecified useは、`Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）および`Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）によってError、AggregateError、または_NativeError_ instancesをidentifyすることです。</p>
+        <p>_NativeError_ インスタンスは、自身の _NativeError_ プロトタイプオブジェクトからプロパティを継承し、値が *undefined* である [[ErrorData]] 内部スロットを持つ通常のオブジェクトである。[[ErrorData]] の唯一の仕様上の用途は、`Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）および `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）によって、Error、AggregateError、SuppressedError、または _NativeError_ インスタンスを識別することである。</p>
       </emu-clause>
     </emu-clause>
 
@@ -32140,8 +32736,84 @@
       </emu-clause>
 
       <emu-clause id="sec-properties-of-aggregate-error-instances">
-        <h1>Properties of AggregateError Instances</h1>
-        <p>AggregateError instancesは、それらのAggregateError prototype objectからpropertiesをinheritするordinary objectsであり、valueが*undefined*である[[ErrorData]] internal slotを持ちます。[[ErrorData]]の唯一のspecified useは、`Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）および`Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）によってError、AggregateError、または_NativeError_ instancesをidentifyすることです。</p>
+        <h1>AggregateError インスタンスのプロパティ</h1>
+        <p>AggregateError インスタンスは、自身の AggregateError プロトタイプオブジェクトからプロパティを継承し、値が *undefined* である [[ErrorData]] 内部スロットを持つ通常のオブジェクトである。[[ErrorData]] の唯一の仕様上の用途は、`Object.prototype.toString`（<emu-xref href="#sec-object.prototype.tostring"></emu-xref>）および `Error.isError`（<emu-xref href="#sec-error.iserror"></emu-xref>）によって、Error、AggregateError、SuppressedError、または _NativeError_ インスタンスを識別することである。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-suppressederror-objects">
+      <h1>SuppressedError オブジェクト</h1>
+
+      <emu-clause id="sec-suppressederror-constructor">
+        <h1>SuppressedError コンストラクタ</h1>
+        <p>SuppressedError コンストラクタは次のとおりである:</p>
+        <ul>
+          <li><dfn>%SuppressedError%</dfn> である。</li>
+          <li>グローバルオブジェクトの *"SuppressedError"* プロパティの初期値である。</li>
+          <li>コンストラクタとしてではなく関数として呼び出された場合、新しい SuppressedError オブジェクトを作成して初期化する。したがって、関数呼び出し `SuppressedError(…)` は、同じ引数を持つオブジェクト作成式 `new SuppressedError(…)` と等価である。</li>
+          <li>クラス定義の `extends` 節の値として使用できる。指定された SuppressedError の振る舞いを継承しようとするサブクラスコンストラクタは、[[ErrorData]] 内部スロットを持つサブクラスインスタンスを作成して初期化するために、SuppressedError コンストラクタへの `super` 呼び出しを含めなければならない。</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror" type="built-in function">
+          <h1>SuppressedError ( _error_, _suppressed_, _message_ )</h1>
+          <p>この関数は、呼び出されたときに次のステップを実行する:</p>
+          <emu-alg>
+            1. NewTarget が *undefined* である場合、_newTarget_ をアクティブな関数オブジェクトとする。そうでなければ、_newTarget_ を NewTarget とする。
+            1. _obj_ を ? OrdinaryCreateFromConstructor(_newTarget_, *"%SuppressedError.prototype%"*, « [[ErrorData]] ») とする。
+            1. _message_ が *undefined* でない場合、then
+              1. _messageString_ を ? ToString(_message_) とする。
+              1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"message"*, _messageString_) を実行する。
+            1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"error"*, _error_) を実行する。
+            1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"suppressed"*, _suppressed_) を実行する。
+            1. _obj_ を返す。
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-constructor">
+        <h1>SuppressedError コンストラクタのプロパティ</h1>
+        <p>SuppressedError コンストラクタは次のとおりである:</p>
+        <ul>
+          <li>値が %Error% である [[Prototype]] 内部スロットを持つ。</li>
+          <li>次のプロパティを持つ:</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype">
+          <h1>SuppressedError.prototype</h1>
+          <p>`SuppressedError.prototype` の初期値は SuppressedError プロトタイプオブジェクトである。</p>
+          <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-prototype-object">
+        <h1>SuppressedError プロトタイプオブジェクトのプロパティ</h1>
+        <p><dfn>SuppressedError プロトタイプオブジェクト</dfn>は次のとおりである:</p>
+        <ul>
+          <li><dfn>%SuppressedError.prototype%</dfn> である。</li>
+          <li>通常のオブジェクトである。</li>
+          <li>Error インスタンスでも SuppressedError インスタンスでもなく、[[ErrorData]] 内部スロットを持たない。</li>
+          <li>値が %Error.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype.constructor">
+          <h1>SuppressedError.prototype.constructor</h1>
+          <p>`SuppressedError.prototype.constructor` の初期値は %SuppressedError% である。</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.message">
+          <h1>SuppressedError.prototype.message</h1>
+          <p>`SuppressedError.prototype.message` の初期値は空の String である。</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.name">
+          <h1>SuppressedError.prototype.name</h1>
+          <p>`SuppressedError.prototype.name` の初期値は *"SuppressedError"* である。</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-suppressederror-instances">
+        <h1>SuppressedError インスタンスのプロパティ</h1>
+        <p>SuppressedError インスタンスは、自身の SuppressedError プロトタイプオブジェクトからプロパティを継承し、値が *undefined* である [[ErrorData]] 内部スロットを持つ通常のオブジェクトである。[[ErrorData]] の唯一の仕様上の用途は、`Object.prototype.toString` および `Error.isError` において、Error、AggregateError、SuppressedError、および _NativeError_ インスタンスを Error オブジェクトとして識別することである。</p>
       </emu-clause>
     </emu-clause>
 
@@ -49099,6 +49771,19 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype-%symbol.dispose%" type="built-in function">
+          <h1>Iterator.prototype [ %Symbol.dispose% ] ( )</h1>
+          <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+          <emu-alg>
+            1. _obj_ を *this* 値とする。
+            1. _return_ を ? GetMethod(_obj_, *"return"*) とする。
+            1. _return_ が *undefined* でない場合、then
+              1. ? Call(_return_, _obj_) を実行する。
+            1. *undefined* を返す。
+          </emu-alg>
+          <p>このメソッドの *"name"* プロパティの値は *"[Symbol.dispose]"* である。</p>
+        </emu-clause>
+
         <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%" type="built-in function">
           <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
           <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
@@ -49214,6 +49899,30 @@ THH:mm:ss.sss
       <emu-note>
         <p>このspecificationでdefinedされる、async iterator interfaceを実装するすべてのobjectsも%AsyncIteratorPrototype%からinheritする。ECMAScript codeも、%AsyncIteratorPrototype%からinheritするobjectsをdefineしてよい。%AsyncIteratorPrototype% objectは、すべてのasync iterator objectsに適用可能なadditional methodsを追加できる場所を提供する。</p>
       </emu-note>
+
+      <emu-clause id="sec-%asynciteratorprototype%-%symbol.asyncdispose%" type="built-in function">
+        <h1>%AsyncIteratorPrototype% [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _obj_ を *this* 値とする。
+          1. _promiseCapability_ を ! NewPromiseCapability(%Promise%) とする。
+          1. _return_ を Completion(GetMethod(_obj_, *"return"*))) とする。
+          1. IfAbruptRejectPromise(_return_, _promiseCapability_).
+          1. _return_ が *undefined* である場合、then
+            1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* ») を実行する。
+          1. Else,
+            1. _result_ を Completion(Call(_return_, _obj_, « »)) とする。
+            1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+            1. _resultWrapper_ を Completion(PromiseResolve(%Promise%, _result_)) とする。
+            1. IfAbruptRejectPromise(_resultWrapper_, _promiseCapability_).
+            1. _unwrap_ を、何もキャプチャせず、呼び出されたときに次のステップを実行する、パラメータを持たない新しい Abstract Closure とする:
+              1. *undefined* を返す。
+            1. _onFulfilled_ を CreateBuiltinFunction(_unwrap_, 1, *""*, « ») とする。
+            1. PerformPromiseThen(_resultWrapper_, _onFulfilled_, *undefined*, _promiseCapability_) を実行する。
+          1. _promiseCapability_.[[Promise]] を返す。
+        </emu-alg>
+        <p>このメソッドの *"name"* プロパティの値は *"[Symbol.asyncDispose]"* である。</p>
+      </emu-clause>
 
       <emu-clause oldids="sec-asynciteratorprototype-asynciterator" id="sec-%asynciteratorprototype%-%symbol.asynciterator%" type="built-in function">
         <h1>%AsyncIteratorPrototype% [ %Symbol.asyncIterator% ] ( )</h1>
@@ -49406,6 +50115,468 @@ THH:mm:ss.sss
           1. _promiseCapability_.[[Promise]]を返す。
         </emu-alg>
       </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-resource-management">
+    <h1>リソース管理</h1>
+
+    <emu-clause id="sec-common-resource-management-interfaces">
+      <h1>共通リソース管理インターフェイス</h1>
+
+      <emu-clause id="sec-disposable-interface">
+        <h1>Disposable インターフェイス</h1>
+        <p><dfn>Disposable</dfn> インターフェイスは、<emu-xref href="#table-disposable-interface-required-properties"></emu-xref> に記述されるプロパティを含む:</p>
+        <emu-table id="table-disposable-interface-required-properties" caption="Disposable インターフェイスの必須プロパティ">
+          <table>
+            <tr>
+              <th>
+                プロパティ
+              </th>
+              <th>
+                値
+              </th>
+              <th>
+                要件
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.dispose%`
+              </td>
+              <td>
+                関数オブジェクト
+              </td>
+              <td>
+                <p>このメソッドを呼び出すことにより、呼び出し元がこのオブジェクトを引き続き使用する意図がないことを Disposable オブジェクトに通知する。このメソッドは、ファイルシステムハンドル、ストリーム、ホストオブジェクトなどを含むがこれらに限定されないリソースの明示的なクリーンアップを実行するために必要なロジックを実行するべきである。このメソッドから例外が投げられる場合、それは通常、そのリソースを明示的に解放できなかったことを意味する。</p>
+                <p>同じオブジェクトに対してこのメソッドを複数回呼び出す場合、すでに破棄済みのリソースに対してクリーンアップロジックを繰り返すことを避けるべきであり、最初の呼び出しで例外が投げられた場合であっても、例外を投げるべきではない。ただし、この要件は強制されない。</p>
+                <p>Disposable オブジェクトを `using` 宣言または `await using` 宣言とともに使用する場合、そのリソースは、その宣言を直接含む |Block| または |Module| が評価されたときに自動的に破棄される。</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposable-interface">
+        <h1>AsyncDisposable インターフェイス</h1>
+        <p><dfn>AsyncDisposable</dfn> インターフェイスは、<emu-xref href="#table-asyncdisposable-interface-required-properties"></emu-xref> に記述されるプロパティを含む:</p>
+        <emu-table id="table-asyncdisposable-interface-required-properties" caption="AsyncDisposable インターフェイスの必須プロパティ">
+          <table>
+            <tr>
+              <th>
+                プロパティ
+              </th>
+              <th>
+                値
+              </th>
+              <th>
+                要件
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.asyncDispose%`
+              </td>
+              <td>
+                promise を返す関数オブジェクト
+              </td>
+              <td>
+                <p>このメソッドを呼び出すことにより、呼び出し元がこのオブジェクトを引き続き使用する意図がないことを AsyncDisposable オブジェクトに通知する。このメソッドは、ファイルシステムハンドル、ストリーム、ホストオブジェクトなどを含むがこれらに限定されないリソースの明示的なクリーンアップを実行するために必要なロジックを実行するべきである。このメソッドが返す promise が reject される場合、それは通常、そのリソースを明示的に解放できなかったことを意味する。AsyncDisposable オブジェクトは、結果の Promise が fulfilled になるまで「破棄済み」とはみなされない。</p>
+                <p>同じオブジェクトに対してこのメソッドを複数回呼び出す場合、すでに破棄済みのリソースに対してクリーンアップロジックを繰り返すことを避けるべきであり、最初の呼び出しで例外が投げられた場合または rejected promise が返された場合であっても、例外を投げたり rejected promise を返したりするべきではない。ただし、この要件は強制されない。</p>
+                <p>AsyncDisposable オブジェクトを `await using` 宣言とともに使用する場合、そのリソースは、その宣言を直接含む |Block| または |Module| が評価されたときに自動的に破棄される。</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-disposablestack-objects">
+    <h1>DisposableStack オブジェクト</h1>
+    <p>DisposableStack は、まとめて破棄されるべき1つ以上のリソースを格納するために使用できるオブジェクトである。</p>
+    <p>任意の DisposableStack オブジェクトは、互いに排他的な2つの状態、すなわち <em>disposed</em> または <em>pending</em> のいずれかにある。disposable stack `d` は、`d.dispose()` も `d.move()` も `d` に対して呼び出されていない場合に限り pending である。</p>
+
+    <emu-clause id="sec-disposablestack-constructor">
+      <h1>DisposableStack コンストラクタ</h1>
+      <p>DisposableStack コンストラクタは次のとおりである:</p>
+      <ul>
+        <li><dfn>%DisposableStack%</dfn> である。</li>
+        <li>グローバルオブジェクトの *"DisposableStack"* プロパティの初期値である。</li>
+        <li>コンストラクタとして呼び出されたとき、新しい DisposableStack を作成して初期化する。</li>
+        <li>関数として呼び出されることは意図されておらず、そのように呼び出された場合は例外を投げる。</li>
+        <li>クラス定義の `extends` 節の値として使用できる。指定された DisposableStack の振る舞いを継承しようとするサブクラスコンストラクタは、`DisposableStack.prototype` の組込みメソッドをサポートするために必要な内部状態を持つサブクラスインスタンスを作成して初期化するために、DisposableStack コンストラクタへの `super` 呼び出しを含めなければならない。</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack" type="built-in function">
+        <h1>DisposableStack ( )</h1>
+        <p>この関数は、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. NewTarget が *undefined* である場合、*TypeError* 例外を投げる。
+          1. _disposableStack_ を ? OrdinaryCreateFromConstructor(NewTarget, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _disposableStack_.[[DisposableState]] を ~pending~ に設定する。
+          1. _disposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _disposableStack_ を返す。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-constructor">
+      <h1>DisposableStack コンストラクタのプロパティ</h1>
+      <p>DisposableStack コンストラクタは次のとおりである:</p>
+      <ul>
+        <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>次のプロパティを持つ:</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype">
+        <h1>DisposableStack.prototype</h1>
+        <p>`DisposableStack.prototype` の初期値は DisposableStack プロトタイプオブジェクトである。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-prototype-object">
+      <h1>DisposableStack プロトタイプオブジェクトのプロパティ</h1>
+      <p><dfn>DisposableStack プロトタイプオブジェクト</dfn>は次のとおりである:</p>
+      <ul>
+        <li><dfn>%DisposableStack.prototype%</dfn> である。</li>
+        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>通常のオブジェクトである。</li>
+        <li>[[DisposableState]] 内部スロットも、DisposableStack インスタンスのその他の内部スロットも持たない。</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype.adopt" type="built-in function">
+        <h1>DisposableStack.prototype.adopt ( _value_, _onDispose_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. IsCallable(_onDispose_) が *false* である場合、*TypeError* 例外を投げる。
+          1. _closure_ を、_value_ と _onDispose_ をキャプチャし、呼び出されたときに次のステップを実行する、パラメータを持たない新しい Abstract Closure とする:
+            1. Return ? Call(_onDispose_, *undefined*, « _value_ »).
+          1. _func_ を CreateBuiltinFunction(_closure_, 0, *""*, « ») とする。
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _func_) を実行する。
+          1. _value_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.constructor">
+        <h1>DisposableStack.prototype.constructor</h1>
+        <p>`DisposableStack.prototype.constructor` の初期値は %DisposableStack% である。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.defer" type="built-in function">
+        <h1>DisposableStack.prototype.defer ( _onDispose_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. IsCallable(_onDispose_) が *false* である場合、*TypeError* 例外を投げる。
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _onDispose_) を実行する。
+          1. *undefined* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.dispose" type="built-in function">
+        <h1>DisposableStack.prototype.dispose ( )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*undefined* を返す。
+          1. _disposableStack_.[[DisposableState]] を ~disposed~ に設定する。
+          1. Return ? DisposeResources(_disposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*)).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-disposablestack.prototype.disposed" type="built-in function">
+        <h1>get DisposableStack.prototype.disposed</h1>
+        <p>`DisposableStack.prototype.disposed` は、set アクセサ関数が *undefined* であるアクセサプロパティである。その get アクセサ関数は、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*true* を返す。
+          1. *false* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.move" type="built-in function">
+        <h1>DisposableStack.prototype.move ( )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. _newDisposableStack_ を ? OrdinaryCreateFromConstructor(%DisposableStack%, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _newDisposableStack_.[[DisposableState]] を ~pending~ に設定する。
+          1. _newDisposableStack_.[[DisposableResourceStack]] を _disposableStack_.[[DisposableResourceStack]] に設定する。
+          1. _disposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _disposableStack_.[[DisposableState]] を ~disposed~ に設定する。
+          1. _newDisposableStack_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.use" type="built-in function">
+        <h1>DisposableStack.prototype.use ( _value_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _disposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
+          1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], _value_, ~sync-dispose~) を実行する。
+          1. _value_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.dispose%">
+        <h1>DisposableStack.prototype [ %Symbol.dispose% ] ( )</h1>
+        <p>`%Symbol.dispose%` プロパティの初期値は、<emu-xref href="#sec-disposablestack.prototype.dispose"></emu-xref> で定義される %DisposableStack.prototype.dispose% である。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.tostringtag%">
+        <h1>DisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` プロパティの初期値は String 値 *"DisposableStack"* である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-disposablestack-instances">
+      <h1>DisposableStack インスタンスのプロパティ</h1>
+      <p>DisposableStack インスタンスは、DisposableStack プロトタイプオブジェクト（組込み %DisposableStack.prototype%）からプロパティを継承する通常のオブジェクトである。DisposableStack インスタンスは、最初に <emu-xref href="#table-internal-slots-of-disposablestack-instances"></emu-xref> に記述される内部スロットを持つように作成される。</p>
+      <emu-table id="table-internal-slots-of-disposablestack-instances" caption="DisposableStack インスタンスの内部スロット">
+        <table>
+          <tr>
+            <th>
+              内部スロット
+            </th>
+            <th>
+              型
+            </th>
+            <th>
+              説明
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableState]]
+            </td>
+            <td>
+              ~pending~ または ~disposed~
+            </td>
+            <td>
+              disposable stack が自身の `%Symbol.dispose%` メソッドへの着信呼び出しにどのように反応するかを制御する。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              DisposableResource レコードの List
+            </td>
+            <td>
+              disposable stack が破棄されるときに破棄されるリソース。リソースは初期化された順に追加され、逆順に破棄される。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-asyncdisposablestack-objects">
+    <h1>AsyncDisposableStack オブジェクト</h1>
+    <p>AsyncDisposableStack は、非同期にまとめて破棄されるべき1つ以上のリソースを格納するために使用できるオブジェクトである。</p>
+    <p>任意の AsyncDisposableStack オブジェクトは、互いに排他的な2つの状態、すなわち <em>disposed</em> または <em>pending</em> のいずれかにある。async-disposable stack `d` は、`d.disposeAsync()` も `d.move()` も `d` に対して呼び出されていない場合に限り pending である。</p>
+
+    <emu-clause id="sec-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack コンストラクタ</h1>
+      <p>AsyncDisposableStack コンストラクタは次のとおりである:</p>
+      <ul>
+        <li><dfn>%AsyncDisposableStack%</dfn> である。</li>
+        <li>グローバルオブジェクトの *"AsyncDisposableStack"* プロパティの初期値である。</li>
+        <li>コンストラクタとして呼び出されたとき、新しい AsyncDisposableStack を作成して初期化する。</li>
+        <li>関数として呼び出されることは意図されておらず、そのように呼び出された場合は例外を投げる。</li>
+        <li>クラス定義の `extends` 節の値として使用できる。指定された AsyncDisposableStack の振る舞いを継承しようとするサブクラスコンストラクタは、`AsyncDisposableStack.prototype` の組込みメソッドをサポートするために必要な内部状態を持つサブクラスインスタンスを作成して初期化するために、AsyncDisposableStack コンストラクタへの `super` 呼び出しを含めなければならない。</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack" type="built-in function">
+        <h1>AsyncDisposableStack ( )</h1>
+        <p>この関数は、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. NewTarget が *undefined* である場合、*TypeError* 例外を投げる。
+          1. _asyncDisposableStack_ を ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] を ~pending~ に設定する。
+          1. _asyncDisposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _asyncDisposableStack_ を返す。
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack コンストラクタのプロパティ</h1>
+      <p>AsyncDisposableStack コンストラクタは次のとおりである:</p>
+      <ul>
+        <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>次のプロパティを持つ:</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype">
+        <h1>AsyncDisposableStack.prototype</h1>
+        <p>`AsyncDisposableStack.prototype` の初期値は AsyncDisposableStack プロトタイプオブジェクトである。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-prototype-object">
+      <h1>AsyncDisposableStack プロトタイプオブジェクトのプロパティ</h1>
+      <p><dfn>AsyncDisposableStack プロトタイプオブジェクト</dfn>は次のとおりである:</p>
+      <ul>
+        <li><dfn>%AsyncDisposableStack.prototype%</dfn> である。</li>
+        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>通常のオブジェクトである。</li>
+        <li>[[AsyncDisposableState]] 内部スロットも、AsyncDisposableStack インスタンスのその他の内部スロットも持たない。</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.adopt" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.adopt ( _value_, _onDisposeAsync_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. IsCallable(_onDisposeAsync_) が *false* である場合、*TypeError* 例外を投げる。
+          1. _closure_ を、_value_ と _onDisposeAsync_ をキャプチャし、呼び出されたときに次のステップを実行する、パラメータを持たない新しい Abstract Closure とする:
+            1. Return ? Call(_onDisposeAsync_, *undefined*, « _value_ »).
+          1. _func_ を CreateBuiltinFunction(_closure_, 0, *""*, « ») とする。
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _func_) を実行する。
+          1. _value_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.constructor">
+        <h1>AsyncDisposableStack.prototype.constructor</h1>
+        <p>`AsyncDisposableStack.prototype.constructor` の初期値は %AsyncDisposableStack% である。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.defer" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.defer ( _onDisposeAsync_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. IsCallable(_onDisposeAsync_) が *false* である場合、*TypeError* 例外を投げる。
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _onDisposeAsync_) を実行する。
+          1. *undefined* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.disposeAsync" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.disposeAsync ( )</h1>
+        <p>この async メソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*undefined* を返す。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] を ~disposed~ に設定する。
+          1. Return ? DisposeResources(_asyncDisposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*)).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-asyncdisposablestack.prototype.disposed" type="built-in function">
+        <h1>get AsyncDisposableStack.prototype.disposed</h1>
+        <p>`AsyncDisposableStack.prototype.disposed` は、set アクセサ関数が *undefined* であるアクセサプロパティである。その get アクセサ関数は、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*true* を返す。
+          1. *false* を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.move" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.move ( )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. _newAsyncDisposableStack_ を ? OrdinaryCreateFromConstructor(%AsyncDisposableStack%, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _newAsyncDisposableStack_.[[AsyncDisposableState]] を ~pending~ に設定する。
+          1. _newAsyncDisposableStack_.[[DisposableResourceStack]] を _asyncDisposableStack_.[[DisposableResourceStack]] に設定する。
+          1. _asyncDisposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] を ~disposed~ に設定する。
+          1. _newAsyncDisposableStack_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.use" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.use ( _value_ )</h1>
+        <p>このメソッドは、呼び出されたときに次のステップを実行する:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_ を *this* 値とする。
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
+          1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外を投げる。
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], _value_, ~async-dispose~) を実行する。
+          1. _value_ を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.asyncdispose%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>`%Symbol.asyncDispose%` プロパティの初期値は、<emu-xref href="#sec-asyncdisposablestack.prototype.disposeAsync"></emu-xref> で定義される %AsyncDisposableStack.prototype.disposeAsync% である。</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.tostringtag%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` プロパティの初期値は String 値 *"AsyncDisposableStack"* である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-asyncdisposablestack-instances">
+      <h1>AsyncDisposableStack インスタンスのプロパティ</h1>
+      <p>AsyncDisposableStack インスタンスは、AsyncDisposableStack プロトタイプオブジェクト（組込み %AsyncDisposableStack.prototype%）からプロパティを継承する通常のオブジェクトである。AsyncDisposableStack インスタンスは、最初に <emu-xref href="#table-internal-slots-of-asyncdisposablestack-instances"></emu-xref> に記述される内部スロットを持つように作成される。</p>
+      <emu-table id="table-internal-slots-of-asyncdisposablestack-instances" caption="AsyncDisposableStack インスタンスの内部スロット">
+        <table>
+          <tr>
+            <th>
+              内部スロット
+            </th>
+            <th>
+              型
+            </th>
+            <th>
+              説明
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[AsyncDisposableState]]
+            </td>
+            <td>
+              ~pending~ または ~disposed~
+            </td>
+            <td>
+              disposable stack が自身の `%Symbol.asyncDispose%` メソッドへの着信呼び出しにどのように反応するかを制御する。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              DisposableResource レコードの List
+            </td>
+            <td>
+              disposable stack が破棄されるときに破棄されるリソース。リソースは初期化された順に追加され、逆順に破棄される。
+            </td>
+          </tr>
+        </table>
+      </emu-table>
     </emu-clause>
   </emu-clause>
 
@@ -52590,6 +53761,14 @@ THH:mm:ss.sss
     <emu-prodref name="LeftHandSideExpression"></emu-prodref>
     <emu-prodref name="UpdateExpression"></emu-prodref>
     <emu-prodref name="UnaryExpression"></emu-prodref>
+    <emu-prodref name="CoverAwaitExpressionAndAwaitUsingDeclarationHead"></emu-prodref>
+    <p>
+      生成規則のインスタンスを処理する際<br>
+      <emu-prodref name="UnaryExpression" a="awaitusingcover"></emu-prodref><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead| の解釈は、次の文法を使用して精緻化される:
+    </p>
+    <emu-prodref name="AwaitExpression"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="ExponentiationExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeOperator"></emu-prodref>
@@ -52640,8 +53819,17 @@ THH:mm:ss.sss
     <emu-prodref name="StatementListItem"></emu-prodref>
     <emu-prodref name="LexicalDeclaration"></emu-prodref>
     <emu-prodref name="LetOrConst"></emu-prodref>
+    <emu-prodref name="UsingDeclaration"></emu-prodref>
+    <emu-prodref name="AwaitUsingDeclaration"></emu-prodref>
     <emu-prodref name="BindingList"></emu-prodref>
     <emu-prodref name="LexicalBinding"></emu-prodref>
+    <p>
+      生成規則のインスタンスを処理する際<br>
+      <emu-prodref name="AwaitUsingDeclaration"></emu-prodref><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead| の解釈は、次の文法を使用して精緻化される:
+    </p>
+    <emu-prodref name="AwaitUsingDeclarationHead"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="VariableStatement"></emu-prodref>
     <emu-prodref name="VariableDeclarationList"></emu-prodref>
     <emu-prodref name="VariableDeclaration"></emu-prodref>

@@ -1356,21 +1356,32 @@
         <p>Well-known symbol은 이 명세의 algorithm에서 명시적으로 참조되는 built-in Symbol value입니다. 보통 specification algorithm의 extension point 역할을 하는 value를 가진 property의 key로 사용됩니다. 달리 specified되지 않는 한, well-known symbol value는 모든 realm이 공유합니다(<emu-xref href="#sec-code-realms"></emu-xref>).</p>
         <p>이 명세 안에서 well-known symbol은 <emu-xref href="#table-well-known-symbols"></emu-xref>에 나열된 값 중 하나인 intrinsic을 사용하는 표준 <emu-xref href="#sec-well-known-intrinsic-objects">intrinsic notation</emu-xref>으로 지칭됩니다.</p>
         <emu-note>이 명세의 이전 판들은 @@name 형식의 notation을 사용했으며, 현재 판에서는 `%Symbol.name%`을 사용합니다. 특히 다음 이름들이 사용되었습니다: @@asyncIterator, @@hasInstance, @@isConcatSpreadable, @@<emu-not-ref>iterator</emu-not-ref>, @@match, @@matchAll, @@replace, @@search, @@species, @@split, @@toPrimitive, @@toStringTag, and @@unscopables.</emu-note>
-        <emu-table id="table-well-known-symbols" caption="Well-known Symbols" oldids="table-1">
+        <emu-table id="table-well-known-symbols" caption="잘 알려진 심벌" oldids="table-1">
           <table>
             <thead>
               <tr>
                 <th>
-                  Specification Name
+                  명세 이름
                 </th>
                 <th>
                   [[Description]]
                 </th>
                 <th>
-                  Value와 Purpose
+                  값과 목적
                 </th>
               </tr>
             </thead>
+            <tr>
+              <td>
+                <dfn>%Symbol.asyncDispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.asyncDispose"*
+              </td>
+              <td>
+                객체에 대해 리소스 정리를 비동기적으로 수행하는 메서드. 포함하는 스코프의 평가가 완료될 때 AsyncDisposableStack 객체와 `await using` 선언에 의해 호출된다.
+              </td>
+            </tr>
             <tr>
               <td>
                 <dfn>%Symbol.asyncIterator%</dfn>
@@ -1379,7 +1390,18 @@
                 *"Symbol.asyncIterator"*
               </td>
               <td>
-                object의 default async iterator를 반환하는 method입니다. `for`-`await`-`of` statement의 semantics에 의해 호출됩니다.
+                객체의 기본 비동기 반복자를 반환하는 메서드. `for`-`await`-`of` 문의 의미론에 의해 호출된다.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dfn>%Symbol.dispose%</dfn>
+              </td>
+              <td>
+                *"Symbol.dispose"*
+              </td>
+              <td>
+                객체에 대해 명시적 리소스 정리를 수행하는 메서드. 포함하는 스코프의 평가가 완료될 때 DisposableStack 객체, AsyncDisposableStack 객체 및 `using` 선언에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1390,7 +1412,7 @@
                 *"Symbol.hasInstance"*
               </td>
               <td>
-                constructor object가 object를 constructor의 instance 중 하나로 인식하는지 결정하는 method입니다. `instanceof` operator의 semantics에 의해 호출됩니다.
+                생성자 객체가 어떤 객체를 해당 생성자의 인스턴스 중 하나로 인식하는지 결정하는 메서드. `instanceof` 연산자의 의미론에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1401,7 +1423,7 @@
                 *"Symbol.isConcatSpreadable"*
               </td>
               <td>
-                true이면 object가 <emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref>에 의해 자신의 array element로 flattened되어야 함을 나타내는 Boolean valued property입니다.
+                true이면 객체가 <emu-xref href="#sec-array.prototype.concat">`Array.prototype.concat`</emu-xref>에 의해 그 배열 요소로 평탄화되어야 함을 나타내는 Boolean 값 속성.
               </td>
             </tr>
             <tr>
@@ -1412,7 +1434,7 @@
                 *"Symbol.iterator"*
               </td>
               <td>
-                object의 default iterator를 반환하는 method입니다. for-of statement의 semantics에 의해 호출됩니다.
+                객체의 기본 반복자를 반환하는 메서드. for-of 문의 의미론에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1423,7 +1445,7 @@
                 *"Symbol.match"*
               </td>
               <td>
-                regular expression을 string에 match하는 regular expression method입니다. <emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref> method에 의해 호출됩니다.
+                정규 표현식을 문자열과 대조하여 일치시키는 정규 표현식 메서드. <emu-xref href="#sec-string.prototype.match">`String.prototype.match`</emu-xref> 메서드에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1434,7 +1456,7 @@
                 *"Symbol.matchAll"*
               </td>
               <td>
-                regular expression이 string에 대해 match한 결과를 yield하는 iterator를 반환하는 regular expression method입니다. <emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref> method에 의해 호출됩니다.
+                정규 표현식을 문자열과 대조한 일치 항목을 산출하는 반복자를 반환하는 정규 표현식 메서드. <emu-xref href="#sec-string.prototype.matchall">`String.prototype.matchAll`</emu-xref> 메서드에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1445,7 +1467,7 @@
                 *"Symbol.replace"*
               </td>
               <td>
-                string의 matched substring을 replace하는 regular expression method입니다. <emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref> method에 의해 호출됩니다.
+                문자열에서 일치한 부분 문자열을 대체하는 정규 표현식 메서드. <emu-xref href="#sec-string.prototype.replace">`String.prototype.replace`</emu-xref> 메서드에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1456,7 +1478,7 @@
                 *"Symbol.search"*
               </td>
               <td>
-                regular expression과 match하는 string 안의 index를 반환하는 regular expression method입니다. <emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref> method에 의해 호출됩니다.
+                정규 표현식과 일치하는 문자열 내 인덱스를 반환하는 정규 표현식 메서드. <emu-xref href="#sec-string.prototype.search">`String.prototype.search`</emu-xref> 메서드에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1467,7 +1489,7 @@
                 *"Symbol.species"*
               </td>
               <td>
-                derived object를 생성하는 데 사용되는 constructor function인 function valued property입니다.
+                파생 객체를 생성하는 데 사용되는 생성자 함수인 함수 값 속성.
               </td>
             </tr>
             <tr>
@@ -1478,7 +1500,7 @@
                 *"Symbol.split"*
               </td>
               <td>
-                regular expression과 match하는 index에서 string을 split하는 regular expression method입니다. <emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref> method에 의해 호출됩니다.
+                정규 표현식과 일치하는 인덱스에서 문자열을 분할하는 정규 표현식 메서드. <emu-xref href="#sec-string.prototype.split">`String.prototype.split`</emu-xref> 메서드에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1489,7 +1511,7 @@
                 *"Symbol.toPrimitive"*
               </td>
               <td>
-                object를 대응하는 primitive value로 convert하는 method입니다. ToPrimitive abstract operation에 의해 호출됩니다.
+                객체를 대응하는 원시 값으로 변환하는 메서드. ToPrimitive 추상 연산에 의해 호출된다.
               </td>
             </tr>
             <tr>
@@ -1500,7 +1522,7 @@
                 *"Symbol.toStringTag"*
               </td>
               <td>
-                object의 default string description을 생성하는 데 사용되는 String valued property입니다. built-in method <emu-xref href="#sec-object.prototype.tostring">`Object.prototype.toString`</emu-xref>에 의해 accessed됩니다.
+                객체의 기본 문자열 설명을 생성할 때 사용되는 String 값 속성. 내장 메서드 <emu-xref href="#sec-object.prototype.tostring">`Object.prototype.toString`</emu-xref>에 의해 접근된다.
               </td>
             </tr>
             <tr>
@@ -1511,7 +1533,7 @@
                 *"Symbol.unscopables"*
               </td>
               <td>
-                associated object의 `with` environment binding에서 excluded되는 property name인 own 및 inherited property name을 가진 object valued property입니다.
+                자체 및 상속된 속성 이름이 연결된 객체의 `with` 환경 바인딩에서 제외되는 속성 이름인 객체 값 속성.
               </td>
             </tr>
           </table>
@@ -3399,18 +3421,18 @@
         <h1>Well-Known Intrinsic Objects</h1>
         <p>Well-known intrinsic은 이 명세의 algorithm에서 명시적으로 referenced되는 built-in object이며, 보통 realm-specific identity를 가집니다. 달리 specified되지 않는 한 각 intrinsic object는 실제로 realm마다 하나씩, 유사한 object의 set에 대응합니다.</p>
         <p>이 명세 안에서 %name% 같은 reference는 current realm과 associated되고 해당 name에 대응하는 intrinsic object를 의미합니다. %name.a.b% 같은 reference는, ECMAScript code가 evaluated되기 전에 intrinsic object %name%의 *"a"* property value의 *"b"* property가 accessed된 것처럼 의미합니다. current realm과 그 intrinsic의 determination은 <emu-xref href="#sec-execution-contexts"></emu-xref>에 설명되어 있습니다. well-known intrinsic은 <emu-xref href="#table-well-known-intrinsic-objects"></emu-xref>에 listed되어 있습니다.</p>
-        <emu-table id="table-well-known-intrinsic-objects" caption="Well-Known Intrinsic Objects" oldids="table-7">
+        <emu-table id="table-well-known-intrinsic-objects" caption="잘 알려진 내재 객체" oldids="table-7">
           <table>
             <thead>
               <tr>
                 <th>
-                  Intrinsic Name
+                  내재 이름
                 </th>
                 <th>
-                  Global Name
+                  전역 이름
                 </th>
                 <th>
-                  ECMAScript Language Association
+                  ECMAScript 언어 연관
                 </th>
               </tr>
             </thead>
@@ -3422,7 +3444,7 @@
                 *"AggregateError"*
               </td>
               <td>
-                `AggregateError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>)
+                `AggregateError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-aggregate-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3433,7 +3455,7 @@
                 *"Array"*
               </td>
               <td>
-                `Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-array-constructor"></emu-xref>)
+                `Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-array-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3444,7 +3466,7 @@
                 *"ArrayBuffer"*
               </td>
               <td>
-                `ArrayBuffer` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>)
+                `ArrayBuffer` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-arraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3454,7 +3476,18 @@
               <td>
               </td>
               <td>
-                Array Iterator object의 prototype (<emu-xref href="#sec-array-iterator-objects"></emu-xref>)
+                Array Iterator 객체의 프로토타입 (<emu-xref href="#sec-array-iterator-objects"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %AsyncDisposableStack%
+              </td>
+              <td>
+                *"AsyncDisposableStack"*
+              </td>
+              <td>
+                `AsyncDisposableStack` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3464,7 +3497,7 @@
               <td>
               </td>
               <td>
-                Async-from-Sync Iterator object의 prototype (<emu-xref href="#sec-async-from-sync-iterator-objects"></emu-xref>)
+                Async-from-Sync Iterator 객체의 프로토타입 (<emu-xref href="#sec-async-from-sync-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3474,7 +3507,7 @@
               <td>
               </td>
               <td>
-                async function object의 <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-async-function-constructor"></emu-xref>)
+                async 함수 객체의 <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-async-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3484,7 +3517,7 @@
               <td>
               </td>
               <td>
-                async generator function object의 <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>)
+                async generator 함수 객체의 <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-asyncgeneratorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3494,7 +3527,7 @@
               <td>
               </td>
               <td>
-                async generator object의 prototype (<emu-xref href="#sec-asyncgenerator-objects"></emu-xref>)
+                async generator 객체의 프로토타입 (<emu-xref href="#sec-asyncgenerator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3504,7 +3537,7 @@
               <td>
               </td>
               <td>
-                모든 standard built-in async iterator object가 indirectly inherit하는 object
+                모든 표준 내장 async iterator 객체가 간접적으로 상속하는 객체
               </td>
             </tr>
             <tr>
@@ -3515,7 +3548,7 @@
                 *"Atomics"*
               </td>
               <td>
-                `Atomics` object (<emu-xref href="#sec-atomics-object"></emu-xref>)
+                `Atomics` 객체 (<emu-xref href="#sec-atomics-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3526,7 +3559,7 @@
                 *"BigInt"*
               </td>
               <td>
-                `BigInt` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-bigint-constructor"></emu-xref>)
+                `BigInt` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-bigint-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3537,7 +3570,7 @@
                 *"BigInt64Array"*
               </td>
               <td>
-                `BigInt64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `BigInt64Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3548,7 +3581,7 @@
                 *"BigUint64Array"*
               </td>
               <td>
-                `BigUint64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `BigUint64Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3559,7 +3592,7 @@
                 *"Boolean"*
               </td>
               <td>
-                `Boolean` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-boolean-constructor"></emu-xref>)
+                `Boolean` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-boolean-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3570,7 +3603,7 @@
                 *"DataView"*
               </td>
               <td>
-                `DataView` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-dataview-constructor"></emu-xref>)
+                `DataView` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-dataview-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3581,7 +3614,7 @@
                 *"Date"*
               </td>
               <td>
-                `Date` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-date-constructor"></emu-xref>)
+                `Date` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-date-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3592,7 +3625,7 @@
                 *"decodeURI"*
               </td>
               <td>
-                `decodeURI` function (<emu-xref href="#sec-decodeuri-encodeduri"></emu-xref>)
+                `decodeURI` 함수 (<emu-xref href="#sec-decodeuri-encodeduri"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3603,7 +3636,18 @@
                 *"decodeURIComponent"*
               </td>
               <td>
-                `decodeURIComponent` function (<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>)
+                `decodeURIComponent` 함수 (<emu-xref href="#sec-decodeuricomponent-encodeduricomponent"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %DisposableStack%
+              </td>
+              <td>
+                *"DisposableStack"*
+              </td>
+              <td>
+                `DisposableStack` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-disposablestack-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3614,7 +3658,7 @@
                 *"encodeURI"*
               </td>
               <td>
-                `encodeURI` function (<emu-xref href="#sec-encodeuri-uri"></emu-xref>)
+                `encodeURI` 함수 (<emu-xref href="#sec-encodeuri-uri"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3625,7 +3669,7 @@
                 *"encodeURIComponent"*
               </td>
               <td>
-                `encodeURIComponent` function (<emu-xref href="#sec-encodeuricomponent-uricomponent"></emu-xref>)
+                `encodeURIComponent` 함수 (<emu-xref href="#sec-encodeuricomponent-uricomponent"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3636,7 +3680,7 @@
                 *"Error"*
               </td>
               <td>
-                `Error` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-error-constructor"></emu-xref>)
+                `Error` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-error-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3647,7 +3691,7 @@
                 *"eval"*
               </td>
               <td>
-                `eval` function (<emu-xref href="#sec-eval-x"></emu-xref>)
+                `eval` 함수 (<emu-xref href="#sec-eval-x"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3658,7 +3702,7 @@
                 *"EvalError"*
               </td>
               <td>
-                `EvalError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>)
+                `EvalError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-evalerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3669,7 +3713,7 @@
                 *"FinalizationRegistry"*
               </td>
               <td>
-                `FinalizationRegistry` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>)
+                `FinalizationRegistry` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-finalization-registry-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3680,7 +3724,7 @@
                 *"Float16Array"*
               </td>
               <td>
-                `Float16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Float16Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3691,7 +3735,7 @@
                 *"Float32Array"*
               </td>
               <td>
-                `Float32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Float32Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3702,7 +3746,7 @@
                 *"Float64Array"*
               </td>
               <td>
-                `Float64Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Float64Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3712,7 +3756,7 @@
               <td>
               </td>
               <td>
-                For-In Iterator object의 prototype (<emu-xref href="#sec-for-in-iterator-objects"></emu-xref>)
+                For-In Iterator 객체의 프로토타입 (<emu-xref href="#sec-for-in-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3723,7 +3767,7 @@
                 *"Function"*
               </td>
               <td>
-                `Function` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-function-constructor"></emu-xref>)
+                `Function` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-function-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3733,7 +3777,7 @@
               <td>
               </td>
               <td>
-                generator function object의 <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>)
+                generator 함수 객체의 <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-generatorfunction-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3743,7 +3787,7 @@
               <td>
               </td>
               <td>
-                generator object의 prototype (<emu-xref href="#sec-generator-objects"></emu-xref>)
+                generator 객체의 프로토타입 (<emu-xref href="#sec-generator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3754,7 +3798,7 @@
                 *"Int8Array"*
               </td>
               <td>
-                `Int8Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Int8Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3765,7 +3809,7 @@
                 *"Int16Array"*
               </td>
               <td>
-                `Int16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Int16Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3776,7 +3820,7 @@
                 *"Int32Array"*
               </td>
               <td>
-                `Int32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Int32Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3787,7 +3831,7 @@
                 *"isFinite"*
               </td>
               <td>
-                `isFinite` function (<emu-xref href="#sec-isfinite-number"></emu-xref>)
+                `isFinite` 함수 (<emu-xref href="#sec-isfinite-number"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3798,7 +3842,7 @@
                 *"isNaN"*
               </td>
               <td>
-                `isNaN` function (<emu-xref href="#sec-isnan-number"></emu-xref>)
+                `isNaN` 함수 (<emu-xref href="#sec-isnan-number"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3809,7 +3853,7 @@
                 *"Iterator"*
               </td>
               <td>
-                `Iterator` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-iterator-constructor"></emu-xref>)
+                `Iterator` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-iterator-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3819,7 +3863,7 @@
               <td>
               </td>
               <td>
-                Iterator Helper object의 prototype (<emu-xref href="#sec-%iteratorhelperprototype%-object"></emu-xref>)
+                Iterator Helper 객체의 프로토타입 (<emu-xref href="#sec-%iteratorhelperprototype%-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3830,7 +3874,7 @@
                 *"JSON"*
               </td>
               <td>
-                `JSON` object (<emu-xref href="#sec-json-object"></emu-xref>)
+                `JSON` 객체 (<emu-xref href="#sec-json-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3841,7 +3885,7 @@
                 *"Map"*
               </td>
               <td>
-                `Map` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-map-constructor"></emu-xref>)
+                `Map` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-map-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3851,7 +3895,7 @@
               <td>
               </td>
               <td>
-                Map Iterator object의 prototype (<emu-xref href="#sec-map-iterator-objects"></emu-xref>)
+                Map Iterator 객체의 프로토타입 (<emu-xref href="#sec-map-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3862,7 +3906,7 @@
                 *"Math"*
               </td>
               <td>
-                `Math` object (<emu-xref href="#sec-math-object"></emu-xref>)
+                `Math` 객체 (<emu-xref href="#sec-math-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3873,7 +3917,7 @@
                 *"Number"*
               </td>
               <td>
-                `Number` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-number-constructor"></emu-xref>)
+                `Number` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-number-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3884,7 +3928,7 @@
                 *"Object"*
               </td>
               <td>
-                `Object` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-object-constructor"></emu-xref>)
+                `Object` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-object-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3895,7 +3939,7 @@
                 *"parseFloat"*
               </td>
               <td>
-                `parseFloat` function (<emu-xref href="#sec-parsefloat-string"></emu-xref>)
+                `parseFloat` 함수 (<emu-xref href="#sec-parsefloat-string"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3906,7 +3950,7 @@
                 *"parseInt"*
               </td>
               <td>
-                `parseInt` function (<emu-xref href="#sec-parseint-string-radix"></emu-xref>)
+                `parseInt` 함수 (<emu-xref href="#sec-parseint-string-radix"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3917,7 +3961,7 @@
                 *"Promise"*
               </td>
               <td>
-                `Promise` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-promise-constructor"></emu-xref>)
+                `Promise` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-promise-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3928,7 +3972,7 @@
                 *"Proxy"*
               </td>
               <td>
-                `Proxy` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-proxy-constructor"></emu-xref>)
+                `Proxy` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-proxy-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3939,7 +3983,7 @@
                 *"RangeError"*
               </td>
               <td>
-                `RangeError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>)
+                `RangeError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-rangeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3950,7 +3994,7 @@
                 *"ReferenceError"*
               </td>
               <td>
-                `ReferenceError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>)
+                `ReferenceError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-referenceerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3961,7 +4005,7 @@
                 *"Reflect"*
               </td>
               <td>
-                `Reflect` object (<emu-xref href="#sec-reflect-object"></emu-xref>)
+                `Reflect` 객체 (<emu-xref href="#sec-reflect-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3972,7 +4016,7 @@
                 *"RegExp"*
               </td>
               <td>
-                `RegExp` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-regexp-constructor"></emu-xref>)
+                `RegExp` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-regexp-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3982,7 +4026,7 @@
               <td>
               </td>
               <td>
-                RegExp String Iterator object의 prototype (<emu-xref href="#sec-regexp-string-iterator-objects"></emu-xref>)
+                RegExp String Iterator 객체의 프로토타입 (<emu-xref href="#sec-regexp-string-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -3993,7 +4037,7 @@
                 *"Set"*
               </td>
               <td>
-                `Set` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-set-constructor"></emu-xref>)
+                `Set` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-set-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4003,7 +4047,7 @@
               <td>
               </td>
               <td>
-                Set Iterator object의 prototype (<emu-xref href="#sec-set-iterator-objects"></emu-xref>)
+                Set Iterator 객체의 프로토타입 (<emu-xref href="#sec-set-iterator-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4014,7 +4058,7 @@
                 *"SharedArrayBuffer"*
               </td>
               <td>
-                `SharedArrayBuffer` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>)
+                `SharedArrayBuffer` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-sharedarraybuffer-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4025,7 +4069,7 @@
                 *"String"*
               </td>
               <td>
-                `String` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-string-constructor"></emu-xref>)
+                `String` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-string-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4035,7 +4079,18 @@
               <td>
               </td>
               <td>
-                String Iterator object의 prototype (<emu-xref href="#sec-string-iterator-objects"></emu-xref>)
+                String Iterator 객체의 프로토타입 (<emu-xref href="#sec-string-iterator-objects"></emu-xref>)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                %SuppressedError%
+              </td>
+              <td>
+                *"SuppressedError"*
+              </td>
+              <td>
+                `SuppressedError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-suppressederror-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4046,7 +4101,7 @@
                 *"Symbol"*
               </td>
               <td>
-                `Symbol` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-symbol-constructor"></emu-xref>)
+                `Symbol` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-symbol-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4057,7 +4112,7 @@
                 *"SyntaxError"*
               </td>
               <td>
-                `SyntaxError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>)
+                `SyntaxError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-syntaxerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4067,7 +4122,7 @@
               <td>
               </td>
               <td>
-                new instance of %TypeError%를 unconditionally throw하는 function object
+                무조건 %TypeError%의 새 인스턴스를 던지는 함수 객체
               </td>
             </tr>
             <tr>
@@ -4077,7 +4132,7 @@
               <td>
               </td>
               <td>
-                모든 typed Array <emu-not-ref>constructor</emu-not-ref>의 super class (<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>)
+                모든 typed Array <emu-not-ref>생성자</emu-not-ref>의 슈퍼클래스 (<emu-xref href="#sec-%typedarray%-intrinsic-object"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4088,7 +4143,7 @@
                 *"TypeError"*
               </td>
               <td>
-                `TypeError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>)
+                `TypeError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-typeerror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4099,7 +4154,7 @@
                 *"Uint8Array"*
               </td>
               <td>
-                `Uint8Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Uint8Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4110,7 +4165,7 @@
                 *"Uint8ClampedArray"*
               </td>
               <td>
-                `Uint8ClampedArray` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Uint8ClampedArray` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4121,7 +4176,7 @@
                 *"Uint16Array"*
               </td>
               <td>
-                `Uint16Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Uint16Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4132,7 +4187,7 @@
                 *"Uint32Array"*
               </td>
               <td>
-                `Uint32Array` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
+                `Uint32Array` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-typedarray-objects"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4143,7 +4198,7 @@
                 *"URIError"*
               </td>
               <td>
-                `URIError` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>)
+                `URIError` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-native-error-types-used-in-this-standard-urierror"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4154,7 +4209,7 @@
                 *"WeakMap"*
               </td>
               <td>
-                `WeakMap` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weakmap-constructor"></emu-xref>)
+                `WeakMap` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-weakmap-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4165,7 +4220,7 @@
                 *"WeakRef"*
               </td>
               <td>
-                `WeakRef` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weak-ref-constructor"></emu-xref>)
+                `WeakRef` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-weak-ref-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4176,7 +4231,7 @@
                 *"WeakSet"*
               </td>
               <td>
-                `WeakSet` <emu-not-ref>constructor</emu-not-ref> (<emu-xref href="#sec-weakset-constructor"></emu-xref>)
+                `WeakSet` <emu-not-ref>생성자</emu-not-ref> (<emu-xref href="#sec-weakset-constructor"></emu-xref>)
               </td>
             </tr>
             <tr>
@@ -4186,7 +4241,7 @@
               <td>
               </td>
               <td>
-                `Iterator.from`이 반환한 wrapped iterator object의 prototype (<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>)
+                `Iterator.from`이 반환하는 감싸진 iterator 객체의 프로토타입 (<emu-xref href="#sec-%wrapforvaliditeratorprototype%-object"></emu-xref>)
               </td>
             </tr>
           </table>
@@ -7340,6 +7395,186 @@
       </emu-alg>
     </emu-clause>
   </emu-clause>
+
+  <emu-clause id="sec-operations-on-disposable-objects">
+    <h1>Disposable 객체에 대한 연산</h1>
+    <p>공통 리소스 관리 인터페이스(<emu-xref href="#sec-common-resource-management-interfaces"></emu-xref>)를 참조한다.</p>
+
+    <emu-clause id="sec-disposableresource-records">
+      <h1>DisposableResource 레코드</h1>
+      <p><dfn variants="DisposableResource Records">DisposableResource 레코드</dfn>는 폐기 가능한 객체를 해당 객체를 폐기하는 데 사용되는 메서드와 함께 캡슐화하는 데 사용되는 Record 값이다. DisposableResource 레코드는 CreateDisposableResource 추상 연산에 의해 생성된다.</p>
+      <p>DisposableResource 레코드에는 <emu-xref href="#table-disposableresource-record-fields"></emu-xref>에 나열된 필드가 있다:</p>
+      <emu-table id="table-disposableresource-record-fields" caption="DisposableResource 레코드 필드">
+        <table>
+          <tr>
+            <th>
+              필드 이름
+            </th>
+            <th>
+              값
+            </th>
+            <th>
+              의미
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[ResourceValue]]
+            </td>
+            <td>
+              Object 또는 *undefined*
+            </td>
+            <td>
+              폐기될 값.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[Kind]]
+            </td>
+            <td>
+              ~sync-dispose~ 또는 ~async-dispose~
+            </td>
+            <td>
+              리소스가 `using` 선언 또는 DisposableStack 객체(~sync-dispose~)에 의해 추가되었는지, 아니면 `await using` 선언 또는 AsyncDisposableStack 객체(~async-dispose~)에 의해 추가되었는지를 나타낸다.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposeMethod]]
+            </td>
+            <td>
+              함수 객체 또는 *undefined*
+            </td>
+            <td>
+              리소스가 폐기될 때 [[ResourceValue]]를 *this* 값으로 하여 호출될 함수 객체.
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+
+    <emu-clause id="sec-adddisposableresource" type="abstract operation">
+      <h1>
+        AddDisposableResource (
+        _disposableResourceStack_: DisposableResource 레코드의 List,
+        _value_: ECMAScript 언어 값,
+        _kind_: ~sync-dispose~ 또는 ~async-dispose~,
+        optional _method_: 함수 객체,
+        ): ~unused~를 포함하는 정상 완료 또는 throw 완료
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _method_가 존재하면,
+          1. 단언: _value_는 *undefined*이다.
+          1. _resource_를 ? CreateDisposableResource(*undefined*, _kind_, _method_)로 둔다.
+        1. 그렇지 않으면,
+          1. _value_가 *null* 또는 *undefined*이고 _kind_가 ~sync-dispose~이면, ~unused~를 반환한다.
+          1. NOTE: _value_가 *null* 또는 *undefined*이고 _kind_가 ~async-dispose~인 경우, 나중에 리소스가 폐기될 때 여전히 Await를 수행하도록 보장하기 위해 리소스가 평가되었음을 기록한다.
+          1. _resource_를 ? CreateDisposableResource(_value_, _kind_)로 둔다.
+        1. _resource_를 _disposableResourceStack_에 추가한다.
+        1. ~unused~를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-createdisposableresource" type="abstract operation">
+      <h1>
+        CreateDisposableResource (
+        _value_: ECMAScript 언어 값,
+        _kind_: ~sync-dispose~ 또는 ~async-dispose~,
+        optional _method_: 함수 객체,
+        ): DisposableResource 레코드를 포함하는 정상 완료 또는 throw 완료
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _method_가 존재하지 않으면,
+          1. _value_가 *null* 또는 *undefined*이면,
+            1. _value_를 *undefined*로 설정한다.
+            1. _method_를 *undefined*로 설정한다.
+          1. 그렇지 않으면,
+            1. _method_를 ? GetDisposeMethod(_value_, _kind_)로 설정한다.
+            1. _method_가 *undefined*이면, *TypeError* 예외를 던진다.
+        1. DisposableResource 레코드 { [[ResourceValue]]: _value_, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ }를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getdisposemethod" type="abstract operation">
+      <h1>
+        GetDisposeMethod (
+          _value_: an ECMAScript language value,
+          _kind_: ~sync-dispose~ or ~async-dispose~,
+        ): either a normal completion containing either a function object or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _value_가 Object가 아니면, *TypeError* 예외를 던진다.
+        1. _kind_가 ~sync-dispose~이면, ? GetMethod(_value_, %Symbol.dispose%)를 반환한다.
+        1. 단언: _kind_는 ~async-dispose~이다.
+        1. _asyncMethod_를 ? GetMethod(_value_, %Symbol.asyncDispose%)로 둔다.
+        1. _asyncMethod_가 *undefined*가 아니면, _asyncMethod_를 반환한다.
+        1. _syncMethod_를 ? GetMethod(_value_, %Symbol.dispose%)로 둔다.
+        1. _syncMethod_가 *undefined*이면, *undefined*를 반환한다.
+        1. _syncMethod_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새 Abstract Closure로 _closure_를 둔다:
+          1. _obj_를 *this* 값으로 둔다.
+          1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
+          1. _result_를 Completion(Call(_syncMethod_, _obj_))로 둔다.
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+          1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
+          1. _promiseCapability_.[[Promise]]를 반환한다.
+        1. NOTE: 이 함수는 사용자 코드에 관찰되지 않는다. 이 함수는 동기 `%Symbol.dispose%` 메서드에서 반환된 Promise가 await되지 않도록 하고, 동기 예외가 거부된 Promise로 변환되도록 보장하는 데 사용된다.
+        1. CreateBuiltinFunction(_closure_, 0, *""*, « »)를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-disposeresources" type="abstract operation">
+      <h1>
+        DisposeResources (
+          _disposableResourceStack_: a List of DisposableResource Records,
+          _completion_: either a normal completion containing either an ECMAScript language value or ~empty~, or an abrupt completion,
+        ): either a normal completion containing either an ECMAScript language value or ~empty~, or an abrupt completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _needsAwait_를 *false*로 둔다.
+        1. _hasAwaited_를 *false*로 둔다.
+        1. _outputCompletion_을 _completion_으로 둔다.
+        1. _disposableResourceStack_의 각 요소 _resource_에 대해, 역 List 순서로 다음을 수행한다.
+          1. _value_를 _resource_.[[ResourceValue]]로 둔다.
+          1. _kind_를 _resource_.[[Kind]]로 둔다.
+          1. _method_를 _resource_.[[DisposeMethod]]로 둔다.
+          1. _kind_가 ~sync-dispose~이고, _needsAwait_가 *true*이며, _hasAwaited_가 *false*이면,
+            1. ! Await(*undefined*)를 수행한다.
+            1. _needsAwait_를 *false*로 설정한다.
+          1. _method_가 *undefined*가 아니면,
+            1. _result_를 Completion(Call(_method_, _value_))로 둔다.
+            1. _result_가 정상 완료이고 _kind_가 ~async-dispose~이면,
+              1. _result_를 Completion(Await(_result_.[[Value]]))로 설정한다.
+              1. _hasAwaited_를 *true*로 설정한다.
+            1. _result_가 throw 완료이면,
+              1. _outputCompletion_이 throw 완료이면,
+                1. _result_를 _result_.[[Value]]로 설정한다.
+                1. _suppressed_를 _outputCompletion_.[[Value]]로 둔다.
+                1. _error_를 새로 생성된 *SuppressedError* 객체로 둔다.
+                1. CreateNonEnumerableDataPropertyOrThrow(_error_, *"error"*, _result_)를 수행한다.
+                1. CreateNonEnumerableDataPropertyOrThrow(_error_, *"suppressed"*, _suppressed_)를 수행한다.
+                1. _outputCompletion_을 ThrowCompletion(_error_)로 설정한다.
+              1. 그렇지 않으면,
+                1. _outputCompletion_을 _result_로 설정한다.
+          1. 그렇지 않으면,
+            1. 단언: _kind_는 ~async-dispose~이다.
+            1. _needsAwait_를 *true*로 설정한다.
+            1. NOTE: 이는 `await using` 선언의 초기화된 값이 *null* 또는 *undefined*였던 경우만 나타낼 수 있다.
+        1. _needsAwait_가 *true*이고 _hasAwaited_가 *false*이면,
+          1. ! Await(*undefined*)를 수행한다.
+        1. NOTE: 이 시점에서 _disposableResourceStack_은 다시는 사용되지 않는다. _disposableResourceStack_의 내용은 가비지 컬렉션과 같은 방식으로 구현에서 폐기될 수 있다.
+        1. ? _outputCompletion_을 반환한다.
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-syntax-directed-operations">
@@ -7380,6 +7615,16 @@
         1. « *"await"* »를 반환한다.
       </emu-alg>
       <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. |BindingList|의 BoundNames를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
       <emu-alg>
         1. |BindingList|의 BoundNames를 반환한다.
       </emu-alg>
@@ -7658,6 +7903,16 @@
         1. *true*를 반환한다.
       </emu-alg>
       <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
+        1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
         FunctionDeclaration :
           `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
           `function` `(` FormalParameters `)` `{` FunctionBody `}`
@@ -7697,6 +7952,124 @@
       <emu-note>
         <p>`export default` |AssignmentExpression|을 constant declaration으로 취급할 필요는 없습니다. module의 default object를 reference하는 데 사용되는 internal bound name에 assignment를 허용하는 syntax가 없기 때문입니다.</p>
       </emu-note>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        UsingDeclaration :
+          `using` BindingList `;`
+
+        AwaitUsingDeclaration :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+      </emu-grammar>
+      <emu-alg>
+        1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        ForDeclaration :
+          `using` ForBinding
+          `await` `using` ForBinding
+      </emu-grammar>
+      <emu-alg>
+        1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-isawaitusingdeclaration" type="sdo">
+      <h1>Static Semantics: IsAwaitUsingDeclaration ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        FunctionDeclaration :
+          `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`
+          `function` `(` FormalParameters `)` `{` FunctionBody `}`
+
+        GeneratorDeclaration :
+          `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`
+          `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
+
+        AsyncGeneratorDeclaration :
+          `async` `function` `*` BindingIdentifier `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+          `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
+
+        AsyncFunctionDeclaration :
+          `async` `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+          `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+      </emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>
+        ClassDeclaration :
+          `class` BindingIdentifier ClassTail
+          `class` ClassTail
+      </emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-static-semantics-lexicallydeclarednames" oldids="sec-block-static-semantics-lexicallydeclarednames,sec-switch-statement-static-semantics-lexicallydeclarednames,sec-labelled-statements-static-semantics-lexicallydeclarednames,sec-function-definitions-static-semantics-lexicallydeclarednames,sec-arrow-function-definitions-static-semantics-lexicallydeclarednames,sec-async-arrow-function-definitions-static-semantics-LexicallyDeclaredNames,sec-scripts-static-semantics-lexicallydeclarednames,sec-module-semantics-static-semantics-lexicallydeclarednames" type="sdo">
@@ -9172,7 +9545,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -9960,7 +10333,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         ExponentiationExpression :
           UpdateExpression `**` ExponentiationExpression
@@ -10114,6 +10487,28 @@
       </emu-grammar>
       <emu-alg>
         1. ~empty~를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-static-semantics-containsusing" type="sdo">
+      <h1>Static Semantics: ContainsUsing ( ): Boolean</h1>
+      <dl class="header">
+      </dl>
+      <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
+      <emu-alg>
+        1. 파생된 |StatementList|의 ContainsUsing이 *true*이면, *true*를 반환한다.
+        1. |StatementListItem|의 ContainsUsing이 *true*이면, *true*를 반환한다.
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>StatementListItem : Statement</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
+      </emu-alg>
+      <emu-grammar>StatementListItem : Declaration</emu-grammar>
+      <emu-alg>
+        1. |Declaration|의 IsUsingDeclaration이 *true*이면, *true*를 반환한다.
+        1. |Declaration|의 IsAwaitUsingDeclaration이 *true*이면, *true*를 반환한다.
+        1. *false*를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -10322,6 +10717,7 @@
       <emu-clause id="sec-declarative-environment-records">
         <h1>Declarative Environment Records</h1>
         <p>각 <dfn variants="Declarative Environment Records">Declarative Environment Record</dfn>는 variable, constant, let, class, module, import 및/또는 function declaration을 포함하는 ECMAScript program scope와 associated됩니다. Declarative Environment Record는 그 scope 안에 contained된 declaration이 정의하는 identifier의 set을 bind합니다.</p>
+        <p>모든 Declarative Environment Record에는 DisposableResource 레코드의 List를 포함하는 [[DisposableResourceStack]] 필드도 있다. 이 목록의 요소는 Environment Record를 구성한 Evaluation 단계가 완료되었을 때 폐기되어야 하는 `using` 선언과 `await using` 선언에 의해 추적된다.</p>
 
         <emu-clause id="sec-declarative-environment-records-hasbinding-n" type="concrete method">
           <h1>
@@ -11440,8 +11836,9 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. binding을 contain하지 않는 새 Declarative Environment Record _envRecord_를 둔다.
+          1. 바인딩을 포함하지 않는 새 Declarative Environment Record를 _envRecord_로 둔다.
           1. _envRecord_.[[OuterEnv]]를 _outerEnv_로 설정한다.
+          1. _envRecord_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
           1. _envRecord_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -11475,12 +11872,13 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. binding을 contain하지 않는 새 Function Environment Record _envRecord_를 둔다.
+          1. 바인딩을 포함하지 않는 새 Function Environment Record를 _envRecord_로 둔다.
           1. _envRecord_.[[FunctionObject]]를 _func_로 설정한다.
           1. _func_.[[ThisMode]]가 ~lexical~이면, _envRecord_.[[ThisBindingStatus]]를 ~lexical~로 설정한다.
           1. 그렇지 않으면, _envRecord_.[[ThisBindingStatus]]를 ~uninitialized~로 설정한다.
-          1. _envRecord_.[[NewTarget]]를 _newTarget_으로 설정한다.
-          1. _envRecord_.[[OuterEnv]]를 _func_.[[Environment]]으로 설정한다.
+          1. _envRecord_.[[NewTarget]]을 _newTarget_으로 설정한다.
+          1. _envRecord_.[[OuterEnv]]를 _func_.[[Environment]]로 설정한다.
+          1. _envRecord_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
           1. _envRecord_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -11515,8 +11913,9 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. binding을 contain하지 않는 새 Module Environment Record _envRecord_를 둔다.
+          1. 바인딩을 포함하지 않는 새 Module Environment Record를 _envRecord_로 둔다.
           1. _envRecord_.[[OuterEnv]]를 _outerEnv_로 설정한다.
+          1. _envRecord_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
           1. _envRecord_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -17968,6 +18367,9 @@
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `++`
             LeftHandSideExpression[?Yield, ?Await] [no LineTerminator here] `--`
 
+          UsingDeclaration[In, Yield, Await] :
+            `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
+
           ContinueStatement[Yield, Await] :
             `continue` `;`
             `continue` [no LineTerminator here] LabelIdentifier[?Yield, ?Await] `;`
@@ -18021,37 +18423,43 @@
         <p>이러한 restricted production의 practical effect는 다음과 같습니다:</p>
         <ul>
           <li>
-            parser가 postfix operator로 treat할 위치에서 `++` 또는 `--` token이 encountered되고 preceding token과 `++` 또는 `--` token 사이에 적어도 하나의 |LineTerminator|가 occurred하면, semicolon이 `++` 또는 `--` token 앞에 automatically inserted됩니다.
+            파서가 후위 연산자로 처리할 위치에서 `++` 또는 `--` 토큰을 만났고, 앞선 토큰과 `++` 또는 `--` 토큰 사이에 하나 이상의 |LineTerminator|가 발생한 경우, `++` 또는 `--` 토큰 앞에 세미콜론이 자동으로 삽입된다.
           </li>
           <li>
-            `continue`, `break`, `return`, `throw` 또는 `yield` token이 encountered되고 next token 전에 |LineTerminator|가 encountered되면, semicolon이 `continue`, `break`, `return`, `throw` 또는 `yield` token 뒤에 automatically inserted됩니다.
+            `using` 토큰을 만났고 |IdentifierName| 토큰 앞에서 |LineTerminator|를 만난 경우, `using` 토큰 뒤에 세미콜론이 자동으로 삽입된다.
           </li>
           <li>
-            arrow function parameter가 `=>` token 전에 |LineTerminator|에 followed되면, semicolon이 automatically inserted되고 punctuator가 syntax error를 cause합니다.
+            `continue`, `break`, `return`, `throw` 또는 `yield` 토큰을 만났고 다음 토큰 앞에서 |LineTerminator|를 만난 경우, `continue`, `break`, `return`, `throw` 또는 `yield` 토큰 뒤에 세미콜론이 자동으로 삽입된다.
           </li>
           <li>
-            `async` token이 `function` 또는 |IdentifierName| 또는 `(` token 전에 |LineTerminator|에 followed되면, semicolon이 automatically inserted되고 `async` token은 following token과 같은 expression 또는 class element의 part로 treated되지 않습니다.
+            화살표 함수 매개변수 뒤에 `=>` 토큰 앞의 |LineTerminator|가 오는 경우, 세미콜론이 자동으로 삽입되고 해당 punctuator가 구문 오류를 일으킨다.
           </li>
           <li>
-            `async` token이 `*` token 전에 |LineTerminator|에 followed되면, semicolon이 automatically inserted되고 punctuator가 syntax error를 cause합니다.
+            `async` 토큰 뒤에 `function`, |IdentifierName| 또는 `(` 토큰 앞의 |LineTerminator|가 오는 경우, 세미콜론이 자동으로 삽입되고 `async` 토큰은 뒤따르는 토큰들과 같은 표현식 또는 클래스 요소의 일부로 처리되지 않는다.
+          </li>
+          <li>
+            `async` 토큰 뒤에 `*` 토큰 앞의 |LineTerminator|가 오는 경우, 세미콜론이 자동으로 삽입되고 해당 punctuator가 구문 오류를 일으킨다.
           </li>
         </ul>
-        <p>ECMAScript programmer에게 resulting practical advice는 다음과 같습니다:</p>
+        <p>그 결과 ECMAScript 프로그래머에게 주어지는 실질적인 조언은 다음과 같다:</p>
         <ul>
           <li>
-            postfix `++` 또는 `--` operator는 operand와 같은 line에 있어야 합니다.
+            후위 `++` 또는 `--` 연산자는 그 피연산자와 같은 줄에 있어야 한다.
           </li>
           <li>
-            `return` 또는 `throw` statement 안의 |Expression| 또는 `yield` expression 안의 |AssignmentExpression|은 `return`, `throw` 또는 `yield` token과 같은 line에서 start해야 합니다.
+            `using` 선언의 |BindingList|는 `using` 토큰과 같은 줄에서 시작해야 한다.
           </li>
           <li>
-            `break` 또는 `continue` statement 안의 |LabelIdentifier|는 `break` 또는 `continue` token과 같은 line에 있어야 합니다.
+            `return` 또는 `throw` 문에서의 |Expression|, 또는 `yield` 표현식에서의 |AssignmentExpression|은 `return`, `throw` 또는 `yield` 토큰과 같은 줄에서 시작해야 한다.
           </li>
           <li>
-            arrow function의 parameter end와 그 `=>`는 같은 line에 있어야 합니다.
+            `break` 또는 `continue` 문에서의 |LabelIdentifier|는 `break` 또는 `continue` 토큰과 같은 줄에 있어야 한다.
           </li>
           <li>
-            asynchronous function 또는 method 앞의 `async` token은 immediately following token과 같은 line에 있어야 합니다.
+            화살표 함수의 매개변수 끝과 그 `=>`는 같은 줄에 있어야 한다.
+          </li>
+          <li>
+            비동기 함수 또는 메서드 앞의 `async` 토큰은 바로 뒤따르는 토큰과 같은 줄에 있어야 한다.
           </li>
         </ul>
       </emu-note>
@@ -20087,7 +20495,21 @@
         `-` UnaryExpression[?Yield, ?Await]
         `~` UnaryExpression[?Yield, ?Await]
         `!` UnaryExpression[?Yield, ?Await]
-        [+Await] AwaitExpression[?Yield]
+        [+Await] CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] #awaitusingcover
+
+      CoverAwaitExpressionAndAwaitUsingDeclarationHead[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
+    </emu-grammar>
+
+    <h2>보충 구문</h2>
+    <p>
+      생성식의 인스턴스를 처리할 때<br>
+      <emu-grammar>UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead</emu-grammar><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead|의 해석은 다음 문법을 사용하여 정제된다:
+    </p>
+    <emu-grammar>
+      AwaitExpression[Yield] :
+        `await` UnaryExpression[?Yield, +Await]
     </emu-grammar>
 
     <emu-clause id="sec-delete-operator">
@@ -21448,12 +21870,13 @@
       </emu-alg>
       <emu-grammar>Block : `{` StatementList `}`</emu-grammar>
       <emu-alg>
-        1. _oldEnv_를 running execution context의 LexicalEnvironment로 둔다.
+        1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
         1. _blockEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 둔다.
         1. BlockDeclarationInstantiation(|StatementList|, _blockEnv_)를 수행한다.
-        1. running execution context의 LexicalEnvironment를 _blockEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _blockEnv_로 설정한다.
         1. _blockValue_를 |StatementList|의 Evaluation의 Completion으로 둔다.
-        1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
+        1. _blockValue_를 Completion(DisposeResources(_blockEnv_.[[DisposableResourceStack]], _blockValue_))로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
         1. ? _blockValue_를 반환한다.
       </emu-alg>
       <emu-note>
@@ -21523,43 +21946,87 @@
     <h1>Declarations and the Variable Statement</h1>
 
     <emu-clause id="sec-let-and-const-declarations">
-      <h1>Let and Const Declarations</h1>
+      <h1>let, const, using 및 await using 선언</h1>
       <emu-note>
-        <p>`let` 및 `const` declaration은 running execution context의 LexicalEnvironment로 scoped되는 variable을 define합니다. variable은 containing Environment Record가 instantiated될 때 created되지만, variable의 |LexicalBinding|이 evaluated되기 전까지는 어떤 way로도 accessed될 수 없습니다. |Initializer|를 가진 |LexicalBinding|에 의해 defined된 variable은 variable이 created될 때가 아니라 |LexicalBinding|이 evaluated될 때 그 |Initializer|의 |AssignmentExpression| value가 assigned됩니다. `let` declaration 안의 |LexicalBinding|이 |Initializer|를 가지지 않으면, |LexicalBinding|이 evaluated될 때 variable에는 value *undefined*가 assigned됩니다.</p>
+        <p>`let`, `const`, `using` 및 `await using` 선언은 실행 중인 실행 컨텍스트의 LexicalEnvironment로 스코프가 지정되는 변수를 정의한다. 변수는 이를 포함하는 Environment Record가 인스턴스화될 때 생성되지만, 변수의 |LexicalBinding|이 평가될 때까지는 어떤 방식으로도 접근할 수 없다. |Initializer|가 있는 |LexicalBinding|으로 정의된 변수는 변수가 생성될 때가 아니라 |LexicalBinding|이 평가될 때 해당 |Initializer|의 |AssignmentExpression| 값이 할당된다. `let` 선언의 |LexicalBinding|에 |Initializer|가 없으면, |LexicalBinding|이 평가될 때 변수에는 *undefined* 값이 할당된다.</p>
       </emu-note>
-      <h2>Syntax</h2>
+      <h2>구문</h2>
       <emu-grammar type="definition">
         LexicalDeclaration[In, Yield, Await] :
-          LetOrConst BindingList[?In, ?Yield, ?Await] `;`
+          LetOrConst BindingList[?In, ?Yield, ?Await, +Pattern] `;`
+          UsingDeclaration[?In, ?Yield, ?Await]
+          [+Await] AwaitUsingDeclaration[?In, ?Yield]
 
         LetOrConst :
           `let`
           `const`
 
-        BindingList[In, Yield, Await] :
-          LexicalBinding[?In, ?Yield, ?Await]
-          BindingList[?In, ?Yield, ?Await] `,` LexicalBinding[?In, ?Yield, ?Await]
+        UsingDeclaration[In, Yield, Await] :
+          `using` [no LineTerminator here] BindingList[?In, ?Yield, ?Await, ~Pattern] `;`
 
-        LexicalBinding[In, Yield, Await] :
+        AwaitUsingDeclaration[In, Yield] :
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead[?Yield] [no LineTerminator here] BindingList[?In, ?Yield, +Await, ~Pattern] `;`
+
+        BindingList[In, Yield, Await, Pattern] :
+          LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+          BindingList[?In, ?Yield, ?Await, ?Pattern] `,` LexicalBinding[?In, ?Yield, ?Await, ?Pattern]
+
+        LexicalBinding[In, Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]?
-          BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await] Initializer[?In, ?Yield, ?Await]
+      </emu-grammar>
+
+      <h2>보충 구문</h2>
+      <p>
+        생성식의 인스턴스를 처리할 때<br>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar><br>
+        |CoverAwaitExpressionAndAwaitUsingDeclarationHead|의 해석은 다음 문법을 사용하여 정제된다:
+      </p>
+      <emu-grammar type="definition">
+        AwaitUsingDeclarationHead :
+          `await` [no LineTerminator here] `using`
       </emu-grammar>
 
       <emu-clause id="sec-let-and-const-declarations-static-semantics-early-errors">
-        <h1>Static Semantics: Early Errors</h1>
+        <h1>Static Semantics: 조기 오류</h1>
         <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
         <ul>
           <li>
-            |BindingList|의 BoundNames가 *"let"*을 contain하면 Syntax Error입니다.
+            |BindingList|의 BoundNames에 *"let"*이 포함되어 있으면 Syntax Error이다.
           </li>
           <li>
-            |BindingList|의 BoundNames가 duplicate entry를 contain하면 Syntax Error입니다.
+            |BindingList|의 BoundNames에 중복 항목이 있으면 Syntax Error이다.
+          </li>
+        </ul>
+        <emu-grammar>
+          UsingDeclaration :
+            `using` BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>
+            |BindingList|의 BoundNames에 *"let"*이 포함되어 있으면 Syntax Error이다.
+          </li>
+          <li>
+            |BindingList|의 BoundNames에 중복 항목이 있으면 Syntax Error이다.
+          </li>
+        </ul>
+        <emu-grammar>
+          AwaitUsingDeclaration :
+            CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
+        </emu-grammar>
+        <ul>
+          <li>|CoverAwaitExpressionAndAwaitUsingDeclarationHead|는 |AwaitUsingDeclarationHead|를 cover해야 한다.</li>
+          <li>
+            |BindingList|의 BoundNames에 *"let"*이 포함되어 있으면 Syntax Error이다.
+          </li>
+          <li>
+            |BindingList|의 BoundNames에 중복 항목이 있으면 Syntax Error이다.
           </li>
         </ul>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer?</emu-grammar>
         <ul>
           <li>
-            |Initializer|가 present하지 않고 이 |LexicalBinding|을 containing하는 |LexicalDeclaration|의 IsConstantDeclaration이 *true*이면 Syntax Error입니다.
+            |Initializer|가 존재하지 않고 이 |LexicalBinding|을 포함하는 |LexicalDeclaration|의 IsConstantDeclaration이 *true*이면 Syntax Error이다.
           </li>
         </ul>
       </emu-clause>
@@ -21568,41 +22035,68 @@
         <h1>Runtime Semantics: Evaluation</h1>
         <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
         <emu-alg>
-          1. |BindingList|의 Evaluation을 ? 수행한다.
+          1. 인수 ~normal~로 |BindingList|의 BindingEvaluation을 ? 수행한다.
           1. ~empty~를 반환한다.
         </emu-alg>
+        <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 인수 ~sync-dispose~로 |BindingList|의 BindingEvaluation을 ? 수행한다.
+          1. ~empty~를 반환한다.
+        </emu-alg>
+        <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+        <emu-alg>
+          1. 인수 ~async-dispose~로 |BindingList|의 BindingEvaluation을 ? 수행한다.
+          1. ~empty~를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-bindingevaluation" type="sdo">
+        <h1>
+          Runtime Semantics: BindingEvaluation (
+            _kind_: ~normal~, ~sync-dispose~, or ~async-dispose~,
+          ): either a normal completion containing ~unused~ or an abrupt completion
+        </h1>
+        <dl class="header">
+        </dl>
         <emu-grammar>BindingList : BindingList `,` LexicalBinding</emu-grammar>
         <emu-alg>
-          1. |BindingList|의 Evaluation을 ? 수행한다.
-          1. |LexicalBinding|의 Evaluation을 ? 반환한다.
+          1. 인수 _kind_로 파생된 |BindingList|의 BindingEvaluation을 ? 수행한다.
+          1. 인수 _kind_로 |LexicalBinding|의 BindingEvaluation을 ? 반환한다.
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingIdentifier</emu-grammar>
         <emu-alg>
-          1. _lhs_를 ! ResolveBinding(|BindingIdentifier|의 StringValue)로 둔다.
+          1. 단언: _kind_는 ~normal~이다.
+          1. _lhs_를 ! ResolveBinding(|BindingIdentifier|의 StringValue)으로 둔다.
           1. ! InitializeReferencedBinding(_lhs_, *undefined*)를 수행한다.
-          1. ~empty~를 반환한다.
+          1. ~unused~를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>static semantics rule은 이 form의 |LexicalBinding|이 `const` declaration 안에서 never occur함을 ensure합니다.</p>
+          <p>정적 의미론 규칙은 이러한 형태의 |LexicalBinding|이 `const`, `using` 또는 `await using` 선언에서 절대 발생하지 않도록 보장한다.</p>
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
           1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
           1. _lhs_를 ! ResolveBinding(_bindingId_)로 둔다.
-          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면, 다음을 수행한다.
-            1. _value_를 argument _bindingId_를 가진 |Initializer|의 NamedEvaluation으로 ? 둔다.
+          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
+            1. _value_를 인수 _bindingId_로 |Initializer|의 NamedEvaluation을 ? 수행한 결과로 둔다.
           1. 그렇지 않으면,
-            1. _rhs_를 |Initializer|의 Evaluation으로 ? 둔다.
+            1. _rhs_를 |Initializer|의 Evaluation을 ? 수행한 결과로 둔다.
             1. _value_를 ? GetValue(_rhs_)로 둔다.
-          1. ! InitializeReferencedBinding(_lhs_, _value_)를 수행한다.
-          1. ~empty~를 반환한다.
+          1. _kind_가 ~normal~이 아니면,
+            1. 단언: IsUnresolvableReference(_lhs_)는 *false*이다.
+            1. _base_를 _lhs_.[[Base]]로 둔다.
+            1. 단언: _base_는 Declarative Environment Record이다.
+            1. AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_)를 ? 수행한다.
+          1. InitializeReferencedBinding(_lhs_, _value_)를 ? 수행한다.
+          1. ~unused~를 반환한다.
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingPattern Initializer</emu-grammar>
         <emu-alg>
-          1. _rhs_를 |Initializer|의 Evaluation으로 ? 둔다.
+          1. 단언: _kind_는 ~normal~이다.
+          1. _rhs_를 |Initializer|의 Evaluation을 ? 수행한 결과로 둔다.
           1. _value_를 ? GetValue(_rhs_)로 둔다.
-          1. _envRecord_를 running execution context의 LexicalEnvironment로 둔다.
-          1. arguments _value_와 _envRecord_를 가진 |BindingPattern|의 BindingInitialization을 ? 반환한다.
+          1. _envRecord_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
+          1. 인수 _value_ 및 _envRecord_로 |BindingPattern|의 BindingInitialization을 ? 반환한다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -22108,24 +22602,28 @@
         </emu-alg>
         <emu-grammar>ForStatement : `for` `(` LexicalDeclaration Expression? `;` Expression? `)` Statement</emu-grammar>
         <emu-alg>
-          1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment라고 하자.
-          1. _loopEnv_를 NewDeclarativeEnvironment(_oldEnv_)라고 하자.
-          1. _isConst_를 |LexicalDeclaration|의 IsConstantDeclaration이라고 하자.
-          1. _boundNames_를 |LexicalDeclaration|의 BoundNames라고 하자.
-          1. _boundNames_의 각 요소 _name_에 대해 다음을 수행한다.
+          1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
+          1. _loopEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 둔다.
+          1. _isConst_를 |LexicalDeclaration|의 IsConstantDeclaration로 둔다.
+          1. _boundNames_를 |LexicalDeclaration|의 BoundNames로 둔다.
+          1. _boundNames_의 각 요소 _name_에 대해, 다음을 수행한다.
             1. _isConst_가 *true*이면,
               1. ! _loopEnv_.CreateImmutableBinding(_name_, *true*)를 수행한다.
             1. 그렇지 않으면,
               1. ! _loopEnv_.CreateMutableBinding(_name_, *false*)를 수행한다.
           1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _loopEnv_로 설정한다.
-          1. _forDecl_을 |LexicalDeclaration|의 Evaluation의 Completion이라고 하자.
-          1. _forDecl_이 abrupt completion이면,
+          1. _forDecl_을 |LexicalDeclaration|의 Evaluation의 Completion으로 둔다.
+          1. _forDecl_이 abrupt 완료이면,
+            1. _forDecl_을 Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _forDecl_))로 설정한다.
+            1. 단언: _forDecl_은 abrupt 완료이다.
             1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
             1. ? _forDecl_을 반환한다.
-          1. _isConst_가 *false*이면 _perIterationLets_를 _boundNames_라고 하고, 그렇지 않으면 _perIterationLets_를 새로운 빈 List라고 하자.
-          1. 첫 번째 |Expression|이 있으면 _test_를 첫 번째 |Expression|이라고 하고, 그렇지 않으면 _test_를 ~empty~라고 하자.
-          1. 두 번째 |Expression|이 있으면 _increment_를 두 번째 |Expression|이라고 하고, 그렇지 않으면 _increment_를 ~empty~라고 하자.
-          1. _bodyResult_를 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))이라고 하자.
+          1. _isConst_가 *false*이면, _perIterationLets_를 _boundNames_로 둔다. 그렇지 않으면 _perIterationLets_를 새 빈 List로 둔다.
+          1. 첫 번째 |Expression|이 존재하면, _test_를 첫 번째 |Expression|으로 둔다. 그렇지 않으면 _test_를 ~empty~로 둔다.
+          1. 두 번째 |Expression|이 존재하면, _increment_를 두 번째 |Expression|으로 둔다. 그렇지 않으면 _increment_를 ~empty~로 둔다.
+          1. _bodyResult_를 Completion(ForBodyEvaluation(_test_, _increment_, |Statement|, _perIterationLets_, _labelSet_))으로 둔다.
+          1. _bodyResult_를 Completion(DisposeResources(_loopEnv_.[[DisposableResourceStack]], _bodyResult_))로 설정한다.
+          1. 단언: _bodyResult_가 정상 완료이면, _bodyResult_.[[Value]]는 ~empty~가 아니다.
           1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
           1. ? _bodyResult_를 반환한다.
         </emu-alg>
@@ -22191,21 +22689,23 @@
       <emu-grammar type="definition">
         ForInOfStatement[Yield, Await, Return] :
           `for` `(` [lookahead != `let` `[`] LeftHandSideExpression[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` ForDeclaration[?Yield, ?Await, ~Using] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           `for` `(` [lookahead &notin; { `let`, `async` `of` }] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          `for` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          `for` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
           [+Await] `for` `await` `(` [lookahead != `let`] LeftHandSideExpression[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
-          [+Await] `for` `await` `(` ForDeclaration[?Yield, ?Await] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` `var` ForBinding[?Yield, ?Await, +Pattern] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
+          [+Await] `for` `await` `(` [lookahead != `using` `of`] ForDeclaration[?Yield, ?Await, +Using] `of` AssignmentExpression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
 
-        ForDeclaration[Yield, Await] :
-          LetOrConst ForBinding[?Yield, ?Await]
+        ForDeclaration[Yield, Await, Using] :
+          LetOrConst ForBinding[?Yield, ?Await, +Pattern]
+          [+Using] `using` [no LineTerminator here] ForBinding[?Yield, ?Await, ~Pattern]
+          [+Using, +Await] `await` [no LineTerminator here] `using` [no LineTerminator here] ForBinding[?Yield, +Await, ~Pattern]
 
-        ForBinding[Yield, Await] :
+        ForBinding[Yield, Await, Pattern] :
           BindingIdentifier[?Yield, ?Await]
-          BindingPattern[?Yield, ?Await]
+          [+Pattern] BindingPattern[?Yield, ?Await]
       </emu-grammar>
       <emu-note>
         <p>이 section은 Annex <emu-xref href="#sec-initializers-in-forin-statement-heads"></emu-xref>에 의해 extended됩니다.</p>
@@ -22325,6 +22825,14 @@
         <emu-alg>
           1. arguments _value_와 _envRecord_를 가진 |ForBinding|의 BindingInitialization을 ? 반환한다.
         </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. *SyntaxError* 예외를 던진다.
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-runtime-semantics-fordeclarationbindinginstantiation" oldids="sec-runtime-semantics-bindinginstantiation" type="sdo">
@@ -22342,6 +22850,16 @@
               1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)를 수행한다.
             1. 그렇지 않으면,
               1. ! _envRecord_.CreateMutableBinding(_name_, *false*)를 수행한다.
+          1. ~unused~를 반환한다.
+        </emu-alg>
+        <emu-grammar>
+          ForDeclaration :
+            `using` ForBinding
+            `await` `using` ForBinding
+        </emu-grammar>
+        <emu-alg>
+          1. |ForBinding|의 BoundNames의 각 요소 _name_에 대해, 다음을 수행한다.
+            1. ! _envRecord_.CreateImmutableBinding(_name_, *true*)를 수행한다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -22460,60 +22978,84 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iteratorKind_가 present하지 않으면, _iteratorKind_를 ~sync~로 설정한다.
-          1. _oldEnv_를 running execution context의 LexicalEnvironment로 둔다.
+          1. _iteratorKind_가 존재하지 않으면, _iteratorKind_를 ~sync~로 설정한다.
+          1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
           1. _iterationResult_를 *undefined*로 둔다.
+          1. _lhsKind_가 ~lexical-binding~이면,
+            1. 단언: _lhs_는 |ForDeclaration|이다.
+            1. _lhs_의 IsAwaitUsingDeclaration이 *true*이면,
+              1. _declarationKind_를 ~async-dispose~로 둔다.
+            1. 그렇지 않고 _lhs_의 IsUsingDeclaration이 *true*이면,
+              1. _declarationKind_를 ~sync-dispose~로 둔다.
+            1. 그렇지 않으면,
+              1. _declarationKind_를 ~normal~로 둔다.
+          1. 그렇지 않으면,
+            1. _declarationKind_를 ~normal~로 둔다.
           1. _destructuring_을 _lhs_의 IsDestructuring으로 둔다.
-          1. _destructuring_이 *true*이고 _lhsKind_가 ~assignment~이면, 다음을 수행한다.
-            1. Assert: _lhs_는 |LeftHandSideExpression|이다.
-            1. _assignmentPattern_을 _lhs_가 covered하는 |AssignmentPattern|으로 둔다.
-          1. Repeat,
+          1. _destructuring_이 *true*이고 _lhsKind_가 ~assignment~이면,
+            1. 단언: _lhs_는 |LeftHandSideExpression|이다.
+            1. _assignmentPattern_을 _lhs_가 cover하는 |AssignmentPattern|으로 둔다.
+          1. 반복한다.
             1. _nextResult_를 ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]])로 둔다.
             1. _iteratorKind_가 ~async~이면, _nextResult_를 ? Await(_nextResult_)로 설정한다.
-            1. _nextResult_가 Object가 아니면, *TypeError* exception을 throw한다.
+            1. _nextResult_가 Object가 아니면, *TypeError* 예외를 던진다.
             1. _done_을 ? IteratorComplete(_nextResult_)로 둔다.
             1. _done_이 *true*이면, _iterationResult_를 반환한다.
             1. _nextValue_를 ? IteratorValue(_nextResult_)로 둔다.
-            1. _lhsKind_가 ~assignment~ 또는 ~var-binding~ 중 하나이면, 다음을 수행한다.
-              1. _destructuring_이 *true*이면, 다음을 수행한다.
-                1. _lhsKind_가 ~assignment~이면, 다음을 수행한다.
-                  1. _status_를 argument _nextValue_를 가진 _assignmentPattern_의 DestructuringAssignmentEvaluation의 Completion으로 둔다.
+            1. _lhsKind_가 ~assignment~ 또는 ~var-binding~이면,
+              1. _destructuring_이 *true*이면,
+                1. _lhsKind_가 ~assignment~이면,
+                  1. _status_를 인수 _nextValue_로 _assignmentPattern_의 DestructuringAssignmentEvaluation의 Completion으로 둔다.
                 1. 그렇지 않으면,
-                  1. Assert: _lhsKind_는 ~var-binding~이다.
-                  1. Assert: _lhs_는 |ForBinding|이다.
-                  1. _status_를 arguments _nextValue_와 *undefined*를 가진 _lhs_의 BindingInitialization의 Completion으로 둔다.
+                  1. 단언: _lhsKind_는 ~var-binding~이다.
+                  1. 단언: _lhs_는 |ForBinding|이다.
+                  1. _status_를 인수 _nextValue_ 및 *undefined*로 _lhs_의 BindingInitialization의 Completion으로 둔다.
               1. 그렇지 않으면,
-                1. _lhsRef_를 _lhs_의 Evaluation의 Completion으로 둔다. (It may be evaluated repeatedly.)
-                1. _lhsKind_가 ~assignment~이고 _lhs_의 AssignmentTargetType이 ~web-compat~이면, *ReferenceError* exception을 throw한다.
-                1. _lhsRef_가 abrupt completion이면, 다음을 수행한다.
+                1. _lhsRef_를 _lhs_의 Evaluation의 Completion으로 둔다. (반복해서 평가될 수 있다.)
+                1. _lhsKind_가 ~assignment~이고 _lhs_의 AssignmentTargetType이 ~web-compat~이면, *ReferenceError* 예외를 던진다.
+                1. _lhsRef_가 abrupt 완료이면,
                   1. _status_를 _lhsRef_로 둔다.
                 1. 그렇지 않으면,
-                  1. _status_를 PutValue(_lhsRef_.[[Value]], _nextValue_)의 Completion으로 둔다.
+                  1. _status_를 Completion(PutValue(_lhsRef_.[[Value]], _nextValue_))로 둔다.
+              1. _iterationEnv_를 *undefined*로 둔다.
             1. 그렇지 않으면,
-              1. Assert: _lhsKind_는 ~lexical-binding~이다.
-              1. Assert: _lhs_는 |ForDeclaration|이다.
+              1. 단언: _lhsKind_는 ~lexical-binding~이다.
+              1. 단언: _lhs_는 |ForDeclaration|이다.
               1. _iterationEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 둔다.
-              1. argument _iterationEnv_를 가진 _lhs_의 ForDeclarationBindingInstantiation을 수행한다.
-              1. running execution context의 LexicalEnvironment를 _iterationEnv_로 설정한다.
-              1. _destructuring_이 *true*이면, 다음을 수행한다.
-                1. _status_를 arguments _nextValue_와 _iterationEnv_를 가진 _lhs_의 ForDeclarationBindingInitialization의 Completion으로 둔다.
+              1. 인수 _iterationEnv_로 _lhs_의 ForDeclarationBindingInstantiation을 수행한다.
+              1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _iterationEnv_로 설정한다.
+              1. _destructuring_이 *true*이면,
+                1. _status_를 인수 _nextValue_ 및 _iterationEnv_로 _lhs_의 ForDeclarationBindingInitialization의 Completion으로 둔다.
               1. 그렇지 않으면,
-                1. Assert: _lhs_는 single name을 binds한다.
-                1. _lhsName_을 _lhs_의 BoundNames의 sole element로 둔다.
+                1. 단언: _lhs_는 단일 이름을 바인딩한다.
+                1. _lhsName_을 _lhs_의 BoundNames의 유일한 요소로 둔다.
                 1. _lhsRef_를 ! ResolveBinding(_lhsName_)으로 둔다.
-                1. _status_를 InitializeReferencedBinding(_lhsRef_, _nextValue_)의 Completion으로 둔다.
-            1. _status_가 abrupt completion이면, 다음을 수행한다.
-              1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
+                1. _declarationKind_가 ~normal~이 아니면,
+                  1. 단언: IsUnresolvableReference(_lhsRef_)는 *false*이다.
+                  1. _base_를 _lhsRef_.[[Base]]로 둔다.
+                  1. 단언: _base_는 Declarative Environment Record이다.
+                  1. _status_를 Completion(AddDisposableResource(_base_.[[DisposableResourceStack]], _nextValue_, _declarationKind_))로 둔다.
+                1. 그렇지 않으면,
+                  1. _status_를 NormalCompletion(~unused~)로 둔다.
+                1. _status_가 정상 완료이면,
+                  1. _status_를 Completion(InitializeReferencedBinding(_lhsRef_, _nextValue_))로 설정한다.
+            1. _status_가 abrupt 완료이면,
+              1. _iterationEnv_가 *undefined*가 아니면,
+                1. _status_를 Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _status_))로 설정한다.
+                1. 단언: _status_는 abrupt 완료이다.
+              1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
               1. _iterationKind_가 ~enumerate~이면, ? _status_를 반환한다.
-              1. Assert: _iterationKind_는 ~iterate~이다.
+              1. 단언: _iterationKind_는 ~iterate~이다.
               1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
               1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
             1. _result_를 _stmt_의 Evaluation의 Completion으로 둔다.
-            1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
-            1. LoopContinues(_result_, _labelSet_)가 *false*이면, 다음을 수행한다.
-              1. _status_를 UpdateEmpty(_result_, _iterationResult_)의 Completion으로 설정한다.
+            1. _iterationEnv_가 *undefined*가 아니면,
+              1. _result_를 Completion(DisposeResources(_iterationEnv_.[[DisposableResourceStack]], _result_))로 설정한다.
+            1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
+            1. LoopContinues(_result_, _labelSet_)가 *false*이면,
+              1. _status_를 Completion(UpdateEmpty(_result_, _iterationResult_))로 설정한다.
               1. _iterationKind_가 ~enumerate~이면, ? _status_를 반환한다.
-              1. Assert: _iterationKind_는 ~iterate~이다.
+              1. 단언: _iterationKind_는 ~iterate~이다.
               1. _iteratorKind_가 ~async~이면, ? AsyncIteratorClose(_iteratorRecord_, _status_)를 반환한다.
               1. ? IteratorClose(_iteratorRecord_, _status_)를 반환한다.
             1. _result_.[[Value]]가 ~empty~가 아니면, _iterationResult_를 _result_.[[Value]]로 설정한다.
@@ -22901,6 +23443,18 @@
           |CaseBlock|의 LexicallyDeclaredNames의 어떤 element가 |CaseBlock|의 VarDeclaredNames에도 occur하면 Syntax Error입니다.
         </li>
       </ul>
+      <emu-grammar>CaseClause : `case` Expression `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          |StatementList|의 ContainsUsing이 *true*이면 Syntax Error이다.
+        </li>
+      </ul>
+      <emu-grammar>DefaultClause : `default` `:` StatementList</emu-grammar>
+      <ul>
+        <li>
+          |StatementList|의 ContainsUsing이 *true*이면 Syntax Error이다.
+        </li>
+      </ul>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics-caseblockevaluation" type="sdo">
@@ -22996,14 +23550,15 @@
       <h1>Runtime Semantics: Evaluation</h1>
       <emu-grammar>SwitchStatement : `switch` `(` Expression `)` CaseBlock</emu-grammar>
       <emu-alg>
-        1. _exprRef_를 |Expression|의 Evaluation으로 ? 둔다.
+        1. _exprRef_를 |Expression|의 Evaluation을 ? 수행한 결과로 둔다.
         1. _switchValue_를 ? GetValue(_exprRef_)로 둔다.
-        1. _oldEnv_를 running execution context의 LexicalEnvironment로 둔다.
+        1. _oldEnv_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
         1. _blockEnv_를 NewDeclarativeEnvironment(_oldEnv_)로 둔다.
         1. BlockDeclarationInstantiation(|CaseBlock|, _blockEnv_)를 수행한다.
-        1. running execution context의 LexicalEnvironment를 _blockEnv_로 설정한다.
-        1. _blockResult_를 argument _switchValue_를 가진 |CaseBlock|의 CaseBlockEvaluation의 Completion으로 둔다.
-        1. running execution context의 LexicalEnvironment를 _oldEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _blockEnv_로 설정한다.
+        1. _blockResult_를 인수 _switchValue_로 |CaseBlock|의 CaseBlockEvaluation의 Completion으로 둔다.
+        1. 단언: _blockEnv_.[[DisposableResourceStack]]은 빈 List이다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _oldEnv_로 설정한다.
         1. _blockResult_를 반환한다.
       </emu-alg>
       <emu-note>
@@ -23790,6 +24345,13 @@
       <emu-grammar>FunctionStatementList : [empty]</emu-grammar>
       <emu-alg>
         1. *undefined*를 반환한다.
+      </emu-alg>
+      <emu-grammar>FunctionStatementList : StatementList</emu-grammar>
+      <emu-alg>
+        1. _result_를 |StatementList|의 Evaluation의 Completion으로 둔다.
+        1. _env_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
+        1. 단언: _env_는 Declarative Environment Record이다.
+        1. ? DisposeResources(_env_.[[DisposableResourceStack]], _result_)를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -25075,10 +25637,13 @@
       </dl>
       <emu-grammar>ClassStaticBlockBody : ClassStaticBlockStatementList</emu-grammar>
       <emu-alg>
-        1. Assert: _funcObj_는 ClassStaticBlockDefinitionEvaluation step <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref>에 의해 created된 synthetic function이다.
+        1. 단언: _funcObj_는 ClassStaticBlockDefinitionEvaluation 단계 <emu-xref href="#step-synthetic-class-static-block-fn"></emu-xref>에서 생성된 합성 함수이다.
         1. ! FunctionDeclarationInstantiation(_funcObj_, « »)를 수행한다.
-        1. |ClassStaticBlockStatementList|의 Evaluation을 ? 수행한다.
-        1. ReturnCompletion(*undefined*)를 반환한다.
+        1. _result_를 |ClassStaticBlockStatementList|의 Evaluation의 Completion으로 둔다.
+        1. _envRecord_를 실행 중인 실행 컨텍스트의 LexicalEnvironment로 둔다.
+        1. 단언: _envRecord_는 Declarative Environment Record이다.
+        1. ? DisposeResources(_envRecord_.[[DisposableResourceStack]], _result_)를 수행한다.
+        1. ReturnCompletion(*undefined*)을 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -25490,6 +26055,13 @@
         1. |AsyncFunctionExpression|의 InstantiateAsyncFunctionExpression을 반환한다.
       </emu-alg>
       <emu-grammar>
+        UnaryExpression : CoverAwaitExpressionAndAwaitUsingDeclarationHead
+      </emu-grammar>
+      <emu-alg>
+        1. _expr_를 |CoverAwaitExpressionAndAwaitUsingDeclarationHead|가 cover하는 |AwaitExpression|으로 둔다.
+        1. _expr_의 Evaluation을 ? 반환한다.
+      </emu-alg>
+      <emu-grammar>
         AwaitExpression : `await` UnaryExpression
       </emu-grammar>
       <emu-alg>
@@ -25672,17 +26244,21 @@
       <dl class="header">
       </dl>
       <emu-note>
-        <p>_call_은 source text의 specific range를 represent하는 Parse Node입니다. 다음 algorithm이 _call_을 다른 Parse Node와 compare할 때, 이는 그것들이 같은 source text를 represent하는지에 대한 test입니다.</p>
+        <p>_call_은 소스 텍스트의 특정 범위를 나타내는 Parse Node이다. 다음 알고리즘들이 _call_을 다른 Parse Node와 비교할 때, 이는 그것들이 동일한 소스 텍스트를 나타내는지에 대한 검사이다.</p>
       </emu-note>
       <emu-note>
-        <p>return GetValue of the call result가 immediately followed하는 potential tail position call도 possible tail position call입니다. function call은 Reference Record를 반환할 수 없으므로, 그러한 GetValue operation은 항상 actual function call result와 같은 value를 반환합니다.</p>
+        <p>호출 결과의 GetValue를 반환하는 것이 바로 뒤따르는 잠재적 꼬리 위치 호출도 가능한 꼬리 위치 호출이다. 함수 호출은 Reference Record를 반환할 수 없으므로, 이러한 GetValue 연산은 항상 실제 함수 호출 결과와 동일한 값을 반환한다.</p>
+      </emu-note>
+      <emu-note>
+        <p>같은 |Block|, |ForStatement|, |ForInOfStatement|, |FunctionBody|, |GeneratorBody|, |AsyncGeneratorBody|, |AsyncFunctionBody| 또는 |ClassStaticBlockBody| 안에서 호출 앞에 오는 `using` 선언 또는 `await using` 선언은 그 호출이 가능한 꼬리 위치 호출이 되는 것을 방지한다.</p>
       </emu-note>
 
       <emu-grammar>StatementList : StatementList StatementListItem</emu-grammar>
       <emu-alg>
-        1. _has_를 argument _call_를 가진 |StatementList|의 HasCallInTailPosition으로 둔다.
+        1. _has_를 인수 _call_로 파생된 |StatementList|의 HasCallInTailPosition으로 둔다.
         1. _has_가 *true*이면, *true*를 반환한다.
-        1. argument _call_를 가진 |StatementListItem|의 HasCallInTailPosition을 반환한다.
+        1. 파생된 |StatementList|의 ContainsUsing이 *true*이면, *false*를 반환한다.
+        1. 인수 _call_로 |StatementListItem|의 HasCallInTailPosition을 반환한다.
       </emu-alg>
       <emu-grammar>
         FunctionStatementList :
@@ -25873,7 +26449,7 @@
           `-` UnaryExpression
           `~` UnaryExpression
           `!` UnaryExpression
-          AwaitExpression
+          CoverAwaitExpressionAndAwaitUsingDeclarationHead
 
         CallExpression :
           SuperCall
@@ -26059,6 +26635,9 @@
         </li>
         <li>
           argument « »를 가진 |StatementList|의 AllPrivateIdentifiersValid가 *false*이면, |ScriptBody|를 contain하는 source text가 direct eval에 의해 processed되고 있는 eval code인 경우를 제외하고 Syntax Error입니다.
+        </li>
+        <li>
+          |StatementList|의 ContainsUsing이 *true*이면 Syntax Error이다.
         </li>
       </ul>
     </emu-clause>
@@ -28684,19 +29263,21 @@
             </dl>
 
             <emu-alg>
-              1. Assert: _module_은 linked되었고 그 module environment 안의 declaration은 instantiated되었다.
+              1. 단언: _module_은 링크되었고 그 module environment의 선언들은 인스턴스화되었다.
               1. _moduleContext_를 _module_.[[Context]]로 둔다.
-              1. _module_.[[HasTLA]]가 *false*이면, 다음을 수행한다.
-                1. Assert: _capability_는 present하지 않는다.
-                1. running execution context를 suspend한다.
-                1. _moduleContext_를 execution context stack에 push한다; _moduleContext_는 이제 running execution context이다.
-                1. _result_를 Completion(_module_.[[ECMAScriptCode]]의 Evaluation)으로 둔다.
-                1. _moduleContext_를 suspend하고 execution context stack에서 remove한다.
-                1. execution context stack의 top에 now 있는 context를 running execution context로 resume한다.
-                1. _result_가 abrupt completion이면, 다음을 수행한다.
+              1. _module_.[[HasTLA]]가 *false*이면,
+                1. 단언: _capability_는 존재하지 않는다.
+                1. _env_를 _module_.[[Environment]]로 둔다.
+                1. 실행 중인 실행 컨텍스트를 일시 중단한다.
+                1. _moduleContext_를 실행 컨텍스트 스택에 push한다. _moduleContext_는 이제 실행 중인 실행 컨텍스트이다.
+                1. _result_를 _module_.[[ECMAScriptCode]]의 Evaluation의 Completion으로 둔다.
+                1. _result_를 Completion(DisposeResources(_env_.[[DisposableResourceStack]], _result_))로 설정한다.
+                1. _moduleContext_를 일시 중단하고 실행 컨텍스트 스택에서 제거한다.
+                1. 이제 실행 컨텍스트 스택의 맨 위에 있는 컨텍스트를 실행 중인 실행 컨텍스트로 재개한다.
+                1. _result_가 abrupt 완료이면,
                   1. ? _result_를 반환한다.
               1. 그렇지 않으면,
-                1. Assert: _capability_는 PromiseCapability Record이다.
+                1. 단언: _capability_는 PromiseCapability Record이다.
                 1. AsyncBlockStart(_capability_, _module_.[[ECMAScriptCode]], _moduleContext_)를 수행한다.
               1. ~unused~를 반환한다.
             </emu-alg>
@@ -29303,7 +29884,7 @@
           `export` ExportFromClause FromClause WithClause? `;`
           `export` NamedExports `;`
           `export` VariableStatement[~Yield, +Await]
-          `export` Declaration[~Yield, +Await]
+          `export` [lookahead &notin; { `using`, `await` }] Declaration[~Yield, +Await]
           `export` `default` HoistableDeclaration[~Yield, +Await, +Default]
           `export` `default` ClassDeclaration[~Yield, +Await, +Default]
           `export` `default` [lookahead &notin; { `function`, `async` [no LineTerminator here] `function`, `class` }] AssignmentExpression[+In, ~Yield, +Await] `;`
@@ -30324,6 +30905,11 @@
       <p><emu-xref href="#sec-arraybuffer-constructor"></emu-xref>를 참조하십시오.</p>
     </emu-clause>
 
+    <emu-clause id="sec-constructor-properties-of-the-global-object-asyncdisposablestack">
+      <h1>AsyncDisposableStack ( . . . )</h1>
+      <p><emu-xref href="#sec-asyncdisposablestack-constructor"></emu-xref>를 참조하십시오.</p>
+    </emu-clause>
+
     <emu-clause id="sec-constructor-properties-of-the-global-object-bigint">
       <h1>BigInt ( . . . )</h1>
       <p><emu-xref href="#sec-bigint-constructor"></emu-xref>를 참조하십시오.</p>
@@ -30352,6 +30938,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-date">
       <h1>Date ( . . . )</h1>
       <p><emu-xref href="#sec-date-constructor"></emu-xref>를 참조하십시오.</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-disposablestack">
+      <h1>DisposableStack ( . . . )</h1>
+      <p><emu-xref href="#sec-disposablestack-constructor"></emu-xref>를 참조하십시오.</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-error">
@@ -30462,6 +31053,11 @@
     <emu-clause id="sec-constructor-properties-of-the-global-object-string">
       <h1>String ( . . . )</h1>
       <p><emu-xref href="#sec-string-constructor"></emu-xref>를 참조하십시오.</p>
+    </emu-clause>
+
+    <emu-clause id="sec-constructor-properties-of-the-global-object-suppressederror">
+      <h1>SuppressedError ( . . . )</h1>
+      <p><emu-xref href="#sec-suppressederror-constructor"></emu-xref>를 참조하십시오.</p>
     </emu-clause>
 
     <emu-clause id="sec-constructor-properties-of-the-global-object-symbol">
@@ -31834,7 +32430,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error Objects</h1>
     <p>Error object의 instance는 runtime error가 occur할 때 exception으로 thrown됩니다. Error object는 user-defined exception class를 위한 base object로도 serve할 수 있습니다.</p>
-    <p>ECMAScript implementation이 runtime error를 detect하면, <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref>에 defined된 _NativeError_ object 중 하나의 new instance 또는 <emu-xref href="#sec-aggregate-error-objects"></emu-xref>에 defined된 AggregateError object의 new instance를 throw합니다.</p>
+    <p>ECMAScript 구현이 런타임 오류를 감지하면, <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref>에 정의된 _NativeError_ 객체 중 하나의 새 인스턴스, 또는 <emu-xref href="#sec-aggregate-error-objects"></emu-xref>에 정의된 AggregateError 객체나 <emu-xref href="#sec-suppressederror-objects"></emu-xref>에 정의된 SuppressedError 객체 중 하나의 새 인스턴스를 던진다. 이러한 각 객체는 아래에 설명된 구조를 가지며, _NativeError_ 대신 생성자 이름으로 사용되는 이름, 프로토타입 객체의 *"name"* 속성, 프로토타입 객체의 구현 정의 *"message"* 속성, 그리고 %AggregateError% 전용 *"errors"* 속성 또는 %SuppressedError% 전용 *"error"* 및 *"suppressed"* 속성의 존재 여부에서만 다르다.</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>The Error Constructor</h1>
@@ -31930,12 +32526,12 @@
 
     <emu-clause id="sec-properties-of-error-instances">
       <h1>Properties of Error Instances</h1>
-      <p>Error instance는 Error prototype object에서 property를 inherit하고 value가 *undefined*인 [[ErrorData]] internal slot을 가지는 ordinary object입니다. [[ErrorData]]의 only specified use는 `Object.prototype.toString` 및 `Error.isError` 안에서 Error, AggregateError, 및 _NativeError_ instance를 Error object로 identify하는 것입니다.</p>
+      <p>Error 인스턴스는 Error 프로토타입 객체에서 속성을 상속하고 값이 *undefined*인 [[ErrorData]] 내부 슬롯을 갖는 일반 객체이다. [[ErrorData]]의 유일하게 명세된 용도는 `Object.prototype.toString` 및 `Error.isError` 안에서 Error, AggregateError, SuppressedError 및 _NativeError_ 인스턴스를 Error 객체로 식별하는 것이다.</p>
     </emu-clause>
 
     <emu-clause id="sec-native-error-types-used-in-this-standard">
       <h1>Native Error Types Used in This Standard</h1>
-      <p>runtime error가 detected될 때 below의 _NativeError_ object 중 하나 또는 AggregateError object의 new instance가 thrown됩니다. 모든 _NativeError_ object는 <emu-xref href="#sec-nativeerror-object-structure"></emu-xref>에 described된 것과 같은 structure를 share합니다.</p>
+      <p>아래의 _NativeError_ 객체 중 하나, 또는 AggregateError 객체나 SuppressedError 객체 중 하나의 새 인스턴스는 런타임 오류가 감지될 때 던져진다. 모든 _NativeError_ 객체는 <emu-xref href="#sec-nativeerror-object-structure"></emu-xref>에 설명된 것처럼 동일한 구조를 공유한다.</p>
 
       <emu-clause id="sec-native-error-types-used-in-this-standard-evalerror">
         <h1>EvalError</h1>
@@ -32046,7 +32642,7 @@
 
       <emu-clause id="sec-properties-of-nativeerror-instances">
         <h1>Properties of _NativeError_ Instances</h1>
-        <p>_NativeError_ instance는 their _NativeError_ prototype object에서 property를 inherit하고 value가 *undefined*인 [[ErrorData]] internal slot을 가지는 ordinary object입니다. [[ErrorData]]의 only specified use는 Error, AggregateError, 또는 _NativeError_ instance를 identify하기 위한 `Object.prototype.toString`(<emu-xref href="#sec-object.prototype.tostring"></emu-xref>) 및 `Error.isError`(<emu-xref href="#sec-error.iserror"></emu-xref>)에 의한 것입니다.</p>
+        <p>_NativeError_ 인스턴스는 해당 _NativeError_ 프로토타입 객체에서 속성을 상속하고 값이 *undefined*인 [[ErrorData]] 내부 슬롯을 갖는 일반 객체이다. [[ErrorData]]의 유일하게 명세된 용도는 `Object.prototype.toString`(<emu-xref href="#sec-object.prototype.tostring"></emu-xref>) 및 `Error.isError`(<emu-xref href="#sec-error.iserror"></emu-xref>)가 Error, AggregateError, SuppressedError 또는 _NativeError_ 인스턴스를 식별하는 것이다.</p>
       </emu-clause>
     </emu-clause>
 
@@ -32122,8 +32718,84 @@
       </emu-clause>
 
       <emu-clause id="sec-properties-of-aggregate-error-instances">
-        <h1>Properties of AggregateError Instances</h1>
-        <p>AggregateError instance는 their AggregateError prototype object에서 property를 inherit하고 value가 *undefined*인 [[ErrorData]] internal slot을 가지는 ordinary object입니다. [[ErrorData]]의 only specified use는 Error, AggregateError, 또는 _NativeError_ instance를 identify하기 위한 `Object.prototype.toString`(<emu-xref href="#sec-object.prototype.tostring"></emu-xref>) 및 `Error.isError`(<emu-xref href="#sec-error.iserror"></emu-xref>)에 의한 것입니다.</p>
+        <h1>AggregateError 인스턴스의 속성</h1>
+        <p>AggregateError 인스턴스는 해당 AggregateError 프로토타입 객체에서 속성을 상속하고 값이 *undefined*인 [[ErrorData]] 내부 슬롯을 갖는 일반 객체이다. [[ErrorData]]의 유일하게 명세된 용도는 `Object.prototype.toString`(<emu-xref href="#sec-object.prototype.tostring"></emu-xref>) 및 `Error.isError`(<emu-xref href="#sec-error.iserror"></emu-xref>)가 Error, AggregateError, SuppressedError 또는 _NativeError_ 인스턴스를 식별하는 것이다.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-suppressederror-objects">
+      <h1>SuppressedError 객체</h1>
+
+      <emu-clause id="sec-suppressederror-constructor">
+        <h1>SuppressedError 생성자</h1>
+        <p>SuppressedError 생성자는 다음과 같다:</p>
+        <ul>
+          <li><dfn>%SuppressedError%</dfn>이다.</li>
+          <li>전역 객체의 *"SuppressedError"* 속성의 초기값이다.</li>
+          <li>생성자가 아니라 함수로 호출될 때 새 SuppressedError 객체를 생성하고 초기화한다. 따라서 함수 호출 `SuppressedError(…)`는 같은 인수를 사용하는 객체 생성 표현식 `new SuppressedError(…)`와 동등하다.</li>
+          <li>클래스 정의의 `extends` 절 값으로 사용할 수 있다. 지정된 SuppressedError 동작을 상속하려는 하위 클래스 생성자는 [[ErrorData]] 내부 슬롯을 갖는 하위 클래스 인스턴스를 생성하고 초기화하기 위해 SuppressedError 생성자에 대한 `super` 호출을 포함해야 한다.</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror" type="built-in function">
+          <h1>SuppressedError ( _error_, _suppressed_, _message_ )</h1>
+          <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. NewTarget이 *undefined*이면 _newTarget_을 활성 함수 객체로 둔다. 그렇지 않으면 _newTarget_을 NewTarget으로 둔다.
+            1. _obj_를 ? OrdinaryCreateFromConstructor(_newTarget_, *"%SuppressedError.prototype%"*, « [[ErrorData]] »)로 둔다.
+            1. _message_가 *undefined*가 아니면,
+              1. _messageString_을 ? ToString(_message_)로 둔다.
+              1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"message"*, _messageString_)를 수행한다.
+            1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"error"*, _error_)를 수행한다.
+            1. CreateNonEnumerableDataPropertyOrThrow(_obj_, *"suppressed"*, _suppressed_)를 수행한다.
+            1. _obj_를 반환한다.
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-constructor">
+        <h1>SuppressedError 생성자의 속성</h1>
+        <p>SuppressedError 생성자는 다음과 같다:</p>
+        <ul>
+          <li>값이 %Error%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+          <li>다음 속성을 갖는다:</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype">
+          <h1>SuppressedError.prototype</h1>
+          <p>`SuppressedError.prototype`의 초기값은 SuppressedError 프로토타입 객체이다.</p>
+          <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } 속성을 갖는다.</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-suppressederror-prototype-object">
+        <h1>SuppressedError 프로토타입 객체의 속성</h1>
+        <p><dfn>SuppressedError 프로토타입 객체</dfn>는 다음과 같다:</p>
+        <ul>
+          <li><dfn>%SuppressedError.prototype%</dfn>이다.</li>
+          <li>일반 객체이다.</li>
+          <li>Error 인스턴스 또는 SuppressedError 인스턴스가 아니며 [[ErrorData]] 내부 슬롯을 갖지 않는다.</li>
+          <li>값이 %Error.prototype%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+        </ul>
+
+        <emu-clause id="sec-suppressederror.prototype.constructor">
+          <h1>SuppressedError.prototype.constructor</h1>
+          <p>`SuppressedError.prototype.constructor`의 초기값은 %SuppressedError%이다.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.message">
+          <h1>SuppressedError.prototype.message</h1>
+          <p>`SuppressedError.prototype.message`의 초기값은 빈 String이다.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-suppressederror.prototype.name">
+          <h1>SuppressedError.prototype.name</h1>
+          <p>`SuppressedError.prototype.name`의 초기값은 *"SuppressedError"*이다.</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-suppressederror-instances">
+        <h1>SuppressedError 인스턴스의 속성</h1>
+        <p>SuppressedError 인스턴스는 해당 SuppressedError 프로토타입 객체에서 속성을 상속하고 값이 *undefined*인 [[ErrorData]] 내부 슬롯을 갖는 일반 객체이다. [[ErrorData]]의 유일하게 명세된 용도는 `Object.prototype.toString` 및 `Error.isError` 안에서 Error, AggregateError, SuppressedError 및 _NativeError_ 인스턴스를 Error 객체로 식별하는 것이다.</p>
       </emu-clause>
     </emu-clause>
 
@@ -49080,6 +49752,19 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype-%symbol.dispose%" type="built-in function">
+          <h1>Iterator.prototype [ %Symbol.dispose% ] ( )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+          <emu-alg>
+            1. _obj_를 *this* 값으로 둔다.
+            1. _return_을 ? GetMethod(_obj_, *"return"*)으로 둔다.
+            1. _return_이 *undefined*가 아니면,
+              1. ? Call(_return_, _obj_)를 수행한다.
+            1. *undefined*를 반환한다.
+          </emu-alg>
+          <p>이 메서드의 *"name"* 속성 값은 *"[Symbol.dispose]"*이다.</p>
+        </emu-clause>
+
         <emu-clause oldids="sec-%iteratorprototype%-@@iterator,sec-%iteratorprototype%-%symbol.iterator%" id="sec-iterator.prototype-%symbol.iterator%" type="built-in function">
           <h1>Iterator.prototype [ %Symbol.iterator% ] ( )</h1>
           <p>이 function은 called될 때 다음 steps를 수행합니다:</p>
@@ -49195,6 +49880,30 @@ THH:mm:ss.sss
       <emu-note>
         <p>이 specification에서 async iterator interface를 implement하도록 defined된 모든 objects는 또한 %AsyncIteratorPrototype%으로부터 inherit합니다. ECMAScript code도 %AsyncIteratorPrototype%으로부터 inherit하는 objects를 define할 수 있습니다. %AsyncIteratorPrototype% object는 all async iterator objects에 applicable한 additional methods가 added될 수 있는 place를 제공합니다.</p>
       </emu-note>
+
+      <emu-clause id="sec-%asynciteratorprototype%-%symbol.asyncdispose%" type="built-in function">
+        <h1>%AsyncIteratorPrototype% [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _obj_를 *this* 값으로 둔다.
+          1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
+          1. _return_을 Completion(GetMethod(_obj_, *"return"*))으로 둔다.
+          1. IfAbruptRejectPromise(_return_, _promiseCapability_).
+          1. _return_이 *undefined*이면,
+            1. ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »)를 수행한다.
+          1. 그렇지 않으면,
+            1. _result_를 Completion(Call(_return_, _obj_, « »))으로 둔다.
+            1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+            1. _resultWrapper_를 Completion(PromiseResolve(%Promise%, _result_))로 둔다.
+            1. IfAbruptRejectPromise(_resultWrapper_, _promiseCapability_).
+            1. 아무것도 캡처하지 않고 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새 Abstract Closure로 _unwrap_을 둔다:
+              1. *undefined*를 반환한다.
+            1. _onFulfilled_를 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)로 둔다.
+            1. PerformPromiseThen(_resultWrapper_, _onFulfilled_, *undefined*, _promiseCapability_)를 수행한다.
+          1. _promiseCapability_.[[Promise]]를 반환한다.
+        </emu-alg>
+        <p>이 메서드의 *"name"* 속성 값은 *"[Symbol.asyncDispose]"*이다.</p>
+      </emu-clause>
 
       <emu-clause oldids="sec-asynciteratorprototype-asynciterator" id="sec-%asynciteratorprototype%-%symbol.asynciterator%" type="built-in function">
         <h1>%AsyncIteratorPrototype% [ %Symbol.asyncIterator% ] ( )</h1>
@@ -49387,6 +50096,468 @@ THH:mm:ss.sss
           1. _promiseCapability_.[[Promise]]를 반환한다.
         </emu-alg>
       </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-resource-management">
+    <h1>리소스 관리</h1>
+
+    <emu-clause id="sec-common-resource-management-interfaces">
+      <h1>공통 리소스 관리 인터페이스</h1>
+
+      <emu-clause id="sec-disposable-interface">
+        <h1>Disposable 인터페이스</h1>
+        <p><dfn>Disposable</dfn> 인터페이스에는 <emu-xref href="#table-disposable-interface-required-properties"></emu-xref>에 설명된 속성이 포함된다:</p>
+        <emu-table id="table-disposable-interface-required-properties" caption="Disposable 인터페이스 필수 속성">
+          <table>
+            <tr>
+              <th>
+                속성
+              </th>
+              <th>
+                값
+              </th>
+              <th>
+                요구사항
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.dispose%`
+              </td>
+              <td>
+                함수 객체
+              </td>
+              <td>
+                <p>이 메서드를 호출하면 호출자가 이 객체를 계속 사용할 의도가 없음을 Disposable 객체에 알린다. 이 메서드는 파일 시스템 핸들, 스트림, 호스트 객체 등을 포함하되 이에 국한되지 않는 리소스의 명시적 정리를 수행하는 데 필요한 모든 로직을 수행해야 한다. 이 메서드에서 예외가 던져지면, 일반적으로 리소스를 명시적으로 해제할 수 없었음을 의미한다.</p>
+                <p>같은 객체에 대해 이 메서드를 두 번 이상 호출하는 경우, 이미 폐기된 리소스에 대해 정리 로직을 반복하지 않아야 하며, 첫 번째 호출에서 예외가 던져졌더라도 예외를 던지지 않아야 한다. 그러나 이 요구사항은 강제되지 않는다.</p>
+                <p>Disposable 객체를 `using` 또는 `await using` 선언과 함께 사용할 때, 리소스는 해당 선언을 바로 포함하는 |Block| 또는 |Module|이 평가된 후 자동으로 폐기된다.</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposable-interface">
+        <h1>AsyncDisposable 인터페이스</h1>
+        <p><dfn>AsyncDisposable</dfn> 인터페이스에는 <emu-xref href="#table-asyncdisposable-interface-required-properties"></emu-xref>에 설명된 속성이 포함된다:</p>
+        <emu-table id="table-asyncdisposable-interface-required-properties" caption="AsyncDisposable 인터페이스 필수 속성">
+          <table>
+            <tr>
+              <th>
+                속성
+              </th>
+              <th>
+                값
+              </th>
+              <th>
+                요구사항
+              </th>
+            </tr>
+            <tr>
+              <td>
+                `%Symbol.asyncDispose%`
+              </td>
+              <td>
+                promise를 반환하는 함수 객체
+              </td>
+              <td>
+                <p>이 메서드를 호출하면 호출자가 이 객체를 계속 사용할 의도가 없음을 AsyncDisposable 객체에 알린다. 이 메서드는 파일 시스템 핸들, 스트림, 호스트 객체 등을 포함하되 이에 국한되지 않는 리소스의 명시적 정리를 수행하는 데 필요한 모든 로직을 수행해야 한다. 이 메서드가 반환한 promise가 거부되면, 일반적으로 리소스를 명시적으로 해제할 수 없었음을 의미한다. AsyncDisposable 객체는 결과 Promise가 이행될 때까지 "disposed"된 것으로 간주되지 않는다.</p>
+                <p>같은 객체에 대해 이 메서드를 두 번 이상 호출하는 경우, 이미 폐기된 리소스에 대해 정리 로직을 반복하지 않아야 하며, 첫 번째 호출에서 예외가 던져졌거나 거부된 promise가 반환되었더라도 예외를 던지거나 거부된 promise를 반환하지 않아야 한다. 그러나 이 요구사항은 강제되지 않는다.</p>
+                <p>AsyncDisposable 객체를 `await using` 선언과 함께 사용할 때, 리소스는 해당 선언을 바로 포함하는 |Block| 또는 |Module|이 평가된 후 자동으로 폐기된다.</p>
+              </td>
+            </tr>
+          </table>
+        </emu-table>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-disposablestack-objects">
+    <h1>DisposableStack 객체</h1>
+    <p>DisposableStack은 함께 폐기되어야 하는 하나 이상의 리소스를 담는 데 사용할 수 있는 객체이다.</p>
+    <p>모든 DisposableStack 객체는 서로 배타적인 두 상태 중 하나, 즉 <em>disposed</em> 또는 <em>pending</em> 상태에 있다. disposable stack `d`에 대해 `d.dispose()`와 `d.move()`가 모두 호출되지 않은 경우에만 `d`는 pending이다.</p>
+
+    <emu-clause id="sec-disposablestack-constructor">
+      <h1>DisposableStack 생성자</h1>
+      <p>DisposableStack 생성자는 다음과 같다:</p>
+      <ul>
+        <li><dfn>%DisposableStack%</dfn>이다.</li>
+        <li>전역 객체의 *"DisposableStack"* 속성의 초기값이다.</li>
+        <li>생성자로 호출될 때 새 DisposableStack을 생성하고 초기화한다.</li>
+        <li>함수로 호출되도록 의도되지 않았으며, 그런 방식으로 호출되면 예외를 던진다.</li>
+        <li>클래스 정의의 `extends` 절에서 값으로 사용할 수 있다. 지정된 DisposableStack 동작을 상속하려는 하위 클래스 생성자는 `DisposableStack.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 하위 클래스 인스턴스를 생성하고 초기화하기 위해 DisposableStack 생성자에 대한 `super` 호출을 포함해야 한다.</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack" type="built-in function">
+        <h1>DisposableStack ( )</h1>
+        <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. NewTarget이 *undefined*이면, *TypeError* 예외를 던진다.
+          1. _disposableStack_을 ? OrdinaryCreateFromConstructor(NewTarget, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] »)로 둔다.
+          1. _disposableStack_.[[DisposableState]]를 ~pending~으로 설정한다.
+          1. _disposableStack_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
+          1. _disposableStack_을 반환한다.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-constructor">
+      <h1>DisposableStack 생성자의 속성</h1>
+      <p>DisposableStack 생성자는 다음과 같다:</p>
+      <ul>
+        <li>값이 %Function.prototype%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+        <li>다음 속성을 갖는다:</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype">
+        <h1>DisposableStack.prototype</h1>
+        <p>`DisposableStack.prototype`의 초기값은 DisposableStack 프로토타입 객체이다.</p>
+        <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } 속성을 갖는다.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-disposablestack-prototype-object">
+      <h1>DisposableStack 프로토타입 객체의 속성</h1>
+      <p><dfn>DisposableStack 프로토타입 객체</dfn>는 다음과 같다:</p>
+      <ul>
+        <li><dfn>%DisposableStack.prototype%</dfn>이다.</li>
+        <li>값이 %Object.prototype%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+        <li>일반 객체이다.</li>
+        <li>[[DisposableState]] 내부 슬롯 또는 DisposableStack 인스턴스의 다른 내부 슬롯을 갖지 않는다.</li>
+      </ul>
+
+      <emu-clause id="sec-disposablestack.prototype.adopt" type="built-in function">
+        <h1>DisposableStack.prototype.adopt ( _value_, _onDispose_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. IsCallable(_onDispose_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _value_와 _onDispose_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새 Abstract Closure로 _closure_를 둔다:
+            1. ? Call(_onDispose_, *undefined*, « _value_ »)를 반환한다.
+          1. _func_를 CreateBuiltinFunction(_closure_, 0, *""*, « »)로 둔다.
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _func_)를 수행한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.constructor">
+        <h1>DisposableStack.prototype.constructor</h1>
+        <p>`DisposableStack.prototype.constructor`의 초기값은 %DisposableStack%이다.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.defer" type="built-in function">
+        <h1>DisposableStack.prototype.defer ( _onDispose_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. IsCallable(_onDispose_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _onDispose_)를 수행한다.
+          1. *undefined*를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.dispose" type="built-in function">
+        <h1>DisposableStack.prototype.dispose ( )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *undefined*를 반환한다.
+          1. _disposableStack_.[[DisposableState]]를 ~disposed~로 설정한다.
+          1. ? DisposeResources(_disposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*))를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-disposablestack.prototype.disposed" type="built-in function">
+        <h1>get DisposableStack.prototype.disposed</h1>
+        <p>`DisposableStack.prototype.disposed`는 set 접근자 함수가 *undefined*인 접근자 속성이다. 그 get 접근자 함수는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *true*를 반환한다.
+          1. *false*를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.move" type="built-in function">
+        <h1>DisposableStack.prototype.move ( )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. _newDisposableStack_을 ? OrdinaryCreateFromConstructor(%DisposableStack%, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] »)로 둔다.
+          1. _newDisposableStack_.[[DisposableState]]를 ~pending~으로 설정한다.
+          1. _newDisposableStack_.[[DisposableResourceStack]]를 _disposableStack_.[[DisposableResourceStack]]로 설정한다.
+          1. _disposableStack_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
+          1. _disposableStack_.[[DisposableState]]를 ~disposed~로 설정한다.
+          1. _newDisposableStack_을 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype.use" type="built-in function">
+        <h1>DisposableStack.prototype.use ( _value_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _disposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]])를 수행한다.
+          1. _disposableStack_.[[DisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], _value_, ~sync-dispose~)를 수행한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.dispose%">
+        <h1>DisposableStack.prototype [ %Symbol.dispose% ] ( )</h1>
+        <p>`%Symbol.dispose%` 속성의 초기값은 <emu-xref href="#sec-disposablestack.prototype.dispose"></emu-xref>에 정의된 %DisposableStack.prototype.dispose%이다.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-disposablestack.prototype-%symbol.tostringtag%">
+        <h1>DisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` 속성의 초기값은 String 값 *"DisposableStack"*이다.</p>
+        <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } 속성을 갖는다.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-disposablestack-instances">
+      <h1>DisposableStack 인스턴스의 속성</h1>
+      <p>DisposableStack 인스턴스는 DisposableStack 프로토타입 객체(내재 객체 %DisposableStack.prototype%)에서 속성을 상속하는 일반 객체이다. DisposableStack 인스턴스는 처음에 <emu-xref href="#table-internal-slots-of-disposablestack-instances"></emu-xref>에 설명된 내부 슬롯과 함께 생성된다.</p>
+      <emu-table id="table-internal-slots-of-disposablestack-instances" caption="DisposableStack 인스턴스의 내부 슬롯">
+        <table>
+          <tr>
+            <th>
+              내부 슬롯
+            </th>
+            <th>
+              타입
+            </th>
+            <th>
+              설명
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableState]]
+            </td>
+            <td>
+              ~pending~ 또는 ~disposed~
+            </td>
+            <td>
+              disposable stack이 자신의 `%Symbol.dispose%` 메서드에 대한 들어오는 호출에 어떻게 반응할지를 지배한다.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              DisposableResource 레코드의 List
+            </td>
+            <td>
+              disposable stack이 폐기될 때 폐기될 리소스. 리소스는 초기화된 순서대로 추가되고, 역순으로 폐기된다.
+            </td>
+          </tr>
+        </table>
+      </emu-table>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-asyncdisposablestack-objects">
+    <h1>AsyncDisposableStack 객체</h1>
+    <p>AsyncDisposableStack은 함께 비동기적으로 폐기되어야 하는 하나 이상의 리소스를 담는 데 사용할 수 있는 객체이다.</p>
+    <p>모든 AsyncDisposableStack 객체는 서로 배타적인 두 상태 중 하나, 즉 <em>disposed</em> 또는 <em>pending</em> 상태에 있다. async-disposable stack `d`에 대해 `d.disposeAsync()`와 `d.move()`가 모두 호출되지 않은 경우에만 `d`는 pending이다.</p>
+
+    <emu-clause id="sec-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack 생성자</h1>
+      <p>AsyncDisposableStack 생성자는 다음과 같다:</p>
+      <ul>
+        <li><dfn>%AsyncDisposableStack%</dfn>이다.</li>
+        <li>전역 객체의 *"AsyncDisposableStack"* 속성의 초기값이다.</li>
+        <li>생성자로 호출될 때 새 AsyncDisposableStack을 생성하고 초기화한다.</li>
+        <li>함수로 호출되도록 의도되지 않았으며, 그런 방식으로 호출되면 예외를 던진다.</li>
+        <li>클래스 정의의 `extends` 절에서 값으로 사용할 수 있다. 지정된 AsyncDisposableStack 동작을 상속하려는 하위 클래스 생성자는 `AsyncDisposableStack.prototype`의 내장 메서드를 지원하는 데 필요한 내부 상태로 하위 클래스 인스턴스를 생성하고 초기화하기 위해 AsyncDisposableStack 생성자에 대한 `super` 호출을 포함해야 한다.</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack" type="built-in function">
+        <h1>AsyncDisposableStack ( )</h1>
+        <p>이 함수는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. NewTarget이 *undefined*이면, *TypeError* 예외를 던진다.
+          1. _asyncDisposableStack_을 ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)로 둔다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]를 ~pending~으로 설정한다.
+          1. _asyncDisposableStack_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
+          1. _asyncDisposableStack_을 반환한다.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-constructor">
+      <h1>AsyncDisposableStack 생성자의 속성</h1>
+      <p>AsyncDisposableStack 생성자는 다음과 같다:</p>
+      <ul>
+        <li>값이 %Function.prototype%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+        <li>다음 속성을 갖는다:</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype">
+        <h1>AsyncDisposableStack.prototype</h1>
+        <p>`AsyncDisposableStack.prototype`의 초기값은 AsyncDisposableStack 프로토타입 객체이다.</p>
+        <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } 속성을 갖는다.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-the-asyncdisposablestack-prototype-object">
+      <h1>AsyncDisposableStack 프로토타입 객체의 속성</h1>
+      <p><dfn>AsyncDisposableStack 프로토타입 객체</dfn>는 다음과 같다:</p>
+      <ul>
+        <li><dfn>%AsyncDisposableStack.prototype%</dfn>이다.</li>
+        <li>값이 %Object.prototype%인 [[Prototype]] 내부 슬롯을 갖는다.</li>
+        <li>일반 객체이다.</li>
+        <li>[[AsyncDisposableState]] 내부 슬롯 또는 AsyncDisposableStack 인스턴스의 다른 내부 슬롯을 갖지 않는다.</li>
+      </ul>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.adopt" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.adopt ( _value_, _onDisposeAsync_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. IsCallable(_onDisposeAsync_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _value_와 _onDisposeAsync_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수가 없는 새 Abstract Closure로 _closure_를 둔다:
+            1. ? Call(_onDisposeAsync_, *undefined*, « _value_ »)를 반환한다.
+          1. _func_를 CreateBuiltinFunction(_closure_, 0, *""*, « »)로 둔다.
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _func_)를 수행한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.constructor">
+        <h1>AsyncDisposableStack.prototype.constructor</h1>
+        <p>`AsyncDisposableStack.prototype.constructor`의 초기값은 %AsyncDisposableStack%이다.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.defer" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.defer ( _onDisposeAsync_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. IsCallable(_onDisposeAsync_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _onDisposeAsync_)를 수행한다.
+          1. *undefined*를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.disposeAsync" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.disposeAsync ( )</h1>
+        <p>이 async 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *undefined*를 반환한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]를 ~disposed~로 설정한다.
+          1. ? DisposeResources(_asyncDisposableStack_.[[DisposableResourceStack]], NormalCompletion(*undefined*))를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-get-asyncdisposablestack.prototype.disposed" type="built-in function">
+        <h1>get AsyncDisposableStack.prototype.disposed</h1>
+        <p>`AsyncDisposableStack.prototype.disposed`는 set 접근자 함수가 *undefined*인 접근자 속성이다. 그 get 접근자 함수는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *true*를 반환한다.
+          1. *false*를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.move" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.move ( )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. _newAsyncDisposableStack_을 ? OrdinaryCreateFromConstructor(%AsyncDisposableStack%, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)로 둔다.
+          1. _newAsyncDisposableStack_.[[AsyncDisposableState]]를 ~pending~으로 설정한다.
+          1. _newAsyncDisposableStack_.[[DisposableResourceStack]]를 _asyncDisposableStack_.[[DisposableResourceStack]]로 설정한다.
+          1. _asyncDisposableStack_.[[DisposableResourceStack]]을 새 빈 List로 설정한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]를 ~disposed~로 설정한다.
+          1. _newAsyncDisposableStack_을 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype.use" type="built-in function">
+        <h1>AsyncDisposableStack.prototype.use ( _value_ )</h1>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
+        <emu-alg>
+          1. _asyncDisposableStack_을 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])를 수행한다.
+          1. _asyncDisposableStack_.[[AsyncDisposableState]]가 ~disposed~이면, *ReferenceError* 예외를 던진다.
+          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], _value_, ~async-dispose~)를 수행한다.
+          1. _value_를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.asyncdispose%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.asyncDispose% ] ( )</h1>
+        <p>`%Symbol.asyncDispose%` 속성의 초기값은 <emu-xref href="#sec-asyncdisposablestack.prototype.disposeAsync"></emu-xref>에 정의된 %AsyncDisposableStack.prototype.disposeAsync%이다.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncdisposablestack.prototype-%symbol.tostringtag%">
+        <h1>AsyncDisposableStack.prototype [ %Symbol.toStringTag% ]</h1>
+        <p>`%Symbol.toStringTag%` 속성의 초기값은 String 값 *"AsyncDisposableStack"*이다.</p>
+        <p>이 속성은 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } 속성을 갖는다.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-properties-of-asyncdisposablestack-instances">
+      <h1>AsyncDisposableStack 인스턴스의 속성</h1>
+      <p>AsyncDisposableStack 인스턴스는 AsyncDisposableStack 프로토타입 객체(내재 객체 %AsyncDisposableStack.prototype%)에서 속성을 상속하는 일반 객체이다. AsyncDisposableStack 인스턴스는 처음에 <emu-xref href="#table-internal-slots-of-asyncdisposablestack-instances"></emu-xref>에 설명된 내부 슬롯과 함께 생성된다.</p>
+      <emu-table id="table-internal-slots-of-asyncdisposablestack-instances" caption="AsyncDisposableStack 인스턴스의 내부 슬롯">
+        <table>
+          <tr>
+            <th>
+              내부 슬롯
+            </th>
+            <th>
+              타입
+            </th>
+            <th>
+              설명
+            </th>
+          </tr>
+          <tr>
+            <td>
+              [[AsyncDisposableState]]
+            </td>
+            <td>
+              ~pending~ 또는 ~disposed~
+            </td>
+            <td>
+              disposable stack이 자신의 `%Symbol.asyncDispose%` 메서드에 대한 들어오는 호출에 어떻게 반응할지를 지배한다.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              [[DisposableResourceStack]]
+            </td>
+            <td>
+              DisposableResource 레코드의 List
+            </td>
+            <td>
+              disposable stack이 폐기될 때 폐기될 리소스. 리소스는 초기화된 순서대로 추가되고, 역순으로 폐기된다.
+            </td>
+          </tr>
+        </table>
+      </emu-table>
     </emu-clause>
   </emu-clause>
 
@@ -52571,6 +53742,14 @@ THH:mm:ss.sss
     <emu-prodref name="LeftHandSideExpression"></emu-prodref>
     <emu-prodref name="UpdateExpression"></emu-prodref>
     <emu-prodref name="UnaryExpression"></emu-prodref>
+    <emu-prodref name="CoverAwaitExpressionAndAwaitUsingDeclarationHead"></emu-prodref>
+    <p>
+      생성식의 인스턴스를 처리할 때<br>
+      <emu-prodref name="UnaryExpression" a="awaitusingcover"></emu-prodref><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead|의 해석은 다음 문법을 사용하여 정제된다:
+    </p>
+    <emu-prodref name="AwaitExpression"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="ExponentiationExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeExpression"></emu-prodref>
     <emu-prodref name="MultiplicativeOperator"></emu-prodref>
@@ -52621,8 +53800,17 @@ THH:mm:ss.sss
     <emu-prodref name="StatementListItem"></emu-prodref>
     <emu-prodref name="LexicalDeclaration"></emu-prodref>
     <emu-prodref name="LetOrConst"></emu-prodref>
+    <emu-prodref name="UsingDeclaration"></emu-prodref>
+    <emu-prodref name="AwaitUsingDeclaration"></emu-prodref>
     <emu-prodref name="BindingList"></emu-prodref>
     <emu-prodref name="LexicalBinding"></emu-prodref>
+    <p>
+      생성식의 인스턴스를 처리할 때<br>
+      <emu-prodref name="AwaitUsingDeclaration"></emu-prodref><br>
+      |CoverAwaitExpressionAndAwaitUsingDeclarationHead|의 해석은 다음 문법을 사용하여 정제된다:
+    </p>
+    <emu-prodref name="AwaitUsingDeclarationHead"></emu-prodref>
+    <p>&nbsp;</p>
     <emu-prodref name="VariableStatement"></emu-prodref>
     <emu-prodref name="VariableDeclarationList"></emu-prodref>
     <emu-prodref name="VariableDeclaration"></emu-prodref>
