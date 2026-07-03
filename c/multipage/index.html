@@ -67,11 +67,13 @@
     min-width: 135mm;
   }
 
-  /* 2.2 Examples of legacy/normative-optional are small enough to be aggressive against breaks */
-  #sec-conformance [example],
-  /* 16.2.1.xxx many tables */
-  #sec-example-cyclic-module-record-graphs table {
-    break-inside: avoid-page;
+  /* 9.1.1 The Environment Record Type Hierarchy (Table 14) is long enough, and rows are tall enough, that R1 can be a widow */
+  #table-abstract-methods-of-environment-records tr:first-of-type {
+    break-after: initial;
+  }
+
+  #table-abstract-methods-of-environment-records td:nth-of-type(2) {
+   width: 40%;
   }
 
   /* 12.10.1 long note can break wherever it wants */
@@ -80,81 +82,40 @@
     break-inside: initial;
   }
 
-  /* 12.10.X Sections start with an <em> not inside a <p> */
-  #sec-examples-of-automatic-semicolon-insertion > em,
-  #sec-interesting-cases-of-automatic-semicolon-insertion > em,
-  #sec-asi-cases-with-no-lineterminator-here > em {
-    display: block;
-    margin-top: 1.25ex;
+  /* 16.2.1.5 Abstract Module Records (Table 39) */
+  #table-abstract-methods-of-module-records td:nth-of-type(2) {
+    width: 50%;
   }
 
-  /* 15.1.X missing spacing between intro and first emu-grammar */
-  #sec-static-semantics-containsexpression > emu-grammar:first-of-type {
-    margin-top: 2ex;
+  /* 16.2.1.6 Additional Abstract Methods of Cyclic Module Records (Table 41) */
+  #table-cyclic-module-methods td:nth-of-type(3) {
+    width: 30%;
   }
 
-  /* 15.3 A very long term combined with inline-block, nowrap, and justified text resulting in weird punctuation */
-  #sec-arrow-function-definitions > p > emu-grammar {
-    text-align: left;
+  /* 21.4.4.41.2 DateString (Tables 60-61) table too narrow for caption */
+  #sec-todatestring-day-names table,
+  #sec-todatestring-month-names table {
+    text-align: center;
+    width: 70mm;
   }
 
-  /* 20.X legacy title */
-  #sec-object\.prototype\.__proto__ > .attributes-tag {
-    break-before: avoid-page;
-    break-after: avoid-page;
+  /* 22.2.2.9.7 UnicodeMatchProperty (Table 66) table too narrow for caption */
+  #table-binary-unicode-properties-of-strings table {
+    width: 90mm;
   }
 
-  /* 21.X table middle column is too narrow */
-  #table-time-zone-identifier-record-fields > figure > table th:nth-of-type(2) {
-    min-width: 19mm;
+  /* 22.2.9.3 Properties of RegExp String Iterator Instances (Table 68) */
+  #table-regexp-string-iterator-instance-slots td:nth-of-type(2) {
+    width: 12%
   }
 
-  /* 29.X extremely long note */
+  /* 29.11 extremely long note */
   #sec-shared-memory-guidelines > emu-note {
     break-inside: auto;
   }
-
-  .unicode-property-table {
-    table-layout: initial;
-    width: auto;
-    font-size: 90%;
-  }
-
-  .unicode-property-table th:first-of-type {
-    width: 33%;
-  }
-
-  .corner-cell {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgaGVpZ2h0PSI0NiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEuNSIgd2lkdGg9IjI0MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMzE1LjI2NiAzOTYuMzQzIDI0MS4zOTQgNDUuMTU1IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS4wNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMxNC45MyAtMzk1LjkzNSkiLz48L3N2Zz4=);
-    background-repeat: no-repeat;
-    background-size: 100% 3em;
-    height: 3em;
-    padding: 0;
-    vertical-align: inherit;
-    position: static;
-  }
-
-  .corner-cell .slash {
-    display: none;
-  }
-
-  .corner-cell > .column, .corner-cell > .row {
-    display: block;
-    position: relative;
-  }
-
-  .corner-cell > .row {
-    text-align: right;
-    top: -0.75em
-  }
-
-  .corner-cell > .column {
-    text-align: left;
-    bottom: -1.25em;
-  }
 </style>
-<script src="..\assets\js\multipage.js?cache=ONtgEQdE" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=gD1tte95" defer=""></script><style>
+<script src="..\assets\js\multipage.js?cache=IIDQQTNy" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=eNjsN4hs" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -203,7 +164,7 @@
   <li><span>Jump to the <i>n</i><sup>th</sup> pin</span><code>1-9</code></li>
   <li><span>Jump to the 10<sup>th</sup> pin</span><code>0</code></li>
   <li><span>Jump to the most recent link target</span><code>`</code></li>
-</ul></div><div id='spec-container'><h1 class="version">Draft ECMA-262 / June 25, 2026</h1>
+</ul></div><div id='spec-container'><h1 class="version">Draft ECMA-262 / July 3, 2026</h1>
 <h1 class="title">ECMAScript® 2027 语言规范</h1>
 <p><img src="..\img\ecma-logo.svg" id="ecma-logo" alt="Ecma International logo"></p>
 <div id="metadata-block">
@@ -255,11 +216,11 @@
   <p>ECMAScript 2019 引入了若干新的内置函数：<code>Array.prototype</code> 上用于扁平化数组的 <code>flat</code> 和 <code>flatMap</code>、用于直接将 <code>Object.entries</code> 的返回值转换为新 Object 的 <code>Object.fromEntries</code>，以及 <code>String.prototype</code> 上作为已广泛实现但非标准的 <code>String.prototype.trimLeft</code> 和 <code>trimRight</code> 内置函数更好命名替代项的 <code>trimStart</code> 和 <code>trimEnd</code>。此外，它还<emu-xref href="#sec-completion-record-specification-type" id="_ref_1020"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>了若干语法和语义上的小更新。更新后的语法包括可选的 catch 绑定参数，以及允许字符串字面量中出现 U+2028（LINE SEPARATOR）和 U+2029（PARAGRAPH SEPARATOR），以与 JSON 对齐。其他更新包括要求 <code>Array.prototype.sort</code> 是稳定排序、要求 <code>JSON.stringify</code> 无论输入如何都返回格式良好的 UTF-8，以及通过要求 <code>Function.prototype.toString</code> 要么返回对应的原始源文本，要么返回标准占位符来澄清该方法。</p>
   <p>ECMAScript 2020，第 11<sup>th</sup> 版，引入了 Strings 的 <code>matchAll</code> 方法，用于为全局正则表达式生成的所有匹配对象产生一个迭代器；<code>import()</code>，一种使用动态说明符异步导入 Modules 的语法；<code>BigInt</code>，一种用于处理任意精度整数的新数字原始值；<code>Promise.allSettled</code>，一种不会短路的新 Promise 组合器；<code>globalThis</code>，一种访问全局 <code>this</code> 值的通用方式；专用于在模块中使用的 <code>export * as ns from 'module'</code> 语法；对 <code>for-in</code> 枚举顺序的标准化增强；<code>import.meta</code>，一种在 Modules 中可用、由<emu-xref href="#host" id="_ref_1021"><a href="overview.html#host">宿主</a></emu-xref>填充且可<emu-xref href="#sec-completion-record-specification-type" id="_ref_1022"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>关于 Module 的上下文信息的对象；并新增两项语法特性以改善处理“nullish”值（<emu-val>undefined</emu-val> 或 <emu-val>null</emu-val>）的体验：空值合并，一种值选择运算符；以及可选链，一种属性访问和函数调用运算符，当要访问/调用的值为 nullish 时会短路。</p>
   <p>ECMAScript 2021，第 12<sup>th</sup> 版，引入了 Strings 的 <code>replaceAll</code> 方法；<code>Promise.any</code>，一种当输入值 fulfilled 时短路的 Promise 组合器；<code>AggregateError</code>，一种一次表示多个错误的新 Error 类型；逻辑赋值运算符（<code>??=</code>、<code>&amp;&amp;=</code>、<code>||=</code>）；<code>WeakRef</code>，用于在不阻止目标对象被垃圾回收的情况下引用目标对象；以及 <code>FinalizationRegistry</code>，用于管理当目标对象被垃圾回收时执行的清理操作的注册和注销；数值字面量分隔符（<code>1_000</code>）；并使 <code>Array.prototype.sort</code> 更精确，减少会导致实现定义<emu-xref href="#sort-order" id="_ref_1023"><a href="indexed-collections.html#sort-order">排序顺序</a></emu-xref>的情况数量。</p>
-  <p>ECMAScript 2022，第 13<sup>th</sup> 版，引入了顶层 <code>await</code>，允许在模块的顶层使用该<emu-xref href="#sec-keywords-and-reserved-words" id="_ref_1024"><a href="ecmascript-language-lexical-grammar.html#sec-keywords-and-reserved-words">关键字</a></emu-xref>；新的类元素：公共和私有实例字段、公共和私有静态字段、私有实例方法和访问器，以及私有静态方法和访问器；类内部的静态块，用于执行按类的求值初始化；<code>#x in obj</code> 语法，用于测试对象上是否存在私有字段；通过 <code>/d</code> 标志提供的正则表达式匹配索引，它为匹配的<emu-xref href="#substring" id="_ref_1025"><a href="ecmascript-data-types-and-values.html#substring">子字符串</a></emu-xref>提供开始和结束索引；Error 对象上的 <code>cause</code> 属性，可用于在错误中记录因果链；Strings、Arrays 和 <emu-xref href="#typedarray" id="_ref_1026"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArrays</a></emu-xref> 的 <code>at</code> 方法，允许相对索引；以及 <code>Object.hasOwn</code>，作为 <code>Object.prototype.hasOwnProperty</code> 的便捷替代项。</p>
+  <p>ECMAScript 2022，第 13<sup>th</sup> 版，引入了顶层 <code>await</code>，允许在模块的顶层使用该<emu-xref href="#sec-keywords-and-reserved-words" id="_ref_1024"><a href="ecmascript-language-lexical-grammar.html#sec-keywords-and-reserved-words">关键字</a></emu-xref>；新的类元素：公共和私有实例字段、公共和私有静态字段、私有实例方法和访问器，以及私有静态方法和访问器；类内部的静态块，用于执行按类的求值初始化；<code>#x in obj</code> 语法，用于测试对象上是否存在私有字段；通过 <code>/d</code> 标志提供的正则表达式匹配索引，它为匹配的<emu-xref href="#substring" id="_ref_1025"><a href="ecmascript-data-types-and-values.html#substring">子字符串</a></emu-xref>提供开始和结束索引；Error 对象上的 <code>cause</code> 属性，可用于在错误中<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1026"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">记录</a></emu-xref>因果链；Strings、Arrays 和 <emu-xref href="#typedarray" id="_ref_1027"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArrays</a></emu-xref> 的 <code>at</code> 方法，允许相对索引；以及 <code>Object.hasOwn</code>，作为 <code>Object.prototype.hasOwnProperty</code> 的便捷替代项。</p>
   <p>ECMAScript 2023，第 14<sup>th</sup> 版，引入了 <code>Array.prototype</code> 和 <code>TypedArray.prototype</code> 上的 <code>toSorted</code>、<code>toReversed</code>、<code>with</code>、<code>findLast</code> 和 <code>findLastIndex</code> 方法，以及 <code>Array.prototype</code> 上的 <code>toSpliced</code> 方法；增加了对文件开头 <code>#!</code> 注释的支持，以更好地便于可执行 ECMAScript 文件；并允许将大多数 Symbols 用作弱集合中的键。</p>
-  <p>ECMAScript 2024，第 15<sup>th</sup> 版，添加了用于调整和转移 ArrayBuffers 与 SharedArrayBuffers 的设施；添加了新的 RegExp <code>/v</code> 标志，用于创建具备更高级特性、可处理字符串集合的 RegExps；并引入了用于构造 Promises 的便捷方法 <code>Promise.withResolvers</code>，用于聚合数据的 <code>Object.groupBy</code> 和 <code>Map.groupBy</code> 方法，用于异步等待共享内存变化的 <code>Atomics.waitAsync</code> 方法，以及用于检查并确保字符串只<emu-xref href="#sec-completion-record-specification-type" id="_ref_1027"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>格式良好 Unicode 的 <code>String.prototype.isWellFormed</code> 和 <code>String.prototype.toWellFormed</code> 方法。</p>
-  <p>ECMAScript 2025，第 16<sup>th</sup> 版，添加了新的 <code>Iterator</code> <emu-xref href="#sec-global-object" id="_ref_1028"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>及其相关静态方法和原型方法，用于处理迭代器；向 <code>Set.prototype</code> 添加了用于执行常见 Set 操作的方法；增加了对导入 JSON modules 以及声明导入模块属性的语法的支持；添加了 <code>RegExp.escape</code> 方法，用于转义字符串以便安全地用于正则表达式；添加了用于在正则表达式内联启用和禁用修饰符标志的语法；添加了 <code>Promise.try</code> 方法，用于调用可能返回也可能不返回 <code>Promise</code> 的函数，并确保结果始终是 <code>Promise</code>；并添加了新的 <code>Float16Array</code> <emu-xref href="#typedarray" id="_ref_1029"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArray</a></emu-xref> 种类，以及相关的 <code>DataView.prototype.getFloat16</code>、<code>DataView.prototype.setFloat16</code> 和 <code>Math.f16round</code> 方法。</p>
-  <p>ECMAScript 2026，第 17<sup>th</sup> 版，添加了 <code>Math.sumPrecise</code>，用于对不同量级的 Numbers 可迭代对象求和，同时最小化精度损失；<code>Iterator.concat</code>，用于串接迭代器；<code>Array.fromAsync</code>，用于从 <emu-xref href="#sec-asynciterable-interface" id="_ref_1030"><a href="control-abstraction-objects.html#sec-asynciterable-interface">async iterables</a></emu-xref> 和其他异步源构造 Arrays；<code>Error.isError</code>，用于识别错误对象；向 <code>Map.prototype</code> 和 <code>WeakMap.prototype</code> 添加了方法，用于在键尚不存在时提供检索期间使用的默认值；向 <code>Uint8Array</code> 添加了方法，用于转换为十六进制和 base64 编码二进制数据的 Strings 以及从这些 Strings 转换回来；向 <code>JSON.parse</code> revivers 添加了一个参数，用于访问匹配的 JSON 源片段；以及 <code>JSON.rawJSON</code>，用于对原始值的 <code>JSON.stringify</code> 输出进行精细控制。</p>
+  <p>ECMAScript 2024，第 15<sup>th</sup> 版，添加了用于调整和转移 ArrayBuffers 与 SharedArrayBuffers 的设施；添加了新的 RegExp <code>/v</code> 标志，用于创建具备更高级特性、可处理字符串集合的 RegExps；并引入了用于构造 Promises 的便捷方法 <code>Promise.withResolvers</code>，用于聚合数据的 <code>Object.groupBy</code> 和 <code>Map.groupBy</code> 方法，用于异步等待共享内存变化的 <code>Atomics.waitAsync</code> 方法，以及用于检查并确保字符串只<emu-xref href="#sec-completion-record-specification-type" id="_ref_1028"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>格式良好 Unicode 的 <code>String.prototype.isWellFormed</code> 和 <code>String.prototype.toWellFormed</code> 方法。</p>
+  <p>ECMAScript 2025，第 16<sup>th</sup> 版，添加了新的 <code>Iterator</code> <emu-xref href="#sec-global-object" id="_ref_1029"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>及其相关静态方法和原型方法，用于处理迭代器；向 <code>Set.prototype</code> 添加了用于执行常见 Set 操作的方法；增加了对导入 JSON modules 以及声明导入模块属性的语法的支持；添加了 <code>RegExp.escape</code> 方法，用于转义字符串以便安全地用于正则表达式；添加了用于在正则表达式内联启用和禁用修饰符标志的语法；添加了 <code>Promise.try</code> 方法，用于调用可能返回也可能不返回 <code>Promise</code> 的函数，并确保结果始终是 <code>Promise</code>；并添加了新的 <code>Float16Array</code> <emu-xref href="#typedarray" id="_ref_1030"><a href="ordinary-and-exotic-objects-behaviours.html#typedarray">TypedArray</a></emu-xref> 种类，以及相关的 <code>DataView.prototype.getFloat16</code>、<code>DataView.prototype.setFloat16</code> 和 <code>Math.f16round</code> 方法。</p>
+  <p>ECMAScript 2026，第 17<sup>th</sup> 版，添加了 <code>Math.sumPrecise</code>，用于对不同量级的 Numbers 可迭代对象求和，同时最小化精度损失；<code>Iterator.concat</code>，用于串接迭代器；<code>Array.fromAsync</code>，用于从 <emu-xref href="#sec-asynciterable-interface" id="_ref_1031"><a href="control-abstraction-objects.html#sec-asynciterable-interface">async iterables</a></emu-xref> 和其他异步源构造 Arrays；<code>Error.isError</code>，用于识别错误对象；向 <code>Map.prototype</code> 和 <code>WeakMap.prototype</code> 添加了方法，用于在键尚不存在时提供检索期间使用的默认值；向 <code>Uint8Array</code> 添加了方法，用于转换为十六进制和 base64 编码二进制数据的 Strings 以及从这些 Strings 转换回来；向 <code>JSON.parse</code> revivers 添加了一个参数，用于访问匹配的 JSON 源片段；以及 <code>JSON.rawJSON</code>，用于对原始值的 <code>JSON.stringify</code> 输出进行精细控制。</p>
   <p>来自许多组织的数十名个人对本版以及之前各版在 Ecma TC39 内的发展作出了非常重要的贡献。此外，一个充满活力的社区已经形成，支持 TC39 的 ECMAScript 工作。该社区审阅了大量草案，提交了数千份缺陷报告，开展了实现实验，贡献了测试套件，并向全球开发者社区普及了 ECMAScript。遗憾的是，要识别并致谢每一位为此作出贡献的个人和组织是不可能的。</p>
   <p>
     Allen Wirfs-Brock<br>

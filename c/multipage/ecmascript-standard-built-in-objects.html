@@ -67,11 +67,13 @@
     min-width: 135mm;
   }
 
-  /* 2.2 Examples of legacy/normative-optional are small enough to be aggressive against breaks */
-  #sec-conformance [example],
-  /* 16.2.1.xxx many tables */
-  #sec-example-cyclic-module-record-graphs table {
-    break-inside: avoid-page;
+  /* 9.1.1 The Environment Record Type Hierarchy (Table 14) is long enough, and rows are tall enough, that R1 can be a widow */
+  #table-abstract-methods-of-environment-records tr:first-of-type {
+    break-after: initial;
+  }
+
+  #table-abstract-methods-of-environment-records td:nth-of-type(2) {
+   width: 40%;
   }
 
   /* 12.10.1 long note can break wherever it wants */
@@ -80,81 +82,40 @@
     break-inside: initial;
   }
 
-  /* 12.10.X Sections start with an <em> not inside a <p> */
-  #sec-examples-of-automatic-semicolon-insertion > em,
-  #sec-interesting-cases-of-automatic-semicolon-insertion > em,
-  #sec-asi-cases-with-no-lineterminator-here > em {
-    display: block;
-    margin-top: 1.25ex;
+  /* 16.2.1.5 Abstract Module Records (Table 39) */
+  #table-abstract-methods-of-module-records td:nth-of-type(2) {
+    width: 50%;
   }
 
-  /* 15.1.X missing spacing between intro and first emu-grammar */
-  #sec-static-semantics-containsexpression > emu-grammar:first-of-type {
-    margin-top: 2ex;
+  /* 16.2.1.6 Additional Abstract Methods of Cyclic Module Records (Table 41) */
+  #table-cyclic-module-methods td:nth-of-type(3) {
+    width: 30%;
   }
 
-  /* 15.3 A very long term combined with inline-block, nowrap, and justified text resulting in weird punctuation */
-  #sec-arrow-function-definitions > p > emu-grammar {
-    text-align: left;
+  /* 21.4.4.41.2 DateString (Tables 60-61) table too narrow for caption */
+  #sec-todatestring-day-names table,
+  #sec-todatestring-month-names table {
+    text-align: center;
+    width: 70mm;
   }
 
-  /* 20.X legacy title */
-  #sec-object\.prototype\.__proto__ > .attributes-tag {
-    break-before: avoid-page;
-    break-after: avoid-page;
+  /* 22.2.2.9.7 UnicodeMatchProperty (Table 66) table too narrow for caption */
+  #table-binary-unicode-properties-of-strings table {
+    width: 90mm;
   }
 
-  /* 21.X table middle column is too narrow */
-  #table-time-zone-identifier-record-fields > figure > table th:nth-of-type(2) {
-    min-width: 19mm;
+  /* 22.2.9.3 Properties of RegExp String Iterator Instances (Table 68) */
+  #table-regexp-string-iterator-instance-slots td:nth-of-type(2) {
+    width: 12%
   }
 
-  /* 29.X extremely long note */
+  /* 29.11 extremely long note */
   #sec-shared-memory-guidelines > emu-note {
     break-inside: auto;
   }
-
-  .unicode-property-table {
-    table-layout: initial;
-    width: auto;
-    font-size: 90%;
-  }
-
-  .unicode-property-table th:first-of-type {
-    width: 33%;
-  }
-
-  .corner-cell {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgaGVpZ2h0PSI0NiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEuNSIgd2lkdGg9IjI0MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMzE1LjI2NiAzOTYuMzQzIDI0MS4zOTQgNDUuMTU1IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS4wNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMxNC45MyAtMzk1LjkzNSkiLz48L3N2Zz4=);
-    background-repeat: no-repeat;
-    background-size: 100% 3em;
-    height: 3em;
-    padding: 0;
-    vertical-align: inherit;
-    position: static;
-  }
-
-  .corner-cell .slash {
-    display: none;
-  }
-
-  .corner-cell > .column, .corner-cell > .row {
-    display: block;
-    position: relative;
-  }
-
-  .corner-cell > .row {
-    text-align: right;
-    top: -0.75em
-  }
-
-  .corner-cell > .column {
-    text-align: left;
-    bottom: -1.25em;
-  }
 </style>
-<script src="..\assets\js\multipage.js?cache=ONtgEQdE" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=gD1tte95" defer=""></script><style>
+<script src="..\assets\js\multipage.js?cache=IIDQQTNy" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=eNjsN4hs" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -205,28 +166,28 @@
   <li><span>Jump to the most recent link target</span><code>`</code></li>
 </ul></div><div id='spec-container'><emu-clause id="sec-ecmascript-standard-built-in-objects">
   <h1><span class="secnum">18</span> ECMAScript 标准内置对象</h1>
-  <p>每当 ECMAScript <emu-nt id="_ref_21530"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_21531"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 开始执行时，都有某些内置对象可用。其中一个是<emu-xref href="#sec-global-object" id="_ref_7912"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>，它是执行程序的全局环境的一部分。其他对象可作为<emu-xref href="#sec-global-object" id="_ref_7913"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>的初始属性访问，或间接作为可访问内置对象的属性访问。</p>
-  <p>除非另有规定，可作为函数调用的内置对象是具有 <emu-xref href="#sec-built-in-function-objects" id="_ref_531"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> 中所述特性的内置<emu-xref href="#function-object" id="_ref_7914"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>。除非另有规定，内置对象的 <var class="field">[[Extensible]]</var> 内部槽最初具有值 <emu-val>true</emu-val>。每个内置<emu-xref href="#function-object" id="_ref_7915"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>都有一个 <var class="field">[[Realm]]</var> 内部槽，其值为该对象最初被创建时所在 <emu-xref href="#realm" id="_ref_7916"><a href="executable-code-and-execution-contexts.html#realm">realm</a></emu-xref> 的 <emu-xref href="#realm-record" id="_ref_7917"><a href="executable-code-and-execution-contexts.html#realm-record">Realm Record</a></emu-xref>。</p>
-  <p>许多内置对象是函数：它们可以用实参调用。其中一些还同时是构造器：它们是旨在与 <code>new</code> 运算符一起使用的函数。对于每个内置函数，本规范描述该函数所需的实参以及该<emu-xref href="#function-object" id="_ref_7918"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的属性。对于每个内置构造器，本规范还描述该构造器的原型对象的属性，以及调用该构造器的 <code>new</code> 表达式所返回的特定对象实例的属性。</p>
+  <p>每当 ECMAScript <emu-nt id="_ref_20922"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_20923"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 开始执行时，都有某些内置对象可用。其中一个是<emu-xref href="#sec-global-object" id="_ref_7578"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>，它是执行程序的全局环境的一部分。其他对象可作为<emu-xref href="#sec-global-object" id="_ref_7579"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>的初始属性访问，或间接作为可访问内置对象的属性访问。</p>
+  <p>除非另有规定，可作为函数调用的内置对象是具有 <emu-xref href="#sec-built-in-function-objects" id="_ref_531"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> 中所述特性的内置<emu-xref href="#function-object" id="_ref_7580"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>。除非另有规定，内置对象的 <var class="field">[[Extensible]]</var> 内部槽最初具有值 <emu-val>true</emu-val>。每个内置<emu-xref href="#function-object" id="_ref_7581"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>都有一个 <var class="field">[[Realm]]</var> 内部槽，其值为该对象最初被创建时所在 <emu-xref href="#realm" id="_ref_7582"><a href="executable-code-and-execution-contexts.html#realm">realm</a></emu-xref> 的 <emu-xref href="#realm-record" id="_ref_7583"><a href="executable-code-and-execution-contexts.html#realm-record">Realm Record</a></emu-xref>。</p>
+  <p>许多内置对象是函数：它们可以用实参调用。其中一些还同时是构造器：它们是旨在与 <code>new</code> 运算符一起使用的函数。对于每个内置函数，本规范描述该函数所需的实参以及该<emu-xref href="#function-object" id="_ref_7584"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的属性。对于每个内置构造器，本规范还描述该构造器的原型对象的属性，以及调用该构造器的 <code>new</code> 表达式所返回的特定对象实例的属性。</p>
   <p>除非特定函数的描述中另有规定，如果内置函数或构造器给定的实参数少于规定该函数所需的实参数，则该函数或构造器应表现得完全像已给定足够的附加实参一样，每个此类实参都是 <emu-val>undefined</emu-val> 值。此类缺失实参被认为是“not present”，并且可以在规范算法中以这种方式识别。在特定函数的描述中，术语“<emu-val>this</emu-val> value”和“NewTarget”具有 <emu-xref href="#sec-built-in-function-objects" id="_ref_532"><a href="ordinary-and-exotic-objects-behaviours.html#sec-built-in-function-objects">10.3</a></emu-xref> 中给出的含义。</p>
   <p>除非特定函数的描述中另有规定，如果所描述的内置函数或构造器给定的实参数多于规定该函数所允许的实参数，则额外实参会由调用求值，然后被该函数忽略。但是，只要该行为不是仅仅以存在额外实参为前提而抛出 <emu-val>TypeError</emu-val> 异常，实现就可以定义与此类实参相关的实现特定行为。</p>
   <emu-note><span class="note">Note 1</span><div class="note-contents">
     <p>鼓励向内置函数集合添加附加能力的实现通过添加新函数，而不是向现有函数添加新参数来做到这一点。</p>
   </div></emu-note>
-  <p>除非另有规定，每个内置函数和每个内置构造器都具有 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_7919"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">Function 原型对象</a></emu-xref>，即表达式 <code>Function.prototype</code> 的初始值（<emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_533"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">20.2.3</a></emu-xref>），作为其 <var class="field">[[Prototype]]</var> 内部槽的值。</p>
-  <p>除非另有规定，每个内置原型对象都具有 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_7920"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">Object 原型对象</a></emu-xref>，即表达式 <code>Object.prototype</code> 的初始值（<emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_534"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">20.1.3</a></emu-xref>），作为其 <var class="field">[[Prototype]]</var> 内部槽的值，但 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_7921"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">Object 原型对象</a></emu-xref>自身除外。</p>
+  <p>除非另有规定，每个内置函数和每个内置构造器都具有 <emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_7585"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">Function 原型对象</a></emu-xref>，即表达式 <code>Function.prototype</code> 的初始值（<emu-xref href="#sec-properties-of-the-function-prototype-object" id="_ref_533"><a href="fundamental-objects.html#sec-properties-of-the-function-prototype-object">20.2.3</a></emu-xref>），作为其 <var class="field">[[Prototype]]</var> 内部槽的值。</p>
+  <p>除非另有规定，每个内置原型对象都具有 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_7586"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">Object 原型对象</a></emu-xref>，即表达式 <code>Object.prototype</code> 的初始值（<emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_534"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">20.1.3</a></emu-xref>），作为其 <var class="field">[[Prototype]]</var> 内部槽的值，但 <emu-xref href="#sec-properties-of-the-object-prototype-object" id="_ref_7587"><a href="fundamental-objects.html#sec-properties-of-the-object-prototype-object">Object 原型对象</a></emu-xref>自身除外。</p>
   <p>如果本规范通过算法步骤定义内置构造器的行为，则这就是其在 <var class="field">[[Call]]</var> 和 <var class="field">[[Construct]]</var> 两种情况下的行为。如果此类算法需要区分这两种情况，它会检查 NewTarget 是否为 <emu-val>undefined</emu-val>，这表示一次 <var class="field">[[Call]]</var> 调用。</p>
-  <p>未被识别为构造器的内置<emu-xref href="#function-object" id="_ref_7922"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>不实现 <var class="field">[[Construct]]</var> 内部方法，除非特定函数的描述中另有规定。</p>
-  <p>不是构造器的内置<emu-xref href="#function-object" id="_ref_7923"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>没有 <emu-val>"prototype"</emu-val> 属性，除非特定函数的描述中另有规定。</p>
-  <p>本规范中定义的每个内置函数都是通过调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7924"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_7925"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>（<emu-xref href="#sec-createbuiltinfunction" id="_ref_535"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">10.3.4</a></emu-xref>）创建的。<var>length</var> 和 <var>name</var> 参数的值是如下所讨论的 <emu-val>"length"</emu-val> 和 <emu-val>"name"</emu-val> 属性的初始值。<var>prefix</var> 参数的值也在下文类似讨论。</p>
-  <p>每个内置<emu-xref href="#function-object" id="_ref_7926"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，包括构造器，都有一个 <emu-val>"length"</emu-val> 属性，其值为非负整数 Number。除非另有规定，此值是函数描述的子条款标题中显示的必需参数数量。可选参数和剩余参数不计入参数计数。</p>
+  <p>未被识别为构造器的内置<emu-xref href="#function-object" id="_ref_7588"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>不实现 <var class="field">[[Construct]]</var> 内部方法，除非特定函数的描述中另有规定。</p>
+  <p>不是构造器的内置<emu-xref href="#function-object" id="_ref_7589"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>没有 <emu-val>"prototype"</emu-val> 属性，除非特定函数的描述中另有规定。</p>
+  <p>本规范中定义的每个内置函数都是通过调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7590"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_7591"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>（<emu-xref href="#sec-createbuiltinfunction" id="_ref_535"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">10.3.4</a></emu-xref>）创建的。<var>length</var> 和 <var>name</var> 参数的值是如下所讨论的 <emu-val>"length"</emu-val> 和 <emu-val>"name"</emu-val> 属性的初始值。<var>prefix</var> 参数的值也在下文类似讨论。</p>
+  <p>每个内置<emu-xref href="#function-object" id="_ref_7592"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，包括构造器，都有一个 <emu-val>"length"</emu-val> 属性，其值为非负整数 Number。除非另有规定，此值是函数描述的子条款标题中显示的必需参数数量。可选参数和剩余参数不计入参数计数。</p>
   <emu-note><span class="note">Note 2</span><div class="note-contents">
-    <p>例如，作为 <emu-xref href="#sec-properties-of-the-array-prototype-object" id="_ref_7927"><a href="indexed-collections.html#sec-properties-of-the-array-prototype-object">Array 原型对象</a></emu-xref>的 <emu-val>"map"</emu-val> 属性初始值的<emu-xref href="#function-object" id="_ref_7928"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，在子条款标题 «Array.prototype.map (callback [ , thisArg])» 下描述，该标题显示两个命名实参 callback 和 thisArg，其中后者是可选的；因此该<emu-xref href="#function-object" id="_ref_7929"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"length"</emu-val> 属性值是 <emu-val>1</emu-val><sub>𝔽</sub>。</p>
+    <p>例如，作为 <emu-xref href="#sec-properties-of-the-array-prototype-object" id="_ref_7593"><a href="indexed-collections.html#sec-properties-of-the-array-prototype-object">Array 原型对象</a></emu-xref>的 <emu-val>"map"</emu-val> 属性初始值的<emu-xref href="#function-object" id="_ref_7594"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，在子条款标题 «Array.prototype.map (callback [ , thisArg])» 下描述，该标题显示两个命名实参 callback 和 thisArg，其中后者是可选的；因此该<emu-xref href="#function-object" id="_ref_7595"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"length"</emu-val> 属性值是 <emu-val>1</emu-val><sub>𝔽</sub>。</p>
   </div></emu-note>
-  <p>除非另有规定，内置<emu-xref href="#function-object" id="_ref_7930"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"length"</emu-val> 属性具有特性 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }。</p>
-  <p>每个内置<emu-xref href="#function-object" id="_ref_7931"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，包括构造器，都有一个 <emu-val>"name"</emu-val> 属性，其值为 String。除非另有规定，此值是在本规范中给出的该函数名称。被识别为匿名函数的函数使用空 String 作为 <emu-val>"name"</emu-val> 属性的值。对于被规定为对象属性的函数，name 值是用于访问该函数的<emu-xref href="#property-name" id="_ref_7932"><a href="ecmascript-data-types-and-values.html#property-name">属性名</a></emu-xref>字符串。被规定为内置属性的 get 或 set 访问器函数的函数，在调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7933"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> 时会分别把 <emu-val>"get"</emu-val> 或 <emu-val>"set"</emu-val> 传给 <var>prefix</var> 参数。</p>
-  <p>对于<emu-xref href="#property-key" id="_ref_7934"><a href="ecmascript-data-types-and-values.html#property-key">属性键</a></emu-xref>是 Symbol 值的每个内置函数，其 <emu-val>"name"</emu-val> 属性的值都被显式规定。如果此类显式规定的值以 <emu-val>"get "</emu-val> 或 <emu-val>"set "</emu-val> 前缀开头，且为其规定该值的函数是某个内置属性的 get 或 set 访问器函数，则去掉前缀后的值会传给 <var>name</var> 参数，并且在调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7935"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> 时，值 <emu-val>"get"</emu-val> 或 <emu-val>"set"</emu-val>（分别）会传给 <var>prefix</var> 参数。</p>
-  <p>除非另有规定，内置<emu-xref href="#function-object" id="_ref_7936"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"name"</emu-val> 属性具有特性 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }。</p>
-  <p>条款 <emu-xref href="#sec-global-object" id="_ref_536"><a href="global-object.html#sec-global-object">19</a></emu-xref> 到 <emu-xref href="#sec-reflection" id="_ref_537"><a href="reflection.html#sec-reflection">28</a></emu-xref> 以及附录 <emu-xref href="#sec-additional-built-in-properties" id="_ref_538"><a href="additional-ecmascript-features-for-web-browsers.html#sec-additional-built-in-properties">B.2</a></emu-xref> 中描述的每个其他<emu-xref href="#sec-object-type" id="_ref_7937"><a href="ecmascript-data-types-and-values.html#sec-object-type">数据属性</a></emu-xref>，都具有特性 { <var class="field">[[Writable]]</var>: <emu-val>true</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }，除非另有规定。</p>
-  <p>条款 <emu-xref href="#sec-global-object" id="_ref_539"><a href="global-object.html#sec-global-object">19</a></emu-xref> 到 <emu-xref href="#sec-reflection" id="_ref_540"><a href="reflection.html#sec-reflection">28</a></emu-xref> 以及附录 <emu-xref href="#sec-additional-built-in-properties" id="_ref_541"><a href="additional-ecmascript-features-for-web-browsers.html#sec-additional-built-in-properties">B.2</a></emu-xref> 中描述的每个<emu-xref href="#sec-object-type" id="_ref_7938"><a href="ecmascript-data-types-and-values.html#sec-object-type">访问器属性</a></emu-xref>，都具有特性 { <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }，除非另有规定。如果只描述了 get 访问器函数，则 set 访问器函数为默认值 <emu-val>undefined</emu-val>。如果只描述了 set 访问器，则 get 访问器为默认值 <emu-val>undefined</emu-val>。</p>
+  <p>除非另有规定，内置<emu-xref href="#function-object" id="_ref_7596"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"length"</emu-val> 属性具有特性 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }。</p>
+  <p>每个内置<emu-xref href="#function-object" id="_ref_7597"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>，包括构造器，都有一个 <emu-val>"name"</emu-val> 属性，其值为 String。除非另有规定，此值是在本规范中给出的该函数名称。被识别为匿名函数的函数使用空 String 作为 <emu-val>"name"</emu-val> 属性的值。对于被规定为对象属性的函数，name 值是用于访问该函数的<emu-xref href="#property-name" id="_ref_7598"><a href="ecmascript-data-types-and-values.html#property-name">属性名</a></emu-xref>字符串。被规定为内置属性的 get 或 set 访问器函数的函数，在调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7599"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> 时会分别把 <emu-val>"get"</emu-val> 或 <emu-val>"set"</emu-val> 传给 <var>prefix</var> 参数。</p>
+  <p>对于<emu-xref href="#property-key" id="_ref_7600"><a href="ecmascript-data-types-and-values.html#property-key">属性键</a></emu-xref>是 Symbol 值的每个内置函数，其 <emu-val>"name"</emu-val> 属性的值都被显式规定。如果此类显式规定的值以 <emu-val>"get "</emu-val> 或 <emu-val>"set "</emu-val> 前缀开头，且为其规定该值的函数是某个内置属性的 get 或 set 访问器函数，则去掉前缀后的值会传给 <var>name</var> 参数，并且在调用 <emu-xref aoid="CreateBuiltinFunction" id="_ref_7601"><a href="ordinary-and-exotic-objects-behaviours.html#sec-createbuiltinfunction">CreateBuiltinFunction</a></emu-xref> 时，值 <emu-val>"get"</emu-val> 或 <emu-val>"set"</emu-val>（分别）会传给 <var>prefix</var> 参数。</p>
+  <p>除非另有规定，内置<emu-xref href="#function-object" id="_ref_7602"><a href="ecmascript-data-types-and-values.html#function-object">函数对象</a></emu-xref>的 <emu-val>"name"</emu-val> 属性具有特性 { <var class="field">[[Writable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }。</p>
+  <p>条款 <emu-xref href="#sec-global-object" id="_ref_536"><a href="global-object.html#sec-global-object">19</a></emu-xref> 到 <emu-xref href="#sec-reflection" id="_ref_537"><a href="reflection.html#sec-reflection">28</a></emu-xref> 以及附录 <emu-xref href="#sec-additional-built-in-properties" id="_ref_538"><a href="additional-ecmascript-features-for-web-browsers.html#sec-additional-built-in-properties">B.2</a></emu-xref> 中描述的每个其他<emu-xref href="#sec-object-type" id="_ref_7603"><a href="ecmascript-data-types-and-values.html#sec-object-type">数据属性</a></emu-xref>，都具有特性 { <var class="field">[[Writable]]</var>: <emu-val>true</emu-val>, <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }，除非另有规定。</p>
+  <p>条款 <emu-xref href="#sec-global-object" id="_ref_539"><a href="global-object.html#sec-global-object">19</a></emu-xref> 到 <emu-xref href="#sec-reflection" id="_ref_540"><a href="reflection.html#sec-reflection">28</a></emu-xref> 以及附录 <emu-xref href="#sec-additional-built-in-properties" id="_ref_541"><a href="additional-ecmascript-features-for-web-browsers.html#sec-additional-built-in-properties">B.2</a></emu-xref> 中描述的每个<emu-xref href="#sec-object-type" id="_ref_7604"><a href="ecmascript-data-types-and-values.html#sec-object-type">访问器属性</a></emu-xref>，都具有特性 { <var class="field">[[Enumerable]]</var>: <emu-val>false</emu-val>, <var class="field">[[Configurable]]</var>: <emu-val>true</emu-val> }，除非另有规定。如果只描述了 get 访问器函数，则 set 访问器函数为默认值 <emu-val>undefined</emu-val>。如果只描述了 set 访问器，则 get 访问器为默认值 <emu-val>undefined</emu-val>。</p>
 </emu-clause></div></body>

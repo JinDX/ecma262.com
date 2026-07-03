@@ -67,11 +67,13 @@
     min-width: 135mm;
   }
 
-  /* 2.2 Examples of legacy/normative-optional are small enough to be aggressive against breaks */
-  #sec-conformance [example],
-  /* 16.2.1.xxx many tables */
-  #sec-example-cyclic-module-record-graphs table {
-    break-inside: avoid-page;
+  /* 9.1.1 The Environment Record Type Hierarchy (Table 14) is long enough, and rows are tall enough, that R1 can be a widow */
+  #table-abstract-methods-of-environment-records tr:first-of-type {
+    break-after: initial;
+  }
+
+  #table-abstract-methods-of-environment-records td:nth-of-type(2) {
+   width: 40%;
   }
 
   /* 12.10.1 long note can break wherever it wants */
@@ -80,81 +82,40 @@
     break-inside: initial;
   }
 
-  /* 12.10.X Sections start with an <em> not inside a <p> */
-  #sec-examples-of-automatic-semicolon-insertion > em,
-  #sec-interesting-cases-of-automatic-semicolon-insertion > em,
-  #sec-asi-cases-with-no-lineterminator-here > em {
-    display: block;
-    margin-top: 1.25ex;
+  /* 16.2.1.5 Abstract Module Records (Table 39) */
+  #table-abstract-methods-of-module-records td:nth-of-type(2) {
+    width: 50%;
   }
 
-  /* 15.1.X missing spacing between intro and first emu-grammar */
-  #sec-static-semantics-containsexpression > emu-grammar:first-of-type {
-    margin-top: 2ex;
+  /* 16.2.1.6 Additional Abstract Methods of Cyclic Module Records (Table 41) */
+  #table-cyclic-module-methods td:nth-of-type(3) {
+    width: 30%;
   }
 
-  /* 15.3 A very long term combined with inline-block, nowrap, and justified text resulting in weird punctuation */
-  #sec-arrow-function-definitions > p > emu-grammar {
-    text-align: left;
+  /* 21.4.4.41.2 DateString (Tables 60-61) table too narrow for caption */
+  #sec-todatestring-day-names table,
+  #sec-todatestring-month-names table {
+    text-align: center;
+    width: 70mm;
   }
 
-  /* 20.X legacy title */
-  #sec-object\.prototype\.__proto__ > .attributes-tag {
-    break-before: avoid-page;
-    break-after: avoid-page;
+  /* 22.2.2.9.7 UnicodeMatchProperty (Table 66) table too narrow for caption */
+  #table-binary-unicode-properties-of-strings table {
+    width: 90mm;
   }
 
-  /* 21.X table middle column is too narrow */
-  #table-time-zone-identifier-record-fields > figure > table th:nth-of-type(2) {
-    min-width: 19mm;
+  /* 22.2.9.3 Properties of RegExp String Iterator Instances (Table 68) */
+  #table-regexp-string-iterator-instance-slots td:nth-of-type(2) {
+    width: 12%
   }
 
-  /* 29.X extremely long note */
+  /* 29.11 extremely long note */
   #sec-shared-memory-guidelines > emu-note {
     break-inside: auto;
   }
-
-  .unicode-property-table {
-    table-layout: initial;
-    width: auto;
-    font-size: 90%;
-  }
-
-  .unicode-property-table th:first-of-type {
-    width: 33%;
-  }
-
-  .corner-cell {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgaGVpZ2h0PSI0NiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEuNSIgd2lkdGg9IjI0MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMzE1LjI2NiAzOTYuMzQzIDI0MS4zOTQgNDUuMTU1IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS4wNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMxNC45MyAtMzk1LjkzNSkiLz48L3N2Zz4=);
-    background-repeat: no-repeat;
-    background-size: 100% 3em;
-    height: 3em;
-    padding: 0;
-    vertical-align: inherit;
-    position: static;
-  }
-
-  .corner-cell .slash {
-    display: none;
-  }
-
-  .corner-cell > .column, .corner-cell > .row {
-    display: block;
-    position: relative;
-  }
-
-  .corner-cell > .row {
-    text-align: right;
-    top: -0.75em
-  }
-
-  .corner-cell > .column {
-    text-align: left;
-    bottom: -1.25em;
-  }
 </style>
-<script src="..\assets\js\multipage.js?cache=ONtgEQdE" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=gD1tte95" defer=""></script><style>
+<script src="..\assets\js\multipage.js?cache=IIDQQTNy" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=eNjsN4hs" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -205,13 +166,13 @@
   <li><span>Jump to the most recent link target</span><code>`</code></li>
 </ul></div><div id='spec-container'><emu-annex id="sec-corrections-and-clarifications-in-ecmascript-2015-with-possible-compatibility-impact">
   <h1><span class="secnum">Annex E <span class="annex-kind">(informative)</span></span> ECMAScript 2015 中可能影响兼容性的修正和澄清</h1>
-  <p><emu-xref href="#sec-candeclareglobalvar" id="_ref_953"><a href="executable-code-and-execution-contexts.html#sec-candeclareglobalvar">9.1.1.4.14</a></emu-xref>-<emu-xref href="#sec-createglobalfunctionbinding" id="_ref_954"><a href="executable-code-and-execution-contexts.html#sec-createglobalfunctionbinding">9.1.1.4.17</a></emu-xref> 第 5 版和第 5.1 版使用属性存在性测试来确定与新的全局声明对应的<emu-xref href="#sec-global-object" id="_ref_14895"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>属性是否已经存在。ECMAScript 2015 使用自有属性存在性测试。这对应于 Web 浏览器最常实现的行为。</p>
-  <p><emu-xref href="#sec-array-exotic-objects-defineownproperty-p-desc" id="_ref_955"><a href="ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects-defineownproperty-p-desc">10.4.2.1</a></emu-xref>：第 5 版将当前数组长度的捕获移到了<emu-xref href="#array-index" id="_ref_14896"><a href="ecmascript-data-types-and-values.html#array-index">数组索引</a></emu-xref>或新 length 值的整数转换之前。然而，如果转换过程具有改变数组长度的副作用，则捕获的 length 值可能变得无效。ECMAScript 2015 规定，当前数组长度必须在这种副作用可能发生之后捕获。</p>
-  <p><emu-xref href="#sec-timeclip" id="_ref_956"><a href="numbers-and-dates.html#sec-timeclip">21.4.1.31</a></emu-xref>：先前版本允许 <emu-xref aoid="TimeClip" id="_ref_14897"><a href="numbers-and-dates.html#sec-timeclip">TimeClip</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_14898"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>返回 <emu-val>+0</emu-val><sub>𝔽</sub> 或 <emu-val>-0</emu-val><sub>𝔽</sub> 作为 0 <emu-xref href="#sec-time-values-and-time-range" id="_ref_14899"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>的表示。ECMAScript 2015 规定总是返回 <emu-val>+0</emu-val><sub>𝔽</sub>。这意味着对于 ECMAScript 2015，Date 的<emu-xref href="#sec-time-values-and-time-range" id="_ref_14900"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>永远不会是可观察的 <emu-val>-0</emu-val><sub>𝔽</sub>，且返回<emu-xref href="#sec-time-values-and-time-range" id="_ref_14901"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>的方法永远不会返回 <emu-val>-0</emu-val><sub>𝔽</sub>。</p>
+  <p><emu-xref href="#sec-candeclareglobalvar" id="_ref_953"><a href="executable-code-and-execution-contexts.html#sec-candeclareglobalvar">9.1.1.4.14</a></emu-xref>-<emu-xref href="#sec-createglobalfunctionbinding" id="_ref_954"><a href="executable-code-and-execution-contexts.html#sec-createglobalfunctionbinding">9.1.1.4.17</a></emu-xref> 第 5 版和第 5.1 版使用属性存在性测试来确定与新的全局声明对应的<emu-xref href="#sec-global-object" id="_ref_14275"><a href="global-object.html#sec-global-object">全局对象</a></emu-xref>属性是否已经存在。ECMAScript 2015 使用自有属性存在性测试。这对应于 Web 浏览器最常实现的行为。</p>
+  <p><emu-xref href="#sec-array-exotic-objects-defineownproperty-p-desc" id="_ref_955"><a href="ordinary-and-exotic-objects-behaviours.html#sec-array-exotic-objects-defineownproperty-p-desc">10.4.2.1</a></emu-xref>：第 5 版将当前数组长度的捕获移到了<emu-xref href="#array-index" id="_ref_14276"><a href="ecmascript-data-types-and-values.html#array-index">数组索引</a></emu-xref>或新 length 值的整数转换之前。然而，如果转换过程具有改变数组长度的副作用，则捕获的 length 值可能变得无效。ECMAScript 2015 规定，当前数组长度必须在这种副作用可能发生之后捕获。</p>
+  <p><emu-xref href="#sec-timeclip" id="_ref_956"><a href="numbers-and-dates.html#sec-timeclip">21.4.1.31</a></emu-xref>：先前版本允许 <emu-xref aoid="TimeClip" id="_ref_14277"><a href="numbers-and-dates.html#sec-timeclip">TimeClip</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_14278"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>返回 <emu-val>+0</emu-val><sub>𝔽</sub> 或 <emu-val>-0</emu-val><sub>𝔽</sub> 作为 0 <emu-xref href="#sec-time-values-and-time-range" id="_ref_14279"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>的表示。ECMAScript 2015 规定总是返回 <emu-val>+0</emu-val><sub>𝔽</sub>。这意味着对于 ECMAScript 2015，Date 的<emu-xref href="#sec-time-values-and-time-range" id="_ref_14280"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>永远不会是可观察的 <emu-val>-0</emu-val><sub>𝔽</sub>，且返回<emu-xref href="#sec-time-values-and-time-range" id="_ref_14281"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>的方法永远不会返回 <emu-val>-0</emu-val><sub>𝔽</sub>。</p>
   <p><emu-xref href="#sec-date-time-string-format" id="_ref_957"><a href="numbers-and-dates.html#sec-date-time-string-format">21.4.1.32</a></emu-xref>：如果不存在 UTC 偏移表示，则使用本地时区。第 5.1 版错误地指出缺失的时区应解释为 <emu-val>"z"</emu-val>。</p>
   <p><emu-xref href="#sec-date.prototype.toisostring" id="_ref_958"><a href="numbers-and-dates.html#sec-date.prototype.toisostring">21.4.4.36</a></emu-xref>：如果年份无法使用 <emu-xref href="#sec-date-time-string-format" id="_ref_959"><a href="numbers-and-dates.html#sec-date-time-string-format">21.4.1.32</a></emu-xref> 中规定的 Date Time String Format 表示，则抛出 RangeError 异常。先前版本没有规定这种情况的行为。</p>
-  <p><emu-xref href="#sec-date.prototype.tostring" id="_ref_960"><a href="numbers-and-dates.html#sec-date.prototype.tostring">21.4.4.41</a></emu-xref>：先前版本没有规定当<emu-xref href="#sec-time-values-and-time-range" id="_ref_14902"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>为 <emu-val>NaN</emu-val> 时 <code>Date.prototype.toString</code> 返回的值。ECMAScript 2015 规定结果为 String 值 <emu-val>"Invalid Date"</emu-val>。</p>
-  <p><emu-xref href="#sec-regexp-pattern-flags" id="_ref_961"><a href="text-processing.html#sec-regexp-pattern-flags">22.2.4.1</a></emu-xref>、<emu-xref href="#sec-escaperegexppattern" id="_ref_962"><a href="text-processing.html#sec-escaperegexppattern">22.2.6.13.1</a></emu-xref>：RegExp 实例的 <emu-val>"source"</emu-val> 属性值中的任何 LineTerminator 代码点都必须使用转义序列表达。第 5.1 版只要求转义 <code>/</code>。</p>
+  <p><emu-xref href="#sec-date.prototype.tostring" id="_ref_960"><a href="numbers-and-dates.html#sec-date.prototype.tostring">21.4.4.41</a></emu-xref>：先前版本没有规定当<emu-xref href="#sec-time-values-and-time-range" id="_ref_14282"><a href="numbers-and-dates.html#sec-time-values-and-time-range">时间值</a></emu-xref>为 <emu-val>NaN</emu-val> 时 <code>Date.prototype.toString</code> 返回的值。ECMAScript 2015 规定结果为 String 值 <emu-val>"Invalid Date"</emu-val>。</p>
+  <p><emu-xref href="#sec-regexp-pattern-flags" id="_ref_961"><a href="text-processing.html#sec-regexp-pattern-flags">22.2.4.1</a></emu-xref>、<emu-xref href="#sec-escaperegexppattern" id="_ref_962"><a href="text-processing.html#sec-escaperegexppattern">22.2.6.13.1</a></emu-xref>：RegExp 实例的 <emu-val>"source"</emu-val> 属性值中的任何 LineTerminator 代码点都必须使用转义序<emu-xref href="#sec-list-and-record-specification-type" id="_ref_14283"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>达。第 5.1 版只要求转义 <code>/</code>。</p>
   <p><emu-xref href="#sec-regexp.prototype-%symbol.match%" id="_ref_963"><a href="text-processing.html#sec-regexp.prototype-%symbol.match%">22.2.6.8</a></emu-xref>、<emu-xref href="#sec-regexp.prototype-%symbol.replace%" id="_ref_964"><a href="text-processing.html#sec-regexp.prototype-%symbol.replace%">22.2.6.11</a></emu-xref>：在先前版本中，<code>String.prototype.match</code> 和 <code>String.prototype.replace</code> 的规范在模式实参是设置了 <code>global</code> 标志的 RegExp 值的情况下是不正确的。先前规范规定，对于每次尝试匹配模式，如果 <code>lastIndex</code> 没有变化，则应将其递增 1。正确行为是，只有当模式匹配空 String 时，才应将 <code>lastIndex</code> 递增 1。</p>
-  <p><emu-xref href="#sec-array.prototype.sort" id="_ref_965"><a href="indexed-collections.html#sec-array.prototype.sort">23.1.3.30</a></emu-xref>：先前版本没有规定 <code>Array.prototype.sort</code> 如何解释 <var>comparator</var> 返回的 <emu-val>NaN</emu-val> 值。ECMAScript 2015 规定，这样的值被视为 <var>comparator</var> 返回了 <emu-val>+0</emu-val><sub>𝔽</sub>。ECMAScript 2015 还规定，对 <var>comparator</var> 返回的结果应用 <emu-xref aoid="ToNumber" id="_ref_14903"><a href="abstract-operations.html#sec-tonumber">ToNumber</a></emu-xref>。在先前版本中，不是 <emu-xref href="#number-value-for" id="_ref_14904"><a href="ecmascript-data-types-and-values.html#number-value-for">Number 值</a></emu-xref>的 <var>comparator</var> 结果的效果是<emu-xref href="#implementation-defined" id="_ref_14905"><a href="overview.html#implementation-defined">实现定义的</a></emu-xref>。实践中，实现会调用 <emu-xref aoid="ToNumber" id="_ref_14906"><a href="abstract-operations.html#sec-tonumber">ToNumber</a></emu-xref>。</p>
+  <p><emu-xref href="#sec-array.prototype.sort" id="_ref_965"><a href="indexed-collections.html#sec-array.prototype.sort">23.1.3.30</a></emu-xref>：先前版本没有规定 <code>Array.prototype.sort</code> 如何解释 <var>comparator</var> 返回的 <emu-val>NaN</emu-val> 值。ECMAScript 2015 规定，这样的值被视为 <var>comparator</var> 返回了 <emu-val>+0</emu-val><sub>𝔽</sub>。ECMAScript 2015 还规定，对 <var>comparator</var> 返回的结果应用 <emu-xref aoid="ToNumber" id="_ref_14284"><a href="abstract-operations.html#sec-tonumber">ToNumber</a></emu-xref>。在先前版本中，不是 <emu-xref href="#number-value-for" id="_ref_14285"><a href="ecmascript-data-types-and-values.html#number-value-for">Number 值</a></emu-xref>的 <var>comparator</var> 结果的效果是<emu-xref href="#implementation-defined" id="_ref_14286"><a href="overview.html#implementation-defined">实现定义的</a></emu-xref>。实践中，实现会调用 <emu-xref aoid="ToNumber" id="_ref_14287"><a href="abstract-operations.html#sec-tonumber">ToNumber</a></emu-xref>。</p>
 </emu-annex></div></body>

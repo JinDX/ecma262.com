@@ -67,11 +67,13 @@
     min-width: 135mm;
   }
 
-  /* 2.2 Examples of legacy/normative-optional are small enough to be aggressive against breaks */
-  #sec-conformance [example],
-  /* 16.2.1.xxx many tables */
-  #sec-example-cyclic-module-record-graphs table {
-    break-inside: avoid-page;
+  /* 9.1.1 The Environment Record Type Hierarchy (Table 14) is long enough, and rows are tall enough, that R1 can be a widow */
+  #table-abstract-methods-of-environment-records tr:first-of-type {
+    break-after: initial;
+  }
+
+  #table-abstract-methods-of-environment-records td:nth-of-type(2) {
+   width: 40%;
   }
 
   /* 12.10.1 long note can break wherever it wants */
@@ -80,81 +82,40 @@
     break-inside: initial;
   }
 
-  /* 12.10.X Sections start with an <em> not inside a <p> */
-  #sec-examples-of-automatic-semicolon-insertion > em,
-  #sec-interesting-cases-of-automatic-semicolon-insertion > em,
-  #sec-asi-cases-with-no-lineterminator-here > em {
-    display: block;
-    margin-top: 1.25ex;
+  /* 16.2.1.5 Abstract Module Records (Table 39) */
+  #table-abstract-methods-of-module-records td:nth-of-type(2) {
+    width: 50%;
   }
 
-  /* 15.1.X missing spacing between intro and first emu-grammar */
-  #sec-static-semantics-containsexpression > emu-grammar:first-of-type {
-    margin-top: 2ex;
+  /* 16.2.1.6 Additional Abstract Methods of Cyclic Module Records (Table 41) */
+  #table-cyclic-module-methods td:nth-of-type(3) {
+    width: 30%;
   }
 
-  /* 15.3 A very long term combined with inline-block, nowrap, and justified text resulting in weird punctuation */
-  #sec-arrow-function-definitions > p > emu-grammar {
-    text-align: left;
+  /* 21.4.4.41.2 DateString (Tables 60-61) table too narrow for caption */
+  #sec-todatestring-day-names table,
+  #sec-todatestring-month-names table {
+    text-align: center;
+    width: 70mm;
   }
 
-  /* 20.X legacy title */
-  #sec-object\.prototype\.__proto__ > .attributes-tag {
-    break-before: avoid-page;
-    break-after: avoid-page;
+  /* 22.2.2.9.7 UnicodeMatchProperty (Table 66) table too narrow for caption */
+  #table-binary-unicode-properties-of-strings table {
+    width: 90mm;
   }
 
-  /* 21.X table middle column is too narrow */
-  #table-time-zone-identifier-record-fields > figure > table th:nth-of-type(2) {
-    min-width: 19mm;
+  /* 22.2.9.3 Properties of RegExp String Iterator Instances (Table 68) */
+  #table-regexp-string-iterator-instance-slots td:nth-of-type(2) {
+    width: 12%
   }
 
-  /* 29.X extremely long note */
+  /* 29.11 extremely long note */
   #sec-shared-memory-guidelines > emu-note {
     break-inside: auto;
   }
-
-  .unicode-property-table {
-    table-layout: initial;
-    width: auto;
-    font-size: 90%;
-  }
-
-  .unicode-property-table th:first-of-type {
-    width: 33%;
-  }
-
-  .corner-cell {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgaGVpZ2h0PSI0NiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEuNSIgd2lkdGg9IjI0MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMzE1LjI2NiAzOTYuMzQzIDI0MS4zOTQgNDUuMTU1IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS4wNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMxNC45MyAtMzk1LjkzNSkiLz48L3N2Zz4=);
-    background-repeat: no-repeat;
-    background-size: 100% 3em;
-    height: 3em;
-    padding: 0;
-    vertical-align: inherit;
-    position: static;
-  }
-
-  .corner-cell .slash {
-    display: none;
-  }
-
-  .corner-cell > .column, .corner-cell > .row {
-    display: block;
-    position: relative;
-  }
-
-  .corner-cell > .row {
-    text-align: right;
-    top: -0.75em
-  }
-
-  .corner-cell > .column {
-    text-align: left;
-    bottom: -1.25em;
-  }
 </style>
-<script src="..\assets\js\multipage.js?cache=ONtgEQdE" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
-<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=gD1tte95" defer=""></script><style>
+<script src="..\assets\js\multipage.js?cache=IIDQQTNy" defer=""></script><script src="https://htmlspecs.com/dropdown.js"></script>
+<title>ECMAScript® 2027 语言规范</title><script src="..\assets\js\ecmarkup.js?cache=eNjsN4hs" defer=""></script><style>
     @media print {
       @page :left {
         @bottom-right {
@@ -218,23 +179,23 @@
 
     <emu-clause id="sec-lexical-and-regexp-grammars">
       <h1><span class="secnum">5.1.2</span> 词法语法和 RegExp 语法</h1>
-      <p>ECMAScript 的<em>词法语法</em>在条款 <emu-xref href="#sec-ecmascript-language-lexical-grammar" id="_ref_24"><a href="ecmascript-language-lexical-grammar.html#sec-ecmascript-language-lexical-grammar">12</a></emu-xref> 中给出。该语法以符合 <emu-xref href="#sec-source-text" id="_ref_25"><a href="ecmascript-language-source-code.html#sec-source-text">11.1</a></emu-xref> 中定义的 <emu-nt id="_ref_15202"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 规则的 Unicode 码点作为其终结符符号。它定义了一组产生式，从<emu-xref href="#sec-context-free-grammars" id="_ref_1144"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_15203"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementDiv">InputElementDiv</a></emu-nt>、<emu-nt id="_ref_15204"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementTemplateTail">InputElementTemplateTail</a></emu-nt>、<emu-nt id="_ref_15205"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExp">InputElementRegExp</a></emu-nt>、<emu-nt id="_ref_15206"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExpOrTemplateTail">InputElementRegExpOrTemplateTail</a></emu-nt> 或 <emu-nt id="_ref_15207"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementHashbangOrRegExp">InputElementHashbangOrRegExp</a></emu-nt> 开始，描述此类码点序列如何被翻译为输入元素序列。</p>
-      <p>除空白和注释之外的输入元素构成 ECMAScript 句法语法的终结符符号，并称为 ECMAScript <em>token</em>。这些 token 是 ECMAScript 语言的<emu-xref href="#sec-keywords-and-reserved-words" id="_ref_1145"><a href="ecmascript-language-lexical-grammar.html#sec-keywords-and-reserved-words">保留字</a></emu-xref>、标识符、字面量和 punctuators。此外，行终止符虽然不被认为是 token，但也会成为输入元素流的一部分，并指导自动分号插入过程（<emu-xref href="#sec-automatic-semicolon-insertion" id="_ref_26"><a href="ecmascript-language-lexical-grammar.html#sec-automatic-semicolon-insertion">12.10</a></emu-xref>）。简单空白和单行注释会被丢弃，且不会出现在句法语法的输入元素流中。<emu-nt id="_ref_15208"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt>（即形如 <code>/*</code>…<code>*/</code> 的注释，不论其是否跨越多行）如果不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1146"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>行终止符，同样会被简单丢弃；但如果 <emu-nt id="_ref_15209"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt> <emu-xref href="#sec-completion-record-specification-type" id="_ref_1147"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>一个或多个行终止符，则它会被替换为单个行终止符，该行终止符成为句法语法的输入元素流的一部分。</p>
-      <p>ECMAScript 的 <em>RegExp 语法</em>在 <emu-xref href="#sec-patterns" id="_ref_27"><a href="text-processing.html#sec-patterns">22.2.1</a></emu-xref> 中给出。该语法也以由 <emu-nt id="_ref_15210"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 定义的码点作为其终结符符号。它定义了一组产生式，从<emu-xref href="#sec-context-free-grammars" id="_ref_1148"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_15211"><a href="text-processing.html#prod-Pattern">Pattern</a></emu-nt> 开始，描述码点序列如何被翻译为正则表达式模式。</p>
+      <p>ECMAScript 的<em>词法语法</em>在条款 <emu-xref href="#sec-ecmascript-language-lexical-grammar" id="_ref_24"><a href="ecmascript-language-lexical-grammar.html#sec-ecmascript-language-lexical-grammar">12</a></emu-xref> 中给出。该语法以符合 <emu-xref href="#sec-source-text" id="_ref_25"><a href="ecmascript-language-source-code.html#sec-source-text">11.1</a></emu-xref> 中定义的 <emu-nt id="_ref_14583"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 规则的 Unicode 码点作为其终结符符号。它定义了一组产生式，从<emu-xref href="#sec-context-free-grammars" id="_ref_1145"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_14584"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementDiv">InputElementDiv</a></emu-nt>、<emu-nt id="_ref_14585"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementTemplateTail">InputElementTemplateTail</a></emu-nt>、<emu-nt id="_ref_14586"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExp">InputElementRegExp</a></emu-nt>、<emu-nt id="_ref_14587"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementRegExpOrTemplateTail">InputElementRegExpOrTemplateTail</a></emu-nt> 或 <emu-nt id="_ref_14588"><a href="ecmascript-language-lexical-grammar.html#prod-InputElementHashbangOrRegExp">InputElementHashbangOrRegExp</a></emu-nt> 开始，描述此类码点序列如何被翻译为输入元素序列。</p>
+      <p>除空白和注释之外的输入元素构成 ECMAScript 句法语法的终结符符号，并称为 ECMAScript <em>token</em>。这些 token 是 ECMAScript 语言的<emu-xref href="#sec-keywords-and-reserved-words" id="_ref_1146"><a href="ecmascript-language-lexical-grammar.html#sec-keywords-and-reserved-words">保留字</a></emu-xref>、标识符、字面量和 punctuators。此外，行终止符虽然不被认为是 token，但也会成为输入元素流的一部分，并指导自动分号插入过程（<emu-xref href="#sec-automatic-semicolon-insertion" id="_ref_26"><a href="ecmascript-language-lexical-grammar.html#sec-automatic-semicolon-insertion">12.10</a></emu-xref>）。简单空白和单行注释会被丢弃，且不会出现在句法语法的输入元素流中。<emu-nt id="_ref_14589"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt>（即形如 <code>/*</code>…<code>*/</code> 的注释，不论其是否跨越多行）如果不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1147"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>行终止符，同样会被简单丢弃；但如果 <emu-nt id="_ref_14590"><a href="ecmascript-language-lexical-grammar.html#prod-MultiLineComment">MultiLineComment</a></emu-nt> <emu-xref href="#sec-completion-record-specification-type" id="_ref_1148"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>一个或多个行终止符，则它会被替换为单个行终止符，该行终止符成为句法语法的输入元素流的一部分。</p>
+      <p>ECMAScript 的 <em>RegExp 语法</em>在 <emu-xref href="#sec-patterns" id="_ref_27"><a href="text-processing.html#sec-patterns">22.2.1</a></emu-xref> 中给出。该语法也以由 <emu-nt id="_ref_14591"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 定义的码点作为其终结符符号。它定义了一组产生式，从<emu-xref href="#sec-context-free-grammars" id="_ref_1149"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_14592"><a href="text-processing.html#prod-Pattern">Pattern</a></emu-nt> 开始，描述码点序列如何被翻译为正则表达式模式。</p>
       <p>词法语法和 RegExp 语法的产生式以两个冒号“<b>::</b>”作为分隔标点来区分。词法语法和 RegExp 语法共享一些产生式。</p>
     </emu-clause>
 
     <emu-clause id="sec-numeric-string-grammar">
       <h1><span class="secnum">5.1.3</span> 数值字符串语法</h1>
-      <p><em>数值字符串语法</em>出现在 <emu-xref href="#sec-tonumber-applied-to-the-string-type" id="_ref_28"><a href="abstract-operations.html#sec-tonumber-applied-to-the-string-type">7.1.4.1</a></emu-xref> 中。它以 <emu-nt id="_ref_15212"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 作为其终结符符号，并用于从<emu-xref href="#sec-context-free-grammars" id="_ref_1149"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_15213"><a href="abstract-operations.html#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt> 开始将 Strings 翻译为数值（该语法类似于但不同于<emu-xref href="#sec-literals-numeric-literals" id="_ref_29"><a href="ecmascript-language-lexical-grammar.html#sec-literals-numeric-literals">数值字面量的词法语法</a></emu-xref>）。</p>
+      <p><em>数值字符串语法</em>出现在 <emu-xref href="#sec-tonumber-applied-to-the-string-type" id="_ref_28"><a href="abstract-operations.html#sec-tonumber-applied-to-the-string-type">7.1.4.1</a></emu-xref> 中。它以 <emu-nt id="_ref_14593"><a href="ecmascript-language-source-code.html#prod-SourceCharacter">SourceCharacter</a></emu-nt> 作为其终结符符号，并用于从<emu-xref href="#sec-context-free-grammars" id="_ref_1150"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_14594"><a href="abstract-operations.html#prod-StringNumericLiteral">StringNumericLiteral</a></emu-nt> 开始将 Strings 翻译为数值（该语法类似于但不同于<emu-xref href="#sec-literals-numeric-literals" id="_ref_29"><a href="ecmascript-language-lexical-grammar.html#sec-literals-numeric-literals">数值字面量的词法语法</a></emu-xref>）。</p>
       <p>数值字符串语法的产生式以三个冒号“<b>:::</b>”作为标点来区分，并且从不用于解析源文本。</p>
     </emu-clause>
 
     <emu-clause id="sec-syntactic-grammar">
       <h1><span class="secnum">5.1.4</span> 句法语法</h1>
-      <p>ECMAScript 的<em>句法语法</em>在条款 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_30"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> 到 <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_31"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> 中给出。该语法以词法语法定义的 ECMAScript token 作为其终结符符号（<emu-xref href="#sec-lexical-and-regexp-grammars" id="_ref_32"><a href="notational-conventions.html#sec-lexical-and-regexp-grammars">5.1.2</a></emu-xref>）。它定义了一组产生式，从两个可选<emu-xref href="#sec-context-free-grammars" id="_ref_1150"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_15214"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 和 <emu-nt id="_ref_15215"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 开始，描述 token 序列如何构成句法正确的 ECMAScript 程序独立组件。</p>
-      <p>当码点流将被解析为 ECMAScript <emu-nt id="_ref_15216"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15217"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 时，它首先通过重复应用词法语法转换为输入元素流；然后该输入元素流通过一次应用句法语法来解析。如果输入元素流中的 token 不能被解析为目标非终结符（<emu-nt id="_ref_15218"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15219"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>）的单个实例且没有剩余 token，则输入流在句法上有错误。</p>
-      <p>解析成功时，会构造一棵<em>解析树</em>，即一种根树结构，其中每个节点都是一个 <dfn variants="Parse Nodes" tabindex="-1">Parse Node</dfn>。每个 Parse Node 都是语法中某个符号的<em>实例</em>；它表示可从该符号派生出的源文本跨度。解析树的根节点表示整个源文本，是该解析<emu-xref href="#sec-context-free-grammars" id="_ref_1151"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>的实例。当 Parse Node 是非终结符的实例时，它也是某个以该非终结符为左手边的产生式的实例。此外，它有零个或多个<em>子节点</em>，产生式右手边的每个符号对应一个子节点：每个子节点都是对应符号的实例的 Parse Node。</p>
+      <p>ECMAScript 的<em>句法语法</em>在条款 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_30"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> 到 <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_31"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> 中给出。该语法以词法语法定义的 ECMAScript token 作为其终结符符号（<emu-xref href="#sec-lexical-and-regexp-grammars" id="_ref_32"><a href="notational-conventions.html#sec-lexical-and-regexp-grammars">5.1.2</a></emu-xref>）。它定义了一组产生式，从两个可选<emu-xref href="#sec-context-free-grammars" id="_ref_1151"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref> <emu-nt id="_ref_14595"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 和 <emu-nt id="_ref_14596"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 开始，描述 token 序列如何构成句法正确的 ECMAScript 程序独立组件。</p>
+      <p>当码点流将被解析为 ECMAScript <emu-nt id="_ref_14597"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14598"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 时，它首先通过重复应用词法语法转换为输入元素流；然后该输入元素流通过一次应用句法语法来解析。如果输入元素流中的 token 不能被解析为目标非终结符（<emu-nt id="_ref_14599"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14600"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>）的单个实例且没有剩余 token，则输入流在句法上有错误。</p>
+      <p>解析成功时，会构造一棵<em>解析树</em>，即一种根树结构，其中每个节点都是一个 <dfn variants="Parse Nodes" tabindex="-1">Parse Node</dfn>。每个 Parse Node 都是语法中某个符号的<em>实例</em>；它表示可从该符号派生出的源文本跨度。解析树的根节点表示整个源文本，是该解析<emu-xref href="#sec-context-free-grammars" id="_ref_1152"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>的实例。当 Parse Node 是非终结符的实例时，它也是某个以该非终结符为左手边的产生式的实例。此外，它有零个或多个<em>子节点</em>，产生式右手边的每个符号对应一个子节点：每个子节点都是对应符号的实例的 Parse Node。</p>
       <p>每次调用解析器都会实例化新的 Parse Nodes，并且即使源文本相同，也绝不会在不同解析之间复用 Parse Nodes。当且仅当 Parse Nodes 表示相同的源文本跨度、是相同语法符号的实例，并且来自同一次解析器调用时，才认为它们是<dfn tabindex="-1">同一 Parse Node</dfn>。</p>
       <emu-note><span class="note">Note 1</span><div class="note-contents">
         <p>多次解析同一个 String 会导致不同的 Parse Nodes。例如，考虑：</p>
@@ -245,17 +206,18 @@
       </div></emu-note>
       <emu-note><span class="note">Note 2</span><div class="note-contents">Parse Nodes 是规范制品，实现不要求使用类似的数据结构。</div></emu-note>
       <p>句法语法的产生式以仅一个冒号“<b>:</b>”作为标点来区分。</p>
-      <p>条款 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_33"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> 到 <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_34"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> 中呈现的句法语法，并不完整说明哪些 token 序列会被接受为正确的 ECMAScript <emu-nt id="_ref_15220"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15221"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>。某些额外的 token 序列也会被接受，即如果只在序列的某些位置（例如行终止符字符之前）添加分号就会由语法描述的那些 token 序列。此外，如果行终止符字符出现在某些“尴尬”的位置，某些由语法描述的 token 序列也不被认为是可接受的。</p>
-      <p>在某些情况下，为避免歧义，句法语法使用广义产生式，这些产生式允许并不构成有效 ECMAScript <emu-nt id="_ref_15222"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15223"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 的 token 序列。例如，这种技术用于对象字面量和对象解构模式。在这类情况下，会提供更具限制性的<em>补充语法</em>，以进一步限制可接受的 token 序列。通常，<emu-xref href="#early-error" id="_ref_1152"><a href="error-handling-and-language-extensions.html#early-error">早期错误</a></emu-xref>规则随后会说明，在某些上下文中，“<var>p</var> <dfn id="must-cover" tabindex="-1">must cover</dfn> an <var>n</var>”，其中 <var>p</var> 是 Parse Node（广义产生式的一个实例），而 <var>n</var> 是补充语法中的非终结符。这意味着：</p>
+      <p>条款 <emu-xref href="#sec-ecmascript-language-expressions" id="_ref_33"><a href="ecmascript-language-expressions.html#sec-ecmascript-language-expressions">13</a></emu-xref> 到 <emu-xref href="#sec-ecmascript-language-scripts-and-modules" id="_ref_34"><a href="ecmascript-language-scripts-and-modules.html#sec-ecmascript-language-scripts-and-modules">16</a></emu-xref> 中呈现的句法语法，并不完整说明哪些 token 序列会被接受为正确的 ECMAScript <emu-nt id="_ref_14601"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14602"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>。某些额外的 token 序列也会被接受，即如果只在序列的某些位置（例如行终止符字符之前）添加分号就会由语法描述的那些 token 序列。此外，如果行终止符字符出现在某些“尴尬”的位置，某些由语法描述的 token 序列也不被认为是可接受的。</p>
+      <p>在某些情况下，为避免歧义，句法语法使用广义产生式，这些产生式允许并不构成有效 ECMAScript <emu-nt id="_ref_14603"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14604"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 的 token 序列。例如，这种技术用于对象字面量和对象解构模式。在这类情况下，会提供更具限制性的<em>补充语法</em>，以进一步限制可接受的 token 序列。通常，<emu-xref href="#early-error" id="_ref_1153"><a href="error-handling-and-language-extensions.html#early-error">早期错误</a></emu-xref>规则随后会说明，在某些上下文中，“<var>p</var> <dfn id="must-cover" tabindex="-1">must cover</dfn> an <var>n</var>”，其中 <var>p</var> 是 Parse Node（广义产生式的一个实例），而 <var>n</var> 是补充语法中的非终结符。这意味着：</p>
       <ol>
-        <li>最初由 <var>p</var> 匹配的 token 序列会以 <var>n</var> 作为<emu-xref href="#sec-context-free-grammars" id="_ref_1153"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>重新解析。如果 <var>n</var> 具有语法参数，则这些参数会被设置为 <var>p</var> 最初解析时使用的相同值。</li>
-        <li>如果该 token 序列能够被解析为 <var>n</var> 的单个实例且没有剩余 token，则：
+        <li>不对 <var>p</var> 或其任何后代应用<emu-xref href="#early-error" id="_ref_1154"><a href="error-handling-and-language-extensions.html#early-error">早期错误</a></emu-xref>规则。</li>
+        <li>最初与 <var>p</var> 匹配的 token 序列会使用 <var>n</var> 作为<emu-xref href="#sec-context-free-grammars" id="_ref_1155"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>重新解析。如果 <var>n</var> 接受语法参数，则这些参数会被设为与最初解析 <var>p</var> 时所用的相同值。</li>
+        <li>如果该 token 序列可被解析为 <var>n</var> 的单个实例，且没有剩余 token，则：
           <ol>
-            <li>我们将该 <var>n</var> 的实例（一个 Parse Node，对给定的 <var>p</var> 唯一）称为“由 <var>p</var> <dfn tabindex="-1">覆盖的</dfn> <var>n</var>”。</li>
-            <li><var>n</var> 及其派生产生式的所有 Early Error 规则也适用于由 <var>p</var> 覆盖的 <var>n</var>。</li>
+            <li>我们将该 <var>n</var> 的实例（一个 Parse Node，对给定的 <var>p</var> 是唯一的）称为“由 <var>p</var> <dfn tabindex="-1">覆盖</dfn>的 <var>n</var>”。</li>
+            <li><emu-xref href="#early-error" id="_ref_1156"><a href="error-handling-and-language-extensions.html#early-error">早期错误</a></emu-xref>规则会应用于由 <var>p</var> 覆盖的 <var>n</var> 及其后代，并按后续的 "<emu-xref href="#must-cover" id="_ref_1157"><a href="notational-conventions.html#must-cover">must cover</a></emu-xref>" 情形进行修改。</li>
           </ol>
         </li>
-        <li>否则（如果解析失败），它是一个早期 Syntax Error。</li>
+        <li>否则（如果解析失败），则为早期 Syntax Error。</li>
       </ol>
     </emu-clause>
 
@@ -264,13 +226,13 @@
 
       <emu-clause id="sec-terminal-symbols">
         <h1><span class="secnum">5.1.5.1</span> 终结符符号</h1>
-        <p>在 ECMAScript 语法中，一些终结符符号以 <code>fixed-width</code> 字体显示。它们应完全按所写形式出现在源文本中。以这种方式指定的所有终结符符号码点，都应被理解为来自 Basic Latin 块的相应 Unicode 码点，而不是来自其他 Unicode 范围的任何外观相似码点。终结符符号中的码点不能用 <code>\</code> <emu-nt id="_ref_15224"><a href="ecmascript-language-lexical-grammar.html#prod-UnicodeEscapeSequence">UnicodeEscapeSequence</a></emu-nt> 表示。</p>
+        <p>在 ECMAScript 语法中，一些终结符符号以 <code>fixed-width</code> 字体显示。它们应完全按所写形式出现在源文本中。以这种方式指定的所有终结符符号码点，都应被理解为来自 Basic Latin 块的相应 Unicode 码点，而不是来自其他 Unicode 范围的任何外观相似码点。终结符符号中的码点不能用 <code>\</code> <emu-nt id="_ref_14605"><a href="ecmascript-language-lexical-grammar.html#prod-UnicodeEscapeSequence">UnicodeEscapeSequence</a></emu-nt> 表示。</p>
         <p>在终结符符号为单个 Unicode 码点的语法中（即词法、RegExp 和数值字符串语法），产生式中出现的多个连续定宽码点是一种简单简写，表示同样的码点序列，但写作独立的终结符符号。</p>
         <p>例如，产生式：</p>
         <emu-grammar type="definition" example=""><emu-production name="HexIntegerLiteral" type="lexical" collapsed="">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-HexIntegerLiteral">HexIntegerLiteral</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="zxvbgn4l">
         <emu-t>0x</emu-t>
-        <emu-nt id="_ref_15225"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
+        <emu-nt id="_ref_14606"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -279,7 +241,7 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-HexIntegerLiteral">HexIntegerLiteral</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="tu0pitdu">
         <emu-t>0</emu-t>
         <emu-t>x</emu-t>
-        <emu-nt id="_ref_15226"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
+        <emu-nt id="_ref_14607"><a href="ecmascript-language-lexical-grammar.html#prod-HexDigits">HexDigits</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -287,7 +249,7 @@
         <p>终结符符号还有另外两种形式：</p>
         <ul>
           <li>在词法和 RegExp 语法中，没有常规印刷表示的 Unicode 码点，会改以“&lt;ABBREV&gt;”形式显示，其中“ABBREV”是该码点或码点集合的助记名。这些形式在 <emu-xref href="#sec-unicode-format-control-characters" title="" id="_ref_35"><a href="ecmascript-language-lexical-grammar.html#sec-unicode-format-control-characters">Unicode 格式控制字符</a></emu-xref>、<emu-xref href="#sec-white-space" title="" id="_ref_36"><a href="ecmascript-language-lexical-grammar.html#sec-white-space">空白</a></emu-xref> 和 <emu-xref href="#sec-line-terminators" title="" id="_ref_37"><a href="ecmascript-language-lexical-grammar.html#sec-line-terminators">行终止符</a></emu-xref> 中定义。</li>
-          <li>在句法语法中，某些终结符符号（例如 <emu-nt id="_ref_15227"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> 和 <emu-nt id="_ref_15228"><a href="ecmascript-language-lexical-grammar.html#prod-RegularExpressionLiteral">RegularExpressionLiteral</a></emu-nt>）以斜体显示，因为它们指向词法语法中同名的非终结符。</li>
+          <li>在句法语法中，某些终结符符号（例如 <emu-nt id="_ref_14608"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> 和 <emu-nt id="_ref_14609"><a href="ecmascript-language-lexical-grammar.html#prod-RegularExpressionLiteral">RegularExpressionLiteral</a></emu-nt>）以斜体显示，因为它们指向词法语法中同名的非终结符。</li>
         </ul>
       </emu-clause>
 
@@ -298,45 +260,45 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="92j78-b5">
         <emu-t>while</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15229"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14610"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15230"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14611"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>说明非终结符 <emu-nt id="_ref_15231"><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> 表示 token <code>while</code>，后跟左圆括号 token，后跟 <emu-nt id="_ref_15232"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>，后跟右圆括号 token，后跟 <emu-nt id="_ref_15233"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>。<emu-nt id="_ref_15234"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> 和 <emu-nt id="_ref_15235"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> 的出现本身是非终结符。再举一个例子，句法定义：</p>
+        <p>说明非终结符 <emu-nt id="_ref_14612"><a href="notational-conventions.html#prod-grammar-notation-WhileStatement">WhileStatement</a></emu-nt> 表示 token <code>while</code>，后跟左圆括号 token，后跟 <emu-nt id="_ref_14613"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>，后跟右圆括号 token，后跟 <emu-nt id="_ref_14614"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>。<emu-nt id="_ref_14615"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> 和 <emu-nt id="_ref_14616"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt> 的出现本身是非终结符。再举一个例子，句法定义：</p>
         <emu-grammar type="definition" example=""><emu-production name="ArgumentList" id="prod-grammar-notation-ArgumentList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="1px9pijq">
-        <emu-nt id="_ref_15236"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
+        <emu-nt id="_ref_14617"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="f_i_7oqe">
-        <emu-nt id="_ref_15237"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt>
+        <emu-nt id="_ref_14618"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt>
         <emu-t>,</emu-t>
-        <emu-nt id="_ref_15238"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
+        <emu-nt id="_ref_14619"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>说明 <emu-nt id="_ref_15239"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 可以表示单个 <emu-nt id="_ref_15240"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>，或表示 <emu-nt id="_ref_15241"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 后跟逗号再后跟 <emu-nt id="_ref_15242"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>。该 <emu-nt id="_ref_15243"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 定义是递归的，也就是说，它以自身来定义自身。其结果是，<emu-nt id="_ref_15244"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 可以<emu-xref href="#sec-completion-record-specification-type" id="_ref_14942"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>任意正数个实参，这些实参由逗号分隔，且每个实参表达式都是 <emu-nt id="_ref_15245"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>。这种非终结符的递归定义很常见。</p>
+        <p>说明 <emu-nt id="_ref_14620"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 可以表示单个 <emu-nt id="_ref_14621"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>，或表示 <emu-nt id="_ref_14622"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 后跟逗号再后跟 <emu-nt id="_ref_14623"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>。该 <emu-nt id="_ref_14624"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 定义是递归的，也就是说，它以自身来定义自身。其结果是，<emu-nt id="_ref_14625"><a href="notational-conventions.html#prod-grammar-notation-ArgumentList">ArgumentList</a></emu-nt> 可以<emu-xref href="#sec-completion-record-specification-type" id="_ref_14321"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>任意正数个实参，这些实参由逗号分隔，且每个实参表达式都是 <emu-nt id="_ref_14626"><a href="ecmascript-language-expressions.html#prod-AssignmentExpression">AssignmentExpression</a></emu-nt>。这种非终结符的递归定义很常见。</p>
       </emu-clause>
 
       <emu-clause id="sec-optional-symbols">
         <h1><span class="secnum">5.1.5.3</span> 可选符号</h1>
-        <p>下标后缀“<sub>opt</sub>”可能出现在终结符或非终结符之后，表示可选符号。<emu-xref href="#sec-completion-record-specification-type" id="_ref_14943"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>可选符号的替代项实际上指定两个右手边，一个省略该可选元素，一个<emu-xref href="#sec-completion-record-specification-type" id="_ref_14944"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>它。这意味着：</p>
+        <p>下标后缀“<sub>opt</sub>”可能出现在终结符或非终结符之后，表示可选符号。<emu-xref href="#sec-completion-record-specification-type" id="_ref_14322"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>可选符号的替代项实际上指定两个右手边，一个省略该可选元素，一个<emu-xref href="#sec-completion-record-specification-type" id="_ref_14323"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>它。这意味着：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="c5neqctp">
-        <emu-nt id="_ref_15246"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt optional="" id="_ref_15247"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_14627"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt optional="" id="_ref_14628"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的便捷缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="uolyom43">
-        <emu-nt id="_ref_15248"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14629"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="ib7lg1vi">
-        <emu-nt id="_ref_15249"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt id="_ref_15250"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
+        <emu-nt id="_ref_14630"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14631"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -345,12 +307,12 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="k8b-ryxj">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15251"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt optional="" id="_ref_15252"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_14632"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt optional="" id="_ref_14633"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15253"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_14634"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15254"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14635"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -359,21 +321,21 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="ga1xtadp">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15255"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14636"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15256"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_14637"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15257"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14638"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="cs1gk7oq">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15258"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15259"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14639"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14640"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt optional="" id="_ref_15260"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt optional="" id="_ref_14641"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a><emu-mods><emu-opt>opt</emu-opt></emu-mods></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15261"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14642"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -382,115 +344,115 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="acc913te">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15262"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14643"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15263"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14644"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="1lbcl8ka">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15264"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14645"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt id="_ref_15265"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14646"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15266"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14647"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="6nfzjduy">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15267"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15268"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14648"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14649"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15269"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14650"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="fyy9sdxo">
         <emu-t>for</emu-t>
         <emu-t>(</emu-t>
-        <emu-nt id="_ref_15270"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
-        <emu-nt id="_ref_15271"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14651"><a href="ecmascript-language-statements-and-declarations.html#prod-LexicalDeclaration">LexicalDeclaration</a></emu-nt>
+        <emu-nt id="_ref_14652"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
-        <emu-nt id="_ref_15272"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-nt id="_ref_14653"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>)</emu-t>
-        <emu-nt id="_ref_15273"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
+        <emu-nt id="_ref_14654"><a href="ecmascript-language-statements-and-declarations.html#prod-Statement">Statement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>因此，在此示例中，非终结符 <emu-nt id="_ref_15274"><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> 实际上有四个可选右手边。</p>
+        <p>因此，在此示例中，非终结符 <emu-nt id="_ref_14655"><a href="notational-conventions.html#prod-grammar-notation-ForStatement">ForStatement</a></emu-nt> 实际上有四个可选右手边。</p>
       </emu-clause>
 
       <emu-clause id="sec-grammatical-parameters">
         <h1><span class="secnum">5.1.5.4</span> 语法参数</h1>
-        <p>产生式可以通过形如“<sub>[parameters]</sub>”的下标注解进行参数化，该注解可作为后缀出现在产生式所定义的非终结符符号之后。“<sub>parameters</sub>”可以是单个名称，也可以是由逗号分隔的名称列表。参数化产生式是一组产生式的简写，这组产生式定义参数名的所有组合，并在参数化非终结符符号之后附加以前导下划线开头的参数名。这意味着：</p>
+        <p>产生式可以通过形如“<sub>[parameters]</sub>”的下标注解进行参数化，该注解可作为后缀出现在产生式所定义的非终结符符号之后。“<sub>parameters</sub>”可以是单个名称，也可以是由逗号分隔的名称<emu-xref href="#sec-list-and-record-specification-type" id="_ref_14324"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>。参数化产生式是一组产生式的简写，这组产生式定义参数名的所有组合，并在参数化非终结符符号之后附加以前导下划线开头的参数名。这意味着：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15275"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14656"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15276"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14657"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的便捷缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15277"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14658"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15278"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14659"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15279"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14660"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15280"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14661"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>并且：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return, In">
     <emu-nt params="Return, In"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return, In]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15281"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14662"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15282"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14663"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15283"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14664"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15284"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14665"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15285"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14666"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15286"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14667"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_In" id="prod-grammar-notation-StatementList_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_In">StatementList_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15287"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14668"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15288"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14669"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return_In" id="prod-grammar-notation-StatementList_Return_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return_In">StatementList_Return_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15289"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14670"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15290"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14671"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -498,17 +460,17 @@
         <p>产生式右手边对非终结符的引用也可以被参数化。例如：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15291"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14672"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="q7ib3n22">
-        <emu-nt params="+In" id="_ref_15292"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[+In]</emu-params></emu-mods></emu-nt>
+        <emu-nt params="+In" id="_ref_14673"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[+In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>等价于说：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15293"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14674"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="k6ggb0ke">
         <emu-nt>ExpressionStatement_In</emu-nt>
@@ -518,38 +480,38 @@
         <p>并且：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15294"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14675"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="cbr-bcps">
-        <emu-nt params="~In" id="_ref_15295"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[~In]</emu-params></emu-mods></emu-nt>
+        <emu-nt params="~In" id="_ref_14676"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a><emu-mods><emu-params>[~In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>等价于：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15296"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14677"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15297"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14678"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>非终结符引用可以同时具有参数列表和“<sub>opt</sub>”后缀。例如：</p>
+        <p>非终结符引用可以同时具有参数<emu-xref href="#sec-list-and-record-specification-type" id="_ref_14325"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>和“<sub>opt</sub>”后缀。例如：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="nj4iu70z">
-        <emu-nt id="_ref_15298"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt params="+In" optional="" id="_ref_15299"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[+In]</emu-params><emu-opt>opt</emu-opt></emu-mods></emu-nt>
+        <emu-nt id="_ref_14679"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt params="+In" optional="" id="_ref_14680"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[+In]</emu-params><emu-opt>opt</emu-opt></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="uolyom43">
-        <emu-nt id="_ref_15300"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14681"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="atb3-ttx">
-        <emu-nt id="_ref_15301"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14682"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
         <emu-nt>Initializer_In</emu-nt>
     </emu-rhs>
 </emu-production>
@@ -557,21 +519,21 @@
         <p>在右手边非终结符引用上用“<sub>?</sub>”作为参数名前缀，会使该参数值取决于当前产生式左手边符号引用上是否出现该参数名。例如：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration" params="In">
     <emu-nt params="In"><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a><emu-mods><emu-params>[In]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="3evhjud3">
-        <emu-nt id="_ref_15302"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt params="?In" id="_ref_15303"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[?In]</emu-params></emu-mods></emu-nt>
+        <emu-nt id="_ref_14683"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt params="?In" id="_ref_14684"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a><emu-mods><emu-params>[?In]</emu-params></emu-mods></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="VariableDeclaration" id="prod-grammar-notation-VariableDeclaration">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration">VariableDeclaration</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="ib7lg1vi">
-        <emu-nt id="_ref_15304"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
-        <emu-nt id="_ref_15305"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
+        <emu-nt id="_ref_14685"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14686"><a href="ecmascript-language-expressions.html#prod-Initializer">Initializer</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="VariableDeclaration_In" id="prod-grammar-notation-VariableDeclaration_In">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-VariableDeclaration_In">VariableDeclaration_In</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="atb3-ttx">
-        <emu-nt id="_ref_15306"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
+        <emu-nt id="_ref_14687"><a href="ecmascript-language-expressions.html#prod-BindingIdentifier">BindingIdentifier</a></emu-nt>
         <emu-nt>Initializer_In</emu-nt>
     </emu-rhs>
 </emu-production>
@@ -579,50 +541,50 @@
         <p>如果右手边替代项带有前缀“[+parameter]”，则只有在引用该产生式的非终结符符号时使用了该命名参数，该替代项才可用。如果右手边替代项带有前缀“[~parameter]”，则只有在引用该产生式的非终结符符号时<em>未</em>使用该命名参数，该替代项才可用。这意味着：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="pxk-qj7n" constraints="+Return"><emu-constraints>[+Return]</emu-constraints>
-        <emu-nt id="_ref_15307"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14688"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15308"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14689"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15309"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14690"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15310"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14691"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15311"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14692"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>并且：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" params="Return">
     <emu-nt params="Return"><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a><emu-mods><emu-params>[Return]</emu-params></emu-mods></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="mr68necj" constraints="~Return"><emu-constraints>[~Return]</emu-constraints>
-        <emu-nt id="_ref_15312"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14693"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15313"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14694"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>是以下形式的缩写：</p>
         <emu-grammar type="definition" example=""><emu-production name="StatementList" id="prod-grammar-notation-StatementList">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList">StatementList</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="qm95e4wi">
-        <emu-nt id="_ref_15314"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
+        <emu-nt id="_ref_14695"><a href="ecmascript-language-statements-and-declarations.html#prod-ReturnStatement">ReturnStatement</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15315"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14696"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 <emu-production name="StatementList_Return" id="prod-grammar-notation-StatementList_Return">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-StatementList_Return">StatementList_Return</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="gsqkt2bv">
-        <emu-nt id="_ref_15316"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
+        <emu-nt id="_ref_14697"><a href="ecmascript-language-statements-and-declarations.html#prod-ExpressionStatement">ExpressionStatement</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -630,7 +592,7 @@
 
       <emu-clause id="sec-one-of">
         <h1><span class="secnum">5.1.5.5</span> one of</h1>
-        <p>当词语“<b>one of</b>”跟在语法定义的冒号之后时，它表示后续一行或多行上的每个终结符符号都是一个可选定义。例如，ECMAScript 的词法语法<emu-xref href="#sec-completion-record-specification-type" id="_ref_14945"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>产生式：</p>
+        <p>当词语“<b>one of</b>”跟在语法定义的冒号之后时，它表示后续一行或多行上的每个终结符符号都是一个可选定义。例如，ECMAScript 的词法语法<emu-xref href="#sec-completion-record-specification-type" id="_ref_14326"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>产生式：</p>
         <emu-grammar type="definition" example=""><emu-production name="NonZeroDigit" type="lexical" oneof="">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-NonZeroDigit">NonZeroDigit</a></emu-nt> <emu-geq>::</emu-geq> <emu-oneof>one of</emu-oneof> <emu-rhs><emu-t>1</emu-t> <emu-t>2</emu-t> <emu-t>3</emu-t> <emu-t>4</emu-t> <emu-t>5</emu-t> <emu-t>6</emu-t> <emu-t>7</emu-t> <emu-t>8</emu-t> <emu-t>9</emu-t></emu-rhs>
 </emu-production>
@@ -670,24 +632,24 @@
 
       <emu-clause id="sec-empty">
         <h1><span class="secnum">5.1.5.6</span> [empty]</h1>
-        <p>如果短语“[empty]”出现在产生式右手边，则表示该产生式的右手边不<emu-xref href="#sec-completion-record-specification-type" id="_ref_14946"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>终结符或非终结符。</p>
+        <p>如果短语“[empty]”出现在产生式右手边，则表示该产生式的右手边不<emu-xref href="#sec-completion-record-specification-type" id="_ref_14327"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>终结符或非终结符。</p>
       </emu-clause>
 
       <emu-clause id="sec-lookahead-restrictions">
         <h1><span class="secnum">5.1.5.7</span> 向前看限制</h1>
-        <p>如果短语“[lookahead = <var>seq</var>]”出现在产生式右手边，则表示只有在 token 序列 <var>seq</var> 是紧接其后的输入 token 序列的前缀时，该产生式才可使用。类似地，“[lookahead ∈ <var>set</var>]”，其中 <var>set</var> 是 token 序列的<emu-xref href="#finite" id="_ref_14947"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>非空集合，表示只有在 <var>set</var> 的某个元素是紧接其后的 token 序列的前缀时，该产生式才可使用。为方便起见，该集合也可以写作非终结符，此时它表示该非终结符可展开得到的所有 token 序列的集合。如果该非终结符可以展开为无限多个不同 token 序列，则认为这是编辑错误。</p>
-        <p>这些条件可以被否定。“[lookahead ≠ <var>seq</var>]”表示只有在 <var>seq</var> <em>不是</em>紧接其后的输入 token 序列的前缀时，<emu-xref href="#sec-completion-record-specification-type" id="_ref_14948"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>该条件的产生式才可使用；而“[lookahead ∉ <var>set</var>]”表示只有在 <var>set</var> 中<em>没有</em>元素是紧接其后的 token 序列的前缀时，该产生式才可使用。</p>
+        <p>如果短语“[lookahead = <var>seq</var>]”出现在产生式右手边，则表示只有在 token 序列 <var>seq</var> 是紧接其后的输入 token 序列的前缀时，该产生式才可使用。类似地，“[lookahead ∈ <var>set</var>]”，其中 <var>set</var> 是 token 序列的<emu-xref href="#finite" id="_ref_14328"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>非空集合，表示只有在 <var>set</var> 的某个元素是紧接其后的 token 序列的前缀时，该产生式才可使用。为方便起见，该集合也可以写作非终结符，此时它表示该非终结符可展开得到的所有 token 序列的集合。如果该非终结符可以展开为无限多个不同 token 序列，则认为这是编辑错误。</p>
+        <p>这些条件可以被否定。“[lookahead ≠ <var>seq</var>]”表示只有在 <var>seq</var> <em>不是</em>紧接其后的输入 token 序列的前缀时，<emu-xref href="#sec-completion-record-specification-type" id="_ref_14329"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>该条件的产生式才可使用；而“[lookahead ∉ <var>set</var>]”表示只有在 <var>set</var> 中<em>没有</em>元素是紧接其后的 token 序列的前缀时，该产生式才可使用。</p>
         <p>作为示例，给定定义：</p>
         <emu-grammar type="definition" example=""><emu-production name="DecimalDigit" type="lexical" oneof="" id="prod-grammar-notation-DecimalDigit">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt> <emu-geq>::</emu-geq> <emu-oneof>one of</emu-oneof> <emu-rhs><emu-t>0</emu-t> <emu-t>1</emu-t> <emu-t>2</emu-t> <emu-t>3</emu-t> <emu-t>4</emu-t> <emu-t>5</emu-t> <emu-t>6</emu-t> <emu-t>7</emu-t> <emu-t>8</emu-t> <emu-t>9</emu-t></emu-rhs>
 </emu-production>
 <emu-production name="DecimalDigits" type="lexical" id="prod-grammar-notation-DecimalDigits">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="s4me4hlz">
-        <emu-nt id="_ref_15317"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-nt id="_ref_14698"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="nyugv7lw">
-        <emu-nt id="_ref_15318"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
-        <emu-nt id="_ref_15319"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-nt id="_ref_14699"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
+        <emu-nt id="_ref_14700"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
@@ -696,32 +658,32 @@
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-LookaheadExample">LookaheadExample</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="addtyof5">
         <emu-t>n</emu-t>
         <emu-gann>[lookahead ∉ { <emu-t>1</emu-t>, <emu-t>3</emu-t>, <emu-t>5</emu-t>, <emu-t>7</emu-t>, <emu-t>9</emu-t> }]</emu-gann>
-        <emu-nt id="_ref_15320"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
+        <emu-nt id="_ref_14701"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigits">DecimalDigits</a></emu-nt>
     </emu-rhs>
     <emu-rhs a="ol8hhyg0">
-        <emu-nt id="_ref_15321"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
-        <emu-gann>[lookahead ∉ <emu-nt id="_ref_15322"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>]</emu-gann>
+        <emu-nt id="_ref_14702"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>
+        <emu-gann>[lookahead ∉ <emu-nt id="_ref_14703"><a href="notational-conventions.html#prod-grammar-notation-DecimalDigit">DecimalDigit</a></emu-nt>]</emu-gann>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
         <p>匹配字母 <code>n</code> 后跟一个或多个十进制数字且第一个数字为偶数，或者匹配一个后面不跟另一个十进制数字的十进制数字。</p>
-        <p>注意，当这些短语在句法语法中使用时，可能无法无歧义地识别紧接其后的 token 序列，因为确定后续 token 需要知道在后续位置使用哪个词法<emu-xref href="#sec-context-free-grammars" id="_ref_14949"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>。因此，当这些短语在句法语法中使用时，如果 token 序列 <var>seq</var> 出现在向前看限制中（包括作为序列集合的一部分），而词法<emu-xref href="#sec-context-free-grammars" id="_ref_14950"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>的选择可能改变 <var>seq</var> 是否会成为所得 token 序列的前缀，则认为这是编辑错误。</p>
+        <p>注意，当这些短语在句法语法中使用时，可能无法无歧义地识别紧接其后的 token 序列，因为确定后续 token 需要知道在后续位置使用哪个词法<emu-xref href="#sec-context-free-grammars" id="_ref_14330"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>。因此，当这些短语在句法语法中使用时，如果 token 序列 <var>seq</var> 出现在向前看限制中（包括作为序列集合的一部分），而词法<emu-xref href="#sec-context-free-grammars" id="_ref_14331"><a href="notational-conventions.html#sec-context-free-grammars">目标符号</a></emu-xref>的选择可能改变 <var>seq</var> 是否会成为所得 token 序列的前缀，则认为这是编辑错误。</p>
       </emu-clause>
 
       <emu-clause id="sec-no-lineterminator-here">
-        <h1><span class="secnum">5.1.5.8</span> [no <emu-nt id="_ref_15323"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</h1>
-        <p>如果短语“[no <emu-nt id="_ref_15324"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]”出现在句法语法产生式的右手边，则表示该产生式是<em>受限产生式</em>：如果 <emu-nt id="_ref_15325"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> 出现在输入流中所示位置，则不能使用该产生式。例如，产生式：</p>
+        <h1><span class="secnum">5.1.5.8</span> [no <emu-nt id="_ref_14704"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</h1>
+        <p>如果短语“[no <emu-nt id="_ref_14705"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]”出现在句法语法产生式的右手边，则表示该产生式是<em>受限产生式</em>：如果 <emu-nt id="_ref_14706"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> 出现在输入流中所示位置，则不能使用该产生式。例如，产生式：</p>
         <emu-grammar type="definition" example=""><emu-production name="ThrowStatement" id="prod-grammar-notation-ThrowStatement">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-ThrowStatement">ThrowStatement</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="_07izqvp">
         <emu-t>throw</emu-t>
-        <emu-gann>[no <emu-nt id="_ref_15326"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</emu-gann>
-        <emu-nt id="_ref_15327"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
+        <emu-gann>[no <emu-nt id="_ref_14707"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> here]</emu-gann>
+        <emu-nt id="_ref_14708"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt>
         <emu-t>;</emu-t>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>表示如果脚本中 <code>throw</code> token 与 <emu-nt id="_ref_15328"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> 之间出现 <emu-nt id="_ref_15329"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt>，则不能使用该产生式。</p>
-        <p>除非受限产生式禁止出现 <emu-nt id="_ref_15330"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt>，否则任意数量的 <emu-nt id="_ref_15331"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> 都可以出现在输入元素流中任意两个连续 token 之间，而不影响脚本的句法可接受性。</p>
+        <p>表示如果脚本中 <code>throw</code> token 与 <emu-nt id="_ref_14709"><a href="ecmascript-language-expressions.html#prod-Expression">Expression</a></emu-nt> 之间出现 <emu-nt id="_ref_14710"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt>，则不能使用该产生式。</p>
+        <p>除非受限产生式禁止出现 <emu-nt id="_ref_14711"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt>，否则任意数量的 <emu-nt id="_ref_14712"><a href="ecmascript-language-lexical-grammar.html#prod-LineTerminator">LineTerminator</a></emu-nt> 都可以出现在输入元素流中任意两个连续 token 之间，而不影响脚本的句法可接受性。</p>
       </emu-clause>
 
       <emu-clause id="sec-but-not">
@@ -729,11 +691,11 @@
         <p>产生式右手边可以使用短语“<b>but not</b>”并随后指明要排除的展开，来指定某些展开不被允许。例如，产生式：</p>
         <emu-grammar type="definition" example=""><emu-production name="Identifier" type="lexical" id="prod-grammar-notation-Identifier">
     <emu-nt><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> <emu-geq>::</emu-geq> <emu-rhs a="v6xddc2h">
-        <emu-nt id="_ref_15332"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> <emu-gmod>but not <emu-nt id="_ref_15333"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt></emu-gmod>
+        <emu-nt id="_ref_14713"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> <emu-gmod>but not <emu-nt id="_ref_14714"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt></emu-gmod>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-        <p>意味着非终结符 <emu-nt id="_ref_15334"><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> 可以被任何能够替换 <emu-nt id="_ref_15335"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> 的码点序列替换，条件是同一码点序列不能替换 <emu-nt id="_ref_15336"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt>。</p>
+        <p>意味着非终结符 <emu-nt id="_ref_14715"><a href="notational-conventions.html#prod-grammar-notation-Identifier">Identifier</a></emu-nt> 可以被任何能够替换 <emu-nt id="_ref_14716"><a href="ecmascript-language-lexical-grammar.html#prod-IdentifierName">IdentifierName</a></emu-nt> 的码点序列替换，条件是同一码点序列不能替换 <emu-nt id="_ref_14717"><a href="ecmascript-language-lexical-grammar.html#prod-ReservedWord">ReservedWord</a></emu-nt>。</p>
       </emu-clause>
 
       <emu-clause id="sec-descriptive-phrases">
@@ -751,8 +713,8 @@
 
   <emu-clause id="sec-algorithm-conventions">
     <h1><span class="secnum">5.2</span> 算法约定</h1>
-    <p>本规范经常使用编号列表来指定算法步骤。这些算法用于精确指定 ECMAScript 语言构造所要求的语义。这些算法并不意在暗示使用任何特定实现技术。在实践中，可能存在更高效的算法来实现给定特性。</p>
-    <p>算法可以用一个有序的、逗号分隔的别名名称序列显式参数化，这些别名可在算法步骤中用于引用对应位置传入的实参。可选参数用外层方括号表示（[ , <var>name</var> ]），并且在算法步骤中与必需参数没有区别。rest 参数可以出现在参数列表末尾，以前导省略号表示（, ...<var>name</var>）。rest 参数将必需参数和可选参数之后提供的所有实参捕获到一个 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_1154"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">List</a></emu-xref> 中。如果没有这样的额外实参，该 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_1155"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">List</a></emu-xref> 为空。</p>
+    <p>本规范经常使用编号<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1158"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>来指定算法步骤。这些算法用于精确指定 ECMAScript 语言构造所要求的语义。这些算法并不意在暗示使用任何特定实现技术。在实践中，可能存在更高效的算法来实现给定特性。</p>
+    <p>算法可以用一个有序的、逗号分隔的别名名称序列显式参数化，这些别名可在算法步骤中用于引用对应位置传入的实参。可选参数用外层方括号表示（[ , <var>name</var> ]），并且在算法步骤中与必需参数没有区别。rest 参数可以出现在参数<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1159"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>末尾，以前导省略号表示（, ...<var>name</var>）。rest 参数将必需参数和可选参数之后提供的所有实参捕获到一个 List 中。如果没有这样的额外实参，该 List 为空。</p>
     <p>算法步骤可以细分为顺序子步骤。子步骤会缩进，并且自身也可以进一步细分为缩进子步骤。大纲编号约定用于标识子步骤，第一层子步骤用小写字母标号，第二层子步骤用小写罗马数字标号。如果需要超过三层，则这些规则重复，第四层使用数字标号。例如：</p>
     <emu-alg example=""><ol><li>顶层步骤<ol><li>子步骤。</li><li>子步骤。<ol><li>子子步骤。<ol><li>子子子步骤<ol><li>子子子子步骤<ol><li>子子子子子步骤</li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></emu-alg>
     <p>步骤或子步骤可以写作一个“if”谓词，用其条件控制其子步骤。在这种情况下，只有在该谓词为真时才应用这些子步骤。如果步骤或子步骤以词语“else”开头，则它是同一层级前一个“if”谓词步骤的否定谓词。</p>
@@ -777,99 +739,99 @@
 
     <emu-clause id="sec-algorithm-conventions-syntax-directed-operations">
       <h1><span class="secnum">5.2.3</span> 语法制导操作</h1>
-      <p><dfn variants="syntax-directed operations" tabindex="-1">语法制导操作</dfn>是一个命名操作，其定义由算法组成，每个算法与某个 ECMAScript 语法中的一个或多个产生式关联。具有多个可选定义的产生式，通常会为每个替代项具有不同的算法。当算法与语法产生式关联时，它可以像引用算法参数一样引用该产生式替代项的终结符和非终结符符号。以这种方式使用时，非终结符符号指的是解析源文本时匹配到的实际替代定义。由某个语法产生式或由它派生出的 <emu-xref href="#sec-syntactic-grammar" id="_ref_1156"><a href="notational-conventions.html#sec-syntactic-grammar">Parse Node</a></emu-xref> <dfn oldids="sec-static-semantics-sourcetext" tabindex="-1"><span id="sec-static-semantics-sourcetext"></span>匹配的源文本</dfn>，是从参与匹配的第一个终结符开始处到参与匹配的最后一个终结符结束处之间的那部分源文本。</p>
+      <p><dfn variants="syntax-directed operations" tabindex="-1">语法制导操作</dfn>是一个命名操作，其定义由算法组成，每个算法与某个 ECMAScript 语法中的一个或多个产生式关联。具有多个可选定义的产生式，通常会为每个替代项具有不同的算法。当算法与语法产生式关联时，它可以像引用算法参数一样引用该产生式替代项的终结符和非终结符符号。以这种方式使用时，非终结符符号指的是解析源文本时匹配到的实际替代定义。由某个语法产生式或由它派生出的 <emu-xref href="#sec-syntactic-grammar" id="_ref_1160"><a href="notational-conventions.html#sec-syntactic-grammar">Parse Node</a></emu-xref> <dfn oldids="sec-static-semantics-sourcetext" tabindex="-1"><span id="sec-static-semantics-sourcetext"></span>匹配的源文本</dfn>，是从参与匹配的第一个终结符开始处到参与匹配的最后一个终结符结束处之间的那部分源文本。</p>
       <p>当算法与产生式替代项关联时，该替代项通常显示时不带任何“[ ]”语法注解。此类注解只应影响对替代项的句法识别，而不影响该替代项的相关语义。</p>
       <p>语法制导操作使用以下算法中步骤 <emu-xref href="#step-sdo-invocation-example-1" id="_ref_38"><a href="notational-conventions.html#step-sdo-invocation-example-1">1</a></emu-xref>、<emu-xref href="#step-sdo-invocation-example-2" id="_ref_39"><a href="notational-conventions.html#step-sdo-invocation-example-2">3</a></emu-xref> 和 <emu-xref href="#step-sdo-invocation-example-3" id="_ref_40"><a href="notational-conventions.html#step-sdo-invocation-example-3">4</a></emu-xref> 上的约定，以 parse node 以及可选的其他参数来调用：</p>
       <emu-alg example=""><ol><li id="step-sdo-invocation-example-1">Let <var>status</var> be SyntaxDirectedOperation of <emu-nt>SomeNonTerminal</emu-nt>.</li><li>Let <var>someParseNode</var> be the parse of some source text.</li><li id="step-sdo-invocation-example-2">Perform SyntaxDirectedOperation of <var>someParseNode</var>.</li><li id="step-sdo-invocation-example-3">Perform SyntaxDirectedOperation of <var>someParseNode</var> with argument <emu-val>"value"</emu-val>.</li></ol></emu-alg>
-      <p>除非另有明确规定，否则所有<emu-xref href="#sec-context-free-grammars" id="_ref_1157"><a href="notational-conventions.html#sec-context-free-grammars">链式产生式</a></emu-xref>对可能应用于该产生式左手边非终结符的每个操作，都有一个隐式定义。该隐式定义只是用相同参数（若有）将同一操作重新应用于该<emu-xref href="#sec-context-free-grammars" id="_ref_1158"><a href="notational-conventions.html#sec-context-free-grammars">链式产生式</a></emu-xref>唯一的右手边非终结符，然后返回结果。例如，假设某算法具有形如“Return <emu-xref aoid="Evaluation" id="_ref_1159"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> of <emu-nt id="_ref_15337"><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt>”的步骤，并且有一个产生式：</p>
+      <p>除非另有明确规定，否则所有<emu-xref href="#sec-context-free-grammars" id="_ref_1161"><a href="notational-conventions.html#sec-context-free-grammars">链式产生式</a></emu-xref>对可能应用于该产生式左手边非终结符的每个操作，都有一个隐式定义。该隐式定义只是用相同参数（若有）将同一操作重新应用于该<emu-xref href="#sec-context-free-grammars" id="_ref_1162"><a href="notational-conventions.html#sec-context-free-grammars">链式产生式</a></emu-xref>唯一的右手边非终结符，然后返回结果。例如，假设某算法具有形如“Return <emu-xref aoid="Evaluation" id="_ref_1163"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> of <emu-nt id="_ref_14718"><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt>”的步骤，并且有一个产生式：</p>
       <emu-grammar example=""><emu-production name="Block">
     <emu-nt><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="z4ljp0ar">
         <emu-t>{</emu-t>
-        <emu-nt id="_ref_15338"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
+        <emu-nt id="_ref_14719"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
         <emu-t>}</emu-t>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <p>但 <emu-xref aoid="Evaluation" id="_ref_1160"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> 操作没有与该产生式关联算法。在这种情况下，<emu-xref aoid="Evaluation" id="_ref_1161"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> 操作会隐式<emu-xref href="#sec-completion-record-specification-type" id="_ref_1162"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>如下形式的关联：</p>
-      <p><b>Runtime Semantics: <emu-xref aoid="Evaluation" id="_ref_1163"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref></b></p>
+      <p>但 <emu-xref aoid="Evaluation" id="_ref_1164"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> 操作没有与该产生式关联算法。在这种情况下，<emu-xref aoid="Evaluation" id="_ref_1165"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref> 操作会隐式<emu-xref href="#sec-completion-record-specification-type" id="_ref_1166"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>如下形式的关联：</p>
+      <p><b>Runtime Semantics: <emu-xref aoid="Evaluation" id="_ref_1167"><a href="syntax-directed-operations.html#sec-evaluation">Evaluation</a></emu-xref></b></p>
       <emu-grammar example=""><emu-production name="Block" collapsed="">
     <emu-nt><a href="ecmascript-language-statements-and-declarations.html#prod-Block">Block</a></emu-nt> <emu-geq>:</emu-geq> <emu-rhs a="z4ljp0ar">
         <emu-t>{</emu-t>
-        <emu-nt id="_ref_15339"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
+        <emu-nt id="_ref_14720"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>
         <emu-t>}</emu-t>
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <emu-alg example=""><ol><li>Return <emu-xref aoid="Evaluation" id="_ref_1164"><a href="syntax-directed-operations.html#sec-evaluation" class="e-user-code">Evaluation</a></emu-xref> of <emu-nt id="_ref_15340"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>.</li></ol></emu-alg>
+      <emu-alg example=""><ol><li>Return <emu-xref aoid="Evaluation" id="_ref_1168"><a href="syntax-directed-operations.html#sec-evaluation" class="e-user-code">Evaluation</a></emu-xref> of <emu-nt id="_ref_14721"><a href="ecmascript-language-statements-and-declarations.html#prod-StatementList">StatementList</a></emu-nt>.</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-runtime-semantics">
       <h1><span class="secnum">5.2.4</span> 运行时语义</h1>
-      <p>指定必须在运行时调用的语义的算法称为<dfn tabindex="-1">运行时语义</dfn>。运行时语义由<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1165"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>或<emu-xref href="#sec-algorithm-conventions-syntax-directed-operations" id="_ref_1166"><a href="notational-conventions.html#sec-algorithm-conventions-syntax-directed-operations">语法制导操作</a></emu-xref>定义。</p>
+      <p>指定必须在运行时调用的语义的算法称为<dfn tabindex="-1">运行时语义</dfn>。运行时语义由<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1169"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>或<emu-xref href="#sec-algorithm-conventions-syntax-directed-operations" id="_ref_1170"><a href="notational-conventions.html#sec-algorithm-conventions-syntax-directed-operations">语法制导操作</a></emu-xref>定义。</p>
 
       <emu-clause id="sec-completion-ao" type="abstract operation" aoid="Completion">
         <h1><span class="secnum">5.2.4.1</span> Completion ( <var>completionRecord</var> )</h1>
-        <p>The abstract operation Completion takes argument <var>completionRecord</var> (a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1167"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>) and returns a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1168"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>. 它用于强调正在返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1169"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>。 It performs the following steps when called:</p>
-        <emu-alg><ol><li><emu-xref href="#assert" id="_ref_1170"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>completionRecord</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1171"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>Return <var>completionRecord</var>.</li></ol></emu-alg>
+        <p>The abstract operation Completion takes argument <var>completionRecord</var> (a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1171"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>) and returns a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1172"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>. 它用于强调正在返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1173"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>。 It performs the following steps when called:</p>
+        <emu-alg><ol><li><emu-xref href="#assert" id="_ref_1174"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>completionRecord</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1175"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>Return <var>completionRecord</var>.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-throw-an-exception">
         <h1><span class="secnum">5.2.4.2</span> Throw</h1>
-        <p>在算法步骤中，词语“throw”是返回调用 <emu-xref aoid="ThrowCompletion" id="_ref_1172"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref> 的结果的简写。例如，</p>
+        <p>在算法步骤中，词语“throw”是返回调用 <emu-xref aoid="ThrowCompletion" id="_ref_1176"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref> 的结果的简写。例如，</p>
         <emu-alg example=""><ol><li>If <var>result</var>.<var class="field">[[Error]]</var> is not <emu-const>none</emu-const>, throw <var>result</var>.<var class="field">[[Error]]</var>.</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li>If <var>result</var>.<var class="field">[[Error]]</var> is not <emu-const>none</emu-const>, return <emu-xref aoid="ThrowCompletion" id="_ref_1173"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref>(<var>result</var>.<var class="field">[[Error]]</var>).</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>If <var>result</var>.<var class="field">[[Error]]</var> is not <emu-const>none</emu-const>, return <emu-xref aoid="ThrowCompletion" id="_ref_1177"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref>(<var>result</var>.<var class="field">[[Error]]</var>).</li></ol></emu-alg>
         <p>要求抛出特定类型异常的算法步骤会构造要抛出的该类型异常。例如，</p>
         <emu-alg example=""><ol><li>Throw a <emu-val>TypeError</emu-val> exception.</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li>Return <emu-xref aoid="ThrowCompletion" id="_ref_1174"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref>(a newly created <emu-val>TypeError</emu-val> object).</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>Return <emu-xref aoid="ThrowCompletion" id="_ref_1178"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref>(a newly created <emu-val>TypeError</emu-val> object).</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt,sec-returnifabrupt-shorthands"><span id="sec-returnifabrupt-shorthands"></span><span id="sec-returnifabrupt"></span>
         <h1><span class="secnum">5.2.4.3</span> 解包 Completion Records 的简写</h1>
-        <p>前缀“?”和“!”用作解包 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1175"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Records</a></emu-xref> 的简写。“?”用于将<emu-xref href="#sec-completion-record-specification-type" id="_ref_1176"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">突然完成</a></emu-xref>传播给调用方，或在其他情况下解包<emu-xref href="#sec-completion-record-specification-type" id="_ref_1177"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">正常完成</a></emu-xref>。“!”用于断言 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1178"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 是正常的并解包它。形式上，步骤</p>
+        <p>前缀“?”和“!”用作解包 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1179"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Records</a></emu-xref> 的简写。“?”用于将<emu-xref href="#sec-completion-record-specification-type" id="_ref_1180"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">突然完成</a></emu-xref>传播给调用方，或在其他情况下解包<emu-xref href="#sec-completion-record-specification-type" id="_ref_1181"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">正常完成</a></emu-xref>。“!”用于断言 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1182"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 是正常的并解包它。形式上，步骤</p>
         <emu-alg example=""><ol><li>Let <var>result</var> be ?&nbsp;<var>record</var>.</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li><emu-xref href="#assert" id="_ref_1179"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>record</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1180"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>If <var>record</var> is an abrupt completion, return <var>record</var>.</li><li>Let <var>result</var> be <var>record</var>.<var class="field">[[Value]]</var>.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><emu-xref href="#assert" id="_ref_1183"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>record</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1184"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>If <var>record</var> is an abrupt completion, return <var>record</var>.</li><li>Let <var>result</var> be <var>record</var>.<var class="field">[[Value]]</var>.</li></ol></emu-alg>
         <p>同样，步骤</p>
         <emu-alg example=""><ol><li>Let <var>result</var> be !&nbsp;<var>record</var>.</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li><emu-xref href="#assert" id="_ref_1181"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>record</var> is a normal completion.</li><li>Let <var>result</var> be <var>record</var>.<var class="field">[[Value]]</var>.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><emu-xref href="#assert" id="_ref_1185"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>record</var> is a normal completion.</li><li>Let <var>result</var> be <var>record</var>.<var class="field">[[Value]]</var>.</li></ol></emu-alg>
         <p>当“?”或“!”在任何其他上下文中使用时，首先应用 <emu-xref href="#sec-evaluation-order" title="" id="_ref_41"><a href="notational-conventions.html#sec-evaluation-order">求值顺序</a></emu-xref> 中给出的重写，直到可以应用本规则，然后应用本规则。例如，步骤</p>
         <emu-alg example=""><ol><li>Perform AO(? Other()).</li></ol></emu-alg>
         <p>可以重写为</p>
         <emu-alg example=""><ol><li>Let <var>tmp1</var> be Other().</li><li>Let <var>tmp2</var> be ?&nbsp;<var>tmp1</var>.</li><li>Perform AO(<var>tmp2</var>).</li></ol></emu-alg>
         <p>它又展开为</p>
-        <emu-alg example=""><ol><li>Let <var>tmp1</var> be Other().</li><li><emu-xref href="#assert" id="_ref_1182"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>tmp1</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1183"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>If <var>tmp1</var> is an abrupt completion, return <var>tmp1</var>.</li><li>Let <var>tmp2</var> be <var>tmp1</var>.<var class="field">[[Value]]</var>.</li><li>Perform AO(<var>tmp2</var>).</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>Let <var>tmp1</var> be Other().</li><li><emu-xref href="#assert" id="_ref_1186"><a href="notational-conventions.html#assert">Assert</a></emu-xref>: <var>tmp1</var> is a <emu-xref href="#sec-completion-record-specification-type" id="_ref_1187"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>.</li><li>If <var>tmp1</var> is an abrupt completion, return <var>tmp1</var>.</li><li>Let <var>tmp2</var> be <var>tmp1</var>.<var class="field">[[Value]]</var>.</li><li>Perform AO(<var>tmp2</var>).</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-implicit-normal-completion" oldids="sec-implicit-completion-values"><span id="sec-implicit-completion-values"></span>
         <h1><span class="secnum">5.2.4.4</span> 隐式正常完成</h1>
-        <p>在声明为返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1184"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1185"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>内的算法中，以及在所有内置函数内，返回值会首先传递给 <emu-xref aoid="NormalCompletion" id="_ref_1186"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>，并使用所得结果。本规则不适用于 <emu-xref aoid="Completion" id="_ref_1187"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref> 算法内部，也不适用于该步骤中返回值已被清楚标记为 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1188"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的情况；这些情况是：</p>
+        <p>在声明为返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1188"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1189"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>内的算法中，以及在所有内置函数内，返回值会首先传递给 <emu-xref aoid="NormalCompletion" id="_ref_1190"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>，并使用所得结果。本规则不适用于 <emu-xref aoid="Completion" id="_ref_1191"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref> 算法内部，也不适用于该步骤中返回值已被清楚标记为 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1192"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的情况；这些情况是：</p>
         <ul>
-          <li>直接返回应用 <emu-xref aoid="Completion" id="_ref_1189"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref>、<emu-xref aoid="NormalCompletion" id="_ref_1190"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>、<emu-xref aoid="ThrowCompletion" id="_ref_1191"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref> 或 <emu-xref aoid="ReturnCompletion" id="_ref_1192"><a href="ecmascript-data-types-and-values.html#sec-returncompletion">ReturnCompletion</a></emu-xref> 的结果时</li>
-          <li>直接返回构造 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1193"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的结果时</li>
+          <li>直接返回应用 <emu-xref aoid="Completion" id="_ref_1193"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref>、<emu-xref aoid="NormalCompletion" id="_ref_1194"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>、<emu-xref aoid="ThrowCompletion" id="_ref_1195"><a href="ecmascript-data-types-and-values.html#sec-throwcompletion">ThrowCompletion</a></emu-xref> 或 <emu-xref aoid="ReturnCompletion" id="_ref_1196"><a href="ecmascript-data-types-and-values.html#sec-returncompletion">ReturnCompletion</a></emu-xref> 的结果时</li>
+          <li>直接返回构造 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1197"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 的结果时</li>
         </ul>
-        <p>如果从这类<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1194"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>中以任何其他方式返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1195"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>，则这是编辑错误。例如，在这些<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1196"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>中，</p>
+        <p>如果从这类<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1198"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>中以任何其他方式返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1199"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref>，则这是编辑错误。例如，在这些<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1200"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>中，</p>
         <emu-alg example=""><ol><li>Return <emu-val>true</emu-val>.</li></ol></emu-alg>
         <p>与以下任一形式含义相同</p>
-        <emu-alg example=""><ol><li>Return <emu-xref aoid="NormalCompletion" id="_ref_1197"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>Return <emu-xref aoid="NormalCompletion" id="_ref_1201"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li></ol></emu-alg>
         <p>或</p>
-        <emu-alg example=""><ol><li>Let <var>completion</var> be <emu-xref aoid="NormalCompletion" id="_ref_1198"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li><li>Return <emu-xref aoid="Completion" id="_ref_1199"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref>(<var>completion</var>).</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>Let <var>completion</var> be <emu-xref aoid="NormalCompletion" id="_ref_1202"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li><li>Return <emu-xref aoid="Completion" id="_ref_1203"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref>(<var>completion</var>).</li></ol></emu-alg>
         <p>或</p>
-        <emu-alg example=""><ol><li>Return <emu-xref href="#sec-completion-record-specification-type" id="_ref_1200"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> { <var class="field">[[Type]]</var>: <emu-const>normal</emu-const>, <var class="field">[[Value]]</var>: <emu-val>true</emu-val>, <var class="field">[[Target]]</var>: <emu-const>empty</emu-const>&nbsp;}.</li></ol></emu-alg>
-        <p>注意，通过 <emu-xref href="#sec-shorthands-for-unwrapping-completion-records" id="_ref_42"><a href="notational-conventions.html#sec-shorthands-for-unwrapping-completion-records">? 简写展开</a></emu-xref>，以下示例是允许的，因为在展开后的步骤中，突然情况会直接返回应用 <emu-xref aoid="Completion" id="_ref_1201"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref> 的结果，而正常情况会在解包之后发生隐式 <emu-xref aoid="NormalCompletion" id="_ref_1202"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref> 应用。</p>
+        <emu-alg example=""><ol><li>Return <emu-xref href="#sec-completion-record-specification-type" id="_ref_1204"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> { <var class="field">[[Type]]</var>: <emu-const>normal</emu-const>, <var class="field">[[Value]]</var>: <emu-val>true</emu-val>, <var class="field">[[Target]]</var>: <emu-const>empty</emu-const>&nbsp;}.</li></ol></emu-alg>
+        <p>注意，通过 <emu-xref href="#sec-shorthands-for-unwrapping-completion-records" id="_ref_42"><a href="notational-conventions.html#sec-shorthands-for-unwrapping-completion-records">? 简写展开</a></emu-xref>，以下示例是允许的，因为在展开后的步骤中，突然情况会直接返回应用 <emu-xref aoid="Completion" id="_ref_1205"><a href="notational-conventions.html#sec-completion-ao">Completion</a></emu-xref> 的结果，而正常情况会在解包之后发生隐式 <emu-xref aoid="NormalCompletion" id="_ref_1206"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref> 应用。</p>
         <emu-alg example=""><ol><li>Return ?&nbsp;<var>completion</var>.</li></ol></emu-alg>
-        <p>以下示例会是编辑错误，因为正在返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1203"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 而该步骤中未进行注解。</p>
-        <emu-alg example=""><ol><li>Let <var>completion</var> be <emu-xref aoid="NormalCompletion" id="_ref_1204"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li><li>Return <var>completion</var>.</li></ol></emu-alg>
+        <p>以下示例会是编辑错误，因为正在返回 <emu-xref href="#sec-completion-record-specification-type" id="_ref_1207"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">Completion Record</a></emu-xref> 而该步骤中未进行注解。</p>
+        <emu-alg example=""><ol><li>Let <var>completion</var> be <emu-xref aoid="NormalCompletion" id="_ref_1208"><a href="ecmascript-data-types-and-values.html#sec-normalcompletion">NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>).</li><li>Return <var>completion</var>.</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-static-semantic-rules">
       <h1><span class="secnum">5.2.5</span> 静态语义</h1>
-      <p>上下文无关语法不足以表达所有规则，这些规则定义输入元素流是否形成可被求值的有效 ECMAScript <emu-nt id="_ref_15341"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15342"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>。在某些情况下，需要使用 ECMAScript 算法约定或散文式要求来表达的额外规则。这类规则总是与语法产生式关联，并称为该产生式的<dfn tabindex="-1">静态语义</dfn>。</p>
+      <p>上下文无关语法不足以表达所有规则，这些规则定义输入元素流是否形成可被求值的有效 ECMAScript <emu-nt id="_ref_14722"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14723"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt>。在某些情况下，需要使用 ECMAScript 算法约定或散文式要求来表达的额外规则。这类规则总是与语法产生式关联，并称为该产生式的<dfn tabindex="-1">静态语义</dfn>。</p>
       <p>Static Semantic Rules 具有名称，并且通常使用算法定义。命名的 Static Semantic Rules 与语法产生式关联，而具有多个可选定义的产生式通常会为每个适用的命名静态语义规则的每个替代项具有不同算法。</p>
-      <p>一种特殊的静态语义规则是 <dfn id="early-error-rule" tabindex="-1">Early Error Rule</dfn>。Early error 规则定义与特定语法产生式关联的 early error 条件（参见条款 <emu-xref href="#sec-error-handling-and-language-extensions" id="_ref_43"><a href="error-handling-and-language-extensions.html#sec-error-handling-and-language-extensions">17</a></emu-xref>）。大多数 early error 规则的求值不会在本规范的算法中显式调用。一致实现必须在首次求值 <emu-nt id="_ref_15343"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15344"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 之前，验证用于解析该 <emu-nt id="_ref_15345"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15346"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 的产生式的所有 early error 规则。如果违反任何 early error 规则，则该 <emu-nt id="_ref_15347"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_15348"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 无效且不能被求值。</p>
+      <p>一种特殊的静态语义规则是 <dfn id="early-error-rule" tabindex="-1">Early Error Rule</dfn>。Early error 规则定义与特定语法产生式关联的 early error 条件（参见条款 <emu-xref href="#sec-error-handling-and-language-extensions" id="_ref_43"><a href="error-handling-and-language-extensions.html#sec-error-handling-and-language-extensions">17</a></emu-xref>）。大多数 early error 规则的求值不会在本规范的算法中显式调用。一致实现必须在首次求值 <emu-nt id="_ref_14724"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14725"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 之前，验证用于解析该 <emu-nt id="_ref_14726"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14727"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 的产生式的所有 early error 规则。如果违反任何 early error 规则，则该 <emu-nt id="_ref_14728"><a href="ecmascript-language-scripts-and-modules.html#prod-Script">Script</a></emu-nt> 或 <emu-nt id="_ref_14729"><a href="ecmascript-language-scripts-and-modules.html#prod-Module">Module</a></emu-nt> 无效且不能被求值。</p>
     </emu-clause>
 
     <emu-clause id="sec-mathematical-operations">
@@ -877,49 +839,49 @@
       <p>本规范引用以下种类的数值：</p>
       <ul>
         <li><dfn id="mathematical-value" variants="mathematical value,mathematical values" tabindex="-1">数学值</dfn>：任意实数，用作默认数值类型。</li>
-        <li><dfn id="extended-mathematical-value" variants="extended mathematical value,extended mathematical values" tabindex="-1">扩展数学值</dfn>：<emu-xref href="#mathematical-value" id="_ref_1205"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>加上 +∞ 和 -∞。</li>
-        <li><em>Numbers</em>：<emu-xref href="#sec-bibliography" id="_ref_1206"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> binary64（双精度浮点）值。</li>
-        <li><em>BigInts</em>：与任意整数一一对应的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1207"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>。</li>
+        <li><dfn id="extended-mathematical-value" variants="extended mathematical value,extended mathematical values" tabindex="-1">扩展数学值</dfn>：<emu-xref href="#mathematical-value" id="_ref_1209"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>加上 +∞ 和 -∞。</li>
+        <li><em>Numbers</em>：<emu-xref href="#sec-bibliography" id="_ref_1210"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> binary64（双精度浮点）值。</li>
+        <li><em>BigInts</em>：与任意整数一一对应的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1211"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>。</li>
       </ul>
 
-      <p>在本规范语言中，数值使用下标后缀来区分不同的数值种类。下标 <sub>𝔽</sub> 指 Numbers，下标 <sub>ℤ</sub> 指 BigInts。不带下标后缀的数值指<emu-xref href="#mathematical-value" id="_ref_1208"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。本规范以 10 进制表示大多数数值；也使用形如 0x 后跟数字 0-9 或 A-F 的数值作为 16 进制值。</p>
-      <p>一般而言，当本规范引用一个数值时，例如在短语“the length of <var>y</var>”或“the <emu-xref href="#integer" id="_ref_1209"><a href="notational-conventions.html#integer">integer</a></emu-xref> represented by the four hexadecimal digits ...”中，如果未显式指定数值种类，该短语指<emu-xref href="#mathematical-value" id="_ref_1210"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。引用 Number 或 BigInt 值的短语会显式标注；例如，“the Number value for the number of code points in …”或“the <emu-xref href="#bigint-value-for" id="_ref_1211"><a href="notational-conventions.html#bigint-value-for">BigInt value for</a></emu-xref> …”。</p>
-      <p>当术语 <dfn id="integer" oldids="mathematical integer" variants="integers" tabindex="-1"><span id="mathematical integer"></span>integer</dfn> 在本规范中使用时，除非另有说明，它指的是属于整数集合的<emu-xref href="#mathematical-value" id="_ref_1212"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。当术语 <dfn id="integral-number" oldids="sec-isintegralnumber,sec-isinteger" variants="integral Numbers" tabindex="-1"><span id="sec-isinteger"></span><span id="sec-isintegralnumber"></span>integral Number</dfn> 在本规范中使用时，它指的是其<emu-xref href="#mathematical-value" id="_ref_1213"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>属于整数集合的<emu-xref href="#finite" id="_ref_1214"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref> <emu-xref href="#number-value-for" id="_ref_1215"><a href="ecmascript-data-types-and-values.html#number-value-for">Number 值</a></emu-xref>。</p>
-      <p>数值运算符如 +、×、= 和 ≥ 指由操作数类型决定的那些操作。当应用于<emu-xref href="#mathematical-value" id="_ref_1216"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>时，运算符指通常的数学操作。当应用于<emu-xref href="#extended-mathematical-value" id="_ref_1217"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>时，运算符指扩展实数上的通常数学操作；不定式未定义，其在本规范中的使用应被视为编辑错误。当应用于 Numbers 时，运算符指 <emu-xref href="#sec-bibliography" id="_ref_1218"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> 中的相关操作。当应用于 BigInts 时，运算符指应用于该 BigInt <emu-xref href="#mathematical-value" id="_ref_1219"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>的通常数学操作。应用于混合类型操作数（例如 Number 和<emu-xref href="#mathematical-value" id="_ref_1220"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>）的数值运算符未定义，并且在本规范中应被视为编辑错误。</p>
-      <p><emu-xref href="#mathematical-value" id="_ref_1221"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>与 Numbers 或 BigInts 之间的转换在本文档中始终是显式的。从<emu-xref href="#mathematical-value" id="_ref_1222"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>或<emu-xref href="#extended-mathematical-value" id="_ref_1223"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref> <var>x</var> 到 Number 的转换表示为“the Number value for <var>x</var>”或 <emu-eqn id="𝔽" aoid="𝔽" class="inline">𝔽(<var>x</var>)</emu-eqn>，并在 <emu-xref href="#sec-ecmascript-language-types-number-type" id="_ref_44"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-number-type">6.1.6.1</a></emu-xref> 中定义。从整数 <var>x</var> 到 BigInt 的转换表示为“the <dfn id="bigint-value-for" tabindex="-1">BigInt value for</dfn> <var>x</var>”或 <emu-eqn id="ℤ" aoid="ℤ" class="inline">ℤ(<var>x</var>)</emu-eqn>。从 Number 或 BigInt <var>x</var> 到<emu-xref href="#mathematical-value" id="_ref_1224"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>的转换表示为“the <dfn id="mathematical-value-of" tabindex="-1">mathematical value of</dfn> <var>x</var>”，或 <emu-eqn id="ℝ" aoid="ℝ" class="inline">ℝ(<var>x</var>)</emu-eqn>。<emu-val>+0</emu-val><sub>𝔽</sub> 和 <emu-val>-0</emu-val><sub>𝔽</sub> 的<emu-xref href="#mathematical-value" id="_ref_1225"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>是<emu-xref href="#mathematical-value" id="_ref_1226"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref> 0。非<emu-xref href="#finite" id="_ref_1227"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>值的<emu-xref href="#mathematical-value" id="_ref_1228"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>未定义。<var>x</var> 的 <dfn id="extended-mathematical-value-of" tabindex="-1">extended mathematical value of</dfn> 是<emu-xref href="#finite" id="_ref_1229"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>值时 <var>x</var> 的<emu-xref href="#mathematical-value" id="_ref_1230"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>，而对 <emu-val>+∞</emu-val><sub>𝔽</sub> 和 <emu-val>-∞</emu-val><sub>𝔽</sub> 分别为 +∞ 和 -∞；对 <emu-val>NaN</emu-val> 未定义。</p>
+      <p>在本规范语言中，数值使用下标后缀来区分不同的数值种类。下标 <sub>𝔽</sub> 指 Numbers，下标 <sub>ℤ</sub> 指 BigInts。不带下标后缀的数值指<emu-xref href="#mathematical-value" id="_ref_1212"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。本规范以 10 进制表示大多数数值；也使用形如 0x 后跟数字 0-9 或 A-F 的数值作为 16 进制值。</p>
+      <p>一般而言，当本规范引用一个数值时，例如在短语“the length of <var>y</var>”或“the <emu-xref href="#integer" id="_ref_1213"><a href="notational-conventions.html#integer">integer</a></emu-xref> represented by the four hexadecimal digits ...”中，如果未显式指定数值种类，该短语指<emu-xref href="#mathematical-value" id="_ref_1214"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。引用 Number 或 BigInt 值的短语会显式标注；例如，“the Number value for the number of code points in …”或“the <emu-xref href="#bigint-value-for" id="_ref_1215"><a href="notational-conventions.html#bigint-value-for">BigInt value for</a></emu-xref> …”。</p>
+      <p>当术语 <dfn id="integer" oldids="mathematical integer" variants="integers" tabindex="-1"><span id="mathematical integer"></span>integer</dfn> 在本规范中使用时，除非另有说明，它指的是属于整数集合的<emu-xref href="#mathematical-value" id="_ref_1216"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>。当术语 <dfn id="integral-number" oldids="sec-isintegralnumber,sec-isinteger" variants="integral Numbers" tabindex="-1"><span id="sec-isinteger"></span><span id="sec-isintegralnumber"></span>integral Number</dfn> 在本规范中使用时，它指的是其<emu-xref href="#mathematical-value" id="_ref_1217"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>属于整数集合的<emu-xref href="#finite" id="_ref_1218"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref> <emu-xref href="#number-value-for" id="_ref_1219"><a href="ecmascript-data-types-and-values.html#number-value-for">Number 值</a></emu-xref>。</p>
+      <p>数值运算符如 +、×、= 和 ≥ 指由操作数类型决定的那些操作。当应用于<emu-xref href="#mathematical-value" id="_ref_1220"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>时，运算符指通常的数学操作。当应用于<emu-xref href="#extended-mathematical-value" id="_ref_1221"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>时，运算符指扩展实数上的通常数学操作；不定式未定义，其在本规范中的使用应被视为编辑错误。当应用于 Numbers 时，运算符指 <emu-xref href="#sec-bibliography" id="_ref_1222"><a href="bibliography.html#sec-bibliography">IEEE 754-2019</a></emu-xref> 中的相关操作。当应用于 BigInts 时，运算符指应用于该 BigInt <emu-xref href="#mathematical-value" id="_ref_1223"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>的通常数学操作。应用于混合类型操作数（例如 Number 和<emu-xref href="#mathematical-value" id="_ref_1224"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>）的数值运算符未定义，并且在本规范中应被视为编辑错误。</p>
+      <p><emu-xref href="#mathematical-value" id="_ref_1225"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>与 Numbers 或 BigInts 之间的转换在本文档中始终是显式的。从<emu-xref href="#mathematical-value" id="_ref_1226"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>或<emu-xref href="#extended-mathematical-value" id="_ref_1227"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref> <var>x</var> 到 Number 的转换表示为“the Number value for <var>x</var>”或 <emu-eqn id="𝔽" aoid="𝔽" class="inline">𝔽(<var>x</var>)</emu-eqn>，并在 <emu-xref href="#sec-ecmascript-language-types-number-type" id="_ref_44"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-number-type">6.1.6.1</a></emu-xref> 中定义。从整数 <var>x</var> 到 BigInt 的转换表示为“the <dfn id="bigint-value-for" tabindex="-1">BigInt value for</dfn> <var>x</var>”或 <emu-eqn id="ℤ" aoid="ℤ" class="inline">ℤ(<var>x</var>)</emu-eqn>。从 Number 或 BigInt <var>x</var> 到<emu-xref href="#mathematical-value" id="_ref_1228"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>的转换表示为“the <dfn id="mathematical-value-of" tabindex="-1">mathematical value of</dfn> <var>x</var>”，或 <emu-eqn id="ℝ" aoid="ℝ" class="inline">ℝ(<var>x</var>)</emu-eqn>。<emu-val>+0</emu-val><sub>𝔽</sub> 和 <emu-val>-0</emu-val><sub>𝔽</sub> 的<emu-xref href="#mathematical-value" id="_ref_1229"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>是<emu-xref href="#mathematical-value" id="_ref_1230"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref> 0。非<emu-xref href="#finite" id="_ref_1231"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>值的<emu-xref href="#mathematical-value" id="_ref_1232"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>未定义。<var>x</var> 的 <dfn id="extended-mathematical-value-of" tabindex="-1">extended mathematical value of</dfn> 是<emu-xref href="#finite" id="_ref_1233"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>值时 <var>x</var> 的<emu-xref href="#mathematical-value" id="_ref_1234"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>，而对 <emu-val>+∞</emu-val><sub>𝔽</sub> 和 <emu-val>-∞</emu-val><sub>𝔽</sub> 分别为 +∞ 和 -∞；对 <emu-val>NaN</emu-val> 未定义。</p>
       <p>数学函数 <emu-eqn id="eqn-abs" aoid="abs" class="inline">abs(<var>x</var>)</emu-eqn> 产生 <var>x</var> 的绝对值，如果 <var>x</var> &lt; 0 则为 <emu-eqn class="inline">-<var>x</var></emu-eqn>，否则为 <var>x</var> 自身。</p>
       <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln" class="inline">ln(<var>x</var>)</emu-eqn> 产生 <var>x</var> 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10" class="inline">log10(<var>x</var>)</emu-eqn> 产生 <var>x</var> 的以 10 为底的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2" class="inline">log2(<var>x</var>)</emu-eqn> 产生 <var>x</var> 的以 2 为底的对数。</p>
-      <p>数学函数 <emu-eqn id="eqn-min" aoid="min" class="inline">min(<var>x1</var>, <var>x2</var>, … , <var>xN</var>)</emu-eqn> 产生 <emu-eqn class="inline"><var>x1</var></emu-eqn> 到 <emu-eqn class="inline"><var>xN</var></emu-eqn> 中数学上最小的值。数学函数 <emu-eqn id="eqn-max" aoid="max" class="inline">max(<var>x1</var>, <var>x2</var>, ..., <var>xN</var>)</emu-eqn> 产生 <emu-eqn class="inline"><var>x1</var></emu-eqn> 到 <emu-eqn class="inline"><var>xN</var></emu-eqn> 中数学上最大的值。这些数学函数的定义域和值域是<emu-xref href="#extended-mathematical-value" id="_ref_1231"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>。</p>
-      <p>记号“<emu-eqn id="eqn-modulo" aoid="modulo" class="inline"><var>x</var> modulo <var>y</var></emu-eqn>”（<var>y</var> 必须为<emu-xref href="#finite" id="_ref_1232"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>且非零）计算一个与 <var>y</var> 符号相同（或为零）的值 <var>k</var>，使得对于某个整数 <var>q</var>，有 <emu-eqn class="inline"><emu-xref aoid="abs" id="_ref_1233"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>(<var>k</var>) &lt; <emu-xref aoid="abs" id="_ref_1234"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>(<var>y</var>) and <var>x</var> - <var>k</var> = <var>q</var> × <var>y</var></emu-eqn>。</p>
-      <p>短语“the result of <dfn id="clamping" tabindex="-1">clamping</dfn> <var>x</var> between <var>lower</var> and <var>upper</var>”（其中 <var>x</var> 是<emu-xref href="#extended-mathematical-value" id="_ref_1235"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>，<var>lower</var> 和 <var>upper</var> 是满足 <var>lower</var> ≤ <var>upper</var> 的<emu-xref href="#mathematical-value" id="_ref_1236"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>）在 <var>x</var> &lt; <var>lower</var> 时产生 <var>lower</var>，在 <var>x</var> &gt; <var>upper</var> 时产生 <var>upper</var>，否则产生 <var>x</var>。</p>
+      <p>数学函数 <emu-eqn id="eqn-min" aoid="min" class="inline">min(<var>x1</var>, <var>x2</var>, … , <var>xN</var>)</emu-eqn> 产生 <emu-eqn class="inline"><var>x1</var></emu-eqn> 到 <emu-eqn class="inline"><var>xN</var></emu-eqn> 中数学上最小的值。数学函数 <emu-eqn id="eqn-max" aoid="max" class="inline">max(<var>x1</var>, <var>x2</var>, ..., <var>xN</var>)</emu-eqn> 产生 <emu-eqn class="inline"><var>x1</var></emu-eqn> 到 <emu-eqn class="inline"><var>xN</var></emu-eqn> 中数学上最大的值。这些数学函数的定义域和值域是<emu-xref href="#extended-mathematical-value" id="_ref_1235"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>。</p>
+      <p>记号“<emu-eqn id="eqn-modulo" aoid="modulo" class="inline"><var>x</var> modulo <var>y</var></emu-eqn>”（<var>y</var> 必须为<emu-xref href="#finite" id="_ref_1236"><a href="ecmascript-data-types-and-values.html#finite">有限</a></emu-xref>且非零）计算一个与 <var>y</var> 符号相同（或为零）的值 <var>k</var>，使得对于某个整数 <var>q</var>，有 <emu-eqn class="inline"><emu-xref aoid="abs" id="_ref_1237"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>(<var>k</var>) &lt; <emu-xref aoid="abs" id="_ref_1238"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>(<var>y</var>) and <var>x</var> - <var>k</var> = <var>q</var> × <var>y</var></emu-eqn>。</p>
+      <p>短语“the result of <dfn id="clamping" tabindex="-1">clamping</dfn> <var>x</var> between <var>lower</var> and <var>upper</var>”（其中 <var>x</var> 是<emu-xref href="#extended-mathematical-value" id="_ref_1239"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>，<var>lower</var> 和 <var>upper</var> 是满足 <var>lower</var> ≤ <var>upper</var> 的<emu-xref href="#mathematical-value" id="_ref_1240"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>）在 <var>x</var> &lt; <var>lower</var> 时产生 <var>lower</var>，在 <var>x</var> &gt; <var>upper</var> 时产生 <var>upper</var>，否则产生 <var>x</var>。</p>
       <p>数学函数 <emu-eqn id="eqn-floor" aoid="floor" class="inline">floor(<var>x</var>)</emu-eqn> 产生不大于 <var>x</var> 的最大整数（最接近 +∞）。</p>
       <emu-note><span class="note">Note</span><div class="note-contents">
-        <p><emu-eqn class="inline"><emu-xref aoid="floor" id="_ref_1237"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(<var>x</var>) = <var>x</var> - (<var>x</var> <emu-xref aoid="modulo" id="_ref_1238"><a href="notational-conventions.html#eqn-modulo">modulo</a></emu-xref> 1)</emu-eqn>。</p>
+        <p><emu-eqn class="inline"><emu-xref aoid="floor" id="_ref_1241"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(<var>x</var>) = <var>x</var> - (<var>x</var> <emu-xref aoid="modulo" id="_ref_1242"><a href="notational-conventions.html#eqn-modulo">modulo</a></emu-xref> 1)</emu-eqn>。</p>
       </div></emu-note>
-      <p>数学函数 <emu-eqn id="eqn-truncate" aoid="truncate" class="inline">truncate(<var>x</var>)</emu-eqn> 通过向零舍入来移除 <var>x</var> 的小数部分，如果 <var>x</var> &lt; 0 则产生 <emu-eqn class="inline">-<emu-xref aoid="floor" id="_ref_1239"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(-<var>x</var>)</emu-eqn>，否则产生 <emu-eqn class="inline"><emu-xref aoid="floor" id="_ref_1240"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(<var>x</var>)</emu-eqn>。</p>
-      <p>数学函数 <emu-xref aoid="min" id="_ref_1241"><a href="notational-conventions.html#eqn-min">min</a></emu-xref>、<emu-xref aoid="max" id="_ref_1242"><a href="notational-conventions.html#eqn-max">max</a></emu-xref>、<emu-xref aoid="abs" id="_ref_1243"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>、<emu-xref aoid="floor" id="_ref_1244"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref> 和 <emu-xref aoid="truncate" id="_ref_1245"><a href="notational-conventions.html#eqn-truncate">truncate</a></emu-xref> 对 Numbers 和 BigInts 未定义，任何使用这些方法且带有非<emu-xref href="#mathematical-value" id="_ref_1246"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>实参的情况，在本规范中都会是编辑错误。</p>
-      <p>从下界 <var>a</var> 到上界 <var>b</var> 的<dfn id="interval" tabindex="-1">区间</dfn>，是一个可能无限、可能为空的同一数值类型的数值集合。每个边界会被描述为<emu-xref href="#sec-completion-record-specification-type" id="_ref_1247"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>或排除其边界值，但不会同时如此。<emu-xref href="#interval" id="_ref_1248"><a href="notational-conventions.html#interval">区间</a></emu-xref>有以下四种：</p>
+      <p>数学函数 <emu-eqn id="eqn-truncate" aoid="truncate" class="inline">truncate(<var>x</var>)</emu-eqn> 通过向零舍入来移除 <var>x</var> 的小数部分，如果 <var>x</var> &lt; 0 则产生 <emu-eqn class="inline">-<emu-xref aoid="floor" id="_ref_1243"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(-<var>x</var>)</emu-eqn>，否则产生 <emu-eqn class="inline"><emu-xref aoid="floor" id="_ref_1244"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref>(<var>x</var>)</emu-eqn>。</p>
+      <p>数学函数 <emu-xref aoid="min" id="_ref_1245"><a href="notational-conventions.html#eqn-min">min</a></emu-xref>、<emu-xref aoid="max" id="_ref_1246"><a href="notational-conventions.html#eqn-max">max</a></emu-xref>、<emu-xref aoid="abs" id="_ref_1247"><a href="notational-conventions.html#eqn-abs">abs</a></emu-xref>、<emu-xref aoid="floor" id="_ref_1248"><a href="notational-conventions.html#eqn-floor">floor</a></emu-xref> 和 <emu-xref aoid="truncate" id="_ref_1249"><a href="notational-conventions.html#eqn-truncate">truncate</a></emu-xref> 对 Numbers 和 BigInts 未定义，任何使用这些方法且带有非<emu-xref href="#mathematical-value" id="_ref_1250"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>实参的情况，在本规范中都会是编辑错误。</p>
+      <p>从下界 <var>a</var> 到上界 <var>b</var> 的<dfn id="interval" tabindex="-1">区间</dfn>，是一个可能无限、可能为空的同一数值类型的数值集合。每个边界会被描述为<emu-xref href="#sec-completion-record-specification-type" id="_ref_1251"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>或排除其边界值，但不会同时如此。<emu-xref href="#interval" id="_ref_1252"><a href="notational-conventions.html#interval">区间</a></emu-xref>有以下四种：</p>
       <ul>
-        <li>从 <var>a</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1249"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 <var>b</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1250"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）的<emu-xref href="#interval" id="_ref_1251"><a href="notational-conventions.html#interval">区间</a></emu-xref>，也称为从 <var>a</var> 到 <var>b</var> 的<dfn id="inclusive-interval" tabindex="-1">闭区间</dfn>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1252"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> ≤ <var>x</var> ≤ <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1253"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
-        <li>从 <var>a</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1254"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 <var>b</var>（排除）的<emu-xref href="#interval" id="_ref_1255"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1256"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> ≤ <var>x</var> &lt; <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1257"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
-        <li>从 <var>a</var>（排除）到 <var>b</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1258"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）的<emu-xref href="#interval" id="_ref_1259"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1260"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> &lt; <var>x</var> ≤ <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1261"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
-        <li>从 <var>a</var>（排除）到 <var>b</var>（排除）的<emu-xref href="#interval" id="_ref_1262"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1263"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> &lt; <var>x</var> &lt; <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1264"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
+        <li>从 <var>a</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1253"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 <var>b</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1254"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）的<emu-xref href="#interval" id="_ref_1255"><a href="notational-conventions.html#interval">区间</a></emu-xref>，也称为从 <var>a</var> 到 <var>b</var> 的<dfn id="inclusive-interval" tabindex="-1">闭区间</dfn>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1256"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> ≤ <var>x</var> ≤ <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1257"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
+        <li>从 <var>a</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1258"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 <var>b</var>（排除）的<emu-xref href="#interval" id="_ref_1259"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1260"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> ≤ <var>x</var> &lt; <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1261"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
+        <li>从 <var>a</var>（排除）到 <var>b</var>（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1262"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）的<emu-xref href="#interval" id="_ref_1263"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1264"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> &lt; <var>x</var> ≤ <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1265"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
+        <li>从 <var>a</var>（排除）到 <var>b</var>（排除）的<emu-xref href="#interval" id="_ref_1266"><a href="notational-conventions.html#interval">区间</a></emu-xref>，<emu-xref href="#sec-completion-record-specification-type" id="_ref_1267"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>同一数值类型中满足 <var>a</var> &lt; <var>x</var> &lt; <var>b</var> 的所有值 <var>x</var>，且不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1268"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>其他值。</li>
       </ul>
-      <p>例如，从 1（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1265"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 2（排除）的<emu-xref href="#interval" id="_ref_1266"><a href="notational-conventions.html#interval">区间</a></emu-xref>由 1 和 2 之间的所有<emu-xref href="#mathematical-value" id="_ref_1267"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>组成，包括 1 但不包括 2。为定义<emu-xref href="#interval" id="_ref_1268"><a href="notational-conventions.html#interval">区间</a></emu-xref>之目的，<emu-val>-0</emu-val><sub>𝔽</sub> &lt; <!-- this comment here to avoid ecmarkup complaining about comparison to 0 --> <emu-val>+0</emu-val><sub>𝔽</sub>，因此，例如，下界为 <emu-val>+0</emu-val><sub>𝔽</sub> 的<emu-xref href="#inclusive-interval" id="_ref_1269"><a href="notational-conventions.html#inclusive-interval">闭区间</a></emu-xref>包括 <emu-val>+0</emu-val><sub>𝔽</sub>，但不包括 <emu-val>-0</emu-val><sub>𝔽</sub>。<emu-val>NaN</emu-val> 永远不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1270"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>在<emu-xref href="#interval" id="_ref_1271"><a href="notational-conventions.html#interval">区间</a></emu-xref>中。</p>
+      <p>例如，从 1（<emu-xref href="#sec-completion-record-specification-type" id="_ref_1269"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>）到 2（排除）的<emu-xref href="#interval" id="_ref_1270"><a href="notational-conventions.html#interval">区间</a></emu-xref>由 1 和 2 之间的所有<emu-xref href="#mathematical-value" id="_ref_1271"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>组成，包括 1 但不包括 2。为定义<emu-xref href="#interval" id="_ref_1272"><a href="notational-conventions.html#interval">区间</a></emu-xref>之目的，<emu-val>-0</emu-val><sub>𝔽</sub> &lt; <!-- this comment here to avoid ecmarkup complaining about comparison to 0 --> <emu-val>+0</emu-val><sub>𝔽</sub>，因此，例如，下界为 <emu-val>+0</emu-val><sub>𝔽</sub> 的<emu-xref href="#inclusive-interval" id="_ref_1273"><a href="notational-conventions.html#inclusive-interval">闭区间</a></emu-xref>包括 <emu-val>+0</emu-val><sub>𝔽</sub>，但不包括 <emu-val>-0</emu-val><sub>𝔽</sub>。<emu-val>NaN</emu-val> 永远不<emu-xref href="#sec-completion-record-specification-type" id="_ref_1274"><a href="ecmascript-data-types-and-values.html#sec-completion-record-specification-type">包含</a></emu-xref>在<emu-xref href="#interval" id="_ref_1275"><a href="notational-conventions.html#interval">区间</a></emu-xref>中。</p>
     </emu-clause>
 
     <emu-clause id="sec-value-notation">
       <h1><span class="secnum">5.2.7</span> 值记号</h1>
-      <p>在本规范中，<emu-xref href="#sec-ecmascript-language-types" id="_ref_1272"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>以 <emu-val>bold</emu-val> 显示。示例包括 <emu-val>null</emu-val>、<emu-val>true</emu-val> 或 <emu-val>"hello"</emu-val>。这些值与 ECMAScript 源文本相区分，例如 <code>Function.prototype.apply</code> 或 <code>let n = 42;</code>。</p>
+      <p>在本规范中，<emu-xref href="#sec-ecmascript-language-types" id="_ref_1276"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>以 <emu-val>bold</emu-val> 显示。示例包括 <emu-val>null</emu-val>、<emu-val>true</emu-val> 或 <emu-val>"hello"</emu-val>。这些值与 ECMAScript 源文本相区分，例如 <code>Function.prototype.apply</code> 或 <code>let n = 42;</code>。</p>
     </emu-clause>
 
     <emu-clause id="sec-identity">
       <h1><span class="secnum">5.2.8</span> 同一性</h1>
-      <p>在本规范中，规范值和 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1273"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>都会进行相等比较。在进行相等比较时，值分为两类。<dfn variants="values without identity,value without identity" tabindex="-1">无同一性的值</dfn>在其所有固有特征都相同时，等于其他无同一性的值——例如整数的大小或序列的长度等特征。无同一性的值可以无需先前引用，而通过完整描述其特征来呈现。相比之下，每个<dfn variants="values with identity" tabindex="-1">有同一性的值</dfn>都是唯一的，因此只等于它自身。有同一性的值类似于无同一性的值，但具有一个额外的不可猜测、不可改变、全局唯一的特征，称为<em>同一性</em>。对既有有同一性值的引用，不能仅通过描述它们来呈现，因为同一性本身无法描述；相反，对这些值的引用必须显式地从一个地方传递到另一个地方。一些有同一性的值是可变的，因此可以原地改变其特征（除其同一性外），使该值的所有持有者观察到新的特征。无同一性的值永远不等于有同一性的值。</p>
-      <p>从本规范的视角看，词语“is”用于比较两个值是否相等，如“If <var>bool</var> is <emu-val>true</emu-val>, then ...”；词语“contains”用于通过相等比较在列表中搜索某个值，如“If <var>list</var> contains a <emu-xref href="#sec-list-and-record-specification-type" id="_ref_1274"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Record</a></emu-xref> <var>r</var> such that <var>r</var>.<var class="field">[[Foo]]</var> is <emu-val>true</emu-val>, then ...”。值的<em>规范同一性</em>决定这些比较的结果，并且在本规范中是公理性的。</p>
-      <p>从 ECMAScript 语言的视角看，语言值使用 <emu-xref aoid="SameValue" id="_ref_1275"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1276"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>及其传递调用的<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1277"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>进行相等比较。这些比较<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1278"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>的算法决定 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1279"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>的<em>语言同一性</em>。</p>
-      <p>对于规范值，无规范同一性的值示例包括但不限于：<emu-xref href="#mathematical-value" id="_ref_1280"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>和<emu-xref href="#extended-mathematical-value" id="_ref_1281"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>；ECMAScript 源文本、<emu-xref href="#surrogate-pair" id="_ref_1282"><a href="ecmascript-data-types-and-values.html#surrogate-pair">代理对</a></emu-xref>、<emu-xref href="#directive-prologue" id="_ref_1283"><a href="ecmascript-language-source-code.html#directive-prologue">Directive Prologues</a></emu-xref> 等；UTF-16 代码单元；Unicode 码点；枚举；<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1284"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>，包括<emu-xref href="#sec-algorithm-conventions-syntax-directed-operations" id="_ref_1285"><a href="notational-conventions.html#sec-algorithm-conventions-syntax-directed-operations">语法制导操作</a></emu-xref>、<emu-xref href="#host-hook" id="_ref_1286"><a href="overview.html#host-hook">宿主钩子</a></emu-xref>等；以及有序对。有规范同一性的规范值示例包括但不限于：任何种类的 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_1287"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Records</a></emu-xref>，包括 <emu-xref href="#sec-property-descriptor-specification-type" id="_ref_1288"><a href="ecmascript-data-types-and-values.html#sec-property-descriptor-specification-type">Property Descriptors</a></emu-xref>、<emu-xref href="#sec-privateelement-specification-type" id="_ref_1289"><a href="ecmascript-data-types-and-values.html#sec-privateelement-specification-type">PrivateElements</a></emu-xref> 等；<emu-xref href="#sec-syntactic-grammar" id="_ref_1290"><a href="notational-conventions.html#sec-syntactic-grammar">Parse Nodes</a></emu-xref>；<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1291"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Lists</a></emu-xref>；<emu-xref href="#sec-set-and-relation-specification-type" id="_ref_45"><a href="ecmascript-data-types-and-values.html#sec-set-and-relation-specification-type">Sets</a></emu-xref> 和 <emu-xref href="#sec-set-and-relation-specification-type" id="_ref_1292"><a href="ecmascript-data-types-and-values.html#sec-set-and-relation-specification-type">Relations</a></emu-xref>；<emu-xref href="#sec-abstract-closure" id="_ref_1293"><a href="ecmascript-data-types-and-values.html#sec-abstract-closure">Abstract Closures</a></emu-xref>；<emu-xref href="#sec-data-blocks" id="_ref_1294"><a href="ecmascript-data-types-and-values.html#sec-data-blocks">Data Blocks</a></emu-xref>；<emu-xref href="#sec-private-names" id="_ref_1295"><a href="ecmascript-data-types-and-values.html#sec-private-names">Private Names</a></emu-xref>；执行上下文和执行上下文栈；<emu-xref href="#sec-agents" id="_ref_1296"><a href="executable-code-and-execution-contexts.html#sec-agents">agent signifiers</a></emu-xref>；以及 <emu-xref href="#sec-waiterlist-records" id="_ref_1297"><a href="structured-data.html#sec-waiterlist-records">WaiterList Records</a></emu-xref>。</p>
-      <p>除由 <emu-xref href="#sec-symbol.for" id="_ref_46"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 Symbol 值外，所有 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1298"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>的规范同一性与语言同一性一致。无规范同一性且无语言同一性的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1299"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>是 <emu-xref href="#sec-ecmascript-language-types-undefined-type" id="_ref_47"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-undefined-type"><emu-val>undefined</emu-val></a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-null-type" id="_ref_48"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-null-type"><emu-val>null</emu-val></a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-boolean-type" id="_ref_49"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-boolean-type">Booleans</a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-string-type" id="_ref_50"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type">Strings</a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-number-type" id="_ref_51"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-number-type">Numbers</a></emu-xref> 和 <emu-xref href="#sec-ecmascript-language-types-bigint-type" id="_ref_52"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-bigint-type">BigInts</a></emu-xref>。有规范同一性和语言同一性的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1300"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>是并非由 <emu-xref href="#sec-symbol.for" id="_ref_53"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 <emu-xref href="#sec-ecmascript-language-types-symbol-type" id="_ref_54"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-symbol-type">Symbols</a></emu-xref> 以及 <emu-xref href="#sec-object-type" id="_ref_55"><a href="ecmascript-data-types-and-values.html#sec-object-type">Objects</a></emu-xref>。由 <emu-xref href="#sec-symbol.for" id="_ref_56"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 Symbol 值具有规范同一性，但没有语言同一性。</p>
+      <p>在本规范中，规范值和 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1277"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>都会进行相等比较。在进行相等比较时，值分为两类。<dfn variants="values without identity,value without identity" tabindex="-1">无同一性的值</dfn>在其所有固有特征都相同时，等于其他无同一性的值——例如整数的大小或序列的长度等特征。无同一性的值可以无需先前引用，而通过完整描述其特征来呈现。相比之下，每个<dfn variants="values with identity" tabindex="-1">有同一性的值</dfn>都是唯一的，因此只等于它自身。有同一性的值类似于无同一性的值，但具有一个额外的不可猜测、不可改变、全局唯一的特征，称为<em>同一性</em>。对既有有同一性值的引用，不能仅通过描述它们来呈现，因为同一性本身无法描述；相反，对这些值的引用必须显式地从一个地方传递到另一个地方。一些有同一性的值是可变的，因此可以原地改变其特征（除其同一性外），使该值的所有持有者观察到新的特征。无同一性的值永远不等于有同一性的值。</p>
+      <p>从本规范的视角看，词语“is”用于比较两个值是否相等，如“If <var>bool</var> is <emu-val>true</emu-val>, then ...”；词语“contains”用于通过相等比较在<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1278"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">列表</a></emu-xref>中搜索某个值，如“If <var>list</var> contains a Record <var>r</var> such that <var>r</var>.<var class="field">[[Foo]]</var> is <emu-val>true</emu-val>, then ...”。值的<em>规范同一性</em>决定这些比较的结果，并且在本规范中是公理性的。</p>
+      <p>从 ECMAScript 语言的视角看，语言值使用 <emu-xref aoid="SameValue" id="_ref_1279"><a href="abstract-operations.html#sec-samevalue">SameValue</a></emu-xref> <emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1280"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>及其传递调用的<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1281"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>进行相等比较。这些比较<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1282"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>的算法决定 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1283"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>的<em>语言同一性</em>。</p>
+      <p>对于规范值，无规范同一性的值示例包括但不限于：<emu-xref href="#mathematical-value" id="_ref_1284"><a href="notational-conventions.html#mathematical-value">数学值</a></emu-xref>和<emu-xref href="#extended-mathematical-value" id="_ref_1285"><a href="notational-conventions.html#extended-mathematical-value">扩展数学值</a></emu-xref>；ECMAScript 源文本、<emu-xref href="#surrogate-pair" id="_ref_1286"><a href="ecmascript-data-types-and-values.html#surrogate-pair">代理对</a></emu-xref>、<emu-xref href="#directive-prologue" id="_ref_1287"><a href="ecmascript-language-source-code.html#directive-prologue">Directive Prologues</a></emu-xref> 等；UTF-16 代码单元；Unicode 码点；枚举；<emu-xref href="#sec-algorithm-conventions-abstract-operations" id="_ref_1288"><a href="notational-conventions.html#sec-algorithm-conventions-abstract-operations">抽象操作</a></emu-xref>，包括<emu-xref href="#sec-algorithm-conventions-syntax-directed-operations" id="_ref_1289"><a href="notational-conventions.html#sec-algorithm-conventions-syntax-directed-operations">语法制导操作</a></emu-xref>、<emu-xref href="#host-hook" id="_ref_1290"><a href="overview.html#host-hook">宿主钩子</a></emu-xref>等；以及有序对。有规范同一性的规范值示例包括但不限于：任何种类的 <emu-xref href="#sec-list-and-record-specification-type" id="_ref_1291"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Records</a></emu-xref>，包括 <emu-xref href="#sec-property-descriptor-specification-type" id="_ref_1292"><a href="ecmascript-data-types-and-values.html#sec-property-descriptor-specification-type">Property Descriptors</a></emu-xref>、<emu-xref href="#sec-privateelement-specification-type" id="_ref_1293"><a href="ecmascript-data-types-and-values.html#sec-privateelement-specification-type">PrivateElements</a></emu-xref> 等；<emu-xref href="#sec-syntactic-grammar" id="_ref_1294"><a href="notational-conventions.html#sec-syntactic-grammar">Parse Nodes</a></emu-xref>；<emu-xref href="#sec-list-and-record-specification-type" id="_ref_1295"><a href="ecmascript-data-types-and-values.html#sec-list-and-record-specification-type">Lists</a></emu-xref>；<emu-xref href="#sec-set-and-relation-specification-type" id="_ref_45"><a href="ecmascript-data-types-and-values.html#sec-set-and-relation-specification-type">Sets</a></emu-xref> 和 <emu-xref href="#sec-set-and-relation-specification-type" id="_ref_1296"><a href="ecmascript-data-types-and-values.html#sec-set-and-relation-specification-type">Relations</a></emu-xref>；<emu-xref href="#sec-abstract-closure" id="_ref_1297"><a href="ecmascript-data-types-and-values.html#sec-abstract-closure">Abstract Closures</a></emu-xref>；<emu-xref href="#sec-data-blocks" id="_ref_1298"><a href="ecmascript-data-types-and-values.html#sec-data-blocks">Data Blocks</a></emu-xref>；<emu-xref href="#sec-private-names" id="_ref_1299"><a href="ecmascript-data-types-and-values.html#sec-private-names">Private Names</a></emu-xref>；执行上下文和执行上下文栈；<emu-xref href="#sec-agents" id="_ref_1300"><a href="executable-code-and-execution-contexts.html#sec-agents">agent signifiers</a></emu-xref>；以及 <emu-xref href="#sec-waiterlist-records" id="_ref_1301"><a href="structured-data.html#sec-waiterlist-records">WaiterList Records</a></emu-xref>。</p>
+      <p>除由 <emu-xref href="#sec-symbol.for" id="_ref_46"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 Symbol 值外，所有 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1302"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>的规范同一性与语言同一性一致。无规范同一性且无语言同一性的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1303"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>是 <emu-xref href="#sec-ecmascript-language-types-undefined-type" id="_ref_47"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-undefined-type"><emu-val>undefined</emu-val></a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-null-type" id="_ref_48"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-null-type"><emu-val>null</emu-val></a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-boolean-type" id="_ref_49"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-boolean-type">Booleans</a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-string-type" id="_ref_50"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-string-type">Strings</a></emu-xref>、<emu-xref href="#sec-ecmascript-language-types-number-type" id="_ref_51"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-number-type">Numbers</a></emu-xref> 和 <emu-xref href="#sec-ecmascript-language-types-bigint-type" id="_ref_52"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-bigint-type">BigInts</a></emu-xref>。有规范同一性和语言同一性的 <emu-xref href="#sec-ecmascript-language-types" id="_ref_1304"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types">ECMAScript 语言值</a></emu-xref>是并非由 <emu-xref href="#sec-symbol.for" id="_ref_53"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 <emu-xref href="#sec-ecmascript-language-types-symbol-type" id="_ref_54"><a href="ecmascript-data-types-and-values.html#sec-ecmascript-language-types-symbol-type">Symbols</a></emu-xref> 以及 <emu-xref href="#sec-object-type" id="_ref_55"><a href="ecmascript-data-types-and-values.html#sec-object-type">Objects</a></emu-xref>。由 <emu-xref href="#sec-symbol.for" id="_ref_56"><a href="fundamental-objects.html#sec-symbol.for">Symbol.for</a></emu-xref> 产生的 Symbol 值具有规范同一性，但没有语言同一性。</p>
     </emu-clause>
   </emu-clause>
 </emu-clause></div></body>
