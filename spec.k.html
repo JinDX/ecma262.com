@@ -674,7 +674,7 @@
         <li>토큰 시퀀스가 남는 토큰 없이 _n_의 단일 인스턴스로 파싱될 수 있으면, 다음을 수행한다:
           <ol>
             <li>우리는 _n_의 해당 인스턴스(주어진 _p_에 대해 고유한 Parse Node)를 “_p_에 의해 <dfn>포괄되는</dfn> _n_”이라고 부른다.</li>
-            <li>초기 오류 규칙은 _p_에 의해 포괄되는 _n_과 그 하위 요소에 적용되며, 이는 추가적인 "must cover" 사례에 의해 수정된다.</li>
+            <li>초기 오류 규칙은 _p_에 의해 포괄되는 _n_과 그 하위 요소에 적용되며, 이는 추가적인 “must cover” 사례에 의해 수정된다.</li>
           </ol>
         </li>
         <li>그렇지 않으면(파싱이 실패하면), 이는 초기 Syntax Error이다.</li>
@@ -1249,7 +1249,7 @@
         <p>이 설계의 rationale은 String 구현을 가능한 한 simple하고 high-performing하게 유지하기 위한 것이었습니다. ECMAScript source text가 Normalized Form C이면, string literal은 Unicode escape sequence를 포함하지 않는 한 normalized되어 있음이 보장됩니다.</p>
       </emu-note>
       <p>이 명세에서 “_A_, _B_, ...의 <dfn id="string-concatenation">string-concatenation</dfn>”이라는 phrase(각 argument가 String value, code unit, 또는 code unit sequence인 경우)는 각 argument의 code unit을 (순서대로) concatenation한 code unit sequence를 가진 String value를 나타냅니다.</p>
-      <p>“_inclusiveStart_부터 _exclusiveEnd_까지의 _string_의 <dfn id="substring">substring</dfn>”이라는 phrase(_string_이 String value 또는 code unit sequence이고 _inclusiveStart_와 _exclusiveEnd_가 integer인 경우)는 _string_의 index _inclusiveStart_에서 시작하여 index _exclusiveEnd_ 바로 앞에서 끝나는 consecutive code unit으로 구성된 String value를 나타냅니다(_inclusiveStart_ = _exclusiveEnd_인 경우 empty String). "to" suffix가 생략되면 _string_의 length가 _exclusiveEnd_ 값으로 사용됩니다.</p>
+      <p>“_inclusiveStart_부터 _exclusiveEnd_까지의 _string_의 <dfn id="substring">substring</dfn>”이라는 phrase(_string_이 String value 또는 code unit sequence이고 _inclusiveStart_와 _exclusiveEnd_가 integer인 경우)는 _string_의 index _inclusiveStart_에서 시작하여 index _exclusiveEnd_ 바로 앞에서 끝나는 consecutive code unit으로 구성된 String value를 나타냅니다(_inclusiveStart_ = _exclusiveEnd_인 경우 empty String). “to” suffix가 생략되면 _string_의 length가 _exclusiveEnd_ 값으로 사용됩니다.</p>
       <p>
         “<dfn id="ASCII-word-characters">ASCII word characters</dfn>”라는 phrase는 Unicode Basic Latin block의 모든 letter와 number 및 U+005F(LOW LINE)만으로 구성된 다음 String value를 나타냅니다:<br>
         *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"*.<br>
@@ -4858,7 +4858,7 @@
 
     <emu-clause id="sec-privateelement-specification-type">
       <h1>PrivateElement Specification Type</h1>
-      <p>PrivateElement 타입은 비공개 클래스 필드, 메서드 및 접근자 명세에서 사용되는 Record이다. Property Descriptor는 비공개 요소에 사용되지 않지만, 비공개 필드는 구성 불가능하고 열거 불가능하며 쓰기 가능한 데이터 프로퍼티와 유사하게 동작하고, 비공개 메서드는 구성 불가능하고 열거 불가능하며 쓰기 불가능한 데이터 프로퍼티와 유사하게 동작하며, 비공개 접근자는 구성 불가능하고 열거 불가능한 접근자 프로퍼티와 유사하게 동작한다.</p>
+      <p>PrivateElement 타입은 비공개 클래스 필드, 메서드 및 접근자의 명세에 사용되는 레코드입니다. 비공개 요소는 프로퍼티 디스크립터와 연결되지 않고 프로퍼티도 아니지만, 이를 참조하는 표현식의 런타임 의미론은 일부 측면에서 구성 불가능한 프로퍼티의 의미론과 유사하며(비공개 필드는 쓰기 가능한 데이터 프로퍼티와 유사하고, 비공개 메서드는 쓰기 불가능한 데이터 프로퍼티와 유사하며, 비공개 접근자는 접근자 프로퍼티와 유사함), 해당 레코드 필드도 유사한 목적으로 사용됩니다.</p>
       <p>PrivateElement 타입의 값은 <emu-xref href="#table-privateelement-fields"></emu-xref>에 의해 필드가 정의되는 Records이다. 이러한 값은 <dfn variants="PrivateElement">PrivateElements</dfn>라고 한다.</p>
       <emu-table id="table-privateelement-fields" caption="PrivateElement 필드">
         <table>
@@ -7925,27 +7925,25 @@
       <emu-alg>
         1. *false*를 반환한다.
       </emu-alg>
-      <emu-grammar>
-        UsingDeclaration :
-          `using` BindingList `;`
-
-        AwaitUsingDeclaration :
-          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
-      </emu-grammar>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
       <emu-alg>
         1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
       </emu-alg>
       <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
       <emu-alg>
         1. *false*를 반환한다.
       </emu-alg>
-      <emu-grammar>
-        ForDeclaration :
-          `using` ForBinding
-          `await` `using` ForBinding
-      </emu-grammar>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
       <emu-alg>
         1. *true*를 반환한다.
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false*를 반환한다.
       </emu-alg>
       <emu-grammar>
         FunctionDeclaration :
@@ -19037,7 +19035,7 @@
         </ul>
         <emu-note>
           <p>이 명세의 다른 곳에는, 특정 상황에서 |LeftHandSideExpression|이 |AssignmentPattern|을 반드시 포괄해야 한다고 요구하는 초기 오류 규칙이 있다. 따라서 |ObjectLiteral|은 |ObjectAssignmentPattern|의 cover grammar 역할을 한다. |CoverInitializedName| 생성식은 |AssignmentProperty|를 완전히 포괄하기 위해 필요하지만, 실제 객체 초기자 안에서는 유효하지 않다.</p>
-          <p>구체적으로, 실제 |ObjectLiteral|이 예상되는 문맥에서는 위의 초기 오류 규칙이 |CoverInitializedName|의 사용을 막는다. 그러나 |ObjectLiteral|이 cover grammar로 사용되는 경우에는 "must cover"의 의미가 |ObjectLiteral| 안의 Parse Node들이 초기 오류 규칙의 적용 대상이 아니라고 명시하므로, |CoverInitializedName|이 허용된다.</p>
+          <p>구체적으로, 실제 |ObjectLiteral|이 예상되는 문맥에서는 위의 초기 오류 규칙이 |CoverInitializedName|의 사용을 막는다. 그러나 |ObjectLiteral|이 cover grammar로 사용되는 경우에는 “must cover”의 의미가 |ObjectLiteral| 안의 Parse Node들이 초기 오류 규칙의 적용 대상이 아니라고 명시하므로, |CoverInitializedName|이 허용된다.</p>
           <p>예를 들어, 다음을 보자:</p>
           <pre><code class="javascript">
             let o = {f = 1};
@@ -27855,53 +27853,53 @@
               </dl>
 
               <emu-alg>
-                1. _module_이 Cyclic Module Record가 아니면, 다음을 수행한다.
-                  1. ? EvaluateModuleSync(_module_)을 수행한다.
+                1. _module_이 순환 모듈 레코드가 아닌 경우,
+                  1. ? EvaluateModuleSync(_module_)를 수행한다.
                   1. _index_를 반환한다.
-                1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~ 중 하나이면, 다음을 수행한다.
-                  1. _module_.[[EvaluationError]]가 ~empty~이면, _index_를 반환한다.
+                1. _module_.[[Status]]가 ~evaluating-async~ 또는 ~evaluated~인 경우,
+                  1. _module_.[[EvaluationError]]가 ~empty~이면 _index_를 반환한다.
                   1. ? _module_.[[EvaluationError]]를 반환한다.
-                1. _module_.[[Status]]가 ~evaluating~이면, _index_를 반환한다.
-                1. Assert: _module_.[[Status]]는 ~linked~이다.
+                1. _module_.[[Status]]가 ~evaluating~이면 _index_를 반환한다.
+                1. 단언: _module_.[[Status]]는 ~linked~이다.
                 1. _module_.[[Status]]를 ~evaluating~으로 설정한다.
                 1. _moduleIndex_를 _index_로 둔다.
                 1. _module_.[[DFSAncestorIndex]]를 _index_로 설정한다.
                 1. _module_.[[PendingAsyncDependencies]]를 0으로 설정한다.
                 1. _index_를 _index_ + 1로 설정한다.
-                1. _module_을 _stack_에 append한다.
-                1. _module_.[[RequestedModules]]의 각 ModuleRequest Record _request_에 대해, 다음을 수행한다.
+                1. _module_을 _stack_에 추가한다.
+                1. _module_.[[RequestedModules]]의 각 ModuleRequest 레코드 _request_에 대해 다음을 수행한다.
                   1. _requiredModule_을 GetImportedModule(_module_, _request_)로 둔다.
                   1. _index_를 ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)로 설정한다.
-                  1. _requiredModule_이 Cyclic Module Record이면, 다음을 수행한다.
-                    1. Assert: _requiredModule_.[[Status]]는 ~evaluating~, ~evaluating-async~, 또는 ~evaluated~ 중 하나이다.
-                    1. Assert: _requiredModule_.[[Status]]가 ~evaluating~인 것은 _stack_이 _requiredModule_을 contain하는 경우에만, 그리고 그 경우에만 true이다.
-                    1. _requiredModule_.[[Status]]가 ~evaluating~이면, 다음을 수행한다.
+                  1. _requiredModule_이 순환 모듈 레코드인 경우,
+                    1. 단언: _requiredModule_.[[Status]]는 ~evaluating~, ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
+                    1. 단언: _stack_에 _requiredModule_이 포함되는 경우에만 _requiredModule_.[[Status]]는 ~evaluating~이다.
+                    1. _requiredModule_.[[Status]]가 ~evaluating~인 경우,
                       1. _module_.[[DFSAncestorIndex]]를 min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]])로 설정한다.
                     1. 그렇지 않으면,
                       1. _requiredModule_을 _requiredModule_.[[CycleRoot]]로 설정한다.
-                      1. Assert: _requiredModule_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~ 중 하나이다.
-                      1. _requiredModule_.[[EvaluationError]]가 ~empty~가 아니면, ? _requiredModule_.[[EvaluationError]]를 반환한다.
-                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 integer이면, 다음을 수행한다.
+                      1. 단언: _requiredModule_.[[Status]]는 ~evaluating-async~ 또는 ~evaluated~이다.
+                      1. _requiredModule_.[[EvaluationError]]가 ~empty~가 아니면 ? _requiredModule_.[[EvaluationError]]를 반환한다.
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 정수인 경우,
                       1. _module_.[[PendingAsyncDependencies]]를 _module_.[[PendingAsyncDependencies]] + 1로 설정한다.
-                      1. _module_을 _requiredModule_.[[AsyncParentModules]]에 append한다.
-                1. _module_.[[PendingAsyncDependencies]] > 0 또는 _module_.[[HasTLA]]가 *true*이면, 다음을 수행한다.
-                  1. Assert: _module_.[[AsyncEvaluationOrder]]는 ~unset~이다.
+                      1. _module_을 _requiredModule_.[[AsyncParentModules]]에 추가한다.
+                1. _module_.[[HasTLA]]가 *true*이거나 _module_.[[PendingAsyncDependencies]] > 0인 경우,
+                  1. 단언: _module_.[[AsyncEvaluationOrder]]는 ~unset~이다.
                   1. _module_.[[AsyncEvaluationOrder]]를 IncrementModuleAsyncEvaluationCount()로 설정한다.
-                  1. _module_.[[PendingAsyncDependencies]] = 0이면, ExecuteAsyncModule(_module_)을 수행한다.
+                  1. _module_.[[PendingAsyncDependencies]] = 0이면 ExecuteAsyncModule(_module_)을 수행한다.
                 1. 그렇지 않으면,
-                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>를 수행한다.
-                1. Assert: _module_은 _stack_ 안에 exactly once occur한다.
-                1. Assert: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_이다.
-                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_이면, 다음을 수행한다.
+                  1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>을 수행한다.
+                1. 단언: _module_은 _stack_에 정확히 한 번 나타난다.
+                1. 단언: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_이다.
+                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_인 경우,
                   1. _done_을 *false*로 둔다.
-                  1. Repeat, _done_이 *false*인 동안,
-                    1. _requiredModule_을 _stack_의 last element로 둔다.
-                    1. _stack_의 last element를 remove한다.
-                    1. Assert: _requiredModule_은 Cyclic Module Record이다.
-                    1. Assert: _requiredModule_.[[AsyncEvaluationOrder]]는 integer 또는 ~unset~ 중 하나이다.
-                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 ~unset~이면, _requiredModule_.[[Status]]를 ~evaluated~로 설정한다.
-                    1. 그렇지 않으면, _requiredModule_.[[Status]]를 ~evaluating-async~로 설정한다.
-                    1. _requiredModule_과 _module_이 same Module Record이면, _done_을 *true*로 설정한다.
+                  1. _done_이 *false*인 동안 다음을 반복한다.
+                    1. _requiredModule_을 _stack_의 마지막 요소로 둔다.
+                    1. _stack_의 마지막 요소를 제거한다.
+                    1. 단언: _requiredModule_은 순환 모듈 레코드이다.
+                    1. 단언: _requiredModule_.[[AsyncEvaluationOrder]]는 정수 또는 ~unset~이다.
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]가 ~unset~이면 _requiredModule_.[[Status]]를 ~evaluated~로 설정한다.
+                    1. 그렇지 않으면 _requiredModule_.[[Status]]를 ~evaluating-async~로 설정한다.
+                    1. _requiredModule_과 _module_이 동일한 모듈 레코드이면 _done_을 *true*로 설정한다.
                     1. _requiredModule_.[[CycleRoot]]를 _module_로 설정한다.
                 1. _index_를 반환한다.
               </emu-alg>
@@ -38641,24 +38639,31 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Atom :: CharacterClass</emu-grammar>
         <emu-alg>
-          1. _cc_를 argument _regexpRecord_와 함께 |CharacterClass|의 CompileCharacterClass로 둔다.
+          1. _cc_를 인수 _regexpRecord_와 함께 |CharacterClass|의 CompileCharacterClass로 둔다.
           1. _cs_를 _cc_.[[CharSet]]으로 둔다.
-          1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _cs_의 every CharSetElement가 single character로 구성되면(_cs_가 empty인 경우 포함), CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)를 반환한다.
-          1. Assert: _cc_.[[Invert]]는 *false*이다.
-          1. _listOfMatchers_를 empty List of Matchers로 둔다.
-          1. _cs_ 안의 more than 1 character를 contain하는 각 CharSetElement _s_에 대해, length의 descending order로 iterating하며 다음을 수행한다.
-            1. _cs2_를 _s_의 last code point를 contain하는 one-element CharSet으로 둔다.
+          1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _cs_의 모든 CharSetElement가 단일 문자로 구성된 경우(_cs_가 비어 있는 경우 포함), CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)를 반환한다.
+          1. 단언: _cc_.[[Invert]]는 *false*이다.
+          1. _listOfMatchers_를 비어 있는 Matcher 목록으로 둔다.
+          1. _csSequences_를 새로운 빈 목록으로 둔다.
+          1. _cs_의 각 CharSetElement _s_에 대해 다음을 수행한다.
+            1. _s_의 길이 > 1이면 _s_를 _csSequences_에 추가한다.
+          1. 각 CharSetElement의 길이를 기준으로 _csSequences_를 내림차순으로 정렬한다.
+          1. _csSequences_의 각 CharSetElement _s_에 대해 다음을 수행한다.
+            1. 단언: _s_는 2개 이상의 코드 포인트로 이루어진 시퀀스이다.
+            1. _remaining_을 _s_의 코드 포인트로 구성된 목록으로 둔다.
+            1. _cs2_를 _remaining_의 마지막 요소를 포함하는 단일 요소 CharSet으로 둔다.
             1. _m2_를 CharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)로 둔다.
-            1. _s_ 안의 각 code point _c1_에 대해, its second-to-last code point부터 backwards로 iterating하며 다음을 수행한다.
-              1. _cs1_을 _c1_을 contain하는 one-element CharSet으로 둔다.
+            1. _remaining_의 마지막 요소를 제거한다.
+            1. _remaining_의 각 코드 포인트 _c1_에 대해 목록의 역순으로 다음을 수행한다.
+              1. _cs1_을 _c1_을 포함하는 단일 요소 CharSet으로 둔다.
               1. _m1_을 CharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)로 둔다.
-              1. _m2_를 MatchSequence(_m1_, _m2_, _direction_)으로 설정한다.
-            1. _m2_를 _listOfMatchers_에 append한다.
-          1. _singles_를 single character로 구성된 _cs_의 every CharSetElement를 contain하는 CharSet으로 둔다.
-          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)를 _listOfMatchers_에 append한다.
-          1. _cs_가 characters의 empty sequence를 contain하면, EmptyMatcher()를 _listOfMatchers_에 append한다.
-          1. _m2_를 _listOfMatchers_ 안의 last Matcher로 둔다.
-          1. _listOfMatchers_의 각 Matcher _m1_에 대해, its second-to-last element부터 backwards로 iterating하며 다음을 수행한다.
+              1. _m2_를 MatchSequence(_m1_, _m2_, _direction_)로 설정한다.
+            1. _m2_를 _listOfMatchers_에 추가한다.
+          1. _singles_를 단일 문자로 구성된 _cs_의 모든 CharSetElement를 포함하는 CharSet으로 둔다.
+          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)를 _listOfMatchers_에 추가한다.
+          1. _cs_가 빈 문자 시퀀스를 포함하면 EmptyMatcher()를 _listOfMatchers_에 추가한다.
+          1. _m2_를 _listOfMatchers_의 마지막 Matcher로 둔다.
+          1. _listOfMatchers_의 각 Matcher _m1_에 대해 끝에서 두 번째 요소부터 역순으로 순회하며 다음을 수행한다.
             1. _m2_를 MatchTwoAlternatives(_m1_, _m2_)로 설정한다.
           1. _m2_를 반환한다.
         </emu-alg>
@@ -38724,22 +38729,29 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>AtomEscape :: CharacterClassEscape</emu-grammar>
         <emu-alg>
-          1. _cs_를 argument _regexpRecord_와 함께 |CharacterClassEscape|의 CompileToCharSet으로 둔다.
-          1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _cs_의 every CharSetElement가 single character로 구성되면(_cs_가 empty인 경우 포함), CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)를 반환한다.
-          1. _listOfMatchers_를 empty List of Matchers로 둔다.
-          1. _cs_ 안의 more than 1 character를 contain하는 각 CharSetElement _s_에 대해, length의 descending order로 iterating하며 다음을 수행한다.
-            1. _cs2_를 _s_의 last code point를 contain하는 one-element CharSet으로 둔다.
+          1. _cs_를 인수 _regexpRecord_와 함께 |CharacterClassEscape|의 CompileToCharSet으로 둔다.
+          1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _cs_의 모든 CharSetElement가 단일 문자로 구성된 경우(_cs_가 비어 있는 경우 포함), CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)를 반환한다.
+          1. _listOfMatchers_를 비어 있는 Matcher 목록으로 둔다.
+          1. _csSequences_를 새로운 빈 목록으로 둔다.
+          1. _cs_의 각 CharSetElement _s_에 대해 다음을 수행한다.
+            1. _s_의 길이가 1보다 크면 _s_를 _csSequences_에 추가한다.
+          1. 각 CharSetElement의 길이를 기준으로 _csSequences_를 내림차순으로 정렬한다.
+          1. _csSequences_의 각 CharSetElement _s_에 대해 다음을 수행한다.
+            1. 단언: _s_는 2개 이상의 코드 포인트로 이루어진 시퀀스이다.
+            1. _remaining_을 _s_의 코드 포인트로 구성된 목록으로 둔다.
+            1. _cs2_를 _remaining_의 마지막 요소를 포함하는 단일 요소 CharSet으로 둔다.
             1. _m2_를 CharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)로 둔다.
-            1. _s_ 안의 각 code point _c1_에 대해, its second-to-last code point부터 backwards로 iterating하며 다음을 수행한다.
-              1. _cs1_을 _c1_을 contain하는 one-element CharSet으로 둔다.
+            1. _remaining_의 마지막 요소를 제거한다.
+            1. _remaining_의 각 코드 포인트 _c1_에 대해 목록의 역순으로 다음을 수행한다.
+              1. _cs1_을 _c1_을 포함하는 단일 요소 CharSet으로 둔다.
               1. _m1_을 CharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)로 둔다.
-              1. _m2_를 MatchSequence(_m1_, _m2_, _direction_)으로 설정한다.
-            1. _m2_를 _listOfMatchers_에 append한다.
-          1. _singles_를 single character로 구성된 _cs_의 every CharSetElement를 contain하는 CharSet으로 둔다.
-          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)를 _listOfMatchers_에 append한다.
-          1. _cs_가 characters의 empty sequence를 contain하면, EmptyMatcher()를 _listOfMatchers_에 append한다.
-          1. _m2_를 _listOfMatchers_ 안의 last Matcher로 둔다.
-          1. _listOfMatchers_의 각 Matcher _m1_에 대해, its second-to-last element부터 backwards로 iterating하며 다음을 수행한다.
+              1. _m2_를 MatchSequence(_m1_, _m2_, _direction_)로 설정한다.
+            1. _m2_를 _listOfMatchers_에 추가한다.
+          1. _singles_를 단일 문자로 구성된 _cs_의 모든 CharSetElement를 포함하는 CharSet으로 둔다.
+          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)를 _listOfMatchers_에 추가한다.
+          1. _cs_가 빈 문자 시퀀스를 포함하면 EmptyMatcher()를 _listOfMatchers_에 추가한다.
+          1. _m2_를 _listOfMatchers_의 마지막 Matcher로 둔다.
+          1. _listOfMatchers_의 각 Matcher _m1_에 대해 끝에서 두 번째 요소부터 역순으로 순회하며 다음을 수행한다.
             1. _m2_를 MatchTwoAlternatives(_m1_, _m2_)로 설정한다.
           1. _m2_를 반환한다.
         </emu-alg>
@@ -39260,13 +39272,13 @@ THH:mm:ss.sss
             <dd>_regexpRecord_.[[UnicodeSets]]가 *false*이거나 _regexpRecord_.[[IgnoreCase]]가 *false*이면, _charSet_을 반환합니다. Otherwise, Unicode Character Database의 file <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> 안의 <a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">Simple Case Folding</a> (<emu-eqn id="eqn-scf" aoid="scf">scf(_codePoint_)</emu-eqn>) definitions(each maps a single code point to another single code point)를 사용하여 _charSet_의 각 CharSetElement를 character-by-character로 canonical form에 map하고 resulting CharSet을 반환합니다.</dd>
           </dl>
           <emu-alg>
-            1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _regexpRecord_.[[IgnoreCase]]가 *false*이면, _charSet_을 반환한다.
-            1. _otherSet_을 새 empty CharSet으로 둔다.
-            1. _charSet_의 각 CharSetElement _s_에 대해, 다음을 수행한다.
-              1. _t_를 characters의 empty sequence로 둔다.
-              1. _s_ 안의 각 single code point _codePoint_에 대해, 다음을 수행한다.
-                1. scf(_codePoint_)를 _t_에 append한다.
-              1. _t_를 _otherSet_에 add한다.
+            1. _regexpRecord_.[[UnicodeSets]]가 *false*이거나 _regexpRecord_.[[IgnoreCase]]가 *false*이면 _charSet_을 반환한다.
+            1. _otherSet_을 새로운 빈 CharSet으로 둔다.
+            1. _charSet_의 각 CharSetElement _s_에 대해 다음을 수행한다.
+              1. _t_를 빈 문자 시퀀스로 둔다.
+              1. _s_의 각 단일 코드 포인트 _codePoint_에 대해 다음을 수행한다.
+                1. scf(_codePoint_)를 _t_에 추가한다.
+              1. _t_를 _otherSet_에 추가한다.
             1. _otherSet_을 반환한다.
           </emu-alg>
         </emu-clause>
@@ -50167,7 +50179,7 @@ THH:mm:ss.sss
                 promise를 반환하는 함수 객체
               </td>
               <td>
-                <p>이 메서드를 호출하면 호출자가 이 객체를 계속 사용할 의도가 없음을 AsyncDisposable 객체에 알린다. 이 메서드는 파일 시스템 핸들, 스트림, 호스트 객체 등을 포함하되 이에 국한되지 않는 리소스의 명시적 정리를 수행하는 데 필요한 모든 로직을 수행해야 한다. 이 메서드가 반환한 promise가 거부되면, 일반적으로 리소스를 명시적으로 해제할 수 없었음을 의미한다. AsyncDisposable 객체는 결과 Promise가 이행될 때까지 "disposed"된 것으로 간주되지 않는다.</p>
+                <p>이 메서드를 호출하면 호출자가 더 이상 이 객체를 계속 사용할 의도가 없음을 AsyncDisposable 객체에 알립니다. 이 메서드는 파일 시스템 핸들, 스트림, 호스트 객체 등을 포함하되 이에 국한되지 않는 리소스를 명시적으로 정리하는 데 필요한 모든 로직을 수행해야 합니다. 이 메서드가 반환한 프로미스가 거부되면 일반적으로 리소스를 명시적으로 해제할 수 없었음을 의미합니다. 결과 프로미스가 이행될 때까지 AsyncDisposable 객체는 “폐기된” 것으로 간주되지 않습니다.</p>
                 <p>같은 객체에 대해 이 메서드를 두 번 이상 호출하는 경우, 이미 폐기된 리소스에 대해 정리 로직을 반복하지 않아야 하며, 첫 번째 호출에서 예외가 던져졌거나 거부된 promise가 반환되었더라도 예외를 던지거나 거부된 promise를 반환하지 않아야 한다. 그러나 이 요구사항은 강제되지 않는다.</p>
                 <p>AsyncDisposable 객체를 `await using` 선언과 함께 사용할 때, 리소스는 해당 선언을 바로 포함하는 |Block| 또는 |Module|이 평가된 후 자동으로 폐기된다.</p>
               </td>

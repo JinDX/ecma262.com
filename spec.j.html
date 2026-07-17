@@ -674,7 +674,7 @@
         <li>そのトークン列が、余りのトークンを残さず、_n_ の単一のインスタンスとして解析できる場合は、次のようにする:
           <ol>
             <li>その _n_ のインスタンス（Parse Node であり、与えられた _p_ に対して一意）を、「_p_ によって<dfn>覆われる</dfn> _n_」と呼ぶ。</li>
-            <li>早期エラー規則は、_p_ によって覆われる _n_ およびその子孫に適用される。ただし、さらに生じる "must cover" の場合によって修正される。</li>
+            <li>早期エラー規則は、_p_ によって覆われる _n_ およびその子孫に適用される。ただし、さらに生じる “must cover” の場合によって修正される。</li>
           </ol>
         </li>
         <li>それ以外の場合（解析に失敗した場合）は、早期 Syntax Error である。</li>
@@ -1249,7 +1249,7 @@
         <p>この設計の根拠は、Stringsの実装を可能な限り単純かつ高性能に保つことでした。ECMAScript source textがNormalized Form Cである場合、Unicode escape sequencesを含まない限り、文字列リテラルも正規化されていることが保証されます。</p>
       </emu-note>
       <p>この仕様では、“_A_, _B_, ...の<dfn id="string-concatenation">string-concatenation</dfn>”（各argumentがString値、コード単位、またはコード単位列である場合）という句は、各argumentのコード単位（順序どおり）の連結（順序どおり）であるコード単位列を持つString値を表します。</p>
-      <p>“_inclusiveStart_から_exclusiveEnd_までの_string_の<dfn id="substring">substring</dfn>”（_string_がString値またはコード単位列であり、_inclusiveStart_および_exclusiveEnd_が整数である場合）という句は、index _inclusiveStart_から始まりindex _exclusiveEnd_の直前で終わる、_string_の連続するコード単位からなるString値を表します（_inclusiveStart_ = _exclusiveEnd_の場合は空のString）。"to"接尾辞が省略された場合、_string_の長さが_exclusiveEnd_の値として使用されます。</p>
+      <p>“_inclusiveStart_から_exclusiveEnd_までの_string_の<dfn id="substring">substring</dfn>”（_string_がString値またはコード単位列であり、_inclusiveStart_および_exclusiveEnd_が整数である場合）という句は、index _inclusiveStart_から始まりindex _exclusiveEnd_の直前で終わる、_string_の連続するコード単位からなるString値を表します（_inclusiveStart_ = _exclusiveEnd_の場合は空のString）。“to”接尾辞が省略された場合、_string_の長さが_exclusiveEnd_の値として使用されます。</p>
       <p>
         “<dfn id="ASCII-word-characters">the ASCII word characters</dfn>”という句は、Unicode Basic Latinブロック内のすべての文字および数字にU+005F（LOW LINE）を加えたもののみからなる、以下のString値を表します：<br>
         *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"*.<br>
@@ -4856,7 +4856,7 @@
 
     <emu-clause id="sec-privateelement-specification-type">
       <h1>PrivateElement仕様型</h1>
-      <p>PrivateElement型は、private class fields、methods、およびaccessorsの仕様で使用されるRecordです。Property Descriptorsはprivate elementsには使用されませんが、private fieldsはnon-configurable、non-enumerable、writable data propertiesと同様に振る舞い、private methodsはnon-configurable、non-enumerable、non-writable data propertiesと同様に振る舞い、private accessorsはnon-configurable、non-enumerable accessor propertiesと同様に振る舞います。</p>
+      <p>PrivateElement型は、プライベートクラスフィールド、メソッド、およびアクセサーの仕様で使用されるRecordである。プライベート要素はプロパティ記述子に関連付けられておらず、プロパティでもないが、それらを参照する式の実行時セマンティクスは、いくつかの点で構成不可プロパティのものと類似しており（プライベートフィールドは書き込み可能なデータプロパティに、プライベートメソッドは書き込み不可のデータプロパティに、プライベートアクセサーはアクセサープロパティに類似する）、対応するRecordフィールドも同様の目的で使用される。</p>
       <p>PrivateElement 型の値は、<emu-xref href="#table-privateelement-fields"></emu-xref> によってフィールドが定義される Record である。そのような値は <dfn variants="PrivateElement">PrivateElements</dfn> と呼ばれる。</p>
       <emu-table id="table-privateelement-fields" caption="PrivateElement フィールド">
         <table>
@@ -7921,29 +7921,27 @@
       </dl>
       <emu-grammar>LexicalDeclaration : LetOrConst BindingList `;`</emu-grammar>
       <emu-alg>
-        1. *false* を返す。
+        1. *false*を返す。
       </emu-alg>
-      <emu-grammar>
-        UsingDeclaration :
-          `using` BindingList `;`
-
-        AwaitUsingDeclaration :
-          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
-      </emu-grammar>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
       <emu-alg>
-        1. *true* を返す。
+        1. *true*を返す。
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. *false*を返す。
       </emu-alg>
       <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
       <emu-alg>
-        1. *false* を返す。
+        1. *false*を返す。
       </emu-alg>
-      <emu-grammar>
-        ForDeclaration :
-          `using` ForBinding
-          `await` `using` ForBinding
-      </emu-grammar>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
       <emu-alg>
-        1. *true* を返す。
+        1. *true*を返す。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. *false*を返す。
       </emu-alg>
       <emu-grammar>
         FunctionDeclaration :
@@ -7963,7 +7961,7 @@
           `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. *false* を返す。
+        1. *false*を返す。
       </emu-alg>
       <emu-grammar>
         ClassDeclaration :
@@ -7971,7 +7969,7 @@
           `class` ClassTail
       </emu-grammar>
       <emu-alg>
-        1. *false* を返す。
+        1. *false*を返す。
       </emu-alg>
     </emu-clause>
 
@@ -19055,7 +19053,7 @@
         </ul>
         <emu-note>
           <p>この仕様の他の箇所には、一定の状況下で、|LeftHandSideExpression| が |AssignmentPattern| を覆わなければならないことを要求する早期エラー規則がある。その結果、|ObjectLiteral| は |ObjectAssignmentPattern| のカバー文法として機能する。|CoverInitializedName| 生成規則は |AssignmentProperty| を完全に覆うために必要であるが、実際のオブジェクト初期化子内では妥当ではない。</p>
-          <p>具体的には、実際の |ObjectLiteral| が期待される文脈では、上記の早期エラー規則によって |CoverInitializedName| の使用が防止される。しかし、|ObjectLiteral| がカバー文法として使用される場合には、"must cover" の意味論により、|ObjectLiteral| 内の Parse Node は早期エラー規則の対象とならないため、|CoverInitializedName| が許可される。</p>
+          <p>具体的には、実際の |ObjectLiteral| が期待される文脈では、上記の早期エラー規則によって |CoverInitializedName| の使用が防止される。しかし、|ObjectLiteral| がカバー文法として使用される場合には、“must cover” の意味論により、|ObjectLiteral| 内の Parse Node は早期エラー規則の対象とならないため、|CoverInitializedName| が許可される。</p>
           <p>例えば、次を考える:</p>
           <pre><code class="javascript">
             let o = {f = 1};
@@ -27873,53 +27871,53 @@
               </dl>
 
               <emu-alg>
-                1. _module_がCyclic Module Recordでないなら、
+                1. _module_がCyclic Module Recordでない場合、
                   1. ? EvaluateModuleSync(_module_)を実行する。
                   1. _index_を返す。
-                1. _module_.[[Status]]が~evaluating-async~または~evaluated~のいずれかなら、
-                  1. _module_.[[EvaluationError]]が~empty~なら、_index_を返す。
+                1. _module_.[[Status]]が~evaluating-async~または~evaluated~のいずれかである場合、
+                  1. _module_.[[EvaluationError]]が~empty~である場合、_index_を返す。
                   1. ? _module_.[[EvaluationError]]を返す。
-                1. _module_.[[Status]]が~evaluating~なら、_index_を返す。
-                1. Assert: _module_.[[Status]]は~linked~である。
+                1. _module_.[[Status]]が~evaluating~である場合、_index_を返す。
+                1. 表明：_module_.[[Status]]は~linked~である。
                 1. _module_.[[Status]]を~evaluating~に設定する。
                 1. _moduleIndex_を_index_とする。
                 1. _module_.[[DFSAncestorIndex]]を_index_に設定する。
                 1. _module_.[[PendingAsyncDependencies]]を0に設定する。
                 1. _index_を_index_ + 1に設定する。
-                1. _module_を_stack_へappendする。
-                1. _module_.[[RequestedModules]]の各ModuleRequest Record _request_について、以下を行う
+                1. _module_を_stack_に追加する。
+                1. _module_.[[RequestedModules]]の各ModuleRequest Record _request_について、次を行う。
                   1. _requiredModule_をGetImportedModule(_module_, _request_)とする。
-                  1. _index_を ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_) に設定する。
-                  1. _requiredModule_がCyclic Module Recordなら、
-                    1. Assert: _requiredModule_.[[Status]]は~evaluating~、~evaluating-async~、または~evaluated~のいずれかである。
-                    1. Assert: _requiredModule_.[[Status]]が~evaluating~であることと_stack_が_requiredModule_を含むことは同値である。
-                    1. _requiredModule_.[[Status]]が~evaluating~なら、
+                  1. _index_を? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)に設定する。
+                  1. _requiredModule_がCyclic Module Recordである場合、
+                    1. 表明：_requiredModule_.[[Status]]は~evaluating~、~evaluating-async~、または~evaluated~のいずれかである。
+                    1. 表明：_requiredModule_.[[Status]]が~evaluating~である場合、かつその場合に限り、_stack_は_requiredModule_を含む。
+                    1. _requiredModule_.[[Status]]が~evaluating~である場合、
                       1. _module_.[[DFSAncestorIndex]]をmin(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]])に設定する。
-                    1. そうでなければ、
+                    1. それ以外の場合、
                       1. _requiredModule_を_requiredModule_.[[CycleRoot]]に設定する。
-                      1. Assert: _requiredModule_.[[Status]]は~evaluating-async~または~evaluated~のいずれかである。
-                      1. _requiredModule_.[[EvaluationError]]が~empty~でないなら、? _requiredModule_.[[EvaluationError]]を返す。
-                    1. _requiredModule_.[[AsyncEvaluationOrder]]がintegerなら、
+                      1. 表明：_requiredModule_.[[Status]]は~evaluating-async~または~evaluated~のいずれかである。
+                      1. _requiredModule_.[[EvaluationError]]が~empty~でない場合、? _requiredModule_.[[EvaluationError]]を返す。
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]が整数である場合、
                       1. _module_.[[PendingAsyncDependencies]]を_module_.[[PendingAsyncDependencies]] + 1に設定する。
-                      1. _module_を_requiredModule_.[[AsyncParentModules]]へappendする。
-                1. _module_.[[PendingAsyncDependencies]] > 0または_module_.[[HasTLA]]が*true*なら、
-                  1. Assert: _module_.[[AsyncEvaluationOrder]]は~unset~である。
+                      1. _module_を_requiredModule_.[[AsyncParentModules]]に追加する。
+                1. _module_.[[HasTLA]]が*true*であるか、_module_.[[PendingAsyncDependencies]] > 0である場合、
+                  1. 表明：_module_.[[AsyncEvaluationOrder]]は~unset~である。
                   1. _module_.[[AsyncEvaluationOrder]]をIncrementModuleAsyncEvaluationCount()に設定する。
-                  1. _module_.[[PendingAsyncDependencies]] = 0なら、ExecuteAsyncModule(_module_)を実行する。
-                1. そうでなければ、
+                  1. _module_.[[PendingAsyncDependencies]] = 0である場合、ExecuteAsyncModule(_module_)を実行する。
+                1. それ以外の場合、
                   1. ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>を実行する。
-                1. Assert: _module_は_stack_内にちょうど1回出現する。
-                1. Assert: _module_.[[DFSAncestorIndex]] ≤ _moduleIndex_である。
-                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_なら、
+                1. 表明：_module_は_stack_内にちょうど1回出現する。
+                1. 表明：_module_.[[DFSAncestorIndex]] ≤ _moduleIndex_である。
+                1. _module_.[[DFSAncestorIndex]] = _moduleIndex_である場合、
                   1. _done_を*false*とする。
-                  1. _done_が*false*である間、繰り返す
+                  1. _done_が*false*である間、次を繰り返す。
                     1. _requiredModule_を_stack_の最後の要素とする。
-                    1. _stack_の最後の要素をremoveする。
-                    1. Assert: _requiredModule_はCyclic Module Recordである。
-                    1. Assert: _requiredModule_.[[AsyncEvaluationOrder]]はintegerまたは~unset~のいずれかである。
-                    1. _requiredModule_.[[AsyncEvaluationOrder]]が~unset~なら、_requiredModule_.[[Status]]を~evaluated~に設定する。
-                    1. そうでなければ、_requiredModule_.[[Status]]を~evaluating-async~に設定する。
-                    1. _requiredModule_と_module_が同じModule Recordなら、_done_を*true*に設定する。
+                    1. _stack_の最後の要素を削除する。
+                    1. 表明：_requiredModule_はCyclic Module Recordである。
+                    1. 表明：_requiredModule_.[[AsyncEvaluationOrder]]は整数または~unset~のいずれかである。
+                    1. _requiredModule_.[[AsyncEvaluationOrder]]が~unset~である場合、_requiredModule_.[[Status]]を~evaluated~に設定する。
+                    1. それ以外の場合、_requiredModule_.[[Status]]を~evaluating-async~に設定する。
+                    1. _requiredModule_と_module_が同じModule Recordである場合、_done_を*true*に設定する。
                     1. _requiredModule_.[[CycleRoot]]を_module_に設定する。
                 1. _index_を返す。
               </emu-alg>
@@ -38660,24 +38658,31 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Atom :: CharacterClass</emu-grammar>
         <emu-alg>
-          1. _cc_をargument _regexpRecord_を伴う|CharacterClass|のCompileCharacterClassとする。
+          1. _cc_を、引数_regexpRecord_を用いた|CharacterClass|のCompileCharacterClassとする。
           1. _cs_を_cc_.[[CharSet]]とする。
-          1. _regexpRecord_.[[UnicodeSets]]が*false*である、または_cs_のすべてのCharSetElementがsingle characterからなる（_cs_がemptyの場合を含む）なら、CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)を返す。
-          1. Assert: _cc_.[[Invert]]は*false*である。
-          1. _listOfMatchers_をMatchersのempty Listとする。
-          1. _cs_内のmore than 1 characterを含む各CharSetElement _s_について、lengthのdescending orderでiteratingして、以下を行う
-            1. _cs2_を_s_のlast code pointを含むone-element CharSetとする。
+          1. _regexpRecord_.[[UnicodeSets]]が*false*であるか、_cs_のすべてのCharSetElementが単一の文字で構成される場合（_cs_が空である場合を含む）、CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)を返す。
+          1. 表明：_cc_.[[Invert]]は*false*である。
+          1. _listOfMatchers_をMatcherの空のListとする。
+          1. _csSequences_を新しい空のListとする。
+          1. _cs_の各CharSetElement _s_について、次を行う。
+            1. _s_の長さが1より大きい場合、_s_を_csSequences_に追加する。
+          1. 各CharSetElementの長さに従って、_csSequences_を降順にソートする。
+          1. _csSequences_の各CharSetElement _s_について、次を行う。
+            1. 表明：_s_は2個以上のコードポイントからなるシーケンスである。
+            1. _remaining_を、_s_のコードポイントからなるListとする。
+            1. _cs2_を、_remaining_の最後の要素を含む1要素のCharSetとする。
             1. _m2_をCharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)とする。
-            1. _s_内の各code point _c1_について、そのsecond-to-last code pointからbackwardsにiteratingして、以下を行う
-              1. _cs1_を_c1_を含むone-element CharSetとする。
+            1. _remaining_の最後の要素を削除する。
+            1. _remaining_の各コードポイント_c1_について、Listの逆順で、次を行う。
+              1. _cs1_を、_c1_を含む1要素のCharSetとする。
               1. _m1_をCharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)とする。
               1. _m2_をMatchSequence(_m1_, _m2_, _direction_)に設定する。
-            1. _m2_を_listOfMatchers_へappendする。
-          1. _singles_を、single characterからなる_cs_のすべてのCharSetElementを含むCharSetとする。
-          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)を_listOfMatchers_へappendする。
-          1. _cs_がcharactersのempty sequenceを含むなら、EmptyMatcher()を_listOfMatchers_へappendする。
-          1. _m2_を_listOfMatchers_内のlast Matcherとする。
-          1. _listOfMatchers_の各Matcher _m1_について、そのsecond-to-last elementからbackwardsにiteratingして、以下を行う
+            1. _m2_を_listOfMatchers_に追加する。
+          1. _singles_を、単一の文字で構成される_cs_のすべてのCharSetElementを含むCharSetとする。
+          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)を_listOfMatchers_に追加する。
+          1. _cs_が空の文字シーケンスを含む場合、EmptyMatcher()を_listOfMatchers_に追加する。
+          1. _m2_を_listOfMatchers_内の最後のMatcherとする。
+          1. _listOfMatchers_の各Matcher _m1_について、その最後から2番目の要素から逆方向に反復し、次を行う。
             1. _m2_をMatchTwoAlternatives(_m1_, _m2_)に設定する。
           1. _m2_を返す。
         </emu-alg>
@@ -38743,22 +38748,29 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>AtomEscape :: CharacterClassEscape</emu-grammar>
         <emu-alg>
-          1. _cs_をargument _regexpRecord_を伴う|CharacterClassEscape|のCompileToCharSetとする。
-          1. _regexpRecord_.[[UnicodeSets]]が*false*である、または_cs_のすべてのCharSetElementがsingle characterからなる（_cs_がemptyの場合を含む）なら、CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)を返す。
-          1. _listOfMatchers_をMatchersのempty Listとする。
-          1. _cs_内のmore than 1 characterを含む各CharSetElement _s_について、lengthのdescending orderでiteratingして、以下を行う
-            1. _cs2_を_s_のlast code pointを含むone-element CharSetとする。
+          1. _cs_を、引数_regexpRecord_を用いた|CharacterClassEscape|のCompileToCharSetとする。
+          1. _regexpRecord_.[[UnicodeSets]]が*false*であるか、_cs_のすべてのCharSetElementが単一の文字で構成される場合（_cs_が空である場合を含む）、CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)を返す。
+          1. _listOfMatchers_をMatcherの空のListとする。
+          1. _csSequences_を新しい空のListとする。
+          1. _cs_の各CharSetElement _s_について、次を行う。
+            1. _s_の長さが1より大きい場合、_s_を_csSequences_に追加する。
+          1. 各CharSetElementの長さに従って、_csSequences_を降順にソートする。
+          1. _csSequences_の各CharSetElement _s_について、次を行う。
+            1. 表明：_s_は2個以上のコードポイントからなるシーケンスである。
+            1. _remaining_を、_s_のコードポイントからなるListとする。
+            1. _cs2_を、_remaining_の最後の要素を含む1要素のCharSetとする。
             1. _m2_をCharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)とする。
-            1. _s_内の各code point _c1_について、そのsecond-to-last code pointからbackwardsにiteratingして、以下を行う
-              1. _cs1_を_c1_を含むone-element CharSetとする。
+            1. _remaining_の最後の要素を削除する。
+            1. _remaining_の各コードポイント_c1_について、Listの逆順で、次を行う。
+              1. _cs1_を、_c1_を含む1要素のCharSetとする。
               1. _m1_をCharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)とする。
               1. _m2_をMatchSequence(_m1_, _m2_, _direction_)に設定する。
-            1. _m2_を_listOfMatchers_へappendする。
-          1. _singles_を、single characterからなる_cs_のすべてのCharSetElementを含むCharSetとする。
-          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)を_listOfMatchers_へappendする。
-          1. _cs_がcharactersのempty sequenceを含むなら、EmptyMatcher()を_listOfMatchers_へappendする。
-          1. _m2_を_listOfMatchers_内のlast Matcherとする。
-          1. _listOfMatchers_の各Matcher _m1_について、そのsecond-to-last elementからbackwardsにiteratingして、以下を行う
+            1. _m2_を_listOfMatchers_に追加する。
+          1. _singles_を、単一の文字で構成される_cs_のすべてのCharSetElementを含むCharSetとする。
+          1. CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_)を_listOfMatchers_に追加する。
+          1. _cs_が空の文字シーケンスを含む場合、EmptyMatcher()を_listOfMatchers_に追加する。
+          1. _m2_を_listOfMatchers_内の最後のMatcherとする。
+          1. _listOfMatchers_の各Matcher _m1_について、その最後から2番目の要素から逆方向に反復し、次を行う。
             1. _m2_をMatchTwoAlternatives(_m1_, _m2_)に設定する。
           1. _m2_を返す。
         </emu-alg>
@@ -39279,13 +39291,13 @@ THH:mm:ss.sss
             <dd>_regexpRecord_.[[UnicodeSets]]が*false*または_regexpRecord_.[[IgnoreCase]]が*false*である場合、_charSet_を返します。そうでなければ、Unicode Character Databaseのfile <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a>内の<a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">Simple Case Folding</a>（<emu-eqn id="eqn-scf" aoid="scf">scf(_codePoint_)</emu-eqn>）definitions（それぞれsingle code pointをanother single code pointへmapする）を使用して、_charSet_の各CharSetElementをcharacter-by-characterにcanonical formへmapし、resulting CharSetを返します。</dd>
           </dl>
           <emu-alg>
-            1. _regexpRecord_.[[UnicodeSets]]が*false*または_regexpRecord_.[[IgnoreCase]]が*false*なら、_charSet_を返す。
-            1. _otherSet_をnew empty CharSetとする。
-            1. _charSet_の各CharSetElement _s_について、以下を行う
-              1. _t_をcharactersのempty sequenceとする。
-              1. _s_内の各single code point _codePoint_について、以下を行う
-                1. scf(_codePoint_)を_t_へappendする。
-              1. _t_を_otherSet_へaddする。
+            1. _regexpRecord_.[[UnicodeSets]]が*false*であるか、_regexpRecord_.[[IgnoreCase]]が*false*である場合、_charSet_を返す。
+            1. _otherSet_を新しい空のCharSetとする。
+            1. _charSet_の各CharSetElement _s_について、次を行う。
+              1. _t_を空の文字シーケンスとする。
+              1. _s_の各単一コードポイント_codePoint_について、次を行う。
+                1. scf(_codePoint_)を_t_に追加する。
+              1. _t_を_otherSet_に追加する。
             1. _otherSet_を返す。
           </emu-alg>
         </emu-clause>
@@ -50186,7 +50198,7 @@ THH:mm:ss.sss
                 promise を返す関数オブジェクト
               </td>
               <td>
-                <p>このメソッドを呼び出すことにより、呼び出し元がこのオブジェクトを引き続き使用する意図がないことを AsyncDisposable オブジェクトに通知する。このメソッドは、ファイルシステムハンドル、ストリーム、ホストオブジェクトなどを含むがこれらに限定されないリソースの明示的なクリーンアップを実行するために必要なロジックを実行するべきである。このメソッドが返す promise が reject される場合、それは通常、そのリソースを明示的に解放できなかったことを意味する。AsyncDisposable オブジェクトは、結果の Promise が fulfilled になるまで「破棄済み」とはみなされない。</p>
+                <p>このメソッドを呼び出すと、呼び出し元がこのオブジェクトを引き続き使用する意図がないことがAsyncDisposableオブジェクトに通知される。このメソッドは、ファイルシステムハンドル、ストリーム、ホストオブジェクトなどを含むがこれらに限定されないリソースを明示的にクリーンアップするために必要なすべての処理を実行するべきである。このメソッドによって返されたPromiseが拒否された場合、通常はリソースを明示的に解放できなかったことを意味する。結果のPromiseが履行されるまで、AsyncDisposableオブジェクトは「破棄済み」とはみなされない。</p>
                 <p>同じオブジェクトに対してこのメソッドを複数回呼び出す場合、すでに破棄済みのリソースに対してクリーンアップロジックを繰り返すことを避けるべきであり、最初の呼び出しで例外が投げられた場合または rejected promise が返された場合であっても、例外を投げたり rejected promise を返したりするべきではない。ただし、この要件は強制されない。</p>
                 <p>AsyncDisposable オブジェクトを `await using` 宣言とともに使用する場合、そのリソースは、その宣言を直接含む |Block| または |Module| が評価されたときに自動的に破棄される。</p>
               </td>

@@ -674,7 +674,7 @@
         <li>如果该 token 序列可被解析为 _n_ 的单个实例，且没有剩余 token，则：
           <ol>
             <li>我们将该 _n_ 的实例（一个 Parse Node，对给定的 _p_ 是唯一的）称为“由 _p_ <dfn>覆盖</dfn>的 _n_”。</li>
-            <li>早期错误规则会应用于由 _p_ 覆盖的 _n_ 及其后代，并按后续的 "must cover" 情形进行修改。</li>
+            <li>早期错误规则会应用于由 _p_ 覆盖的 _n_ 及其后代，并按后续的 “must cover” 情形进行修改。</li>
           </ol>
         </li>
         <li>否则（如果解析失败），则为早期 Syntax Error。</li>
@@ -1249,7 +1249,7 @@
         <p>此设计背后的理由是，使 Strings 的实现尽可能简单且高性能。如果 ECMAScript 源文本采用 Normalized Form C，则只要字符串字面量不包含任何 Unicode 转义序列，就保证它们也被规范化。</p>
       </emu-note>
       <p>在本规范中，短语“_A_、_B_、... 的<dfn id="string-concatenation">字符串连接</dfn>”（其中每个实参都是 String 值、码元或码元序列）表示一个 String 值，其码元序列是每个实参的码元（按顺序）的连接（按顺序）。</p>
-      <p>短语“_string_ 从 _inclusiveStart_ 到 _exclusiveEnd_ 的<dfn id="substring">子字符串</dfn>”（其中 _string_ 是 String 值或码元序列，_inclusiveStart_ 和 _exclusiveEnd_ 是整数）表示由 _string_ 中从索引 _inclusiveStart_ 开始并在索引 _exclusiveEnd_ 之前立即结束的连续码元组成的 String 值（当 _inclusiveStart_ = _exclusiveEnd_ 时为空 String）。如果省略 "to" 后缀，则使用 _string_ 的长度作为 _exclusiveEnd_ 的值。</p>
+      <p>短语“_string_ 从 _inclusiveStart_ 到 _exclusiveEnd_ 的<dfn id="substring">子字符串</dfn>”（其中 _string_ 是 String 值或码元序列，_inclusiveStart_ 和 _exclusiveEnd_ 是整数）表示由 _string_ 中从索引 _inclusiveStart_ 开始并在索引 _exclusiveEnd_ 之前立即结束的连续码元组成的 String 值（当 _inclusiveStart_ = _exclusiveEnd_ 时为空 String）。如果省略 “to” 后缀，则使用 _string_ 的长度作为 _exclusiveEnd_ 的值。</p>
       <p>
         短语“<dfn id="ASCII-word-characters">ASCII 单词字符</dfn>”表示以下 String 值，该值仅由 Unicode Basic Latin 块中的每个字母和数字以及 U+005F（LOW LINE）组成：<br>
         *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"*。<br>
@@ -4858,7 +4858,7 @@
 
     <emu-clause id="sec-privateelement-specification-type">
       <h1>PrivateElement 规范类型</h1>
-      <p>PrivateElement 类型是用于私有类字段、方法和访问器规范的 Record。尽管 Property Descriptors 不用于私有元素，私有字段的行为类似于不可配置、不可枚举、可写的数据属性，私有方法的行为类似于不可配置、不可枚举、不可写的数据属性，而私有访问器的行为类似于不可配置、不可枚举的访问器属性。</p>
+      <p>PrivateElement 类型是一个记录，用于私有类字段、方法和访问器的规范。尽管私有元素不与属性描述符相关联，也不是属性，但引用它们的表达式的运行时语义在某些方面类似于不可配置属性的运行时语义（私有字段类似于可写数据属性，私有方法类似于不可写数据属性，而私有访问器类似于访问器属性），相应的记录字段也用于类似的目的。</p>
       <p>PrivateElement 类型的值是字段由 <emu-xref href="#table-privateelement-fields"></emu-xref> 定义的 Record。此类值称为 <dfn variants="PrivateElement">PrivateElements</dfn>。</p>
       <emu-table id="table-privateelement-fields" caption="PrivateElement 字段">
         <table>
@@ -7925,27 +7925,25 @@
       <emu-alg>
         1. 返回 *false*。
       </emu-alg>
-      <emu-grammar>
-        UsingDeclaration :
-          `using` BindingList `;`
-
-        AwaitUsingDeclaration :
-          CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`
-      </emu-grammar>
+      <emu-grammar>UsingDeclaration : `using` BindingList `;`</emu-grammar>
       <emu-alg>
         1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>AwaitUsingDeclaration : CoverAwaitExpressionAndAwaitUsingDeclarationHead BindingList `;`</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
       </emu-alg>
       <emu-grammar>ForDeclaration : LetOrConst ForBinding</emu-grammar>
       <emu-alg>
         1. 返回 *false*。
       </emu-alg>
-      <emu-grammar>
-        ForDeclaration :
-          `using` ForBinding
-          `await` `using` ForBinding
-      </emu-grammar>
+      <emu-grammar>ForDeclaration : `using` ForBinding</emu-grammar>
       <emu-alg>
         1. 返回 *true*。
+      </emu-alg>
+      <emu-grammar>ForDeclaration : `await` `using` ForBinding</emu-grammar>
+      <emu-alg>
+        1. 返回 *false*。
       </emu-alg>
       <emu-grammar>
         FunctionDeclaration :
@@ -19037,7 +19035,7 @@
         </ul>
         <emu-note>
           <p>在本规范的其他地方，有一些早期错误规则会在某些情况下要求 |LeftHandSideExpression| 必须覆盖一个 |AssignmentPattern|。因此，|ObjectLiteral| 充当 |ObjectAssignmentPattern| 的覆盖文法。|CoverInitializedName| 产生式是为了完整覆盖 |AssignmentProperty| 所必需的，但在实际的对象初始化器中并不有效。</p>
-          <p>具体来说，在预期出现实际 |ObjectLiteral| 的上下文中，上述早期错误规则会阻止使用 |CoverInitializedName|。但在将 |ObjectLiteral| 用作覆盖文法的情况下，"must cover" 的语义规定 |ObjectLiteral| 内的 Parse Node 不受早期错误规则约束，因此允许 |CoverInitializedName|。</p>
+          <p>具体来说，在预期出现实际 |ObjectLiteral| 的上下文中，上述早期错误规则会阻止使用 |CoverInitializedName|。但在将 |ObjectLiteral| 用作覆盖文法的情况下，“must cover” 的语义规定 |ObjectLiteral| 内的 Parse Node 不受早期错误规则约束，因此允许 |CoverInitializedName|。</p>
           <p>例如，考虑：</p>
           <pre><code class="javascript">
             let o = {f = 1};
@@ -27855,53 +27853,53 @@
               </dl>
 
               <emu-alg>
-                1. 如果 _module_ 不是 Cyclic Module Record，则
+                1. 如果 _module_ 不是循环模块记录，则
                   1. 执行 ? EvaluateModuleSync(_module_)。
                   1. 返回 _index_。
-                1. 如果 _module_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~，则
-                  1. 如果 _module_.[[EvaluationError]] 是 ~empty~，则返回 _index_。
+                1. 如果 _module_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~，则
+                  1. 如果 _module_.[[EvaluationError]] 为 ~empty~，返回 _index_。
                   1. 返回 ? _module_.[[EvaluationError]]。
-                1. 如果 _module_.[[Status]] 是 ~evaluating~，则返回 _index_。
-                1. 断言：_module_.[[Status]] 是 ~linked~。
+                1. 如果 _module_.[[Status]] 为 ~evaluating~，返回 _index_。
+                1. 断言：_module_.[[Status]] 为 ~linked~。
                 1. 将 _module_.[[Status]] 设置为 ~evaluating~。
                 1. 令 _moduleIndex_ 为 _index_。
                 1. 将 _module_.[[DFSAncestorIndex]] 设置为 _index_。
                 1. 将 _module_.[[PendingAsyncDependencies]] 设置为 0。
                 1. 将 _index_ 设置为 _index_ + 1。
                 1. 将 _module_ 追加到 _stack_。
-                1. 对 _module_.[[RequestedModules]] 的每个 ModuleRequest Record _request_，执行：
+                1. 对于 _module_.[[RequestedModules]] 中的每个模块请求记录 _request_，执行
                   1. 令 _requiredModule_ 为 GetImportedModule(_module_, _request_)。
                   1. 将 _index_ 设置为 ? InnerModuleEvaluation(_requiredModule_, _stack_, _index_)。
-                  1. 如果 _requiredModule_ 是 Cyclic Module Record，则
+                  1. 如果 _requiredModule_ 是循环模块记录，则
                     1. 断言：_requiredModule_.[[Status]] 是 ~evaluating~、~evaluating-async~ 或 ~evaluated~ 之一。
-                    1. 断言：当且仅当 _stack_ 包含 _requiredModule_ 时，_requiredModule_.[[Status]] 是 ~evaluating~。
-                    1. 如果 _requiredModule_.[[Status]] 是 ~evaluating~，则
+                    1. 断言：当且仅当 _stack_ 包含 _requiredModule_ 时，_requiredModule_.[[Status]] 为 ~evaluating~。
+                    1. 如果 _requiredModule_.[[Status]] 为 ~evaluating~，则
                       1. 将 _module_.[[DFSAncestorIndex]] 设置为 min(_module_.[[DFSAncestorIndex]], _requiredModule_.[[DFSAncestorIndex]])。
                     1. 否则，
                       1. 将 _requiredModule_ 设置为 _requiredModule_.[[CycleRoot]]。
-                      1. 断言：_requiredModule_.[[Status]] 是 ~evaluating-async~ 或 ~evaluated~。
-                      1. 如果 _requiredModule_.[[EvaluationError]] 不是 ~empty~，则返回 ? _requiredModule_.[[EvaluationError]]。
+                      1. 断言：_requiredModule_.[[Status]] 为 ~evaluating-async~ 或 ~evaluated~。
+                      1. 如果 _requiredModule_.[[EvaluationError]] 不为 ~empty~，返回 ? _requiredModule_.[[EvaluationError]]。
                     1. 如果 _requiredModule_.[[AsyncEvaluationOrder]] 是整数，则
                       1. 将 _module_.[[PendingAsyncDependencies]] 设置为 _module_.[[PendingAsyncDependencies]] + 1。
                       1. 将 _module_ 追加到 _requiredModule_.[[AsyncParentModules]]。
-                1. 如果 _module_.[[PendingAsyncDependencies]] > 0 或 _module_.[[HasTLA]] 是 *true*，则
-                  1. 断言：_module_.[[AsyncEvaluationOrder]] 是 ~unset~。
+                1. 如果 _module_.[[HasTLA]] 为 *true* 或 _module_.[[PendingAsyncDependencies]] > 0，则
+                  1. 断言：_module_.[[AsyncEvaluationOrder]] 为 ~unset~。
                   1. 将 _module_.[[AsyncEvaluationOrder]] 设置为 IncrementModuleAsyncEvaluationCount()。
-                  1. 如果 _module_.[[PendingAsyncDependencies]] = 0，则执行 ExecuteAsyncModule(_module_)。
+                  1. 如果 _module_.[[PendingAsyncDependencies]] = 0，执行 ExecuteAsyncModule(_module_)。
                 1. 否则，
                   1. 执行 ? <emu-meta effects="user-code">_module_.ExecuteModule()</emu-meta>。
                 1. 断言：_module_ 在 _stack_ 中恰好出现一次。
                 1. 断言：_module_.[[DFSAncestorIndex]] ≤ _moduleIndex_。
                 1. 如果 _module_.[[DFSAncestorIndex]] = _moduleIndex_，则
                   1. 令 _done_ 为 *false*。
-                  1. 重复，只要 _done_ 是 *false*，
+                  1. 当 _done_ 为 *false* 时，重复执行，
                     1. 令 _requiredModule_ 为 _stack_ 的最后一个元素。
                     1. 移除 _stack_ 的最后一个元素。
-                    1. 断言：_requiredModule_ 是 Cyclic Module Record。
+                    1. 断言：_requiredModule_ 是循环模块记录。
                     1. 断言：_requiredModule_.[[AsyncEvaluationOrder]] 是整数或 ~unset~。
-                    1. 如果 _requiredModule_.[[AsyncEvaluationOrder]] 是 ~unset~，则将 _requiredModule_.[[Status]] 设置为 ~evaluated~。
+                    1. 如果 _requiredModule_.[[AsyncEvaluationOrder]] 为 ~unset~，将 _requiredModule_.[[Status]] 设置为 ~evaluated~。
                     1. 否则，将 _requiredModule_.[[Status]] 设置为 ~evaluating-async~。
-                    1. 如果 _requiredModule_ 和 _module_ 是同一个 Module Record，则将 _done_ 设置为 *true*。
+                    1. 如果 _requiredModule_ 和 _module_ 是同一个模块记录，将 _done_ 设置为 *true*。
                     1. 将 _requiredModule_.[[CycleRoot]] 设置为 _module_。
                 1. 返回 _index_。
               </emu-alg>
@@ -38641,24 +38639,31 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Atom :: CharacterClass</emu-grammar>
         <emu-alg>
-          1. 令 _cc_ 为以 _regexpRecord_ 为实参执行 |CharacterClass| 的 CompileCharacterClass。
+          1. 令 _cc_ 为以 _regexpRecord_ 作为参数对 |CharacterClass| 执行 CompileCharacterClass 的结果。
           1. 令 _cs_ 为 _cc_.[[CharSet]]。
-          1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *false*，或 _cs_ 的每个 CharSetElement 都由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)。
-          1. 断言：_cc_.[[Invert]] 是 *false*。
-          1. 令 _listOfMatchers_ 为空 Matcher List。
-          1. 对 _cs_ 中包含多于 1 个字符的每个 CharSetElement _s_，按长度降序迭代，执行：
-            1. 令 _cs2_ 为包含 _s_ 最后一个码点的单元素 CharSet。
+          1. 如果 _regexpRecord_.[[UnicodeSets]] 为 *false*，或者 _cs_ 的每个 CharSetElement 均由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)。
+          1. 断言：_cc_.[[Invert]] 为 *false*。
+          1. 令 _listOfMatchers_ 为空的 Matcher 列表。
+          1. 令 _csSequences_ 为新的空列表。
+          1. 对于 _cs_ 的每个 CharSetElement _s_，执行
+            1. 如果 _s_ 的长度 > 1，则将 _s_ 追加到 _csSequences_。
+          1. 按每个 CharSetElement 的长度以降序对 _csSequences_ 进行排序。
+          1. 对于 _csSequences_ 的每个 CharSetElement _s_，执行
+            1. 断言：_s_ 是由 2 个或更多码位组成的序列。
+            1. 令 _remaining_ 为由 _s_ 的码位组成的列表。
+            1. 令 _cs2_ 为包含 _remaining_ 最后一个元素的单元素 CharSet。
             1. 令 _m2_ 为 CharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)。
-            1. 对 _s_ 中每个码点 _c1_，从其倒数第二个码点开始向后迭代，执行：
+            1. 移除 _remaining_ 的最后一个元素。
+            1. 对于按列表逆序排列的 _remaining_ 的每个码位 _c1_，执行
               1. 令 _cs1_ 为包含 _c1_ 的单元素 CharSet。
               1. 令 _m1_ 为 CharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)。
               1. 将 _m2_ 设置为 MatchSequence(_m1_, _m2_, _direction_)。
             1. 将 _m2_ 追加到 _listOfMatchers_。
-          1. 令 _singles_ 为包含 _cs_ 中所有由单个字符组成的 CharSetElement 的 CharSet。
+          1. 令 _singles_ 为包含 _cs_ 中每个由单个字符组成的 CharSetElement 的 CharSet。
           1. 将 CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_) 追加到 _listOfMatchers_。
           1. 如果 _cs_ 包含空字符序列，则将 EmptyMatcher() 追加到 _listOfMatchers_。
-          1. 令 _m2_ 为 _listOfMatchers_ 中最后一个 Matcher。
-          1. 对 _listOfMatchers_ 的每个 Matcher _m1_，从倒数第二个元素开始向后迭代，执行：
+          1. 令 _m2_ 为 _listOfMatchers_ 中的最后一个 Matcher。
+          1. 对于 _listOfMatchers_ 中的每个 Matcher _m1_，从其倒数第二个元素开始向后迭代，执行
             1. 将 _m2_ 设置为 MatchTwoAlternatives(_m1_, _m2_)。
           1. 返回 _m2_。
         </emu-alg>
@@ -38724,22 +38729,29 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>AtomEscape :: CharacterClassEscape</emu-grammar>
         <emu-alg>
-          1. 令 _cs_ 为以 _regexpRecord_ 为实参执行 |CharacterClassEscape| 的 CompileToCharSet。
-          1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *false*，或 _cs_ 的每个 CharSetElement 都由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)。
-          1. 令 _listOfMatchers_ 为空 Matcher List。
-          1. 对 _cs_ 中包含多于 1 个字符的每个 CharSetElement _s_，按长度降序迭代，执行：
-            1. 令 _cs2_ 为包含 _s_ 最后一个码点的单元素 CharSet。
+          1. 令 _cs_ 为以 _regexpRecord_ 作为参数对 |CharacterClassEscape| 执行 CompileToCharSet 的结果。
+          1. 如果 _regexpRecord_.[[UnicodeSets]] 为 *false*，或者 _cs_ 的每个 CharSetElement 均由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)。
+          1. 令 _listOfMatchers_ 为空的 Matcher 列表。
+          1. 令 _csSequences_ 为新的空列表。
+          1. 对于 _cs_ 的每个 CharSetElement _s_，执行
+            1. 如果 _s_ 的长度 > 1，则将 _s_ 追加到 _csSequences_。
+          1. 按每个 CharSetElement 的长度以降序对 _csSequences_ 进行排序。
+          1. 对于 _csSequences_ 的每个 CharSetElement _s_，执行
+            1. 断言：_s_ 是由 2 个或更多码位组成的序列。
+            1. 令 _remaining_ 为由 _s_ 的码位组成的列表。
+            1. 令 _cs2_ 为包含 _remaining_ 最后一个元素的单元素 CharSet。
             1. 令 _m2_ 为 CharacterSetMatcher(_regexpRecord_, _cs2_, *false*, _direction_)。
-            1. 对 _s_ 中每个码点 _c1_，从其倒数第二个码点开始向后迭代，执行：
+            1. 移除 _remaining_ 的最后一个元素。
+            1. 对于按列表逆序排列的 _remaining_ 的每个码位 _c1_，执行
               1. 令 _cs1_ 为包含 _c1_ 的单元素 CharSet。
               1. 令 _m1_ 为 CharacterSetMatcher(_regexpRecord_, _cs1_, *false*, _direction_)。
               1. 将 _m2_ 设置为 MatchSequence(_m1_, _m2_, _direction_)。
             1. 将 _m2_ 追加到 _listOfMatchers_。
-          1. 令 _singles_ 为包含 _cs_ 中所有由单个字符组成的 CharSetElement 的 CharSet。
+          1. 令 _singles_ 为包含 _cs_ 中每个由单个字符组成的 CharSetElement 的 CharSet。
           1. 将 CharacterSetMatcher(_regexpRecord_, _singles_, *false*, _direction_) 追加到 _listOfMatchers_。
           1. 如果 _cs_ 包含空字符序列，则将 EmptyMatcher() 追加到 _listOfMatchers_。
-          1. 令 _m2_ 为 _listOfMatchers_ 中最后一个 Matcher。
-          1. 对 _listOfMatchers_ 的每个 Matcher _m1_，从倒数第二个元素开始向后迭代，执行：
+          1. 令 _m2_ 为 _listOfMatchers_ 中的最后一个 Matcher。
+          1. 对于 _listOfMatchers_ 中的每个 Matcher _m1_，从其倒数第二个元素开始向前迭代，执行
             1. 将 _m2_ 设置为 MatchTwoAlternatives(_m1_, _m2_)。
           1. 返回 _m2_。
         </emu-alg>
@@ -39260,11 +39272,11 @@ THH:mm:ss.sss
             <dd>如果 _regexpRecord_.[[UnicodeSets]] 是 *false* 或 _regexpRecord_.[[IgnoreCase]] 是 *false*，则返回 _charSet_。否则，它使用 Unicode Character Database 文件 <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> 中的 <a href="https://www.unicode.org/reports/tr44/#Simple_Case_Folding">Simple Case Folding</a>（<emu-eqn id="eqn-scf" aoid="scf">scf(_codePoint_)</emu-eqn>）定义（每个定义都会把单个码点映射到另一个单个码点），逐字符地把 _charSet_ 的每个 CharSetElement 映射到规范形式，并返回所得 CharSet。</dd>
           </dl>
           <emu-alg>
-            1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *false* 或 _regexpRecord_.[[IgnoreCase]] 是 *false*，则返回 _charSet_。
+            1. 如果 _regexpRecord_.[[UnicodeSets]] 为 *false*，或者 _regexpRecord_.[[IgnoreCase]] 为 *false*，则返回 _charSet_。
             1. 令 _otherSet_ 为新的空 CharSet。
-            1. 对 _charSet_ 的每个 CharSetElement _s_，执行：
+            1. 对于 _charSet_ 的每个 CharSetElement _s_，执行
               1. 令 _t_ 为空字符序列。
-              1. 对 _s_ 中的每个单一码点 _codePoint_，执行：
+              1. 对于 _s_ 的每个单一码位 _codePoint_，执行
                 1. 将 scf(_codePoint_) 追加到 _t_。
               1. 将 _t_ 添加到 _otherSet_。
             1. 返回 _otherSet_。
@@ -50167,7 +50179,7 @@ THH:mm:ss.sss
                 一个返回 promise 的函数对象
               </td>
               <td>
-                <p>调用此方法会通知 AsyncDisposable 对象：调用者不打算继续使用此对象。此方法应执行任何必要逻辑，以对资源执行显式清理，包括但不限于文件系统句柄、流、宿主对象等。当此方法返回的 promise 被拒绝时，通常意味着无法显式释放该资源。直到所得 Promise 被兑现前，AsyncDisposable 对象不被视为已“处置”。</p>
+                <p>调用此方法会通知 AsyncDisposable 对象，调用者不打算继续使用此对象。此方法应执行显式清理资源所需的任何逻辑，包括但不限于文件系统句柄、流、宿主对象等。当此方法返回的 promise 被拒绝时，通常意味着无法显式释放该资源。在生成的 Promise 得到兑现之前，不认为 AsyncDisposable 对象已“处置”。</p>
                 <p>对同一个对象多次调用此方法时，应避免对已经处置的资源重复执行清理逻辑，并且不应抛出异常或返回被拒绝的 promise，即使第一次调用时曾抛出异常或返回被拒绝的 promise 也是如此。不过，此要求不会被强制执行。</p>
                 <p>当通过 `await using` 声明使用 AsyncDisposable 对象时，在直接包含该声明的 |Block| 或 |Module| 求值完成后，该资源将被自动处置。</p>
               </td>
