@@ -34770,7 +34770,7 @@
                 `YYYY`
               </td>
               <td>
-                proleptic Gregorian calendarにおけるyearであり、0000から9999までのfour decimal digits、または*"+"*または*"-"*の後にsix decimal digitsが続く<emu-xref href="#sec-expanded-years">expanded year</emu-xref>です。
+                先発グレゴリオ暦における年であり、0000 から 9999 までの4桁の10進数、または *"+"* か *"-"* に6桁の10進数が続く拡張年である。
               </td>
             </tr>
             <tr>
@@ -34885,7 +34885,7 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
           <h1>Expanded Years</h1>
-          <p>1970年1月1日からforwardまたはbackwardにおよそ273,790年というfull time value range（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>）をcoverするには、0より前または9999より後のyearsをrepresentする必要があります。ISO 8601はyear representationのexpansionをpermitしますが、information interchangeのpartners間のmutual agreementによる場合に限ります。simplified ECMAScript formatでは、そのようなexpanded year representationは6 digitsを持ち、常に+または- signでprefixedされなければなりません。year 0はpositiveとみなされ、+ signでprefixedされなければなりません。year 0を-000000として表すrepresentationはinvalidです。time valueのrange外のinstants in timeを表すexpanded yearsを持つ<emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref>にmatchingするStringsは、<emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>によってunrecognizableとして扱われ、そのfunctionはimplementation-specific behaviourまたはheuristicsにfall backせずに*NaN*を返します。</p>
+          <p>1970年1月1日から前後約273,790年に及ぶ時刻値の全範囲（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>）を網羅するには、0年より前または9999年より後の年を表現する必要がある。ISO 8601では年表現の拡張が認められているが、情報交換を行う当事者間の相互合意がある場合に限られる。簡略化されたECMAScript形式では、このような<dfn variants="expanded years">拡張年</dfn>表現は6桁で、常に + または - 符号を接頭辞として付けなければならない。0年は正とみなされ、+ 符号を接頭辞として付けなければならない。0年を -000000 と表現することは無効である。時刻値の範囲外の時点を表す拡張年を含み、<emu-xref href="#sec-date-time-string-format">日時文字列形式</emu-xref>に一致する文字列は、<emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>によって認識不能なものとして扱われ、実装固有の動作やヒューリスティックにフォールバックすることなく、その関数は *NaN* を返す。</p>
           <emu-note>
             <p>expanded yearsを持つdate-<emu-not-ref>time values</emu-not-ref>のexamples：</p>
             <figure>
@@ -42055,35 +42055,34 @@ THH:mm:ss.sss
         <emu-clause id="sec-%arrayiteratorprototype%.next" type="built-in function">
           <h1>%ArrayIteratorPrototype%.next ( )</h1>
           <emu-alg>
-            1. _iteratorObj_を*this* valueとする。
-            1. _iteratorObj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iteratorObj_がArray Iterator Instanceのすべてのinternal slots（<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>）を持たないなら、*TypeError*例外をthrowする。
-            1. _array_を_iteratorObj_.[[IteratedArrayLike]]とする。
-            1. _array_が*undefined*なら、CreateIteratorResultObject(*undefined*, *true*)を返す。
-            1. _index_を_iteratorObj_.[[ArrayLikeNextIndex]]とする。
-            1. _kind_を_iteratorObj_.[[ArrayLikeIterationKind]]とする。
-            1. _array_が[[TypedArrayName]] internal slotを持つなら、
-              1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_array_, ~seq-cst~)とする。
-              1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-              1. _length_をTypedArrayLength(_taRecord_)とする。
-            1. そうでなければ、
-              1. _length_を ? LengthOfArrayLike(_array_) とする。
-            1. _index_ ≥ _length_なら、
-              1. _iteratorObj_.[[IteratedArrayLike]]を*undefined*に設定する。
-              1. CreateIteratorResultObject(*undefined*, *true*)を返す。
-            1. _iteratorObj_.[[ArrayLikeNextIndex]]を_index_ + 1に設定する。
-            1. _indexNumber_を𝔽(_index_)とする。
-            1. _kind_が~key~なら、
-              1. _result_を_indexNumber_とする。
-            1. そうでなければ、
-              1. _elementKey_を ! ToString(_indexNumber_) とする。
-              1. _elementValue_を ? Get(_array_, _elementKey_) とする。
-              1. _kind_が~value~なら、
-                1. _result_を_elementValue_とする。
-              1. そうでなければ、
-                1. Assert: _kind_は~key+value~である。
-                1. _result_をCreateArrayFromList(« _indexNumber_, _elementValue_ »)とする。
-            1. CreateIteratorResultObject(_result_, *false*)を返す。
+            1. _iteratorObj_ を *this* 値とする。
+            1. _iteratorObj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iteratorObj_ が配列イテレーターインスタンス（<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>）のすべての内部スロットを持たない場合、*TypeError* 例外をスローする。
+            1. _array_ を _iteratorObj_.[[IteratedArrayLike]] とする。
+            1. _array_ が *undefined* の場合、CreateIteratorResultObject(*undefined*, *true*) を返す。
+            1. _index_ を _iteratorObj_.[[ArrayLikeNextIndex]] とする。
+            1. _kind_ を _iteratorObj_.[[ArrayLikeIterationKind]] とする。
+            1. _array_ が [[TypedArrayName]] 内部スロットを持つ場合、
+              1. _taRecord_ を ? ValidateTypedArrayBounds(_array_, ~seq-cst~) とする。
+              1. _length_ を TypedArrayLength(_taRecord_) とする。
+            1. それ以外の場合、
+              1. _length_ を ? LengthOfArrayLike(_array_) とする。
+            1. _index_ ≥ _length_ の場合、
+              1. _iteratorObj_.[[IteratedArrayLike]] を *undefined* に設定する。
+              1. CreateIteratorResultObject(*undefined*, *true*) を返す。
+            1. _iteratorObj_.[[ArrayLikeNextIndex]] を _index_ + 1 に設定する。
+            1. _indexNumber_ を 𝔽(_index_) とする。
+            1. _kind_ が ~key~ の場合、
+              1. _result_ を _indexNumber_ とする。
+            1. それ以外の場合、
+              1. _elementKey_ を ! ToString(_indexNumber_) とする。
+              1. _elementValue_ を ? Get(_array_, _elementKey_) とする。
+              1. _kind_ が ~value~ の場合、
+                1. _result_ を _elementValue_ とする。
+              1. それ以外の場合、
+                1. 表明：_kind_ は ~key+value~ である。
+                1. _result_ を CreateArrayFromList(« _indexNumber_, _elementValue_ ») とする。
+            1. CreateIteratorResultObject(_result_, *false*) を返す。
           </emu-alg>
         </emu-clause>
 
@@ -42581,29 +42580,28 @@ THH:mm:ss.sss
           1. _length_ を TypedArrayLength(_taRecord_) とする。
           1. _targetIndex_ を ? ToClampedIndex(_target_, _length_) とする。
           1. _startIndex_ を ? ToClampedIndex(_start_, _length_) とする。
-          1. _end_ が *undefined* の場合は _endIndex_ を _length_ とし、そうでない場合は _endIndex_ を ? ToClampedIndex(_end_, _length_) とする。
+          1. _end_ が *undefined* の場合、_endIndex_ を _length_ とする。それ以外の場合、_endIndex_ を ? ToClampedIndex(_end_, _length_) とする。
           1. _count_ を min(_endIndex_ - _startIndex_, _length_ - _targetIndex_) とする。
-          1. _count_ > 0 の場合、次を行う。
-            1. 注: コピーは、ソースデータのビットレベルのエンコーディングが保持される方法で実行しなければならない。
+          1. _count_ > 0 の場合、
+            1. 注記：コピーは、ソースデータのビットレベルの符号化を保持する方法で実行しなければならない。
             1. _buffer_ を _obj_.[[ViewedArrayBuffer]] とする。
-            1. _taRecord_ を MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~) に設定する。
-            1. IsTypedArrayOutOfBounds(_taRecord_) が *true* の場合、*TypeError* 例外を投げる。
+            1. _taRecord_ を ? ValidateTypedArrayBounds(_obj_, ~seq-cst~) に設定する。
             1. _length_ を TypedArrayLength(_taRecord_) に設定する。
-            1. 注: 上記ステップの副作用で _obj_ のサイズが縮小されている可能性があり、その場合コピーは依然として適用可能な最長プレフィックスで進めるべきである。
+            1. 注記：上記のステップの副作用によって _obj_ のサイズが縮小している可能性があり、その場合、コピーは依然として適用可能な最長の接頭部を用いて続行すべきである。
             1. _count_ を min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_) に設定する。
             1. _elementSize_ を TypedArrayElementSize(_obj_) とする。
             1. _byteOffset_ を _obj_.[[ByteOffset]] とする。
             1. _toByteIndex_ を (_targetIndex_ × _elementSize_) + _byteOffset_ とする。
             1. _fromByteIndex_ を (_startIndex_ × _elementSize_) + _byteOffset_ とする。
             1. _countBytes_ を _count_ × _elementSize_ とする。
-            1. _fromByteIndex_ &lt; _toByteIndex_ かつ _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_ の場合、次を行う。
+            1. _fromByteIndex_ &lt; _toByteIndex_ かつ _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_ の場合、
               1. _direction_ を -1 とする。
               1. _fromByteIndex_ を _fromByteIndex_ + _countBytes_ - 1 に設定する。
               1. _toByteIndex_ を _toByteIndex_ + _countBytes_ - 1 に設定する。
-            1. それ以外の場合、次を行う。
+            1. それ以外の場合、
               1. _direction_ を 1 とする。
             1. _countBytes_ > 0 の間、繰り返す。
-              1. Assert: _fromByteIndex_ ≥ 0 かつ _toByteIndex_ ≥ 0。
+              1. 表明：_fromByteIndex_ ≥ 0 かつ _toByteIndex_ ≥ 0。
               1. _value_ を GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~) とする。
               1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~) を実行する。
               1. _fromByteIndex_ を _fromByteIndex_ + _direction_ に設定する。
@@ -42649,23 +42647,22 @@ THH:mm:ss.sss
         <p>このmethodのargumentsのinterpretationおよびuseは、<emu-xref href="#sec-array.prototype.fill"></emu-xref>で定義される`Array.prototype.fill`と同じです。</p>
         <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _obj_を*現在のthis値*とする。
-          1. _taRecord_を? ValidateTypedArray(_obj_, ~seq-cst~)とする。
-          1. _length_をTypedArrayLength(_taRecord_)とする。
-          1. _obj_.[[ContentType]]が~bigint~である場合、_value_を? ToBigInt(_value_)に設定する。
-          1. そうでない場合、_value_を? ToNumber(_value_)に設定する。
-          1. _startIndex_を? ToClampedIndex(_start_, _length_)とする。
-          1. _end_が*undefined*である場合、_endIndex_を_length_とする。そうでない場合、_endIndex_を? ToClampedIndex(_end_, _length_)とする。
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)に設定する。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*である場合、*TypeError*例外を投げる。
-          1. _length_をTypedArrayLength(_taRecord_)に設定する。
-          1. _endIndex_をmin(_endIndex_, _length_)に設定する。
-          1. _k_を_startIndex_とする。
-          1. _k_ &lt; _endIndex_である間、繰り返す。
-            1. _propertyKey_を! ToString(𝔽(_k_))とする。
-            1. ! Set(_obj_, _propertyKey_, _value_, *true*)を実行する。
-            1. _k_を_k_ + 1に設定する。
-          1. _obj_を返す。
+          1. _obj_ を *this* 値とする。
+          1. _taRecord_ を ? ValidateTypedArray(_obj_, ~seq-cst~) とする。
+          1. _length_ を TypedArrayLength(_taRecord_) とする。
+          1. _obj_.[[ContentType]] が ~bigint~ の場合、_value_ を ? ToBigInt(_value_) に設定する。
+          1. それ以外の場合、_value_ を ? ToNumber(_value_) に設定する。
+          1. _startIndex_ を ? ToClampedIndex(_start_, _length_) とする。
+          1. _end_ が *undefined* の場合、_endIndex_ を _length_ とする。それ以外の場合、_endIndex_ を ? ToClampedIndex(_end_, _length_) とする。
+          1. _taRecord_ を ? ValidateTypedArrayBounds(_obj_, ~seq-cst~) に設定する。
+          1. _length_ を TypedArrayLength(_taRecord_) に設定する。
+          1. _endIndex_ を min(_endIndex_, _length_) に設定する。
+          1. _k_ を _startIndex_ とする。
+          1. _k_ &lt; _endIndex_ の間、繰り返す。
+            1. _propertyKey_ を ! ToString(𝔽(_k_)) とする。
+            1. ! Set(_obj_, _propertyKey_, _value_, *true*) を実行する。
+            1. _k_ を _k_ + 1 に設定する。
+          1. _obj_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43020,21 +43017,20 @@ THH:mm:ss.sss
             <dd>これは、_target_内でindex _targetOffset_からstartingして、_source_からvaluesを読み取ってmultiple valuesをsetします。</dd>
           </dl>
           <emu-alg>
-            1. _targetRecord_をMakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)とする。
-            1. IsTypedArrayOutOfBounds(_targetRecord_)が*true*なら、*TypeError*例外をthrowする。
-            1. _targetLength_をTypedArrayLength(_targetRecord_)とする。
-            1. _source_を ? ToObject(_source_) に設定する。
-            1. _sourceLength_を ? LengthOfArrayLike(_source_) とする。
-            1. _targetOffset_ = +∞なら、*RangeError*例外をthrowする。
-            1. _sourceLength_ + _targetOffset_ > _targetLength_なら、*RangeError*例外をthrowする。
-            1. _k_を0とする。
-            1. _k_ &lt; _sourceLength_の間、繰り返す
-              1. _propertyKey_を ! ToString(𝔽(_k_)) とする。
-              1. _value_を ? Get(_source_, _propertyKey_) とする。
-              1. _targetIndex_を𝔽(_targetOffset_ + _k_)とする。
-              1. ? TypedArraySetElement(_target_, _targetIndex_, _value_)を実行する。
-              1. _k_を_k_ + 1に設定する。
-            1. ~unused~を返す。
+            1. _targetRecord_ を ? ValidateTypedArrayBounds(_target_, ~seq-cst~) とする。
+            1. _targetLength_ を TypedArrayLength(_targetRecord_) とする。
+            1. _source_ を ? ToObject(_source_) に設定する。
+            1. _sourceLength_ を ? LengthOfArrayLike(_source_) とする。
+            1. _targetOffset_ = +∞ の場合、*RangeError* 例外をスローする。
+            1. _sourceLength_ + _targetOffset_ > _targetLength_ の場合、*RangeError* 例外をスローする。
+            1. _k_ を 0 とする。
+            1. _k_ &lt; _sourceLength_ の間、繰り返す。
+              1. _propertyKey_ を ! ToString(𝔽(_k_)) とする。
+              1. _value_ を ? Get(_source_, _propertyKey_) とする。
+              1. _targetIndex_ を 𝔽(_targetOffset_ + _k_) とする。
+              1. ? TypedArraySetElement(_target_, _targetIndex_, _value_) を実行する。
+              1. _k_ を _k_ + 1 に設定する。
+            1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -43051,46 +43047,44 @@ THH:mm:ss.sss
             <dd>これは、_target_内でindex _targetOffset_からstartingして、_source_からvaluesを読み取ってmultiple valuesをsetします。</dd>
           </dl>
           <emu-alg>
-            1. _targetBuffer_を_target_.[[ViewedArrayBuffer]]とする。
-            1. _targetRecord_をMakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)とする。
-            1. IsTypedArrayOutOfBounds(_targetRecord_)が*true*なら、*TypeError*例外をthrowする。
-            1. _targetLength_をTypedArrayLength(_targetRecord_)とする。
-            1. _sourceBuffer_を_source_.[[ViewedArrayBuffer]]とする。
-            1. _sourceRecord_をMakeTypedArrayWithBufferWitnessRecord(_source_, ~seq-cst~)とする。
-            1. IsTypedArrayOutOfBounds(_sourceRecord_)が*true*なら、*TypeError*例外をthrowする。
-            1. _sourceLength_をTypedArrayLength(_sourceRecord_)とする。
-            1. _targetType_をTypedArrayElementType(_target_)とする。
-            1. _targetElementSize_をTypedArrayElementSize(_target_)とする。
-            1. _targetByteOffset_を_target_.[[ByteOffset]]とする。
-            1. _sourceType_をTypedArrayElementType(_source_)とする。
-            1. _sourceElementSize_をTypedArrayElementSize(_source_)とする。
-            1. _sourceByteOffset_を_source_.[[ByteOffset]]とする。
-            1. _targetOffset_ = +∞なら、*RangeError*例外をthrowする。
-            1. _sourceLength_ + _targetOffset_ > _targetLength_なら、*RangeError*例外をthrowする。
-            1. _target_.[[ContentType]]が_source_.[[ContentType]]でないなら、*TypeError*例外をthrowする。
-            1. IsSharedArrayBuffer(_sourceBuffer_)が*true*であり、IsSharedArrayBuffer(_targetBuffer_)が*true*であり、かつ_sourceBuffer_.[[ArrayBufferData]]が_targetBuffer_.[[ArrayBufferData]]であるなら、_sameSharedArrayBuffer_を*true*とする；そうでなければ、_sameSharedArrayBuffer_を*false*とする。
-            1. SameValue(_sourceBuffer_, _targetBuffer_)が*true*または_sameSharedArrayBuffer_が*true*なら、
-              1. _sourceByteLength_をTypedArrayByteLength(_sourceRecord_)とする。
-              1. _sourceBuffer_を ? CloneArrayBuffer(_sourceBuffer_, _sourceByteOffset_, _sourceByteLength_) に設定する。
-              1. _sourceByteIndex_を0とする。
-            1. そうでなければ、
-              1. _sourceByteIndex_を_sourceByteOffset_とする。
-            1. _targetByteIndex_を(_targetOffset_ × _targetElementSize_) + _targetByteOffset_とする。
-            1. _limit_を_targetByteIndex_ + (_targetElementSize_ × _sourceLength_)とする。
-            1. _sourceType_が_targetType_なら、
-              1. NOTE: transferはsource dataのbit-level encodingをpreserveするmannerでperformedされなければならない。
-              1. _targetByteIndex_ &lt; _limit_の間、繰り返す
-                1. _value_をGetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)とする。
-                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)を実行する。
-                1. _sourceByteIndex_を_sourceByteIndex_ + 1に設定する。
-                1. _targetByteIndex_を_targetByteIndex_ + 1に設定する。
-            1. そうでなければ、
-              1. _targetByteIndex_ &lt; _limit_の間、繰り返す
-                1. _value_をGetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)とする。
-                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, _targetType_, _value_, *true*, ~unordered~)を実行する。
-                1. _sourceByteIndex_を_sourceByteIndex_ + _sourceElementSize_に設定する。
-                1. _targetByteIndex_を_targetByteIndex_ + _targetElementSize_に設定する。
-            1. ~unused~を返す。
+            1. _targetBuffer_ を _target_.[[ViewedArrayBuffer]] とする。
+            1. _targetRecord_ を ? ValidateTypedArrayBounds(_target_, ~seq-cst~) とする。
+            1. _targetLength_ を TypedArrayLength(_targetRecord_) とする。
+            1. _sourceBuffer_ を _source_.[[ViewedArrayBuffer]] とする。
+            1. _sourceRecord_ を ? ValidateTypedArrayBounds(_source_, ~seq-cst~) とする。
+            1. _sourceLength_ を TypedArrayLength(_sourceRecord_) とする。
+            1. _targetType_ を TypedArrayElementType(_target_) とする。
+            1. _targetElementSize_ を TypedArrayElementSize(_target_) とする。
+            1. _targetByteOffset_ を _target_.[[ByteOffset]] とする。
+            1. _sourceType_ を TypedArrayElementType(_source_) とする。
+            1. _sourceElementSize_ を TypedArrayElementSize(_source_) とする。
+            1. _sourceByteOffset_ を _source_.[[ByteOffset]] とする。
+            1. _targetOffset_ = +∞ の場合、*RangeError* 例外をスローする。
+            1. _sourceLength_ + _targetOffset_ > _targetLength_ の場合、*RangeError* 例外をスローする。
+            1. _target_.[[ContentType]] が _source_.[[ContentType]] と異なる場合、*TypeError* 例外をスローする。
+            1. IsSharedArrayBuffer(_sourceBuffer_) が *true*、IsSharedArrayBuffer(_targetBuffer_) が *true*、かつ _sourceBuffer_.[[ArrayBufferData]] が _targetBuffer_.[[ArrayBufferData]] である場合、_sameSharedArrayBuffer_ を *true* とする。それ以外の場合、_sameSharedArrayBuffer_ を *false* とする。
+            1. SameValue(_sourceBuffer_, _targetBuffer_) が *true* または _sameSharedArrayBuffer_ が *true* の場合、
+              1. _sourceByteLength_ を TypedArrayByteLength(_sourceRecord_) とする。
+              1. _sourceBuffer_ を ? CloneArrayBuffer(_sourceBuffer_, _sourceByteOffset_, _sourceByteLength_) に設定する。
+              1. _sourceByteIndex_ を 0 とする。
+            1. それ以外の場合、
+              1. _sourceByteIndex_ を _sourceByteOffset_ とする。
+            1. _targetByteIndex_ を (_targetOffset_ × _targetElementSize_) + _targetByteOffset_ とする。
+            1. _limit_ を _targetByteIndex_ + (_targetElementSize_ × _sourceLength_) とする。
+            1. _sourceType_ が _targetType_ である場合、
+              1. 注記：転送は、ソースデータのビットレベルの符号化を保持する方法で実行しなければならない。
+              1. _targetByteIndex_ &lt; _limit_ の間、繰り返す。
+                1. _value_ を GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~) とする。
+                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~) を実行する。
+                1. _sourceByteIndex_ を _sourceByteIndex_ + 1 に設定する。
+                1. _targetByteIndex_ を _targetByteIndex_ + 1 に設定する。
+            1. それ以外の場合、
+              1. _targetByteIndex_ &lt; _limit_ の間、繰り返す。
+                1. _value_ を GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~) とする。
+                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, _targetType_, _value_, *true*, ~unordered~) を実行する。
+                1. _sourceByteIndex_ を _sourceByteIndex_ + _sourceElementSize_ に設定する。
+                1. _targetByteIndex_ を _targetByteIndex_ + _targetElementSize_ に設定する。
+            1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -43104,18 +43098,17 @@ THH:mm:ss.sss
           1. _taRecord_ を ? ValidateTypedArray(_obj_, ~seq-cst~) とする。
           1. _sourceArrayLength_ を TypedArrayLength(_taRecord_) とする。
           1. _startIndex_ を ? ToClampedIndex(_start_, _sourceArrayLength_) とする。
-          1. _end_ が *undefined* の場合は _endIndex_ を _sourceArrayLength_ とし、そうでない場合は _endIndex_ を ? ToClampedIndex(_end_, _sourceArrayLength_) とする。
+          1. _end_ が *undefined* の場合、_endIndex_ を _sourceArrayLength_ とする。それ以外の場合、_endIndex_ を ? ToClampedIndex(_end_, _sourceArrayLength_) とする。
           1. _countBytes_ を max(_endIndex_ - _startIndex_, 0) とする。
           1. _resultArray_ を ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) ») とする。
-          1. _countBytes_ > 0 の場合、次を行う。
-            1. _taRecord_ を MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~) に設定する。
-            1. IsTypedArrayOutOfBounds(_taRecord_) が *true* の場合、*TypeError* 例外を投げる。
+          1. _countBytes_ > 0 の場合、
+            1. _taRecord_ を ? ValidateTypedArrayBounds(_obj_, ~seq-cst~) に設定する。
             1. _endIndex_ を min(_endIndex_, TypedArrayLength(_taRecord_)) に設定する。
             1. _countBytes_ を max(_endIndex_ - _startIndex_, 0) に設定する。
             1. _sourceType_ を TypedArrayElementType(_obj_) とする。
             1. _targetType_ を TypedArrayElementType(_resultArray_) とする。
-            1. _sourceType_ が _targetType_ と同じ場合、次を行う。
-              1. 注: 転送は、ソースデータのビットレベルのエンコーディングが保持される方法で実行しなければならない。
+            1. _sourceType_ が _targetType_ である場合、
+              1. 注記：転送は、ソースデータのビットレベルの符号化を保持する方法で実行しなければならない。
               1. _sourceBuffer_ を _obj_.[[ViewedArrayBuffer]] とする。
               1. _targetBuffer_ を _resultArray_.[[ViewedArrayBuffer]] とする。
               1. _elementSize_ を TypedArrayElementSize(_obj_) とする。
@@ -43128,7 +43121,7 @@ THH:mm:ss.sss
                 1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~) を実行する。
                 1. _sourceByteIndex_ を _sourceByteIndex_ + 1 に設定する。
                 1. _targetByteIndex_ を _targetByteIndex_ + 1 に設定する。
-            1. それ以外の場合、次を行う。
+            1. それ以外の場合、
               1. _n_ を 0 とする。
               1. _k_ を _startIndex_ とする。
               1. _k_ &lt; _endIndex_ の間、繰り返す。
@@ -43399,11 +43392,27 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. ? RequireInternalSlot(_obj_, [[TypedArrayName]])を実行する。
-          1. Assert: _obj_は[[ViewedArrayBuffer]] internal slotを持つ。
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_obj_, _order_)とする。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-          1. _taRecord_を返す。
+          1. ? RequireInternalSlot(_obj_, [[TypedArrayName]]) を実行する。
+          1. 表明：_obj_ は [[ViewedArrayBuffer]] 内部スロットを持つ。
+          1. ? ValidateTypedArrayBounds(_obj_, _order_) を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-validatetypedarraybounds" type="abstract operation">
+        <h1>
+          ValidateTypedArrayBounds (
+            _ta_: a TypedArray,
+            _order_: ~seq-cst~ or ~unordered~,
+          ): either a normal completion containing a TypedArray With Buffer Witness Record or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>これは、_ta_ がそのバッキングバッファの境界を超えていないことを検証する。</dd>
+        </dl>
+        <emu-alg>
+          1. _taRecord_ を MakeTypedArrayWithBufferWitnessRecord(_ta_, _order_) とする。
+          1. IsTypedArrayOutOfBounds(_taRecord_) が *true* の場合、*TypeError* 例外をスローする。
+          1. _taRecord_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43547,35 +43556,34 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _sourceData_を_sourceArray_.[[ViewedArrayBuffer]]とする。
-            1. _elementType_をTypedArrayElementType(_obj_)とする。
-            1. _elementSize_をTypedArrayElementSize(_obj_)とする。
-            1. _sourceType_をTypedArrayElementType(_sourceArray_)とする。
-            1. _sourceElementSize_をTypedArrayElementSize(_sourceArray_)とする。
-            1. _sourceByteOffset_を_sourceArray_.[[ByteOffset]]とする。
-            1. _sourceRecord_をMakeTypedArrayWithBufferWitnessRecord(_sourceArray_, ~seq-cst~)とする。
-            1. IsTypedArrayOutOfBounds(_sourceRecord_)が*true*なら、*TypeError*例外をthrowする。
-            1. _elementLength_をTypedArrayLength(_sourceRecord_)とする。
-            1. _byteLength_を_elementSize_ × _elementLength_とする。
-            1. _elementType_が_sourceType_なら、
-              1. _data_を ? CloneArrayBuffer(_sourceData_, _sourceByteOffset_, _byteLength_) とする。
-            1. そうでなければ、
-              1. _data_を ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _byteLength_)</emu-meta> とする。
-              1. _sourceArray_.[[ContentType]]が_obj_.[[ContentType]]でないなら、*TypeError*例外をthrowする。
-              1. _sourceByteIndex_を_sourceByteOffset_とする。
-              1. _targetByteIndex_を0とする。
-              1. _count_を_elementLength_とする。
-              1. _count_ > 0の間、繰り返す
-                1. _value_をGetValueFromBuffer(_sourceData_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)とする。
-                1. SetValueInBuffer(_data_, _targetByteIndex_, _elementType_, _value_, *true*, ~unordered~)を実行する。
-                1. _sourceByteIndex_を_sourceByteIndex_ + _sourceElementSize_に設定する。
-                1. _targetByteIndex_を_targetByteIndex_ + _elementSize_に設定する。
-                1. _count_を_count_ - 1に設定する。
-            1. _obj_.[[ViewedArrayBuffer]]を_data_に設定する。
-            1. _obj_.[[ByteLength]]を_byteLength_に設定する。
-            1. _obj_.[[ByteOffset]]を0に設定する。
-            1. _obj_.[[ArrayLength]]を_elementLength_に設定する。
-            1. ~unused~を返す。
+            1. _sourceData_ を _sourceArray_.[[ViewedArrayBuffer]] とする。
+            1. _elementType_ を TypedArrayElementType(_obj_) とする。
+            1. _elementSize_ を TypedArrayElementSize(_obj_) とする。
+            1. _sourceType_ を TypedArrayElementType(_sourceArray_) とする。
+            1. _sourceElementSize_ を TypedArrayElementSize(_sourceArray_) とする。
+            1. _sourceByteOffset_ を _sourceArray_.[[ByteOffset]] とする。
+            1. _sourceRecord_ を ? ValidateTypedArrayBounds(_sourceArray_, ~seq-cst~) とする。
+            1. _elementLength_ を TypedArrayLength(_sourceRecord_) とする。
+            1. _byteLength_ を _elementSize_ × _elementLength_ とする。
+            1. _elementType_ が _sourceType_ である場合、
+              1. _data_ を ? CloneArrayBuffer(_sourceData_, _sourceByteOffset_, _byteLength_) とする。
+            1. それ以外の場合、
+              1. _data_ を ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _byteLength_)</emu-meta> とする。
+              1. _sourceArray_.[[ContentType]] が _obj_.[[ContentType]] と異なる場合、*TypeError* 例外をスローする。
+              1. _sourceByteIndex_ を _sourceByteOffset_ とする。
+              1. _targetByteIndex_ を 0 とする。
+              1. _count_ を _elementLength_ とする。
+              1. _count_ > 0 の間、繰り返す。
+                1. _value_ を GetValueFromBuffer(_sourceData_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~) とする。
+                1. SetValueInBuffer(_data_, _targetByteIndex_, _elementType_, _value_, *true*, ~unordered~) を実行する。
+                1. _sourceByteIndex_ を _sourceByteIndex_ + _sourceElementSize_ に設定する。
+                1. _targetByteIndex_ を _targetByteIndex_ + _elementSize_ に設定する。
+                1. _count_ を _count_ - 1 に設定する。
+            1. _obj_.[[ViewedArrayBuffer]] を _data_ に設定する。
+            1. _obj_.[[ByteLength]] を _byteLength_ に設定する。
+            1. _obj_.[[ByteOffset]] を 0 に設定する。
+            1. _obj_.[[ArrayLength]] を _elementLength_ に設定する。
+            1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -43792,55 +43800,53 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.setfrombase64" type="built-in function">
         <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. _into_を*this* valueとする。
-          1. ? ValidateUint8Array(_into_)を実行する。
-          1. _string_がStringでないなら、*TypeError*例外をthrowする。
-          1. _opts_を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_を ? Get(_opts_, *"alphabet"*) とする。
-          1. _alphabet_が*undefined*なら、_alphabet_を*"base64"*に設定する。
-          1. _alphabet_が*"base64"*でも*"base64url"*でもないなら、*TypeError*例外をthrowする。
-          1. _lastChunkHandling_を ? Get(_opts_, *"lastChunkHandling"*) とする。
-          1. _lastChunkHandling_が*undefined*なら、_lastChunkHandling_を*"loose"*に設定する。
-          1. _lastChunkHandling_が*"loose"*、*"strict"*、または*"stop-before-partial"*のいずれでもないなら、*TypeError*例外をthrowする。
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)とする。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-          1. _byteLength_をTypedArrayLength(_taRecord_)とする。
-          1. _result_をFromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)とする。
-          1. _bytes_を_result_.[[Bytes]]とする。
-          1. _written_を_bytes_内のelementsの数とする。
-          1. NOTE: FromBase64はuser codeをinvokeしないため、_into_をbackingするArrayBufferはdetachedまたはshrunkされていることはない。
-          1. Assert: _written_ ≤ _byteLength_。
-          1. SetUint8ArrayBytes(_into_, _bytes_)を実行する。
-          1. _result_.[[Error]]が~none~でないなら、
-            1. _result_.[[Error]]をthrowする。
-          1. _resultObj_をOrdinaryObjectCreate(%Object.prototype%)とする。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))を実行する。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))を実行する。
-          1. _resultObj_を返す。
+          1. _into_ を *this* 値とする。
+          1. ? ValidateUint8Array(_into_) を実行する。
+          1. _string_ が String でない場合、*TypeError* 例外をスローする。
+          1. _opts_ を ? GetOptionsObject(_options_) とする。
+          1. _alphabet_ を ? Get(_opts_, *"alphabet"*) とする。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ を *"base64"* に設定する。
+          1. _alphabet_ が *"base64"* と *"base64url"* のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _lastChunkHandling_ を ? Get(_opts_, *"lastChunkHandling"*) とする。
+          1. _lastChunkHandling_ が *undefined* の場合、_lastChunkHandling_ を *"loose"* に設定する。
+          1. _lastChunkHandling_ が *"loose"*、*"strict"*、*"stop-before-partial"* のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _taRecord_ を ? ValidateTypedArrayBounds(_into_, ~seq-cst~) とする。
+          1. _byteLength_ を TypedArrayLength(_taRecord_) とする。
+          1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_) とする。
+          1. _bytes_ を _result_.[[Bytes]] とする。
+          1. _written_ を _bytes_ 内の要素数とする。
+          1. 注記：FromBase64 はユーザーコードを一切呼び出さないため、_into_ のバッキング ArrayBuffer が切り離されたり縮小されたりすることはない。
+          1. 表明：_written_ ≤ _byteLength_。
+          1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
+          1. _result_.[[Error]] が ~none~ でない場合、
+            1. _result_.[[Error]] をスローする。
+          1. _resultObj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_)) を実行する。
+          1. _resultObj_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-uint8array.prototype.setfromhex" type="built-in function">
         <h1>Uint8Array.prototype.setFromHex ( _string_ )</h1>
         <emu-alg>
-          1. _into_を*this* valueとする。
-          1. ? ValidateUint8Array(_into_)を実行する。
-          1. _string_がStringでないなら、*TypeError*例外をthrowする。
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)とする。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-          1. _byteLength_をTypedArrayLength(_taRecord_)とする。
-          1. _result_をFromHex(_string_, _byteLength_)とする。
-          1. _bytes_を_result_.[[Bytes]]とする。
-          1. _written_を_bytes_内のelementsの数とする。
-          1. NOTE: FromHexはuser codeをinvokeしないため、_into_をbackingするArrayBufferはdetachedまたはshrunkされていることはない。
-          1. Assert: _written_ ≤ _byteLength_。
-          1. SetUint8ArrayBytes(_into_, _bytes_)を実行する。
-          1. _result_.[[Error]]が~none~でないなら、
-            1. _result_.[[Error]]をthrowする。
-          1. _resultObj_をOrdinaryObjectCreate(%Object.prototype%)とする。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))を実行する。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))を実行する。
-          1. _resultObj_を返す。
+          1. _into_ を *this* 値とする。
+          1. ? ValidateUint8Array(_into_) を実行する。
+          1. _string_ が String でない場合、*TypeError* 例外をスローする。
+          1. _taRecord_ を ? ValidateTypedArrayBounds(_into_, ~seq-cst~) とする。
+          1. _byteLength_ を TypedArrayLength(_taRecord_) とする。
+          1. _result_ を FromHex(_string_, _byteLength_) とする。
+          1. _bytes_ を _result_.[[Bytes]] とする。
+          1. _written_ を _bytes_ 内の要素数とする。
+          1. 注記：FromHex はユーザーコードを一切呼び出さないため、_into_ のバッキング ArrayBuffer が切り離されたり縮小されたりすることはない。
+          1. 表明：_written_ ≤ _byteLength_。
+          1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
+          1. _result_.[[Error]] が ~none~ でない場合、
+            1. _result_.[[Error]] をスローする。
+          1. _resultObj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_)) を実行する。
+          1. _resultObj_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43905,19 +43911,18 @@ THH:mm:ss.sss
         </h1>
         <dl class="header"></dl>
         <emu-alg>
-          1. _buffer_を_ta_.[[ViewedArrayBuffer]]とする。
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~)とする。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-          1. _length_をTypedArrayLength(_taRecord_)とする。
-          1. _byteOffset_を_ta_.[[ByteOffset]]とする。
-          1. _bytes_を新しい空のListとする。
-          1. _index_を0とする。
-          1. _index_ &lt; _length_の間、繰り返す
-            1. _byteIndex_を_byteOffset_ + _index_とする。
-            1. _byte_をℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~))とする。
-            1. _byte_を_bytes_へappendする。
-            1. _index_を_index_ + 1に設定する。
-          1. _bytes_を返す。
+          1. _buffer_ を _ta_.[[ViewedArrayBuffer]] とする。
+          1. _taRecord_ を ? ValidateTypedArrayBounds(_ta_, ~seq-cst~) とする。
+          1. _length_ を TypedArrayLength(_taRecord_) とする。
+          1. _byteOffset_ を _ta_.[[ByteOffset]] とする。
+          1. _bytes_ を新しい空の List とする。
+          1. _index_ を 0 とする。
+          1. _index_ &lt; _length_ の間、繰り返す。
+            1. _byteIndex_ を _byteOffset_ + _index_ とする。
+            1. _byte_ を ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~)) とする。
+            1. _byte_ を _bytes_ に追加する。
+            1. _index_ を _index_ + 1 に設定する。
+          1. _bytes_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -45769,8 +45774,8 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsUnclampedIntegerElementType(_type_) が *true* である場合、*true* を返す。
-          1. IsBigIntElementType(_type_) が *true* であり、かつ _order_ が ~init~ でも ~unordered~ でもない場合、*true* を返す。
+          1. IsUnclampedIntegerElementType(_type_) が *true* の場合、*true* を返す。
+          1. IsBigIntElementType(_type_) が *true* であり、かつ _order_ が ~seq-cst~ である場合、*true* を返す。
           1. *false* を返す。
         </emu-alg>
       </emu-clause>
@@ -47175,16 +47180,16 @@ THH:mm:ss.sss
           ): either a normal completion containing a TypedArray With Buffer Witness Record, or a throw completion
         </h1>
         <dl class="header">
+          <dt>description</dt>
+          <dd>これは、%Atomics% 関数で使用できる TypedArray、特に共有メモリとのアトミックな相互作用を保証できるものを制限するために使用される。</dd>
         </dl>
         <emu-alg>
-          1. _taRecord_を ? ValidateTypedArray(_ta_, ~unordered~) とする。
-          1. NOTE: _ta_のbacking bufferがgrowable SharedArrayBufferである場合、Bounds checkingはsynchronizing operationではない。
-          1. _waitable_が*true*なら、
-            1. _ta_.[[TypedArrayName]]が*"Int32Array"*でも*"BigInt64Array"*でもないなら、*TypeError*例外をthrowする。
-          1. そうでなければ、
-            1. _type_をTypedArrayElementType(_ta_)とする。
-            1. IsUnclampedIntegerElementType(_type_)が*false*であり、かつIsBigIntElementType(_type_)が*false*なら、*TypeError*例外をthrowする。
-          1. _taRecord_を返す。
+          1. 注記：_ta_ のバッキングバッファが拡張可能な SharedArrayBuffer である場合、境界チェックは同期操作ではない。
+          1. _taRecord_ を ? ValidateTypedArray(_ta_, ~unordered~) とする。
+          1. _elementType_ を TypedArrayElementType(_ta_) とする。
+          1. IsNoTearConfiguration(_elementType_, ~seq-cst~) が *false* の場合、*TypeError* 例外をスローする。
+          1. _waitable_ が *true* であり、かつ _elementType_ が ~int32~ と ~bigint64~ のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _taRecord_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -47236,12 +47241,11 @@ THH:mm:ss.sss
           <dd>このoperationは、Atomics methodsにおいてすべてのargument coercionsがperformedされた後、atomic operationsのためのbacking buffer内のindexをrevalidateする。argument coercionsはarbitrary side effectsを持ち得るため、bufferがout of boundsになる可能性がある。このoperationは、_ta_のbacking bufferがSharedArrayBufferである場合にはthrowしない。</dd>
         </dl>
         <emu-alg>
-          1. _taRecord_をMakeTypedArrayWithBufferWitnessRecord(_ta_, ~unordered~)とする。
-          1. NOTE: _ta_のbacking bufferがgrowable SharedArrayBufferである場合、Bounds checkingはsynchronizing operationではない。
-          1. IsTypedArrayOutOfBounds(_taRecord_)が*true*なら、*TypeError*例外をthrowする。
-          1. Assert: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]である。
-          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]なら、*RangeError*例外をthrowする。
-          1. ~unused~を返す。
+          1. 注記：_ta_ のバッキングバッファが拡張可能な SharedArrayBuffer である場合、境界チェックは同期操作ではない。
+          1. _taRecord_ を ? ValidateTypedArrayBounds(_ta_, ~unordered~) とする。
+          1. 表明：_byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]。
+          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]] の場合、*RangeError* 例外をスローする。
+          1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -47441,57 +47445,56 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _taRecord_を ? ValidateIntegerTypedArray(_ta_, *true*) とする。
-          1. _buffer_を_taRecord_.[[Object]].[[ViewedArrayBuffer]]とする。
-          1. IsSharedArrayBuffer(_buffer_)が*false*なら、*TypeError*例外をthrowする。
-          1. _byteIndexInBuffer_を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
-          1. _arrayTypeName_を_ta_.[[TypedArrayName]]とする。
-          1. _arrayTypeName_が*"BigInt64Array"*なら、_expected_を ? ToBigInt64(_value_) とする。
-          1. そうでなければ、_expected_を ? ToInt32(_value_) とする。
-          1. _timeoutNumber_を ? ToNumber(_timeout_) とする。
-          1. _timeoutNumber_が*NaN*または*+∞*<sub>𝔽</sub>のいずれかなら、_realTimeout_を+∞とする。
-          1. そうでなく、_timeoutNumber_が*-∞*<sub>𝔽</sub>なら、_realTimeout_を0とする。
-          1. そうでなければ、_realTimeout_をmax(ℝ(_timeoutNumber_), 0)とする。
-          1. _mode_が~sync~であり、AgentCanSuspend()が*false*なら、*TypeError*例外をthrowする。
-          1. _block_を_buffer_.[[ArrayBufferData]]とする。
-          1. _waiterList_をGetWaiterList(_block_, _byteIndexInBuffer_)とする。
-          1. _mode_が~sync~なら、
-            1. _promiseCapability_を~blocking~とする。
-            1. _resultObj_を*undefined*とする。
-          1. そうでなければ、
-            1. _promiseCapability_を ! NewPromiseCapability(%Promise%) とする。
-            1. _resultObj_をOrdinaryObjectCreate(%Object.prototype%)とする。
-          1. EnterCriticalSection(_waiterList_)を実行する。
-          1. _elementType_をTypedArrayElementType(_ta_)とする。
-          1. _witness_をGetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)とする。
-          1. _expected_ ≠ _witness_なら、
-            1. LeaveCriticalSection(_waiterList_)を実行する。
-            1. _mode_が~sync~なら、*"not-equal"*を返す。
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)を実行する。
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"not-equal"*)を実行する。
-            1. _resultObj_を返す。
-          1. _realTimeout_ = 0かつ_mode_が~async~なら、
-            1. NOTE: synchronous immediate timeoutsにspecial handlingはない。Asynchronous immediate timeoutsは、fail fastし、unnecessary Promise jobsをavoidするためにspecial handlingを持つ。
-            1. LeaveCriticalSection(_waiterList_)を実行する。
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)を実行する。
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"timed-out"*)を実行する。
-            1. _resultObj_を返す。
-          1. _thisAgent_をAgentSignifier()とする。
-          1. _now_をcurrent timeをidentifyingするtime value (UTC)とする。
-          1. _additionalTimeout_をimplementation-defined non-negative mathematical valueとする。
-          1. _timeoutTime_をℝ(_now_) + _realTimeout_ + _additionalTimeout_とする。
-          1. NOTE: _realTimeout_が+∞である場合、_timeoutTime_も+∞である。
-          1. _waiterRecord_をnew Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }とする。
-          1. AddWaiter(_waiterList_, _waiterRecord_)を実行する。
-          1. _mode_が~sync~なら、
-            1. SuspendThisAgent(_waiterList_, _waiterRecord_)を実行する。
-          1. そうでなく、_timeoutTime_がfiniteなら、
-            1. EnqueueAtomicsWaitAsyncTimeoutJob(_waiterList_, _waiterRecord_)を実行する。
-          1. LeaveCriticalSection(_waiterList_)を実行する。
-          1. _mode_が~sync~なら、_waiterRecord_.[[Result]]を返す。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *true*)を実行する。
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, _promiseCapability_.[[Promise]])を実行する。
-          1. _resultObj_を返す。
+          1. _taRecord_ を ? ValidateIntegerTypedArray(_ta_, *true*) とする。
+          1. _buffer_ を _taRecord_.[[Object]].[[ViewedArrayBuffer]] とする。
+          1. IsSharedArrayBuffer(_buffer_) が *false* の場合、*TypeError* 例外をスローする。
+          1. _byteIndexInBuffer_ を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
+          1. _elementType_ を TypedArrayElementType(_ta_) とする。
+          1. 表明：_elementType_ は ~bigint64~ または ~int32~ のいずれかである。
+          1. _elementType_ が ~bigint64~ の場合、_expected_ を ? ToBigInt64(_value_) とする。それ以外の場合、_expected_ を ? ToInt32(_value_) とする。
+          1. _timeoutNumber_ を ? ToNumber(_timeout_) とする。
+          1. _timeoutNumber_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_realTimeout_ を +∞ とする。
+          1. それ以外で、_timeoutNumber_ が *-∞*<sub>𝔽</sub> の場合、_realTimeout_ を 0 とする。
+          1. それ以外の場合、_realTimeout_ を max(ℝ(_timeoutNumber_), 0) とする。
+          1. _mode_ が ~sync~ であり、かつ AgentCanSuspend() が *false* の場合、*TypeError* 例外をスローする。
+          1. _block_ を _buffer_.[[ArrayBufferData]] とする。
+          1. _waiterList_ を GetWaiterList(_block_, _byteIndexInBuffer_) とする。
+          1. _mode_ が ~sync~ の場合、
+            1. _promiseCapability_ を ~blocking~ とする。
+            1. _resultObj_ を *undefined* とする。
+          1. それ以外の場合、
+            1. _promiseCapability_ を ! NewPromiseCapability(%Promise%) とする。
+            1. _resultObj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
+          1. EnterCriticalSection(_waiterList_) を実行する。
+          1. _witness_ を GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~) とする。
+          1. _expected_ ≠ _witness_ の場合、
+            1. LeaveCriticalSection(_waiterList_) を実行する。
+            1. _mode_ が ~sync~ の場合、*"not-equal"* を返す。
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*) を実行する。
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"not-equal"*) を実行する。
+            1. _resultObj_ を返す。
+          1. _realTimeout_ = 0 であり、かつ _mode_ が ~async~ の場合、
+            1. 注記：同期的な即時タイムアウトに対する特別な処理はない。非同期の即時タイムアウトには、迅速に失敗し、不要な Promise ジョブを回避するための特別な処理がある。
+            1. LeaveCriticalSection(_waiterList_) を実行する。
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*) を実行する。
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"timed-out"*) を実行する。
+            1. _resultObj_ を返す。
+          1. _thisAgent_ を AgentSignifier() とする。
+          1. _now_ を現在時刻を識別する時刻値（UTC）とする。
+          1. _additionalTimeout_ を実装定義の非負の数学値とする。
+          1. _timeoutTime_ を ℝ(_now_) + _realTimeout_ + _additionalTimeout_ とする。
+          1. 注記：_realTimeout_ が +∞ の場合、_timeoutTime_ も +∞ である。
+          1. _waiterRecord_ を新しい Waiter レコード { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* } とする。
+          1. AddWaiter(_waiterList_, _waiterRecord_) を実行する。
+          1. _mode_ が ~sync~ の場合、
+            1. SuspendThisAgent(_waiterList_, _waiterRecord_) を実行する。
+          1. それ以外で、_timeoutTime_ が有限である場合、
+            1. EnqueueAtomicsWaitAsyncTimeoutJob(_waiterList_, _waiterRecord_) を実行する。
+          1. LeaveCriticalSection(_waiterList_) を実行する。
+          1. _mode_ が ~sync~ の場合、_waiterRecord_.[[Result]] を返す。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *true*) を実行する。
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, _promiseCapability_.[[Promise]]) を実行する。
+          1. _resultObj_ を返す。
         </emu-alg>
         <emu-note>
           <p>_additionalTimeout_は、power consumptionのreducingやtiming attacksをmitigateするためのtimer resolutionのcoarseningなど、必要に応じてimplementationsがtimeoutsをpadすることを可能にする。このvalueはDoWaitのcallごとに異なってもよい。</p>

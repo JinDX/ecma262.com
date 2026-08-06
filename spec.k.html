@@ -34752,7 +34752,7 @@
                 `YYYY`
               </td>
               <td>
-                proleptic Gregorian calendar에서 0000부터 9999까지의 four decimal digits로 된 year이거나, *"+"* 또는 *"-"* 뒤에 six decimal digits가 followed되는 <emu-xref href="#sec-expanded-years">expanded year</emu-xref>입니다.
+                역산 그레고리력의 연도로, 0000부터 9999까지의 네 자리 십진수이거나 *"+"* 또는 *"-"* 뒤에 여섯 자리 십진수가 오는 확장 연도이다.
               </td>
             </tr>
             <tr>
@@ -34867,7 +34867,7 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
           <h1>Expanded Years</h1>
-          <p>1970년 1월 1일을 기준으로 forward 또는 backward approximately 273,790 years의 full time value range를 cover하려면(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>), 0 before 또는 9999 after의 years를 represent해야 합니다. ISO 8601은 year representation의 expansion을 permit하지만, information interchange의 partners 간 mutual agreement에 의해서만 permit합니다. simplified ECMAScript format에서 such expanded year representation은 6 digits를 가져야 하며 항상 + 또는 - sign이 prefixed됩니다. year 0은 positive로 considered되며 + sign으로 prefixed되어야 합니다. year 0을 -000000으로 represent하는 것은 invalid입니다. expanded years를 가진 <emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref>과 match하는 String이 time value range outside의 instant를 represent하면, <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>에 의해 unrecognizable로 treated되고 implementation-specific behaviour 또는 heuristics로 fallback하지 않고 그 function이 *NaN*을 return하게 합니다.</p>
+          <p>1970년 1월 1일을 기준으로 앞뒤 약 273,790년에 이르는 전체 시간 값 범위(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>)를 포괄하려면 0년 이전 또는 9999년 이후의 연도를 나타내야 한다. ISO 8601에서는 연도 표현을 확장할 수 있지만, 정보 교환 당사자 간의 상호 합의가 있는 경우에만 허용된다. 단순화된 ECMAScript 형식에서 이러한 <dfn variants="expanded years">확장 연도</dfn> 표현은 6자리여야 하며 항상 + 또는 - 기호가 앞에 붙는다. 0년은 양수로 간주되며 앞에 + 기호가 붙어야 한다. 0년을 -000000으로 나타내는 것은 유효하지 않다. 시간 값 범위를 벗어난 시점을 확장 연도로 나타내면서 <emu-xref href="#sec-date-time-string-format">날짜 시간 문자열 형식</emu-xref>과 일치하는 문자열은 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>에서 인식할 수 없는 것으로 처리되며, 이 함수는 구현별 동작이나 휴리스틱으로 대체하지 않고 *NaN*을 반환한다.</p>
           <emu-note>
             <p>expanded years를 가진 date-<emu-not-ref>time values</emu-not-ref>의 examples:</p>
             <figure>
@@ -42036,33 +42036,32 @@ THH:mm:ss.sss
         <emu-clause id="sec-%arrayiteratorprototype%.next" type="built-in function">
           <h1>%ArrayIteratorPrototype%.next ( )</h1>
           <emu-alg>
-            1. _iteratorObj_를 *this* value로 둔다.
-            1. _iteratorObj_가 Object가 아니면, *TypeError* exception을 throw한다.
-            1. _iteratorObj_가 Array Iterator Instance의 all internal slots(<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>)를 가지지 않으면, *TypeError* exception을 throw한다.
+            1. _iteratorObj_를 *this* 값으로 둔다.
+            1. _iteratorObj_가 Object가 아니면 *TypeError* 예외를 발생시킨다.
+            1. _iteratorObj_가 배열 반복자 인스턴스(<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>)의 모든 내부 슬롯을 갖고 있지 않으면 *TypeError* 예외를 발생시킨다.
             1. _array_를 _iteratorObj_.[[IteratedArrayLike]]로 둔다.
-            1. _array_가 *undefined*이면, CreateIteratorResultObject(*undefined*, *true*)를 반환한다.
+            1. _array_가 *undefined*이면 CreateIteratorResultObject(*undefined*, *true*)를 반환한다.
             1. _index_를 _iteratorObj_.[[ArrayLikeNextIndex]]로 둔다.
             1. _kind_를 _iteratorObj_.[[ArrayLikeIterationKind]]로 둔다.
-            1. _array_가 [[TypedArrayName]] internal slot을 가지면, 다음을 수행한다.
-              1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_array_, ~seq-cst~)로 둔다.
-              1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. _array_에 [[TypedArrayName]] 내부 슬롯이 있으면,
+              1. _taRecord_를 ? ValidateTypedArrayBounds(_array_, ~seq-cst~)로 둔다.
               1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-            1. Else,
+            1. 그렇지 않으면,
               1. _length_를 ? LengthOfArrayLike(_array_)로 둔다.
-            1. _index_ ≥ _length_이면, 다음을 수행한다.
+            1. _index_ ≥ _length_이면,
               1. _iteratorObj_.[[IteratedArrayLike]]를 *undefined*로 설정한다.
               1. CreateIteratorResultObject(*undefined*, *true*)를 반환한다.
             1. _iteratorObj_.[[ArrayLikeNextIndex]]를 _index_ + 1로 설정한다.
             1. _indexNumber_를 𝔽(_index_)로 둔다.
-            1. _kind_가 ~key~이면, 다음을 수행한다.
+            1. _kind_가 ~key~이면,
               1. _result_를 _indexNumber_로 둔다.
-            1. Else,
-              1. _elementKey_를 ! ToString(_indexNumber_)로 둔다.
-              1. _elementValue_를 ? Get(_array_, _elementKey_)로 둔다.
-              1. _kind_가 ~value~이면, 다음을 수행한다.
+            1. 그렇지 않으면,
+              1. _elementKey_를 ! ToString(_indexNumber_)으로 둔다.
+              1. _elementValue_를 ? Get(_array_, _elementKey_)으로 둔다.
+              1. _kind_가 ~value~이면,
                 1. _result_를 _elementValue_로 둔다.
-              1. Else,
-                1. Assert: _kind_는 ~key+value~이다.
+              1. 그렇지 않으면,
+                1. 단언: _kind_는 ~key+value~이다.
                 1. _result_를 CreateArrayFromList(« _indexNumber_, _elementValue_ »)로 둔다.
             1. CreateIteratorResultObject(_result_, *false*)를 반환한다.
           </emu-alg>
@@ -42564,26 +42563,25 @@ THH:mm:ss.sss
           1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 둔다.
           1. _end_가 *undefined*이면 _endIndex_를 _length_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 둔다.
           1. _count_를 min(_endIndex_ - _startIndex_, _length_ - _targetIndex_)로 둔다.
-          1. _count_ > 0이면, 다음을 수행한다.
-            1. 참고: 복사는 원본 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
+          1. _count_ > 0이면,
+            1. 참고: 복사는 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
             1. _buffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
-            1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
+            1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정한다.
             1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
-            1. 참고: 위 단계들의 부작용으로 _obj_의 크기가 줄어들었을 수 있으며, 이 경우 복사는 여전히 적용 가능한 가장 긴 접두 구간으로 진행되어야 한다.
+            1. 참고: 위 단계의 부작용으로 _obj_의 크기가 줄었을 수 있으며, 이 경우 여전히 적용 가능한 가장 긴 접두부를 대상으로 복사를 진행해야 한다.
             1. _count_를 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)로 설정한다.
             1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
             1. _byteOffset_을 _obj_.[[ByteOffset]]으로 둔다.
             1. _toByteIndex_를 (_targetIndex_ × _elementSize_) + _byteOffset_으로 둔다.
             1. _fromByteIndex_를 (_startIndex_ × _elementSize_) + _byteOffset_으로 둔다.
             1. _countBytes_를 _count_ × _elementSize_로 둔다.
-            1. _fromByteIndex_ &lt; _toByteIndex_이고 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_이면, 다음을 수행한다.
+            1. _fromByteIndex_ &lt; _toByteIndex_이고 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_이면,
               1. _direction_을 -1로 둔다.
               1. _fromByteIndex_를 _fromByteIndex_ + _countBytes_ - 1로 설정한다.
               1. _toByteIndex_를 _toByteIndex_ + _countBytes_ - 1로 설정한다.
-            1. 그렇지 않으면, 다음을 수행한다.
+            1. 그렇지 않으면,
               1. _direction_을 1로 둔다.
-            1. _countBytes_ > 0인 동안, 반복한다.
+            1. _countBytes_ > 0인 동안 반복한다.
               1. 단언: _fromByteIndex_ ≥ 0이고 _toByteIndex_ ≥ 0이다.
               1. _value_를 GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
               1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
@@ -42630,20 +42628,19 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.fill"></emu-xref>에 defined된 `Array.prototype.fill`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 설정한다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 설정한다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
-          1. _obj_.[[ContentType]]이 ~bigint~이면, _value_를 ? ToBigInt(_value_)로 설정한다.
-          1. 그렇지 않으면, _value_를 ? ToNumber(_value_)로 설정한다.
-          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 설정한다.
-          1. _end_가 *undefined*이면, _endIndex_를 _length_로 설정한다. 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 설정한다.
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. _obj_를 *this* 값으로 둔다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _obj_.[[ContentType]]이 ~bigint~이면 _value_를 ? ToBigInt(_value_)로 설정한다.
+          1. 그렇지 않으면 _value_를 ? ToNumber(_value_)로 설정한다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 둔다.
+          1. _end_가 *undefined*이면 _endIndex_를 _length_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 둔다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정한다.
           1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
           1. _endIndex_를 min(_endIndex_, _length_)로 설정한다.
-          1. _k_를 _startIndex_로 설정한다.
+          1. _k_를 _startIndex_로 둔다.
           1. _k_ &lt; _endIndex_인 동안 반복한다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))으로 설정한다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
             1. ! Set(_obj_, _propertyKey_, _value_, *true*)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. _obj_를 반환한다.
@@ -43001,17 +42998,16 @@ THH:mm:ss.sss
             <dd>_source_에서 values를 reading하여, index _targetOffset_에서 starting하여 _target_ 안에 multiple values를 sets합니다.</dd>
           </dl>
           <emu-alg>
-            1. _targetRecord_를 MakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)로 둔다.
-            1. IsTypedArrayOutOfBounds(_targetRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. _targetRecord_를 ? ValidateTypedArrayBounds(_target_, ~seq-cst~)로 둔다.
             1. _targetLength_를 TypedArrayLength(_targetRecord_)로 둔다.
             1. _source_를 ? ToObject(_source_)로 설정한다.
             1. _sourceLength_를 ? LengthOfArrayLike(_source_)로 둔다.
-            1. _targetOffset_ = +∞이면, *RangeError* exception을 throw한다.
-            1. _sourceLength_ + _targetOffset_ > _targetLength_이면, *RangeError* exception을 throw한다.
+            1. _targetOffset_ = +∞이면 *RangeError* 예외를 발생시킨다.
+            1. _sourceLength_ + _targetOffset_ > _targetLength_이면 *RangeError* 예외를 발생시킨다.
             1. _k_를 0으로 둔다.
-            1. Repeat, while _k_ &lt; _sourceLength_,
+            1. _k_ &lt; _sourceLength_인 동안 반복한다.
               1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-              1. _value_를 ? Get(_source_, _propertyKey_)로 둔다.
+              1. _value_를 ? Get(_source_, _propertyKey_)으로 둔다.
               1. _targetIndex_를 𝔽(_targetOffset_ + _k_)로 둔다.
               1. ? TypedArraySetElement(_target_, _targetIndex_, _value_)를 수행한다.
               1. _k_를 _k_ + 1로 설정한다.
@@ -43033,40 +43029,38 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. _targetBuffer_를 _target_.[[ViewedArrayBuffer]]로 둔다.
-            1. _targetRecord_를 MakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)로 둔다.
-            1. IsTypedArrayOutOfBounds(_targetRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. _targetRecord_를 ? ValidateTypedArrayBounds(_target_, ~seq-cst~)로 둔다.
             1. _targetLength_를 TypedArrayLength(_targetRecord_)로 둔다.
             1. _sourceBuffer_를 _source_.[[ViewedArrayBuffer]]로 둔다.
-            1. _sourceRecord_를 MakeTypedArrayWithBufferWitnessRecord(_source_, ~seq-cst~)로 둔다.
-            1. IsTypedArrayOutOfBounds(_sourceRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. _sourceRecord_를 ? ValidateTypedArrayBounds(_source_, ~seq-cst~)로 둔다.
             1. _sourceLength_를 TypedArrayLength(_sourceRecord_)로 둔다.
             1. _targetType_을 TypedArrayElementType(_target_)으로 둔다.
             1. _targetElementSize_를 TypedArrayElementSize(_target_)로 둔다.
             1. _targetByteOffset_을 _target_.[[ByteOffset]]으로 둔다.
-            1. _sourceType_을 TypedArrayElementType(_source_)로 둔다.
+            1. _sourceType_을 TypedArrayElementType(_source_)으로 둔다.
             1. _sourceElementSize_를 TypedArrayElementSize(_source_)로 둔다.
             1. _sourceByteOffset_을 _source_.[[ByteOffset]]으로 둔다.
-            1. _targetOffset_ = +∞이면, *RangeError* exception을 throw한다.
-            1. _sourceLength_ + _targetOffset_ > _targetLength_이면, *RangeError* exception을 throw한다.
-            1. _target_.[[ContentType]]이 _source_.[[ContentType]]이 아니면, *TypeError* exception을 throw한다.
-            1. IsSharedArrayBuffer(_sourceBuffer_)가 *true*이고, IsSharedArrayBuffer(_targetBuffer_)가 *true*이며, _sourceBuffer_.[[ArrayBufferData]]가 _targetBuffer_.[[ArrayBufferData]]이면 _sameSharedArrayBuffer_를 *true*로 둔다; else _sameSharedArrayBuffer_를 *false*로 둔다.
-            1. SameValue(_sourceBuffer_, _targetBuffer_)가 *true*이거나 _sameSharedArrayBuffer_가 *true*이면, 다음을 수행한다.
+            1. _targetOffset_ = +∞이면 *RangeError* 예외를 발생시킨다.
+            1. _sourceLength_ + _targetOffset_ > _targetLength_이면 *RangeError* 예외를 발생시킨다.
+            1. _target_.[[ContentType]]이 _source_.[[ContentType]]과 다르면 *TypeError* 예외를 발생시킨다.
+            1. IsSharedArrayBuffer(_sourceBuffer_)가 *true*이고, IsSharedArrayBuffer(_targetBuffer_)가 *true*이며, _sourceBuffer_.[[ArrayBufferData]]가 _targetBuffer_.[[ArrayBufferData]]이면 _sameSharedArrayBuffer_를 *true*로 두고, 그렇지 않으면 _sameSharedArrayBuffer_를 *false*로 둔다.
+            1. SameValue(_sourceBuffer_, _targetBuffer_)가 *true*이거나 _sameSharedArrayBuffer_가 *true*이면,
               1. _sourceByteLength_를 TypedArrayByteLength(_sourceRecord_)로 둔다.
               1. _sourceBuffer_를 ? CloneArrayBuffer(_sourceBuffer_, _sourceByteOffset_, _sourceByteLength_)로 설정한다.
               1. _sourceByteIndex_를 0으로 둔다.
-            1. Else,
+            1. 그렇지 않으면,
               1. _sourceByteIndex_를 _sourceByteOffset_으로 둔다.
             1. _targetByteIndex_를 (_targetOffset_ × _targetElementSize_) + _targetByteOffset_으로 둔다.
-            1. _limit_를 _targetByteIndex_ + (_targetElementSize_ × _sourceLength_)로 둔다.
-            1. _sourceType_이 _targetType_이면, 다음을 수행한다.
-              1. NOTE: transfer는 source data의 bit-level encoding을 preserve하는 manner로 performed되어야 한다.
-              1. Repeat, while _targetByteIndex_ &lt; _limit_,
+            1. _limit_을 _targetByteIndex_ + (_targetElementSize_ × _sourceLength_)로 둔다.
+            1. _sourceType_이 _targetType_이면,
+              1. 참고: 전송은 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
+              1. _targetByteIndex_ &lt; _limit_인 동안 반복한다.
                 1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
                 1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
                 1. _sourceByteIndex_를 _sourceByteIndex_ + 1로 설정한다.
                 1. _targetByteIndex_를 _targetByteIndex_ + 1로 설정한다.
-            1. Else,
-              1. Repeat, while _targetByteIndex_ &lt; _limit_,
+            1. 그렇지 않으면,
+              1. _targetByteIndex_ &lt; _limit_인 동안 반복한다.
                 1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)로 둔다.
                 1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, _targetType_, _value_, *true*, ~unordered~)를 수행한다.
                 1. _sourceByteIndex_를 _sourceByteIndex_ + _sourceElementSize_로 설정한다.
@@ -43086,17 +43080,16 @@ THH:mm:ss.sss
           1. _sourceArrayLength_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _startIndex_를 ? ToClampedIndex(_start_, _sourceArrayLength_)로 둔다.
           1. _end_가 *undefined*이면 _endIndex_를 _sourceArrayLength_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _sourceArrayLength_)로 둔다.
-          1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 둔다.
+          1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)로 둔다.
           1. _resultArray_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)로 둔다.
-          1. _countBytes_ > 0이면, 다음을 수행한다.
-            1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. _countBytes_ > 0이면,
+            1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정한다.
             1. _endIndex_를 min(_endIndex_, TypedArrayLength(_taRecord_))로 설정한다.
-            1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 설정한다.
-            1. _sourceType_를 TypedArrayElementType(_obj_)로 둔다.
-            1. _targetType_를 TypedArrayElementType(_resultArray_)로 둔다.
-            1. _sourceType_가 _targetType_와 같으면, 다음을 수행한다.
-              1. 참고: 전송은 원본 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
+            1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)로 설정한다.
+            1. _sourceType_을 TypedArrayElementType(_obj_)으로 둔다.
+            1. _targetType_을 TypedArrayElementType(_resultArray_)으로 둔다.
+            1. _sourceType_이 _targetType_이면,
+              1. 참고: 전송은 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
               1. _sourceBuffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
               1. _targetBuffer_를 _resultArray_.[[ViewedArrayBuffer]]로 둔다.
               1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
@@ -43104,17 +43097,17 @@ THH:mm:ss.sss
               1. _sourceByteIndex_를 (_startIndex_ × _elementSize_) + _sourceByteOffset_으로 둔다.
               1. _targetByteIndex_를 _resultArray_.[[ByteOffset]]으로 둔다.
               1. _endByteIndex_를 _targetByteIndex_ + (_countBytes_ × _elementSize_)로 둔다.
-              1. _targetByteIndex_ &lt; _endByteIndex_인 동안, 반복한다.
+              1. _targetByteIndex_ &lt; _endByteIndex_인 동안 반복한다.
                 1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
                 1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
                 1. _sourceByteIndex_를 _sourceByteIndex_ + 1로 설정한다.
                 1. _targetByteIndex_를 _targetByteIndex_ + 1로 설정한다.
-            1. 그렇지 않으면, 다음을 수행한다.
+            1. 그렇지 않으면,
               1. _n_을 0으로 둔다.
               1. _k_를 _startIndex_로 둔다.
-              1. _k_ &lt; _endIndex_인 동안, 반복한다.
+              1. _k_ &lt; _endIndex_인 동안 반복한다.
                 1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-                1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
+                1. _kValue_를 ! Get(_obj_, _propertyKey_)으로 둔다.
                 1. ! Set(_resultArray_, ! ToString(𝔽(_n_)), _kValue_, *true*)를 수행한다.
                 1. _k_를 _k_ + 1로 설정한다.
                 1. _n_을 _n_ + 1로 설정한다.
@@ -43380,10 +43373,26 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. ? RequireInternalSlot(_obj_, [[TypedArrayName]])를 수행한다.
-          1. Assert: _obj_는 [[ViewedArrayBuffer]] internal slot을 가진다.
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, _order_)로 둔다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. ? RequireInternalSlot(_obj_, [[TypedArrayName]])을 수행한다.
+          1. 단언: _obj_에는 [[ViewedArrayBuffer]] 내부 슬롯이 있다.
+          1. ? ValidateTypedArrayBounds(_obj_, _order_)를 반환한다.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-validatetypedarraybounds" type="abstract operation">
+        <h1>
+          ValidateTypedArrayBounds (
+            _ta_: a TypedArray,
+            _order_: ~seq-cst~ or ~unordered~,
+          ): either a normal completion containing a TypedArray With Buffer Witness Record or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>_ta_가 이를 뒷받침하는 버퍼의 범위를 초과하지 않는지 검증한다.</dd>
+        </dl>
+        <emu-alg>
+          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_ta_, _order_)로 둔다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면 *TypeError* 예외를 발생시킨다.
           1. _taRecord_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -43529,24 +43538,23 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. _sourceData_를 _sourceArray_.[[ViewedArrayBuffer]]로 둔다.
-            1. _elementType_을 TypedArrayElementType(_obj_)로 둔다.
+            1. _elementType_을 TypedArrayElementType(_obj_)으로 둔다.
             1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
-            1. _sourceType_을 TypedArrayElementType(_sourceArray_)로 둔다.
+            1. _sourceType_을 TypedArrayElementType(_sourceArray_)으로 둔다.
             1. _sourceElementSize_를 TypedArrayElementSize(_sourceArray_)로 둔다.
             1. _sourceByteOffset_을 _sourceArray_.[[ByteOffset]]으로 둔다.
-            1. _sourceRecord_를 MakeTypedArrayWithBufferWitnessRecord(_sourceArray_, ~seq-cst~)로 둔다.
-            1. IsTypedArrayOutOfBounds(_sourceRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. _sourceRecord_를 ? ValidateTypedArrayBounds(_sourceArray_, ~seq-cst~)로 둔다.
             1. _elementLength_를 TypedArrayLength(_sourceRecord_)로 둔다.
             1. _byteLength_를 _elementSize_ × _elementLength_로 둔다.
-            1. _elementType_이 _sourceType_이면, 다음을 수행한다.
+            1. _elementType_이 _sourceType_이면,
               1. _data_를 ? CloneArrayBuffer(_sourceData_, _sourceByteOffset_, _byteLength_)로 둔다.
-            1. Else,
+            1. 그렇지 않으면,
               1. _data_를 ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _byteLength_)</emu-meta>로 둔다.
-              1. _sourceArray_.[[ContentType]]이 _obj_.[[ContentType]]이 아니면, *TypeError* exception을 throw한다.
+              1. _sourceArray_.[[ContentType]]이 _obj_.[[ContentType]]과 다르면 *TypeError* 예외를 발생시킨다.
               1. _sourceByteIndex_를 _sourceByteOffset_으로 둔다.
               1. _targetByteIndex_를 0으로 둔다.
               1. _count_를 _elementLength_로 둔다.
-              1. Repeat, while _count_ > 0,
+              1. _count_ > 0인 동안 반복한다.
                 1. _value_를 GetValueFromBuffer(_sourceData_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)로 둔다.
                 1. SetValueInBuffer(_data_, _targetByteIndex_, _elementType_, _value_, *true*, ~unordered~)를 수행한다.
                 1. _sourceByteIndex_를 _sourceByteIndex_ + _sourceElementSize_로 설정한다.
@@ -43773,27 +43781,26 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.setfrombase64" type="built-in function">
         <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. _into_를 *this* value로 둔다.
+          1. _into_를 *this* 값으로 둔다.
           1. ? ValidateUint8Array(_into_)를 수행한다.
-          1. _string_이 String이 아니면, *TypeError* exception을 throw한다.
+          1. _string_이 String이 아니면 *TypeError* 예외를 발생시킨다.
           1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
           1. _alphabet_을 ? Get(_opts_, *"alphabet"*)으로 둔다.
-          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
-          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* exception을 throw한다.
+          1. _alphabet_이 *undefined*이면 _alphabet_을 *"base64"*로 설정한다.
+          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면 *TypeError* 예외를 발생시킨다.
           1. _lastChunkHandling_을 ? Get(_opts_, *"lastChunkHandling"*)으로 둔다.
-          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정한다.
-          1. _lastChunkHandling_이 *"loose"*, *"strict"*, 또는 *"stop-before-partial"* 중 하나가 아니면, *TypeError* exception을 throw한다.
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)로 둔다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. _lastChunkHandling_이 *undefined*이면 _lastChunkHandling_을 *"loose"*로 설정한다.
+          1. _lastChunkHandling_이 *"loose"*, *"strict"* 또는 *"stop-before-partial"* 중 하나가 아니면 *TypeError* 예외를 발생시킨다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)로 둔다.
           1. _byteLength_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)로 둔다.
           1. _bytes_를 _result_.[[Bytes]]로 둔다.
-          1. _written_을 _bytes_ 안의 elements 수로 둔다.
-          1. NOTE: FromBase64는 any user code를 invoke하지 않으므로, _into_를 backing하는 ArrayBuffer는 detached되거나 shrunk되었을 수 없다.
-          1. Assert: _written_ ≤ _byteLength_이다.
+          1. _written_을 _bytes_의 요소 수로 둔다.
+          1. 참고: FromBase64는 사용자 코드를 호출하지 않으므로 _into_를 뒷받침하는 ArrayBuffer가 분리되거나 축소되었을 수 없다.
+          1. 단언: _written_ ≤ _byteLength_이다.
           1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
-          1. _result_.[[Error]]가 ~none~이 아니면, 다음을 수행한다.
-            1. _result_.[[Error]]를 Throw한다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. _result_.[[Error]]를 발생시킨다.
           1. _resultObj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))를 수행한다.
@@ -43804,20 +43811,19 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.setfromhex" type="built-in function">
         <h1>Uint8Array.prototype.setFromHex ( _string_ )</h1>
         <emu-alg>
-          1. _into_를 *this* value로 둔다.
+          1. _into_를 *this* 값으로 둔다.
           1. ? ValidateUint8Array(_into_)를 수행한다.
-          1. _string_이 String이 아니면, *TypeError* exception을 throw한다.
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)로 둔다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. _string_이 String이 아니면 *TypeError* 예외를 발생시킨다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)로 둔다.
           1. _byteLength_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _result_를 FromHex(_string_, _byteLength_)로 둔다.
           1. _bytes_를 _result_.[[Bytes]]로 둔다.
-          1. _written_을 _bytes_ 안의 elements 수로 둔다.
-          1. NOTE: FromHex는 any user code를 invoke하지 않으므로, _into_를 backing하는 ArrayBuffer는 detached되거나 shrunk되었을 수 없다.
-          1. Assert: _written_ ≤ _byteLength_이다.
+          1. _written_을 _bytes_의 요소 수로 둔다.
+          1. 참고: FromHex는 사용자 코드를 호출하지 않으므로 _into_를 뒷받침하는 ArrayBuffer가 분리되거나 축소되었을 수 없다.
+          1. 단언: _written_ ≤ _byteLength_이다.
           1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
-          1. _result_.[[Error]]가 ~none~이 아니면, 다음을 수행한다.
-            1. _result_.[[Error]]를 Throw한다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. _result_.[[Error]]를 발생시킨다.
           1. _resultObj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))를 수행한다.
@@ -43887,16 +43893,15 @@ THH:mm:ss.sss
         <dl class="header"></dl>
         <emu-alg>
           1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 둔다.
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~)로 둔다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_ta_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _byteOffset_을 _ta_.[[ByteOffset]]으로 둔다.
-          1. _bytes_를 새 empty List로 둔다.
+          1. _bytes_를 새로운 빈 List로 둔다.
           1. _index_를 0으로 둔다.
-          1. Repeat, while _index_ &lt; _length_,
+          1. _index_ &lt; _length_인 동안 반복한다.
             1. _byteIndex_를 _byteOffset_ + _index_로 둔다.
             1. _byte_를 ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~))로 둔다.
-            1. _byte_를 _bytes_에 append한다.
+            1. _byte_를 _bytes_에 추가한다.
             1. _index_를 _index_ + 1로 설정한다.
           1. _bytes_를 반환한다.
         </emu-alg>
@@ -45750,9 +45755,9 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. IsUnclampedIntegerElementType(_type_)가 *true*이면, *true*를 반환하라.
-          1. IsBigIntElementType(_type_)가 *true*이고 _order_가 ~init~도 ~unordered~도 아니면, *true*를 반환하라.
-          1. *false*를 반환하라.
+          1. IsUnclampedIntegerElementType(_type_)이 *true*이면 *true*를 반환한다.
+          1. IsBigIntElementType(_type_)이 *true*이고 _order_가 ~seq-cst~이면 *true*를 반환한다.
+          1. *false*를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -47156,15 +47161,15 @@ THH:mm:ss.sss
           ): either a normal completion containing a TypedArray With Buffer Witness Record, or a throw completion
         </h1>
         <dl class="header">
+          <dt>description</dt>
+          <dd>공유 메모리와의 원자적 상호작용을 보장할 수 있는 TypedArray를 비롯하여 %Atomics% 함수와 함께 사용할 수 있는 TypedArray를 제한하는 데 사용된다.</dd>
         </dl>
         <emu-alg>
+          1. 참고: _ta_의 기반 버퍼가 확장 가능한 SharedArrayBuffer인 경우 범위 검사는 동기화 연산이 아니다.
           1. _taRecord_를 ? ValidateTypedArray(_ta_, ~unordered~)로 둔다.
-          1. NOTE: _ta_'s backing buffer가 growable SharedArrayBuffer일 때 bounds checking은 synchronizing operation이 아닙니다.
-          1. _waitable_이 *true*이면, 다음을 수행한다.
-            1. _ta_.[[TypedArrayName]]이 *"Int32Array"*도 *"BigInt64Array"*도 아니면, *TypeError* exception을 throw한다.
-          1. 그렇지 않으면,
-            1. _type_을 TypedArrayElementType(_ta_)로 둔다.
-            1. IsUnclampedIntegerElementType(_type_)이 *false*이고 IsBigIntElementType(_type_)이 *false*이면, *TypeError* exception을 throw한다.
+          1. _elementType_을 TypedArrayElementType(_ta_)으로 둔다.
+          1. IsNoTearConfiguration(_elementType_, ~seq-cst~)이 *false*이면 *TypeError* 예외를 발생시킨다.
+          1. _waitable_이 *true*이고 _elementType_이 ~int32~도 ~bigint64~도 아니면 *TypeError* 예외를 발생시킨다.
           1. _taRecord_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -47217,11 +47222,10 @@ THH:mm:ss.sss
           <dd>이 operation은 Atomics methods에서 모든 argument coercions가 performed된 후 atomic operations를 위한 backing buffer 안의 index를 revalidates합니다. argument coercions는 arbitrary side effects를 가질 수 있고, 이는 buffer가 out of bounds가 되도록 cause할 수 있기 때문입니다. 이 operation은 _ta_'s backing buffer가 SharedArrayBuffer일 때 throw하지 않습니다.</dd>
         </dl>
         <emu-alg>
-          1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~unordered~)로 둔다.
-          1. NOTE: _ta_'s backing buffer가 growable SharedArrayBuffer일 때 bounds checking은 synchronizing operation이 아닙니다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
-          1. Assert: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]].
-          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]이면, *RangeError* exception을 throw한다.
+          1. 참고: _ta_의 기반 버퍼가 확장 가능한 SharedArrayBuffer인 경우 범위 검사는 동기화 연산이 아니다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_ta_, ~unordered~)로 둔다.
+          1. 단언: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]이다.
+          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]이면 *RangeError* 예외를 발생시킨다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -47424,52 +47428,51 @@ THH:mm:ss.sss
         <emu-alg>
           1. _taRecord_를 ? ValidateIntegerTypedArray(_ta_, *true*)로 둔다.
           1. _buffer_를 _taRecord_.[[Object]].[[ViewedArrayBuffer]]로 둔다.
-          1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *TypeError* exception을 throw한다.
+          1. IsSharedArrayBuffer(_buffer_)가 *false*이면 *TypeError* 예외를 발생시킨다.
           1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 둔다.
-          1. _arrayTypeName_을 _ta_.[[TypedArrayName]]으로 둔다.
-          1. _arrayTypeName_이 *"BigInt64Array"*이면, _expected_를 ? ToBigInt64(_value_)로 둔다.
-          1. 그렇지 않으면, _expected_를 ? ToInt32(_value_)로 둔다.
+          1. _elementType_을 TypedArrayElementType(_ta_)으로 둔다.
+          1. 단언: _elementType_은 ~bigint64~ 또는 ~int32~이다.
+          1. _elementType_이 ~bigint64~이면 _expected_를 ? ToBigInt64(_value_)로 두고, 그렇지 않으면 _expected_를 ? ToInt32(_value_)로 둔다.
           1. _timeoutNumber_를 ? ToNumber(_timeout_)로 둔다.
-          1. _timeoutNumber_가 *NaN* 또는 *+∞*<sub>𝔽</sub> 중 하나이면, _realTimeout_을 +∞로 둔다.
-          1. 그렇지 않고 _timeoutNumber_가 *-∞*<sub>𝔽</sub>이면, _realTimeout_을 0으로 둔다.
-          1. 그렇지 않으면, _realTimeout_을 max(ℝ(_timeoutNumber_), 0)으로 둔다.
-          1. _mode_가 ~sync~이고 AgentCanSuspend()가 *false*이면, *TypeError* exception을 throw한다.
+          1. _timeoutNumber_가 *NaN* 또는 *+∞*<sub>𝔽</sub>이면 _realTimeout_을 +∞로 둔다.
+          1. 그렇지 않고 _timeoutNumber_가 *-∞*<sub>𝔽</sub>이면 _realTimeout_을 0으로 둔다.
+          1. 그렇지 않으면 _realTimeout_을 max(ℝ(_timeoutNumber_), 0)으로 둔다.
+          1. _mode_가 ~sync~이고 AgentCanSuspend()가 *false*이면 *TypeError* 예외를 발생시킨다.
           1. _block_을 _buffer_.[[ArrayBufferData]]로 둔다.
           1. _waiterList_를 GetWaiterList(_block_, _byteIndexInBuffer_)로 둔다.
-          1. _mode_가 ~sync~이면, 다음을 수행한다.
+          1. _mode_가 ~sync~이면,
             1. _promiseCapability_를 ~blocking~으로 둔다.
             1. _resultObj_를 *undefined*로 둔다.
           1. 그렇지 않으면,
             1. _promiseCapability_를 ! NewPromiseCapability(%Promise%)로 둔다.
             1. _resultObj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
-          1. EnterCriticalSection(_waiterList_)를 수행한다.
-          1. _elementType_을 TypedArrayElementType(_ta_)로 둔다.
+          1. EnterCriticalSection(_waiterList_)을 수행한다.
           1. _witness_를 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)로 둔다.
-          1. _expected_ ≠ _witness_이면, 다음을 수행한다.
-            1. LeaveCriticalSection(_waiterList_)를 수행한다.
-            1. _mode_가 ~sync~이면, *"not-equal"*을 반환한다.
+          1. _expected_ ≠ _witness_이면,
+            1. LeaveCriticalSection(_waiterList_)을 수행한다.
+            1. _mode_가 ~sync~이면 *"not-equal"*을 반환한다.
             1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)를 수행한다.
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"not-equal"*)를 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"not-equal"*)을 수행한다.
             1. _resultObj_를 반환한다.
-          1. _realTimeout_ = 0이고 _mode_가 ~async~이면, 다음을 수행한다.
-            1. NOTE: synchronous immediate timeouts에 대한 special handling은 없습니다. Asynchronous immediate timeouts는 fail fast하고 unnecessary Promise jobs를 avoid하기 위해 special handling을 가집니다.
-            1. LeaveCriticalSection(_waiterList_)를 수행한다.
+          1. _realTimeout_ = 0이고 _mode_가 ~async~이면,
+            1. 참고: 동기식 즉시 시간 초과에는 특별한 처리가 없다. 비동기식 즉시 시간 초과는 신속히 실패하고 불필요한 Promise 작업을 피하기 위해 특별히 처리된다.
+            1. LeaveCriticalSection(_waiterList_)을 수행한다.
             1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)를 수행한다.
-            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"timed-out"*)를 수행한다.
+            1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"timed-out"*)을 수행한다.
             1. _resultObj_를 반환한다.
           1. _thisAgent_를 AgentSignifier()로 둔다.
-          1. _now_를 current time을 identifying하는 time value (UTC)로 둔다.
-          1. _additionalTimeout_을 implementation-defined non-negative mathematical value로 둔다.
+          1. _now_를 현재 시간을 식별하는 시간 값(UTC)으로 둔다.
+          1. _additionalTimeout_을 구현 정의 비음수 수학적 값으로 둔다.
           1. _timeoutTime_을 ℝ(_now_) + _realTimeout_ + _additionalTimeout_으로 둔다.
-          1. NOTE: _realTimeout_이 +∞일 때, _timeoutTime_도 +∞입니다.
-          1. _waiterRecord_를 new Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }로 둔다.
+          1. 참고: _realTimeout_이 +∞이면 _timeoutTime_도 +∞이다.
+          1. _waiterRecord_를 새로운 Waiter 레코드 { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }로 둔다.
           1. AddWaiter(_waiterList_, _waiterRecord_)를 수행한다.
-          1. _mode_가 ~sync~이면, 다음을 수행한다.
+          1. _mode_가 ~sync~이면,
             1. SuspendThisAgent(_waiterList_, _waiterRecord_)를 수행한다.
-          1. 그렇지 않고 _timeoutTime_이 finite이면, 다음을 수행한다.
-            1. EnqueueAtomicsWaitAsyncTimeoutJob(_waiterList_, _waiterRecord_)를 수행한다.
-          1. LeaveCriticalSection(_waiterList_)를 수행한다.
-          1. _mode_가 ~sync~이면, _waiterRecord_.[[Result]]를 반환한다.
+          1. 그렇지 않고 _timeoutTime_이 유한하면,
+            1. EnqueueAtomicsWaitAsyncTimeoutJob(_waiterList_, _waiterRecord_)을 수행한다.
+          1. LeaveCriticalSection(_waiterList_)을 수행한다.
+          1. _mode_가 ~sync~이면 _waiterRecord_.[[Result]]를 반환한다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *true*)를 수행한다.
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, _promiseCapability_.[[Promise]])를 수행한다.
           1. _resultObj_를 반환한다.

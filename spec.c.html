@@ -34752,7 +34752,7 @@
                 `YYYY`
               </td>
               <td>
-                是预推格里高利历中的年份，表示为从 0000 到 9999 的四位十进制数字，或表示为一个<emu-xref href="#sec-expanded-years">扩展年份</emu-xref>，即 *"+"* 或 *"-"* 后跟六位十进制数字。
+                是预推格里高利历中的年份，表示为从 0000 到 9999 的四位十进制数字，或者表示为由 *"+"* 或 *"-"* 后跟六位十进制数字组成的扩展年份。
               </td>
             </tr>
             <tr>
@@ -34867,7 +34867,7 @@ THH:mm:ss.sss
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
           <h1>扩展年份</h1>
-          <p>覆盖相对于 1970 年 1 月 1 日向前或向后约 273,790 年的完整时间值范围（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>），需要表示 0 年之前或 9999 年之后的年份。ISO 8601 允许扩展年份表示，但仅限于信息交换伙伴之间相互约定。在简化的 ECMAScript 格式中，这种扩展年份表示应具有 6 位数字，并且始终以前缀 + 或 - 符号开头。年份 0 被视为正数，并且必须以 + 符号为前缀。将年份 0 表示为 -000000 是无效的。与<emu-xref href="#sec-date-time-string-format">日期时间字符串格式</emu-xref>匹配、且扩展年份表示的时间瞬间超出时间值范围的字符串，会被 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> 视为不可识别，并使该函数返回 *NaN*，且不会回退到实现特定行为或启发式规则。</p>
+          <p>要涵盖从 1970 年 1 月 1 日起向前或向后约 273,790 年的完整时间值范围（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>），需要表示 0 年以前或 9999 年以后的年份。ISO 8601 允许扩展年份表示法，但仅限信息交换各方共同约定。在简化的 ECMAScript 格式中，此类<dfn variants="expanded years">扩展年份</dfn>表示应为 6 位数字，并且始终以 + 或 - 符号为前缀。0 年被视为正数，并且必须以 + 符号为前缀。将 0 年表示为 -000000 是无效的。与<emu-xref href="#sec-date-time-string-format">日期时间字符串格式</emu-xref>匹配，但其扩展年份表示的时间点超出时间值范围的字符串，会被 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> 视为无法识别，并导致该函数返回 *NaN*，而不会回退到特定于实现的行为或启发式方法。</p>
           <emu-note>
             <p>带扩展年份的 date-<emu-not-ref>time values</emu-not-ref> 示例：</p>
             <figure>
@@ -42037,29 +42037,28 @@ THH:mm:ss.sss
           <h1>%ArrayIteratorPrototype%.next ( )</h1>
           <emu-alg>
             1. 令 _iteratorObj_ 为 *this* 值。
-            1. 如果 _iteratorObj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 如果 _iteratorObj_ 不具有 Array Iterator Instance（<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>）的所有内部槽，则抛出 *TypeError* 异常。
+            1. 如果 _iteratorObj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 如果 _iteratorObj_ 不具有数组迭代器实例（<emu-xref href="#sec-properties-of-array-iterator-instances"></emu-xref>）的全部内部槽，则抛出 *TypeError* 异常。
             1. 令 _array_ 为 _iteratorObj_.[[IteratedArrayLike]]。
             1. 如果 _array_ 是 *undefined*，则返回 CreateIteratorResultObject(*undefined*, *true*)。
             1. 令 _index_ 为 _iteratorObj_.[[ArrayLikeNextIndex]]。
             1. 令 _kind_ 为 _iteratorObj_.[[ArrayLikeIterationKind]]。
-            1. 如果 _array_ 具有 [[TypedArrayName]] 内部槽，则
-              1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_array_, ~seq-cst~)。
-              1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
+            1. 如果 _array_ 具有 [[TypedArrayName]] 内部槽，那么
+              1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_array_, ~seq-cst~)。
               1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
             1. 否则，
               1. 令 _length_ 为 ? LengthOfArrayLike(_array_)。
-            1. 如果 _index_ ≥ _length_，则
+            1. 如果 _index_ ≥ _length_，那么
               1. 将 _iteratorObj_.[[IteratedArrayLike]] 设置为 *undefined*。
               1. 返回 CreateIteratorResultObject(*undefined*, *true*)。
             1. 将 _iteratorObj_.[[ArrayLikeNextIndex]] 设置为 _index_ + 1。
             1. 令 _indexNumber_ 为 𝔽(_index_)。
-            1. 如果 _kind_ 是 ~key~，则
+            1. 如果 _kind_ 是 ~key~，那么
               1. 令 _result_ 为 _indexNumber_。
             1. 否则，
               1. 令 _elementKey_ 为 ! ToString(_indexNumber_)。
               1. 令 _elementValue_ 为 ? Get(_array_, _elementKey_)。
-              1. 如果 _kind_ 是 ~value~，则
+              1. 如果 _kind_ 是 ~value~，那么
                 1. 令 _result_ 为 _elementValue_。
               1. 否则，
                 1. 断言：_kind_ 是 ~key+value~。
@@ -42562,34 +42561,33 @@ THH:mm:ss.sss
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _targetIndex_ 为 ? ToClampedIndex(_target_, _length_)。
           1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _length_)。
-          1. 若 _end_ 为 *undefined*，令 _endIndex_ 为 _length_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 如果 _end_ 是 *undefined*，则令 _endIndex_ 为 _length_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _count_ 为 min(_endIndex_ - _startIndex_, _length_ - _targetIndex_)。
-          1. 若 _count_ > 0，则
-            1. 注：复制必须以保留源数据位级编码的方式执行。
+          1. 如果 _count_ > 0，那么
+            1. 注意：必须以保留源数据位级编码的方式执行复制。
             1. 令 _buffer_ 为 _obj_.[[ViewedArrayBuffer]]。
-            1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-            1. 若 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，抛出 *TypeError* 异常。
-            1. 将 _length_ 设为 TypedArrayLength(_taRecord_)。
-            1. 注：上述步骤的副作用可能已减小 _obj_ 的大小，在这种情况下，复制应使用仍然适用的最长前缀继续进行。
-            1. 将 _count_ 设为 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)。
+            1. 将 _taRecord_ 设置为 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)。
+            1. 将 _length_ 设置为 TypedArrayLength(_taRecord_)。
+            1. 注意：上述步骤的副作用可能已减小 _obj_ 的大小，在这种情况下，应使用仍然适用的最长前缀继续复制。
+            1. 将 _count_ 设置为 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)。
             1. 令 _elementSize_ 为 TypedArrayElementSize(_obj_)。
             1. 令 _byteOffset_ 为 _obj_.[[ByteOffset]]。
             1. 令 _toByteIndex_ 为 (_targetIndex_ × _elementSize_) + _byteOffset_。
             1. 令 _fromByteIndex_ 为 (_startIndex_ × _elementSize_) + _byteOffset_。
             1. 令 _countBytes_ 为 _count_ × _elementSize_。
-            1. 若 _fromByteIndex_ &lt; _toByteIndex_ 且 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_，则
+            1. 如果 _fromByteIndex_ &lt; _toByteIndex_ 且 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_，那么
               1. 令 _direction_ 为 -1。
-              1. 将 _fromByteIndex_ 设为 _fromByteIndex_ + _countBytes_ - 1。
-              1. 将 _toByteIndex_ 设为 _toByteIndex_ + _countBytes_ - 1。
+              1. 将 _fromByteIndex_ 设置为 _fromByteIndex_ + _countBytes_ - 1。
+              1. 将 _toByteIndex_ 设置为 _toByteIndex_ + _countBytes_ - 1。
             1. 否则，
               1. 令 _direction_ 为 1。
             1. 当 _countBytes_ > 0 时，重复：
               1. 断言：_fromByteIndex_ ≥ 0 且 _toByteIndex_ ≥ 0。
               1. 令 _value_ 为 GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)。
               1. 执行 SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~)。
-              1. 将 _fromByteIndex_ 设为 _fromByteIndex_ + _direction_。
-              1. 将 _toByteIndex_ 设为 _toByteIndex_ + _direction_。
-              1. 将 _countBytes_ 设为 _countBytes_ - 1。
+              1. 将 _fromByteIndex_ 设置为 _fromByteIndex_ + _direction_。
+              1. 将 _toByteIndex_ 设置为 _toByteIndex_ + _direction_。
+              1. 将 _countBytes_ 设置为 _countBytes_ - 1。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -42633,19 +42631,18 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _obj_.[[ContentType]] 为 ~bigint~，则将 _value_ 设为 ? ToBigInt(_value_)。
-          1. 否则，将 _value_ 设为 ? ToNumber(_value_)。
+          1. 如果 _obj_.[[ContentType]] 是 ~bigint~，则将 _value_ 设置为 ? ToBigInt(_value_)。
+          1. 否则，将 _value_ 设置为 ? ToNumber(_value_)。
           1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _length_)。
-          1. 如果 _end_ 为 *undefined*，则令 _endIndex_ 为 _length_；否则，令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
-          1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，则抛出 *TypeError* 异常。
-          1. 将 _length_ 设为 TypedArrayLength(_taRecord_)。
-          1. 将 _endIndex_ 设为 min(_endIndex_, _length_)。
+          1. 如果 _end_ 是 *undefined*，则令 _endIndex_ 为 _length_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 将 _taRecord_ 设置为 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)。
+          1. 将 _length_ 设置为 TypedArrayLength(_taRecord_)。
+          1. 将 _endIndex_ 设置为 min(_endIndex_, _length_)。
           1. 令 _k_ 为 _startIndex_。
-          1. 当 _k_ &lt; _endIndex_ 时，重复执行，
+          1. 当 _k_ &lt; _endIndex_ 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 执行 ! Set(_obj_, _propertyKey_, _value_, *true*)。
-            1. 将 _k_ 设为 _k_ + 1。
+            1. 将 _k_ 设置为 _k_ + 1。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -43001,15 +42998,14 @@ THH:mm:ss.sss
             <dd>它从 _source_ 读取值，并从索引 _targetOffset_ 开始在 _target_ 中设置多个值。</dd>
           </dl>
           <emu-alg>
-            1. 令 _targetRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_targetRecord_) 是 *true*，则抛出 *TypeError* 异常。
+            1. 令 _targetRecord_ 为 ? ValidateTypedArrayBounds(_target_, ~seq-cst~)。
             1. 令 _targetLength_ 为 TypedArrayLength(_targetRecord_)。
             1. 将 _source_ 设置为 ? ToObject(_source_)。
             1. 令 _sourceLength_ 为 ? LengthOfArrayLike(_source_)。
             1. 如果 _targetOffset_ = +∞，则抛出 *RangeError* 异常。
             1. 如果 _sourceLength_ + _targetOffset_ > _targetLength_，则抛出 *RangeError* 异常。
             1. 令 _k_ 为 0。
-            1. 重复，只要 _k_ &lt; _sourceLength_，
+            1. 当 _k_ &lt; _sourceLength_ 时，重复：
               1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
               1. 令 _value_ 为 ? Get(_source_, _propertyKey_)。
               1. 令 _targetIndex_ 为 𝔽(_targetOffset_ + _k_)。
@@ -43033,12 +43029,10 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. 令 _targetBuffer_ 为 _target_.[[ViewedArrayBuffer]]。
-            1. 令 _targetRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_target_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_targetRecord_) 是 *true*，则抛出 *TypeError* 异常。
+            1. 令 _targetRecord_ 为 ? ValidateTypedArrayBounds(_target_, ~seq-cst~)。
             1. 令 _targetLength_ 为 TypedArrayLength(_targetRecord_)。
             1. 令 _sourceBuffer_ 为 _source_.[[ViewedArrayBuffer]]。
-            1. 令 _sourceRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_source_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_sourceRecord_) 是 *true*，则抛出 *TypeError* 异常。
+            1. 令 _sourceRecord_ 为 ? ValidateTypedArrayBounds(_source_, ~seq-cst~)。
             1. 令 _sourceLength_ 为 TypedArrayLength(_sourceRecord_)。
             1. 令 _targetType_ 为 TypedArrayElementType(_target_)。
             1. 令 _targetElementSize_ 为 TypedArrayElementSize(_target_)。
@@ -43049,8 +43043,8 @@ THH:mm:ss.sss
             1. 如果 _targetOffset_ = +∞，则抛出 *RangeError* 异常。
             1. 如果 _sourceLength_ + _targetOffset_ > _targetLength_，则抛出 *RangeError* 异常。
             1. 如果 _target_.[[ContentType]] 不是 _source_.[[ContentType]]，则抛出 *TypeError* 异常。
-            1. 如果 IsSharedArrayBuffer(_sourceBuffer_) 是 *true*，IsSharedArrayBuffer(_targetBuffer_) 是 *true*，且 _sourceBuffer_.[[ArrayBufferData]] 是 _targetBuffer_.[[ArrayBufferData]]，则令 _sameSharedArrayBuffer_ 为 *true*；否则令 _sameSharedArrayBuffer_ 为 *false*。
-            1. 如果 SameValue(_sourceBuffer_, _targetBuffer_) 是 *true* 或 _sameSharedArrayBuffer_ 是 *true*，则
+            1. 如果 IsSharedArrayBuffer(_sourceBuffer_) 是 *true*、IsSharedArrayBuffer(_targetBuffer_) 是 *true*，并且 _sourceBuffer_.[[ArrayBufferData]] 是 _targetBuffer_.[[ArrayBufferData]]，则令 _sameSharedArrayBuffer_ 为 *true*；否则令 _sameSharedArrayBuffer_ 为 *false*。
+            1. 如果 SameValue(_sourceBuffer_, _targetBuffer_) 是 *true* 或 _sameSharedArrayBuffer_ 是 *true*，那么
               1. 令 _sourceByteLength_ 为 TypedArrayByteLength(_sourceRecord_)。
               1. 将 _sourceBuffer_ 设置为 ? CloneArrayBuffer(_sourceBuffer_, _sourceByteOffset_, _sourceByteLength_)。
               1. 令 _sourceByteIndex_ 为 0。
@@ -43058,15 +43052,15 @@ THH:mm:ss.sss
               1. 令 _sourceByteIndex_ 为 _sourceByteOffset_。
             1. 令 _targetByteIndex_ 为 (_targetOffset_ × _targetElementSize_) + _targetByteOffset_。
             1. 令 _limit_ 为 _targetByteIndex_ + (_targetElementSize_ × _sourceLength_)。
-            1. 如果 _sourceType_ 是 _targetType_，则
-              1. 注：传输必须以保留源数据的位级编码的方式执行。
-              1. 重复，只要 _targetByteIndex_ &lt; _limit_，
+            1. 如果 _sourceType_ 是 _targetType_，那么
+              1. 注意：必须以保留源数据位级编码的方式执行传输。
+              1. 当 _targetByteIndex_ &lt; _limit_ 时，重复：
                 1. 令 _value_ 为 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)。
                 1. 执行 SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)。
                 1. 将 _sourceByteIndex_ 设置为 _sourceByteIndex_ + 1。
                 1. 将 _targetByteIndex_ 设置为 _targetByteIndex_ + 1。
             1. 否则，
-              1. 重复，只要 _targetByteIndex_ &lt; _limit_，
+              1. 当 _targetByteIndex_ &lt; _limit_ 时，重复：
                 1. 令 _value_ 为 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)。
                 1. 执行 SetValueInBuffer(_targetBuffer_, _targetByteIndex_, _targetType_, _value_, *true*, ~unordered~)。
                 1. 将 _sourceByteIndex_ 设置为 _sourceByteIndex_ + _sourceElementSize_。
@@ -43085,18 +43079,17 @@ THH:mm:ss.sss
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _sourceArrayLength_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _sourceArrayLength_)。
-          1. 若 _end_ 为 *undefined*，令 _endIndex_ 为 _sourceArrayLength_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _sourceArrayLength_)。
+          1. 如果 _end_ 是 *undefined*，则令 _endIndex_ 为 _sourceArrayLength_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _sourceArrayLength_)。
           1. 令 _countBytes_ 为 max(_endIndex_ - _startIndex_, 0)。
           1. 令 _resultArray_ 为 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)。
-          1. 若 _countBytes_ > 0，则
-            1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-            1. 若 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，抛出 *TypeError* 异常。
-            1. 将 _endIndex_ 设为 min(_endIndex_, TypedArrayLength(_taRecord_))。
-            1. 将 _countBytes_ 设为 max(_endIndex_ - _startIndex_, 0)。
+          1. 如果 _countBytes_ > 0，那么
+            1. 将 _taRecord_ 设置为 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)。
+            1. 将 _endIndex_ 设置为 min(_endIndex_, TypedArrayLength(_taRecord_))。
+            1. 将 _countBytes_ 设置为 max(_endIndex_ - _startIndex_, 0)。
             1. 令 _sourceType_ 为 TypedArrayElementType(_obj_)。
             1. 令 _targetType_ 为 TypedArrayElementType(_resultArray_)。
-            1. 若 _sourceType_ 为 _targetType_，则
-              1. 注：传输必须以保留源数据位级编码的方式执行。
+            1. 如果 _sourceType_ 是 _targetType_，那么
+              1. 注意：必须以保留源数据位级编码的方式执行传输。
               1. 令 _sourceBuffer_ 为 _obj_.[[ViewedArrayBuffer]]。
               1. 令 _targetBuffer_ 为 _resultArray_.[[ViewedArrayBuffer]]。
               1. 令 _elementSize_ 为 TypedArrayElementSize(_obj_)。
@@ -43107,8 +43100,8 @@ THH:mm:ss.sss
               1. 当 _targetByteIndex_ &lt; _endByteIndex_ 时，重复：
                 1. 令 _value_ 为 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)。
                 1. 执行 SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)。
-                1. 将 _sourceByteIndex_ 设为 _sourceByteIndex_ + 1。
-                1. 将 _targetByteIndex_ 设为 _targetByteIndex_ + 1。
+                1. 将 _sourceByteIndex_ 设置为 _sourceByteIndex_ + 1。
+                1. 将 _targetByteIndex_ 设置为 _targetByteIndex_ + 1。
             1. 否则，
               1. 令 _n_ 为 0。
               1. 令 _k_ 为 _startIndex_。
@@ -43116,8 +43109,8 @@ THH:mm:ss.sss
                 1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
                 1. 令 _kValue_ 为 ! Get(_obj_, _propertyKey_)。
                 1. 执行 ! Set(_resultArray_, ! ToString(𝔽(_n_)), _kValue_, *true*)。
-                1. 将 _k_ 设为 _k_ + 1。
-                1. 将 _n_ 设为 _n_ + 1。
+                1. 将 _k_ 设置为 _k_ + 1。
+                1. 将 _n_ 设置为 _n_ + 1。
           1. 返回 _resultArray_。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -43382,7 +43375,23 @@ THH:mm:ss.sss
         <emu-alg>
           1. 执行 ? RequireInternalSlot(_obj_, [[TypedArrayName]])。
           1. 断言：_obj_ 具有 [[ViewedArrayBuffer]] 内部槽。
-          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_obj_, _order_)。
+          1. 返回 ? ValidateTypedArrayBounds(_obj_, _order_)。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-validatetypedarraybounds" type="abstract operation">
+        <h1>
+          ValidateTypedArrayBounds (
+            _ta_: a TypedArray,
+            _order_: ~seq-cst~ or ~unordered~,
+          ): either a normal completion containing a TypedArray With Buffer Witness Record or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>它验证 _ta_ 是否未超出其后备缓冲区的边界。</dd>
+        </dl>
+        <emu-alg>
+          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_ta_, _order_)。
           1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
           1. 返回 _taRecord_。
         </emu-alg>
@@ -43534,11 +43543,10 @@ THH:mm:ss.sss
             1. 令 _sourceType_ 为 TypedArrayElementType(_sourceArray_)。
             1. 令 _sourceElementSize_ 为 TypedArrayElementSize(_sourceArray_)。
             1. 令 _sourceByteOffset_ 为 _sourceArray_.[[ByteOffset]]。
-            1. 令 _sourceRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_sourceArray_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_sourceRecord_) 是 *true*，则抛出 *TypeError* 异常。
+            1. 令 _sourceRecord_ 为 ? ValidateTypedArrayBounds(_sourceArray_, ~seq-cst~)。
             1. 令 _elementLength_ 为 TypedArrayLength(_sourceRecord_)。
             1. 令 _byteLength_ 为 _elementSize_ × _elementLength_。
-            1. 如果 _elementType_ 是 _sourceType_，则
+            1. 如果 _elementType_ 是 _sourceType_，那么
               1. 令 _data_ 为 ? CloneArrayBuffer(_sourceData_, _sourceByteOffset_, _byteLength_)。
             1. 否则，
               1. 令 _data_ 为 ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _byteLength_)</emu-meta>。
@@ -43546,7 +43554,7 @@ THH:mm:ss.sss
               1. 令 _sourceByteIndex_ 为 _sourceByteOffset_。
               1. 令 _targetByteIndex_ 为 0。
               1. 令 _count_ 为 _elementLength_。
-              1. 重复，只要 _count_ > 0，
+              1. 当 _count_ > 0 时，重复：
                 1. 令 _value_ 为 GetValueFromBuffer(_sourceData_, _sourceByteIndex_, _sourceType_, *true*, ~unordered~)。
                 1. 执行 SetValueInBuffer(_data_, _targetByteIndex_, _elementType_, _value_, *true*, ~unordered~)。
                 1. 将 _sourceByteIndex_ 设置为 _sourceByteIndex_ + _sourceElementSize_。
@@ -43775,7 +43783,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _into_ 为 *this* 值。
           1. 执行 ? ValidateUint8Array(_into_)。
-          1. 如果 _string_ 不是 String，则抛出 *TypeError* 异常。
+          1. 如果 _string_ 不是字符串，则抛出 *TypeError* 异常。
           1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
           1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
           1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
@@ -43783,16 +43791,15 @@ THH:mm:ss.sss
           1. 令 _lastChunkHandling_ 为 ? Get(_opts_, *"lastChunkHandling"*)。
           1. 如果 _lastChunkHandling_ 是 *undefined*，则将 _lastChunkHandling_ 设置为 *"loose"*。
           1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
-          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)。
           1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)。
           1. 令 _bytes_ 为 _result_.[[Bytes]]。
-          1. 令 _written_ 为 _bytes_ 中元素的数量。
-          1. 注：FromBase64 不调用任何用户代码，因此支撑 _into_ 的 ArrayBuffer 不可能已被分离或缩小。
+          1. 令 _written_ 为 _bytes_ 中的元素数量。
+          1. 注意：FromBase64 不会调用任何用户代码，因此 _into_ 的后备 ArrayBuffer 不可能已被分离或收缩。
           1. 断言：_written_ ≤ _byteLength_。
           1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
-          1. 如果 _result_.[[Error]] 不是 ~none~，则
+          1. 如果 _result_.[[Error]] 不是 ~none~，那么
             1. 抛出 _result_.[[Error]]。
           1. 令 _resultObj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))。
@@ -43806,17 +43813,16 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _into_ 为 *this* 值。
           1. 执行 ? ValidateUint8Array(_into_)。
-          1. 如果 _string_ 不是 String，则抛出 *TypeError* 异常。
-          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_into_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 如果 _string_ 不是字符串，则抛出 *TypeError* 异常。
+          1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)。
           1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _result_ 为 FromHex(_string_, _byteLength_)。
           1. 令 _bytes_ 为 _result_.[[Bytes]]。
-          1. 令 _written_ 为 _bytes_ 中元素的数量。
-          1. 注：FromHex 不调用任何用户代码，因此支撑 _into_ 的 ArrayBuffer 不可能已被分离或缩小。
+          1. 令 _written_ 为 _bytes_ 中的元素数量。
+          1. 注意：FromHex 不会调用任何用户代码，因此 _into_ 的后备 ArrayBuffer 不可能已被分离或收缩。
           1. 断言：_written_ ≤ _byteLength_。
           1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
-          1. 如果 _result_.[[Error]] 不是 ~none~，则
+          1. 如果 _result_.[[Error]] 不是 ~none~，那么
             1. 抛出 _result_.[[Error]]。
           1. 令 _resultObj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))。
@@ -43887,13 +43893,12 @@ THH:mm:ss.sss
         <dl class="header"></dl>
         <emu-alg>
           1. 令 _buffer_ 为 _ta_.[[ViewedArrayBuffer]]。
-          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_ta_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _byteOffset_ 为 _ta_.[[ByteOffset]]。
-          1. 令 _bytes_ 为新的空 List。
+          1. 令 _bytes_ 为一个新的空列表。
           1. 令 _index_ 为 0。
-          1. 重复，只要 _index_ &lt; _length_，
+          1. 当 _index_ &lt; _length_ 时，重复：
             1. 令 _byteIndex_ 为 _byteOffset_ + _index_。
             1. 令 _byte_ 为 ℝ(GetValueFromBuffer(_buffer_, _byteIndex_, ~uint8~, *true*, ~unordered~))。
             1. 将 _byte_ 追加到 _bytes_。
@@ -45751,7 +45756,7 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 如果 IsUnclampedIntegerElementType(_type_) 是 *true*，则返回 *true*。
-          1. 如果 IsBigIntElementType(_type_) 是 *true* 且 _order_ 既不是 ~init~ 也不是 ~unordered~，则返回 *true*。
+          1. 如果 IsBigIntElementType(_type_) 是 *true* 且 _order_ 是 ~seq-cst~，则返回 *true*。
           1. 返回 *false*。
         </emu-alg>
       </emu-clause>
@@ -47156,15 +47161,15 @@ THH:mm:ss.sss
           ): either a normal completion containing a TypedArray With Buffer Witness Record, or a throw completion
         </h1>
         <dl class="header">
+          <dt>description</dt>
+          <dd>これは、%Atomics% 関数で使用できる TypedArray、特に共有メモリとのアトミックな相互作用を保証できるものを制限するために使用される。</dd>
         </dl>
         <emu-alg>
+          1. 注意：当 _ta_ 的后备缓冲区是可增长 SharedArrayBuffer 时，边界检查不是同步操作。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_ta_, ~unordered~)。
-          1. 注：当 _ta_ 的后备缓冲区是可增长 SharedArrayBuffer 时，边界检查不是同步操作。
-          1. 如果 _waitable_ 是 *true*，则
-            1. 如果 _ta_.[[TypedArrayName]] 既不是 *"Int32Array"* 也不是 *"BigInt64Array"*，则抛出 *TypeError* 异常。
-          1. 否则，
-            1. 令 _type_ 为 TypedArrayElementType(_ta_)。
-            1. 如果 IsUnclampedIntegerElementType(_type_) 是 *false* 且 IsBigIntElementType(_type_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 令 _elementType_ 为 TypedArrayElementType(_ta_)。
+          1. 如果 IsNoTearConfiguration(_elementType_, ~seq-cst~) 是 *false*，则抛出 *TypeError* 异常。
+          1. 如果 _waitable_ 是 *true*，并且 _elementType_ 既不是 ~int32~ 也不是 ~bigint64~，则抛出 *TypeError* 异常。
           1. 返回 _taRecord_。
         </emu-alg>
       </emu-clause>
@@ -47217,9 +47222,8 @@ THH:mm:ss.sss
           <dd>此操作在 Atomics 方法中所有实参强制转换执行之后，重新验证原子操作在后备缓冲区中的索引，因为实参强制转换可能具有任意副作用，可能导致缓冲区越界。当 _ta_ 的后备缓冲区是 SharedArrayBuffer 时，此操作不会抛出异常。</dd>
         </dl>
         <emu-alg>
-          1. 令 _taRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_ta_, ~unordered~)。
-          1. 注：当 _ta_ 的后备缓冲区是可增长 SharedArrayBuffer 时，边界检查不是同步操作。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 注意：当 _ta_ 的后备缓冲区是可增长 SharedArrayBuffer 时，边界检查不是同步操作。
+          1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_ta_, ~unordered~)。
           1. 断言：_byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]。
           1. 如果 _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]，则抛出 *RangeError* 异常。
           1. 返回 ~unused~。
@@ -47426,9 +47430,9 @@ THH:mm:ss.sss
           1. 令 _buffer_ 为 _taRecord_.[[Object]].[[ViewedArrayBuffer]]。
           1. 如果 IsSharedArrayBuffer(_buffer_) 是 *false*，则抛出 *TypeError* 异常。
           1. 令 _byteIndexInBuffer_ 为 ? ValidateAtomicAccess(_taRecord_, _index_)。
-          1. 令 _arrayTypeName_ 为 _ta_.[[TypedArrayName]]。
-          1. 如果 _arrayTypeName_ 是 *"BigInt64Array"*，则令 _expected_ 为 ? ToBigInt64(_value_)。
-          1. 否则，令 _expected_ 为 ? ToInt32(_value_)。
+          1. 令 _elementType_ 为 TypedArrayElementType(_ta_)。
+          1. 断言：_elementType_ 是 ~bigint64~ 或 ~int32~。
+          1. 如果 _elementType_ 是 ~bigint64~，则令 _expected_ 为 ? ToBigInt64(_value_)；否则令 _expected_ 为 ? ToInt32(_value_)。
           1. 令 _timeoutNumber_ 为 ? ToNumber(_timeout_)。
           1. 如果 _timeoutNumber_ 是 *NaN* 或 *+∞*<sub>𝔽</sub>，则令 _realTimeout_ 为 +∞。
           1. 否则，如果 _timeoutNumber_ 是 *-∞*<sub>𝔽</sub>，则令 _realTimeout_ 为 0。
@@ -47436,23 +47440,22 @@ THH:mm:ss.sss
           1. 如果 _mode_ 是 ~sync~ 且 AgentCanSuspend() 是 *false*，则抛出 *TypeError* 异常。
           1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
           1. 令 _waiterList_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
-          1. 如果 _mode_ 是 ~sync~，则
+          1. 如果 _mode_ 是 ~sync~，那么
             1. 令 _promiseCapability_ 为 ~blocking~。
             1. 令 _resultObj_ 为 *undefined*。
           1. 否则，
             1. 令 _promiseCapability_ 为 ! NewPromiseCapability(%Promise%)。
             1. 令 _resultObj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 EnterCriticalSection(_waiterList_)。
-          1. 令 _elementType_ 为 TypedArrayElementType(_ta_)。
           1. 令 _witness_ 为 GetValueFromBuffer(_buffer_, _byteIndexInBuffer_, _elementType_, *true*, ~seq-cst~)。
-          1. 如果 _expected_ ≠ _witness_，则
+          1. 如果 _expected_ ≠ _witness_，那么
             1. 执行 LeaveCriticalSection(_waiterList_)。
             1. 如果 _mode_ 是 ~sync~，则返回 *"not-equal"*。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"not-equal"*)。
             1. 返回 _resultObj_。
-          1. 如果 _realTimeout_ = 0 且 _mode_ 是 ~async~，则
-            1. 注：同步的立即超时没有特殊处理。异步的立即超时具有特殊处理，以便快速失败并避免不必要的 Promise job。
+          1. 如果 _realTimeout_ = 0 且 _mode_ 是 ~async~，那么
+            1. 注意：同步立即超时没有特殊处理。异步立即超时会进行特殊处理，以便快速失败并避免不必要的 Promise 作业。
             1. 执行 LeaveCriticalSection(_waiterList_)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"async"*, *false*)。
             1. 执行 ! CreateDataPropertyOrThrow(_resultObj_, *"value"*, *"timed-out"*)。
@@ -47461,12 +47464,12 @@ THH:mm:ss.sss
           1. 令 _now_ 为标识当前时间的时间值（UTC）。
           1. 令 _additionalTimeout_ 为实现定义的非负数学值。
           1. 令 _timeoutTime_ 为 ℝ(_now_) + _realTimeout_ + _additionalTimeout_。
-          1. 注：当 _realTimeout_ 是 +∞ 时，_timeoutTime_ 也是 +∞。
-          1. 令 _waiterRecord_ 为新的 Waiter Record { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
+          1. 注意：当 _realTimeout_ 为 +∞ 时，_timeoutTime_ 也为 +∞。
+          1. 令 _waiterRecord_ 为一个新的等待者记录 { [[AgentSignifier]]: _thisAgent_, [[PromiseCapability]]: _promiseCapability_, [[TimeoutTime]]: _timeoutTime_, [[Result]]: *"ok"* }。
           1. 执行 AddWaiter(_waiterList_, _waiterRecord_)。
-          1. 如果 _mode_ 是 ~sync~，则
+          1. 如果 _mode_ 是 ~sync~，那么
             1. 执行 SuspendThisAgent(_waiterList_, _waiterRecord_)。
-          1. 否则，如果 _timeoutTime_ 是有限的，则
+          1. 否则，如果 _timeoutTime_ 是有限值，那么
             1. 执行 EnqueueAtomicsWaitAsyncTimeoutJob(_waiterList_, _waiterRecord_)。
           1. 执行 LeaveCriticalSection(_waiterList_)。
           1. 如果 _mode_ 是 ~sync~，则返回 _waiterRecord_.[[Result]]。
