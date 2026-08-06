@@ -5725,9 +5725,9 @@
         <dd>_arg_를 array-like object의 length로 사용하기에 suitable한 non-negative integral Number로 clamp하고 truncate합니다.</dd>
       </dl>
       <emu-alg>
-        1. _length_를 ? ToIntegerOrInfinity(_arg_)로 둔다.
-        1. _length_ ≤ 0이면, *+0*<sub>𝔽</sub>를 반환한다.
-        1. 𝔽(min(_length_, 2<sup>53</sup> - 1))를 반환한다.
+        1. _length_를 ? ToIntegerOrInfinity(_arg_)로 설정한다.
+        1. _clampedLen_을 _length_를 0과 2<sup>53</sup> - 1 사이로 제한한 결과로 설정한다.
+        1. 𝔽(_clampedLen_)을 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -5764,6 +5764,42 @@
         1. _int_를 ? ToIntegerOrInfinity(_arg_)로 둔다.
         1. _int_가 0부터 2<sup>53</sup> - 1까지의 inclusive interval 안에 없으면, *RangeError* exception을 throw한다.
         1. _int_를 반환한다.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-toabsoluteindex" type="abstract operation">
+      <h1>
+        ToAbsoluteIndex (
+          _value_: an ECMAScript language value,
+          _length_: a non-negative integer,
+        ): either a normal completion containing either an integer, +&infin;, or -&infin;, or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>이는 _value_를 정수, +∞, 또는 -∞로 변환하며, 음수 값은 _length_를 기준으로 해석한다.</dd>
+      </dl>
+      <emu-alg>
+        1. _int_를 ? ToIntegerOrInfinity(_value_)로 둔다.
+        1. _int_가 유한값이고 _int_ &lt; 0이면, _int_를 _length_ + _int_로 설정한다.
+        1. _int_를 반환한다.
+      </emu-alg>
+    </emu-clause>
+    
+
+    <emu-clause id="sec-toclampedindex" type="abstract operation">
+      <h1>
+        ToClampedIndex (
+          _value_: an ECMAScript language value,
+          _length_: a non-negative integer,
+        ): either a normal completion containing a non-negative integer or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>이는 _value_를 정수로 변환하고(_length_를 기준으로 음수 값을 해석), 그 결과를 0부터 _length_까지의 닫힌 구간으로 클램핑한다.</dd>
+      </dl>
+      <emu-alg>
+        1. _index_를 ? ToAbsoluteIndex(_value_, _length_)로 둔다.
+        1. _index_를 0과 _length_ 사이로 클램핑한 결과를 반환한다.
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -17020,8 +17056,8 @@
         </tr>
       </table>
     </emu-table>
-    <p><emu-xref href="#table-line-terminator-code-points"></emu-xref> 안의 Unicode code point만 line terminator로 treated됩니다. 다른 new line 또는 line breaking Unicode code point는 line terminator로 treated되지 않지만, <emu-xref href="#table-white-space-code-points"></emu-xref>에 listed된 requirement를 meet하면 white space로 treated됩니다. sequence &lt;CR>&lt;LF>는 commonly line terminator로 사용됩니다. 이는 line number를 reporting하기 위한 purpose에서는 single |SourceCharacter|로 considered되어야 합니다.</p>
-    <h2>Syntax</h2>
+    <p><emu-xref href="#table-line-terminator-code-points"></emu-xref>의 유니코드 코드 포인트만 줄 종결자로 처리된다. 다른 줄바꿈 또는 줄 나눔 유니코드 코드 포인트는 줄 종결자로 처리되지 않지만, <emu-xref href="#table-white-space-code-points"></emu-xref>에 나열된 요구 사항을 충족하면 공백으로 처리된다.</p>
+    <h2>구문</h2>
     <emu-grammar type="definition">
       LineTerminator ::
         &lt;LF&gt;
@@ -17036,6 +17072,9 @@
         &lt;PS&gt;
         &lt;CR&gt; &lt;LF&gt;
     </emu-grammar>
+    <emu-note>
+      <p><emu-grammar>LineTerminatorSequence :: &lt;CR&gt; &lt;LF&gt;</emu-grammar> 생성 규칙은, 진단에서 줄 번호를 보고할 때처럼, 전체가 하나의 줄 종결자로 동작해야 하는 코드 포인트 시퀀스와 일치한다.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-comments">
@@ -31877,26 +31916,25 @@
         <h1>Function.prototype.bind ( _thisArg_, ..._args_ )</h1>
         <p>이 method는 called될 때 다음 step을 수행합니다:</p>
         <emu-alg>
-          1. _target_을 *this* value로 둔다.
-          1. IsCallable(_target_)이 *false*이면, *TypeError* exception을 throw한다.
-          1. _boundFunc_를 ? BoundFunctionCreate(_target_, _thisArg_, _args_)로 둔다.
-          1. _length_를 0으로 둔다.
-          1. _targetHasLength_를 ? HasOwnProperty(_target_, *"length"*)로 둔다.
-          1. _targetHasLength_가 *true*이면, 다음을 수행한다.
-            1. _targetLength_를 ? Get(_target_, *"length"*)로 둔다.
-            1. _targetLength_가 Number이면, 다음을 수행한다.
-              1. _targetLength_가 *+∞*<sub>𝔽</sub>이면, 다음을 수행한다.
+          1. _target_을 *this* 값으로 설정한다.
+          1. IsCallable(_target_)이 *false*이면, *TypeError* 예외를 던진다.
+          1. _boundFunc_를 ? BoundFunctionCreate(_target_, _thisArg_, _args_)로 설정한다.
+          1. _length_를 0으로 설정한다.
+          1. _targetHasLength_를 ? HasOwnProperty(_target_, *"length"*)로 설정한다.
+          1. _targetHasLength_가 *true*이면,
+            1. _targetLength_를 ? Get(_target_, *"length"*)로 설정한다.
+            1. _targetLength_가 Number이면,
+              1. _targetLengthAsInt_를 ! ToIntegerOrInfinity(_targetLength_)로 설정한다.
+              1. _targetLengthAsInt_ = +∞이면,
                 1. _length_를 +∞로 설정한다.
-              1. 그렇지 않고 _targetLength_가 *-∞*<sub>𝔽</sub>이면, 다음을 수행한다.
+              1. 그렇지 않고 _targetLengthAsInt_ = -∞이면,
                 1. _length_를 0으로 설정한다.
               1. 그렇지 않으면,
-                1. _targetLengthAsInt_를 ! ToIntegerOrInfinity(_targetLength_)로 둔다.
-                1. Assert: _targetLengthAsInt_는 finite이다.
-                1. _argCount_를 _args_ 안의 element 수로 둔다.
+                1. _argCount_를 _args_의 요소 수로 설정한다.
                 1. _length_를 max(_targetLengthAsInt_ - _argCount_, 0)으로 설정한다.
           1. SetFunctionLength(_boundFunc_, _length_)를 수행한다.
-          1. _targetName_을 ? Get(_target_, *"name"*)로 둔다.
-          1. _targetName_이 String이 아니면, _targetName_을 empty String으로 설정한다.
+          1. _targetName_을 ? Get(_target_, *"name"*)으로 설정한다.
+          1. _targetName_이 String이 아니면, _targetName_을 빈 String으로 설정한다.
           1. SetFunctionName(_boundFunc_, _targetName_, *"bound"*)를 수행한다.
           1. _boundFunc_를 반환한다.
         </emu-alg>
@@ -36177,17 +36215,13 @@ THH:mm:ss.sss
       <emu-clause id="sec-string.prototype.at" type="built-in function">
         <h1>String.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
+          1. _thisValue_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
           1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _relativeIndex_를 ? ToIntegerOrInfinity(_index_)로 둔다.
-          1. _relativeIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _relativeIndex_로 둔다.
-          1. 그렇지 않으면,
-            1. _k_를 _length_ + _relativeIndex_로 둔다.
+          1. _length_를 _string_의 길이로 둔다.
+          1. _k_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
           1. _k_ &lt; 0 또는 _k_ ≥ _length_이면, *undefined*를 반환한다.
-          1. _string_의 _k_부터 _k_ + 1까지의 substring을 반환한다.
+          1. _string_의 _k_부터 _k_ + 1까지의 부분 문자열을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -36284,20 +36318,19 @@ THH:mm:ss.sss
         <h1>String.prototype.endsWith ( _searchString_ [ , _endPosition_ ] )</h1>
         <p>이 method는 called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _isRegexp_를 ? IsRegExp(_searchString_)로 둔다.
-          1. _isRegexp_가 *true*이면, *TypeError* exception을 throw한다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
+          1. _isRegexp_를 ? IsRegExp(_searchString_)로 설정한다.
+          1. _isRegexp_가 *true*이면, *TypeError* 예외를 던진다.
           1. _searchString_을 ? ToString(_searchString_)으로 설정한다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _endPosition_이 *undefined*이면 _position_을 _length_로 둔다; 그렇지 않으면 _position_을 ? ToIntegerOrInfinity(_endPosition_)로 둔다.
-          1. _end_를 _position_을 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _searchLength_를 _searchString_의 length로 둔다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _endPosition_이 *undefined*이면, _end_를 _length_로 설정한다. 그렇지 않으면 _end_를 ? ToIntegerOrInfinity(_endPosition_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. _searchLength_를 _searchString_의 길이로 설정한다.
           1. _searchLength_ = 0이면, *true*를 반환한다.
-          1. _start_를 _end_ - _searchLength_로 둔다.
+          1. _start_를 _end_ - _searchLength_로 설정한다.
           1. _start_ &lt; 0이면, *false*를 반환한다.
-          1. _substring_을 _string_의 _start_부터 _end_까지의 substring으로 둔다.
+          1. _substring_을 _string_의 _start_부터 _end_까지의 부분 문자열로 설정한다.
           1. _substring_이 _searchString_이면, *true*를 반환한다.
           1. *false*를 반환한다.
         </emu-alg>
@@ -36313,17 +36346,16 @@ THH:mm:ss.sss
         <h1>String.prototype.includes ( _searchString_ [ , _position_ ] )</h1>
         <p>이 method는 called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _isRegexp_를 ? IsRegExp(_searchString_)로 둔다.
-          1. _isRegexp_가 *true*이면, *TypeError* exception을 throw한다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
+          1. _isRegexp_를 ? IsRegExp(_searchString_)로 설정한다.
+          1. _isRegexp_가 *true*이면, *TypeError* 예외를 던진다.
           1. _searchString_을 ? ToString(_searchString_)으로 설정한다.
-          1. _positionInt_를 ? ToIntegerOrInfinity(_position_)로 둔다.
-          1. Assert: _position_이 *undefined*이면, _positionInt_는 0이다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _start_를 _positionInt_를 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _index_를 StringIndexOf(_string_, _searchString_, _start_)로 둔다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _start_를 ? ToIntegerOrInfinity(_position_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. 단언: _position_이 *undefined*이면, _start_는 0이다.
+          1. _index_를 StringIndexOf(_string_, _searchString_, _start_)로 설정한다.
           1. _index_가 ~not-found~이면, *false*를 반환한다.
           1. *true*를 반환한다.
         </emu-alg>
@@ -36345,17 +36377,16 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
           1. _searchString_을 ? ToString(_searchString_)으로 설정한다.
-          1. _positionInt_를 ? ToIntegerOrInfinity(_position_)로 둔다.
-          1. Assert: _position_이 *undefined*이면, _positionInt_는 0이다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _start_를 _positionInt_를 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _result_를 StringIndexOf(_string_, _searchString_, _start_)로 둔다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _start_를 ? ToIntegerOrInfinity(_position_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. 단언: _position_이 *undefined*이면, _start_는 0이다.
+          1. _result_를 StringIndexOf(_string_, _searchString_, _start_)로 설정한다.
           1. _result_가 ~not-found~이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. 𝔽(_result_)를 반환한다.
+          1. 𝔽(_result_)을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic입니다; *this* value가 String object일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 other kinds of objects에 transferred될 수 있습니다.</p>
@@ -36380,20 +36411,20 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
           1. _searchString_을 ? ToString(_searchString_)으로 설정한다.
-          1. _numberPosition_을 ? ToNumber(_position_)으로 둔다.
-          1. Assert: _position_이 *undefined*이면, _numberPosition_은 *NaN*이다.
-          1. _numberPosition_이 *NaN*이면 _position_을 +∞로 설정한다; 그렇지 않으면 _position_을 ! ToIntegerOrInfinity(_numberPosition_)로 설정한다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _searchLength_를 _searchString_의 length로 둔다.
-          1. _length_ &lt; _searchLength_이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _start_를 _position_을 0과 _length_ - _searchLength_ 사이로 clamping한 result로 둔다.
-          1. _result_를 StringLastIndexOf(_string_, _searchString_, _start_)로 둔다.
+          1. _numberPosition_을 ? ToNumber(_position_)으로 설정한다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _searchLength_를 _searchString_의 길이로 설정한다.
+          1. _maxStart_를 _length_ - _searchLength_로 설정한다.
+          1. _maxStart_ &lt; 0이면, *-1*<sub>𝔽</sub>를 반환한다.
+          1. _numberPosition_이 *NaN*이면, _start_를 _maxStart_로 설정한다. 그렇지 않으면 _start_를 ! ToIntegerOrInfinity(_numberPosition_)의 결과를 0과 _maxStart_ 사이로 제한한 값으로 설정한다.
+          1. 단언: _position_이 *undefined*이면, _start_는 _maxStart_이다.
+          1. _result_를 StringLastIndexOf(_string_, _searchString_, _start_)로 설정한다.
           1. _result_가 ~not-found~이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. 𝔽(_result_)를 반환한다.
+          1. 𝔽(_result_)을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic입니다; *this* value가 String object일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 other kinds of objects에 transferred될 수 있습니다.</p>
@@ -36797,20 +36828,14 @@ THH:mm:ss.sss
         <p>이 method는 this object를 String으로 converting한 result의 <emu-not-ref>substring</emu-not-ref>을 반환하며, index _start_에서 start하여 index _end_ 전까지(or _end_가 *undefined*이면 String의 end까지) running합니다. _start_가 negative이면, 이는 <emu-eqn>_sourceLength_ + _start_</emu-eqn>로 treated되며 여기서 _sourceLength_는 String의 length입니다. _end_가 negative이면, 이는 <emu-eqn>_sourceLength_ + _end_</emu-eqn>로 treated되며 여기서 _sourceLength_는 String의 length입니다. result는 String value이며, String object가 아닙니다.</p>
         <p>called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _intStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _intStart_ = -∞이면, _from_을 0으로 둔다.
-          1. 그렇지 않고 _intStart_ &lt; 0이면, _from_을 max(_length_ + _intStart_, 0)으로 둔다.
-          1. 그렇지 않으면, _from_을 min(_intStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _intEnd_를 _length_로 둔다; 그렇지 않으면 _intEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _intEnd_ = -∞이면, _to_를 0으로 둔다.
-          1. 그렇지 않고 _intEnd_ &lt; 0이면, _to_를 max(_length_ + _intEnd_, 0)으로 둔다.
-          1. 그렇지 않으면, _to_를 min(_intEnd_, _length_)로 둔다.
-          1. _from_ ≥ _to_이면, empty String을 반환한다.
-          1. _string_의 _from_부터 _to_까지의 substring을 반환한다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _from_을 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _end_가 *undefined*이면, _to_를 _length_로 설정한다. 그렇지 않으면 _to_를 ? ToClampedIndex(_end_, _length_)로 설정한다.
+          1. _from_ ≥ _to_이면, 빈 String을 반환한다.
+          1. _string_의 _from_부터 _to_까지의 부분 문자열을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic입니다; *this* value가 String object일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 other kinds of objects에 transferred될 수 있습니다.</p>
@@ -36870,20 +36895,20 @@ THH:mm:ss.sss
         <h1>String.prototype.startsWith ( _searchString_ [ , _position_ ] )</h1>
         <p>이 method는 called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _isRegexp_를 ? IsRegExp(_searchString_)로 둔다.
-          1. _isRegexp_가 *true*이면, *TypeError* exception을 throw한다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
+          1. _isRegexp_를 ? IsRegExp(_searchString_)로 설정한다.
+          1. _isRegexp_가 *true*이면, *TypeError* 예외를 던진다.
           1. _searchString_을 ? ToString(_searchString_)으로 설정한다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _position_이 *undefined*이면 _position_을 0으로 설정한다; 그렇지 않으면 _position_을 ? ToIntegerOrInfinity(_position_)로 설정한다.
-          1. _start_를 _position_을 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _searchLength_를 _searchString_의 length로 둔다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _start_를 ? ToIntegerOrInfinity(_position_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. 단언: _position_이 *undefined*이면, _start_는 0이다.
+          1. _searchLength_를 _searchString_의 길이로 설정한다.
           1. _searchLength_ = 0이면, *true*를 반환한다.
-          1. _end_를 _start_ + _searchLength_로 둔다.
+          1. _end_를 _start_ + _searchLength_로 설정한다.
           1. _end_ > _length_이면, *false*를 반환한다.
-          1. _substring_을 _string_의 _start_부터 _end_까지의 substring으로 둔다.
+          1. _substring_을 _string_의 _start_부터 _end_까지의 부분 문자열로 설정한다.
           1. _substring_이 _searchString_이면, *true*를 반환한다.
           1. *false*를 반환한다.
         </emu-alg>
@@ -36902,17 +36927,16 @@ THH:mm:ss.sss
         <p>_start_가 _end_보다 strictly greater이면, 둘은 swapped됩니다.</p>
         <p>called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _thisValue_를 *this* value로 둔다.
-          1. ? RequireObjectCoercible(_thisValue_)를 수행한다.
-          1. _string_을 ? ToString(_thisValue_)로 둔다.
-          1. _length_를 _string_의 length로 둔다.
-          1. _intStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _end_가 *undefined*이면 _intEnd_를 _length_로 둔다; 그렇지 않으면 _intEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _finalStart_를 _intStart_를 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _finalEnd_를 _intEnd_를 0과 _length_ 사이로 clamping한 result로 둔다.
-          1. _from_을 min(_finalStart_, _finalEnd_)로 둔다.
-          1. _to_를 max(_finalStart_, _finalEnd_)로 둔다.
-          1. _string_의 _from_부터 _to_까지의 substring을 반환한다.
+          1. _thisValue_를 *this* 값으로 설정한다.
+          1. ? RequireObjectCoercible(_thisValue_)을 수행한다.
+          1. _string_을 ? ToString(_thisValue_)으로 설정한다.
+          1. _length_를 _string_의 길이로 설정한다.
+          1. _finalStart_를 ? ToIntegerOrInfinity(_start_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. 단언: _start_가 *undefined*이면, _finalStart_는 0이다.
+          1. _end_가 *undefined*이면, _finalEnd_를 _length_로 설정한다. 그렇지 않으면 _finalEnd_를 ? ToIntegerOrInfinity(_end_)의 결과를 0과 _length_ 사이로 제한한 값으로 설정한다.
+          1. _from_을 min(_finalStart_, _finalEnd_)으로 설정한다.
+          1. _to_를 max(_finalStart_, _finalEnd_)으로 설정한다.
+          1. _string_의 _from_부터 _to_까지의 부분 문자열을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic입니다; *this* value가 String object일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 other kinds of objects에 transferred될 수 있습니다.</p>
@@ -40711,13 +40735,9 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.at" type="built-in function">
         <h1>Array.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 둔다.
           1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeIndex_를 ? ToIntegerOrInfinity(_index_)로 둔다.
-          1. _relativeIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _relativeIndex_로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _relativeIndex_로 둔다.
+          1. _k_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
           1. _k_ &lt; 0 또는 _k_ ≥ _length_이면, *undefined*를 반환한다.
           1. ? Get(_obj_, ! ToString(𝔽(_k_)))를 반환한다.
         </emu-alg>
@@ -40794,36 +40814,27 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeTarget_을 ? ToIntegerOrInfinity(_target_)로 둔다.
-          1. _relativeTarget_ = -∞이면, _to_를 0으로 둔다.
-          1. Else if _relativeTarget_ &lt; 0이면, _to_를 max(_length_ + _relativeTarget_, 0)으로 둔다.
-          1. Else, _to_를 min(_relativeTarget_, _length_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _from_을 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _from_을 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _from_을 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _final_을 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _final_을 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _final_을 min(_relativeEnd_, _length_)로 둔다.
-          1. _count_를 min(_final_ - _from_, _length_ - _to_)로 둔다.
-          1. _from_ &lt; _to_이고 _to_ &lt; _from_ + _count_이면, 다음을 수행한다.
-            1. _direction_을 -1로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
+          1. _to_를 ? ToClampedIndex(_target_, _length_)로 설정한다.
+          1. _from_을 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _end_가 *undefined*이면, _final_을 _length_로 설정한다. 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 설정한다.
+          1. _count_를 min(_final_ - _from_, _length_ - _to_)으로 설정한다.
+          1. _from_ &lt; _to_이고 _to_ &lt; _from_ + _count_이면,
+            1. _direction_을 -1로 설정한다.
             1. _from_을 _from_ + _count_ - 1로 설정한다.
             1. _to_를 _to_ + _count_ - 1로 설정한다.
-          1. Else,
-            1. _direction_을 1로 둔다.
-          1. Repeat, while _count_ > 0,
-            1. _fromKey_를 ! ToString(𝔽(_from_))로 둔다.
-            1. _toKey_를 ! ToString(𝔽(_to_))로 둔다.
-            1. _fromPresent_를 ? HasProperty(_obj_, _fromKey_)로 둔다.
-            1. _fromPresent_가 *true*이면, 다음을 수행한다.
-              1. _fromValue_를 ? Get(_obj_, _fromKey_)로 둔다.
+          1. 그렇지 않으면,
+            1. _direction_을 1로 설정한다.
+          1. _count_ > 0인 동안 반복한다.
+            1. _fromKey_를 ! ToString(𝔽(_from_))으로 설정한다.
+            1. _toKey_를 ! ToString(𝔽(_to_))으로 설정한다.
+            1. _fromPresent_를 ? HasProperty(_obj_, _fromKey_)로 설정한다.
+            1. _fromPresent_가 *true*이면,
+              1. _fromValue_를 ? Get(_obj_, _fromKey_)으로 설정한다.
               1. ? Set(_obj_, _toKey_, _fromValue_, *true*)를 수행한다.
-            1. Else,
-              1. Assert: _fromPresent_는 *false*이다.
+            1. 그렇지 않으면,
+              1. 단언: _fromPresent_는 *false*이다.
               1. ? DeletePropertyOrThrow(_obj_, _toKey_)를 수행한다.
             1. _from_을 _from_ + _direction_으로 설정한다.
             1. _to_를 _to_ + _direction_으로 설정한다.
@@ -40885,18 +40896,12 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _k_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _k_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _k_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _final_을 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _final_을 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _final_을 min(_relativeEnd_, _length_)로 둔다.
-          1. Repeat, while _k_ &lt; _final_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
+          1. _k_를 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _end_가 *undefined*이면, _final_을 _length_로 설정한다. 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 설정한다.
+          1. _k_ &lt; _final_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))으로 설정한다.
             1. ? Set(_obj_, _propertyKey_, _value_, *true*)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. _obj_를 반환한다.
@@ -41156,20 +41161,12 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
           1. _length_ = 0이면, *false*를 반환한다.
-          1. _startIndex_를 ? ToIntegerOrInfinity(_fromIndex_)로 둔다.
-          1. Assert: _fromIndex_가 *undefined*이면, _startIndex_는 0이다.
-          1. _startIndex_ = +∞이면, *false*를 반환한다.
-          1. _startIndex_ = -∞이면, _startIndex_를 0으로 설정한다.
-          1. _startIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _startIndex_로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _startIndex_로 둔다.
-            1. _k_ &lt; 0이면, _k_를 0으로 설정한다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _elementK_를 ? Get(_obj_, ! ToString(𝔽(_k_)))로 둔다.
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 설정한다.
+          1. _k_ &lt; _length_인 동안 반복한다.
+            1. _elementK_를 ? Get(_obj_, ! ToString(𝔽(_k_)))으로 설정한다.
             1. SameValueZero(_searchElement_, _elementK_)가 *true*이면, *true*를 반환한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. *false*를 반환한다.
@@ -41190,24 +41187,16 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
           1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _startIndex_를 ? ToIntegerOrInfinity(_fromIndex_)로 둔다.
-          1. Assert: _fromIndex_가 *undefined*이면, _startIndex_는 0이다.
-          1. _startIndex_ = +∞이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _startIndex_ = -∞이면, _startIndex_를 0으로 설정한다.
-          1. _startIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _startIndex_로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _startIndex_로 둔다.
-            1. _k_ &lt; 0이면, _k_를 0으로 설정한다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kPresent_를 ? HasProperty(_obj_, _propertyKey_)로 둔다.
-            1. _kPresent_가 *true*이면, 다음을 수행한다.
-              1. _elementK_를 ? Get(_obj_, _propertyKey_)로 둔다.
-              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면, 𝔽(_k_)를 반환한다.
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 설정한다.
+          1. _k_ &lt; _length_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))으로 설정한다.
+            1. _kPresent_를 ? HasProperty(_obj_, _propertyKey_)로 설정한다.
+            1. _kPresent_가 *true*이면,
+              1. _elementK_를 ? Get(_obj_, _propertyKey_)로 설정한다.
+              1. IsStrictlyEqual(_searchElement_, _elementK_)이 *true*이면, 𝔽(_k_)를 반환한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. *-1*<sub>𝔽</sub>를 반환한다.
         </emu-alg>
@@ -41258,16 +41247,11 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 둔다.
           1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
           1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _fromIndex_가 present이면 _startIndex_를 ? ToIntegerOrInfinity(_fromIndex_)로 둔다; else _startIndex_를 _length_ - 1로 둔다.
-          1. _startIndex_ = -∞이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _startIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 min(_startIndex_, _length_ - 1)로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _startIndex_로 둔다.
-          1. Repeat, while _k_ ≥ 0,
+          1. _fromIndex_가 없으면 _k_를 _length_ - 1로 두고, 그렇지 않으면 _k_를 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)로 둔다.
+          1. _k_ ≥ 0인 동안, 반복한다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
             1. _kPresent_를 ? HasProperty(_obj_, _propertyKey_)로 둔다.
             1. _kPresent_가 *true*이면, 다음을 수행한다.
@@ -41520,24 +41504,18 @@ THH:mm:ss.sss
         <p>이 method는 element _start_부터 element _end_ 전까지(or _end_가 *undefined*이면 array의 end까지) array의 elements를 contain하는 array를 반환합니다. _start_가 negative이면, array의 length인 _length_에 대해 <emu-eqn>_length_ + _start_</emu-eqn>로 treated됩니다. _end_가 negative이면, array의 length인 _length_에 대해 <emu-eqn>_length_ + _end_</emu-eqn>로 treated됩니다.</p>
         <p>called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _k_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _k_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _k_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _final_을 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _final_을 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _final_을 min(_relativeEnd_, _length_)로 둔다.
-          1. _count_를 max(_final_ - _k_, 0)으로 둔다.
-          1. _array_를 ? ArraySpeciesCreate(_obj_, _count_)로 둔다.
-          1. _resultIndex_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _final_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kPresent_를 ? HasProperty(_obj_, _propertyKey_)로 둔다.
-            1. _kPresent_가 *true*이면, 다음을 수행한다.
-              1. _kValue_를 ? Get(_obj_, _propertyKey_)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
+          1. _k_를 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _end_가 *undefined*이면, _final_을 _length_로 설정한다. 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 설정한다.
+          1. _count_를 max(_final_ - _k_, 0)으로 설정한다.
+          1. _array_를 ? ArraySpeciesCreate(_obj_, _count_)로 설정한다.
+          1. _resultIndex_를 0으로 설정한다.
+          1. _k_ &lt; _final_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))으로 설정한다.
+            1. _kPresent_를 ? HasProperty(_obj_, _propertyKey_)로 설정한다.
+            1. _kPresent_가 *true*이면,
+              1. _kValue_를 ? Get(_obj_, _propertyKey_)로 설정한다.
               1. ? CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_resultIndex_)), _kValue_)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
             1. _resultIndex_를 _resultIndex_ + 1로 설정한다.
@@ -41721,58 +41699,56 @@ THH:mm:ss.sss
         </emu-note>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 둔다.
           1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _actualStart_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _actualStart_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _actualStart_를 min(_relativeStart_, _length_)로 둔다.
-          1. _itemCount_를 _items_ 안의 elements 수로 둔다.
-          1. _start_가 present하지 않으면, 다음을 수행한다.
+          1. _actualStart_를 ? ToClampedIndex(_start_, _length_)로 둔다.
+          1. _itemCount_를 _items_의 요소 개수로 둔다.
+          1. _start_가 없으면, 다음을 수행한다.
             1. _actualDeleteCount_를 0으로 둔다.
-          1. Else if _deleteCount_가 present하지 않으면, 다음을 수행한다.
+          1. 그렇지 않고 _deleteCount_가 없으면, 다음을 수행한다.
             1. _actualDeleteCount_를 _length_ - _actualStart_로 둔다.
-          1. Else,
+            1. 단언: _actualDeleteCount_ ≥ 0.
+          1. 그렇지 않으면, 다음을 수행한다.
             1. _dc_를 ? ToIntegerOrInfinity(_deleteCount_)로 둔다.
-            1. _actualDeleteCount_를 _dc_를 0과 _length_ - _actualStart_ 사이로 clamping한 result로 둔다.
-          1. _length_ + _itemCount_ - _actualDeleteCount_ > 2<sup>53</sup> - 1이면, *TypeError* exception을 throw한다.
+            1. _actualDeleteCount_를 _dc_를 0과 _length_ - _actualStart_ 사이로 클램핑한 결과로 둔다.
+          1. _length_ + _itemCount_ - _actualDeleteCount_ > 2<sup>53</sup> - 1이면, *TypeError* 예외를 던진다.
           1. _deletedArray_를 ? ArraySpeciesCreate(_obj_, _actualDeleteCount_)로 둔다.
           1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _actualDeleteCount_,
+          1. _k_ &lt; _actualDeleteCount_인 동안, 반복한다.
             1. _from_을 ! ToString(𝔽(_actualStart_ + _k_))로 둔다.
             1. ? HasProperty(_obj_, _from_)가 *true*이면, 다음을 수행한다.
-              1. _fromValue_를 ? Get(_obj_, _from_)로 둔다.
+              1. _fromValue_를 ? Get(_obj_, _from_)으로 둔다.
               1. ? CreateDataPropertyOrThrow(_deletedArray_, ! ToString(𝔽(_k_)), _fromValue_)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. [id="step-array-proto-splice-set-length"] ? Set(_deletedArray_, *"length"*, 𝔽(_actualDeleteCount_), *true*)를 수행한다.
           1. _itemCount_ &lt; _actualDeleteCount_이면, 다음을 수행한다.
             1. _k_를 _actualStart_로 설정한다.
-            1. Repeat, while _k_ &lt; (_length_ - _actualDeleteCount_),
+            1. _k_ &lt; (_length_ - _actualDeleteCount_)인 동안, 반복한다.
               1. _from_을 ! ToString(𝔽(_k_ + _actualDeleteCount_))로 둔다.
               1. _to_를 ! ToString(𝔽(_k_ + _itemCount_))로 둔다.
               1. ? HasProperty(_obj_, _from_)가 *true*이면, 다음을 수행한다.
-                1. _fromValue_를 ? Get(_obj_, _from_)로 둔다.
+                1. _fromValue_를 ? Get(_obj_, _from_)으로 둔다.
                 1. ? Set(_obj_, _to_, _fromValue_, *true*)를 수행한다.
-              1. Else,
+              1. 그렇지 않으면, 다음을 수행한다.
                 1. ? DeletePropertyOrThrow(_obj_, _to_)를 수행한다.
               1. _k_를 _k_ + 1로 설정한다.
             1. _k_를 _length_로 설정한다.
-            1. Repeat, while _k_ > (_length_ - _actualDeleteCount_ + _itemCount_),
+            1. _k_ > (_length_ - _actualDeleteCount_ + _itemCount_)인 동안, 반복한다.
               1. ? DeletePropertyOrThrow(_obj_, ! ToString(𝔽(_k_ - 1)))를 수행한다.
               1. _k_를 _k_ - 1로 설정한다.
-          1. Else if _itemCount_ > _actualDeleteCount_이면, 다음을 수행한다.
+          1. 그렇지 않고 _itemCount_ > _actualDeleteCount_이면, 다음을 수행한다.
             1. _k_를 (_length_ - _actualDeleteCount_)로 설정한다.
-            1. Repeat, while _k_ > _actualStart_,
+            1. _k_ > _actualStart_인 동안, 반복한다.
               1. _from_을 ! ToString(𝔽(_k_ + _actualDeleteCount_ - 1))로 둔다.
               1. _to_를 ! ToString(𝔽(_k_ + _itemCount_ - 1))로 둔다.
               1. ? HasProperty(_obj_, _from_)가 *true*이면, 다음을 수행한다.
-                1. _fromValue_를 ? Get(_obj_, _from_)로 둔다.
+                1. _fromValue_를 ? Get(_obj_, _from_)으로 둔다.
                 1. ? Set(_obj_, _to_, _fromValue_, *true*)를 수행한다.
-              1. Else,
+              1. 그렇지 않으면, 다음을 수행한다.
                 1. ? DeletePropertyOrThrow(_obj_, _to_)를 수행한다.
               1. _k_를 _k_ - 1로 설정한다.
           1. _k_를 _actualStart_로 설정한다.
-          1. _items_의 각 element _item_에 대해, 다음을 수행한다.
+          1. _items_의 각 요소 _item_에 대해, 다음을 수행한다.
             1. ? Set(_obj_, ! ToString(𝔽(_k_)), _item_, *true*)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. [id="step-array-proto-splice-set-length-2"] ? Set(_obj_, *"length"*, 𝔽(_length_ - _actualDeleteCount_ + _itemCount_), *true*)를 수행한다.
@@ -41858,38 +41834,36 @@ THH:mm:ss.sss
         <h1>Array.prototype.toSpliced ( _start_, _skipCount_, ..._items_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _actualStart_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _actualStart_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _actualStart_를 min(_relativeStart_, _length_)로 둔다.
-          1. _insertCount_를 _items_ 안의 elements 수로 둔다.
-          1. _start_가 present하지 않으면, 다음을 수행한다.
-            1. _actualSkipCount_를 0으로 둔다.
-          1. Else if _skipCount_가 present하지 않으면, 다음을 수행한다.
-            1. _actualSkipCount_를 _length_ - _actualStart_로 둔다.
-          1. Else,
-            1. _sc_를 ? ToIntegerOrInfinity(_skipCount_)로 둔다.
-            1. _actualSkipCount_를 _sc_를 0과 _length_ - _actualStart_ 사이로 clamping한 result로 둔다.
-          1. _newLength_를 _length_ + _insertCount_ - _actualSkipCount_로 둔다.
-          1. _newLength_ > 2<sup>53</sup> - 1이면, *TypeError* exception을 throw한다.
-          1. _newArray_를 ? ArrayCreate(_newLength_)로 둔다.
-          1. _writeIndex_를 0으로 둔다.
-          1. _readIndex_를 _actualStart_ + _actualSkipCount_로 둔다.
-          1. Repeat, while _writeIndex_ &lt; _actualStart_,
-            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))로 둔다.
-            1. _iValue_를 ? Get(_obj_, _propertyKey_)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정한다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정한다.
+          1. _actualStart_를 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _insertCount_를 _items_의 요소 수로 설정한다.
+          1. _maxSkipCount_를 _length_ - _actualStart_로 설정한다.
+          1. _start_가 존재하지 않으면,
+            1. _actualSkipCount_를 0으로 설정한다.
+          1. 그렇지 않고 _skipCount_가 존재하지 않으면,
+            1. _actualSkipCount_를 _maxSkipCount_로 설정한다.
+          1. 그렇지 않으면,
+            1. _actualSkipCount_를 ? ToIntegerOrInfinity(_skipCount_)의 결과를 0과 _maxSkipCount_ 사이로 제한한 값으로 설정한다.
+          1. _newLength_를 _length_ + _insertCount_ - _actualSkipCount_로 설정한다.
+          1. 단언: _newLength_ ≥ 0.
+          1. _newLength_ > 2<sup>53</sup> - 1이면, *TypeError* 예외를 던진다.
+          1. _newArray_를 ? ArrayCreate(_newLength_)로 설정한다.
+          1. _writeIndex_를 0으로 설정한다.
+          1. _readIndex_를 _actualStart_ + _actualSkipCount_로 설정한다.
+          1. _writeIndex_ &lt; _actualStart_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))으로 설정한다.
+            1. _iValue_를 ? Get(_obj_, _propertyKey_)로 설정한다.
             1. ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _iValue_)를 수행한다.
             1. _writeIndex_를 _writeIndex_ + 1로 설정한다.
-          1. _items_의 각 element _item_에 대해, 다음을 수행한다.
-            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))로 둔다.
+          1. _items_의 각 요소 _item_에 대해 다음을 수행한다.
+            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))으로 설정한다.
             1. ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _item_)를 수행한다.
             1. _writeIndex_를 _writeIndex_ + 1로 설정한다.
-          1. Repeat, while _writeIndex_ &lt; _newLength_,
-            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))로 둔다.
-            1. _from_을 ! ToString(𝔽(_readIndex_))로 둔다.
-            1. _fromValue_를 ? Get(_obj_, _from_)로 둔다.
+          1. _writeIndex_ &lt; _newLength_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_writeIndex_))으로 설정한다.
+            1. _from_을 ! ToString(𝔽(_readIndex_))으로 설정한다.
+            1. _fromValue_를 ? Get(_obj_, _from_)으로 설정한다.
             1. ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _fromValue_)를 수행한다.
             1. _writeIndex_를 _writeIndex_ + 1로 설정한다.
             1. _readIndex_를 _readIndex_ + 1로 설정한다.
@@ -41959,18 +41933,16 @@ THH:mm:ss.sss
         <h1>Array.prototype.with ( _index_, _value_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
+          1. _obj_를 ? ToObject(*this* 값)으로 둔다.
           1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _relativeIndex_를 ? ToIntegerOrInfinity(_index_)로 둔다.
-          1. _relativeIndex_ ≥ 0이면 _actualIndex_를 _relativeIndex_로 둔다.
-          1. Else, _actualIndex_를 _length_ + _relativeIndex_로 둔다.
-          1. _actualIndex_ ≥ _length_ 또는 _actualIndex_ &lt; 0이면, *RangeError* exception을 throw한다.
+          1. _actualIndex_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
+          1. _actualIndex_ &lt; 0 또는 _actualIndex_ ≥ _length_이면, *RangeError* 예외를 던진다.
           1. _array_를 ? ArrayCreate(_length_)로 둔다.
           1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
+          1. _k_ &lt; _length_인 동안, 반복한다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _k_ = _actualIndex_이면 _fromValue_를 _value_로 둔다.
-            1. Else, _fromValue_를 ? Get(_obj_, _propertyKey_)로 둔다.
+            1. _k_ = _actualIndex_이면, _fromValue_를 _value_로 둔다.
+            1. 그렇지 않으면, _fromValue_를 ? Get(_obj_, _propertyKey_)로 둔다.
             1. ! CreateDataPropertyOrThrow(_array_, _propertyKey_, _fromValue_)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. _array_를 반환한다.
@@ -42527,14 +42499,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-%typedarray%.prototype.at" type="built-in function">
         <h1>%TypedArray%.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _relativeIndex_를 ? ToIntegerOrInfinity(_index_)로 둔다.
-          1. _relativeIndex_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _relativeIndex_로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _relativeIndex_로 둔다.
+          1. _k_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
           1. _k_ &lt; 0 또는 _k_ ≥ _length_이면, *undefined*를 반환한다.
           1. ! Get(_obj_, ! ToString(𝔽(_k_)))를 반환한다.
         </emu-alg>
@@ -42590,29 +42558,20 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.copywithin"></emu-xref>에 defined된 `Array.prototype.copyWithin`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _relativeTarget_을 ? ToIntegerOrInfinity(_target_)로 둔다.
-          1. _relativeTarget_ = -∞이면, _targetIndex_를 0으로 둔다.
-          1. Else if _relativeTarget_ &lt; 0이면, _targetIndex_를 max(_length_ + _relativeTarget_, 0)으로 둔다.
-          1. Else, _targetIndex_를 min(_relativeTarget_, _length_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _startIndex_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _startIndex_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _startIndex_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _endIndex_를 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _endIndex_를 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _endIndex_를 min(_relativeEnd_, _length_)로 둔다.
+          1. _targetIndex_를 ? ToClampedIndex(_target_, _length_)로 둔다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 둔다.
+          1. _end_가 *undefined*이면 _endIndex_를 _length_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 둔다.
           1. _count_를 min(_endIndex_ - _startIndex_, _length_ - _targetIndex_)로 둔다.
           1. _count_ > 0이면, 다음을 수행한다.
-            1. NOTE: copying은 source data의 bit-level encoding을 preserve하는 manner로 performed되어야 한다.
+            1. 참고: 복사는 원본 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
             1. _buffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
             1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
             1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
-            1. NOTE: above steps의 side-effects가 _obj_의 size를 reduced했을 수 있으며, 이 경우 copying은 still-applicable longest prefix로 proceed해야 한다.
+            1. 참고: 위 단계들의 부작용으로 _obj_의 크기가 줄어들었을 수 있으며, 이 경우 복사는 여전히 적용 가능한 가장 긴 접두 구간으로 진행되어야 한다.
             1. _count_를 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)로 설정한다.
             1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
             1. _byteOffset_을 _obj_.[[ByteOffset]]으로 둔다.
@@ -42623,9 +42582,10 @@ THH:mm:ss.sss
               1. _direction_을 -1로 둔다.
               1. _fromByteIndex_를 _fromByteIndex_ + _countBytes_ - 1로 설정한다.
               1. _toByteIndex_를 _toByteIndex_ + _countBytes_ - 1로 설정한다.
-            1. Else,
+            1. 그렇지 않으면, 다음을 수행한다.
               1. _direction_을 1로 둔다.
-            1. Repeat, while _countBytes_ > 0,
+            1. _countBytes_ > 0인 동안, 반복한다.
+              1. 단언: _fromByteIndex_ ≥ 0이고 _toByteIndex_ ≥ 0이다.
               1. _value_를 GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
               1. SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
               1. _fromByteIndex_를 _fromByteIndex_ + _direction_으로 설정한다.
@@ -42671,26 +42631,20 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.fill"></emu-xref>에 defined된 `Array.prototype.fill`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _obj_를 *this* 값으로 설정한다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 설정한다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
           1. _obj_.[[ContentType]]이 ~bigint~이면, _value_를 ? ToBigInt(_value_)로 설정한다.
-          1. Else, _value_를 ? ToNumber(_value_)로 설정한다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _startIndex_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _startIndex_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _startIndex_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _endIndex_를 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _endIndex_를 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _endIndex_를 min(_relativeEnd_, _length_)로 둔다.
+          1. 그렇지 않으면, _value_를 ? ToNumber(_value_)로 설정한다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 설정한다.
+          1. _end_가 *undefined*이면, _endIndex_를 _length_로 설정한다. 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 설정한다.
           1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
           1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
           1. _endIndex_를 min(_endIndex_, _length_)로 설정한다.
-          1. _k_를 _startIndex_로 둔다.
-          1. Repeat, while _k_ &lt; _endIndex_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
+          1. _k_를 _startIndex_로 설정한다.
+          1. _k_ &lt; _endIndex_인 동안 반복한다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))으로 설정한다.
             1. ! Set(_obj_, _propertyKey_, _value_, *true*)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. _obj_를 반환한다.
@@ -42808,21 +42762,13 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.includes"></emu-xref>에 defined된 `Array.prototype.includes`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
+          1. _obj_를 *this* 값으로 설정한다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 설정한다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
           1. _length_ = 0이면, *false*를 반환한다.
-          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 둔다.
-          1. Assert: _fromIndex_가 *undefined*이면, _n_은 0이다.
-          1. _n_ = +∞이면, *false*를 반환한다.
-          1. _n_ = -∞이면, _n_을 0으로 설정한다.
-          1. _n_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _n_으로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _n_으로 둔다.
-            1. _k_ &lt; 0이면, _k_를 0으로 설정한다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _elementK_를 ! Get(_obj_, ! ToString(𝔽(_k_)))로 둔다.
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 설정한다.
+          1. _k_ &lt; _length_인 동안 반복한다.
+            1. _elementK_를 ! Get(_obj_, ! ToString(𝔽(_k_)))으로 설정한다.
             1. SameValueZero(_searchElement_, _elementK_)가 *true*이면, *true*를 반환한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. *false*를 반환한다.
@@ -42835,20 +42781,12 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.indexof"></emu-xref>에 defined된 `Array.prototype.indexOf`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 둔다.
-          1. Assert: _fromIndex_가 *undefined*이면, _n_은 0이다.
-          1. _n_ = +∞이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _n_ = -∞이면, _n_을 0으로 설정한다.
-          1. _n_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 _n_으로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _n_으로 둔다.
-            1. _k_ &lt; 0이면, _k_를 0으로 설정한다.
-          1. Repeat, while _k_ &lt; _length_,
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 둔다.
+          1. _k_ &lt; _length_인 동안, 반복한다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
             1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둔다.
             1. _kPresent_가 *true*이면, 다음을 수행한다.
@@ -42899,17 +42837,12 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.lastindexof"></emu-xref>에 defined된 `Array.prototype.lastIndexOf`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
           1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _fromIndex_가 present이면 _n_을 ? ToIntegerOrInfinity(_fromIndex_)로 둔다; else _n_을 _length_ - 1로 둔다.
-          1. _n_ = -∞이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _n_ ≥ 0이면, 다음을 수행한다.
-            1. _k_를 min(_n_, _length_ - 1)로 둔다.
-          1. Else,
-            1. _k_를 _length_ + _n_으로 둔다.
-          1. Repeat, while _k_ ≥ 0,
+          1. _fromIndex_가 없으면 _k_를 _length_ - 1로 두고, 그렇지 않으면 _k_를 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)로 둔다.
+          1. _k_ ≥ 0인 동안, 반복한다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
             1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둔다.
             1. _kPresent_가 *true*이면, 다음을 수행한다.
@@ -43149,28 +43082,22 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.slice"></emu-xref>에 defined된 `Array.prototype.slice`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _sourceArrayLength_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _startIndex_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _startIndex_를 max(_sourceArrayLength_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _startIndex_를 min(_relativeStart_, _sourceArrayLength_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _sourceArrayLength_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _endIndex_를 0으로 둔다.
-          1. Else if _relativeEnd_ &lt; 0이면, _endIndex_를 max(_sourceArrayLength_ + _relativeEnd_, 0)으로 둔다.
-          1. Else, _endIndex_를 min(_relativeEnd_, _sourceArrayLength_)로 둔다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _sourceArrayLength_)로 둔다.
+          1. _end_가 *undefined*이면 _endIndex_를 _sourceArrayLength_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _sourceArrayLength_)로 둔다.
           1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 둔다.
           1. _resultArray_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)로 둔다.
           1. _countBytes_ > 0이면, 다음을 수행한다.
             1. _taRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 설정한다.
-            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* exception을 throw한다.
+            1. IsTypedArrayOutOfBounds(_taRecord_)가 *true*이면, *TypeError* 예외를 던진다.
             1. _endIndex_를 min(_endIndex_, TypedArrayLength(_taRecord_))로 설정한다.
             1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 설정한다.
-            1. _sourceType_을 TypedArrayElementType(_obj_)로 둔다.
-            1. _targetType_을 TypedArrayElementType(_resultArray_)로 둔다.
-            1. _sourceType_이 _targetType_이면, 다음을 수행한다.
-              1. NOTE: transfer는 source data의 bit-level encoding을 preserve하는 manner로 performed되어야 한다.
+            1. _sourceType_를 TypedArrayElementType(_obj_)로 둔다.
+            1. _targetType_를 TypedArrayElementType(_resultArray_)로 둔다.
+            1. _sourceType_가 _targetType_와 같으면, 다음을 수행한다.
+              1. 참고: 전송은 원본 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
               1. _sourceBuffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
               1. _targetBuffer_를 _resultArray_.[[ViewedArrayBuffer]]로 둔다.
               1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
@@ -43178,15 +43105,15 @@ THH:mm:ss.sss
               1. _sourceByteIndex_를 (_startIndex_ × _elementSize_) + _sourceByteOffset_으로 둔다.
               1. _targetByteIndex_를 _resultArray_.[[ByteOffset]]으로 둔다.
               1. _endByteIndex_를 _targetByteIndex_ + (_countBytes_ × _elementSize_)로 둔다.
-              1. Repeat, while _targetByteIndex_ &lt; _endByteIndex_,
+              1. _targetByteIndex_ &lt; _endByteIndex_인 동안, 반복한다.
                 1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
                 1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
                 1. _sourceByteIndex_를 _sourceByteIndex_ + 1로 설정한다.
                 1. _targetByteIndex_를 _targetByteIndex_ + 1로 설정한다.
-            1. Else,
+            1. 그렇지 않으면, 다음을 수행한다.
               1. _n_을 0으로 둔다.
               1. _k_를 _startIndex_로 둔다.
-              1. Repeat, while _k_ &lt; _endIndex_,
+              1. _k_ &lt; _endIndex_인 동안, 반복한다.
                 1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
                 1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
                 1. ! Set(_resultArray_, ! ToString(𝔽(_n_)), _kValue_, *true*)를 수행한다.
@@ -43248,32 +43175,24 @@ THH:mm:ss.sss
         <p>이 method는 element type이 this _TypedArray_의 element type이고 ArrayBuffer가 this _TypedArray_의 ArrayBuffer인 new _TypedArray_를 반환하며, _start_(inclusive)부터 _end_(exclusive)까지의 interval 안의 elements를 referencing합니다. _start_ 또는 _end_ 중 어느 하나가 negative이면, beginning에서가 아니라 array의 end로부터의 index를 refer합니다.</p>
         <p>called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. ? RequireInternalSlot(_obj_, [[TypedArrayName]])를 수행한다.
-          1. Assert: _obj_는 [[ViewedArrayBuffer]] internal slot을 가진다.
+          1. 단언: _obj_는 [[ViewedArrayBuffer]] 내부 슬롯을 가진다.
           1. _buffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
           1. _sourceRecord_를 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)로 둔다.
           1. IsTypedArrayOutOfBounds(_sourceRecord_)가 *true*이면, 다음을 수행한다.
             1. _sourceLength_를 0으로 둔다.
-          1. Else,
+          1. 그렇지 않으면, 다음을 수행한다.
             1. _sourceLength_를 TypedArrayLength(_sourceRecord_)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _startIndex_를 0으로 둔다.
-          1. Else if _relativeStart_ &lt; 0이면, _startIndex_를 max(_sourceLength_ + _relativeStart_, 0)으로 둔다.
-          1. Else, _startIndex_를 min(_relativeStart_, _sourceLength_)로 둔다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _sourceLength_)로 둔다.
           1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
           1. _sourceByteOffset_을 _obj_.[[ByteOffset]]으로 둔다.
           1. _beginByteOffset_을 _sourceByteOffset_ + (_startIndex_ × _elementSize_)로 둔다.
           1. _obj_.[[ArrayLength]]가 ~auto~이고 _end_가 *undefined*이면, 다음을 수행한다.
-            1. _argList_를 « _buffer_, 𝔽(_beginByteOffset_) »로 둔다.
-          1. Else,
-            1. _end_가 *undefined*이면 _relativeEnd_를 _sourceLength_로 둔다; else _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-            1. _relativeEnd_ = -∞이면, _endIndex_를 0으로 둔다.
-            1. Else if _relativeEnd_ &lt; 0이면, _endIndex_를 max(_sourceLength_ + _relativeEnd_, 0)으로 둔다.
-            1. Else, _endIndex_를 min(_relativeEnd_, _sourceLength_)로 둔다.
-            1. _newLength_를 max(_endIndex_ - _startIndex_, 0)으로 둔다.
-            1. _argList_를 « _buffer_, 𝔽(_beginByteOffset_), 𝔽(_newLength_) »로 둔다.
-          1. ? TypedArraySpeciesCreate(_obj_, _argList_)를 반환한다.
+            1. ? TypedArraySpeciesCreate(_obj_, « _buffer_, 𝔽(_beginByteOffset_) »)를 반환한다.
+          1. _end_가 *undefined*이면 _endIndex_를 _sourceLength_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _sourceLength_)로 둔다.
+          1. _newLength_를 max(_endIndex_ - _startIndex_, 0)으로 둔다.
+          1. ? TypedArraySpeciesCreate(_obj_, « _buffer_, 𝔽(_beginByteOffset_), 𝔽(_newLength_) »)를 반환한다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -43346,21 +43265,19 @@ THH:mm:ss.sss
         <h1>%TypedArray%.prototype.with ( _index_, _value_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _relativeIndex_를 ? ToIntegerOrInfinity(_index_)로 둔다.
-          1. _relativeIndex_ ≥ 0이면 _actualIndex_를 _relativeIndex_로 둔다.
-          1. Else, _actualIndex_를 _length_ + _relativeIndex_로 둔다.
-          1. _obj_.[[ContentType]]이 ~bigint~이면, _numericValue_를 ? ToBigInt(_value_)로 둔다.
-          1. Else, _numericValue_를 ? ToNumber(_value_)로 둔다.
-          1. IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_))가 *false*이면, *RangeError* exception을 throw한다.
+          1. _actualIndex_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
+          1. _obj_.[[ContentType]]가 ~bigint~이면 _numericValue_를 ? ToBigInt(_value_)로 두고,
+          1. 그렇지 않으면 _numericValue_를 ? ToNumber(_value_)로 둔다.
+          1. IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_))가 *false*이면, *RangeError* 예외를 던진다.
           1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둔다.
           1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
+          1. _k_ &lt; _length_인 동안, 반복한다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _k_ = _actualIndex_이면 _fromValue_를 _numericValue_로 둔다.
-            1. Else, _fromValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
+            1. _k_ = _actualIndex_이면, _fromValue_를 _numericValue_로 둔다.
+            1. 그렇지 않으면, _fromValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
             1. ! Set(_resultArray_, _propertyKey_, _fromValue_, *true*)를 수행한다.
             1. _k_를 _k_ + 1로 설정한다.
           1. _resultArray_를 반환한다.
@@ -46189,34 +46106,29 @@ THH:mm:ss.sss
         <h1>ArrayBuffer.prototype.slice ( _start_, _end_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_obj_)가 *true*이면, *TypeError* exception을 throw한다.
-          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. IsSharedArrayBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
           1. _length_를 _obj_.[[ArrayBufferByteLength]]로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _first_를 0으로 둔다.
-          1. 그렇지 않고 _relativeStart_ &lt; 0이면, _first_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. 그렇지 않으면, _first_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; 그렇지 않으면 _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _final_을 0으로 둔다.
-          1. 그렇지 않고 _relativeEnd_ &lt; 0이면, _final_을 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. 그렇지 않으면, _final_을 min(_relativeEnd_, _length_)로 둔다.
+          1. _first_를 ? ToClampedIndex(_start_, _length_)로 둔다.
+          1. _end_가 *undefined*이면 _final_을 _length_로 두고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 둔다.
           1. _newLength_를 max(_final_ - _first_, 0)으로 둔다.
           1. _ctor_를 ? SpeciesConstructor(_obj_, %ArrayBuffer%)로 둔다.
           1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 둔다.
           1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_new_)가 *true*이면, *TypeError* exception을 throw한다.
-          1. IsDetachedBuffer(_new_)가 *true*이면, *TypeError* exception을 throw한다.
-          1. SameValue(_new_, _obj_)가 *true*이면, *TypeError* exception을 throw한다.
-          1. _new_.[[ArrayBufferByteLength]] &lt; _newLength_이면, *TypeError* exception을 throw한다.
-          1. NOTE: above steps의 side-effects가 _obj_를 detached 또는 resized했을 수 있다.
-          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* exception을 throw한다.
+          1. IsSharedArrayBuffer(_new_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. IsDetachedBuffer(_new_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. SameValue(_new_, _obj_)가 *true*이면, *TypeError* 예외를 던진다.
+          1. _new_.[[ArrayBufferByteLength]] &lt; _newLength_이면, *TypeError* 예외를 던진다.
+          1. 참고: 위 단계들의 부작용으로 _obj_가 분리(detach)되거나 크기 조정되었을 수 있다.
+          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
           1. _fromBuf_를 _obj_.[[ArrayBufferData]]로 둔다.
           1. _toBuf_를 _new_.[[ArrayBufferData]]로 둔다.
           1. _currentLength_를 _obj_.[[ArrayBufferByteLength]]로 둔다.
-          1. _first_ &lt; _currentLength_이면, 다음을 수행한다.
-            1. _count_를 min(_newLength_, _currentLength_ - _first_)로 둔다.
+          1. _maxCount_를 _currentLength_ - _first_로 둔다.
+          1. _maxCount_ > 0이면, 다음을 수행한다.
+            1. _count_를 min(_newLength_, _maxCount_)로 둔다.
             1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _count_)를 수행한다.
           1. _new_를 반환한다.
         </emu-alg>
@@ -46523,25 +46435,19 @@ THH:mm:ss.sss
         <h1>SharedArrayBuffer.prototype.slice ( _start_, _end_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_obj_)가 *false*이면, *TypeError* exception을 throw한다.
+          1. IsSharedArrayBuffer(_obj_)가 *false*이면, *TypeError* 예외를 던진다.
           1. _length_를 ArrayBufferByteLength(_obj_, ~seq-cst~)로 둔다.
-          1. _relativeStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _relativeStart_ = -∞이면, _first_를 0으로 둔다.
-          1. 그렇지 않고 _relativeStart_ &lt; 0이면, _first_를 max(_length_ + _relativeStart_, 0)으로 둔다.
-          1. 그렇지 않으면, _first_를 min(_relativeStart_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _relativeEnd_를 _length_로 둔다; 그렇지 않으면 _relativeEnd_를 ? ToIntegerOrInfinity(_end_)로 둔다.
-          1. _relativeEnd_ = -∞이면, _final_을 0으로 둔다.
-          1. 그렇지 않고 _relativeEnd_ &lt; 0이면, _final_을 max(_length_ + _relativeEnd_, 0)으로 둔다.
-          1. 그렇지 않으면, _final_을 min(_relativeEnd_, _length_)로 둔다.
+          1. _first_를 ? ToClampedIndex(_start_, _length_)로 둔다.
+          1. _end_가 *undefined*이면 _final_을 _length_로 두고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 둔다.
           1. _newLength_를 max(_final_ - _first_, 0)으로 둔다.
           1. _ctor_를 ? SpeciesConstructor(_obj_, %SharedArrayBuffer%)로 둔다.
           1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 둔다.
           1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_new_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _new_.[[ArrayBufferData]]가 _obj_.[[ArrayBufferData]]이면, *TypeError* exception을 throw한다.
-          1. ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_이면, *TypeError* exception을 throw한다.
+          1. IsSharedArrayBuffer(_new_)가 *false*이면, *TypeError* 예외를 던진다.
+          1. _new_.[[ArrayBufferData]]가 _obj_.[[ArrayBufferData]]와 같으면, *TypeError* 예외를 던진다.
+          1. ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_이면, *TypeError* 예외를 던진다.
           1. _fromBuf_를 _obj_.[[ArrayBufferData]]로 둔다.
           1. _toBuf_를 _new_.[[ArrayBufferData]]로 둔다.
           1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _newLength_)를 수행한다.
@@ -54506,18 +54412,14 @@ THH:mm:ss.sss
         <p>이 method는 *this* value를 String으로 converting한 결과의 <emu-not-ref>substring</emu-not-ref>을 반환하며, index _start_에서 시작하여 _length_ code units만큼 이어집니다(_length_가 *undefined*이면 String의 end까지). _start_가 negative이면, _sourceLength_가 String의 length일 때 <emu-eqn>_sourceLength_ + _start_</emu-eqn>로 treated됩니다. 결과는 String object가 아니라 String value입니다.</p>
         <p>called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
+          1. _obj_를 *this* 값으로 둔다.
           1. ? RequireObjectCoercible(_obj_)를 수행한다.
           1. _string_을 ? ToString(_obj_)로 둔다.
-          1. _size_를 _string_의 length로 둔다.
-          1. _intStart_를 ? ToIntegerOrInfinity(_start_)로 둔다.
-          1. _intStart_ = -∞이면, _intStart_를 0으로 설정한다.
-          1. Else if _intStart_ &lt; 0이면, _intStart_를 max(_size_ + _intStart_, 0)으로 설정한다.
-          1. Else, _intStart_를 min(_intStart_, _size_)로 설정한다.
-          1. _length_가 *undefined*이면 _intLength_를 _size_로 둔다; 그렇지 않으면 _intLength_를 ? ToIntegerOrInfinity(_length_)로 둔다.
-          1. _intLength_를 0과 _size_ 사이로 clamping한 result로 설정한다.
+          1. _size_를 _string_의 길이로 둔다.
+          1. _intStart_를 ? ToClampedIndex(_start_, _size_)로 둔다.
+          1. _length_가 *undefined*이면 _intLength_를 _size_로 두고, 그렇지 않으면 _intLength_를 ? ToIntegerOrInfinity(_length_)를 0과 _size_ 사이로 클램핑한 결과로 둔다.
           1. _intEnd_를 min(_intStart_ + _intLength_, _size_)로 둔다.
-          1. _string_의 substring from _intStart_ to _intEnd_를 반환한다.
+          1. _string_의 _intStart_부터 _intEnd_까지의 부분 문자열을 반환한다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic합니다; *this* value가 String object일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 다른 kinds of objects로 transferred될 수 있습니다.</p>

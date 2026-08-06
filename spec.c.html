@@ -5726,8 +5726,8 @@
       </dl>
       <emu-alg>
         1. 令 _length_ 为 ? ToIntegerOrInfinity(_arg_)。
-        1. 如果 _length_ ≤ 0，则返回 *+0*<sub>𝔽</sub>。
-        1. 返回 𝔽(min(_length_, 2<sup>53</sup> - 1))。
+        1. 令 _clampedLen_ 为将 _length_ 限制在 0 和 2<sup>53</sup> - 1 之间的结果。
+        1. 返回 𝔽(_clampedLen_)。
       </emu-alg>
     </emu-clause>
 
@@ -5764,6 +5764,42 @@
         1. 令 _int_ 为 ? ToIntegerOrInfinity(_arg_)。
         1. 如果 _int_ 不在从 0 到 2<sup>53</sup> - 1 的闭区间内，则抛出 *RangeError* 异常。
         1. 返回 _int_。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-toabsoluteindex" type="abstract operation">
+      <h1>
+        ToAbsoluteIndex (
+          _value_: 一个 ECMAScript 语言值，
+          _length_: 一个非负整数，
+        ): 要么是一个正常完成，包含一个整数、+&infin; 或 -&infin;，要么是一个抛出完成
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>它将 _value_ 转换为一个整数、+∞ 或 -∞，并将负值解释为相对于 _length_ 的偏移。</dd>
+      </dl>
+      <emu-alg>
+        1. 令 _int_ 为 ? ToIntegerOrInfinity(_value_)。
+        1. 若 _int_ 为有限值且 _int_ &lt; 0，将 _int_ 设为 _length_ + _int_。
+        1. 返回 _int_。
+      </emu-alg>
+    </emu-clause>
+    
+
+    <emu-clause id="sec-toclampedindex" type="abstract operation">
+      <h1>
+        ToClampedIndex (
+          _value_: 一个 ECMAScript 语言值，
+          _length_: 一个非负整数，
+        ): 要么是一个正常完成，包含一个非负整数，要么是一个抛出完成
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>它将 _value_ 转换为一个整数（将负值解释为相对于 _length_ 的偏移），并将结果钳制到从 0 到 _length_ 的闭区间内。</dd>
+      </dl>
+      <emu-alg>
+        1. 令 _index_ 为 ? ToAbsoluteIndex(_value_, _length_)。
+        1. 返回将 _index_ 在 0 和 _length_ 之间钳制后的结果。
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -17020,7 +17056,7 @@
         </tr>
       </table>
     </emu-table>
-    <p>只有 <emu-xref href="#table-line-terminator-code-points"></emu-xref> 中的 Unicode 码点会被当作行终止符处理。其他换行或断行 Unicode 码点不会被当作行终止符处理，但如果它们满足 <emu-xref href="#table-white-space-code-points"></emu-xref> 中列出的要求，则会被当作空白处理。序列 &lt;CR>&lt;LF> 通常用作行终止符。为报告行号之目的，应将其视为单个 |SourceCharacter|。</p>
+    <p>仅 <emu-xref href="#table-line-terminator-code-points"></emu-xref> 中的 Unicode 码点被视为行终止符。其他用于换行或断行的 Unicode 码点不被视为行终止符，但如果它们满足 <emu-xref href="#table-white-space-code-points"></emu-xref> 中列出的要求，则被视为空白字符。</p>
     <h2>语法</h2>
     <emu-grammar type="definition">
       LineTerminator ::
@@ -17036,6 +17072,9 @@
         &lt;PS&gt;
         &lt;CR&gt; &lt;LF&gt;
     </emu-grammar>
+    <emu-note>
+      <p>产生式 <emu-grammar>LineTerminatorSequence :: &lt;CR&gt; &lt;LF&gt;</emu-grammar> 匹配一个码点序列，该序列应作为单个行终止符共同起作用，例如在诊断信息中报告行号时。</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-comments">
@@ -31877,26 +31916,25 @@
         <h1>Function.prototype.bind ( _thisArg_, ..._args_ )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _target_ 为 *this* value。
-          1. 如果 IsCallable(_target_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 令 _target_ 为 *this* 值。
+          1. 如果 IsCallable(_target_) 为 *false*，则抛出 *TypeError* 异常。
           1. 令 _boundFunc_ 为 ? BoundFunctionCreate(_target_, _thisArg_, _args_)。
           1. 令 _length_ 为 0。
           1. 令 _targetHasLength_ 为 ? HasOwnProperty(_target_, *"length"*)。
-          1. 如果 _targetHasLength_ 是 *true*，则
+          1. 如果 _targetHasLength_ 为 *true*，那么
             1. 令 _targetLength_ 为 ? Get(_target_, *"length"*)。
-            1. 如果 _targetLength_ 是 Number，则
-              1. 如果 _targetLength_ 是 *+∞*<sub>𝔽</sub>，则
-                1. 将 _length_ 设置为 +∞。
-              1. 否则，如果 _targetLength_ 是 *-∞*<sub>𝔽</sub>，则
-                1. 将 _length_ 设置为 0。
+            1. 如果 _targetLength_ 是 Number，那么
+              1. 令 _targetLengthAsInt_ 为 ! ToIntegerOrInfinity(_targetLength_)。
+              1. 如果 _targetLengthAsInt_ = +∞，那么
+                1. 将 _length_ 设为 +∞。
+              1. 否则，如果 _targetLengthAsInt_ = -∞，那么
+                1. 将 _length_ 设为 0。
               1. 否则，
-                1. 令 _targetLengthAsInt_ 为 ! ToIntegerOrInfinity(_targetLength_)。
-                1. 断言：_targetLengthAsInt_ 是有限的。
                 1. 令 _argCount_ 为 _args_ 中元素的数量。
-                1. 将 _length_ 设置为 max(_targetLengthAsInt_ - _argCount_, 0)。
+                1. 将 _length_ 设为 max(_targetLengthAsInt_ - _argCount_, 0)。
           1. 执行 SetFunctionLength(_boundFunc_, _length_)。
           1. 令 _targetName_ 为 ? Get(_target_, *"name"*)。
-          1. 如果 _targetName_ 不是 String，则将 _targetName_ 设置为空 String。
+          1. 如果 _targetName_ 不是 String，则将 _targetName_ 设为空 String。
           1. 执行 SetFunctionName(_boundFunc_, _targetName_, *"bound"*)。
           1. 返回 _boundFunc_。
         </emu-alg>
@@ -36177,16 +36215,12 @@ THH:mm:ss.sss
       <emu-clause id="sec-string.prototype.at" type="built-in function">
         <h1>String.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 令 _relativeIndex_ 为 ? ToIntegerOrInfinity(_index_)。
-          1. 如果 _relativeIndex_ ≥ 0，则
-            1. 令 _k_ 为 _relativeIndex_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _relativeIndex_。
-          1. 如果 _k_ &lt; 0 或 _k_ ≥ _length_，则返回 *undefined*。
+          1. 令 _k_ 为 ? ToAbsoluteIndex(_index_, _length_)。
+          1. 若 _k_ &lt; 0 或 _k_ ≥ _length_，返回 *undefined*。
           1. 返回 _string_ 从 _k_ 到 _k_ + 1 的子字符串。
         </emu-alg>
       </emu-clause>
@@ -36284,21 +36318,20 @@ THH:mm:ss.sss
         <h1>String.prototype.endsWith ( _searchString_ [ , _endPosition_ ] )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _isRegexp_ 为 ? IsRegExp(_searchString_)。
-          1. 如果 _isRegexp_ 是 *true*，则抛出 *TypeError* 异常。
-          1. 将 _searchString_ 设置为 ? ToString(_searchString_)。
+          1. 如果 _isRegexp_ 为 *true*，则抛出 *TypeError* 异常。
+          1. 将 _searchString_ 设为 ? ToString(_searchString_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 如果 _endPosition_ 是 *undefined*，则令 _position_ 为 _length_；否则令 _position_ 为 ? ToIntegerOrInfinity(_endPosition_)。
-          1. 令 _end_ 为将 _position_ 夹在 0 与 _length_ 之间的结果。
+          1. 如果 _endPosition_ 为 *undefined*，则令 _end_ 为 _length_；否则，令 _end_ 为将 ? ToIntegerOrInfinity(_endPosition_) 限制在 0 和 _length_ 之间的结果。
           1. 令 _searchLength_ 为 _searchString_ 的长度。
           1. 如果 _searchLength_ = 0，则返回 *true*。
           1. 令 _start_ 为 _end_ - _searchLength_。
           1. 如果 _start_ &lt; 0，则返回 *false*。
-          1. 令 _substring_ 为 _string_ 从 _start_ 到 _end_ 的子字符串。
-          1. 如果 _substring_ 是 _searchString_，则返回 *true*。
+          1. 令 _substring_ 为 _string_ 中从 _start_ 到 _end_ 的子字符串。
+          1. 如果 _substring_ 为 _searchString_，则返回 *true*。
           1. 返回 *false*。
         </emu-alg>
         <emu-note>
@@ -36313,18 +36346,17 @@ THH:mm:ss.sss
         <h1>String.prototype.includes ( _searchString_ [ , _position_ ] )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _isRegexp_ 为 ? IsRegExp(_searchString_)。
-          1. 如果 _isRegexp_ 是 *true*，则抛出 *TypeError* 异常。
-          1. 将 _searchString_ 设置为 ? ToString(_searchString_)。
-          1. 令 _positionInt_ 为 ? ToIntegerOrInfinity(_position_)。
-          1. 断言：如果 _position_ 是 *undefined*，则 _positionInt_ 是 0。
+          1. 如果 _isRegexp_ 为 *true*，则抛出 *TypeError* 异常。
+          1. 将 _searchString_ 设为 ? ToString(_searchString_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 令 _start_ 为将 _positionInt_ 夹在 0 与 _length_ 之间的结果。
+          1. 令 _start_ 为将 ? ToIntegerOrInfinity(_position_) 限制在 0 和 _length_ 之间的结果。
+          1. 断言：如果 _position_ 为 *undefined*，那么 _start_ 为 0。
           1. 令 _index_ 为 StringIndexOf(_string_, _searchString_, _start_)。
-          1. 如果 _index_ 是 ~not-found~，则返回 *false*。
+          1. 如果 _index_ 为 ~not-found~，则返回 *false*。
           1. 返回 *true*。
         </emu-alg>
         <emu-note>
@@ -36345,16 +36377,15 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
-          1. 将 _searchString_ 设置为 ? ToString(_searchString_)。
-          1. 令 _positionInt_ 为 ? ToIntegerOrInfinity(_position_)。
-          1. 断言：如果 _position_ 是 *undefined*，则 _positionInt_ 是 0。
+          1. 将 _searchString_ 设为 ? ToString(_searchString_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 令 _start_ 为将 _positionInt_ 夹在 0 与 _length_ 之间的结果。
+          1. 令 _start_ 为将 ? ToIntegerOrInfinity(_position_) 限制在 0 和 _length_ 之间的结果。
+          1. 断言：如果 _position_ 为 *undefined*，那么 _start_ 为 0。
           1. 令 _result_ 为 StringIndexOf(_string_, _searchString_, _start_)。
-          1. 如果 _result_ 是 ~not-found~，则返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _result_ 为 ~not-found~，则返回 *-1*<sub>𝔽</sub>。
           1. 返回 𝔽(_result_)。
         </emu-alg>
         <emu-note>
@@ -36380,19 +36411,19 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
-          1. 将 _searchString_ 设置为 ? ToString(_searchString_)。
+          1. 将 _searchString_ 设为 ? ToString(_searchString_)。
           1. 令 _numberPosition_ 为 ? ToNumber(_position_)。
-          1. 断言：如果 _position_ 是 *undefined*，则 _numberPosition_ 是 *NaN*。
-          1. 如果 _numberPosition_ 是 *NaN*，则将 _position_ 设置为 +∞；否则将 _position_ 设置为 ! ToIntegerOrInfinity(_numberPosition_)。
           1. 令 _length_ 为 _string_ 的长度。
           1. 令 _searchLength_ 为 _searchString_ 的长度。
-          1. 如果 _length_ &lt; _searchLength_，则返回 *-1*<sub>𝔽</sub>。
-          1. 令 _start_ 为将 _position_ 夹在 0 与 _length_ - _searchLength_ 之间的结果。
+          1. 令 _maxStart_ 为 _length_ - _searchLength_。
+          1. 如果 _maxStart_ &lt; 0，则返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _numberPosition_ 为 *NaN*，则令 _start_ 为 _maxStart_；否则，令 _start_ 为将 ! ToIntegerOrInfinity(_numberPosition_) 限制在 0 和 _maxStart_ 之间的结果。
+          1. 断言：如果 _position_ 为 *undefined*，那么 _start_ 为 _maxStart_。
           1. 令 _result_ 为 StringLastIndexOf(_string_, _searchString_, _start_)。
-          1. 如果 _result_ 是 ~not-found~，则返回 *-1*<sub>𝔽</sub>。
+          1. 如果 _result_ 为 ~not-found~，则返回 *-1*<sub>𝔽</sub>。
           1. 返回 𝔽(_result_)。
         </emu-alg>
         <emu-note>
@@ -36797,20 +36828,14 @@ THH:mm:ss.sss
         <p>此方法返回将此对象转换为 String 后所得结果的一个<emu-not-ref>子字符串</emu-not-ref>，从索引 _start_ 开始，并持续到但不包括索引 _end_（如果 _end_ 是 *undefined*，则持续到 String 末尾）。如果 _start_ 为负，则将其视为 <emu-eqn>_sourceLength_ + _start_</emu-eqn>，其中 _sourceLength_ 是 String 的长度。如果 _end_ 为负，则将其视为 <emu-eqn>_sourceLength_ + _end_</emu-eqn>，其中 _sourceLength_ 是 String 的长度。结果是 String 值，而不是 String 对象。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 令 _intStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _intStart_ = -∞，则令 _from_ 为 0。
-          1. 否则，如果 _intStart_ &lt; 0，则令 _from_ 为 max(_length_ + _intStart_, 0)。
-          1. 否则，令 _from_ 为 min(_intStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _intEnd_ 为 _length_；否则令 _intEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _intEnd_ = -∞，则令 _to_ 为 0。
-          1. 否则，如果 _intEnd_ &lt; 0，则令 _to_ 为 max(_length_ + _intEnd_, 0)。
-          1. 否则，令 _to_ 为 min(_intEnd_, _length_)。
+          1. 令 _from_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 如果 _end_ 为 *undefined*，则令 _to_ 为 _length_；否则，令 _to_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 如果 _from_ ≥ _to_，则返回空 String。
-          1. 返回 _string_ 从 _from_ 到 _to_ 的子字符串。
+          1. 返回 _string_ 中从 _from_ 到 _to_ 的子字符串。
         </emu-alg>
         <emu-note>
           <p>此方法有意设计为泛型的；它不要求其 *this* 值是 String 对象。因此，它可以被转移到其他种类的对象上作为方法使用。</p>
@@ -36870,21 +36895,21 @@ THH:mm:ss.sss
         <h1>String.prototype.startsWith ( _searchString_ [ , _position_ ] )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _isRegexp_ 为 ? IsRegExp(_searchString_)。
-          1. 如果 _isRegexp_ 是 *true*，则抛出 *TypeError* 异常。
-          1. 将 _searchString_ 设置为 ? ToString(_searchString_)。
+          1. 如果 _isRegexp_ 为 *true*，则抛出 *TypeError* 异常。
+          1. 将 _searchString_ 设为 ? ToString(_searchString_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 如果 _position_ 是 *undefined*，则将 _position_ 设置为 0；否则将 _position_ 设置为 ? ToIntegerOrInfinity(_position_)。
-          1. 令 _start_ 为将 _position_ 夹在 0 与 _length_ 之间的结果。
+          1. 令 _start_ 为将 ? ToIntegerOrInfinity(_position_) 限制在 0 和 _length_ 之间的结果。
+          1. 断言：如果 _position_ 为 *undefined*，那么 _start_ 为 0。
           1. 令 _searchLength_ 为 _searchString_ 的长度。
           1. 如果 _searchLength_ = 0，则返回 *true*。
           1. 令 _end_ 为 _start_ + _searchLength_。
           1. 如果 _end_ > _length_，则返回 *false*。
-          1. 令 _substring_ 为 _string_ 从 _start_ 到 _end_ 的子字符串。
-          1. 如果 _substring_ 是 _searchString_，则返回 *true*。
+          1. 令 _substring_ 为 _string_ 中从 _start_ 到 _end_ 的子字符串。
+          1. 如果 _substring_ 为 _searchString_，则返回 *true*。
           1. 返回 *false*。
         </emu-alg>
         <emu-note>
@@ -36902,17 +36927,16 @@ THH:mm:ss.sss
         <p>如果 _start_ 严格大于 _end_，则交换二者。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _thisValue_ 为 *this* value。
+          1. 令 _thisValue_ 为 *this* 值。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
           1. 令 _length_ 为 _string_ 的长度。
-          1. 令 _intStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _end_ 是 *undefined*，则令 _intEnd_ 为 _length_；否则令 _intEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 令 _finalStart_ 为将 _intStart_ 夹在 0 与 _length_ 之间的结果。
-          1. 令 _finalEnd_ 为将 _intEnd_ 夹在 0 与 _length_ 之间的结果。
+          1. 令 _finalStart_ 为将 ? ToIntegerOrInfinity(_start_) 限制在 0 和 _length_ 之间的结果。
+          1. 断言：如果 _start_ 为 *undefined*，那么 _finalStart_ 为 0。
+          1. 如果 _end_ 为 *undefined*，则令 _finalEnd_ 为 _length_；否则，令 _finalEnd_ 为将 ? ToIntegerOrInfinity(_end_) 限制在 0 和 _length_ 之间的结果。
           1. 令 _from_ 为 min(_finalStart_, _finalEnd_)。
           1. 令 _to_ 为 max(_finalStart_, _finalEnd_)。
-          1. 返回 _string_ 从 _from_ 到 _to_ 的子字符串。
+          1. 返回 _string_ 中从 _from_ 到 _to_ 的子字符串。
         </emu-alg>
         <emu-note>
           <p>此方法有意设计为泛型的；它不要求其 *this* 值是 String 对象。因此，它可以被转移到其他种类的对象上作为方法使用。</p>
@@ -40711,14 +40735,10 @@ THH:mm:ss.sss
       <emu-clause id="sec-array.prototype.at" type="built-in function">
         <h1>Array.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeIndex_ 为 ? ToIntegerOrInfinity(_index_)。
-          1. 如果 _relativeIndex_ ≥ 0，则
-            1. 令 _k_ 为 _relativeIndex_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _relativeIndex_。
-          1. 如果 _k_ &lt; 0 或 _k_ ≥ _length_，则返回 *undefined*。
+          1. 令 _k_ 为 ? ToAbsoluteIndex(_index_, _length_)。
+          1. 若 _k_ &lt; 0 或 _k_ ≥ _length_，返回 *undefined*。
           1. 返回 ? Get(_obj_, ! ToString(𝔽(_k_)))。
         </emu-alg>
       </emu-clause>
@@ -40794,40 +40814,31 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeTarget_ 为 ? ToIntegerOrInfinity(_target_)。
-          1. 如果 _relativeTarget_ = -∞，则令 _to_ 为 0。
-          1. 否则，如果 _relativeTarget_ &lt; 0，则令 _to_ 为 max(_length_ + _relativeTarget_, 0)。
-          1. 否则，令 _to_ 为 min(_relativeTarget_, _length_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _from_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _from_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _from_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _final_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _final_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _final_ 为 min(_relativeEnd_, _length_)。
+          1. 令 _to_ 为 ? ToClampedIndex(_target_, _length_)。
+          1. 令 _from_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 如果 _end_ 为 *undefined*，则令 _final_ 为 _length_；否则，令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _count_ 为 min(_final_ - _from_, _length_ - _to_)。
-          1. 如果 _from_ &lt; _to_ 且 _to_ &lt; _from_ + _count_，则
+          1. 如果 _from_ &lt; _to_ 且 _to_ &lt; _from_ + _count_，那么
             1. 令 _direction_ 为 -1。
-            1. 将 _from_ 设置为 _from_ + _count_ - 1。
-            1. 将 _to_ 设置为 _to_ + _count_ - 1。
+            1. 将 _from_ 设为 _from_ + _count_ - 1。
+            1. 将 _to_ 设为 _to_ + _count_ - 1。
           1. 否则，
             1. 令 _direction_ 为 1。
-          1. 重复，只要 _count_ > 0，
+          1. 当 _count_ > 0 时，重复执行，
             1. 令 _fromKey_ 为 ! ToString(𝔽(_from_))。
             1. 令 _toKey_ 为 ! ToString(𝔽(_to_))。
             1. 令 _fromPresent_ 为 ? HasProperty(_obj_, _fromKey_)。
-            1. 如果 _fromPresent_ 是 *true*，则
+            1. 如果 _fromPresent_ 为 *true*，那么
               1. 令 _fromValue_ 为 ? Get(_obj_, _fromKey_)。
               1. 执行 ? Set(_obj_, _toKey_, _fromValue_, *true*)。
             1. 否则，
-              1. 断言：_fromPresent_ 是 *false*。
+              1. 断言：_fromPresent_ 为 *false*。
               1. 执行 ? DeletePropertyOrThrow(_obj_, _toKey_)。
-            1. 将 _from_ 设置为 _from_ + _direction_。
-            1. 将 _to_ 设置为 _to_ + _direction_。
-            1. 将 _count_ 设置为 _count_ - 1。
+            1. 将 _from_ 设为 _from_ + _direction_。
+            1. 将 _to_ 设为 _to_ + _direction_。
+            1. 将 _count_ 设为 _count_ - 1。
           1. 返回 _obj_。
         </emu-alg>
         <emu-note>
@@ -40885,20 +40896,14 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _k_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _k_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _k_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _final_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _final_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _final_ 为 min(_relativeEnd_, _length_)。
-          1. 重复，只要 _k_ &lt; _final_，
+          1. 令 _k_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 如果 _end_ 为 *undefined*，则令 _final_ 为 _length_；否则，令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 当 _k_ &lt; _final_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 执行 ? Set(_obj_, _propertyKey_, _value_, *true*)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 _obj_。
         </emu-alg>
         <emu-note>
@@ -41156,22 +41161,14 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
           1. 如果 _length_ = 0，则返回 *false*。
-          1. 令 _startIndex_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：如果 _fromIndex_ 是 *undefined*，则 _startIndex_ 是 0。
-          1. 如果 _startIndex_ = +∞，则返回 *false*。
-          1. 如果 _startIndex_ = -∞，则将 _startIndex_ 设置为 0。
-          1. 如果 _startIndex_ ≥ 0，则
-            1. 令 _k_ 为 _startIndex_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _startIndex_。
-            1. 如果 _k_ &lt; 0，则将 _k_ 设置为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 令 _k_ 为 ? ToClampedIndex(_fromIndex_, _length_)。
+          1. 当 _k_ &lt; _length_ 时，重复执行，
             1. 令 _elementK_ 为 ? Get(_obj_, ! ToString(𝔽(_k_)))。
-            1. 如果 SameValueZero(_searchElement_, _elementK_) 是 *true*，则返回 *true*。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 如果 SameValueZero(_searchElement_, _elementK_) 为 *true*，则返回 *true*。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 *false*。
         </emu-alg>
         <emu-note>
@@ -41190,25 +41187,17 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
           1. 如果 _length_ = 0，则返回 *-1*<sub>𝔽</sub>。
-          1. 令 _startIndex_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：如果 _fromIndex_ 是 *undefined*，则 _startIndex_ 是 0。
-          1. 如果 _startIndex_ = +∞，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _startIndex_ = -∞，则将 _startIndex_ 设置为 0。
-          1. 如果 _startIndex_ ≥ 0，则
-            1. 令 _k_ 为 _startIndex_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _startIndex_。
-            1. 如果 _k_ &lt; 0，则将 _k_ 设置为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 令 _k_ 为 ? ToClampedIndex(_fromIndex_, _length_)。
+          1. 当 _k_ &lt; _length_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 令 _kPresent_ 为 ? HasProperty(_obj_, _propertyKey_)。
-            1. 如果 _kPresent_ 是 *true*，则
+            1. 如果 _kPresent_ 为 *true*，那么
               1. 令 _elementK_ 为 ? Get(_obj_, _propertyKey_)。
-              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 是 *true*，则返回 𝔽(_k_)。
-            1. 将 _k_ 设置为 _k_ + 1。
+              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，则返回 𝔽(_k_)。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <emu-note>
@@ -41258,22 +41247,17 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 如果 _length_ = 0，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _fromIndex_ 存在，则令 _startIndex_ 为 ? ToIntegerOrInfinity(_fromIndex_)；否则令 _startIndex_ 为 _length_ - 1。
-          1. 如果 _startIndex_ = -∞，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _startIndex_ ≥ 0，则
-            1. 令 _k_ 为 min(_startIndex_, _length_ - 1)。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _startIndex_。
-          1. 重复，只要 _k_ ≥ 0，
+          1. 若 _length_ = 0，返回 *-1*<sub>𝔽</sub>。
+          1. 若 _fromIndex_ 不存在，则令 _k_ 为 _length_ - 1；否则令 _k_ 为 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)。
+          1. 当 _k_ ≥ 0 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 令 _kPresent_ 为 ? HasProperty(_obj_, _propertyKey_)。
-            1. 如果 _kPresent_ 是 *true*，则
+            1. 若 _kPresent_ 为 *true*，则
               1. 令 _elementK_ 为 ? Get(_obj_, _propertyKey_)。
-              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 是 *true*，则返回 𝔽(_k_)。
-            1. 将 _k_ 设置为 _k_ - 1。
+              1. 若 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
+            1. 将 _k_ 设为 _k_ - 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <emu-note>
@@ -41520,27 +41504,21 @@ THH:mm:ss.sss
         <p>此方法返回一个数组，其中包含该数组从元素 _start_ 起，到元素 _end_（不包含）之前的元素（如果 _end_ 是 *undefined*，则直到数组末尾）。如果 _start_ 为负，则将其视为 <emu-eqn>_length_ + _start_</emu-eqn>，其中 _length_ 是数组的长度。如果 _end_ 为负，则将其视为 <emu-eqn>_length_ + _end_</emu-eqn>，其中 _length_ 是数组的长度。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _k_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _k_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _k_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _final_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _final_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _final_ 为 min(_relativeEnd_, _length_)。
+          1. 令 _k_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 如果 _end_ 为 *undefined*，则令 _final_ 为 _length_；否则，令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _count_ 为 max(_final_ - _k_, 0)。
           1. 令 _array_ 为 ? ArraySpeciesCreate(_obj_, _count_)。
           1. 令 _resultIndex_ 为 0。
-          1. 重复，只要 _k_ &lt; _final_，
+          1. 当 _k_ &lt; _final_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 令 _kPresent_ 为 ? HasProperty(_obj_, _propertyKey_)。
-            1. 如果 _kPresent_ 是 *true*，则
+            1. 如果 _kPresent_ 为 *true*，那么
               1. 令 _kValue_ 为 ? Get(_obj_, _propertyKey_)。
               1. 执行 ? CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_resultIndex_)), _kValue_)。
-            1. 将 _k_ 设置为 _k_ + 1。
-            1. 将 _resultIndex_ 设置为 _resultIndex_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
+            1. 将 _resultIndex_ 设为 _resultIndex_ + 1。
           1. [id="step-array-proto-slice-set-length"] 执行 ? Set(_array_, *"length"*, 𝔽(_resultIndex_), *true*)。
           1. 返回 _array_。
         </emu-alg>
@@ -41721,60 +41699,58 @@ THH:mm:ss.sss
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _actualStart_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _actualStart_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _actualStart_ 为 min(_relativeStart_, _length_)。
+          1. 令 _actualStart_ 为 ? ToClampedIndex(_start_, _length_)。
           1. 令 _itemCount_ 为 _items_ 中元素的数量。
-          1. 如果 _start_ 不存在，则
+          1. 若 _start_ 不存在，则
             1. 令 _actualDeleteCount_ 为 0。
-          1. 否则，如果 _deleteCount_ 不存在，则
+          1. 否则若 _deleteCount_ 不存在，则
             1. 令 _actualDeleteCount_ 为 _length_ - _actualStart_。
+            1. 断言：_actualDeleteCount_ ≥ 0。
           1. 否则，
             1. 令 _dc_ 为 ? ToIntegerOrInfinity(_deleteCount_)。
-            1. 令 _actualDeleteCount_ 为将 _dc_ 夹在 0 与 _length_ - _actualStart_ 之间的结果。
-          1. 如果 _length_ + _itemCount_ - _actualDeleteCount_ > 2<sup>53</sup> - 1，则抛出 *TypeError* 异常。
+            1. 令 _actualDeleteCount_ 为将 _dc_ 在 0 和 _length_ - _actualStart_ 之间钳制后的结果。
+          1. 若 _length_ + _itemCount_ - _actualDeleteCount_ > 2<sup>53</sup> - 1，抛出 *TypeError* 异常。
           1. 令 _deletedArray_ 为 ? ArraySpeciesCreate(_obj_, _actualDeleteCount_)。
           1. 令 _k_ 为 0。
-          1. 重复，只要 _k_ &lt; _actualDeleteCount_，
+          1. 当 _k_ &lt; _actualDeleteCount_ 时，重复：
             1. 令 _from_ 为 ! ToString(𝔽(_actualStart_ + _k_))。
-            1. 如果 ? HasProperty(_obj_, _from_) 是 *true*，则
+            1. 若 ? HasProperty(_obj_, _from_) 为 *true*，则
               1. 令 _fromValue_ 为 ? Get(_obj_, _from_)。
               1. 执行 ? CreateDataPropertyOrThrow(_deletedArray_, ! ToString(𝔽(_k_)), _fromValue_)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. [id="step-array-proto-splice-set-length"] 执行 ? Set(_deletedArray_, *"length"*, 𝔽(_actualDeleteCount_), *true*)。
-          1. 如果 _itemCount_ &lt; _actualDeleteCount_，则
-            1. 将 _k_ 设置为 _actualStart_。
-            1. 重复，只要 _k_ &lt; (_length_ - _actualDeleteCount_)，
+          1. 若 _itemCount_ &lt; _actualDeleteCount_，则
+            1. 将 _k_ 设为 _actualStart_。
+            1. 当 _k_ &lt; (_length_ - _actualDeleteCount_) 时，重复：
               1. 令 _from_ 为 ! ToString(𝔽(_k_ + _actualDeleteCount_))。
               1. 令 _to_ 为 ! ToString(𝔽(_k_ + _itemCount_))。
-              1. 如果 ? HasProperty(_obj_, _from_) 是 *true*，则
+              1. 若 ? HasProperty(_obj_, _from_) 为 *true*，则
                 1. 令 _fromValue_ 为 ? Get(_obj_, _from_)。
                 1. 执行 ? Set(_obj_, _to_, _fromValue_, *true*)。
               1. 否则，
                 1. 执行 ? DeletePropertyOrThrow(_obj_, _to_)。
-              1. 将 _k_ 设置为 _k_ + 1。
-            1. 将 _k_ 设置为 _length_。
-            1. 重复，只要 _k_ > (_length_ - _actualDeleteCount_ + _itemCount_)，
+              1. 将 _k_ 设为 _k_ + 1。
+            1. 将 _k_ 设为 _length_。
+            1. 当 _k_ > (_length_ - _actualDeleteCount_ + _itemCount_) 时，重复：
               1. 执行 ? DeletePropertyOrThrow(_obj_, ! ToString(𝔽(_k_ - 1)))。
-              1. 将 _k_ 设置为 _k_ - 1。
-          1. 否则，如果 _itemCount_ > _actualDeleteCount_，则
-            1. 将 _k_ 设置为 (_length_ - _actualDeleteCount_)。
-            1. 重复，只要 _k_ > _actualStart_，
+              1. 将 _k_ 设为 _k_ - 1。
+          1. 否则若 _itemCount_ > _actualDeleteCount_，则
+            1. 将 _k_ 设为 (_length_ - _actualDeleteCount_)。
+            1. 当 _k_ > _actualStart_ 时，重复：
               1. 令 _from_ 为 ! ToString(𝔽(_k_ + _actualDeleteCount_ - 1))。
               1. 令 _to_ 为 ! ToString(𝔽(_k_ + _itemCount_ - 1))。
-              1. 如果 ? HasProperty(_obj_, _from_) 是 *true*，则
+              1. 若 ? HasProperty(_obj_, _from_) 为 *true*，则
                 1. 令 _fromValue_ 为 ? Get(_obj_, _from_)。
                 1. 执行 ? Set(_obj_, _to_, _fromValue_, *true*)。
               1. 否则，
                 1. 执行 ? DeletePropertyOrThrow(_obj_, _to_)。
-              1. 将 _k_ 设置为 _k_ - 1。
-          1. 将 _k_ 设置为 _actualStart_。
-          1. 对 _items_ 的每个元素 _item_，执行：
+              1. 将 _k_ 设为 _k_ - 1。
+          1. 将 _k_ 设为 _actualStart_。
+          1. 对 _items_ 的每个元素 _item_，执行
             1. 执行 ? Set(_obj_, ! ToString(𝔽(_k_)), _item_, *true*)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. [id="step-array-proto-splice-set-length-2"] 执行 ? Set(_obj_, *"length"*, 𝔽(_length_ - _actualDeleteCount_ + _itemCount_), *true*)。
           1. 返回 _deletedArray_。
         </emu-alg>
@@ -41858,41 +41834,39 @@ THH:mm:ss.sss
         <h1>Array.prototype.toSpliced ( _start_, _skipCount_, ..._items_ )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _actualStart_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _actualStart_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _actualStart_ 为 min(_relativeStart_, _length_)。
+          1. 令 _actualStart_ 为 ? ToClampedIndex(_start_, _length_)。
           1. 令 _insertCount_ 为 _items_ 中元素的数量。
-          1. 如果 _start_ 不存在，则
+          1. 令 _maxSkipCount_ 为 _length_ - _actualStart_。
+          1. 如果 _start_ 不存在，那么
             1. 令 _actualSkipCount_ 为 0。
-          1. 否则，如果 _skipCount_ 不存在，则
-            1. 令 _actualSkipCount_ 为 _length_ - _actualStart_。
+          1. 否则，如果 _skipCount_ 不存在，那么
+            1. 令 _actualSkipCount_ 为 _maxSkipCount_。
           1. 否则，
-            1. 令 _sc_ 为 ? ToIntegerOrInfinity(_skipCount_)。
-            1. 令 _actualSkipCount_ 为将 _sc_ 夹在 0 与 _length_ - _actualStart_ 之间的结果。
+            1. 令 _actualSkipCount_ 为将 ? ToIntegerOrInfinity(_skipCount_) 限制在 0 和 _maxSkipCount_ 之间的结果。
           1. 令 _newLength_ 为 _length_ + _insertCount_ - _actualSkipCount_。
+          1. 断言：_newLength_ ≥ 0。
           1. 如果 _newLength_ > 2<sup>53</sup> - 1，则抛出 *TypeError* 异常。
           1. 令 _newArray_ 为 ? ArrayCreate(_newLength_)。
           1. 令 _writeIndex_ 为 0。
           1. 令 _readIndex_ 为 _actualStart_ + _actualSkipCount_。
-          1. 重复，只要 _writeIndex_ &lt; _actualStart_，
+          1. 当 _writeIndex_ &lt; _actualStart_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_writeIndex_))。
             1. 令 _iValue_ 为 ? Get(_obj_, _propertyKey_)。
             1. 执行 ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _iValue_)。
-            1. 将 _writeIndex_ 设置为 _writeIndex_ + 1。
-          1. 对 _items_ 的每个元素 _item_，执行：
+            1. 将 _writeIndex_ 设为 _writeIndex_ + 1。
+          1. 对于 _items_ 中的每个元素 _item_，执行
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_writeIndex_))。
             1. 执行 ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _item_)。
-            1. 将 _writeIndex_ 设置为 _writeIndex_ + 1。
-          1. 重复，只要 _writeIndex_ &lt; _newLength_，
+            1. 将 _writeIndex_ 设为 _writeIndex_ + 1。
+          1. 当 _writeIndex_ &lt; _newLength_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_writeIndex_))。
             1. 令 _from_ 为 ! ToString(𝔽(_readIndex_))。
             1. 令 _fromValue_ 为 ? Get(_obj_, _from_)。
             1. 执行 ! CreateDataPropertyOrThrow(_newArray_, _propertyKey_, _fromValue_)。
-            1. 将 _writeIndex_ 设置为 _writeIndex_ + 1。
-            1. 将 _readIndex_ 设置为 _readIndex_ + 1。
+            1. 将 _writeIndex_ 设为 _writeIndex_ + 1。
+            1. 将 _readIndex_ 设为 _readIndex_ + 1。
           1. 返回 _newArray_。
         </emu-alg>
       </emu-clause>
@@ -41959,20 +41933,18 @@ THH:mm:ss.sss
         <h1>Array.prototype.with ( _index_, _value_ )</h1>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 令 _relativeIndex_ 为 ? ToIntegerOrInfinity(_index_)。
-          1. 如果 _relativeIndex_ ≥ 0，则令 _actualIndex_ 为 _relativeIndex_。
-          1. 否则，令 _actualIndex_ 为 _length_ + _relativeIndex_。
-          1. 如果 _actualIndex_ ≥ _length_ 或 _actualIndex_ &lt; 0，则抛出 *RangeError* 异常。
+          1. 令 _actualIndex_ 为 ? ToAbsoluteIndex(_index_, _length_)。
+          1. 若 _actualIndex_ &lt; 0 或 _actualIndex_ ≥ _length_，抛出 *RangeError* 异常。
           1. 令 _array_ 为 ? ArrayCreate(_length_)。
           1. 令 _k_ 为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 当 _k_ &lt; _length_ 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
-            1. 如果 _k_ = _actualIndex_，则令 _fromValue_ 为 _value_。
+            1. 若 _k_ = _actualIndex_，令 _fromValue_ 为 _value_。
             1. 否则，令 _fromValue_ 为 ? Get(_obj_, _propertyKey_)。
             1. 执行 ! CreateDataPropertyOrThrow(_array_, _propertyKey_, _fromValue_)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 _array_。
         </emu-alg>
       </emu-clause>
@@ -42530,12 +42502,8 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 令 _relativeIndex_ 为 ? ToIntegerOrInfinity(_index_)。
-          1. 如果 _relativeIndex_ ≥ 0，则
-            1. 令 _k_ 为 _relativeIndex_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _relativeIndex_。
-          1. 如果 _k_ &lt; 0 或 _k_ ≥ _length_，则返回 *undefined*。
+          1. 令 _k_ 为 ? ToAbsoluteIndex(_index_, _length_)。
+          1. 若 _k_ &lt; 0 或 _k_ ≥ _length_，返回 *undefined*。
           1. 返回 ! Get(_obj_, ! ToString(𝔽(_k_)))。
         </emu-alg>
       </emu-clause>
@@ -42593,44 +42561,36 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 令 _relativeTarget_ 为 ? ToIntegerOrInfinity(_target_)。
-          1. 如果 _relativeTarget_ = -∞，则令 _targetIndex_ 为 0。
-          1. 否则，如果 _relativeTarget_ &lt; 0，则令 _targetIndex_ 为 max(_length_ + _relativeTarget_, 0)。
-          1. 否则，令 _targetIndex_ 为 min(_relativeTarget_, _length_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _startIndex_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _startIndex_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _startIndex_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _endIndex_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _endIndex_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _endIndex_ 为 min(_relativeEnd_, _length_)。
+          1. 令 _targetIndex_ 为 ? ToClampedIndex(_target_, _length_)。
+          1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 若 _end_ 为 *undefined*，令 _endIndex_ 为 _length_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _count_ 为 min(_endIndex_ - _startIndex_, _length_ - _targetIndex_)。
-          1. 如果 _count_ > 0，则
-            1. 注：复制必须以保留源数据的位级编码的方式执行。
+          1. 若 _count_ > 0，则
+            1. 注：复制必须以保留源数据位级编码的方式执行。
             1. 令 _buffer_ 为 _obj_.[[ViewedArrayBuffer]]。
-            1. 将 _taRecord_ 设置为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
-            1. 将 _length_ 设置为 TypedArrayLength(_taRecord_)。
-            1. 注：上述步骤的副作用可能已经减小 _obj_ 的大小；在这种情况下，复制应继续处理仍适用的最长前缀。
-            1. 将 _count_ 设置为 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)。
+            1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
+            1. 若 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，抛出 *TypeError* 异常。
+            1. 将 _length_ 设为 TypedArrayLength(_taRecord_)。
+            1. 注：上述步骤的副作用可能已减小 _obj_ 的大小，在这种情况下，复制应使用仍然适用的最长前缀继续进行。
+            1. 将 _count_ 设为 min(_count_, _length_ - _startIndex_, _length_ - _targetIndex_)。
             1. 令 _elementSize_ 为 TypedArrayElementSize(_obj_)。
             1. 令 _byteOffset_ 为 _obj_.[[ByteOffset]]。
             1. 令 _toByteIndex_ 为 (_targetIndex_ × _elementSize_) + _byteOffset_。
             1. 令 _fromByteIndex_ 为 (_startIndex_ × _elementSize_) + _byteOffset_。
             1. 令 _countBytes_ 为 _count_ × _elementSize_。
-            1. 如果 _fromByteIndex_ &lt; _toByteIndex_ 且 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_，则
+            1. 若 _fromByteIndex_ &lt; _toByteIndex_ 且 _toByteIndex_ &lt; _fromByteIndex_ + _countBytes_，则
               1. 令 _direction_ 为 -1。
-              1. 将 _fromByteIndex_ 设置为 _fromByteIndex_ + _countBytes_ - 1。
-              1. 将 _toByteIndex_ 设置为 _toByteIndex_ + _countBytes_ - 1。
+              1. 将 _fromByteIndex_ 设为 _fromByteIndex_ + _countBytes_ - 1。
+              1. 将 _toByteIndex_ 设为 _toByteIndex_ + _countBytes_ - 1。
             1. 否则，
               1. 令 _direction_ 为 1。
-            1. 重复，只要 _countBytes_ > 0，
+            1. 当 _countBytes_ > 0 时，重复：
+              1. 断言：_fromByteIndex_ ≥ 0 且 _toByteIndex_ ≥ 0。
               1. 令 _value_ 为 GetValueFromBuffer(_buffer_, _fromByteIndex_, ~uint8~, *true*, ~unordered~)。
               1. 执行 SetValueInBuffer(_buffer_, _toByteIndex_, ~uint8~, _value_, *true*, ~unordered~)。
-              1. 将 _fromByteIndex_ 设置为 _fromByteIndex_ + _direction_。
-              1. 将 _toByteIndex_ 设置为 _toByteIndex_ + _direction_。
-              1. 将 _countBytes_ 设置为 _countBytes_ - 1。
+              1. 将 _fromByteIndex_ 设为 _fromByteIndex_ + _direction_。
+              1. 将 _toByteIndex_ 设为 _toByteIndex_ + _direction_。
+              1. 将 _countBytes_ 设为 _countBytes_ - 1。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -42674,25 +42634,19 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _obj_.[[ContentType]] 是 ~bigint~，则将 _value_ 设置为 ? ToBigInt(_value_)。
-          1. 否则，将 _value_ 设置为 ? ToNumber(_value_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _startIndex_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _startIndex_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _startIndex_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _endIndex_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _endIndex_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _endIndex_ 为 min(_relativeEnd_, _length_)。
-          1. 将 _taRecord_ 设置为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 将 _length_ 设置为 TypedArrayLength(_taRecord_)。
-          1. 将 _endIndex_ 设置为 min(_endIndex_, _length_)。
+          1. 如果 _obj_.[[ContentType]] 为 ~bigint~，则将 _value_ 设为 ? ToBigInt(_value_)。
+          1. 否则，将 _value_ 设为 ? ToNumber(_value_)。
+          1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 如果 _end_ 为 *undefined*，则令 _endIndex_ 为 _length_；否则，令 _endIndex_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
+          1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 将 _length_ 设为 TypedArrayLength(_taRecord_)。
+          1. 将 _endIndex_ 设为 min(_endIndex_, _length_)。
           1. 令 _k_ 为 _startIndex_。
-          1. 重复，只要 _k_ &lt; _endIndex_，
+          1. 当 _k_ &lt; _endIndex_ 时，重复执行，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 执行 ! Set(_obj_, _propertyKey_, _value_, *true*)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 _obj_。
         </emu-alg>
       </emu-clause>
@@ -42812,19 +42766,11 @@ THH:mm:ss.sss
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
           1. 如果 _length_ = 0，则返回 *false*。
-          1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：如果 _fromIndex_ 是 *undefined*，则 _n_ 是 0。
-          1. 如果 _n_ = +∞，则返回 *false*。
-          1. 如果 _n_ = -∞，则将 _n_ 设置为 0。
-          1. 如果 _n_ ≥ 0，则
-            1. 令 _k_ 为 _n_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _n_。
-            1. 如果 _k_ &lt; 0，则将 _k_ 设置为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 令 _k_ 为 ? ToClampedIndex(_fromIndex_, _length_)。
+          1. 当 _k_ &lt; _length_ 时，重复执行，
             1. 令 _elementK_ 为 ! Get(_obj_, ! ToString(𝔽(_k_)))。
-            1. 如果 SameValueZero(_searchElement_, _elementK_) 是 *true*，则返回 *true*。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 如果 SameValueZero(_searchElement_, _elementK_) 为 *true*，则返回 *true*。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 *false*。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -42838,23 +42784,15 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _length_ = 0，则返回 *-1*<sub>𝔽</sub>。
-          1. 令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)。
-          1. 断言：如果 _fromIndex_ 是 *undefined*，则 _n_ 是 0。
-          1. 如果 _n_ = +∞，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _n_ = -∞，则将 _n_ 设置为 0。
-          1. 如果 _n_ ≥ 0，则
-            1. 令 _k_ 为 _n_。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _n_。
-            1. 如果 _k_ &lt; 0，则将 _k_ 设置为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 若 _length_ = 0，返回 *-1*<sub>𝔽</sub>。
+          1. 令 _k_ 为 ? ToClampedIndex(_fromIndex_, _length_)。
+          1. 当 _k_ &lt; _length_ 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 令 _kPresent_ 为 ! HasProperty(_obj_, _propertyKey_)。
-            1. 如果 _kPresent_ 是 *true*，则
+            1. 若 _kPresent_ 为 *true*，则
               1. 令 _elementK_ 为 ! Get(_obj_, _propertyKey_)。
-              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 是 *true*，则返回 𝔽(_k_)。
-            1. 将 _k_ 设置为 _k_ + 1。
+              1. 若 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -42902,20 +42840,15 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _length_ = 0，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _fromIndex_ 存在，则令 _n_ 为 ? ToIntegerOrInfinity(_fromIndex_)；否则令 _n_ 为 _length_ - 1。
-          1. 如果 _n_ = -∞，则返回 *-1*<sub>𝔽</sub>。
-          1. 如果 _n_ ≥ 0，则
-            1. 令 _k_ 为 min(_n_, _length_ - 1)。
-          1. 否则，
-            1. 令 _k_ 为 _length_ + _n_。
-          1. 重复，只要 _k_ ≥ 0，
+          1. 若 _length_ = 0，返回 *-1*<sub>𝔽</sub>。
+          1. 若 _fromIndex_ 不存在，则令 _k_ 为 _length_ - 1；否则令 _k_ 为 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)。
+          1. 当 _k_ ≥ 0 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
             1. 令 _kPresent_ 为 ! HasProperty(_obj_, _propertyKey_)。
-            1. 如果 _kPresent_ 是 *true*，则
+            1. 若 _kPresent_ 为 *true*，则
               1. 令 _elementK_ 为 ! Get(_obj_, _propertyKey_)。
-              1. 如果 IsStrictlyEqual(_searchElement_, _elementK_) 是 *true*，则返回 𝔽(_k_)。
-            1. 将 _k_ 设置为 _k_ - 1。
+              1. 若 IsStrictlyEqual(_searchElement_, _elementK_) 为 *true*，返回 𝔽(_k_)。
+            1. 将 _k_ 设为 _k_ - 1。
           1. 返回 *-1*<sub>𝔽</sub>。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -43152,25 +43085,19 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _sourceArrayLength_ 为 TypedArrayLength(_taRecord_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _startIndex_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _startIndex_ 为 max(_sourceArrayLength_ + _relativeStart_, 0)。
-          1. 否则，令 _startIndex_ 为 min(_relativeStart_, _sourceArrayLength_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _sourceArrayLength_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _endIndex_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _endIndex_ 为 max(_sourceArrayLength_ + _relativeEnd_, 0)。
-          1. 否则，令 _endIndex_ 为 min(_relativeEnd_, _sourceArrayLength_)。
+          1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _sourceArrayLength_)。
+          1. 若 _end_ 为 *undefined*，令 _endIndex_ 为 _sourceArrayLength_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _sourceArrayLength_)。
           1. 令 _countBytes_ 为 max(_endIndex_ - _startIndex_, 0)。
           1. 令 _resultArray_ 为 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)。
-          1. 如果 _countBytes_ > 0，则
-            1. 将 _taRecord_ 设置为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-            1. 如果 IsTypedArrayOutOfBounds(_taRecord_) 是 *true*，则抛出 *TypeError* 异常。
-            1. 将 _endIndex_ 设置为 min(_endIndex_, TypedArrayLength(_taRecord_))。
-            1. 将 _countBytes_ 设置为 max(_endIndex_ - _startIndex_, 0)。
+          1. 若 _countBytes_ > 0，则
+            1. 将 _taRecord_ 设为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
+            1. 若 IsTypedArrayOutOfBounds(_taRecord_) 为 *true*，抛出 *TypeError* 异常。
+            1. 将 _endIndex_ 设为 min(_endIndex_, TypedArrayLength(_taRecord_))。
+            1. 将 _countBytes_ 设为 max(_endIndex_ - _startIndex_, 0)。
             1. 令 _sourceType_ 为 TypedArrayElementType(_obj_)。
             1. 令 _targetType_ 为 TypedArrayElementType(_resultArray_)。
-            1. 如果 _sourceType_ 是 _targetType_，则
-              1. 注：传输必须以保留源数据的位级编码的方式执行。
+            1. 若 _sourceType_ 为 _targetType_，则
+              1. 注：传输必须以保留源数据位级编码的方式执行。
               1. 令 _sourceBuffer_ 为 _obj_.[[ViewedArrayBuffer]]。
               1. 令 _targetBuffer_ 为 _resultArray_.[[ViewedArrayBuffer]]。
               1. 令 _elementSize_ 为 TypedArrayElementSize(_obj_)。
@@ -43178,20 +43105,20 @@ THH:mm:ss.sss
               1. 令 _sourceByteIndex_ 为 (_startIndex_ × _elementSize_) + _sourceByteOffset_。
               1. 令 _targetByteIndex_ 为 _resultArray_.[[ByteOffset]]。
               1. 令 _endByteIndex_ 为 _targetByteIndex_ + (_countBytes_ × _elementSize_)。
-              1. 重复，只要 _targetByteIndex_ &lt; _endByteIndex_，
+              1. 当 _targetByteIndex_ &lt; _endByteIndex_ 时，重复：
                 1. 令 _value_ 为 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)。
                 1. 执行 SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)。
-                1. 将 _sourceByteIndex_ 设置为 _sourceByteIndex_ + 1。
-                1. 将 _targetByteIndex_ 设置为 _targetByteIndex_ + 1。
+                1. 将 _sourceByteIndex_ 设为 _sourceByteIndex_ + 1。
+                1. 将 _targetByteIndex_ 设为 _targetByteIndex_ + 1。
             1. 否则，
               1. 令 _n_ 为 0。
               1. 令 _k_ 为 _startIndex_。
-              1. 重复，只要 _k_ &lt; _endIndex_，
+              1. 当 _k_ &lt; _endIndex_ 时，重复：
                 1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
                 1. 令 _kValue_ 为 ! Get(_obj_, _propertyKey_)。
                 1. 执行 ! Set(_resultArray_, ! ToString(𝔽(_n_)), _kValue_, *true*)。
-                1. 将 _k_ 设置为 _k_ + 1。
-                1. 将 _n_ 设置为 _n_ + 1。
+                1. 将 _k_ 设为 _k_ + 1。
+                1. 将 _n_ 设为 _n_ + 1。
           1. 返回 _resultArray_。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
@@ -43253,27 +43180,19 @@ THH:mm:ss.sss
           1. 断言：_obj_ 具有 [[ViewedArrayBuffer]] 内部槽。
           1. 令 _buffer_ 为 _obj_.[[ViewedArrayBuffer]]。
           1. 令 _sourceRecord_ 为 MakeTypedArrayWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-          1. 如果 IsTypedArrayOutOfBounds(_sourceRecord_) 是 *true*，则
+          1. 若 IsTypedArrayOutOfBounds(_sourceRecord_) 为 *true*，则
             1. 令 _sourceLength_ 为 0。
           1. 否则，
             1. 令 _sourceLength_ 为 TypedArrayLength(_sourceRecord_)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _startIndex_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _startIndex_ 为 max(_sourceLength_ + _relativeStart_, 0)。
-          1. 否则，令 _startIndex_ 为 min(_relativeStart_, _sourceLength_)。
+          1. 令 _startIndex_ 为 ? ToClampedIndex(_start_, _sourceLength_)。
           1. 令 _elementSize_ 为 TypedArrayElementSize(_obj_)。
           1. 令 _sourceByteOffset_ 为 _obj_.[[ByteOffset]]。
           1. 令 _beginByteOffset_ 为 _sourceByteOffset_ + (_startIndex_ × _elementSize_)。
-          1. 如果 _obj_.[[ArrayLength]] 是 ~auto~ 且 _end_ 是 *undefined*，则
-            1. 令 _argList_ 为 « _buffer_, 𝔽(_beginByteOffset_) »。
-          1. 否则，
-            1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _sourceLength_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-            1. 如果 _relativeEnd_ = -∞，则令 _endIndex_ 为 0。
-            1. 否则，如果 _relativeEnd_ &lt; 0，则令 _endIndex_ 为 max(_sourceLength_ + _relativeEnd_, 0)。
-            1. 否则，令 _endIndex_ 为 min(_relativeEnd_, _sourceLength_)。
-            1. 令 _newLength_ 为 max(_endIndex_ - _startIndex_, 0)。
-            1. 令 _argList_ 为 « _buffer_, 𝔽(_beginByteOffset_), 𝔽(_newLength_) »。
-          1. 返回 ? TypedArraySpeciesCreate(_obj_, _argList_)。
+          1. 若 _obj_.[[ArrayLength]] 为 ~auto~ 且 _end_ 为 *undefined*，则
+            1. 返回 ? TypedArraySpeciesCreate(_obj_, « _buffer_, 𝔽(_beginByteOffset_) »)。
+          1. 若 _end_ 为 *undefined*，令 _endIndex_ 为 _sourceLength_；否则令 _endIndex_ 为 ? ToClampedIndex(_end_, _sourceLength_)。
+          1. 令 _newLength_ 为 max(_endIndex_ - _startIndex_, 0)。
+          1. 返回 ? TypedArraySpeciesCreate(_obj_, « _buffer_, 𝔽(_beginByteOffset_), 𝔽(_newLength_) »)。
         </emu-alg>
         <p>此方法不是泛型的。*this* 值必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
       </emu-clause>
@@ -43349,20 +43268,18 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 令 _relativeIndex_ 为 ? ToIntegerOrInfinity(_index_)。
-          1. 如果 _relativeIndex_ ≥ 0，则令 _actualIndex_ 为 _relativeIndex_。
-          1. 否则，令 _actualIndex_ 为 _length_ + _relativeIndex_。
-          1. 如果 _obj_.[[ContentType]] 是 ~bigint~，则令 _numericValue_ 为 ? ToBigInt(_value_)。
+          1. 令 _actualIndex_ 为 ? ToAbsoluteIndex(_index_, _length_)。
+          1. 若 _obj_.[[ContentType]] 为 ~bigint~，令 _numericValue_ 为 ? ToBigInt(_value_)。
           1. 否则，令 _numericValue_ 为 ? ToNumber(_value_)。
-          1. 如果 IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_)) 是 *false*，则抛出 *RangeError* 异常。
+          1. 若 IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_)) 为 *false*，抛出 *RangeError* 异常。
           1. 令 _resultArray_ 为 ? TypedArrayCreateSameType(_obj_, _length_)。
           1. 令 _k_ 为 0。
-          1. 重复，只要 _k_ &lt; _length_，
+          1. 当 _k_ &lt; _length_ 时，重复：
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
-            1. 如果 _k_ = _actualIndex_，则令 _fromValue_ 为 _numericValue_。
+            1. 若 _k_ = _actualIndex_，令 _fromValue_ 为 _numericValue_。
             1. 否则，令 _fromValue_ 为 ! Get(_obj_, _propertyKey_)。
             1. 执行 ! Set(_resultArray_, _propertyKey_, _fromValue_, *true*)。
-            1. 将 _k_ 设置为 _k_ + 1。
+            1. 将 _k_ 设为 _k_ + 1。
           1. 返回 _resultArray_。
         </emu-alg>
       </emu-clause>
@@ -46191,32 +46108,27 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[ArrayBufferData]])。
-          1. 如果 IsSharedArrayBuffer(_obj_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 IsDetachedBuffer(_obj_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 若 IsSharedArrayBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
+          1. 若 IsDetachedBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
           1. 令 _length_ 为 _obj_.[[ArrayBufferByteLength]]。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _first_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _first_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _first_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _final_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _final_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _final_ 为 min(_relativeEnd_, _length_)。
+          1. 令 _first_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 若 _end_ 为 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _newLength_ 为 max(_final_ - _first_, 0)。
           1. 令 _ctor_ 为 ? SpeciesConstructor(_obj_, %ArrayBuffer%)。
           1. 令 _new_ 为 ? Construct(_ctor_, « 𝔽(_newLength_) »)。
           1. 执行 ? RequireInternalSlot(_new_, [[ArrayBufferData]])。
-          1. 如果 IsSharedArrayBuffer(_new_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 IsDetachedBuffer(_new_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 SameValue(_new_, _obj_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 _new_.[[ArrayBufferByteLength]] &lt; _newLength_，则抛出 *TypeError* 异常。
+          1. 若 IsSharedArrayBuffer(_new_) 为 *true*，抛出 *TypeError* 异常。
+          1. 若 IsDetachedBuffer(_new_) 为 *true*，抛出 *TypeError* 异常。
+          1. 若 SameValue(_new_, _obj_) 为 *true*，抛出 *TypeError* 异常。
+          1. 若 _new_.[[ArrayBufferByteLength]] &lt; _newLength_，抛出 *TypeError* 异常。
           1. 注：上述步骤的副作用可能已分离或调整 _obj_ 的大小。
-          1. 如果 IsDetachedBuffer(_obj_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 若 IsDetachedBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
           1. 令 _fromBuf_ 为 _obj_.[[ArrayBufferData]]。
           1. 令 _toBuf_ 为 _new_.[[ArrayBufferData]]。
           1. 令 _currentLength_ 为 _obj_.[[ArrayBufferByteLength]]。
-          1. 如果 _first_ &lt; _currentLength_，则
-            1. 令 _count_ 为 min(_newLength_, _currentLength_ - _first_)。
+          1. 令 _maxCount_ 为 _currentLength_ - _first_。
+          1. 若 _maxCount_ > 0，则
+            1. 令 _count_ 为 min(_newLength_, _maxCount_)。
             1. 执行 CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _count_)。
           1. 返回 _new_。
         </emu-alg>
@@ -46525,23 +46437,17 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[ArrayBufferData]])。
-          1. 如果 IsSharedArrayBuffer(_obj_) 是 *false*，则抛出 *TypeError* 异常。
+          1. 若 IsSharedArrayBuffer(_obj_) 为 *false*，抛出 *TypeError* 异常。
           1. 令 _length_ 为 ArrayBufferByteLength(_obj_, ~seq-cst~)。
-          1. 令 _relativeStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _relativeStart_ = -∞，则令 _first_ 为 0。
-          1. 否则，如果 _relativeStart_ &lt; 0，则令 _first_ 为 max(_length_ + _relativeStart_, 0)。
-          1. 否则，令 _first_ 为 min(_relativeStart_, _length_)。
-          1. 如果 _end_ 是 *undefined*，则令 _relativeEnd_ 为 _length_；否则令 _relativeEnd_ 为 ? ToIntegerOrInfinity(_end_)。
-          1. 如果 _relativeEnd_ = -∞，则令 _final_ 为 0。
-          1. 否则，如果 _relativeEnd_ &lt; 0，则令 _final_ 为 max(_length_ + _relativeEnd_, 0)。
-          1. 否则，令 _final_ 为 min(_relativeEnd_, _length_)。
+          1. 令 _first_ 为 ? ToClampedIndex(_start_, _length_)。
+          1. 若 _end_ 为 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _newLength_ 为 max(_final_ - _first_, 0)。
           1. 令 _ctor_ 为 ? SpeciesConstructor(_obj_, %SharedArrayBuffer%)。
           1. 令 _new_ 为 ? Construct(_ctor_, « 𝔽(_newLength_) »)。
           1. 执行 ? RequireInternalSlot(_new_, [[ArrayBufferData]])。
-          1. 如果 IsSharedArrayBuffer(_new_) 是 *false*，则抛出 *TypeError* 异常。
-          1. 如果 _new_.[[ArrayBufferData]] 是 _obj_.[[ArrayBufferData]]，则抛出 *TypeError* 异常。
-          1. 如果 ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_，则抛出 *TypeError* 异常。
+          1. 若 IsSharedArrayBuffer(_new_) 为 *false*，抛出 *TypeError* 异常。
+          1. 若 _new_.[[ArrayBufferData]] 为 _obj_.[[ArrayBufferData]]，抛出 *TypeError* 异常。
+          1. 若 ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_，抛出 *TypeError* 异常。
           1. 令 _fromBuf_ 为 _obj_.[[ArrayBufferData]]。
           1. 令 _toBuf_ 为 _new_.[[ArrayBufferData]]。
           1. 执行 CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _newLength_)。
@@ -54510,14 +54416,10 @@ THH:mm:ss.sss
           1. 执行 ? RequireObjectCoercible(_obj_)。
           1. 令 _string_ 为 ? ToString(_obj_)。
           1. 令 _size_ 为 _string_ 的长度。
-          1. 令 _intStart_ 为 ? ToIntegerOrInfinity(_start_)。
-          1. 如果 _intStart_ = -∞，则将 _intStart_ 设置为 0。
-          1. 否则，如果 _intStart_ &lt; 0，则将 _intStart_ 设置为 max(_size_ + _intStart_, 0)。
-          1. 否则，将 _intStart_ 设置为 min(_intStart_, _size_)。
-          1. 如果 _length_ 是 *undefined*，则令 _intLength_ 为 _size_；否则令 _intLength_ 为 ? ToIntegerOrInfinity(_length_)。
-          1. 将 _intLength_ 设置为把 _intLength_ 夹在 0 和 _size_ 之间的结果。
+          1. 令 _intStart_ 为 ? ToClampedIndex(_start_, _size_)。
+          1. 若 _length_ 为 *undefined*，令 _intLength_ 为 _size_；否则令 _intLength_ 为将 ? ToIntegerOrInfinity(_length_) 在 0 和 _size_ 之间钳制后的结果。
           1. 令 _intEnd_ 为 min(_intStart_ + _intLength_, _size_)。
-          1. 返回 _string_ 从 _intStart_ 到 _intEnd_ 的子串。
+          1. 返回 _string_ 从 _intStart_ 到 _intEnd_ 的子字符串。
         </emu-alg>
         <emu-note>
           <p>此方法有意为泛型方法；它不要求其 *this* 值是 String 对象。因此，它可以被转移到其他种类的对象上作为方法使用。</p>
