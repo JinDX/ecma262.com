@@ -19234,7 +19234,8 @@
         </emu-alg>
         <emu-grammar>PropertyDefinition : MethodDefinition</emu-grammar>
         <emu-alg>
-          1. 执行 ? 以 _obj_ 和 *true* 为实参执行 |MethodDefinition| 的 MethodDefinitionEvaluation。
+          1. 令 _result_ 为以 _obj_ 和 *true* 作为参数对 |MethodDefinition| 求值 MethodDefinitionEvaluation 的结果 ?。
+          1. 断言：_result_ 是 ~empty~。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -25735,51 +25736,51 @@
       </emu-note>
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody? `}`</emu-grammar>
       <emu-alg>
-        1. 令 _envRecord_ 为正在运行的执行上下文的 LexicalEnvironment。
+        1. 令 _envRecord_ 为运行执行上下文的 LexicalEnvironment。
         1. 令 _classEnv_ 为 NewDeclarativeEnvironment(_envRecord_)。
-        1. 如果 _classBinding_ 不是 *undefined*，则
+        1. 如果 _classBinding_ 不是 *undefined*，那么
           1. 执行 ! _classEnv_.CreateImmutableBinding(_classBinding_, *true*)。
-        1. 令 _outerPrivateEnv_ 为正在运行的执行上下文的 PrivateEnvironment。
+        1. 令 _outerPrivateEnv_ 为运行执行上下文的 PrivateEnvironment。
         1. 令 _classPrivateEnv_ 为 NewPrivateEnvironment(_outerPrivateEnv_)。
-        1. 如果存在 |ClassBody|，则
+        1. 如果存在 |ClassBody|，那么
           1. 对于 |ClassBody| 的 PrivateBoundIdentifiers 中的每个 String _description_，执行
-            1. 如果 _classPrivateEnv_.[[Names]] 包含一个 Private Name _privateName_，使得 _privateName_.[[Description]] 是 _description_，则
-              1. 断言：这只可能发生在 getter/setter 对中。
+            1. 如果 _classPrivateEnv_.[[Names]] 包含一个 [[Description]] 为 _description_ 的 Private Name _privateName_，那么
+              1. 断言：这仅可能发生于 getter/setter 对。
             1. 否则，
               1. 令 _name_ 为一个新的 Private Name，其 [[Description]] 为 _description_。
               1. 将 _name_ 追加到 _classPrivateEnv_.[[Names]]。
-        1. 如果不存在 |ClassHeritage|，则
+        1. 如果不存在 |ClassHeritage|，那么
           1. 令 _protoParent_ 为 %Object.prototype%。
           1. 令 _ctorParent_ 为 %Function.prototype%。
         1. 否则，
-          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _classEnv_。
-          1. 注：在对 |ClassHeritage| 求值时，正在运行的执行上下文的 PrivateEnvironment 是 _outerPrivateEnv_。
-          1. 令 _superclassRef_ 为 Completion(|ClassHeritage| 的 Evaluation)。
-          1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
+          1. 将运行执行上下文的 LexicalEnvironment 设置为 _classEnv_。
+          1. 注：对 |ClassHeritage| 求值时，运行执行上下文的 PrivateEnvironment 是 _outerPrivateEnv_。
+          1. 令 _superclassRef_ 为 Completion(对 |ClassHeritage| 求值)。
+          1. 将运行执行上下文的 LexicalEnvironment 设置为 _envRecord_。
           1. 令 _superclass_ 为 ? GetValue(? _superclassRef_)。
-          1. 如果 _superclass_ 是 *null*，则
+          1. 如果 _superclass_ 是 *null*，那么
             1. 令 _protoParent_ 为 *null*。
             1. 令 _ctorParent_ 为 %Function.prototype%。
-          1. 否则，如果 IsConstructor(_superclass_) 是 *false*，则
-            1. 抛出 *TypeError* 异常。
+          1. 否则，如果 IsConstructor(_superclass_) 是 *false*，那么
+            1. 抛出一个 *TypeError* 异常。
           1. 否则，
             1. 令 _protoParent_ 为 ? Get(_superclass_, *"prototype"*)。
-            1. 如果 _protoParent_ 不是 Object 且 _protoParent_ 不是 *null*，则抛出 *TypeError* 异常。
+            1. 如果 _protoParent_ 不是 Object 且 _protoParent_ 不是 *null*，则抛出一个 *TypeError* 异常。
             1. 令 _ctorParent_ 为 _superclass_。
         1. 令 _proto_ 为 OrdinaryObjectCreate(_protoParent_)。
         1. 如果不存在 |ClassBody|，则令 _ctor_ 为 ~empty~。
         1. 否则，令 _ctor_ 为 |ClassBody| 的 ConstructorMethod。
-        1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _classEnv_。
-        1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _classPrivateEnv_。
-        1. 如果 _ctor_ 是 ~empty~，则
-          1. 令 _defaultCtor_ 为一个没有参数、不捕获任何内容的新 Abstract Closure，调用时执行以下步骤：
-            1. 令 _args_ 为通过 [[Call]] 或 [[Construct]] 传给此函数的参数 List。
-            1. 如果 NewTarget 是 *undefined*，则抛出 *TypeError* 异常。
-            1. 令 _ctorFunc_ 为活动 function object。
-            1. 如果 _ctorFunc_.[[ConstructorKind]] 是 ~derived~，则
-              1. 注：此分支的行为类似于 `constructor(...args) { super(...args); }`。最显著的区别在于，虽然前述 ECMAScript 源文本会可观察地调用 `%Array.prototype%` 上的 %Symbol.iterator% 方法，但此函数不会。
+        1. 将运行执行上下文的 LexicalEnvironment 设置为 _classEnv_。
+        1. 将运行执行上下文的 PrivateEnvironment 设置为 _classPrivateEnv_。
+        1. 如果 _ctor_ 是 ~empty~，那么
+          1. 令 _defaultCtor_ 为一个不带参数、不捕获任何内容的新 Abstract Closure，该闭包在被调用时执行以下步骤：
+            1. 令 _args_ 为通过 [[Call]] 或 [[Construct]] 传递给此函数的参数 List。
+            1. 如果 NewTarget 是 *undefined*，则抛出一个 *TypeError* 异常。
+            1. 令 _ctorFunc_ 为活动函数对象。
+            1. 如果 _ctorFunc_.[[ConstructorKind]] 是 ~derived~，那么
+              1. 注：此分支的行为类似于 `constructor(...args) { super(...args); }`。最显著的区别是，虽然上述 ECMAScript 源文本会以可观察的方式调用 `%Array.prototype%` 上的 %Symbol.iterator% 方法，但此函数不会。
               1. 令 _func_ 为 ! _ctorFunc_.[[GetPrototypeOf]]()。
-              1. 如果 IsConstructor(_func_) 是 *false*，则抛出 *TypeError* 异常。
+              1. 如果 IsConstructor(_func_) 是 *false*，则抛出一个 *TypeError* 异常。
               1. 令 _result_ 为 ? Construct(_func_, _args_, NewTarget)。
             1. 否则，
               1. 注：此分支的行为类似于 `constructor() {}`。
@@ -25788,65 +25789,67 @@
             1. 返回 NormalCompletion(_result_)。
           1. 令 _ctorFunc_ 为 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », 当前 Realm Record, _ctorParent_)。
         1. 否则，
-          1. 令 _ctorInfo_ 为以 _proto_ 和 _ctorParent_ 为参数的 _ctor_ 的 ! DefineMethod。
+          1. 令 _ctorInfo_ 为以 _proto_ 和 _ctorParent_ 作为参数对 _ctor_ 执行 DefineMethod 的结果 !。
           1. 令 _ctorFunc_ 为 _ctorInfo_.[[Closure]]。
           1. 执行 MakeClassConstructor(_ctorFunc_)。
           1. 执行 SetFunctionName(_ctorFunc_, _className_)。
-        1. 将 _ctorFunc_.[[SourceText]] 设为 _sourceText_。
+        1. 将 _ctorFunc_.[[SourceText]] 设置为 _sourceText_。
         1. 执行 MakeConstructor(_ctorFunc_, *false*, _proto_)。
-        1. 如果存在 |ClassHeritage|，则将 _ctorFunc_.[[ConstructorKind]] 设为 ~derived~。
+        1. 如果存在 |ClassHeritage|，则将 _ctorFunc_.[[ConstructorKind]] 设置为 ~derived~。
         1. 执行 ! DefineMethodProperty(_proto_, *"constructor"*, _ctorFunc_, *false*)。
-        1. 如果不存在 |ClassBody|，则令 _classElements_ 为新的空 List。
+        1. 如果不存在 |ClassBody|，则令 _classElements_ 为一个新的空 List。
         1. 否则，令 _classElements_ 为 |ClassBody| 的 NonConstructorElements。
-        1. 令 _instancePrivateMethods_ 为新的空 List。
-        1. 令 _staticPrivateMethods_ 为新的空 List。
-        1. 令 _instanceFields_ 为新的空 List。
-        1. 令 _staticElements_ 为新的空 List。
+        1. 令 _instancePrivateMethods_ 为一个新的空 List。
+        1. 令 _staticPrivateMethods_ 为一个新的空 List。
+        1. 令 _instanceFields_ 为一个新的空 List。
+        1. 令 _staticElements_ 为一个新的空 List。
         1. 对于 _classElements_ 中的每个 |ClassElement| _classElement_，执行
-          1. 如果 _classElement_ 的 IsStatic 是 *false*，则
-            1. 令 _element_ 为以 _proto_ 为参数的 _classElement_ 的 ClassElementEvaluation 的 Completion。
+          1. 如果 _classElement_ 的 IsStatic 是 *false*，那么
+            1. 令 _element_ 为 Completion(以 _proto_ 作为参数对 _classElement_ 执行 ClassElementEvaluation)。
           1. 否则，
-            1. 令 _element_ 为以 _ctorFunc_ 为参数的 _classElement_ 的 ClassElementEvaluation 的 Completion。
-          1. 如果 _element_ 是一个 abrupt completion，则
-            1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
-            1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
+            1. 令 _element_ 为 Completion(以 _ctorFunc_ 作为参数对 _classElement_ 执行 ClassElementEvaluation)。
+          1. 如果 _element_ 是突然完成，那么
+            1. 将运行执行上下文的 LexicalEnvironment 设置为 _envRecord_。
+            1. 将运行执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
             1. 返回 ? _element_。
-          1. 将 _element_ 设为 ! _element_。
-          1. 如果 _element_ 是 PrivateElement，则
+          1. 将 _element_ 设置为 ! _element_。
+          1. 如果 _element_ 是 PrivateElement，那么
             1. 断言：_element_.[[Kind]] 是 ~method~ 或 ~accessor~。
             1. 如果 _classElement_ 的 IsStatic 是 *false*，则令 _container_ 为 _instancePrivateMethods_。
             1. 否则，令 _container_ 为 _staticPrivateMethods_。
-            1. 如果 _container_ 包含一个 PrivateElement _existingElement_，使得 _existingElement_.[[Key]] 是 _element_.[[Key]]，则
-              1. 断言：_element_.[[Kind]] 和 _existingElement_.[[Kind]] 都是 ~accessor~。
-              1. 如果 _element_.[[Getter]] 是 *undefined*，则
+            1. 如果 _container_ 包含一个 [[Key]] 与 _element_.[[Key]] 相同的 PrivateElement _existingElement_，那么
+              1. 断言：_element_.[[Kind]] 和 _existingElement_.[[Kind]] 均为 ~accessor~。
+              1. 如果 _element_.[[Getter]] 是 *undefined*，那么
                 1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _existingElement_.[[Getter]], [[Setter]]: _element_.[[Setter]] }。
               1. 否则，
                 1. 令 _combined_ 为 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _element_.[[Getter]], [[Setter]]: _existingElement_.[[Setter]] }。
               1. 将 _container_ 中的 _existingElement_ 替换为 _combined_。
             1. 否则，
               1. 将 _element_ 追加到 _container_。
-          1. 否则，如果 _element_ 是 ClassFieldDefinition Record，则
+          1. 否则，如果 _element_ 是 ClassFieldDefinition Record，那么
             1. 如果 _classElement_ 的 IsStatic 是 *false*，则将 _element_ 追加到 _instanceFields_。
             1. 否则，将 _element_ 追加到 _staticElements_。
-          1. 否则，如果 _element_ 是 ClassStaticBlockDefinition Record，则
+          1. 否则，如果 _element_ 是 ClassStaticBlockDefinition Record，那么
             1. 将 _element_ 追加到 _staticElements_。
-        1. 将正在运行的执行上下文的 LexicalEnvironment 设为 _envRecord_。
-        1. 如果 _classBinding_ 不是 *undefined*，则
+          1. 否则，
+            1. 断言：_element_ 是 ~empty~。
+        1. 将运行执行上下文的 LexicalEnvironment 设置为 _envRecord_。
+        1. 如果 _classBinding_ 不是 *undefined*，那么
           1. 执行 ! _classEnv_.InitializeBinding(_classBinding_, _ctorFunc_)。
-        1. 将 _ctorFunc_.[[PrivateMethods]] 设为 _instancePrivateMethods_。
-        1. 将 _ctorFunc_.[[Fields]] 设为 _instanceFields_。
+        1. 将 _ctorFunc_.[[PrivateMethods]] 设置为 _instancePrivateMethods_。
+        1. 将 _ctorFunc_.[[Fields]] 设置为 _instanceFields_。
         1. 对于 _staticPrivateMethods_ 中的每个 PrivateElement _method_，执行
           1. 执行 ! PrivateMethodOrAccessorAdd(_ctorFunc_, _method_)。
         1. 对于 _staticElements_ 中的每个元素 _elementRecord_，执行
-          1. 如果 _elementRecord_ 是 ClassFieldDefinition Record，则
+          1. 如果 _elementRecord_ 是 ClassFieldDefinition Record，那么
             1. 令 _result_ 为 Completion(DefineField(_ctorFunc_, _elementRecord_))。
           1. 否则，
             1. 断言：_elementRecord_ 是 ClassStaticBlockDefinition Record。
             1. 令 _result_ 为 Completion(Call(_elementRecord_.[[BodyFunction]], _ctorFunc_))。
-          1. 如果 _result_ 是一个 abrupt completion，则
-            1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
+          1. 如果 _result_ 是突然完成，那么
+            1. 将运行执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
             1. 返回 ? _result_。
-        1. 将正在运行的执行上下文的 PrivateEnvironment 设为 _outerPrivateEnv_。
+        1. 将运行执行上下文的 PrivateEnvironment 设置为 _outerPrivateEnv_。
         1. 返回 _ctorFunc_。
       </emu-alg>
     </emu-clause>
@@ -34061,24 +34064,24 @@
     <h1>Date 对象</h1>
 
     <emu-clause id="sec-overview-of-date-objects-and-definitions-of-abstract-operations">
-      <h1>Date 对象概述以及抽象操作定义</h1>
-      <p>以下抽象操作作用于时间值（定义见 <emu-xref href="#sec-time-values-and-time-range"></emu-xref>）。注意，在每种情况下，如果这些函数之一的任何实参是 *NaN*，则结果将是 *NaN*。</p>
+      <h1>Date 对象概述及抽象操作的定义</h1>
+      <p>以下抽象操作对时间值（定义见 <emu-xref href="#sec-time-values-and-time-range"></emu-xref>）进行操作。请注意，在所有情况下，如果这些函数中任一函数的任何参数是 *NaN*，则结果将为 *NaN*。</p>
 
       <emu-clause id="sec-time-values-and-time-range">
         <h1>时间值和时间范围</h1>
-        <p>ECMAScript 中的时间度量类似于 POSIX 中的时间度量，特别是共享以预推格里高利历、UTC 1970 年 1 月 1 日开始时的午夜作为 <dfn id="epoch">epoch</dfn>，并且把每一天都计为正好 86,400 秒（每秒长度为 1000 毫秒）的定义。</p>
-        <p>ECMAScript <dfn variants="time values">时间值</dfn>是 Number，要么是表示毫秒精度的时间瞬间的有限整数 Number，要么是表示没有特定瞬间的 *NaN*。作为 <emu-eqn>24 × 60 × 60 × 1000 = 86,400,000</emu-eqn> 的倍数的时间值（即，对于某个整数 _d_，是 86,400,000 × _d_）表示从 epoch 起经过 _d_ 个完整 UTC 日后的 UTC 日开始处的瞬间（负 _d_ 表示早于 epoch）。其他每个有限时间值 _tv_ 都相对于此前最大的、满足这种倍数条件的时间值 _s_ 来定义，并表示发生在与 _s_ 同一个 UTC 日内、但在其后 (_tv_ - _s_) 毫秒的瞬间。</p>
-        <p>时间值不考虑 UTC 闰秒——没有表示正闰秒内瞬间的时间值，并且存在表示因负闰秒而从 UTC 时间线移除的瞬间的时间值。不过，时间值的定义仍然产生与 UTC 的分段对齐，仅在闰秒边界处存在不连续，并且在闰秒之外差值为零。</p>
-        <p>Number 可以精确表示从 -9,007,199,254,740,992 到 9,007,199,254,740,992 的所有整数（<emu-xref href="#sec-number.min_safe_integer"></emu-xref> 和 <emu-xref href="#sec-number.max_safe_integer"></emu-xref>）。时间值支持略小的范围，即 -8,640,000,000,000,000 到 8,640,000,000,000,000 毫秒。这产生的受支持时间值范围，相对于 UTC 1970 年 1 月 1 日开始时的午夜，正好是 -100,000,000 天到 100,000,000 天。</p>
-        <p>UTC 1970 年 1 月 1 日开始时午夜的精确时刻由时间值 *+0*<sub>𝔽</sub> 表示。</p>
+        <p>ECMAScript 中的时间度量类似于 POSIX 中的时间度量，特别是都依据公历回溯历法进行定义，以 UTC 1970 年 1 月 1 日开始时的午夜作为<dfn id="epoch">纪元</dfn>，并将每一天计为恰好包含 86,400 秒（每秒为 1000 毫秒）。</p>
+        <p>ECMAScript <dfn variants="time values">时间值</dfn>是一个 Number，它可以是表示精确到毫秒的某个时刻的有限整数 Number，也可以是表示没有特定时刻的 *NaN*。作为 msPerDay 整数倍的时间值（即对于某个整数 _d_，其值为 msPerDay × _d_）表示比纪元晚 _d_ 个完整 UTC 日的 UTC 日开始时的时刻（当 _d_ 为负数时则早于纪元）。其他任何有限时间值 _tv_ 都是相对于在它之前且作为这种倍数的最大时间值 _s_ 定义的，并表示与 _s_ 位于同一 UTC 日内、但比它晚 (_tv_ - _s_) 毫秒的时刻。</p>
+        <p>时间值不考虑 UTC 闰秒——没有时间值表示正闰秒内的时刻，而被负闰秒从 UTC 时间线中移除的时刻则存在对应的时间值。不过，时间值的定义仍然产生与 UTC 的分段对齐，仅在闰秒边界处出现不连续，并且在闰秒之外差值为零。</p>
+        <p>Number 可以精确表示从 -9,007,199,254,740,992 到 9,007,199,254,740,992 的所有整数（<emu-xref href="#sec-number.min_safe_integer"></emu-xref> 和 <emu-xref href="#sec-number.max_safe_integer"></emu-xref>）。时间值支持的范围略小，为 -8,640,000,000,000,000 到 8,640,000,000,000,000 毫秒。因此，相对于 UTC 1970 年 1 月 1 日开始时的午夜，受支持的时间值范围恰好为 -100,000,000 日到 100,000,000 日。</p>
+        <p>UTC 1970 年 1 月 1 日开始时的午夜这一确切时刻由时间值 *+0*<sub>𝔽</sub> 表示。</p>
         <emu-note>
-          <p>在预推格里高利历中，闰年正是那些可被 4 整除并且可被 400 整除或不能被 100 整除的年份。</p>
-          <p>预推格里高利历的 400 年周期包含 97 个闰年。这产生每年平均 365.2425 天，即 31,556,952,000 毫秒。因此，Number 能以毫秒精度精确表示的最大范围，相对于 1970 年大约是 -285,426 年到 285,426 年。本节规定的时间值所支持的较小范围，相对于 1970 年大约是 -273,790 年到 273,790 年。</p>
+          <p>在公历回溯历法中，闰年恰好是既能被 4 整除，又能被 400 整除或不能被 100 整除的年份。</p>
+          <p>公历回溯历法的 400 年周期包含 97 个闰年。因此，平均每年为 365.2425 日，即 31,556,952,000 毫秒。所以，Number 能够以毫秒精度精确表示的最大范围约为相对于 1970 年的 -285,426 年到 285,426 年。本节规定的时间值所支持的较小范围约为相对于 1970 年的 -273,790 年到 273,790 年。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-related-constants">
-        <h1>时间相关常量</h1>
+        <h1>与时间相关的常量</h1>
         <p>以下各节中的算法会引用这些常量。</p>
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
@@ -34087,17 +34090,20 @@
         <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = *60000*<sub>𝔽</sub> = msPerSecond × 𝔽(SecondsPerMinute)</emu-eqn>
         <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = *3600000*<sub>𝔽</sub> = msPerMinute × 𝔽(MinutesPerHour)</emu-eqn>
         <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = *86400000*<sub>𝔽</sub> = msPerHour × 𝔽(HoursPerDay)</emu-eqn>
+        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × ℝ(msPerSecond) = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
+        <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
       </emu-clause>
 
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
         <h1>
           Day (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 一个有限时间值,
+          ): 一个整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入日期的日编号。</dd>
+          <dd>它返回 _tv_ 所在日的日编号。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(floor(ℝ(_tv_ / msPerDay)))。
@@ -34107,12 +34113,12 @@
       <emu-clause id="sec-timewithinday" type="abstract operation" oldids="eqn-TimeWithinDay">
         <h1>
           TimeWithinDay (
-            _tv_: a finite time value,
-          ): an integral Number in the interval from *+0*<sub>𝔽</sub> (inclusive) to msPerDay (exclusive)
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub>（包含）到 msPerDay（不包含）区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回自 _tv_ 所落入日期开始以来的毫秒数。</dd>
+          <dd>它返回从 _tv_ 所在日开始时起经过的毫秒数。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(ℝ(_tv_) modulo ℝ(msPerDay))。
@@ -34122,12 +34128,12 @@
       <emu-clause id="sec-daysinyear" type="abstract operation" oldids="eqn-DaysInYear,sec-year-number">
         <h1>
           DaysInYear (
-            _y_: an integral Number,
-          ): *365*<sub>𝔽</sub> or *366*<sub>𝔽</sub>
+            _y_: 一个整数 Number,
+          ): *365*<sub>𝔽</sub> 或 *366*<sub>𝔽</sub>
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回年份 _y_ 中的天数。闰年有 366 天；所有其他年份有 365 天。</dd>
+          <dd>它返回年份 _y_ 中的日数。闰年有 366 日；所有其他年份有 365 日。</dd>
         </dl>
         <emu-alg>
           1. 令 _ry_ 为 ℝ(_y_)。
@@ -34141,8 +34147,8 @@
       <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear">
         <h1>
           DayFromYear (
-            _y_: an integral Number,
-          ): an integral Number
+            _y_: 一个整数 Number,
+          ): 一个整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -34150,7 +34156,7 @@
         </dl>
         <emu-alg>
           1. 令 _ry_ 为 ℝ(_y_)。
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注：在以下步骤中，_numberYears1_、_numberYears4_、_numberYears100_ 和 _numberYears400_ 分别表示在 epoch 与年份 _y_ 开始之间出现的、可被 1、4、100 和 400 整除的年份数。如果 _y_ 早于 epoch，则该数为负。
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注：在以下步骤中，_numberYears1_、_numberYears4_、_numberYears100_ 和 _numberYears400_ 分别表示纪元与年份 _y_ 开始时之间出现的可被 1、4、100 和 400 整除的年份数。如果 _y_ 早于纪元，则该数为负数。
           1. 令 _numberYears1_ 为 (_ry_ - 1970)。
           1. 令 _numberYears4_ 为 floor((_ry_ - 1969) / 4)。
           1. 令 _numberYears100_ 为 floor((_ry_ - 1901) / 100)。
@@ -34162,12 +34168,12 @@
       <emu-clause id="sec-timefromyear" type="abstract operation" oldids="eqn-TimeFromYear">
         <h1>
           TimeFromYear (
-            _y_: an integral Number,
-          ): a time value
+            _y_: 一个整数 Number,
+          ): 一个时间值
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回年份 _y_ 开始处的时间值。</dd>
+          <dd>它返回年份 _y_ 开始时的时间值。</dd>
         </dl>
         <emu-alg>
           1. 返回 msPerDay × DayFromYear(_y_)。
@@ -34177,23 +34183,23 @@
       <emu-clause id="sec-yearfromtime" type="abstract operation" oldids="eqn-YearFromTime">
         <h1>
           YearFromTime (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 一个有限时间值,
+          ): 一个整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入的年份。</dd>
+          <dd>它返回 _tv_ 所在的年份。</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] 返回最大的整数 Number _y_（最接近 +∞），使得 TimeFromYear(_y_) ≤ _tv_。
+          1. [declared="y"] 返回满足 TimeFromYear(_y_) ≤ _tv_ 的最大整数 Number _y_（最接近 +∞）。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-daywithinyear" type="abstract operation" oldids="eqn-DayWithinYear">
         <h1>
           DayWithinYear (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *365*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *365*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
         </dl>
@@ -34205,12 +34211,12 @@
       <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear">
         <h1>
           InLeapYear (
-            _tv_: a finite time value,
-          ): *+0*<sub>𝔽</sub> or *1*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): *+0*<sub>𝔽</sub> 或 *1*<sub>𝔽</sub>
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>如果 _tv_ 位于闰年内，则返回 *1*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。</dd>
+          <dd>如果 _tv_ 位于闰年内，则它返回 *1*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。</dd>
         </dl>
         <emu-alg>
           1. 如果 DaysInYear(YearFromTime(_tv_)) 是 *366*<sub>𝔽</sub>，则返回 *1*<sub>𝔽</sub>。
@@ -34221,12 +34227,12 @@
       <emu-clause id="sec-monthfromtime" type="abstract operation" oldids="eqn-MonthFromTime,sec-month-number">
         <h1>
           MonthFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *11*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *11*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回一个 Number，用于标识 _tv_ 所落入的月份。月份值 *+0*<sub>𝔽</sub> 指定一月；*1*<sub>𝔽</sub> 指定二月；*2*<sub>𝔽</sub> 指定三月；*3*<sub>𝔽</sub> 指定四月；*4*<sub>𝔽</sub> 指定五月；*5*<sub>𝔽</sub> 指定六月；*6*<sub>𝔽</sub> 指定七月；*7*<sub>𝔽</sub> 指定八月；*8*<sub>𝔽</sub> 指定九月；*9*<sub>𝔽</sub> 指定十月；*10*<sub>𝔽</sub> 指定十一月；*11*<sub>𝔽</sub> 指定十二月。注意，<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
+          <dd>它返回一个标识 _tv_ 所在月份的 Number。月份值 *+0*<sub>𝔽</sub> 指定一月；*1*<sub>𝔽</sub> 指定二月；*2*<sub>𝔽</sub> 指定三月；*3*<sub>𝔽</sub> 指定四月；*4*<sub>𝔽</sub> 指定五月；*5*<sub>𝔽</sub> 指定六月；*6*<sub>𝔽</sub> 指定七月；*7*<sub>𝔽</sub> 指定八月；*8*<sub>𝔽</sub> 指定九月；*9*<sub>𝔽</sub> 指定十月；*10*<sub>𝔽</sub> 指定十一月；而 *11*<sub>𝔽</sub> 指定十二月。请注意，<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
         </dl>
         <emu-alg>
           1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
@@ -34250,12 +34256,12 @@
       <emu-clause id="sec-datefromtime" type="abstract operation" oldids="sec-date-number">
         <h1>
           DateFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *1*<sub>𝔽</sub> to *31*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *1*<sub>𝔽</sub> 到 *31*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入月份中的日期。</dd>
+          <dd>它返回 _tv_ 所在月份中的日期。</dd>
         </dl>
         <emu-alg>
           1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
@@ -34280,12 +34286,12 @@
       <emu-clause id="sec-weekday" type="abstract operation" oldids="sec-week-day">
         <h1>
           WeekDay (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *6*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *6*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回一个 Number，用于标识 _tv_ 所落入的星期几。星期值 *+0*<sub>𝔽</sub> 指定星期日；*1*<sub>𝔽</sub> 指定星期一；*2*<sub>𝔽</sub> 指定星期二；*3*<sub>𝔽</sub> 指定星期三；*4*<sub>𝔽</sub> 指定星期四；*5*<sub>𝔽</sub> 指定星期五；*6*<sub>𝔽</sub> 指定星期六。注意，<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
+          <dd>它返回一个标识 _tv_ 所在星期几的 Number。星期值 *+0*<sub>𝔽</sub> 指定星期日；*1*<sub>𝔽</sub> 指定星期一；*2*<sub>𝔽</sub> 指定星期二；*3*<sub>𝔽</sub> 指定星期三；*4*<sub>𝔽</sub> 指定星期四；*5*<sub>𝔽</sub> 指定星期五；而 *6*<sub>𝔽</sub> 指定星期六。请注意，<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7)。
@@ -34295,12 +34301,12 @@
       <emu-clause id="sec-hourfromtime" type="abstract operation" oldids="eqn-HourFromTime,sec-hours-minutes-second-and-milliseconds">
         <h1>
           HourFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *23*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *23*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入日期中的小时。</dd>
+          <dd>它返回 _tv_ 所在日中的小时。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(floor(ℝ(_tv_ / msPerHour)) modulo HoursPerDay)。
@@ -34310,12 +34316,12 @@
       <emu-clause id="sec-minfromtime" type="abstract operation" oldids="eqn-MinFromTime">
         <h1>
           MinFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *59*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *59*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入小时中的分钟。</dd>
+          <dd>它返回 _tv_ 所在小时中的分钟。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(floor(ℝ(_tv_ / msPerMinute)) modulo MinutesPerHour)。
@@ -34325,12 +34331,12 @@
       <emu-clause id="sec-secfromtime" type="abstract operation" oldids="eqn-SecFromTime">
         <h1>
           SecFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *59*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *59*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入分钟中的秒。</dd>
+          <dd>它返回 _tv_ 所在分钟中的秒。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(floor(ℝ(_tv_ / msPerSecond)) modulo SecondsPerMinute)。
@@ -34340,12 +34346,12 @@
       <emu-clause id="sec-msfromtime" type="abstract operation" oldids="eqn-msFromTime">
         <h1>
           msFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *999*<sub>𝔽</sub>
+            _tv_: 一个有限时间值,
+          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *999*<sub>𝔽</sub> 的闭区间内的整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所落入秒中的毫秒。</dd>
+          <dd>它返回 _tv_ 所在秒中的毫秒。</dd>
         </dl>
         <emu-alg>
           1. 返回 𝔽(ℝ(_tv_) modulo ℝ(msPerSecond))。
@@ -34355,27 +34361,27 @@
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
-            _year_: an integer,
-            _month_: an integer in the inclusive interval from 1 to 12,
-            _day_: an integer in the inclusive interval from 1 to 31,
-            _hour_: an integer in the inclusive interval from 0 to 23,
-            _minute_: an integer in the inclusive interval from 0 to 59,
-            _second_: an integer in the inclusive interval from 0 to 59,
-            _millisecond_: an integer in the inclusive interval from 0 to 999,
-            _microsecond_: an integer in the inclusive interval from 0 to 999,
-            _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a BigInt
+            _year_: 一个整数,
+            _month_: 一个位于从 1 到 12 的闭区间内的整数,
+            _day_: 一个位于从 1 到 31 的闭区间内的整数,
+            _hour_: 一个位于从 0 到 23 的闭区间内的整数,
+            _minute_: 一个位于从 0 到 59 的闭区间内的整数,
+            _second_: 一个位于从 0 到 59 的闭区间内的整数,
+            _millisecond_: 一个位于从 0 到 999 的闭区间内的整数,
+            _microsecond_: 一个位于从 0 到 999 的闭区间内的整数,
+            _nanosecond_: 一个位于从 0 到 999 的闭区间内的整数,
+          ): 一个 BigInt
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>返回值表示自 epoch 以来的纳秒数，该值对应于给定的 ISO 8601 日历日期和 UTC 挂钟时间。</dd>
+          <dd>返回值表示自纪元以来、与给定 ISO 8601 日历日期和 UTC 挂钟时间相对应的纳秒数。</dd>
         </dl>
         <emu-alg>
           1. 令 _date_ 为 MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_))。
           1. 令 _time_ 为 MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_))。
           1. 令 _ms_ 为 MakeDate(_date_, _time_)。
-          1. 断言：_ms_ 是整数 Number。
-          1. 返回 ℤ(ℝ(_ms_) × 10<sup>6</sup> + _microsecond_ × 10<sup>3</sup> + _nanosecond_)。
+          1. 断言：_ms_ 是一个整数 Number。
+          1. 返回 ℤ(ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_)。
         </emu-alg>
       </emu-clause>
 
@@ -34383,108 +34389,108 @@
         <h1>时区标识符</h1>
 
         <p>
-          ECMAScript 中的时区由<dfn variants="time zone identifier">时区标识符</dfn>表示，它们是完全由从 0x0000 到 0x007F 闭区间内的码元组成的 String。
-          ECMAScript 实现支持的时区可以是<dfn variants="available named time zone">可用命名时区</dfn>，由 AvailableNamedTimeZoneIdentifiers 返回的 Time Zone Identifier Records 的 [[Identifier]] 字段表示；也可以是<dfn variants="offset time zone">偏移时区</dfn>，由 IsTimeZoneOffsetString 返回 *true* 的 String 表示。
+          ECMAScript 中的时区由<dfn variants="time zone identifier">时区标识符</dfn>表示，该标识符是完全由位于从 0x0000 到 0x007F 的闭区间内的代码单元组成的 String。
+          ECMAScript 实现所支持的时区可以是<dfn variants="available named time zone">可用具名时区</dfn>，由 AvailableNamedTimeZoneIdentifiers 返回的 Time Zone Identifier Record 的 [[Identifier]] 字段表示；也可以是<dfn variants="offset time zone">偏移时区</dfn>，由使 IsTimeZoneOffsetString 返回 *true* 的 String 表示。
         </p>
         <p>
-          <dfn variants="primary time zone identifiers">主时区标识符</dfn>是某个可用命名时区的首选标识符。
-          <dfn variants="non-primary time zone identifiers">非主时区标识符</dfn>是某个可用命名时区的标识符，且不是主时区标识符。
-          <dfn variants="available named time zone identifiers">可用命名时区标识符</dfn>要么是主时区标识符，要么是非主时区标识符。
-          每个可用命名时区标识符都恰好关联到一个可用命名时区。
-          每个可用命名时区都恰好关联到一个主时区标识符，并关联到零个或更多非主时区标识符。
+          <dfn variants="primary time zone identifiers">主时区标识符</dfn>是可用具名时区的首选标识符。
+          <dfn variants="non-primary time zone identifiers">非主时区标识符</dfn>是可用具名时区的标识符，但不是主时区标识符。
+          <dfn variants="available named time zone identifiers">可用具名时区标识符</dfn>是主时区标识符或非主时区标识符。
+          每个可用具名时区标识符恰好与一个可用具名时区相关联。
+          每个可用具名时区恰好与一个主时区标识符以及零个或多个非主时区标识符相关联。
         </p>
         <p>
-          ECMAScript 实现必须支持标识符为 *"UTC"* 的可用命名时区，该标识符必须是 UTC 时区的主时区标识符。
-          此外，实现可以支持任意数量的其他可用命名时区。
+          ECMAScript 实现必须支持标识符为 *"UTC"* 的可用具名时区，该标识符必须是 UTC 时区的主时区标识符。
+          此外，实现可以支持任意数量的其他可用具名时区。
         </p>
         <p>
-          遵循 ECMA-402 国际化 API 规范中所述时区要求的实现称为<dfn>时区感知</dfn>。
-          时区感知实现必须支持与 IANA Time Zone Database 的 Zone 和 Link 名称对应的可用命名时区，并且只能支持这样的名称。
-          在时区感知实现中，主时区标识符分别是 IANA Time Zone Database 中的 Zone 名称，非主时区标识符是 Link 名称，但 ECMA-402 规范中规定的 AvailableNamedTimeZoneIdentifiers 特别覆盖的情况除外。
-          仍建议不支持完整 IANA Time Zone Database 的实现使用 IANA Time Zone Database 名称作为表示时区的标识符。
+          遵循 ECMA-402 国际化 API 规范中所述时区要求的实现称为<dfn>时区感知</dfn>实现。
+          时区感知实现必须支持与 IANA 时区数据库的 Zone 名称和 Link 名称相对应的可用具名时区，并且只能支持这些名称。
+          在时区感知实现中，除 ECMA-402 规范所规定的 AvailableNamedTimeZoneIdentifiers 明确覆盖的情况外，主时区标识符和非主时区标识符分别是 IANA 时区数据库中的 Zone 名称和 Link 名称。
+          仍建议未支持整个 IANA 时区数据库的实现使用 IANA 时区数据库名称作为表示时区的标识符。
         </p>
       </emu-clause>
 
       <emu-clause id="sec-getnamedtimezoneepochnanoseconds" type="implementation-defined abstract operation">
         <h1>
           GetNamedTimeZoneEpochNanoseconds (
-            _timeZoneIdentifier_: a String,
-            _year_: an integer,
-            _month_: an integer in the inclusive interval from 1 to 12,
-            _day_: an integer in the inclusive interval from 1 to 31,
-            _hour_: an integer in the inclusive interval from 0 to 23,
-            _minute_: an integer in the inclusive interval from 0 to 59,
-            _second_: an integer in the inclusive interval from 0 to 59,
-            _millisecond_: an integer in the inclusive interval from 0 to 999,
-            _microsecond_: an integer in the inclusive interval from 0 to 999,
-            _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a List of BigInts
+            _timeZoneIdentifier_: 一个 String,
+            _year_: 一个整数,
+            _month_: 一个位于从 1 到 12 的闭区间内的整数,
+            _day_: 一个位于从 1 到 31 的闭区间内的整数,
+            _hour_: 一个位于从 0 到 23 的闭区间内的整数,
+            _minute_: 一个位于从 0 到 59 的闭区间内的整数,
+            _second_: 一个位于从 0 到 59 的闭区间内的整数,
+            _millisecond_: 一个位于从 0 到 999 的闭区间内的整数,
+            _microsecond_: 一个位于从 0 到 999 的闭区间内的整数,
+            _nanosecond_: 一个位于从 0 到 999 的闭区间内的整数,
+          ): 一个 BigInt 的 List
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            返回的 List 中的每个值都表示自 epoch 以来的纳秒数，该值对应于由 _timeZoneIdentifier_ 标识的命名时区中的给定 ISO 8601 日历日期和挂钟时间。
+            返回的 List 中的每个值都表示自纪元以来、与给定 ISO 8601 日历日期以及由 _timeZoneIdentifier_ 标识的具名时区中的挂钟时间相对应的纳秒数。
           </dd>
         </dl>
         <p>
-          当输入表示的本地时间因负时区转换而出现多次（例如夏令时结束时，或因时区规则变更而时区偏移减少时），返回的 List 将有多个元素，并按数值升序排序。
-          当输入表示的本地时间因正时区转换而被跳过（例如夏令时开始时，或因时区规则变更而时区偏移增加时），返回的 List 将为空。
-          否则，返回的 List 将有一个元素。
+          当输入表示由于负时区转换而出现多次的本地时间时（例如夏令时结束，或由于时区规则发生变化而减小时区偏移），返回的 List 将包含多个元素，并按数值升序排序。
+          当输入表示由于正时区转换而被跳过的本地时间时（例如夏令时开始，或由于时区规则发生变化而增大时区偏移），返回的 List 将为空。
+          否则，返回的 List 将包含一个元素。
         </p>
-        <p>GetNamedTimeZoneEpochNanoseconds 的默认实现（用于不包含任何时区本地政治规则的 ECMAScript 实现）在被调用时执行以下步骤：</p>
+        <p>对于不包含任何时区的本地政治规则的 ECMAScript 实现，应使用 GetNamedTimeZoneEpochNanoseconds 的默认实现；该默认实现在被调用时执行以下步骤：</p>
         <emu-alg>
           1. 断言：_timeZoneIdentifier_ 是 *"UTC"*。
           1. 令 _epochNanoseconds_ 为 GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_)。
           1. 返回 « _epochNanoseconds_ »。
         </emu-alg>
         <emu-note>
-          <p>要求时区感知实现（并建议所有其他实现）使用 IANA Time Zone Database 的时区信息 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>。</p>
-          <p>America/New_York 中 2017 年 11 月 5 日凌晨 1:30 会重复两次，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) 会返回一个长度为 2 的 List，其中第一个元素表示 05:30 UTC（对应 UTC 偏移 -04:00 的美国东部夏令时 01:30），第二个元素表示 06:30 UTC（对应 UTC 偏移 -05:00 的美国东部标准时 01:30）。</p>
-          <p>America/New_York 中 2017 年 3 月 12 日凌晨 2:30 不存在，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) 会返回一个空 List。</p>
+          <p>时区感知实现必须使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 的时区信息（并建议所有其他实现也这样做）。</p>
+          <p>America/New_York 的 2017 年 11 月 5 日凌晨 1:30 重复出现了两次，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) 将返回长度为 2 的 List，其中第一个元素表示 UTC 05:30（对应于 UTC 偏移 -04:00 的美国东部夏令时 01:30），第二个元素表示 UTC 06:30（对应于 UTC 偏移 -05:00 的美国东部标准时间 01:30）。</p>
+          <p>America/New_York 的 2017 年 3 月 12 日凌晨 2:30 并不存在，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) 将返回一个空 List。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-getnamedtimezoneoffsetnanoseconds" oldids="sec-local-time-zone-adjustment" type="implementation-defined abstract operation">
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
-            _timeZoneIdentifier_: a String,
-            _epochNanoseconds_: a BigInt,
-          ): an integer
+            _timeZoneIdentifier_: 一个 String,
+            _epochNanoseconds_: 一个 BigInt,
+          ): 一个整数
         </h1>
         <dl class="header">
         </dl>
-        <p>返回的整数表示由 _timeZoneIdentifier_ 标识的命名时区，在相对于 epoch 与 _epochNanoseconds_ 对应的瞬间相对于 UTC 的偏移，两者都以纳秒为单位。</p>
-        <p>GetNamedTimeZoneOffsetNanoseconds 的默认实现（用于不包含任何时区本地政治规则的 ECMAScript 实现）在被调用时执行以下步骤：</p>
+        <p>返回的整数表示在相对于纪元与 _epochNanoseconds_ 相对应的时刻，由 _timeZoneIdentifier_ 标识的具名时区相对于 UTC 的偏移，两者均以纳秒为单位。</p>
+        <p>对于不包含任何时区的本地政治规则的 ECMAScript 实现，应使用 GetNamedTimeZoneOffsetNanoseconds 的默认实现；该默认实现在被调用时执行以下步骤：</p>
         <emu-alg>
           1. 断言：_timeZoneIdentifier_ 是 *"UTC"*。
           1. 返回 0。
         </emu-alg>
         <emu-note>
-          <p>时区偏移值可以为正，也可以为负。</p>
+          <p>时区偏移值可以是正数或负数。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-zone-identifier-record">
-        <h1>Time Zone Identifier Record</h1>
-        <p><dfn variants="Time Zone Identifier Records">Time Zone Identifier Record</dfn> 是一种 Record，用于描述可用命名时区标识符及其对应的主时区标识符。</p>
-        <p>Time Zone Identifier Record 具有 <emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref> 中列出的字段。</p>
-        <emu-table id="table-time-zone-identifier-record-fields" caption="Time Zone Identifier Record 字段">
+        <h1>时区标识符记录</h1>
+        <p><dfn variants="Time Zone Identifier Records">时区标识符记录</dfn>是一种用于描述可用具名时区标识符及其对应主时区标识符的 Record。</p>
+        <p>时区标识符记录具有 <emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref> 中列出的字段。</p>
+        <emu-table id="table-time-zone-identifier-record-fields" caption="时区标识符记录的字段">
           <table>
             <thead>
               <tr>
-                <th>字段名</th>
+                <th>字段名称</th>
                 <th>值</th>
                 <th>含义</th>
               </tr>
             </thead>
             <tr>
               <td>[[Identifier]]</td>
-              <td>a String</td>
-              <td>实现支持的可用命名时区标识符。</td>
+              <td>一个 String</td>
+              <td>实现所支持的可用具名时区标识符。</td>
             </tr>
             <tr>
               <td>[[PrimaryIdentifier]]</td>
-              <td>a String</td>
+              <td>一个 String</td>
               <td>[[Identifier]] 解析到的主时区标识符。</td>
             </tr>
           </table>
@@ -34495,28 +34501,28 @@
       </emu-clause>
 
       <emu-clause id="sec-availablenamedtimezoneidentifiers" type="implementation-defined abstract operation">
-        <h1>AvailableNamedTimeZoneIdentifiers ( ): a List of Time Zone Identifier Records</h1>
+        <h1>AvailableNamedTimeZoneIdentifiers ( ): Time Zone Identifier Record 的 List</h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            其结果描述此实现中的所有可用命名时区标识符，以及每个可用命名时区标识符对应的主时区标识符。
-            该 List 按每个 Time Zone Identifier Record 的 [[Identifier]] 字段排序。
+            其结果描述此实现中的所有可用具名时区标识符，以及与每个可用具名时区标识符相对应的主时区标识符。
+            该 List 按照每个 Time Zone Identifier Record 的 [[Identifier]] 字段排序。
           </dd>
         </dl>
         <p>
-          时区感知实现，包括所有实现 ECMA-402 国际化 API 的实现，必须按 ECMA-402 规范中的规定实现 AvailableNamedTimeZoneIdentifiers 抽象操作。
+          时区感知实现（包括所有实现 ECMA-402 国际化 API 的实现）必须按照 ECMA-402 规范中的规定实现 AvailableNamedTimeZoneIdentifiers 抽象操作。
           对于非时区感知实现，AvailableNamedTimeZoneIdentifiers 在被调用时执行以下步骤：
         </p>
         <emu-alg>
-          1. 如果实现不包含任何时区的本地政治规则，则
+          1. 如果实现不包含任何时区的本地政治规则，那么
             1. 返回 « Time Zone Identifier Record { [[Identifier]]: *"UTC"*, [[PrimaryIdentifier]]: *"UTC"* } »。
-          1. 令 _identifiers_ 为唯一可用命名时区标识符的 List，按字典序码元顺序排序。
-          1. 令 _result_ 为新的空 List。
-          1. 对 _identifiers_ 的每个元素 _identifier_，执行：
+          1. 令 _identifiers_ 为由唯一的可用具名时区标识符组成、按照代码单元字典序排序的 List。
+          1. 令 _result_ 为一个新的空 List。
+          1. 对于 _identifiers_ 中的每个元素 _identifier_，执行
             1. 令 _primary_ 为 _identifier_。
-            1. 如果 _identifier_ 是此实现中的非主时区标识符，且 _identifier_ 不是 *"UTC"*，则
-              1. 将 _primary_ 设置为与 _identifier_ 关联的主时区标识符。
-              1. 注：实现可能需要迭代解析 _identifier_，以获得主时区标识符。
+            1. 如果 _identifier_ 是此实现中的非主时区标识符，并且 _identifier_ 不是 *"UTC"*，那么
+              1. 将 _primary_ 设置为与 _identifier_ 相关联的主时区标识符。
+              1. 注：实现可能需要以迭代方式解析 _identifier_，以获得主时区标识符。
             1. 令 _record_ 为 Time Zone Identifier Record { [[Identifier]]: _identifier_, [[PrimaryIdentifier]]: _primary_ }。
             1. 将 _record_ 追加到 _result_。
           1. 断言：_result_ 包含一个 Time Zone Identifier Record _record_，使得 _record_.[[Identifier]] 是 *"UTC"* 且 _record_.[[PrimaryIdentifier]] 是 *"UTC"*。
@@ -34525,59 +34531,59 @@
       </emu-clause>
 
       <emu-clause id="sec-systemtimezoneidentifier" oldids="sec-defaulttimezone" type="implementation-defined abstract operation">
-        <h1>SystemTimeZoneIdentifier ( ): a String</h1>
+        <h1>SystemTimeZoneIdentifier ( ): 一个 String</h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            它返回一个表示宿主环境当前时区的 String，该 String 要么是表示 UTC 偏移且使 IsTimeZoneOffsetString 返回 *true* 的 String，要么是主时区标识符。
+            它返回一个表示宿主环境当前时区的 String，该 String 要么表示一个使 IsTimeZoneOffsetString 返回 *true* 的 UTC 偏移，要么是一个主时区标识符。
           </dd>
         </dl>
 
         <emu-alg>
-          1. 如果实现只支持 UTC 时区，则返回 *"UTC"*。
-          1. 令 _systemTimeZoneString_ 为表示宿主环境当前时区的 String，它要么是主时区标识符，要么是偏移时区标识符。
+          1. 如果实现仅支持 UTC 时区，则返回 *"UTC"*。
+          1. 令 _systemTimeZoneString_ 为表示宿主环境当前时区的 String，它是主时区标识符或偏移时区标识符。
           1. 返回 _systemTimeZoneString_。
         </emu-alg>
 
         <emu-note>
           <p>
-            为确保实现通常在 Date 对象方法中提供的功能水平，建议 SystemTimeZoneIdentifier 返回与宿主环境时区设置对应的 IANA 时区名称，如果存在这样的名称。
-            如果该时区存在标准时和夏令时的本地政治规则，则 GetNamedTimeZoneEpochNanoseconds 和 GetNamedTimeZoneOffsetNanoseconds 必须反映这些规则。
+            为确保实现能够提供 Date 对象的方法通常所提供的功能级别，建议 SystemTimeZoneIdentifier 返回与宿主环境时区设置相对应的 IANA 时区名称（如果存在这种名称）。
+            如果该时区存在标准时间和夏令时的本地政治规则，则 GetNamedTimeZoneEpochNanoseconds 和 GetNamedTimeZoneOffsetNanoseconds 必须反映这些规则。
           </p>
-          <p>例如，如果宿主环境是在用户已选择美国东部时间作为其时区的系统上的浏览器，则 SystemTimeZoneIdentifier 返回 *"America/New_York"*。</p>
+          <p>例如，如果宿主环境是某个系统上的浏览器，并且用户选择美国东部时间作为其时区，则 SystemTimeZoneIdentifier 返回 *"America/New_York"*。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-localtime" type="abstract operation">
         <h1>
           LocalTime (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 一个有限时间值,
+          ): 一个整数 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
             它将 _tv_ 从 UTC 转换为本地时间。
-            应使用 _tv_ 处生效的标准时和夏令时本地政治规则，按本节规定的方式确定结果。
+            应使用在 _tv_ 时生效的标准时间和夏令时本地政治规则，按照本节规定的方式确定结果。
           </dd>
         </dl>
         <emu-alg>
           1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，则
+          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
             1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
           1. 否则，
-            1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × 10<sup>6</sup>))。
-          1. 令 _offsetMs_ 为 truncate(_offsetNs_ / 10<sup>6</sup>)。
+            1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))。
+          1. 令 _offsetMs_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
           1. 返回 _tv_ + 𝔽(_offsetMs_)。
         </emu-alg>
         <emu-note>
-          <p>如果实现内没有本地时间 _tv_ 的政治规则，则结果为 _tv_，因为 SystemTimeZoneIdentifier 返回 *"UTC"* 且 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
+          <p>如果实现中没有本地时间 _tv_ 的政治规则，则结果为 _tv_，因为 SystemTimeZoneIdentifier 返回 *"UTC"*，而 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
         </emu-note>
         <emu-note>
-          <p>要求时区感知实现（并建议所有其他实现）使用 IANA Time Zone Database 的时区信息 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>。</p>
+          <p>时区感知实现必须使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 的时区信息（并建议所有其他实现也这样做）。</p>
         </emu-note>
         <emu-note>
-          <p>两个不同的输入时间值 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> 会在负时区转换处存在重复时间时（例如夏令时结束或时区调整减少时）转换为相同本地时间 <emu-eqn>t<sub>local</sub></emu-eqn>。</p>
+          <p>在存在重复时间的负时区转换处（例如夏令时结束或时区调整减小），两个不同的输入时间值 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> 会转换为同一本地时间 <emu-eqn>t<sub>local</sub></emu-eqn>。</p>
           <p><emu-eqn>LocalTime(UTC(_tv_<sub>local</sub>))</emu-eqn> 不一定总是等于 <emu-eqn>_tv_<sub>local</sub></emu-eqn>。相应地，<emu-eqn>UTC(LocalTime(_tv_<sub>UTC</sub>))</emu-eqn> 也不一定总是等于 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn>。</p>
         </emu-note>
       </emu-clause>
@@ -34585,50 +34591,50 @@
       <emu-clause id="sec-utc-t" type="abstract operation">
         <h1>
           UTC (
-            _t_: a Number,
-          ): a time value
+            _t_: 一个 Number,
+          ): 一个时间值
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
             它将 _t_ 从本地时间转换为 UTC 时间值。
-            应使用 _t_ 处生效的标准时和夏令时本地政治规则，按本节规定的方式确定结果。
+            应使用在 _t_ 时生效的标准时间和夏令时本地政治规则，按照本节规定的方式确定结果。
           </dd>
         </dl>
         <emu-alg>
-          1. 如果 _t_ 不是有限的，则返回 *NaN*。
+          1. 如果 _t_ 不是有限值，则返回 *NaN*。
           1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，则
+          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
             1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
           1. 否则，
             1. 令 _possibleInstants_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0)。
-            1. 注：以下步骤确保当 _t_ 表示在负时区转换处重复多次的本地时间（例如夏令时结束时，或因时区规则变更而时区偏移减少时）或在正时区转换处被跳过的本地时间（例如夏令时开始时，或因时区规则变更而时区偏移增加时）时，_t_ 会使用转换之前的时区偏移来解释。
-            1. 如果 _possibleInstants_ 非空，则
+            1. 注：以下步骤确保当 _t_ 表示在负时区转换处重复多次的本地时间（例如夏令时结束，或由于时区规则发生变化而减小时区偏移），或者表示在正时区转换处被跳过的本地时间（例如夏令时开始，或由于时区规则发生变化而增大时区偏移）时，使用转换前的时区偏移解释 _t_。
+            1. 如果 _possibleInstants_ 不为空，那么
               1. 令 _disambiguatedInstant_ 为 _possibleInstants_[0]。
             1. 否则，
-              1. 注：_t_ 表示在正时区转换处被跳过的本地时间（例如由于夏令时开始或时区规则变更增加 UTC 偏移）。
-              1. [declared="tBefore"] 令 _possibleInstantsBefore_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)，其中 _tBefore_ 是小于 _t_ 且使 _possibleInstantsBefore_ 非空的最大整数 Number（即，_tBefore_ 表示转换前的最后一个本地时间）。
+              1. 注：_t_ 表示在正时区转换处被跳过的本地时间（例如由于夏令时开始或时区规则发生变化而增大 UTC 偏移）。
+              1. [declared="tBefore"] 令 _possibleInstantsBefore_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)，其中 _tBefore_ 是使 _possibleInstantsBefore_ 不为空的最大整数 Number &lt; _t_（即 _tBefore_ 表示转换前的最后一个本地时间）。
               1. 令 _disambiguatedInstant_ 为 _possibleInstantsBefore_ 的最后一个元素。
             1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)。
-          1. 令 _offsetMs_ 为 truncate(_offsetNs_ / 10<sup>6</sup>)。
+          1. 令 _offsetMs_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
           1. 返回 _t_ - 𝔽(_offsetMs_)。
         </emu-alg>
         <p>
-          输入 _t_ 名义上是时间值，但可以是任何 Number 值。
-          算法不得将 _t_ 限制在时间值范围内，以便无论本地 UTC 偏移如何，都能支持与时间值范围边界对应的输入。
-          例如，最大时间值是 8.64 × 10<sup>15</sup>，对应于 *"+275760-09-13T00:00:00Z"*。
-          在某个环境中，如果本地时区偏移在该瞬间比 UTC 早 1 小时，则它由更大的输入 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> 表示，对应于 *"+275760-09-13T01:00:00+01:00"*。
+          输入 _t_ 名义上是一个时间值，但可以是任何 Number 值。
+          该算法不得将 _t_ 限制在时间值范围内，从而无论本地 UTC 偏移为何，都可以支持与时间值范围边界相对应的输入。
+          例如，最大时间值为 8.64 × 10<sup>15</sup>，对应于 *"+275760-09-13T00:00:00Z"*。
+          在某个环境中，如果该时刻的本地时区偏移比 UTC 提前 1 小时，则它由更大的输入 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> 表示，对应于 *"+275760-09-13T01:00:00+01:00"*。
         </p>
-        <p>如果实现内没有本地时间 _t_ 的政治规则，则结果为 _t_，因为 SystemTimeZoneIdentifier 返回 *"UTC"* 且 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
+        <p>如果实现中没有本地时间 _t_ 的政治规则，则结果为 _t_，因为 SystemTimeZoneIdentifier 返回 *"UTC"*，而 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
         <emu-note>
-          <p>要求时区感知实现（并建议所有其他实现）使用 IANA Time Zone Database 的时区信息 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>。</p>
+          <p>时区感知实现必须使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 的时区信息（并建议所有其他实现也这样做）。</p>
           <p>
-            America/New_York 中 2017 年 11 月 5 日凌晨 1:30 会重复两次（向后回退），但它必须被解释为 UTC-04 的凌晨 1:30，而不是 UTC-05 的凌晨 1:30。
-            在 UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) 中，_offsetMs_ 的值是 <emu-eqn>-4 × msPerHour</emu-eqn>。
+            America/New_York 的 2017 年 11 月 5 日凌晨 1:30 重复出现了两次（时钟后拨），但必须将其解释为 UTC-04 的凌晨 1:30，而不是 UTC-05 的凌晨 1:30。
+            在 UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) 中，_offsetMs_ 的值为 <emu-eqn>-4 × msPerHour</emu-eqn>。
           </p>
           <p>
-            America/New_York 中 2017 年 3 月 12 日凌晨 2:30 不存在，但它必须被解释为 UTC-05 的凌晨 2:30（等价于 UTC-04 的凌晨 3:30）。
-            在 UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) 中，_offsetMs_ 的值是 <emu-eqn>-5 × msPerHour</emu-eqn>。
+            America/New_York 的 2017 年 3 月 12 日凌晨 2:30 并不存在，但必须将其解释为 UTC-05 的凌晨 2:30（等同于 UTC-04 的凌晨 3:30）。
+            在 UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) 中，_offsetMs_ 的值为 <emu-eqn>-5 × msPerHour</emu-eqn>。
           </p>
         </emu-note>
         <emu-note>
@@ -34639,18 +34645,18 @@
       <emu-clause id="sec-maketime" type="abstract operation">
         <h1>
           MakeTime (
-            _hour_: a Number,
-            _min_: a Number,
-            _sec_: a Number,
-            _ms_: a Number,
-          ): a Number
+            _hour_: 一个 Number,
+            _min_: 一个 Number,
+            _sec_: 一个 Number,
+            _ms_: 一个 Number,
+          ): 一个 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它计算毫秒数。</dd>
         </dl>
         <emu-alg>
-          1. 如果 _hour_ 不是有限的、_min_ 不是有限的、_sec_ 不是有限的，或 _ms_ 不是有限的，则返回 *NaN*。
+          1. 如果 _hour_ 不是有限值、_min_ 不是有限值、_sec_ 不是有限值或 _ms_ 不是有限值，则返回 *NaN*。
           1. 令 _h_ 为 𝔽(! ToIntegerOrInfinity(_hour_))。
           1. 令 _m_ 为 𝔽(! ToIntegerOrInfinity(_min_))。
           1. 令 _s_ 为 𝔽(! ToIntegerOrInfinity(_sec_))。
@@ -34658,31 +34664,31 @@
           1. 返回 ((_h_ × msPerHour + _m_ × msPerMinute) + _s_ × msPerSecond) + _milli_。
         </emu-alg>
         <emu-note>
-          <p>MakeTime 中的算术是浮点算术，不满足结合律，因此操作必须按正确顺序执行。</p>
+          <p>MakeTime 中的算术是浮点算术，它不满足结合律，因此必须按正确顺序执行这些运算。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-makeday" type="abstract operation">
         <h1>
           MakeDay (
-            _year_: a Number,
-            _month_: a Number,
-            _date_: a Number,
-          ): a finite Number or *NaN*
+            _year_: 一个 Number,
+            _month_: 一个 Number,
+            _date_: 一个 Number,
+          ): 一个有限 Number 或 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它计算天数。</dd>
+          <dd>它计算日数。</dd>
         </dl>
         <emu-alg>
-          1. 如果 _year_ 不是有限的、_month_ 不是有限的，或 _date_ 不是有限的，则返回 *NaN*。
+          1. 如果 _year_ 不是有限值、_month_ 不是有限值或 _date_ 不是有限值，则返回 *NaN*。
           1. 令 _y_ 为 𝔽(! ToIntegerOrInfinity(_year_))。
           1. 令 _m_ 为 𝔽(! ToIntegerOrInfinity(_month_))。
           1. 令 _dt_ 为 𝔽(! ToIntegerOrInfinity(_date_))。
           1. 令 _ym_ 为 _y_ + 𝔽(floor(ℝ(_m_) / 12))。
-          1. 如果 _ym_ 不是有限的，则返回 *NaN*。
+          1. 如果 _ym_ 不是有限值，则返回 *NaN*。
           1. 令 _mn_ 为 𝔽(ℝ(_m_) modulo 12)。
-          1. 找到一个有限时间值 _tv_，使得 YearFromTime(_tv_) 是 _ym_，MonthFromTime(_tv_) 是 _mn_，并且 DateFromTime(_tv_) 是 *1*<sub>𝔽</sub>；但如果这不可能（因为某个实参超出范围），则返回 *NaN*。
+          1. 找到一个有限时间值 _tv_，使 YearFromTime(_tv_) 是 _ym_、MonthFromTime(_tv_) 是 _mn_，并且 DateFromTime(_tv_) 是 *1*<sub>𝔽</sub>；但如果无法做到这一点（因为某个参数超出范围），则返回 *NaN*。
           1. 返回 Day(_tv_) + _dt_ - *1*<sub>𝔽</sub>。
         </emu-alg>
       </emu-clause>
@@ -34690,18 +34696,18 @@
       <emu-clause id="sec-makedate" type="abstract operation">
         <h1>
           MakeDate (
-            _day_: a Number,
-            _time_: a Number,
-          ): a finite Number or *NaN*
+            _day_: 一个 Number,
+            _time_: 一个 Number,
+          ): 一个有限 Number 或 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它计算毫秒数。</dd>
         </dl>
         <emu-alg>
-          1. 如果 _day_ 不是有限的或 _time_ 不是有限的，则返回 *NaN*。
+          1. 如果 _day_ 不是有限值或 _time_ 不是有限值，则返回 *NaN*。
           1. 令 _tv_ 为 _day_ × msPerDay + _time_。
-          1. 如果 _tv_ 不是有限的，则返回 *NaN*。
+          1. 如果 _tv_ 不是有限值，则返回 *NaN*。
           1. 返回 _tv_。
         </emu-alg>
       </emu-clause>
@@ -34709,17 +34715,17 @@
       <emu-clause id="sec-makefullyear" type="abstract operation">
         <h1>
           MakeFullYear (
-            _year_: a Number,
-          ): an integral Number or *NaN*
+            _year_: 一个 Number,
+          ): 一个整数 Number 或 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回与 _year_ 的整数部分关联的完整年份，将从 0 到 99 的闭区间内的任何值解释为自 1900 年开始以来的年数。为与预推格里高利历对齐，“完整年份”定义为自年份 0（公元前 1 年）开始以来的完整年数的带符号计数。</dd>
+          <dd>它返回与 _year_ 的整数部分相关联的完整年份，并将从 0 到 99 的闭区间内的任何值解释为自 1900 年开始以来的年数。为与公历回溯历法保持一致，“完整年份”被定义为自年份 0（公元前 1 年）开始以来完整年数的有符号计数。</dd>
         </dl>
         <emu-alg>
           1. 如果 _year_ 是 *NaN*、*+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub> 之一，则返回 *NaN*。
           1. 令 _truncated_ 为 ! ToIntegerOrInfinity(_year_)。
-          1. 如果 _truncated_ 在从 0 到 99 的闭区间内，则返回 *1900*<sub>𝔽</sub> + 𝔽(_truncated_)。
+          1. 如果 _truncated_ 位于从 0 到 99 的闭区间内，则返回 *1900*<sub>𝔽</sub> + 𝔽(_truncated_)。
           1. 返回 𝔽(_truncated_)。
         </emu-alg>
       </emu-clause>
@@ -34727,15 +34733,15 @@
       <emu-clause id="sec-timeclip" type="abstract operation">
         <h1>
           TimeClip (
-            _time_: a Number,
-          ): a time value
+            _time_: 一个 Number,
+          ): 一个时间值
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它计算毫秒数。</dd>
         </dl>
         <emu-alg>
-          1. 如果 _time_ 不是有限的，则返回 *NaN*。
+          1. 如果 _time_ 不是有限值，则返回 *NaN*。
           1. 如果 abs(ℝ(_time_)) > 8.64 × 10<sup>15</sup>，则返回 *NaN*。
           1. 返回 𝔽(! ToIntegerOrInfinity(_time_))。
         </emu-alg>
@@ -34743,8 +34749,8 @@
 
       <emu-clause id="sec-date-time-string-format">
         <h1>日期时间字符串格式</h1>
-        <p>ECMAScript 定义了一种基于 ISO 8601 日历日期扩展格式的简化形式的日期时间字符串交换格式。格式如下：`YYYY-MM-DDTHH:mm:ss.sssZ`</p>
-        <p>其中各元素如下：</p>
+        <p>ECMAScript 定义了一种从 ISO 8601 日历日期扩展格式改编而来的日期时间字符串交换格式。该格式如下：`YYYY-MM-DDTHH:mm:ss.sssZ`</p>
+        <p>其中各组成部分如下：</p>
         <figure>
           <table class="lightweight-table">
             <tr>
@@ -34752,7 +34758,7 @@
                 `YYYY`
               </td>
               <td>
-                是预推格里高利历中的年份，表示为从 0000 到 9999 的四位十进制数字，或者表示为由 *"+"* 或 *"-"* 后跟六位十进制数字组成的扩展年份。
+                是公历回溯历法中的年份，表示为从 0000 到 9999 的四位十进制数字，或表示为 *"+"* 或 *"-"* 后跟六位十进制数字的扩展年份。
               </td>
             </tr>
             <tr>
@@ -34776,7 +34782,7 @@
                 `DD`
               </td>
               <td>
-                是月份中的日期，表示为从 01 到 31 的两位十进制数字。
+                是一个月中的日期，表示为从 01 到 31 的两位十进制数字。
               </td>
             </tr>
             <tr>
@@ -34784,7 +34790,7 @@
                 `T`
               </td>
               <td>
-                *"T"* 在字符串中按字面出现，用于指示时间元素的开始。
+                *"T"* 在字符串中按字面出现，用于表示时间组成部分的开始。
               </td>
             </tr>
             <tr>
@@ -34792,7 +34798,7 @@
                 `HH`
               </td>
               <td>
-                是自午夜以来已经过去的完整小时数，表示为从 00 到 24 的两位十进制数字。
+                是自午夜以来经过的完整小时数，表示为从 00 到 24 的两位十进制数字。
               </td>
             </tr>
             <tr>
@@ -34808,7 +34814,7 @@
                 `mm`
               </td>
               <td>
-                是自小时开始以来的完整分钟数，表示为从 00 到 59 的两位十进制数字。
+                是自该小时开始以来经过的完整分钟数，表示为从 00 到 59 的两位十进制数字。
               </td>
             </tr>
             <tr>
@@ -34816,7 +34822,7 @@
                 `ss`
               </td>
               <td>
-                是自分钟开始以来的完整秒数，表示为从 00 到 59 的两位十进制数字。
+                是自该分钟开始以来经过的完整秒数，表示为从 00 到 59 的两位十进制数字。
               </td>
             </tr>
             <tr>
@@ -34832,7 +34838,7 @@
                 `sss`
               </td>
               <td>
-                是自秒开始以来的完整毫秒数，表示为三位十进制数字。
+                是自该秒开始以来经过的完整毫秒数，表示为三位十进制数字。
               </td>
             </tr>
             <tr>
@@ -34840,36 +34846,36 @@
                 `Z`
               </td>
               <td>
-                是 UTC 偏移表示，指定为 *"Z"*（表示无偏移的 UTC），或指定为 *"+"* 或 *"-"* 后跟时间表达式 `HH:mm`（<emu-xref href="#sec-time-zone-offset-strings">时区偏移字符串格式</emu-xref>的一个子集，分别表示本地时间早于或晚于 UTC）
+                是 UTC 偏移表示，指定为 *"Z"*（表示没有偏移的 UTC），或者指定为 *"+"* 或 *"-"* 后跟时间表达式 `HH:mm`（<emu-xref href="#sec-time-zone-offset-strings">时区偏移字符串格式</emu-xref>的一个子集），分别表示本地时间早于或晚于 UTC
               </td>
             </tr>
           </table>
         </figure>
-        <p>此格式包括仅日期形式：</p>
+        <p>此格式包含仅日期形式：</p>
         <pre>
 YYYY
 YYYY-MM
 YYYY-MM-DD
         </pre>
-        <p>它还包括“日期时间”形式，该形式由上述某个仅日期形式立即后跟以下某个时间形式组成，并可选择附加 UTC 偏移表示：</p>
+        <p>它还包含“日期时间”形式，该形式由上述仅日期形式之一紧接着以下时间形式之一组成，并可以在其后追加可选的 UTC 偏移表示：</p>
         <pre>
 THH:mm
 THH:mm:ss
 THH:mm:ss.sss
         </pre>
-        <p>包含越界元素或不符合格式元素的字符串，不是此格式的有效实例。</p>
+        <p>包含越界或不符合要求的组成部分的字符串不是此格式的有效实例。</p>
         <emu-note>
-          <p>由于每天都以午夜开始并以午夜结束，记法 `00:00` 和 `24:00` 可用于区分可与一个日期关联的两个午夜。这意味着以下两个记法指代完全相同的时间点：`1995-02-04T24:00` 和 `1995-02-05T00:00`。后一种形式作为“日历日结束”的这种解释与 ISO 8601 一致，尽管该规范将其保留用于描述时间区间，并且不允许在单个时间点的表示中使用它。</p>
+          <p>由于每一天都从午夜开始并在午夜结束，因此可以使用 `00:00` 和 `24:00` 两种表示法来区分可与同一日期相关联的两个午夜。这意味着以下两种表示法指向完全相同的时刻：`1995-02-04T24:00` 和 `1995-02-05T00:00`。</p>
         </emu-note>
         <emu-note>
-          <p>不存在指定 CET、EST 等民用时区缩写的国际标准，并且有时同一个缩写甚至会用于两个非常不同的时区。因此，ISO 8601 和此格式都指定时区偏移的数字表示。</p>
+          <p>此格式不支持 RFC 9557 中定义的带有时区名称的注解，仅支持时区偏移的数字表示。</p>
         </emu-note>
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
           <h1>扩展年份</h1>
-          <p>要涵盖从 1970 年 1 月 1 日起向前或向后约 273,790 年的完整时间值范围（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>），需要表示 0 年以前或 9999 年以后的年份。ISO 8601 允许扩展年份表示法，但仅限信息交换各方共同约定。在简化的 ECMAScript 格式中，此类<dfn variants="expanded years">扩展年份</dfn>表示应为 6 位数字，并且始终以 + 或 - 符号为前缀。0 年被视为正数，并且必须以 + 符号为前缀。将 0 年表示为 -000000 是无效的。与<emu-xref href="#sec-date-time-string-format">日期时间字符串格式</emu-xref>匹配，但其扩展年份表示的时间点超出时间值范围的字符串，会被 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> 视为无法识别，并导致该函数返回 *NaN*，而不会回退到特定于实现的行为或启发式方法。</p>
+          <p>为了覆盖从 1970 年 1 月 1 日向前或向后约 273,790 年的完整时间值范围（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>），需要表示早于 0 年或晚于 9999 年的年份。ISO 8601 允许扩展年份表示，但仅限于信息交换双方达成一致的情况。在简化的 ECMAScript 格式中，这种<dfn variants="expanded years">扩展年份</dfn>表示应有 6 位数字，并且始终以 + 或 - 符号为前缀。年份 0 被视为正数，必须以 + 符号为前缀。将年份 0 表示为 -000000 是无效的。符合<emu-xref href="#sec-date-time-string-format">日期时间字符串格式</emu-xref>、但其扩展年份表示的时刻超出时间值范围的字符串，会被 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> 视为不可识别，并使该函数返回 *NaN*，而不会退回到实现特定的行为或启发式方法。</p>
           <emu-note>
-            <p>带扩展年份的 date-<emu-not-ref>time values</emu-not-ref> 示例：</p>
+            <p>包含扩展年份的日期<emu-not-ref>时间值</emu-not-ref>示例：</p>
             <figure>
               <table class="lightweight-table">
                 <tr>
@@ -34911,7 +34917,7 @@ THH:mm:ss.sss
 
         <p>
           ECMAScript 定义了一种派生自 ISO 8601 的 UTC 偏移字符串交换格式。
-          该格式由以下文法描述。
+          以下语法描述了该格式。
         </p>
 
         <h2>语法</h2>
@@ -34966,16 +34972,16 @@ THH:mm:ss.sss
         <emu-clause id="sec-istimezoneoffsetstring" type="abstract operation">
           <h1>
             IsTimeZoneOffsetString (
-              _offsetString_: a String,
-            ): a Boolean
+              _offsetString_: 一个 String,
+            ): 一个 Boolean
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>返回值指示 _offsetString_ 是否符合 |UTCOffset| 给出的文法。</dd>
+            <dd>返回值表示 _offsetString_ 是否符合 |UTCOffset| 给出的语法。</dd>
           </dl>
           <emu-alg>
             1. 令 _parseResult_ 为 ParseText(_offsetString_, |UTCOffset|)。
-            1. 如果 _parseResult_ 是错误列表，则返回 *false*。
+            1. 如果 _parseResult_ 是一个错误 List，则返回 *false*。
             1. 返回 *true*。
           </emu-alg>
         </emu-clause>
@@ -34983,44 +34989,44 @@ THH:mm:ss.sss
         <emu-clause id="sec-parsetimezoneoffsetstring" type="abstract operation">
           <h1>
             ParseTimeZoneOffsetString (
-              _offsetString_: a String,
-            ): an integer
+              _offsetString_: 一个 String,
+            ): 一个整数
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>返回值是与 String _offsetString_ 对应的 UTC 偏移，表示为纳秒数。</dd>
+            <dd>返回值是与 String _offsetString_ 相对应的 UTC 偏移，以纳秒数表示。</dd>
           </dl>
           <emu-alg>
             1. 令 _parseResult_ 为 ParseText(_offsetString_, |UTCOffset|)。
-            1. 断言：_parseResult_ 不是错误列表。
+            1. 断言：_parseResult_ 不是一个错误 List。
             1. 断言：_parseResult_ 包含一个 |ASCIISign| Parse Node。
             1. 令 _parsedSign_ 为 _parseResult_ 中包含的 |ASCIISign| Parse Node 所匹配的源文本。
-            1. 如果 _parsedSign_ 是单个码点 U+002D（HYPHEN-MINUS），则
+            1. 如果 _parsedSign_ 是单个码点 U+002D (HYPHEN-MINUS)，那么
               1. 令 _sign_ 为 -1。
             1. 否则，
               1. 令 _sign_ 为 1。
-            1. 注：下面 StringToNumber 的应用不会损失精度，因为每个被解析的值都保证是足够短的十进制数字字符串。
+            1. 注：以下 StringToNumber 的应用不会损失精度，因为可以保证每个已解析值都是足够短的十进制数字字符串。
             1. 断言：_parseResult_ 包含一个 |Hour| Parse Node。
             1. 令 _parsedHours_ 为 _parseResult_ 中包含的 |Hour| Parse Node 所匹配的源文本。
             1. 令 _hours_ 为 ℝ(StringToNumber(CodePointsToString(_parsedHours_)))。
-            1. 如果 _parseResult_ 不包含 |MinuteSecond| Parse Node，则
+            1. 如果 _parseResult_ 不包含 |MinuteSecond| Parse Node，那么
               1. 令 _minutes_ 为 0。
             1. 否则，
               1. 令 _parsedMinutes_ 为 _parseResult_ 中包含的第一个 |MinuteSecond| Parse Node 所匹配的源文本。
               1. 令 _minutes_ 为 ℝ(StringToNumber(CodePointsToString(_parsedMinutes_)))。
-            1. 如果 _parseResult_ 不包含两个 |MinuteSecond| Parse Node，则
+            1. 如果 _parseResult_ 不包含两个 |MinuteSecond| Parse Node，那么
               1. 令 _seconds_ 为 0。
             1. 否则，
               1. 令 _parsedSeconds_ 为 _parseResult_ 中包含的第二个 |MinuteSecond| Parse Node 所匹配的源文本。
               1. 令 _seconds_ 为 ℝ(StringToNumber(CodePointsToString(_parsedSeconds_)))。
-            1. 如果 _parseResult_ 不包含 |TemporalDecimalFraction| Parse Node，则
+            1. 如果 _parseResult_ 不包含 |TemporalDecimalFraction| Parse Node，那么
               1. 令 _nanoseconds_ 为 0。
             1. 否则，
               1. 令 _parsedFraction_ 为 _parseResult_ 中包含的 |TemporalDecimalFraction| Parse Node 所匹配的源文本。
-              1. 令 _fraction_ 为 CodePointsToString(_parsedFraction_) 和 *"000000000"* 的字符串连接。
+              1. 令 _fraction_ 为 CodePointsToString(_parsedFraction_) 与 *"000000000"* 的字符串连接结果。
               1. 令 _nanosecondsString_ 为 _fraction_ 从 1 到 10 的子字符串。
               1. 令 _nanoseconds_ 为 ℝ(StringToNumber(_nanosecondsString_))。
-            1. 返回 _sign_ × (((_hours_ × 60 + _minutes_) × 60 + _seconds_) × 10<sup>9</sup> + _nanoseconds_)。
+            1. 返回 _sign_ × (((_hours_ × MinutesPerHour + _minutes_) × SecondsPerMinute + _seconds_) × nsPerSecond + _nanoseconds_)。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -35990,12 +35996,12 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，则
+            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
               1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
             1. 否则，
-              1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × 10<sup>6</sup>))。
-            1. 令 _offset_ 为 𝔽(truncate(_offsetNs_ / 10<sup>6</sup>))。
-            1. 如果 _offset_ 是 *+0*<sub>𝔽</sub> 或 _offset_ > *+0*<sub>𝔽</sub>，则
+              1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))。
+            1. 令 _offset_ 为 𝔽(truncate(_offsetNs_ / nsPerMillisecond))。
+            1. 如果 _offset_ 是 *+0*<sub>𝔽</sub> 或 _offset_ > *+0*<sub>𝔽</sub>，那么
               1. 令 _offsetSign_ 为 *"+"*。
               1. 令 _absOffset_ 为 _offset_。
             1. 否则，
@@ -36003,8 +36009,8 @@ THH:mm:ss.sss
               1. 令 _absOffset_ 为 -_offset_。
             1. 令 _offsetMin_ 为 ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2)。
             1. 令 _offsetHour_ 为 ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2)。
-            1. 令 _tzName_ 为一个由实现定义的字符串，它要么是空 String，要么是码元 0x0020（SPACE）、码元 0x0028（LEFT PARENTHESIS）、一个由实现定义的时区名称和码元 0x0029（RIGHT PARENTHESIS）的字符串连接。
-            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串连接。
+            1. 令 _tzName_ 为一个由实现定义的字符串，它要么是空 String，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、由实现定义的时区名称和代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串连接结果。
+            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串连接结果。
           </emu-alg>
         </emu-clause>
 
@@ -55043,55 +55049,58 @@ THH:mm:ss.sss
   <h1>参考文献</h1>
   <ol>
     <li>
-      <dfn>IEEE 754-2019</dfn>：<i>浮点算术 IEEE 标准</i>。Institute of Electrical and Electronic Engineers，纽约（2019）
+      <dfn>IEEE 754-2019</dfn>：<i>IEEE 浮点算术标准</i>。电气与电子工程师协会，纽约（2019）
       <emu-note>
-        <p>IEEE 754-2008 和 IEEE 754-2019 之间没有影响 ECMA-262 规范的规范性变更。</p>
+        <p>IEEE 754-2008 与 IEEE 754-2019 之间不存在影响 ECMA-262 规范的规范性变更。</p>
       </emu-note>
     </li>
     <li>
-      <i>Unicode Standard</i>，可见于 &lt;<a href="https://unicode.org/versions/latest">https://unicode.org/versions/latest</a>>
+      <i>Unicode 标准</i>，可在 &lt;<a href="https://unicode.org/versions/latest">https://unicode.org/versions/latest</a> 获取
     </li>
     <li>
-      <i>Unicode Technical Note #5：应用中的规范等价性</i>，可见于 &lt;<a href="https://unicode.org/notes/tn5/">https://unicode.org/notes/tn5/</a>>
+      <i>Unicode 技术说明 #5：应用中的规范等价</i>，可在 &lt;<a href="https://unicode.org/notes/tn5/">https://unicode.org/notes/tn5/</a> 获取
     </li>
     <li>
-      <i>Unicode Technical Standard #10：Unicode 排序算法</i>，可见于 &lt;<a href="https://unicode.org/reports/tr10/">https://unicode.org/reports/tr10/</a>>
+      <i>Unicode 技术标准 #10：Unicode 排序算法</i>，可在 &lt;<a href="https://unicode.org/reports/tr10/">https://unicode.org/reports/tr10/</a> 获取
     </li>
     <li>
-      <i>Unicode Standard Annex #15，Unicode 规范化形式</i>，可见于 &lt;<a href="https://unicode.org/reports/tr15/">https://unicode.org/reports/tr15/</a>>
+      <i>Unicode 标准附录 #15：Unicode 规范化形式</i>，可在 &lt;<a href="https://unicode.org/reports/tr15/">https://unicode.org/reports/tr15/</a> 获取
     </li>
     <li>
-      <i>Unicode Standard Annex #18：Unicode 正则表达式</i>，可见于 &lt;<a href="https://unicode.org/reports/tr18/">https://unicode.org/reports/tr18/</a>>
+      <i>Unicode 标准附录 #18：Unicode 正则表达式</i>，可在 &lt;<a href="https://unicode.org/reports/tr18/">https://unicode.org/reports/tr18/</a> 获取
     </li>
     <li>
-      <i>Unicode Standard Annex #24：Unicode `Script` 属性</i>，可见于 &lt;<a href="https://unicode.org/reports/tr24/">https://unicode.org/reports/tr24/</a>>
+      <i>Unicode 标准附录 #24：Unicode `Script` 属性</i>，可在 &lt;<a href="https://unicode.org/reports/tr24/">https://unicode.org/reports/tr24/</a> 获取
     </li>
     <li>
-      <i>Unicode Standard Annex #31，Unicode 标识符和模式语法</i>，可见于 &lt;<a href="https://unicode.org/reports/tr31/">https://unicode.org/reports/tr31/</a>>
+      <i>Unicode 标准附录 #31：Unicode 标识符和模式语法</i>，可在 &lt;<a href="https://unicode.org/reports/tr31/">https://unicode.org/reports/tr31/</a> 获取
     </li>
     <li>
-      <i>Unicode Standard Annex #44：Unicode 字符数据库</i>，可见于 &lt;<a href="https://unicode.org/reports/tr44/">https://unicode.org/reports/tr44/</a>>
+      <i>Unicode 标准附录 #44：Unicode 字符数据库</i>，可在 &lt;<a href="https://unicode.org/reports/tr44/">https://unicode.org/reports/tr44/</a> 获取
     </li>
     <li>
-      <i>Unicode Technical Standard #51：Unicode Emoji</i>，可见于 &lt;<a href="https://unicode.org/reports/tr51/">https://unicode.org/reports/tr51/</a>>
+      <i>Unicode 技术标准 #51：Unicode 表情符号</i>，可在 &lt;<a href="https://unicode.org/reports/tr51/">https://unicode.org/reports/tr51/</a> 获取
     </li>
     <li>
-      <i>IANA 时区数据库</i>，可见于 &lt;<a href="https://www.iana.org/time-zones">https://www.iana.org/time-zones</a>>
+      <i>IANA 时区数据库</i>，可在 &lt;<a href="https://www.iana.org/time-zones">https://www.iana.org/time-zones</a> 获取
     </li>
     <li>
-      ISO 8601:2004(E) <i>数据元素和交换格式 — 信息交换 — 日期和时间的表示</i>
+      ISO 8601-1:2019(E) <i>日期和时间——信息交换表示法——第 1 部分：基本规则</i>及修正案 1:2022。
     </li>
     <li>
-      <i>RFC 1738 “统一资源定位符（URL）”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>>
+      <i>RFC 1738“统一资源定位符（URL）”</i>，可在 &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a> 获取
     </li>
     <li>
-      <i>RFC 2396 “统一资源标识符（URI）：通用语法”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>>
+      <i>RFC 2396“统一资源标识符（URI）：通用语法”</i>，可在 &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a> 获取
     </li>
     <li>
-      <i>RFC 3629 “UTF-8，ISO 10646 的一种转换格式”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>>
+      <i>RFC 3629“UTF-8：ISO 10646 的一种转换格式”</i>，可在 &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a> 获取
     </li>
     <li>
-      <i>RFC 7231 “超文本传输协议（HTTP/1.1）：语义和内容”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>>
+      <i>RFC 7231“超文本传输协议（HTTP/1.1）：语义和内容”</i>，可在 &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a> 获取
+    </li>
+    <li>
+      <i>RFC 9557“互联网上的日期和时间：带有附加信息的时间戳”</i>，可在 &lt;<a href="https://rfc-editor.org/info/rfc9557">https://rfc-editor.org/info/rfc9557</a> 获取
     </li>
   </ol>
 </emu-annex>

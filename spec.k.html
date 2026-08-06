@@ -19234,7 +19234,8 @@
         </emu-alg>
         <emu-grammar>PropertyDefinition : MethodDefinition</emu-grammar>
         <emu-alg>
-          1. arguments _obj_와 *true*를 가진 |MethodDefinition|의 MethodDefinitionEvaluation을 ? 수행한다.
+          1. _result_를 _obj_ 및 *true*를 인수로 하는 |MethodDefinition|의 ? MethodDefinitionEvaluation으로 설정한다.
+          1. 단언: _result_는 ~empty~이다.
           1. ~unused~를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -25735,118 +25736,120 @@
       </emu-note>
       <emu-grammar>ClassTail : ClassHeritage? `{` ClassBody? `}`</emu-grammar>
       <emu-alg>
-        1. _envRecord_를 실행 중인 execution context의 LexicalEnvironment라고 하자.
-        1. _classEnv_를 NewDeclarativeEnvironment(_envRecord_)라고 하자.
-        1. _classBinding_이 *undefined*가 아니면, 다음을 수행한다.
+        1. _envRecord_을 실행 중인 실행 컨텍스트의 LexicalEnvironment로 설정한다.
+        1. _classEnv_를 NewDeclarativeEnvironment(_envRecord_)로 설정한다.
+        1. _classBinding_이 *undefined*가 아니면,
           1. ! _classEnv_.CreateImmutableBinding(_classBinding_, *true*)를 수행한다.
-        1. _outerPrivateEnv_를 실행 중인 execution context의 PrivateEnvironment라고 하자.
-        1. _classPrivateEnv_를 NewPrivateEnvironment(_outerPrivateEnv_)라고 하자.
-        1. |ClassBody|가 있으면, 다음을 수행한다.
-          1. |ClassBody|의 PrivateBoundIdentifiers의 각 String _description_에 대해, 다음을 수행한다.
-            1. _classPrivateEnv_.[[Names]]에 [[Description]]이 _description_인 Private Name _privateName_이 포함되어 있으면, 다음을 수행한다.
-              1. Assert: 이는 getter/setter 쌍의 경우에만 가능하다.
+        1. _outerPrivateEnv_를 실행 중인 실행 컨텍스트의 PrivateEnvironment로 설정한다.
+        1. _classPrivateEnv_를 NewPrivateEnvironment(_outerPrivateEnv_)로 설정한다.
+        1. |ClassBody|가 존재하면,
+          1. |ClassBody|의 PrivateBoundIdentifiers에 있는 각 String _description_에 대해, 다음을 수행한다.
+            1. _classPrivateEnv_.[[Names]]에 _privateName_.[[Description]]이 _description_인 Private Name _privateName_이 포함되어 있으면,
+              1. 단언: 이는 getter/setter 쌍에서만 가능하다.
             1. 그렇지 않으면,
-              1. _name_을 [[Description]]이 _description_인 새로운 Private Name이라고 하자.
+              1. _name_을 [[Description]]이 _description_인 새로운 Private Name으로 설정한다.
               1. _name_을 _classPrivateEnv_.[[Names]]에 추가한다.
-        1. |ClassHeritage|가 없으면, 다음을 수행한다.
-          1. _protoParent_를 %Object.prototype%이라고 하자.
-          1. _ctorParent_를 %Function.prototype%이라고 하자.
+        1. |ClassHeritage|가 존재하지 않으면,
+          1. _protoParent_를 %Object.prototype%로 설정한다.
+          1. _ctorParent_를 %Function.prototype%로 설정한다.
         1. 그렇지 않으면,
-          1. 실행 중인 execution context의 LexicalEnvironment를 _classEnv_로 설정한다.
-          1. NOTE: |ClassHeritage|를 평가할 때 실행 중인 execution context의 PrivateEnvironment는 _outerPrivateEnv_이다.
-          1. _superclassRef_를 |ClassHeritage|의 Evaluation의 Completion이라고 하자.
-          1. 실행 중인 execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-          1. _superclass_를 ? GetValue(? _superclassRef_)라고 하자.
-          1. _superclass_가 *null*이면, 다음을 수행한다.
-            1. _protoParent_를 *null*이라고 하자.
-            1. _ctorParent_를 %Function.prototype%이라고 하자.
-          1. 그렇지 않고 IsConstructor(_superclass_)가 *false*이면, 다음을 수행한다.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _classEnv_로 설정한다.
+          1. 참고: |ClassHeritage|를 평가할 때 실행 중인 실행 컨텍스트의 PrivateEnvironment는 _outerPrivateEnv_이다.
+          1. _superclassRef_를 |ClassHeritage| 평가의 Completion으로 설정한다.
+          1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+          1. _superclass_를 ? GetValue(? _superclassRef_)로 설정한다.
+          1. _superclass_가 *null*이면,
+            1. _protoParent_를 *null*로 설정한다.
+            1. _ctorParent_를 %Function.prototype%로 설정한다.
+          1. 그렇지 않고 IsConstructor(_superclass_)가 *false*이면,
             1. *TypeError* 예외를 던진다.
           1. 그렇지 않으면,
-            1. _protoParent_를 ? Get(_superclass_, *"prototype"*)이라고 하자.
-            1. _protoParent_가 Object가 아니고 _protoParent_가 *null*도 아니면, *TypeError* 예외를 던진다.
-            1. _ctorParent_를 _superclass_라고 하자.
-        1. _proto_를 OrdinaryObjectCreate(_protoParent_)라고 하자.
-        1. |ClassBody|가 없으면, _ctor_를 ~empty~라고 하자.
-        1. 그렇지 않으면, _ctor_를 |ClassBody|의 ConstructorMethod라고 하자.
-        1. 실행 중인 execution context의 LexicalEnvironment를 _classEnv_로 설정한다.
-        1. 실행 중인 execution context의 PrivateEnvironment를 _classPrivateEnv_로 설정한다.
-        1. _ctor_가 ~empty~이면, 다음을 수행한다.
-          1. _defaultCtor_를 매개변수가 없고 아무것도 캡처하지 않는 새로운 Abstract Closure라고 하며, 호출될 때 다음 단계를 수행한다:
-            1. _args_를 [[Call]] 또는 [[Construct]]에 의해 이 함수에 전달된 arguments의 List라고 하자.
+            1. _protoParent_를 ? Get(_superclass_, *"prototype"*)으로 설정한다.
+            1. _protoParent_가 Object가 아니고 *null*도 아니면, *TypeError* 예외를 던진다.
+            1. _ctorParent_를 _superclass_로 설정한다.
+        1. _proto_를 OrdinaryObjectCreate(_protoParent_)로 설정한다.
+        1. |ClassBody|가 존재하지 않으면, _ctor_를 ~empty~로 설정한다.
+        1. 그렇지 않으면, _ctor_를 |ClassBody|의 ConstructorMethod로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _classEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _classPrivateEnv_로 설정한다.
+        1. _ctor_가 ~empty~이면,
+          1. _defaultCtor_를 아무것도 캡처하지 않으며 매개변수가 없는 새로운 Abstract Closure로 설정한다. 이 클로저는 호출될 때 다음 단계를 수행한다.
+            1. _args_를 [[Call]] 또는 [[Construct]]가 이 함수에 전달한 인수의 List로 설정한다.
             1. NewTarget이 *undefined*이면, *TypeError* 예외를 던진다.
-            1. _ctorFunc_를 active function object라고 하자.
-            1. _ctorFunc_.[[ConstructorKind]]가 ~derived~이면, 다음을 수행한다.
-              1. NOTE: 이 분기는 `constructor(...args) { super(...args); }`와 유사하게 동작한다. 가장 주목할 만한 차이는, 앞의 ECMAScript 소스 텍스트는 `%Array.prototype%`의 %Symbol.iterator% 메서드를 관찰 가능하게 호출하지만, 이 함수는 그렇게 하지 않는다는 점이다.
-              1. _func_를 ! _ctorFunc_.[[GetPrototypeOf]]()라고 하자.
+            1. _ctorFunc_를 활성 함수 객체로 설정한다.
+            1. _ctorFunc_.[[ConstructorKind]]가 ~derived~이면,
+              1. 참고: 이 분기는 `constructor(...args) { super(...args); }`와 유사하게 동작한다. 가장 주목할 만한 차이점은 앞서 언급한 ECMAScript 소스 텍스트가 `%Array.prototype%`의 %Symbol.iterator% 메서드를 관찰 가능한 방식으로 호출하는 반면, 이 함수는 호출하지 않는다는 것이다.
+              1. _func_를 ! _ctorFunc_.[[GetPrototypeOf]]()로 설정한다.
               1. IsConstructor(_func_)가 *false*이면, *TypeError* 예외를 던진다.
-              1. _result_를 ? Construct(_func_, _args_, NewTarget)라고 하자.
+              1. _result_를 ? Construct(_func_, _args_, NewTarget)로 설정한다.
             1. 그렇지 않으면,
-              1. NOTE: 이 분기는 `constructor() {}`와 유사하게 동작한다.
-              1. _result_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)라고 하자.
+              1. 참고: 이 분기는 `constructor() {}`와 유사하게 동작한다.
+              1. _result_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Object.prototype%"*)로 설정한다.
             1. ? InitializeInstanceElements(_result_, _ctorFunc_)를 수행한다.
-            1. NormalCompletion(_result_)를 반환한다.
-          1. _ctorFunc_를 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », the current Realm Record, _ctorParent_)라고 하자.
+            1. NormalCompletion(_result_)을 반환한다.
+          1. _ctorFunc_를 CreateBuiltinFunction(_defaultCtor_, 0, _className_, « [[ConstructorKind]], [[SourceText]], [[PrivateMethods]], [[Fields]] », 현재 Realm Record, _ctorParent_)로 설정한다.
         1. 그렇지 않으면,
-          1. _ctorInfo_를 인수 _proto_ 및 _ctorParent_를 사용한 _ctor_의 ! DefineMethod라고 하자.
-          1. _ctorFunc_를 _ctorInfo_.[[Closure]]라고 하자.
+          1. _ctorInfo_를 _proto_와 _ctorParent_를 인수로 하는 _ctor_의 ! DefineMethod로 설정한다.
+          1. _ctorFunc_를 _ctorInfo_.[[Closure]]로 설정한다.
           1. MakeClassConstructor(_ctorFunc_)를 수행한다.
           1. SetFunctionName(_ctorFunc_, _className_)을 수행한다.
         1. _ctorFunc_.[[SourceText]]를 _sourceText_로 설정한다.
         1. MakeConstructor(_ctorFunc_, *false*, _proto_)를 수행한다.
-        1. |ClassHeritage|가 있으면, _ctorFunc_.[[ConstructorKind]]를 ~derived~로 설정한다.
+        1. |ClassHeritage|가 존재하면, _ctorFunc_.[[ConstructorKind]]를 ~derived~로 설정한다.
         1. ! DefineMethodProperty(_proto_, *"constructor"*, _ctorFunc_, *false*)를 수행한다.
-        1. |ClassBody|가 없으면, _classElements_를 새로운 빈 List라고 하자.
-        1. 그렇지 않으면, _classElements_를 |ClassBody|의 NonConstructorElements라고 하자.
-        1. _instancePrivateMethods_를 새로운 빈 List라고 하자.
-        1. _staticPrivateMethods_를 새로운 빈 List라고 하자.
-        1. _instanceFields_를 새로운 빈 List라고 하자.
-        1. _staticElements_를 새로운 빈 List라고 하자.
+        1. |ClassBody|가 존재하지 않으면, _classElements_를 새로운 빈 List로 설정한다.
+        1. 그렇지 않으면, _classElements_를 |ClassBody|의 NonConstructorElements로 설정한다.
+        1. _instancePrivateMethods_를 새로운 빈 List로 설정한다.
+        1. _staticPrivateMethods_를 새로운 빈 List로 설정한다.
+        1. _instanceFields_를 새로운 빈 List로 설정한다.
+        1. _staticElements_를 새로운 빈 List로 설정한다.
         1. _classElements_의 각 |ClassElement| _classElement_에 대해, 다음을 수행한다.
-          1. _classElement_의 IsStatic이 *false*이면, 다음을 수행한다.
-            1. _element_를 인수 _proto_를 사용한 _classElement_의 ClassElementEvaluation의 Completion이라고 하자.
+          1. _classElement_의 IsStatic이 *false*이면,
+            1. _element_를 _proto_를 인수로 하는 _classElement_의 ClassElementEvaluation의 Completion으로 설정한다.
           1. 그렇지 않으면,
-            1. _element_를 인수 _ctorFunc_를 사용한 _classElement_의 ClassElementEvaluation의 Completion이라고 하자.
-          1. _element_가 abrupt completion이면, 다음을 수행한다.
-            1. 실행 중인 execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-            1. 실행 중인 execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+            1. _element_를 _ctorFunc_를 인수로 하는 _classElement_의 ClassElementEvaluation의 Completion으로 설정한다.
+          1. _element_가 갑작스러운 완료이면,
+            1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+            1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
             1. ? _element_를 반환한다.
           1. _element_를 ! _element_로 설정한다.
-          1. _element_가 PrivateElement이면, 다음을 수행한다.
-            1. Assert: _element_.[[Kind]]는 ~method~ 또는 ~accessor~ 중 하나이다.
-            1. _classElement_의 IsStatic이 *false*이면, _container_를 _instancePrivateMethods_라고 하자.
-            1. 그렇지 않으면, _container_를 _staticPrivateMethods_라고 하자.
-            1. _container_에 [[Key]]가 _element_.[[Key]]인 PrivateElement _existingElement_가 포함되어 있으면, 다음을 수행한다.
-              1. Assert: _element_.[[Kind]]와 _existingElement_.[[Kind]]는 모두 ~accessor~이다.
-              1. _element_.[[Getter]]가 *undefined*이면, 다음을 수행한다.
-                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _existingElement_.[[Getter]], [[Setter]]: _element_.[[Setter]] }라고 하자.
+          1. _element_가 PrivateElement이면,
+            1. 단언: _element_.[[Kind]]는 ~method~ 또는 ~accessor~이다.
+            1. _classElement_의 IsStatic이 *false*이면, _container_를 _instancePrivateMethods_로 설정한다.
+            1. 그렇지 않으면, _container_를 _staticPrivateMethods_로 설정한다.
+            1. _container_에 _existingElement_.[[Key]]가 _element_.[[Key]]인 PrivateElement _existingElement_가 포함되어 있으면,
+              1. 단언: _element_.[[Kind]]와 _existingElement_.[[Kind]]는 모두 ~accessor~이다.
+              1. _element_.[[Getter]]가 *undefined*이면,
+                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _existingElement_.[[Getter]], [[Setter]]: _element_.[[Setter]] }로 설정한다.
               1. 그렇지 않으면,
-                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _element_.[[Getter]], [[Setter]]: _existingElement_.[[Setter]] }라고 하자.
-              1. _container_ 안의 _existingElement_를 _combined_로 대체한다.
+                1. _combined_를 PrivateElement { [[Key]]: _element_.[[Key]], [[Kind]]: ~accessor~, [[Getter]]: _element_.[[Getter]], [[Setter]]: _existingElement_.[[Setter]] }로 설정한다.
+              1. _container_의 _existingElement_를 _combined_로 대체한다.
             1. 그렇지 않으면,
               1. _element_를 _container_에 추가한다.
-          1. 그렇지 않고 _element_가 ClassFieldDefinition Record이면, 다음을 수행한다.
+          1. 그렇지 않고 _element_가 ClassFieldDefinition Record이면,
             1. _classElement_의 IsStatic이 *false*이면, _element_를 _instanceFields_에 추가한다.
             1. 그렇지 않으면, _element_를 _staticElements_에 추가한다.
-          1. 그렇지 않고 _element_가 ClassStaticBlockDefinition Record이면, 다음을 수행한다.
+          1. 그렇지 않고 _element_가 ClassStaticBlockDefinition Record이면,
             1. _element_를 _staticElements_에 추가한다.
-        1. 실행 중인 execution context의 LexicalEnvironment를 _envRecord_로 설정한다.
-        1. _classBinding_이 *undefined*가 아니면, 다음을 수행한다.
-          1. ! _classEnv_.InitializeBinding(_classBinding_, _ctorFunc_)를 수행한다.
+          1. 그렇지 않으면,
+            1. 단언: _element_는 ~empty~이다.
+        1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정한다.
+        1. _classBinding_이 *undefined*가 아니면,
+          1. ! _classEnv_.InitializeBinding(_classBinding_, _ctorFunc_)을 수행한다.
         1. _ctorFunc_.[[PrivateMethods]]를 _instancePrivateMethods_로 설정한다.
         1. _ctorFunc_.[[Fields]]를 _instanceFields_로 설정한다.
         1. _staticPrivateMethods_의 각 PrivateElement _method_에 대해, 다음을 수행한다.
           1. ! PrivateMethodOrAccessorAdd(_ctorFunc_, _method_)를 수행한다.
-        1. _staticElements_의 각 element _elementRecord_에 대해, 다음을 수행한다.
-          1. _elementRecord_가 ClassFieldDefinition Record이면, 다음을 수행한다.
-            1. _result_를 Completion(DefineField(_ctorFunc_, _elementRecord_))라고 하자.
+        1. _staticElements_의 각 요소 _elementRecord_에 대해, 다음을 수행한다.
+          1. _elementRecord_가 ClassFieldDefinition Record이면,
+            1. _result_를 DefineField(_ctorFunc_, _elementRecord_)의 Completion으로 설정한다.
           1. 그렇지 않으면,
-            1. Assert: _elementRecord_는 ClassStaticBlockDefinition Record이다.
-            1. _result_를 Completion(Call(_elementRecord_.[[BodyFunction]], _ctorFunc_))라고 하자.
-          1. _result_가 abrupt completion이면, 다음을 수행한다.
-            1. 실행 중인 execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+            1. 단언: _elementRecord_는 ClassStaticBlockDefinition Record이다.
+            1. _result_를 Call(_elementRecord_.[[BodyFunction]], _ctorFunc_)의 Completion으로 설정한다.
+          1. _result_가 갑작스러운 완료이면,
+            1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
             1. ? _result_를 반환한다.
-        1. 실행 중인 execution context의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
+        1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정한다.
         1. _ctorFunc_를 반환한다.
       </emu-alg>
     </emu-clause>
@@ -34061,25 +34064,25 @@
     <h1>Date Objects</h1>
 
     <emu-clause id="sec-overview-of-date-objects-and-definitions-of-abstract-operations">
-      <h1>Overview of Date Objects and Definitions of Abstract Operations</h1>
-      <p>다음 abstract operation은 time value(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>에서 defined됨)에 대해 operate합니다. 모든 경우에, 이러한 function 중 하나에 대한 any argument가 *NaN*이면 result는 *NaN*이 된다는 점에 note하십시오.</p>
+      <h1>Date 객체 개요 및 추상 연산 정의</h1>
+      <p>다음 추상 연산은 시간 값(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>에서 정의됨)을 대상으로 작동한다. 모든 경우에 이러한 함수 중 하나에 전달된 인수가 *NaN*이면 결과도 *NaN*이라는 점에 유의한다.</p>
 
       <emu-clause id="sec-time-values-and-time-range">
-        <h1>Time Values and Time Range</h1>
-        <p>ECMAScript의 time measurement는 POSIX의 time measurement와 analogous하며, 특히 proleptic Gregorian calendar, 1970년 1월 1일 UTC 시작 시점의 midnight인 <dfn id="epoch">epoch</dfn>, 그리고 every day가 정확히 86,400초(각각 1000 milliseconds 길이)로 구성된다는 accounting을 공유합니다.</p>
-        <p>ECMAScript <dfn variants="time values">time value</dfn>는 Number이며, millisecond precision으로 time 안의 instant를 represent하는 finite integral Number이거나 specific instant가 없음을 represent하는 *NaN*입니다. <emu-eqn>24 × 60 × 60 × 1000 = 86,400,000</emu-eqn>의 multiple인 time value(즉 어떤 integer _d_에 대해 86,400,000 × _d_)는 epoch 뒤에 _d_ whole UTC days만큼 따르는 UTC day의 start instant를 represent합니다(negative _d_의 경우 epoch 앞). every other finite time value _tv_는 그러한 multiple인 greatest preceding time value _s_를 기준으로 defined되며, _s_와 same UTC day 안에서 occur하지만 (_tv_ - _s_) milliseconds만큼 뒤따르는 instant를 represent합니다.</p>
-        <p>Time value는 UTC leap second를 account하지 않습니다—positive leap second 안의 instant를 represent하는 time value는 없고, negative leap second에 의해 UTC timeline에서 removed된 instant를 represent하는 time value가 있습니다. 그러나 time value의 definition은 nonetheless UTC와 piecewise alignment를 yield하며, discontinuity는 leap second boundary에서만 존재하고 leap second 밖에서는 zero difference입니다.</p>
-        <p>Number는 -9,007,199,254,740,992부터 9,007,199,254,740,992까지의 모든 integer를 exactly represent할 수 있습니다(<emu-xref href="#sec-number.min_safe_integer"></emu-xref> 및 <emu-xref href="#sec-number.max_safe_integer"></emu-xref>). time value는 -8,640,000,000,000,000부터 8,640,000,000,000,000 milliseconds까지의 slightly smaller range를 support합니다. 이는 1970년 1월 1일 UTC 시작 시점의 midnight를 기준으로 exactly -100,000,000 days부터 100,000,000 days까지의 supported time value range를 yield합니다.</p>
-        <p>1970년 1월 1일 UTC 시작 시점의 midnight의 exact moment는 time value *+0*<sub>𝔽</sub>로 represented됩니다.</p>
+        <h1>시간 값과 시간 범위</h1>
+        <p>ECMAScript의 시간 측정은 POSIX의 시간 측정과 유사하며, 특히 역산 그레고리력, 1970년 1월 1일 UTC가 시작되는 자정의 <dfn id="epoch">에포크</dfn>, 그리고 매일을 정확히 86,400초(각각의 길이는 1000밀리초)로 구성된 것으로 계산하는 정의를 공유한다.</p>
+        <p>ECMAScript <dfn variants="time values">시간 값</dfn>은 Number이며, 밀리초 정밀도로 특정 시점을 나타내는 유한한 정수 Number이거나 특정 시점을 나타내지 않는 *NaN*이다. msPerDay의 정수 배수인 시간 값(즉, 어떤 정수 _d_에 대해 msPerDay × _d_인 값)은 에포크로부터 _d_개의 완전한 UTC 일이 지난 뒤 시작되는 UTC 일의 시작 시점(음수 _d_의 경우 에포크 이전)을 나타낸다. 그 밖의 모든 유한한 시간 값 _tv_는 그러한 배수인 값 중 가장 가까운 이전 시간 값 _s_를 기준으로 정의되며, _s_와 같은 UTC 일에 속하면서 그보다 (_tv_ - _s_)밀리초 뒤에 발생하는 시점을 나타낸다.</p>
+        <p>시간 값은 UTC 윤초를 고려하지 않는다. 즉, 양의 윤초 안의 시점을 나타내는 시간 값은 없으며, 음의 윤초에 의해 UTC 타임라인에서 제거된 시점을 나타내는 시간 값은 존재한다. 하지만 시간 값의 정의는 윤초 경계에서만 불연속적이고 윤초 밖에서는 차이가 없는 방식으로 UTC와 구간별 정렬을 이룬다.</p>
+        <p>Number는 -9,007,199,254,740,992부터 9,007,199,254,740,992까지의 모든 정수를 정확하게 나타낼 수 있다(<emu-xref href="#sec-number.min_safe_integer"></emu-xref> 및 <emu-xref href="#sec-number.max_safe_integer"></emu-xref>). 시간 값은 이보다 약간 작은 -8,640,000,000,000,000밀리초부터 8,640,000,000,000,000밀리초까지의 범위를 지원한다. 이에 따라 1970년 1월 1일 UTC가 시작되는 자정을 기준으로 정확히 -100,000,000일부터 100,000,000일까지의 시간 값 범위가 지원된다.</p>
+        <p>1970년 1월 1일 UTC가 시작되는 자정의 정확한 순간은 시간 값 *+0*<sub>𝔽</sub>으로 나타낸다.</p>
         <emu-note>
-          <p>proleptic Gregorian calendar에서 leap year는 4로 divisible하면서 400으로 divisible하거나 100으로 divisible하지 않는 year입니다.</p>
-          <p>proleptic Gregorian calendar의 400 year cycle은 97 leap years를 contain합니다. 이는 year당 average 365.2425 days를 yield하며, 이는 31,556,952,000 milliseconds입니다. 따라서 Number가 millisecond precision으로 exactly represent할 수 있는 maximum range는 1970을 기준으로 approximately -285,426부터 285,426 years까지입니다. 이 section에 specified된 time value가 support하는 smaller range는 1970을 기준으로 approximately -273,790부터 273,790 years까지입니다.</p>
+          <p>역산 그레고리력에서 윤년은 정확히 4로 나누어지고 400으로 나누어지거나 100으로 나누어지지 않는 해이다.</p>
+          <p>역산 그레고리력의 400년 주기에는 97개의 윤년이 포함된다. 이에 따라 1년의 평균은 365.2425일, 즉 31,556,952,000밀리초가 된다. 따라서 Number가 밀리초 정밀도로 정확하게 나타낼 수 있는 최대 범위는 1970년을 기준으로 약 -285,426년부터 285,426년까지이다. 이 절에서 명시한 시간 값이 지원하는 더 작은 범위는 1970년을 기준으로 약 -273,790년부터 273,790년까지이다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-related-constants">
-        <h1>Time-related Constants</h1>
-        <p>이러한 constant는 following sections의 algorithm에서 referenced됩니다.</p>
+        <h1>시간 관련 상수</h1>
+        <p>다음 절의 알고리즘은 이러한 상수를 참조한다.</p>
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
         <emu-eqn id="eqn-SecondsPerMinute" aoid="SecondsPerMinute">SecondsPerMinute = 60</emu-eqn>
@@ -34087,32 +34090,35 @@
         <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = *60000*<sub>𝔽</sub> = msPerSecond × 𝔽(SecondsPerMinute)</emu-eqn>
         <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = *3600000*<sub>𝔽</sub> = msPerMinute × 𝔽(MinutesPerHour)</emu-eqn>
         <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = *86400000*<sub>𝔽</sub> = msPerHour × 𝔽(HoursPerDay)</emu-eqn>
+        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × ℝ(msPerSecond) = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
+        <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
       </emu-clause>
 
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
         <h1>
           Day (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 유한한 시간 값,
+          ): 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 day의 day number를 반환합니다.</dd>
+          <dd>_tv_가 속하는 날의 일 번호를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerDay)))를 반환한다.
+          1. 𝔽(floor(ℝ(_tv_ / msPerDay)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timewithinday" type="abstract operation" oldids="eqn-TimeWithinDay">
         <h1>
           TimeWithinDay (
-            _tv_: a finite time value,
-          ): an integral Number in the interval from *+0*<sub>𝔽</sub> (inclusive) to msPerDay (exclusive)
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>(포함)부터 msPerDay(제외)까지의 구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 day의 start 이후 milliseconds 수를 반환합니다.</dd>
+          <dd>_tv_가 속하는 날의 시작 이후 경과한 밀리초 수를 반환한다.</dd>
         </dl>
         <emu-alg>
           1. 𝔽(ℝ(_tv_) modulo ℝ(msPerDay))를 반환한다.
@@ -34122,18 +34128,18 @@
       <emu-clause id="sec-daysinyear" type="abstract operation" oldids="eqn-DaysInYear,sec-year-number">
         <h1>
           DaysInYear (
-            _y_: an integral Number,
-          ): *365*<sub>𝔽</sub> or *366*<sub>𝔽</sub>
+            _y_: 정수 Number,
+          ): *365*<sub>𝔽</sub> 또는 *366*<sub>𝔽</sub>
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>year _y_ 안의 days 수를 반환합니다. Leap year는 366 days를 가지고, all other years는 365를 가집니다.</dd>
+          <dd>연도 _y_의 일수를 반환한다. 윤년은 366일이고 그 밖의 모든 해는 365일이다.</dd>
         </dl>
         <emu-alg>
-          1. _ry_를 ℝ(_y_)로 둔다.
-          1. (_ry_ modulo 400) = 0이면, *366*<sub>𝔽</sub>를 반환한다.
-          1. (_ry_ modulo 100) = 0이면, *365*<sub>𝔽</sub>를 반환한다.
-          1. (_ry_ modulo 4) = 0이면, *366*<sub>𝔽</sub>를 반환한다.
+          1. _ry_를 ℝ(_y_)로 설정한다.
+          1. (_ry_ modulo 400) = 0이면, *366*<sub>𝔽</sub>을 반환한다.
+          1. (_ry_ modulo 100) = 0이면, *365*<sub>𝔽</sub>을 반환한다.
+          1. (_ry_ modulo 4) = 0이면, *366*<sub>𝔽</sub>을 반환한다.
           1. *365*<sub>𝔽</sub>를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -34141,33 +34147,33 @@
       <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear">
         <h1>
           DayFromYear (
-            _y_: an integral Number,
-          ): an integral Number
+            _y_: 정수 Number,
+          ): 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>year _y_의 first day의 day number를 반환합니다.</dd>
+          <dd>연도 _y_의 첫날에 해당하는 일 번호를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. _ry_를 ℝ(_y_)로 둔다.
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] NOTE: following steps에서 _numberYears1_, _numberYears4_, _numberYears100_, 및 _numberYears400_은 각각 1, 4, 100, 및 400으로 divisible한 years의 number이며, epoch와 year _y_의 start 사이에 occur합니다. _y_가 epoch보다 before이면 number는 negative입니다.
-          1. _numberYears1_을 (_ry_ - 1970)으로 둔다.
-          1. _numberYears4_를 floor((_ry_ - 1969) / 4)로 둔다.
-          1. _numberYears100_을 floor((_ry_ - 1901) / 100)으로 둔다.
-          1. _numberYears400_을 floor((_ry_ - 1601) / 400)으로 둔다.
-          1. 𝔽(365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_)를 반환한다.
+          1. _ry_를 ℝ(_y_)로 설정한다.
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 참고: 다음 단계에서 _numberYears1_, _numberYears4_, _numberYears100_ 및 _numberYears400_은 각각 에포크와 연도 _y_의 시작 사이에 있는 1, 4, 100 및 400으로 나누어지는 연도의 수를 나타낸다. _y_가 에포크 이전이면 이 수는 음수이다.
+          1. _numberYears1_을 (_ry_ - 1970)으로 설정한다.
+          1. _numberYears4_를 floor((_ry_ - 1969) / 4)로 설정한다.
+          1. _numberYears100_을 floor((_ry_ - 1901) / 100)으로 설정한다.
+          1. _numberYears400_을 floor((_ry_ - 1601) / 400)으로 설정한다.
+          1. 𝔽(365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_)을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timefromyear" type="abstract operation" oldids="eqn-TimeFromYear">
         <h1>
           TimeFromYear (
-            _y_: an integral Number,
-          ): a time value
+            _y_: 정수 Number,
+          ): 시간 값
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>year _y_의 start의 time value를 반환합니다.</dd>
+          <dd>연도 _y_의 시작에 해당하는 시간 값을 반환한다.</dd>
         </dl>
         <emu-alg>
           1. msPerDay × DayFromYear(_y_)를 반환한다.
@@ -34177,23 +34183,23 @@
       <emu-clause id="sec-yearfromtime" type="abstract operation" oldids="eqn-YearFromTime">
         <h1>
           YearFromTime (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 유한한 시간 값,
+          ): 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 year를 반환합니다.</dd>
+          <dd>_tv_가 속하는 연도를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_인 largest integral Number _y_ (closest to +∞)를 반환한다.
+          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_를 충족하는 가장 큰 정수 Number _y_(+∞에 가장 가까운 값)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-daywithinyear" type="abstract operation" oldids="eqn-DayWithinYear">
         <h1>
           DayWithinYear (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *365*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *365*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
         </dl>
@@ -34205,64 +34211,64 @@
       <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear">
         <h1>
           InLeapYear (
-            _tv_: a finite time value,
-          ): *+0*<sub>𝔽</sub> or *1*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub> 또는 *1*<sub>𝔽</sub>
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 leap year 안에 있으면 *1*<sub>𝔽</sub>를 반환하고 otherwise *+0*<sub>𝔽</sub>를 반환합니다.</dd>
+          <dd>_tv_가 윤년에 속하면 *1*<sub>𝔽</sub>을 반환하고, 그렇지 않으면 *+0*<sub>𝔽</sub>을 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. DaysInYear(YearFromTime(_tv_))가 *366*<sub>𝔽</sub>이면, *1*<sub>𝔽</sub>를 반환한다.
-          1. *+0*<sub>𝔽</sub>를 반환한다.
+          1. DaysInYear(YearFromTime(_tv_))가 *366*<sub>𝔽</sub>이면, *1*<sub>𝔽</sub>을 반환한다.
+          1. *+0*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-monthfromtime" type="abstract operation" oldids="eqn-MonthFromTime,sec-month-number">
         <h1>
           MonthFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *11*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *11*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 month를 identifying하는 Number를 반환합니다. month value *+0*<sub>𝔽</sub>는 January를 specify합니다; *1*<sub>𝔽</sub>는 February를 specify합니다; *2*<sub>𝔽</sub>는 March를 specify합니다; *3*<sub>𝔽</sub>는 April을 specify합니다; *4*<sub>𝔽</sub>는 May를 specify합니다; *5*<sub>𝔽</sub>는 June을 specify합니다; *6*<sub>𝔽</sub>는 July를 specify합니다; *7*<sub>𝔽</sub>는 August를 specify합니다; *8*<sub>𝔽</sub>는 September를 specify합니다; *9*<sub>𝔽</sub>는 October를 specify합니다; *10*<sub>𝔽</sub>는 November를 specify합니다; 그리고 *11*<sub>𝔽</sub>는 December를 specify합니다. <emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 corresponding함에 note하십시오.</dd>
+          <dd>_tv_가 속하는 월을 식별하는 Number를 반환한다. 월 값 *+0*<sub>𝔽</sub>은 1월을 지정하고, *1*<sub>𝔽</sub>은 2월, *2*<sub>𝔽</sub>는 3월, *3*<sub>𝔽</sub>은 4월, *4*<sub>𝔽</sub>는 5월, *5*<sub>𝔽</sub>는 6월, *6*<sub>𝔽</sub>은 7월, *7*<sub>𝔽</sub>은 8월, *8*<sub>𝔽</sub>은 9월, *9*<sub>𝔽</sub>는 10월, *10*<sub>𝔽</sub>은 11월, *11*<sub>𝔽</sub>은 12월을 지정한다. <emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다는 점에 유의한다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 둔다.
-          1. _dayWithinYear_를 DayWithinYear(_tv_)로 둔다.
-          1. _dayWithinYear_ &lt; *31*<sub>𝔽</sub>이면, *+0*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *59*<sub>𝔽</sub> + _inLeapYear_이면, *1*<sub>𝔽</sub>를 반환한다.
+          1. _inLeapYear_를 InLeapYear(_tv_)로 설정한다.
+          1. _dayWithinYear_를 DayWithinYear(_tv_)로 설정한다.
+          1. _dayWithinYear_ &lt; *31*<sub>𝔽</sub>이면, *+0*<sub>𝔽</sub>을 반환한다.
+          1. _dayWithinYear_ &lt; *59*<sub>𝔽</sub> + _inLeapYear_이면, *1*<sub>𝔽</sub>을 반환한다.
           1. _dayWithinYear_ &lt; *90*<sub>𝔽</sub> + _inLeapYear_이면, *2*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *120*<sub>𝔽</sub> + _inLeapYear_이면, *3*<sub>𝔽</sub>를 반환한다.
+          1. _dayWithinYear_ &lt; *120*<sub>𝔽</sub> + _inLeapYear_이면, *3*<sub>𝔽</sub>을 반환한다.
           1. _dayWithinYear_ &lt; *151*<sub>𝔽</sub> + _inLeapYear_이면, *4*<sub>𝔽</sub>를 반환한다.
           1. _dayWithinYear_ &lt; *181*<sub>𝔽</sub> + _inLeapYear_이면, *5*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *212*<sub>𝔽</sub> + _inLeapYear_이면, *6*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *243*<sub>𝔽</sub> + _inLeapYear_이면, *7*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *273*<sub>𝔽</sub> + _inLeapYear_이면, *8*<sub>𝔽</sub>를 반환한다.
+          1. _dayWithinYear_ &lt; *212*<sub>𝔽</sub> + _inLeapYear_이면, *6*<sub>𝔽</sub>을 반환한다.
+          1. _dayWithinYear_ &lt; *243*<sub>𝔽</sub> + _inLeapYear_이면, *7*<sub>𝔽</sub>을 반환한다.
+          1. _dayWithinYear_ &lt; *273*<sub>𝔽</sub> + _inLeapYear_이면, *8*<sub>𝔽</sub>을 반환한다.
           1. _dayWithinYear_ &lt; *304*<sub>𝔽</sub> + _inLeapYear_이면, *9*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *334*<sub>𝔽</sub> + _inLeapYear_이면, *10*<sub>𝔽</sub>를 반환한다.
-          1. Assert: _dayWithinYear_ &lt; *365*<sub>𝔽</sub> + _inLeapYear_이다.
-          1. *11*<sub>𝔽</sub>를 반환한다.
+          1. _dayWithinYear_ &lt; *334*<sub>𝔽</sub> + _inLeapYear_이면, *10*<sub>𝔽</sub>을 반환한다.
+          1. 단언: _dayWithinYear_ &lt; *365*<sub>𝔽</sub> + _inLeapYear_이다.
+          1. *11*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-datefromtime" type="abstract operation" oldids="sec-date-number">
         <h1>
           DateFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *1*<sub>𝔽</sub> to *31*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *1*<sub>𝔽</sub>부터 *31*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 month의 day를 반환합니다.</dd>
+          <dd>_tv_가 속하는 달의 날짜를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 둔다.
-          1. _dayWithinYear_를 DayWithinYear(_tv_)로 둔다.
-          1. _month_를 MonthFromTime(_tv_)로 둔다.
-          1. _month_가 *+0*<sub>𝔽</sub>이면, _dayWithinYear_ + *1*<sub>𝔽</sub>를 반환한다.
-          1. _month_가 *1*<sub>𝔽</sub>이면, _dayWithinYear_ - *30*<sub>𝔽</sub>를 반환한다.
+          1. _inLeapYear_를 InLeapYear(_tv_)로 설정한다.
+          1. _dayWithinYear_를 DayWithinYear(_tv_)로 설정한다.
+          1. _month_를 MonthFromTime(_tv_)으로 설정한다.
+          1. _month_가 *+0*<sub>𝔽</sub>이면, _dayWithinYear_ + *1*<sub>𝔽</sub>을 반환한다.
+          1. _month_가 *1*<sub>𝔽</sub>이면, _dayWithinYear_ - *30*<sub>𝔽</sub>을 반환한다.
           1. _month_가 *2*<sub>𝔽</sub>이면, _dayWithinYear_ - *58*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
           1. _month_가 *3*<sub>𝔽</sub>이면, _dayWithinYear_ - *89*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
           1. _month_가 *4*<sub>𝔽</sub>이면, _dayWithinYear_ - *119*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
@@ -34272,7 +34278,7 @@
           1. _month_가 *8*<sub>𝔽</sub>이면, _dayWithinYear_ - *242*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
           1. _month_가 *9*<sub>𝔽</sub>이면, _dayWithinYear_ - *272*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
           1. _month_가 *10*<sub>𝔽</sub>이면, _dayWithinYear_ - *303*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. Assert: _month_는 *11*<sub>𝔽</sub>이다.
+          1. 단언: _month_는 *11*<sub>𝔽</sub>이다.
           1. _dayWithinYear_ - *333*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -34280,27 +34286,27 @@
       <emu-clause id="sec-weekday" type="abstract operation" oldids="sec-week-day">
         <h1>
           WeekDay (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *6*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *6*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 week의 day를 identifying하는 Number를 반환합니다. weekday value *+0*<sub>𝔽</sub>는 Sunday를 specify합니다; *1*<sub>𝔽</sub>는 Monday를 specify합니다; *2*<sub>𝔽</sub>는 Tuesday를 specify합니다; *3*<sub>𝔽</sub>는 Wednesday를 specify합니다; *4*<sub>𝔽</sub>는 Thursday를 specify합니다; *5*<sub>𝔽</sub>는 Friday를 specify합니다; 그리고 *6*<sub>𝔽</sub>는 Saturday를 specify합니다. <emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 corresponding함에 note하십시오.</dd>
+          <dd>_tv_가 속하는 요일을 식별하는 Number를 반환한다. 요일 값 *+0*<sub>𝔽</sub>은 일요일을 지정하고, *1*<sub>𝔽</sub>은 월요일, *2*<sub>𝔽</sub>는 화요일, *3*<sub>𝔽</sub>은 수요일, *4*<sub>𝔽</sub>는 목요일, *5*<sub>𝔽</sub>는 금요일, *6*<sub>𝔽</sub>은 토요일을 지정한다. <emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다는 점에 유의한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7)를 반환한다.
+          1. 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7)을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-hourfromtime" type="abstract operation" oldids="eqn-HourFromTime,sec-hours-minutes-second-and-milliseconds">
         <h1>
           HourFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *23*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *23*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 day의 hour를 반환합니다.</dd>
+          <dd>_tv_가 속하는 날의 시를 반환한다.</dd>
         </dl>
         <emu-alg>
           1. 𝔽(floor(ℝ(_tv_ / msPerHour)) modulo HoursPerDay)를 반환한다.
@@ -34310,12 +34316,12 @@
       <emu-clause id="sec-minfromtime" type="abstract operation" oldids="eqn-MinFromTime">
         <h1>
           MinFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *59*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *59*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 hour의 minute를 반환합니다.</dd>
+          <dd>_tv_가 속하는 시간의 분을 반환한다.</dd>
         </dl>
         <emu-alg>
           1. 𝔽(floor(ℝ(_tv_ / msPerMinute)) modulo MinutesPerHour)를 반환한다.
@@ -34325,12 +34331,12 @@
       <emu-clause id="sec-secfromtime" type="abstract operation" oldids="eqn-SecFromTime">
         <h1>
           SecFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *59*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *59*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 minute의 second를 반환합니다.</dd>
+          <dd>_tv_가 속하는 분의 초를 반환한다.</dd>
         </dl>
         <emu-alg>
           1. 𝔽(floor(ℝ(_tv_ / msPerSecond)) modulo SecondsPerMinute)를 반환한다.
@@ -34340,12 +34346,12 @@
       <emu-clause id="sec-msfromtime" type="abstract operation" oldids="eqn-msFromTime">
         <h1>
           msFromTime (
-            _tv_: a finite time value,
-          ): an integral Number in the inclusive interval from *+0*<sub>𝔽</sub> to *999*<sub>𝔽</sub>
+            _tv_: 유한한 시간 값,
+          ): *+0*<sub>𝔽</sub>부터 *999*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 fall하는 second의 millisecond를 반환합니다.</dd>
+          <dd>_tv_가 속하는 초의 밀리초를 반환한다.</dd>
         </dl>
         <emu-alg>
           1. 𝔽(ℝ(_tv_) modulo ℝ(msPerSecond))를 반환한다.
@@ -34355,27 +34361,27 @@
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
-            _year_: an integer,
-            _month_: an integer in the inclusive interval from 1 to 12,
-            _day_: an integer in the inclusive interval from 1 to 31,
-            _hour_: an integer in the inclusive interval from 0 to 23,
-            _minute_: an integer in the inclusive interval from 0 to 59,
-            _second_: an integer in the inclusive interval from 0 to 59,
-            _millisecond_: an integer in the inclusive interval from 0 to 999,
-            _microsecond_: an integer in the inclusive interval from 0 to 999,
-            _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a BigInt
+            _year_: 정수,
+            _month_: 1부터 12까지의 닫힌구간에 있는 정수,
+            _day_: 1부터 31까지의 닫힌구간에 있는 정수,
+            _hour_: 0부터 23까지의 닫힌구간에 있는 정수,
+            _minute_: 0부터 59까지의 닫힌구간에 있는 정수,
+            _second_: 0부터 59까지의 닫힌구간에 있는 정수,
+            _millisecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+            _microsecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+            _nanosecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+          ): BigInt
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>returned value는 UTC에서 given ISO 8601 calendar date 및 wall-clock time에 corresponding하는 epoch 이후 nanoseconds 수를 represent합니다.</dd>
+          <dd>반환되는 값은 주어진 ISO 8601 역일 날짜와 UTC 벽시계 시각에 해당하는 에포크 이후의 나노초 수를 나타낸다.</dd>
         </dl>
         <emu-alg>
-          1. _date_를 MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_))로 둔다.
-          1. _time_을 MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_))로 둔다.
-          1. _ms_를 MakeDate(_date_, _time_)로 둔다.
-          1. Assert: _ms_는 integral Number이다.
-          1. ℤ(ℝ(_ms_) × 10<sup>6</sup> + _microsecond_ × 10<sup>3</sup> + _nanosecond_)를 반환한다.
+          1. _date_를 MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_))로 설정한다.
+          1. _time_을 MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_))로 설정한다.
+          1. _ms_를 MakeDate(_date_, _time_)로 설정한다.
+          1. 단언: _ms_는 정수 Number이다.
+          1. ℤ(ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34383,325 +34389,325 @@
         <h1>시간대 식별자</h1>
 
         <p>
-          ECMAScript의 시간대는 <dfn variants="time zone identifier">시간대 식별자</dfn>로 표현되며, 이는 0x0000부터 0x007F까지의 닫힌 구간에 있는 코드 유닛으로만 구성된 String이다.
-          ECMAScript 구현체가 지원하는 시간대는 AvailableNamedTimeZoneIdentifiers가 반환하는 시간대 식별자 레코드의 [[Identifier]] 필드로 표현되는 <dfn variants="available named time zone">사용 가능한 이름 있는 시간대</dfn>이거나, IsTimeZoneOffsetString이 *true*를 반환하는 String으로 표현되는 <dfn variants="offset time zone">오프셋 시간대</dfn>일 수 있다.
+          ECMAScript의 시간대는 0x0000부터 0x007F까지의 닫힌구간에 있는 코드 단위로만 구성된 String인 <dfn variants="time zone identifier">시간대 식별자</dfn>로 나타낸다.
+          ECMAScript 구현이 지원하는 시간대는 AvailableNamedTimeZoneIdentifiers가 반환한 Time Zone Identifier Record의 [[Identifier]] 필드로 나타내는 <dfn variants="available named time zone">사용 가능한 명명된 시간대</dfn>이거나, IsTimeZoneOffsetString이 *true*를 반환하는 String으로 나타내는 <dfn variants="offset time zone">오프셋 시간대</dfn>일 수 있다.
         </p>
         <p>
-          <dfn variants="primary time zone identifiers">주 시간대 식별자</dfn>는 사용 가능한 이름 있는 시간대에 대한 선호 식별자이다.
-          <dfn variants="non-primary time zone identifiers">비주 시간대 식별자</dfn>는 주 시간대 식별자가 아닌, 사용 가능한 이름 있는 시간대에 대한 식별자이다.
-          <dfn variants="available named time zone identifiers">사용 가능한 이름 있는 시간대 식별자</dfn>는 주 시간대 식별자 또는 비주 시간대 식별자 중 하나이다.
-          각 사용 가능한 이름 있는 시간대 식별자는 정확히 하나의 사용 가능한 이름 있는 시간대와 연관된다.
-          각 사용 가능한 이름 있는 시간대는 정확히 하나의 주 시간대 식별자와 0개 이상의 비주 시간대 식별자와 연관된다.
+          <dfn variants="primary time zone identifiers">기본 시간대 식별자</dfn>는 사용 가능한 명명된 시간대에서 선호되는 식별자이다.
+          <dfn variants="non-primary time zone identifiers">비기본 시간대 식별자</dfn>는 기본 시간대 식별자가 아닌 사용 가능한 명명된 시간대의 식별자이다.
+          <dfn variants="available named time zone identifiers">사용 가능한 명명된 시간대 식별자</dfn>는 기본 시간대 식별자 또는 비기본 시간대 식별자이다.
+          각각의 사용 가능한 명명된 시간대 식별자는 정확히 하나의 사용 가능한 명명된 시간대와 연결된다.
+          각각의 사용 가능한 명명된 시간대는 정확히 하나의 기본 시간대 식별자 및 0개 이상의 비기본 시간대 식별자와 연결된다.
         </p>
         <p>
-          ECMAScript 구현체는 식별자 *"UTC"*를 가지는 사용 가능한 이름 있는 시간대를 지원해야 하며, 이는 UTC 시간대의 주 시간대 식별자여야 한다.
-          또한, 구현체는 임의 개수의 다른 사용 가능한 이름 있는 시간대를 지원할 수 있다.
+          ECMAScript 구현은 식별자가 *"UTC"*인 사용 가능한 명명된 시간대를 지원해야 하며, 이 식별자는 UTC 시간대의 기본 시간대 식별자여야 한다.
+          또한 구현은 임의의 수만큼 다른 사용 가능한 명명된 시간대를 지원할 수 있다.
         </p>
         <p>
-          ECMA-402 국제화 API 명세에 설명된 시간대 요구사항을 따르는 구현체를 <dfn>시간대 인식</dfn>이라고 한다.
-          시간대 인식 구현체는 IANA Time Zone Database의 Zone 및 Link 이름에 해당하는 사용 가능한 이름 있는 시간대를 지원해야 하며, 그러한 이름만 지원해야 한다.
-          시간대 인식 구현체에서, ECMA-402 명세에 명시된 AvailableNamedTimeZoneIdentifiers에 의해 특별히 재정의된 경우를 제외하고, 주 시간대 식별자는 IANA Time Zone Database의 Zone 이름이고, 비주 시간대 식별자는 각각 Link 이름이다.
-          전체 IANA Time Zone Database를 지원하지 않는 구현체도 시간대를 표현하는 식별자로 IANA Time Zone Database 이름을 사용하는 것이 권장된다.
+          ECMA-402 국제화 API 명세에 기술된 시간대 요구 사항을 따르는 구현을 <dfn>시간대 인식</dfn> 구현이라고 한다.
+          시간대 인식 구현은 IANA Time Zone Database의 Zone 및 Link 이름에 해당하는 사용 가능한 명명된 시간대만 지원해야 한다.
+          시간대 인식 구현에서 기본 시간대 식별자와 비기본 시간대 식별자는 각각 IANA Time Zone Database의 Zone 이름과 Link 이름이다. 단, ECMA-402 명세에 규정된 AvailableNamedTimeZoneIdentifiers가 명시적으로 재정의한 경우는 제외한다.
+          전체 IANA Time Zone Database를 지원하지 않는 구현에도 시간대를 나타내는 식별자로 IANA Time Zone Database 이름을 사용할 것을 권장한다.
         </p>
       </emu-clause>
 
       <emu-clause id="sec-getnamedtimezoneepochnanoseconds" type="implementation-defined abstract operation">
         <h1>
           GetNamedTimeZoneEpochNanoseconds (
-            _timeZoneIdentifier_: a String,
-            _year_: an integer,
-            _month_: an integer in the inclusive interval from 1 to 12,
-            _day_: an integer in the inclusive interval from 1 to 31,
-            _hour_: an integer in the inclusive interval from 0 to 23,
-            _minute_: an integer in the inclusive interval from 0 to 59,
-            _second_: an integer in the inclusive interval from 0 to 59,
-            _millisecond_: an integer in the inclusive interval from 0 to 999,
-            _microsecond_: an integer in the inclusive interval from 0 to 999,
-            _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a List of BigInts
+            _timeZoneIdentifier_: String,
+            _year_: 정수,
+            _month_: 1부터 12까지의 닫힌구간에 있는 정수,
+            _day_: 1부터 31까지의 닫힌구간에 있는 정수,
+            _hour_: 0부터 23까지의 닫힌구간에 있는 정수,
+            _minute_: 0부터 59까지의 닫힌구간에 있는 정수,
+            _second_: 0부터 59까지의 닫힌구간에 있는 정수,
+            _millisecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+            _microsecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+            _nanosecond_: 0부터 999까지의 닫힌구간에 있는 정수,
+          ): BigInt의 List
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            returned List 안의 각 value는 _timeZoneIdentifier_로 identified되는 named time zone에서 given ISO 8601 calendar date 및 wall-clock time에 corresponding하는 epoch 이후 nanoseconds 수를 represent합니다.
+            반환되는 List의 각 값은 주어진 ISO 8601 역일 날짜와 _timeZoneIdentifier_로 식별되는 명명된 시간대의 벽시계 시각에 해당하는 에포크 이후의 나노초 수를 나타낸다.
           </dd>
         </dl>
         <p>
-          input이 negative time zone transition 때문에 more than once occur하는 local time을 represent할 때(예: daylight saving time이 끝나거나 time zone rule change 때문에 time zone offset이 decreased되는 경우), returned List는 more than one element를 가지며 ascending numerical value로 sorted됩니다.
-          input이 positive time zone transition 때문에 skipped된 local time을 represent할 때(예: daylight saving time이 시작되거나 time zone rule change 때문에 time zone offset이 increased되는 경우), returned List는 empty입니다.
-          Otherwise, returned List는 one element를 가집니다.
+          입력이 음의 시간대 전환으로 인해 두 번 이상 발생하는 현지 시각을 나타내면(예: 서머 타임이 끝나거나 시간대 규칙 변경으로 시간대 오프셋이 감소하는 경우), 반환되는 List는 둘 이상의 요소를 가지며 숫자 값의 오름차순으로 정렬된다.
+          입력이 양의 시간대 전환으로 인해 건너뛴 현지 시각을 나타내면(예: 서머 타임이 시작되거나 시간대 규칙 변경으로 시간대 오프셋이 증가하는 경우), 반환되는 List는 비어 있다.
+          그 밖의 경우 반환되는 List는 하나의 요소를 가진다.
         </p>
-        <p>any time zone에 대한 local political rules를 include하지 않는 ECMAScript implementation에 사용될 GetNamedTimeZoneEpochNanoseconds의 default implementation은 called될 때 following steps를 수행합니다:</p>
+        <p>어떤 시간대의 현지 정치적 규칙도 포함하지 않는 ECMAScript 구현에서 사용하는 GetNamedTimeZoneEpochNanoseconds의 기본 구현은 호출될 때 다음 단계를 수행한다.</p>
         <emu-alg>
-          1. Assert: _timeZoneIdentifier_는 *"UTC"*이다.
-          1. _epochNanoseconds_를 GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_)로 둔다.
+          1. 단언: _timeZoneIdentifier_는 *"UTC"*이다.
+          1. _epochNanoseconds_를 GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_)로 설정한다.
           1. « _epochNanoseconds_ »를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>time zone aware implementation에 대해 required되고(all others에도 recommended됨), IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 time zone information을 사용해야 합니다.</p>
-          <p>America/New_York에서 2017년 11월 5일 1:30 AM은 twice repeated되므로, GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0)는 length 2의 List를 반환할 것이며, first element는 05:30 UTC(UTC offset -04:00에서 01:30 US Eastern Daylight Time에 corresponding)를 represent하고 second element는 06:30 UTC(UTC offset -05:00에서 01:30 US Eastern Standard Time에 corresponding)를 represent합니다.</p>
-          <p>America/New_York에서 2017년 3월 12일 2:30 AM은 exist하지 않으므로, GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0)는 empty List를 반환할 것입니다.</p>
+          <p>시간대 인식 구현은 IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 시간대 정보를 사용해야 하며, 그 밖의 모든 구현에도 이를 사용할 것을 권장한다.</p>
+          <p>America/New_York에서 2017년 11월 5일 오전 1시 30분은 두 번 반복되므로, GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0)는 길이가 2인 List를 반환한다. 첫 번째 요소는 05:30 UTC(UTC 오프셋 -04:00인 미국 동부 서머 타임의 01:30에 해당)를 나타내고 두 번째 요소는 06:30 UTC(UTC 오프셋 -05:00인 미국 동부 표준시의 01:30에 해당)를 나타낸다.</p>
+          <p>America/New_York에서 2017년 3월 12일 오전 2시 30분은 존재하지 않으므로, GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0)는 빈 List를 반환한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-getnamedtimezoneoffsetnanoseconds" oldids="sec-local-time-zone-adjustment" type="implementation-defined abstract operation">
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
-            _timeZoneIdentifier_: a String,
-            _epochNanoseconds_: a BigInt,
-          ): an integer
+            _timeZoneIdentifier_: String,
+            _epochNanoseconds_: BigInt,
+          ): 정수
         </h1>
         <dl class="header">
         </dl>
-        <p>returned integer는 epoch를 기준으로 _epochNanoseconds_와 corresponding하는 instant에서 _timeZoneIdentifier_로 identified되는 named time zone의 UTC로부터의 offset을 nanoseconds 단위로 represent합니다.</p>
-        <p>any time zone에 대한 local political rules를 include하지 않는 ECMAScript implementation에 사용될 GetNamedTimeZoneOffsetNanoseconds의 default implementation은 called될 때 following steps를 수행합니다:</p>
+        <p>반환되는 정수는 _epochNanoseconds_에 해당하는 시점에서 _timeZoneIdentifier_로 식별되는 명명된 시간대와 UTC 사이의 오프셋을 나타내며, 시점과 오프셋 모두 에포크를 기준으로 나노초 단위이다.</p>
+        <p>어떤 시간대의 현지 정치적 규칙도 포함하지 않는 ECMAScript 구현에서 사용하는 GetNamedTimeZoneOffsetNanoseconds의 기본 구현은 호출될 때 다음 단계를 수행한다.</p>
         <emu-alg>
-          1. Assert: _timeZoneIdentifier_는 *"UTC"*이다.
+          1. 단언: _timeZoneIdentifier_는 *"UTC"*이다.
           1. 0을 반환한다.
         </emu-alg>
         <emu-note>
-          <p>Time zone offset value는 positive 또는 negative일 수 있습니다.</p>
+          <p>시간대 오프셋 값은 양수 또는 음수일 수 있다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-zone-identifier-record">
         <h1>Time Zone Identifier Record</h1>
-        <p><dfn variants="Time Zone Identifier Records">Time Zone Identifier Record</dfn>는 available named time zone identifier와 그 corresponding primary time zone identifier를 describe하는 데 사용되는 Record입니다.</p>
-        <p>Time Zone Identifier Record는 <emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref>에 listed된 field를 가집니다.</p>
+        <p><dfn variants="Time Zone Identifier Records">Time Zone Identifier Record</dfn>는 사용 가능한 명명된 시간대 식별자와 이에 대응하는 기본 시간대 식별자를 설명하는 데 사용하는 Record이다.</p>
+        <p>Time Zone Identifier Record에는 <emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref>에 나열된 필드가 있다.</p>
         <emu-table id="table-time-zone-identifier-record-fields" caption="Time Zone Identifier Record Fields">
           <table>
             <thead>
               <tr>
-                <th>Field Name</th>
-                <th>Value</th>
-                <th>Meaning</th>
+                <th>필드 이름</th>
+                <th>값</th>
+                <th>의미</th>
               </tr>
             </thead>
             <tr>
               <td>[[Identifier]]</td>
-              <td>a String</td>
-              <td>implementation이 support하는 available named time zone identifier입니다.</td>
+              <td>String</td>
+              <td>구현이 지원하는 사용 가능한 명명된 시간대 식별자.</td>
             </tr>
             <tr>
               <td>[[PrimaryIdentifier]]</td>
-              <td>a String</td>
-              <td>[[Identifier]]가 resolve되는 primary time zone identifier입니다.</td>
+              <td>String</td>
+              <td>[[Identifier]]가 해석되는 기본 시간대 식별자.</td>
             </tr>
           </table>
         </emu-table>
         <emu-note>
-          <p>[[Identifier]]가 primary time zone identifier이면, [[Identifier]]는 [[PrimaryIdentifier]]입니다.</p>
+          <p>[[Identifier]]가 기본 시간대 식별자이면 [[Identifier]]는 [[PrimaryIdentifier]]이다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-availablenamedtimezoneidentifiers" type="implementation-defined abstract operation">
-        <h1>AvailableNamedTimeZoneIdentifiers ( ): a List of Time Zone Identifier Records</h1>
+        <h1>AvailableNamedTimeZoneIdentifiers ( ): Time Zone Identifier Record의 List</h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            그 result는 이 implementation의 모든 available named time zone identifier와 각 available named time zone identifier에 corresponding하는 primary time zone identifier를 describe합니다.
-            List는 각 Time Zone Identifier Record의 [[Identifier]] field에 따라 ordered됩니다.
+            결과는 이 구현에서 사용 가능한 모든 명명된 시간대 식별자와 각각의 사용 가능한 명명된 시간대 식별자에 대응하는 기본 시간대 식별자를 설명한다.
+            List는 각 Time Zone Identifier Record의 [[Identifier]] 필드에 따라 정렬된다.
           </dd>
         </dl>
         <p>
-          ECMA-402 Internationalization API를 implement하는 all implementation을 포함하여 time zone aware implementation은 ECMA-402 specification에 specified된 대로 AvailableNamedTimeZoneIdentifiers abstract operation을 implement해야 합니다.
-          time zone aware가 아닌 implementation의 경우, AvailableNamedTimeZoneIdentifiers는 called될 때 following steps를 수행합니다:
+          ECMA-402 국제화 API를 구현하는 모든 구현을 포함한 시간대 인식 구현은 ECMA-402 명세에 규정된 대로 AvailableNamedTimeZoneIdentifiers 추상 연산을 구현해야 한다.
+          시간대를 인식하지 않는 구현의 경우 AvailableNamedTimeZoneIdentifiers는 호출될 때 다음 단계를 수행한다.
         </p>
         <emu-alg>
-          1. implementation이 any time zone에 대한 local political rules를 include하지 않으면, 다음을 수행한다.
+          1. 구현이 어떤 시간대의 현지 정치적 규칙도 포함하지 않으면,
             1. « Time Zone Identifier Record { [[Identifier]]: *"UTC"*, [[PrimaryIdentifier]]: *"UTC"* } »를 반환한다.
-          1. _identifiers_를 lexicographic code unit order에 따라 sorted된 unique available named time zone identifier의 List로 둔다.
-          1. _result_를 새 empty List로 둔다.
-          1. _identifiers_의 각 element _identifier_에 대해, 다음을 수행한다.
-            1. _primary_를 _identifier_로 둔다.
-            1. _identifier_가 이 implementation에서 non-primary time zone identifier이고 _identifier_가 *"UTC"*가 아니면, 다음을 수행한다.
-              1. _primary_를 _identifier_와 associated된 primary time zone identifier로 설정한다.
-              1. NOTE: implementation은 primary time zone identifier를 obtain하기 위해 _identifier_를 iteratively resolve해야 할 수 있다.
-            1. _record_를 Time Zone Identifier Record { [[Identifier]]: _identifier_, [[PrimaryIdentifier]]: _primary_ }로 둔다.
-            1. _record_를 _result_에 append한다.
-          1. Assert: _result_는 _record_.[[Identifier]]가 *"UTC"*이고 _record_.[[PrimaryIdentifier]]가 *"UTC"*인 Time Zone Identifier Record _record_를 contain한다.
+          1. _identifiers_를 사전식 코드 단위 순서로 정렬된 고유한 사용 가능한 명명된 시간대 식별자의 List로 설정한다.
+          1. _result_를 새로운 빈 List로 설정한다.
+          1. _identifiers_의 각 요소 _identifier_에 대해, 다음을 수행한다.
+            1. _primary_를 _identifier_로 설정한다.
+            1. _identifier_가 이 구현의 비기본 시간대 식별자이고 _identifier_가 *"UTC"*가 아니면,
+              1. _primary_를 _identifier_와 연결된 기본 시간대 식별자로 설정한다.
+              1. 참고: 구현은 기본 시간대 식별자를 얻기 위해 _identifier_를 반복적으로 해석해야 할 수 있다.
+            1. _record_를 Time Zone Identifier Record { [[Identifier]]: _identifier_, [[PrimaryIdentifier]]: _primary_ }로 설정한다.
+            1. _record_를 _result_에 추가한다.
+          1. 단언: _result_에는 _record_.[[Identifier]]가 *"UTC"*이고 _record_.[[PrimaryIdentifier]]가 *"UTC"*인 Time Zone Identifier Record _record_가 포함되어 있다.
           1. _result_를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-systemtimezoneidentifier" oldids="sec-defaulttimezone" type="implementation-defined abstract operation">
-        <h1>SystemTimeZoneIdentifier ( ): a String</h1>
+        <h1>SystemTimeZoneIdentifier ( ): String</h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            host environment의 current time zone을 represent하는 String을 반환합니다. 이는 IsTimeZoneOffsetString이 *true*를 반환하는 UTC offset을 represent하는 String이거나 primary time zone identifier입니다.
+            호스트 환경의 현재 시간대를 나타내는 String을 반환한다. 이 String은 IsTimeZoneOffsetString이 *true*를 반환하는 UTC 오프셋을 나타내는 String이거나 기본 시간대 식별자이다.
           </dd>
         </dl>
 
         <emu-alg>
-          1. implementation이 UTC time zone만 support하면, *"UTC"*를 반환한다.
-          1. _systemTimeZoneString_을 host environment의 current time zone을 represent하는 String으로 둔다. 이는 primary time zone identifier 또는 offset time zone identifier이다.
+          1. 구현이 UTC 시간대만 지원하면, *"UTC"*를 반환한다.
+          1. _systemTimeZoneString_을 호스트 환경의 현재 시간대를 나타내는 String, 즉 기본 시간대 식별자 또는 오프셋 시간대 식별자로 설정한다.
           1. _systemTimeZoneString_을 반환한다.
         </emu-alg>
 
         <emu-note>
           <p>
-            Date object의 method에서 implementation이 commonly provide하는 functionality level을 ensure하기 위해, such thing이 exist한다면 SystemTimeZoneIdentifier가 host environment의 time zone setting에 corresponding하는 IANA time zone name을 return하는 것이 recommended됩니다.
-            GetNamedTimeZoneEpochNanoseconds와 GetNamedTimeZoneOffsetNanoseconds는 such rules가 exist한다면 해당 time zone의 standard time 및 daylight saving time에 대한 local political rules를 reflect해야 합니다.
+            구현이 Date 객체의 메서드에서 일반적으로 제공하는 수준의 기능을 보장하기 위해, 호스트 환경의 시간대 설정에 대응하는 IANA 시간대 이름이 존재한다면 SystemTimeZoneIdentifier가 그 이름을 반환할 것을 권장한다.
+            해당 시간대에 표준시 및 서머 타임에 관한 현지 정치적 규칙이 존재한다면 GetNamedTimeZoneEpochNanoseconds와 GetNamedTimeZoneOffsetNanoseconds는 이를 반영해야 한다.
           </p>
-          <p>예를 들어 host environment가 user가 time zone으로 US Eastern Time을 chosen한 system의 browser라면, SystemTimeZoneIdentifier는 *"America/New_York"*를 반환합니다.</p>
+          <p>예를 들어 호스트 환경이 사용자가 자신의 시간대로 미국 동부 시간을 선택한 시스템의 브라우저이면 SystemTimeZoneIdentifier는 *"America/New_York"*를 반환한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-localtime" type="abstract operation">
         <h1>
           LocalTime (
-            _tv_: a finite time value,
-          ): an integral Number
+            _tv_: 유한한 시간 값,
+          ): 정수 Number
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            _tv_를 UTC에서 local time으로 convert합니다.
-            _tv_에서 effect 중인 standard time 및 daylight saving time에 대한 local political rules를 사용하여 이 section에 specified된 way로 result를 determine해야 합니다.
+            _tv_를 UTC에서 현지 시각으로 변환한다.
+            _tv_에서 유효한 표준시 및 서머 타임에 관한 현지 정치적 규칙을 사용하여 이 절에 명시된 방식으로 결과를 결정해야 한다.
           </dd>
         </dl>
         <emu-alg>
-          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둔다.
-          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면, 다음을 수행한다.
-            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 둔다.
+          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정한다.
+          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
+            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 설정한다.
           1. 그렇지 않으면,
-            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × 10<sup>6</sup>))로 둔다.
-          1. _offsetMs_를 truncate(_offsetNs_ / 10<sup>6</sup>)로 둔다.
+            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))로 설정한다.
+          1. _offsetMs_를 truncate(_offsetNs_ / nsPerMillisecond)로 설정한다.
           1. _tv_ + 𝔽(_offsetMs_)를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>local time _tv_에 대한 political rules가 implementation 안에서 available하지 않으면, SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 result는 _tv_입니다.</p>
+          <p>구현에서 현지 시각 _tv_에 관한 정치적 규칙을 사용할 수 없으면 SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 결과는 _tv_이다.</p>
         </emu-note>
         <emu-note>
-          <p>time zone aware implementation에 대해 required되고(all others에도 recommended됨), IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 time zone information을 사용해야 합니다.</p>
+          <p>시간대 인식 구현은 IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 시간대 정보를 사용해야 하며, 그 밖의 모든 구현에도 이를 사용할 것을 권장한다.</p>
         </emu-note>
         <emu-note>
-          <p>negative time zone transition에서 repeated time이 있을 때(예: daylight saving time이 끝나거나 time zone adjustment가 decreased되는 경우) two different input time value <emu-eqn>_tv_<sub>UTC</sub></emu-eqn>가 same local time <emu-eqn>t<sub>local</sub></emu-eqn>로 converted됩니다.</p>
-          <p><emu-eqn>LocalTime(UTC(_tv_<sub>local</sub>))</emu-eqn>는 necessarily always <emu-eqn>_tv_<sub>local</sub></emu-eqn>와 equal하지 않습니다. Correspondingly, <emu-eqn>UTC(LocalTime(_tv_<sub>UTC</sub>))</emu-eqn>도 necessarily always <emu-eqn>_tv_<sub>UTC</sub></emu-eqn>와 equal하지 않습니다.</p>
+          <p>반복되는 시각이 있는 음의 시간대 전환(예: 서머 타임이 끝나거나 시간대 조정이 감소하는 경우)에서는 서로 다른 두 입력 시간 값 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn>가 동일한 현지 시각 <emu-eqn>t<sub>local</sub></emu-eqn>로 변환된다.</p>
+          <p><emu-eqn>LocalTime(UTC(_tv_<sub>local</sub>))</emu-eqn>은 반드시 항상 <emu-eqn>_tv_<sub>local</sub></emu-eqn>과 같지는 않다. 마찬가지로 <emu-eqn>UTC(LocalTime(_tv_<sub>UTC</sub>))</emu-eqn>도 반드시 항상 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn>와 같지는 않다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-utc-t" type="abstract operation">
         <h1>
           UTC (
-            _t_: a Number,
-          ): a time value
+            _t_: Number,
+          ): 시간 값
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            _t_를 local time에서 UTC time value로 convert합니다.
-            _t_에서 effect 중인 standard time 및 daylight saving time에 대한 local political rules를 사용하여 이 section에 specified된 way로 result를 determine해야 합니다.
+            _t_를 현지 시각에서 UTC 시간 값으로 변환한다.
+            _t_에서 유효한 표준시 및 서머 타임에 관한 현지 정치적 규칙을 사용하여 이 절에 명시된 방식으로 결과를 결정해야 한다.
           </dd>
         </dl>
         <emu-alg>
-          1. _t_가 finite가 아니면, *NaN*을 반환한다.
-          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둔다.
-          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면, 다음을 수행한다.
-            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 둔다.
+          1. _t_가 유한하지 않으면, *NaN*을 반환한다.
+          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정한다.
+          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
+            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 설정한다.
           1. 그렇지 않으면,
-            1. _possibleInstants_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0)로 둔다.
-            1. NOTE: 다음 steps는 _t_가 negative time zone transition에서 multiple times repeating되는 local time(예: daylight saving time이 끝나거나 time zone rule change 때문에 time zone offset이 decreased되는 경우) 또는 positive time zone transition에서 skipped local time(예: daylight saving time이 시작되거나 time zone rule change 때문에 time zone offset이 increased되는 경우)을 represent할 때, _t_가 transition before의 time zone offset을 사용하여 interpreted되도록 ensure한다.
-            1. _possibleInstants_가 empty가 아니면, 다음을 수행한다.
-              1. _disambiguatedInstant_를 _possibleInstants_[0]으로 둔다.
+            1. _possibleInstants_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0)으로 설정한다.
+            1. 참고: 다음 단계는 _t_가 음의 시간대 전환에서 여러 번 반복되는 현지 시각(예: 서머 타임이 끝나거나 시간대 규칙 변경으로 시간대 오프셋이 감소하는 경우) 또는 양의 시간대 전환에서 건너뛴 현지 시각(예: 서머 타임이 시작되거나 시간대 규칙 변경으로 시간대 오프셋이 증가하는 경우)을 나타낼 때 전환 이전의 시간대 오프셋을 사용하여 _t_가 해석되도록 보장한다.
+            1. _possibleInstants_가 비어 있지 않으면,
+              1. _disambiguatedInstant_를 _possibleInstants_[0]으로 설정한다.
             1. 그렇지 않으면,
-              1. NOTE: _t_는 positive time zone transition에서 skipped된 local time을 represent한다(예: daylight saving time starting 또는 time zone rule change가 UTC offset을 increasing하기 때문).
-              1. [declared="tBefore"] _possibleInstantsBefore_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)로 둔다. 여기서 _tBefore_는 _possibleInstantsBefore_가 empty가 아닌 largest integral Number &lt; _t_이다(즉 _tBefore_는 transition before의 last local time을 represent한다).
-              1. _disambiguatedInstant_를 _possibleInstantsBefore_의 last element로 둔다.
-            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)로 둔다.
-          1. _offsetMs_를 truncate(_offsetNs_ / 10<sup>6</sup>)로 둔다.
+              1. 참고: _t_는 양의 시간대 전환에서 건너뛴 현지 시각(예: 서머 타임의 시작 또는 UTC 오프셋을 증가시키는 시간대 규칙 변경으로 인한 경우)을 나타낸다.
+              1. [declared="tBefore"] _possibleInstantsBefore_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)으로 설정한다. 여기서 _tBefore_는 _possibleInstantsBefore_가 비어 있지 않은 가장 큰 정수 Number &lt; _t_이다(즉, _tBefore_는 전환 이전의 마지막 현지 시각을 나타낸다).
+              1. _disambiguatedInstant_를 _possibleInstantsBefore_의 마지막 요소로 설정한다.
+            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)로 설정한다.
+          1. _offsetMs_를 truncate(_offsetNs_ / nsPerMillisecond)로 설정한다.
           1. _t_ - 𝔽(_offsetMs_)를 반환한다.
         </emu-alg>
         <p>
-          input _t_는 nominally time value이지만 any Number value일 수 있습니다.
-          algorithm은 _t_를 time value range로 limit해서는 안 됩니다. 그러면 local UTC offset에 관계없이 time value range의 boundary와 corresponding하는 input이 support될 수 있습니다.
-          예를 들어 maximum time value는 8.64 × 10<sup>15</sup>이며, 이는 *"+275760-09-13T00:00:00Z"*에 corresponding합니다.
-          local time zone offset이 해당 instant에서 UTC보다 1 hour ahead인 environment에서는, 더 큰 input인 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup>로 represented되며, 이는 *"+275760-09-13T01:00:00+01:00"*에 corresponding합니다.
+          입력 _t_는 명목상 시간 값이지만 어떤 Number 값이든 될 수 있다.
+          현지 UTC 오프셋과 관계없이 시간 값 범위의 경계에 해당하는 입력을 지원할 수 있도록 알고리즘은 _t_를 시간 값 범위로 제한해서는 안 된다.
+          예를 들어 최대 시간 값은 8.64 × 10<sup>15</sup>이며, *"+275760-09-13T00:00:00Z"*에 해당한다.
+          해당 시점에 현지 시간대 오프셋이 UTC보다 1시간 앞선 환경에서는 *"+275760-09-13T01:00:00+01:00"*에 해당하는 더 큰 입력인 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup>으로 나타낸다.
         </p>
-        <p>local time _t_에 대한 political rules가 implementation 안에서 available하지 않으면, SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 result는 _t_입니다.</p>
+        <p>구현에서 현지 시각 _t_에 관한 정치적 규칙을 사용할 수 없으면 SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 결과는 _t_이다.</p>
         <emu-note>
-          <p>time zone aware implementation에 대해 required되고(all others에도 recommended됨), IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 time zone information을 사용해야 합니다.</p>
+          <p>시간대 인식 구현은 IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 시간대 정보를 사용해야 하며, 그 밖의 모든 구현에도 이를 사용할 것을 권장한다.</p>
           <p>
-            America/New_York에서 2017년 11월 5일 1:30 AM은 twice repeated됩니다(fall backward). 하지만 이는 1:30 AM UTC-05가 아니라 1:30 AM UTC-04로 interpreted되어야 합니다.
-            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0))))에서 _offsetMs_의 value는 <emu-eqn>-4 × msPerHour</emu-eqn>입니다.
+            America/New_York에서 2017년 11월 5일 오전 1시 30분은 두 번 반복되지만(시계를 뒤로 돌림), 오전 1시 30분 UTC-05가 아니라 오전 1시 30분 UTC-04로 해석해야 한다.
+            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0))))에서 _offsetMs_의 값은 <emu-eqn>-4 × msPerHour</emu-eqn>이다.
           </p>
           <p>
-            America/New_York에서 2017년 3월 12일 2:30 AM은 exist하지 않지만, 2:30 AM UTC-05(3:30 AM UTC-04와 equivalent)로 interpreted되어야 합니다.
-            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0))))에서 _offsetMs_의 value는 <emu-eqn>-5 × msPerHour</emu-eqn>입니다.
+            America/New_York에서 2017년 3월 12일 오전 2시 30분은 존재하지 않지만, 오전 2시 30분 UTC-05(오전 3시 30분 UTC-04와 동일)로 해석해야 한다.
+            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0))))에서 _offsetMs_의 값은 <emu-eqn>-5 × msPerHour</emu-eqn>이다.
           </p>
         </emu-note>
         <emu-note>
-          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn>는 necessarily always <emu-eqn>_t_<sub>UTC</sub></emu-eqn>와 equal하지 않습니다. Correspondingly, <emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn>도 necessarily always <emu-eqn>_t_<sub>local</sub></emu-eqn>와 equal하지 않습니다.</p>
+          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn>은 반드시 항상 <emu-eqn>_t_<sub>UTC</sub></emu-eqn>와 같지는 않다. 마찬가지로 <emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn>도 반드시 항상 <emu-eqn>_t_<sub>local</sub></emu-eqn>과 같지는 않다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-maketime" type="abstract operation">
         <h1>
           MakeTime (
-            _hour_: a Number,
-            _min_: a Number,
-            _sec_: a Number,
-            _ms_: a Number,
-          ): a Number
+            _hour_: Number,
+            _min_: Number,
+            _sec_: Number,
+            _ms_: Number,
+          ): Number
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>milliseconds 수를 calculate합니다.</dd>
+          <dd>밀리초 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _hour_가 finite가 아니거나, _min_이 finite가 아니거나, _sec_가 finite가 아니거나, _ms_가 finite가 아니면, *NaN*을 반환한다.
-          1. _h_를 𝔽(! ToIntegerOrInfinity(_hour_))로 둔다.
-          1. _m_을 𝔽(! ToIntegerOrInfinity(_min_))로 둔다.
-          1. _s_를 𝔽(! ToIntegerOrInfinity(_sec_))로 둔다.
-          1. _milli_를 𝔽(! ToIntegerOrInfinity(_ms_))로 둔다.
+          1. _hour_가 유한하지 않거나, _min_이 유한하지 않거나, _sec_가 유한하지 않거나, _ms_가 유한하지 않으면, *NaN*을 반환한다.
+          1. _h_를 𝔽(! ToIntegerOrInfinity(_hour_))로 설정한다.
+          1. _m_을 𝔽(! ToIntegerOrInfinity(_min_))으로 설정한다.
+          1. _s_를 𝔽(! ToIntegerOrInfinity(_sec_))로 설정한다.
+          1. _milli_를 𝔽(! ToIntegerOrInfinity(_ms_))로 설정한다.
           1. ((_h_ × msPerHour + _m_ × msPerMinute) + _s_ × msPerSecond) + _milli_를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>MakeTime 안의 arithmetic은 floating-point arithmetic이며 associative하지 않으므로, operation은 correct order로 performed되어야 합니다.</p>
+          <p>MakeTime의 산술 연산은 결합법칙이 성립하지 않는 부동소수점 산술이므로 연산을 올바른 순서로 수행해야 한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-makeday" type="abstract operation">
         <h1>
           MakeDay (
-            _year_: a Number,
-            _month_: a Number,
-            _date_: a Number,
-          ): a finite Number or *NaN*
+            _year_: Number,
+            _month_: Number,
+            _date_: Number,
+          ): 유한한 Number 또는 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>days 수를 calculate합니다.</dd>
+          <dd>일수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _year_가 finite가 아니거나, _month_가 finite가 아니거나, _date_가 finite가 아니면, *NaN*을 반환한다.
-          1. _y_를 𝔽(! ToIntegerOrInfinity(_year_))로 둔다.
-          1. _m_을 𝔽(! ToIntegerOrInfinity(_month_))로 둔다.
-          1. _dt_를 𝔽(! ToIntegerOrInfinity(_date_))로 둔다.
-          1. _ym_을 _y_ + 𝔽(floor(ℝ(_m_) / 12))로 둔다.
-          1. _ym_이 finite가 아니면, *NaN*을 반환한다.
-          1. _mn_을 𝔽(ℝ(_m_) modulo 12)로 둔다.
-          1. YearFromTime(_tv_)가 _ym_이고, MonthFromTime(_tv_)가 _mn_이며, DateFromTime(_tv_)가 *1*<sub>𝔽</sub>인 finite time value _tv_를 find한다; 하지만 이것이 possible하지 않으면(어떤 argument가 out of range이므로), *NaN*을 반환한다.
-          1. Day(_tv_) + _dt_ - *1*<sub>𝔽</sub>를 반환한다.
+          1. _year_가 유한하지 않거나, _month_가 유한하지 않거나, _date_가 유한하지 않으면, *NaN*을 반환한다.
+          1. _y_를 𝔽(! ToIntegerOrInfinity(_year_))로 설정한다.
+          1. _m_을 𝔽(! ToIntegerOrInfinity(_month_))으로 설정한다.
+          1. _dt_를 𝔽(! ToIntegerOrInfinity(_date_))로 설정한다.
+          1. _ym_을 _y_ + 𝔽(floor(ℝ(_m_) / 12))로 설정한다.
+          1. _ym_이 유한하지 않으면, *NaN*을 반환한다.
+          1. _mn_을 𝔽(ℝ(_m_) modulo 12)로 설정한다.
+          1. YearFromTime(_tv_)가 _ym_이고, MonthFromTime(_tv_)이 _mn_이며, DateFromTime(_tv_)이 *1*<sub>𝔽</sub>인 유한한 시간 값 _tv_를 찾는다. 이것이 불가능하면(일부 인수가 범위를 벗어나므로), *NaN*을 반환한다.
+          1. Day(_tv_) + _dt_ - *1*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-makedate" type="abstract operation">
         <h1>
           MakeDate (
-            _day_: a Number,
-            _time_: a Number,
-          ): a finite Number or *NaN*
+            _day_: Number,
+            _time_: Number,
+          ): 유한한 Number 또는 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>milliseconds 수를 calculate합니다.</dd>
+          <dd>밀리초 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _day_가 finite가 아니거나 _time_이 finite가 아니면, *NaN*을 반환한다.
-          1. _tv_를 _day_ × msPerDay + _time_으로 둔다.
-          1. _tv_가 finite가 아니면, *NaN*을 반환한다.
+          1. _day_가 유한하지 않거나 _time_이 유한하지 않으면, *NaN*을 반환한다.
+          1. _tv_를 _day_ × msPerDay + _time_으로 설정한다.
+          1. _tv_가 유한하지 않으면, *NaN*을 반환한다.
           1. _tv_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -34709,17 +34715,17 @@
       <emu-clause id="sec-makefullyear" type="abstract operation">
         <h1>
           MakeFullYear (
-            _year_: a Number,
-          ): an integral Number or *NaN*
+            _year_: Number,
+          ): 정수 Number 또는 *NaN*
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_year_의 integer part와 associated된 full year를 반환하며, 0부터 99까지의 inclusive interval 안의 any value를 1900 start 이후 years count로 interpret합니다. proleptic Gregorian calendar와 alignment하기 위해, “full year”는 year 0(1 B.C.) start 이후 complete years의 signed count로 defined됩니다.</dd>
+          <dd>_year_의 정수 부분과 연결된 전체 연도를 반환하며, 0부터 99까지의 닫힌구간에 있는 값은 1900년 시작 이후의 연수로 해석한다. 역산 그레고리력과 일치시키기 위해 “전체 연도”는 연도 0(기원전 1년)의 시작 이후 완료된 연도의 부호 있는 개수로 정의한다.</dd>
         </dl>
         <emu-alg>
-          1. _year_가 *NaN*, *+∞*<sub>𝔽</sub>, 또는 *-∞*<sub>𝔽</sub> 중 하나이면, *NaN*을 반환한다.
-          1. _truncated_를 ! ToIntegerOrInfinity(_year_)로 둔다.
-          1. _truncated_가 0부터 99까지의 inclusive interval 안에 있으면, *1900*<sub>𝔽</sub> + 𝔽(_truncated_)를 반환한다.
+          1. _year_가 *NaN*, *+∞*<sub>𝔽</sub> 또는 *-∞*<sub>𝔽</sub> 중 하나이면, *NaN*을 반환한다.
+          1. _truncated_를 ! ToIntegerOrInfinity(_year_)로 설정한다.
+          1. _truncated_가 0부터 99까지의 닫힌구간에 있으면, *1900*<sub>𝔽</sub> + 𝔽(_truncated_)를 반환한다.
           1. 𝔽(_truncated_)를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -34727,24 +34733,24 @@
       <emu-clause id="sec-timeclip" type="abstract operation">
         <h1>
           TimeClip (
-            _time_: a Number,
-          ): a time value
+            _time_: Number,
+          ): 시간 값
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>milliseconds 수를 calculate합니다.</dd>
+          <dd>밀리초 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _time_이 finite가 아니면, *NaN*을 반환한다.
+          1. _time_이 유한하지 않으면, *NaN*을 반환한다.
           1. abs(ℝ(_time_)) > 8.64 × 10<sup>15</sup>이면, *NaN*을 반환한다.
           1. 𝔽(! ToIntegerOrInfinity(_time_))를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date-time-string-format">
-        <h1>Date Time String Format</h1>
-        <p>ECMAScript는 ISO 8601 calendar date extended format의 simplification을 기반으로 date-times를 위한 string interchange format을 define합니다. format은 다음과 같습니다: `YYYY-MM-DDTHH:mm:ss.sssZ`</p>
-        <p>elements는 다음과 같습니다:</p>
+        <h1>날짜 시간 문자열 형식</h1>
+        <p>ECMAScript는 ISO 8601 역일 날짜 확장 형식을 단순화한 날짜-시간 문자열 교환 형식을 정의한다. 형식은 다음과 같다. `YYYY-MM-DDTHH:mm:ss.sssZ`</p>
+        <p>각 요소는 다음과 같다.</p>
         <figure>
           <table class="lightweight-table">
             <tr>
@@ -34752,7 +34758,7 @@
                 `YYYY`
               </td>
               <td>
-                역산 그레고리력의 연도로, 0000부터 9999까지의 네 자리 십진수이거나 *"+"* 또는 *"-"* 뒤에 여섯 자리 십진수가 오는 확장 연도이다.
+                역산 그레고리력의 연도를 0000부터 9999까지의 네 자리 십진 숫자로 나타내거나, *"+"* 또는 *"-"* 뒤에 여섯 자리 십진 숫자가 오는 확장 연도로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34760,7 +34766,7 @@
                 `-`
               </td>
               <td>
-                *"-"* (hyphen)가 string 안에 literally twice appear합니다.
+                *"-"* (하이픈)이 문자열에 문자 그대로 두 번 나타난다.
               </td>
             </tr>
             <tr>
@@ -34768,7 +34774,7 @@
                 `MM`
               </td>
               <td>
-                01 (January)부터 12 (December)까지의 two decimal digits로 된 year의 month입니다.
+                연중 월을 01(1월)부터 12(12월)까지의 두 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34776,7 +34782,7 @@
                 `DD`
               </td>
               <td>
-                01부터 31까지의 two decimal digits로 된 month의 day입니다.
+                월중 일을 01부터 31까지의 두 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34784,7 +34790,7 @@
                 `T`
               </td>
               <td>
-                time element의 beginning을 indicate하기 위해 *"T"*가 string 안에 literally appear합니다.
+                시간 요소의 시작을 나타내기 위해 *"T"*가 문자열에 문자 그대로 나타난다.
               </td>
             </tr>
             <tr>
@@ -34792,7 +34798,7 @@
                 `HH`
               </td>
               <td>
-                midnight 이후 passed한 complete hours 수이며, 00부터 24까지의 two decimal digits입니다.
+                자정 이후 경과한 완전한 시간의 수를 00부터 24까지의 두 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34800,7 +34806,7 @@
                 `:`
               </td>
               <td>
-                *":"* (colon)가 string 안에 literally twice appear합니다.
+                *":"* (콜론)이 문자열에 문자 그대로 두 번 나타난다.
               </td>
             </tr>
             <tr>
@@ -34808,7 +34814,7 @@
                 `mm`
               </td>
               <td>
-                hour의 start 이후 complete minutes 수이며, 00부터 59까지의 two decimal digits입니다.
+                해당 시간이 시작된 이후 경과한 완전한 분의 수를 00부터 59까지의 두 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34816,7 +34822,7 @@
                 `ss`
               </td>
               <td>
-                minute의 start 이후 complete seconds 수이며, 00부터 59까지의 two decimal digits입니다.
+                해당 분이 시작된 이후 경과한 완전한 초의 수를 00부터 59까지의 두 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34824,7 +34830,7 @@
                 `.`
               </td>
               <td>
-                *"."* (dot)가 string 안에 literally appear합니다.
+                *"."* (마침표)이 문자열에 문자 그대로 나타난다.
               </td>
             </tr>
             <tr>
@@ -34832,7 +34838,7 @@
                 `sss`
               </td>
               <td>
-                second의 start 이후 complete milliseconds 수이며, three decimal digits입니다.
+                해당 초가 시작된 이후 경과한 완전한 밀리초의 수를 세 자리 십진 숫자로 나타낸다.
               </td>
             </tr>
             <tr>
@@ -34840,65 +34846,65 @@
                 `Z`
               </td>
               <td>
-                UTC offset representation이며, *"Z"* (offset 없는 UTC)로 specified되거나, local time이 UTC보다 ahead 또는 behind임을 indicate하기 위해 *"+"* 또는 *"-"* 뒤에 time expression `HH:mm`가 followed되는 형식(<emu-xref href="#sec-time-zone-offset-strings">time zone offset string format</emu-xref>의 subset)입니다.
+                UTC 오프셋 표현이며, *"Z"*(오프셋이 없는 UTC) 또는 *"+"*나 *"-"* 뒤에 시간 표현 `HH:mm`이 오는 형식으로 지정한다(각각 UTC보다 앞서거나 뒤처진 현지 시각을 나타내는 <emu-xref href="#sec-time-zone-offset-strings">시간대 오프셋 문자열 형식</emu-xref>의 하위 집합)
               </td>
             </tr>
           </table>
         </figure>
-        <p>이 format은 date-only form을 include합니다:</p>
+        <p>이 형식에는 다음과 같은 날짜 전용 형식이 포함된다.</p>
         <pre>
 YYYY
 YYYY-MM
 YYYY-MM-DD
         </pre>
-        <p>또한 above date-only form 중 하나 바로 뒤에 following time form 중 하나가 followed되고 optional UTC offset representation이 appended되는 “date-time” form도 include합니다:</p>
+        <p>또한 위의 날짜 전용 형식 중 하나 바로 뒤에 다음 시간 형식 중 하나가 오고 선택적으로 UTC 오프셋 표현이 추가되는 “날짜-시간” 형식도 포함된다.</p>
         <pre>
 THH:mm
 THH:mm:ss
 THH:mm:ss.sss
         </pre>
-        <p>out-of-bounds 또는 nonconforming element를 contain하는 string은 이 format의 valid instance가 아닙니다.</p>
+        <p>범위를 벗어나거나 규격을 준수하지 않는 요소가 포함된 문자열은 이 형식의 유효한 인스턴스가 아니다.</p>
         <emu-note>
-          <p>every day는 midnight로 start하고 end하므로, two notations `00:00` 및 `24:00`는 one date와 associated될 수 있는 two midnights를 distinguish하기 위해 available합니다. 이는 following two notations가 exactly same point in time을 refer함을 의미합니다: `1995-02-04T24:00` 및 `1995-02-05T00:00`. latter form을 “calendar day의 end”로 해석하는 것은 ISO 8601과 consistent합니다. 그 specification이 이를 time interval을 describing하는 데 reserve하고 single point in time의 representation 안에서는 permit하지 않더라도 그렇습니다.</p>
+          <p>모든 날은 자정에 시작하고 자정에 끝나므로 한 날짜와 연결될 수 있는 두 자정을 구별하기 위해 `00:00`과 `24:00`이라는 두 표기법을 사용할 수 있다. 이는 `1995-02-04T24:00`과 `1995-02-05T00:00`이라는 두 표기법이 정확히 같은 시점을 가리킨다는 의미이다.</p>
         </emu-note>
         <emu-note>
-          <p>CET, EST 등과 같은 civil time zone의 abbreviation을 specify하는 international standard는 존재하지 않으며, sometimes same abbreviation이 even two very different time zones에 사용됩니다. 이러한 이유로 ISO 8601과 이 format 모두 time zone offset의 numeric representation을 specify합니다.</p>
+          <p>이 형식은 RFC 9557에 정의된 시간대 이름이 포함된 주석을 지원하지 않으며, 시간대 오프셋의 숫자 표현만 지원한다.</p>
         </emu-note>
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
-          <h1>Expanded Years</h1>
-          <p>1970년 1월 1일을 기준으로 앞뒤 약 273,790년에 이르는 전체 시간 값 범위(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>)를 포괄하려면 0년 이전 또는 9999년 이후의 연도를 나타내야 한다. ISO 8601에서는 연도 표현을 확장할 수 있지만, 정보 교환 당사자 간의 상호 합의가 있는 경우에만 허용된다. 단순화된 ECMAScript 형식에서 이러한 <dfn variants="expanded years">확장 연도</dfn> 표현은 6자리여야 하며 항상 + 또는 - 기호가 앞에 붙는다. 0년은 양수로 간주되며 앞에 + 기호가 붙어야 한다. 0년을 -000000으로 나타내는 것은 유효하지 않다. 시간 값 범위를 벗어난 시점을 확장 연도로 나타내면서 <emu-xref href="#sec-date-time-string-format">날짜 시간 문자열 형식</emu-xref>과 일치하는 문자열은 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>에서 인식할 수 없는 것으로 처리되며, 이 함수는 구현별 동작이나 휴리스틱으로 대체하지 않고 *NaN*을 반환한다.</p>
+          <h1>확장 연도</h1>
+          <p>1970년 1월 1일을 기준으로 앞뒤 약 273,790년에 이르는 전체 시간 값 범위(<emu-xref href="#sec-time-values-and-time-range"></emu-xref>)를 포괄하려면 0년 이전 또는 9999년 이후의 연도를 나타내야 한다. ISO 8601은 연도 표현의 확장을 허용하지만 정보 교환 당사자 간의 상호 합의가 있는 경우에만 허용한다. 단순화된 ECMAScript 형식에서 이러한 <dfn variants="expanded years">확장 연도</dfn> 표현은 6자리여야 하며 항상 + 또는 - 부호가 접두사로 붙는다. 연도 0은 양수로 간주하며 + 부호를 접두사로 붙여야 한다. 연도 0을 -000000으로 나타내는 것은 유효하지 않다. 확장 연도가 시간 값의 범위를 벗어난 시점을 나타내면서 <emu-xref href="#sec-date-time-string-format">날짜 시간 문자열 형식</emu-xref>과 일치하는 문자열은 <emu-xref href="#sec-date.parse">`Date.parse`</emu-xref>에서 인식할 수 없는 것으로 처리하며, 해당 함수는 구현별 동작이나 휴리스틱으로 대체하지 않고 *NaN*을 반환한다.</p>
           <emu-note>
-            <p>expanded years를 가진 date-<emu-not-ref>time values</emu-not-ref>의 examples:</p>
+            <p>확장 연도를 사용하는 날짜-<emu-not-ref>시간 값</emu-not-ref>의 예:</p>
             <figure>
               <table class="lightweight-table">
                 <tr>
                   <td>-271821-04-20T00:00:00Z</td>
-                  <td>271822 B.C.</td>
+                  <td>기원전 271822년</td>
                 </tr>
                 <tr>
                   <td>-000001-01-01T00:00:00Z</td>
-                  <td>2 B.C.</td>
+                  <td>기원전 2년</td>
                 </tr>
                 <tr>
                   <td>+000000-01-01T00:00:00Z</td>
-                  <td>1 B.C.</td>
+                  <td>기원전 1년</td>
                 </tr>
                 <tr>
                   <td>+000001-01-01T00:00:00Z</td>
-                  <td>1 A.D.</td>
+                  <td>서기 1년</td>
                 </tr>
                 <tr>
                   <td>+001970-01-01T00:00:00Z</td>
-                  <td>1970 A.D.</td>
+                  <td>서기 1970년</td>
                 </tr>
                 <tr>
                   <td>+002009-12-15T00:00:00Z</td>
-                  <td>2009 A.D.</td>
+                  <td>서기 2009년</td>
                 </tr>
                 <tr>
                   <td>+275760-09-13T00:00:00Z</td>
-                  <td>275760 A.D.</td>
+                  <td>서기 275760년</td>
                 </tr>
               </table>
             </figure>
@@ -34907,14 +34913,14 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-time-zone-offset-strings">
-        <h1>Time Zone Offset String Format</h1>
+        <h1>시간대 오프셋 문자열 형식</h1>
 
         <p>
-          ECMAScript는 ISO 8601에서 derived된 UTC offsets를 위한 string interchange format을 define합니다.
-          format은 following grammar로 described됩니다.
+          ECMAScript는 ISO 8601에서 파생된 UTC 오프셋 문자열 교환 형식을 정의한다.
+          형식은 다음 문법으로 설명한다.
         </p>
 
-        <h2>Syntax</h2>
+        <h2>구문</h2>
         <emu-grammar type="definition">
           UTCOffset :::
             ASCIISign Hour
@@ -34966,16 +34972,16 @@ THH:mm:ss.sss
         <emu-clause id="sec-istimezoneoffsetstring" type="abstract operation">
           <h1>
             IsTimeZoneOffsetString (
-              _offsetString_: a String,
-            ): a Boolean
+              _offsetString_: String,
+            ): Boolean
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>return value는 _offsetString_이 |UTCOffset|에 의해 given된 grammar에 conform하는지 여부를 indicate합니다.</dd>
+            <dd>반환 값은 _offsetString_이 |UTCOffset|으로 주어진 문법을 준수하는지를 나타낸다.</dd>
           </dl>
           <emu-alg>
-            1. _parseResult_를 ParseText(_offsetString_, |UTCOffset|)로 둔다.
-            1. _parseResult_가 error의 List이면, *false*를 반환한다.
+            1. _parseResult_를 ParseText(_offsetString_, |UTCOffset|)로 설정한다.
+            1. _parseResult_가 오류의 List이면, *false*를 반환한다.
             1. *true*를 반환한다.
           </emu-alg>
         </emu-clause>
@@ -34983,44 +34989,44 @@ THH:mm:ss.sss
         <emu-clause id="sec-parsetimezoneoffsetstring" type="abstract operation">
           <h1>
             ParseTimeZoneOffsetString (
-              _offsetString_: a String,
-            ): an integer
+              _offsetString_: String,
+            ): 정수
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>return value는 String _offsetString_에 corresponding하는 UTC offset이며, nanoseconds 수입니다.</dd>
+            <dd>반환 값은 String _offsetString_에 대응하는 나노초 단위의 UTC 오프셋이다.</dd>
           </dl>
           <emu-alg>
-            1. _parseResult_를 ParseText(_offsetString_, |UTCOffset|)로 둔다.
-            1. Assert: _parseResult_는 error의 List가 아니다.
-            1. Assert: _parseResult_는 |ASCIISign| Parse Node를 contain한다.
-            1. _parsedSign_을 _parseResult_ 안에 contained된 |ASCIISign| Parse Node가 matched한 source text로 둔다.
-            1. _parsedSign_이 single code point U+002D (HYPHEN-MINUS)이면, 다음을 수행한다.
-              1. _sign_을 -1로 둔다.
+            1. _parseResult_를 ParseText(_offsetString_, |UTCOffset|)로 설정한다.
+            1. 단언: _parseResult_는 오류의 List가 아니다.
+            1. 단언: _parseResult_에는 |ASCIISign| Parse Node가 포함되어 있다.
+            1. _parsedSign_을 _parseResult_ 안에 포함된 |ASCIISign| Parse Node가 일치시킨 소스 텍스트로 설정한다.
+            1. _parsedSign_이 단일 코드 포인트 U+002D (HYPHEN-MINUS)이면,
+              1. _sign_을 -1로 설정한다.
             1. 그렇지 않으면,
-              1. _sign_을 1로 둔다.
-            1. NOTE: 아래 StringToNumber의 application은 precision을 lose하지 않는다. parsed value 각각은 sufficiently short string of decimal digits임이 guaranteed되기 때문이다.
-            1. Assert: _parseResult_는 |Hour| Parse Node를 contain한다.
-            1. _parsedHours_를 _parseResult_ 안에 contained된 |Hour| Parse Node가 matched한 source text로 둔다.
-            1. _hours_를 ℝ(StringToNumber(CodePointsToString(_parsedHours_)))로 둔다.
-            1. _parseResult_가 |MinuteSecond| Parse Node를 contain하지 않으면, 다음을 수행한다.
-              1. _minutes_를 0으로 둔다.
+              1. _sign_을 1로 설정한다.
+            1. 참고: 파싱된 각 값은 충분히 짧은 십진 숫자 문자열임이 보장되므로 아래의 StringToNumber 적용에서는 정밀도가 손실되지 않는다.
+            1. 단언: _parseResult_에는 |Hour| Parse Node가 포함되어 있다.
+            1. _parsedHours_를 _parseResult_ 안에 포함된 |Hour| Parse Node가 일치시킨 소스 텍스트로 설정한다.
+            1. _hours_를 ℝ(StringToNumber(CodePointsToString(_parsedHours_)))로 설정한다.
+            1. _parseResult_에 |MinuteSecond| Parse Node가 포함되어 있지 않으면,
+              1. _minutes_를 0으로 설정한다.
             1. 그렇지 않으면,
-              1. _parsedMinutes_를 _parseResult_ 안에 contained된 first |MinuteSecond| Parse Node가 matched한 source text로 둔다.
-              1. _minutes_를 ℝ(StringToNumber(CodePointsToString(_parsedMinutes_)))로 둔다.
-            1. _parseResult_가 two |MinuteSecond| Parse Nodes를 contain하지 않으면, 다음을 수행한다.
-              1. _seconds_를 0으로 둔다.
+              1. _parsedMinutes_를 _parseResult_ 안에 포함된 첫 번째 |MinuteSecond| Parse Node가 일치시킨 소스 텍스트로 설정한다.
+              1. _minutes_를 ℝ(StringToNumber(CodePointsToString(_parsedMinutes_)))로 설정한다.
+            1. _parseResult_에 두 개의 |MinuteSecond| Parse Node가 포함되어 있지 않으면,
+              1. _seconds_를 0으로 설정한다.
             1. 그렇지 않으면,
-              1. _parsedSeconds_를 _parseResult_ 안에 contained된 second |MinuteSecond| Parse Node가 matched한 source text로 둔다.
-              1. _seconds_를 ℝ(StringToNumber(CodePointsToString(_parsedSeconds_)))로 둔다.
-            1. _parseResult_가 |TemporalDecimalFraction| Parse Node를 contain하지 않으면, 다음을 수행한다.
-              1. _nanoseconds_를 0으로 둔다.
+              1. _parsedSeconds_를 _parseResult_ 안에 포함된 두 번째 |MinuteSecond| Parse Node가 일치시킨 소스 텍스트로 설정한다.
+              1. _seconds_를 ℝ(StringToNumber(CodePointsToString(_parsedSeconds_)))로 설정한다.
+            1. _parseResult_에 |TemporalDecimalFraction| Parse Node가 포함되어 있지 않으면,
+              1. _nanoseconds_를 0으로 설정한다.
             1. 그렇지 않으면,
-              1. _parsedFraction_을 _parseResult_ 안에 contained된 |TemporalDecimalFraction| Parse Node가 matched한 source text로 둔다.
-              1. _fraction_을 CodePointsToString(_parsedFraction_)과 *"000000000"*의 string-concatenation으로 둔다.
-              1. _nanosecondsString_을 _fraction_의 1부터 10까지의 substring으로 둔다.
-              1. _nanoseconds_를 ℝ(StringToNumber(_nanosecondsString_))로 둔다.
-            1. _sign_ × (((_hours_ × 60 + _minutes_) × 60 + _seconds_) × 10<sup>9</sup> + _nanoseconds_)를 반환한다.
+              1. _parsedFraction_을 _parseResult_ 안에 포함된 |TemporalDecimalFraction| Parse Node가 일치시킨 소스 텍스트로 설정한다.
+              1. _fraction_을 CodePointsToString(_parsedFraction_)과 *"000000000"*을 문자열 연결한 결과로 설정한다.
+              1. _nanosecondsString_을 _fraction_의 1부터 10까지의 부분 문자열로 설정한다.
+              1. _nanoseconds_를 ℝ(StringToNumber(_nanosecondsString_))로 설정한다.
+            1. _sign_ × (((_hours_ × MinutesPerHour + _minutes_) × SecondsPerMinute + _seconds_) × nsPerSecond + _nanoseconds_)를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -35989,22 +35995,22 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둔다.
-            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면, 다음을 수행한다.
-              1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 둔다.
+            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정한다.
+            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
+              1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 설정한다.
             1. 그렇지 않으면,
-              1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × 10<sup>6</sup>))로 둔다.
-            1. _offset_을 𝔽(truncate(_offsetNs_ / 10<sup>6</sup>))로 둔다.
-            1. _offset_이 *+0*<sub>𝔽</sub>이거나 _offset_ > *+0*<sub>𝔽</sub>이면, 다음을 수행한다.
-              1. _offsetSign_을 *"+"*로 둔다.
-              1. _absOffset_을 _offset_으로 둔다.
+              1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))로 설정한다.
+            1. _offset_을 𝔽(truncate(_offsetNs_ / nsPerMillisecond))로 설정한다.
+            1. _offset_이 *+0*<sub>𝔽</sub>이거나 _offset_ > *+0*<sub>𝔽</sub>이면,
+              1. _offsetSign_을 *"+"*로 설정한다.
+              1. _absOffset_을 _offset_으로 설정한다.
             1. 그렇지 않으면,
-              1. _offsetSign_을 *"-"*로 둔다.
-              1. _absOffset_을 -_offset_으로 둔다.
-            1. _offsetMin_을 ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2)로 둔다.
-            1. _offsetHour_를 ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2)로 둔다.
-            1. _tzName_을 empty String이거나 code unit 0x0020 (SPACE), code unit 0x0028 (LEFT PARENTHESIS), implementation-defined timezone name, 및 code unit 0x0029 (RIGHT PARENTHESIS)의 string-concatenation인 implementation-defined string으로 둔다.
-            1. _offsetSign_, _offsetHour_, _offsetMin_, 및 _tzName_의 string-concatenation을 반환한다.
+              1. _offsetSign_을 *"-"*로 설정한다.
+              1. _absOffset_을 -_offset_으로 설정한다.
+            1. _offsetMin_을 ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2)로 설정한다.
+            1. _offsetHour_를 ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2)로 설정한다.
+            1. _tzName_을 빈 String이거나 코드 단위 0x0020 (SPACE), 코드 단위 0x0028 (LEFT PARENTHESIS), 구현 정의 시간대 이름 및 코드 단위 0x0029 (RIGHT PARENTHESIS)을 문자열 연결한 결과인 구현 정의 문자열로 설정한다.
+            1. _offsetSign_, _offsetHour_, _offsetMin_ 및 _tzName_을 문자열 연결한 결과를 반환한다.
           </emu-alg>
         </emu-clause>
 
@@ -55040,58 +55046,61 @@ THH:mm:ss.sss
 </emu-annex>
 
 <emu-annex id="sec-bibliography" back-matter>
-  <h1>Bibliography</h1>
+  <h1>참고 문헌</h1>
   <ol>
     <li>
-      <dfn>IEEE 754-2019</dfn>: <i>IEEE Standard for Floating-Point Arithmetic</i>. Institute of Electrical and Electronic Engineers, New York (2019)
+      <dfn>IEEE 754-2019</dfn>: <i>부동소수점 산술에 관한 IEEE 표준</i>. 전기전자공학자협회, 뉴욕 (2019)
       <emu-note>
-        <p>ECMA-262 specification에 affect하는 IEEE 754-2008과 IEEE 754-2019 사이의 normative changes는 없습니다.</p>
+        <p>ECMA-262 명세에 영향을 미치는 규범적 변경 사항은 IEEE 754-2008과 IEEE 754-2019 사이에 없다.</p>
       </emu-note>
     </li>
     <li>
-      <i>The Unicode Standard</i>, available at &lt;<a href="https://unicode.org/versions/latest">https://unicode.org/versions/latest</a>>
+      <i>유니코드 표준</i>, &lt;<a href="https://unicode.org/versions/latest">https://unicode.org/versions/latest</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Technical Note #5: Canonical Equivalence in Applications</i>, available at &lt;<a href="https://unicode.org/notes/tn5/">https://unicode.org/notes/tn5/</a>>
+      <i>유니코드 기술 노트 #5: 애플리케이션에서의 정규 등가성</i>, &lt;<a href="https://unicode.org/notes/tn5/">https://unicode.org/notes/tn5/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Technical Standard #10: Unicode Collation Algorithm</i>, available at &lt;<a href="https://unicode.org/reports/tr10/">https://unicode.org/reports/tr10/</a>>
+      <i>유니코드 기술 표준 #10: 유니코드 조합 알고리즘</i>, &lt;<a href="https://unicode.org/reports/tr10/">https://unicode.org/reports/tr10/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Standard Annex #15, Unicode Normalization Forms</i>, available at &lt;<a href="https://unicode.org/reports/tr15/">https://unicode.org/reports/tr15/</a>>
+      <i>유니코드 표준 부속서 #15, 유니코드 정규화 형식</i>, &lt;<a href="https://unicode.org/reports/tr15/">https://unicode.org/reports/tr15/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Standard Annex #18: Unicode Regular Expressions</i>, available at &lt;<a href="https://unicode.org/reports/tr18/">https://unicode.org/reports/tr18/</a>>
+      <i>유니코드 표준 부속서 #18: 유니코드 정규 표현식</i>, &lt;<a href="https://unicode.org/reports/tr18/">https://unicode.org/reports/tr18/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Standard Annex #24: Unicode `Script` Property</i>, available at &lt;<a href="https://unicode.org/reports/tr24/">https://unicode.org/reports/tr24/</a>>
+      <i>유니코드 표준 부속서 #24: 유니코드 `Script` 속성</i>, &lt;<a href="https://unicode.org/reports/tr24/">https://unicode.org/reports/tr24/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Standard Annex #31, Unicode Identifiers and Pattern Syntax</i>, available at &lt;<a href="https://unicode.org/reports/tr31/">https://unicode.org/reports/tr31/</a>>
+      <i>유니코드 표준 부속서 #31, 유니코드 식별자 및 패턴 구문</i>, &lt;<a href="https://unicode.org/reports/tr31/">https://unicode.org/reports/tr31/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Standard Annex #44: Unicode Character Database</i>, available at &lt;<a href="https://unicode.org/reports/tr44/">https://unicode.org/reports/tr44/</a>>
+      <i>유니코드 표준 부속서 #44: 유니코드 문자 데이터베이스</i>, &lt;<a href="https://unicode.org/reports/tr44/">https://unicode.org/reports/tr44/</a>에서 이용 가능>
     </li>
     <li>
-      <i>Unicode Technical Standard #51: Unicode Emoji</i>, available at &lt;<a href="https://unicode.org/reports/tr51/">https://unicode.org/reports/tr51/</a>>
+      <i>유니코드 기술 표준 #51: 유니코드 이모지</i>, &lt;<a href="https://unicode.org/reports/tr51/">https://unicode.org/reports/tr51/</a>에서 이용 가능>
     </li>
     <li>
-      <i>IANA Time Zone Database</i>, available at &lt;<a href="https://www.iana.org/time-zones">https://www.iana.org/time-zones</a>>
+      <i>IANA 시간대 데이터베이스</i>, &lt;<a href="https://www.iana.org/time-zones">https://www.iana.org/time-zones</a>에서 이용 가능>
     </li>
     <li>
-      ISO 8601:2004(E) <i>Data elements and interchange formats — Information interchange — Representation of dates and times</i>
+      ISO 8601-1:2019(E) <i>날짜 및 시간 — 정보 교환을 위한 표현 — 제1부: 기본 규칙</i> 및 개정 1:2022.
     </li>
     <li>
-      <i>RFC 1738 “Uniform Resource Locators (URL)”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>>
+      <i>RFC 1738 “통합 자원 위치 지정자(URL)”</i>, &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>에서 이용 가능>
     </li>
     <li>
-      <i>RFC 2396 “Uniform Resource Identifiers (URI): Generic Syntax”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>>
+      <i>RFC 2396 “통합 자원 식별자(URI): 일반 구문”</i>, &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>에서 이용 가능>
     </li>
     <li>
-      <i>RFC 3629 “UTF-8, a transformation format of ISO 10646”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>>
+      <i>RFC 3629 “UTF-8, ISO 10646의 변환 형식”</i>, &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>에서 이용 가능>
     </li>
     <li>
-      <i>RFC 7231 “Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>>
+      <i>RFC 7231 “하이퍼텍스트 전송 프로토콜(HTTP/1.1): 의미론 및 콘텐츠”</i>, &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>에서 이용 가능>
+    </li>
+    <li>
+      <i>RFC 9557 “인터넷의 날짜 및 시간: 추가 정보가 포함된 타임스탬프”</i>, &lt;<a href="https://rfc-editor.org/info/rfc9557">https://rfc-editor.org/info/rfc9557</a>에서 이용 가능>
     </li>
   </ol>
 </emu-annex>
