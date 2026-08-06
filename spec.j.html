@@ -5782,7 +5782,6 @@
         1. _int_ を返す。
       </emu-alg>
     </emu-clause>
-    
 
     <emu-clause id="sec-toclampedindex" type="abstract operation">
       <h1>
@@ -14148,7 +14147,7 @@
           _name_: a property key or Private Name,
           _closure_: a function object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -14158,7 +14157,7 @@
         1. _propertyDesc_をPropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }とする。
         1. ? DefinePropertyOrThrow(_homeObj_, _name_, _propertyDesc_)を実行する。
         1. NOTE: DefinePropertyOrThrowがabrupt completionを返すのは、_name_が*"prototype"*であるclass static methodを定義しようとする場合だけである。
-        1. ~unused~を返す。
+        1. ~empty~を返す。
       </emu-alg>
     </emu-clause>
 
@@ -24654,7 +24653,7 @@
         Runtime Semantics: MethodDefinitionEvaluation (
           _obj_: an Object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -24678,7 +24677,7 @@
           1. PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: _closure_, [[Setter]]: *undefined* } を返す。
         1. _propertyDesc_ を PropertyDescriptor { [[Getter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
         1. ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_) を実行する。
-        1. ~unused~ を返す。
+        1. ~empty~ を返す。
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -24693,7 +24692,7 @@
           1. PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: *undefined*, [[Setter]]: _closure_ } を返す。
         1. _propertyDesc_ を PropertyDescriptor { [[Setter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* } とする。
         1. ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_) を実行する。
-        1. ~unused~ を返す。
+        1. ~empty~ を返す。
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25701,7 +25700,7 @@
       <h1>
         Runtime Semantics: ClassElementEvaluation (
           _obj_: an Object,
-        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -25733,7 +25732,7 @@
         ClassElement : `;`
       </emu-grammar>
       <emu-alg>
-        1. ~unused~を返す。
+        1. ~empty~を返す。
       </emu-alg>
     </emu-clause>
 
@@ -43857,10 +43856,10 @@ THH:mm:ss.sss
           1. _omitPadding_をToBoolean(? Get(_opts_, *"omitPadding"*))とする。
           1. _toEncode_を ? GetUint8ArrayBytes(_obj_) とする。
           1. _alphabet_が*"base64"*なら、
-            1. _outAscii_を、_toEncode_を<a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>のsection 4でspecifiedされるbase64 encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
+            1. _outAscii_を、_toEncode_を<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>のsection 4でspecifiedされるbase64 encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
           1. そうでなければ、
             1. Assert: _alphabet_は*"base64url"*である。
-            1. _outAscii_を、_toEncode_を<a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>のsection 5でspecifiedされるbase64url encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
+            1. _outAscii_を、_toEncode_を<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>のsection 5でspecifiedされるbase64url encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
           1. CodePointsToString(_outAscii_)を返す。
         </emu-alg>
       </emu-clause>
@@ -43998,7 +43997,7 @@ THH:mm:ss.sss
         </dl>
         <p><dfn id="standard-base64-alphabet">standard base64 alphabet</dfn>は*"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"*、すなわち、Unicode Basic Latin block内のすべてのletterおよびnumberにcorrespondingするcode unitsと、*"+"*および*"/"*からなるStringです。</p>
         <emu-alg>
-          1. _byteSequence_を、_chunk_をbase64としてdecodingした結果のunique sequence of 3 bytesとする（すなわち、_byteSequence_に<a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>のsection 4でspecifiedされるbase64 encodingをapplyingすると_chunk_をproduceするようなsequence）。
+          1. _byteSequence_を、_chunk_をbase64としてdecodingした結果のunique sequence of 3 bytesとする（すなわち、_byteSequence_に<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>のsection 4でspecifiedされるbase64 encodingをapplyingすると_chunk_をproduceするようなsequence）。
           1. elementsが_byteSequence_のelementsであり、orderを保ったListを返す。
         </emu-alg>
       </emu-clause>
@@ -55099,16 +55098,16 @@ THH:mm:ss.sss
       ISO 8601:2004(E) <i>Data elements and interchange formats — Information interchange — Representation of dates and times</i>
     </li>
     <li>
-      <i>RFC 1738 “Uniform Resource Locators (URL)”</i>、&lt;<a href="https://tools.ietf.org/html/rfc1738">https://tools.ietf.org/html/rfc1738</a>>で入手可能
+      <i>RFC 1738 “Uniform Resource Locators (URL)”</i>、&lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>>で入手可能
     </li>
     <li>
-      <i>RFC 2396 “Uniform Resource Identifiers (URI): Generic Syntax”</i>、&lt;<a href="https://tools.ietf.org/html/rfc2396">https://tools.ietf.org/html/rfc2396</a>>で入手可能
+      <i>RFC 2396 “Uniform Resource Identifiers (URI): Generic Syntax”</i>、&lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>>で入手可能
     </li>
     <li>
-      <i>RFC 3629 “UTF-8, a transformation format of ISO 10646”</i>、&lt;<a href="https://tools.ietf.org/html/rfc3629">https://tools.ietf.org/html/rfc3629</a>>で入手可能
+      <i>RFC 3629 “UTF-8, a transformation format of ISO 10646”</i>、&lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>>で入手可能
     </li>
     <li>
-      <i>RFC 7231 “Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content”</i>、&lt;<a href="https://tools.ietf.org/html/rfc7231">https://tools.ietf.org/html/rfc7231</a>>で入手可能
+      <i>RFC 7231 “Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content”</i>、&lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>>で入手可能
     </li>
   </ol>
 </emu-annex>

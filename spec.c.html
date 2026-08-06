@@ -5770,8 +5770,8 @@
     <emu-clause id="sec-toabsoluteindex" type="abstract operation">
       <h1>
         ToAbsoluteIndex (
-          _value_: 一个 ECMAScript 语言值，
-          _length_: 一个非负整数，
+          _value_: 一个 ECMAScript 语言值，,
+          _length_: 一个非负整数，,
         ): 要么是一个正常完成，包含一个整数、+&infin; 或 -&infin;，要么是一个抛出完成
       </h1>
       <dl class="header">
@@ -5784,13 +5784,12 @@
         1. 返回 _int_。
       </emu-alg>
     </emu-clause>
-    
 
     <emu-clause id="sec-toclampedindex" type="abstract operation">
       <h1>
         ToClampedIndex (
-          _value_: 一个 ECMAScript 语言值，
-          _length_: 一个非负整数，
+          _value_: 一个 ECMAScript 语言值，,
+          _length_: 一个非负整数，,
         ): 要么是一个正常完成，包含一个非负整数，要么是一个抛出完成
       </h1>
       <dl class="header">
@@ -14130,7 +14129,7 @@
           _name_: a property key or Private Name,
           _closure_: a function object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -14140,7 +14139,7 @@
         1. 令 _propertyDesc_ 为 PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
         1. 执行 ? DefinePropertyOrThrow(_homeObj_, _name_, _propertyDesc_)。
         1. 注：DefinePropertyOrThrow 仅在尝试定义 _name_ 为 *"prototype"* 的类静态方法时返回 abrupt completion。
-        1. 返回 ~unused~。
+        1. 返回 ~empty~。
       </emu-alg>
     </emu-clause>
 
@@ -24636,7 +24635,7 @@
         Runtime Semantics: MethodDefinitionEvaluation (
           _obj_: an Object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -24660,7 +24659,7 @@
           1. 返回 PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: _closure_, [[Setter]]: *undefined* }。
         1. 令 _propertyDesc_ 为 PropertyDescriptor { [[Getter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
         1. 执行 ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_)。
-        1. 返回 ~unused~。
+        1. 返回 ~empty~。
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -24675,7 +24674,7 @@
           1. 返回 PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: *undefined*, [[Setter]]: _closure_ }。
         1. 令 _propertyDesc_ 为 PropertyDescriptor { [[Setter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }。
         1. 执行 ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_)。
-        1. 返回 ~unused~。
+        1. 返回 ~empty~。
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25683,7 +25682,7 @@
       <h1>
         Runtime Semantics: ClassElementEvaluation (
           _obj_: an Object,
-        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -25715,7 +25714,7 @@
         ClassElement : `;`
       </emu-grammar>
       <emu-alg>
-        1. 返回 ~unused~。
+        1. 返回 ~empty~。
       </emu-alg>
     </emu-clause>
 
@@ -43838,10 +43837,10 @@ THH:mm:ss.sss
           1. 令 _omitPadding_ 为 ToBoolean(? Get(_opts_, *"omitPadding"*))。
           1. 令 _toEncode_ 为 ? GetUint8ArrayBytes(_obj_)。
           1. 如果 _alphabet_ 是 *"base64"*，则
-            1. 令 _outAscii_ 为根据 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 4 节指定的 base64 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
+            1. 令 _outAscii_ 为根据 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 4 节指定的 base64 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
           1. 否则，
             1. 断言：_alphabet_ 是 *"base64url"*。
-            1. 令 _outAscii_ 为根据 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 5 节指定的 base64url 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
+            1. 令 _outAscii_ 为根据 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 5 节指定的 base64url 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
           1. 返回 CodePointsToString(_outAscii_)。
         </emu-alg>
       </emu-clause>
@@ -43979,7 +43978,7 @@ THH:mm:ss.sss
         </dl>
         <p><dfn id="standard-base64-alphabet">标准 base64 字母表</dfn>是 *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"*，即由 Unicode Basic Latin 块中每个字母和数字对应的码元，以及 *"+"* 和 *"/"* 组成的 String。</p>
         <emu-alg>
-          1. 令 _byteSequence_ 为将 _chunk_ 作为 base64 解码所得的唯一 3 字节序列（即，对 _byteSequence_ 应用 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a> 第 4 节指定的 base64 编码会产生 _chunk_ 的序列）。
+          1. 令 _byteSequence_ 为将 _chunk_ 作为 base64 解码所得的唯一 3 字节序列（即，对 _byteSequence_ 应用 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 4 节指定的 base64 编码会产生 _chunk_ 的序列）。
           1. 返回一个 List，其元素按顺序为 _byteSequence_ 的元素。
         </emu-alg>
       </emu-clause>
@@ -55080,16 +55079,16 @@ THH:mm:ss.sss
       ISO 8601:2004(E) <i>数据元素和交换格式 — 信息交换 — 日期和时间的表示</i>
     </li>
     <li>
-      <i>RFC 1738 “统一资源定位符（URL）”</i>，可见于 &lt;<a href="https://tools.ietf.org/html/rfc1738">https://tools.ietf.org/html/rfc1738</a>>
+      <i>RFC 1738 “统一资源定位符（URL）”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>>
     </li>
     <li>
-      <i>RFC 2396 “统一资源标识符（URI）：通用语法”</i>，可见于 &lt;<a href="https://tools.ietf.org/html/rfc2396">https://tools.ietf.org/html/rfc2396</a>>
+      <i>RFC 2396 “统一资源标识符（URI）：通用语法”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>>
     </li>
     <li>
-      <i>RFC 3629 “UTF-8，ISO 10646 的一种转换格式”</i>，可见于 &lt;<a href="https://tools.ietf.org/html/rfc3629">https://tools.ietf.org/html/rfc3629</a>>
+      <i>RFC 3629 “UTF-8，ISO 10646 的一种转换格式”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>>
     </li>
     <li>
-      <i>RFC 7231 “超文本传输协议（HTTP/1.1）：语义和内容”</i>，可见于 &lt;<a href="https://tools.ietf.org/html/rfc7231">https://tools.ietf.org/html/rfc7231</a>>
+      <i>RFC 7231 “超文本传输协议（HTTP/1.1）：语义和内容”</i>，可见于 &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>>
     </li>
   </ol>
 </emu-annex>

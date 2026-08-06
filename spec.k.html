@@ -5784,7 +5784,6 @@
         1. _int_를 반환한다.
       </emu-alg>
     </emu-clause>
-    
 
     <emu-clause id="sec-toclampedindex" type="abstract operation">
       <h1>
@@ -14130,7 +14129,7 @@
           _name_: a property key or Private Name,
           _closure_: a function object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -14140,7 +14139,7 @@
         1. _propertyDesc_를 PropertyDescriptor { [[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }로 둔다.
         1. ? DefinePropertyOrThrow(_homeObj_, _name_, _propertyDesc_)를 수행한다.
         1. NOTE: DefinePropertyOrThrow는 _name_이 *"prototype"*인 class static method를 define하려고 attempt할 때만 abrupt completion을 반환합니다.
-        1. ~unused~를 반환한다.
+        1. ~empty~를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -24636,7 +24635,7 @@
         Runtime Semantics: MethodDefinitionEvaluation (
           _obj_: an Object,
           _enumerable_: a Boolean,
-        ): either a normal completion containing either a PrivateElement or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a PrivateElement or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -24660,7 +24659,7 @@
           1. PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: _closure_, [[Setter]]: *undefined* }를 반환한다.
         1. _propertyDesc_를 PropertyDescriptor { [[Getter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }라고 하자.
         1. ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_)를 수행한다.
-        1. ~unused~를 반환한다.
+        1. ~empty~를 반환한다.
       </emu-alg>
       <emu-grammar>MethodDefinition : `set` ClassElementName `(` PropertySetParameterList `)` `{` FunctionBody `}`</emu-grammar>
       <emu-alg>
@@ -24675,7 +24674,7 @@
           1. PrivateElement { [[Key]]: _propertyKey_, [[Kind]]: ~accessor~, [[Getter]]: *undefined*, [[Setter]]: _closure_ }를 반환한다.
         1. _propertyDesc_를 PropertyDescriptor { [[Setter]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true* }라고 하자.
         1. ? DefinePropertyOrThrow(_obj_, _propertyKey_, _propertyDesc_)를 수행한다.
-        1. ~unused~를 반환한다.
+        1. ~empty~를 반환한다.
       </emu-alg>
       <emu-grammar>GeneratorMethod : `*` ClassElementName `(` UniqueFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
       <emu-alg>
@@ -25683,7 +25682,7 @@
       <h1>
         Runtime Semantics: ClassElementEvaluation (
           _obj_: an Object,
-        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~unused~, or an abrupt completion
+        ): either a normal completion containing either a ClassFieldDefinition Record, a ClassStaticBlockDefinition Record, a PrivateElement, or ~empty~, or an abrupt completion
       </h1>
       <dl class="header">
       </dl>
@@ -25715,7 +25714,7 @@
         ClassElement : `;`
       </emu-grammar>
       <emu-alg>
-        1. ~unused~를 반환한다.
+        1. ~empty~를 반환한다.
       </emu-alg>
     </emu-clause>
 
@@ -43838,10 +43837,10 @@ THH:mm:ss.sss
           1. _omitPadding_을 ToBoolean(? Get(_opts_, *"omitPadding"*)))으로 둔다.
           1. _toEncode_를 ? GetUint8ArrayBytes(_obj_)로 둔다.
           1. _alphabet_이 *"base64"*이면, 다음을 수행한다.
-            1. _outAscii_를 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>의 section 4에 specified된 base64 encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
+            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 section 4에 specified된 base64 encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
           1. Else,
             1. Assert: _alphabet_은 *"base64url"*이다.
-            1. _outAscii_를 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>의 section 5에 specified된 base64url encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
+            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 section 5에 specified된 base64url encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
           1. CodePointsToString(_outAscii_)를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -43979,7 +43978,7 @@ THH:mm:ss.sss
         </dl>
         <p><dfn id="standard-base64-alphabet">standard base64 alphabet</dfn>은 *"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"*입니다. 즉, Unicode Basic Latin block 안의 every letter 및 number에 corresponding하는 code units와 *"+"* 및 *"/"*를 elements로 가지는 String입니다.</p>
         <emu-alg>
-          1. _byteSequence_를 _chunk_를 base64로 decoding하여 resulting되는 unique sequence of 3 bytes로 둔다(즉, _byteSequence_에 <a href="https://datatracker.ietf.org/doc/html/rfc4648">RFC 4648</a>의 section 4에 specified된 base64 encoding을 applying하면 _chunk_를 produce하게 되는 sequence).
+          1. _byteSequence_를 _chunk_를 base64로 decoding하여 resulting되는 unique sequence of 3 bytes로 둔다(즉, _byteSequence_에 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 section 4에 specified된 base64 encoding을 applying하면 _chunk_를 produce하게 되는 sequence).
           1. elements가 _byteSequence_의 elements인 List를 order대로 반환한다.
         </emu-alg>
       </emu-clause>
@@ -55080,16 +55079,16 @@ THH:mm:ss.sss
       ISO 8601:2004(E) <i>Data elements and interchange formats — Information interchange — Representation of dates and times</i>
     </li>
     <li>
-      <i>RFC 1738 “Uniform Resource Locators (URL)”</i>, available at &lt;<a href="https://tools.ietf.org/html/rfc1738">https://tools.ietf.org/html/rfc1738</a>>
+      <i>RFC 1738 “Uniform Resource Locators (URL)”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc1738">https://rfc-editor.org/info/rfc1738</a>>
     </li>
     <li>
-      <i>RFC 2396 “Uniform Resource Identifiers (URI): Generic Syntax”</i>, available at &lt;<a href="https://tools.ietf.org/html/rfc2396">https://tools.ietf.org/html/rfc2396</a>>
+      <i>RFC 2396 “Uniform Resource Identifiers (URI): Generic Syntax”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc2396">https://rfc-editor.org/info/rfc2396</a>>
     </li>
     <li>
-      <i>RFC 3629 “UTF-8, a transformation format of ISO 10646”</i>, available at &lt;<a href="https://tools.ietf.org/html/rfc3629">https://tools.ietf.org/html/rfc3629</a>>
+      <i>RFC 3629 “UTF-8, a transformation format of ISO 10646”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc3629">https://rfc-editor.org/info/rfc3629</a>>
     </li>
     <li>
-      <i>RFC 7231 “Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content”</i>, available at &lt;<a href="https://tools.ietf.org/html/rfc7231">https://tools.ietf.org/html/rfc7231</a>>
+      <i>RFC 7231 “Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content”</i>, available at &lt;<a href="https://rfc-editor.org/info/rfc7231">https://rfc-editor.org/info/rfc7231</a>>
     </li>
   </ol>
 </emu-annex>
