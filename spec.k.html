@@ -34086,11 +34086,11 @@
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
         <emu-eqn id="eqn-SecondsPerMinute" aoid="SecondsPerMinute">SecondsPerMinute = 60</emu-eqn>
-        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = *1000*<sub>𝔽</sub></emu-eqn>
-        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = *60000*<sub>𝔽</sub> = msPerSecond × 𝔽(SecondsPerMinute)</emu-eqn>
-        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = *3600000*<sub>𝔽</sub> = msPerMinute × 𝔽(MinutesPerHour)</emu-eqn>
-        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = *86400000*<sub>𝔽</sub> = msPerHour × 𝔽(HoursPerDay)</emu-eqn>
-        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × ℝ(msPerSecond) = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = 1000</emu-eqn>
+        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
+        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
+        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
       </emu-clause>
@@ -34099,14 +34099,14 @@
         <h1>
           Day (
             _tv_: 유한한 시간 값,
-          ): 정수 Number
+          ): 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 날의 일 번호를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerDay)))을 반환한다.
+          1. floor(ℝ(_tv_) / msPerDay)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34114,61 +34114,41 @@
         <h1>
           TimeWithinDay (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>(포함)부터 msPerDay(제외)까지의 구간에 있는 정수 Number
+          ): 0(포함)부터 msPerDay(제외)까지의 구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 날의 시작 이후 경과한 밀리초 수를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(_tv_) modulo ℝ(msPerDay))를 반환한다.
+          1. ℝ(_tv_) modulo msPerDay를 반환한다.
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-daysinyear" type="abstract operation" oldids="eqn-DaysInYear,sec-year-number">
-        <h1>
-          DaysInYear (
-            _y_: 정수 Number,
-          ): *365*<sub>𝔽</sub> 또는 *366*<sub>𝔽</sub>
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>연도 _y_의 일수를 반환한다. 윤년은 366일이고 그 밖의 모든 해는 365일이다.</dd>
-        </dl>
-        <emu-alg>
-          1. _ry_를 ℝ(_y_)로 설정한다.
-          1. (_ry_ modulo 400) = 0이면, *366*<sub>𝔽</sub>을 반환한다.
-          1. (_ry_ modulo 100) = 0이면, *365*<sub>𝔽</sub>을 반환한다.
-          1. (_ry_ modulo 4) = 0이면, *366*<sub>𝔽</sub>을 반환한다.
-          1. *365*<sub>𝔽</sub>를 반환한다.
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear">
+      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear,sec-year-number">
         <h1>
           DayFromYear (
-            _y_: 정수 Number,
-          ): 정수 Number
+            _y_: 정수,
+          ): 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>연도 _y_의 첫날에 해당하는 일 번호를 반환한다.</dd>
+          <dd>연도 _y_의 첫째 날의 일 번호를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. _ry_를 ℝ(_y_)로 설정한다.
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 참고: 다음 단계에서 _numberYears1_, _numberYears4_, _numberYears100_ 및 _numberYears400_은 각각 에포크와 연도 _y_의 시작 사이에 있는 1, 4, 100 및 400으로 나누어지는 연도의 수를 나타낸다. _y_가 에포크 이전이면 이 수는 음수이다.
-          1. _numberYears1_을 (_ry_ - 1970)으로 설정한다.
-          1. _numberYears4_를 floor((_ry_ - 1969) / 4)로 설정한다.
-          1. _numberYears100_을 floor((_ry_ - 1901) / 100)으로 설정한다.
-          1. _numberYears400_을 floor((_ry_ - 1601) / 400)으로 설정한다.
-          1. 𝔽(365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_)을 반환한다.
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 참고: 다음 단계에서 _numberYears1_, _numberYears4_, _numberYears100_, _numberYears400_은 각각 epoch와 연도 _y_의 시작 사이에 나타나는 1, 4, 100, 400으로 나누어떨어지는 연도의 수를 나타낸다. _y_가 epoch보다 이전이면 이 수는 음수이다.
+          1. _numberYears1_을 (_y_ - 1970)으로 둔다.
+          1. _numberYears4_를 floor((_y_ - 1969) / 4)로 둔다.
+          1. _numberYears100_을 floor((_y_ - 1901) / 100)으로 둔다.
+          1. _numberYears400_을 floor((_y_ - 1601) / 400)으로 둔다.
+          1. 365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timefromyear" type="abstract operation" oldids="eqn-TimeFromYear">
         <h1>
           TimeFromYear (
-            _y_: 정수 Number,
+            _y_: 정수,
           ): 시간 값
         </h1>
         <dl class="header">
@@ -34176,7 +34156,7 @@
           <dd>연도 _y_의 시작에 해당하는 시간 값을 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. msPerDay × DayFromYear(_y_)를 반환한다.
+          1. 𝔽(msPerDay × DayFromYear(_y_))를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34184,14 +34164,14 @@
         <h1>
           YearFromTime (
             _tv_: 유한한 시간 값,
-          ): 정수 Number
+          ): 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 연도를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_를 충족하는 가장 큰 정수 Number _y_(+∞에 가장 가까운 값)를 반환한다.
+          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_를 만족하는 가장 큰 정수 _y_(+∞에 가장 가까운 값)를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34199,7 +34179,7 @@
         <h1>
           DayWithinYear (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *365*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 365까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
         </dl>
@@ -34208,19 +34188,22 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear">
+      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
         <h1>
           InLeapYear (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub> 또는 *1*<sub>𝔽</sub>
+          ): 0 또는 1
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 윤년에 속하면 *1*<sub>𝔽</sub>을 반환하고, 그렇지 않으면 *+0*<sub>𝔽</sub>을 반환한다.</dd>
+          <dd>_tv_가 윤년에 속하면 1을, 그렇지 않으면 0을 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. DaysInYear(YearFromTime(_tv_))가 *366*<sub>𝔽</sub>이면, *1*<sub>𝔽</sub>을 반환한다.
-          1. *+0*<sub>𝔽</sub>을 반환한다.
+          1. _y_를 YearFromTime(_tv_)으로 둔다.
+          1. (_y_ modulo 400) = 0이면 1을 반환한다.
+          1. (_y_ modulo 100) = 0이면 0을 반환한다.
+          1. (_y_ modulo 4) = 0이면 1을 반환한다.
+          1. 0을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34228,28 +34211,28 @@
         <h1>
           MonthFromTime (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *11*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 11까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 속하는 월을 식별하는 Number를 반환한다. 월 값 *+0*<sub>𝔽</sub>은 1월을 지정하고, *1*<sub>𝔽</sub>은 2월, *2*<sub>𝔽</sub>는 3월, *3*<sub>𝔽</sub>은 4월, *4*<sub>𝔽</sub>는 5월, *5*<sub>𝔽</sub>는 6월, *6*<sub>𝔽</sub>은 7월, *7*<sub>𝔽</sub>은 8월, *8*<sub>𝔽</sub>은 9월, *9*<sub>𝔽</sub>는 10월, *10*<sub>𝔽</sub>은 11월, *11*<sub>𝔽</sub>은 12월을 지정한다. <emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다는 점에 유의한다.</dd>
+          <dd>_tv_가 속하는 월을 식별하는 정수를 반환한다. 월 값 0은 1월을 지정하고, 1은 2월을, 2는 3월을, 3은 4월을, 4는 5월을, 5는 6월을, 6은 7월을, 7은 8월을, 8은 9월을, 9는 10월을, 10은 11월을, 11은 12월을 지정한다. <emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 설정한다.
-          1. _dayWithinYear_를 DayWithinYear(_tv_)로 설정한다.
-          1. _dayWithinYear_ &lt; *31*<sub>𝔽</sub>이면, *+0*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *59*<sub>𝔽</sub> + _inLeapYear_이면, *1*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *90*<sub>𝔽</sub> + _inLeapYear_이면, *2*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *120*<sub>𝔽</sub> + _inLeapYear_이면, *3*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *151*<sub>𝔽</sub> + _inLeapYear_이면, *4*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *181*<sub>𝔽</sub> + _inLeapYear_이면, *5*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *212*<sub>𝔽</sub> + _inLeapYear_이면, *6*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *243*<sub>𝔽</sub> + _inLeapYear_이면, *7*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *273*<sub>𝔽</sub> + _inLeapYear_이면, *8*<sub>𝔽</sub>을 반환한다.
-          1. _dayWithinYear_ &lt; *304*<sub>𝔽</sub> + _inLeapYear_이면, *9*<sub>𝔽</sub>를 반환한다.
-          1. _dayWithinYear_ &lt; *334*<sub>𝔽</sub> + _inLeapYear_이면, *10*<sub>𝔽</sub>을 반환한다.
-          1. 단언: _dayWithinYear_ &lt; *365*<sub>𝔽</sub> + _inLeapYear_이다.
-          1. *11*<sub>𝔽</sub>을 반환한다.
+          1. _inLeapYear_를 InLeapYear(_tv_)로 둔다.
+          1. _dayWithinYear_를 DayWithinYear(_tv_)로 둔다.
+          1. _dayWithinYear_ &lt; 31이면 0을 반환한다.
+          1. _dayWithinYear_ &lt; 59 + _inLeapYear_이면 1을 반환한다.
+          1. _dayWithinYear_ &lt; 90 + _inLeapYear_이면 2를 반환한다.
+          1. _dayWithinYear_ &lt; 120 + _inLeapYear_이면 3을 반환한다.
+          1. _dayWithinYear_ &lt; 151 + _inLeapYear_이면 4를 반환한다.
+          1. _dayWithinYear_ &lt; 181 + _inLeapYear_이면 5를 반환한다.
+          1. _dayWithinYear_ &lt; 212 + _inLeapYear_이면 6을 반환한다.
+          1. _dayWithinYear_ &lt; 243 + _inLeapYear_이면 7을 반환한다.
+          1. _dayWithinYear_ &lt; 273 + _inLeapYear_이면 8을 반환한다.
+          1. _dayWithinYear_ &lt; 304 + _inLeapYear_이면 9를 반환한다.
+          1. _dayWithinYear_ &lt; 334 + _inLeapYear_이면 10을 반환한다.
+          1. 단언: _dayWithinYear_ &lt; 365 + _inLeapYear_.
+          1. 11을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34257,29 +34240,29 @@
         <h1>
           DateFromTime (
             _tv_: 유한한 시간 값,
-          ): *1*<sub>𝔽</sub>부터 *31*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 1부터 31까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 속하는 달의 날짜를 반환한다.</dd>
+          <dd>_tv_가 속하는 월의 날짜를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 설정한다.
-          1. _dayWithinYear_를 DayWithinYear(_tv_)로 설정한다.
-          1. _month_를 MonthFromTime(_tv_)으로 설정한다.
-          1. _month_가 *+0*<sub>𝔽</sub>이면, _dayWithinYear_ + *1*<sub>𝔽</sub>을 반환한다.
-          1. _month_가 *1*<sub>𝔽</sub>이면, _dayWithinYear_ - *30*<sub>𝔽</sub>을 반환한다.
-          1. _month_가 *2*<sub>𝔽</sub>이면, _dayWithinYear_ - *58*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *3*<sub>𝔽</sub>이면, _dayWithinYear_ - *89*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *4*<sub>𝔽</sub>이면, _dayWithinYear_ - *119*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *5*<sub>𝔽</sub>이면, _dayWithinYear_ - *150*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *6*<sub>𝔽</sub>이면, _dayWithinYear_ - *180*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *7*<sub>𝔽</sub>이면, _dayWithinYear_ - *211*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *8*<sub>𝔽</sub>이면, _dayWithinYear_ - *242*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *9*<sub>𝔽</sub>이면, _dayWithinYear_ - *272*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. _month_가 *10*<sub>𝔽</sub>이면, _dayWithinYear_ - *303*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
-          1. 단언: _month_는 *11*<sub>𝔽</sub>이다.
-          1. _dayWithinYear_ - *333*<sub>𝔽</sub> - _inLeapYear_를 반환한다.
+          1. _inLeapYear_를 InLeapYear(_tv_)로 둔다.
+          1. _dayWithinYear_를 DayWithinYear(_tv_)로 둔다.
+          1. _month_를 MonthFromTime(_tv_)으로 둔다.
+          1. _month_ = 0이면 _dayWithinYear_ + 1을 반환한다.
+          1. _month_ = 1이면 _dayWithinYear_ - 30을 반환한다.
+          1. _month_ = 2이면 _dayWithinYear_ - 58 - _inLeapYear_를 반환한다.
+          1. _month_ = 3이면 _dayWithinYear_ - 89 - _inLeapYear_를 반환한다.
+          1. _month_ = 4이면 _dayWithinYear_ - 119 - _inLeapYear_를 반환한다.
+          1. _month_ = 5이면 _dayWithinYear_ - 150 - _inLeapYear_를 반환한다.
+          1. _month_ = 6이면 _dayWithinYear_ - 180 - _inLeapYear_를 반환한다.
+          1. _month_ = 7이면 _dayWithinYear_ - 211 - _inLeapYear_를 반환한다.
+          1. _month_ = 8이면 _dayWithinYear_ - 242 - _inLeapYear_를 반환한다.
+          1. _month_ = 9이면 _dayWithinYear_ - 272 - _inLeapYear_를 반환한다.
+          1. _month_ = 10이면 _dayWithinYear_ - 303 - _inLeapYear_를 반환한다.
+          1. 단언: _month_ = 11.
+          1. _dayWithinYear_ - 333 - _inLeapYear_를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34287,14 +34270,14 @@
         <h1>
           WeekDay (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *6*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 6까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 속하는 요일을 식별하는 Number를 반환한다. 요일 값 *+0*<sub>𝔽</sub>은 일요일을 지정하고, *1*<sub>𝔽</sub>은 월요일, *2*<sub>𝔽</sub>는 화요일, *3*<sub>𝔽</sub>은 수요일, *4*<sub>𝔽</sub>는 목요일, *5*<sub>𝔽</sub>는 금요일, *6*<sub>𝔽</sub>은 토요일을 지정한다. <emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다는 점에 유의한다.</dd>
+          <dd>_tv_가 속하는 요일을 식별하는 정수를 반환한다. 요일 값 0은 일요일을 지정하고, 1은 월요일을, 2는 화요일을, 3은 수요일을, 4는 목요일을, 5는 금요일을, 6은 토요일을 지정한다. <emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = 4</emu-eqn>이며, 이는 1970년 1월 1일 목요일에 해당한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7)을 반환한다.
+          1. (Day(_tv_) + 4) modulo 7을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34302,14 +34285,14 @@
         <h1>
           HourFromTime (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *23*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 23까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 날의 시를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerHour)) modulo HoursPerDay)를 반환한다.
+          1. floor(ℝ(_tv_) / msPerHour) modulo HoursPerDay를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34317,14 +34300,14 @@
         <h1>
           MinFromTime (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *59*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 59까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 속하는 시간의 분을 반환한다.</dd>
+          <dd>_tv_가 속하는 시의 분을 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerMinute)) modulo MinutesPerHour)를 반환한다.
+          1. floor(ℝ(_tv_) / msPerMinute) modulo MinutesPerHour를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34332,29 +34315,29 @@
         <h1>
           SecFromTime (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *59*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 59까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 분의 초를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerSecond)) modulo SecondsPerMinute)를 반환한다.
+          1. floor(ℝ(_tv_) / msPerSecond) modulo SecondsPerMinute를 반환한다.
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-msfromtime" type="abstract operation" oldids="eqn-msFromTime">
+      <emu-clause id="sec-millisecfromtime" type="abstract operation" oldids="sec-msfromtime,eqn-msFromTime">
         <h1>
-          msFromTime (
+          MillisecFromTime (
             _tv_: 유한한 시간 값,
-          ): *+0*<sub>𝔽</sub>부터 *999*<sub>𝔽</sub>까지의 닫힌구간에 있는 정수 Number
+          ): 0부터 999까지의 폐구간에 있는 정수
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_가 속하는 초의 밀리초를 반환한다.</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(_tv_) modulo ℝ(msPerSecond))를 반환한다.
+          1. ℝ(_tv_) modulo msPerSecond를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34597,48 +34580,48 @@
         <dl class="header">
           <dt>description</dt>
           <dd>
-            _t_를 현지 시각에서 UTC 시간 값으로 변환한다.
-            _t_에서 유효한 표준시 및 서머 타임에 관한 현지 정치적 규칙을 사용하여 이 절에 명시된 방식으로 결과를 결정해야 한다.
+            _t_를 현지 시간에서 UTC 시간 값으로 변환한다.
+            결과를 결정할 때는 이 절에 명시된 방식에 따라 _t_에서 유효한 표준시 및 일광 절약 시간에 관한 현지의 정치적 규칙을 사용해야 한다.
           </dd>
         </dl>
         <emu-alg>
-          1. _t_가 유한하지 않으면, *NaN*을 반환한다.
-          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정한다.
-          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
-            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 설정한다.
+          1. _t_가 유한하지 않으면 *NaN*을 반환한다.
+          1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둔다.
+          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)가 *true*이면,
+            1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 둔다.
           1. 그렇지 않으면,
-            1. _possibleInstants_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0)으로 설정한다.
-            1. 참고: 다음 단계는 _t_가 음의 시간대 전환에서 여러 번 반복되는 현지 시각(예: 서머 타임이 끝나거나 시간대 규칙 변경으로 시간대 오프셋이 감소하는 경우) 또는 양의 시간대 전환에서 건너뛴 현지 시각(예: 서머 타임이 시작되거나 시간대 규칙 변경으로 시간대 오프셋이 증가하는 경우)을 나타낼 때 전환 이전의 시간대 오프셋을 사용하여 _t_가 해석되도록 보장한다.
+            1. _possibleInstants_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_t_), MonthFromTime(_t_) + 1, DateFromTime(_t_), HourFromTime(_t_), MinFromTime(_t_), SecFromTime(_t_), MillisecFromTime(_t_), 0, 0)로 둔다.
+            1. 참고: 다음 단계는 _t_가 음의 시간대 전환 시 여러 번 반복되는 현지 시간(예: 일광 절약 시간이 종료되거나 시간대 규칙 변경으로 인해 시간대 오프셋이 감소하는 경우) 또는 양의 시간대 전환 시 건너뛴 현지 시간(예: 일광 절약 시간이 시작되거나 시간대 규칙 변경으로 인해 시간대 오프셋이 증가하는 경우)을 나타낼 때, _t_가 전환 이전의 시간대 오프셋을 사용하여 해석되도록 한다.
             1. _possibleInstants_가 비어 있지 않으면,
-              1. _disambiguatedInstant_를 _possibleInstants_[0]으로 설정한다.
+              1. _disambiguatedInstant_를 _possibleInstants_[0]으로 둔다.
             1. 그렇지 않으면,
-              1. 참고: _t_는 양의 시간대 전환에서 건너뛴 현지 시각(예: 서머 타임의 시작 또는 UTC 오프셋을 증가시키는 시간대 규칙 변경으로 인한 경우)을 나타낸다.
-              1. [declared="tBefore"] _possibleInstantsBefore_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)으로 설정한다. 여기서 _tBefore_는 _possibleInstantsBefore_가 비어 있지 않은 가장 큰 정수 Number &lt; _t_이다(즉, _tBefore_는 전환 이전의 마지막 현지 시각을 나타낸다).
-              1. _disambiguatedInstant_를 _possibleInstantsBefore_의 마지막 요소로 설정한다.
-            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)로 설정한다.
-          1. _offsetMs_를 truncate(_offsetNs_ / nsPerMillisecond)로 설정한다.
+              1. 참고: _t_는 양의 시간대 전환 시 건너뛴 현지 시간을 나타낸다(예: 일광 절약 시간이 시작되거나 시간대 규칙 변경으로 UTC 오프셋이 증가하는 경우).
+              1. [declared="tBefore"] _possibleInstantsBefore_를 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_tBefore_), MonthFromTime(_tBefore_) + 1, DateFromTime(_tBefore_), HourFromTime(_tBefore_), MinFromTime(_tBefore_), SecFromTime(_tBefore_), MillisecFromTime(_tBefore_), 0, 0)로 둔다. 여기서 _tBefore_는 _possibleInstantsBefore_가 비어 있지 않은 _t_보다 작은 가장 큰 정수 Number이다(즉, _tBefore_는 전환 이전의 마지막 현지 시간을 나타낸다).
+              1. _disambiguatedInstant_를 _possibleInstantsBefore_의 마지막 요소로 둔다.
+            1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)로 둔다.
+          1. _offsetMs_를 truncate(_offsetNs_ / nsPerMillisecond)로 둔다.
           1. _t_ - 𝔽(_offsetMs_)를 반환한다.
         </emu-alg>
         <p>
-          입력 _t_는 명목상 시간 값이지만 어떤 Number 값이든 될 수 있다.
-          현지 UTC 오프셋과 관계없이 시간 값 범위의 경계에 해당하는 입력을 지원할 수 있도록 알고리즘은 _t_를 시간 값 범위로 제한해서는 안 된다.
+          입력 _t_는 명목상 시간 값이지만 임의의 Number 값일 수 있다.
+          현지 UTC 오프셋에 관계없이 시간 값 범위의 경계에 해당하는 입력을 지원할 수 있도록 알고리즘은 _t_를 시간 값 범위로 제한해서는 안 된다.
           예를 들어 최대 시간 값은 8.64 × 10<sup>15</sup>이며, *"+275760-09-13T00:00:00Z"*에 해당한다.
-          해당 시점에 현지 시간대 오프셋이 UTC보다 1시간 앞선 환경에서는 *"+275760-09-13T01:00:00+01:00"*에 해당하는 더 큰 입력인 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup>으로 나타낸다.
+          해당 순간에 현지 시간대 오프셋이 UTC보다 1시간 빠른 환경에서는 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup>이라는 더 큰 입력으로 표현되며, 이는 *"+275760-09-13T01:00:00+01:00"*에 해당한다.
         </p>
-        <p>구현에서 현지 시각 _t_에 관한 정치적 규칙을 사용할 수 없으면 SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 결과는 _t_이다.</p>
+        <p>구현에서 현지 시간 _t_에 대한 정치적 규칙을 사용할 수 없는 경우, SystemTimeZoneIdentifier가 *"UTC"*를 반환하고 GetNamedTimeZoneOffsetNanoseconds가 0을 반환하므로 결과는 _t_이다.</p>
         <emu-note>
-          <p>시간대 인식 구현은 IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 시간대 정보를 사용해야 하며, 그 밖의 모든 구현에도 이를 사용할 것을 권장한다.</p>
+          <p>시간대를 인식하는 구현은 IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>의 시간대 정보를 사용해야 하며, 그 밖의 모든 구현에도 이를 사용할 것을 권장한다.</p>
           <p>
-            America/New_York에서 2017년 11월 5일 오전 1시 30분은 두 번 반복되지만(시계를 뒤로 돌림), 오전 1시 30분 UTC-05가 아니라 오전 1시 30분 UTC-04로 해석해야 한다.
+            America/New_York에서 2017년 11월 5일 오전 1:30은 두 번 반복되지만(시계를 뒤로 돌림), 오전 1:30 UTC-05가 아니라 오전 1:30 UTC-04로 해석해야 한다.
             UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0))))에서 _offsetMs_의 값은 <emu-eqn>-4 × msPerHour</emu-eqn>이다.
           </p>
           <p>
-            America/New_York에서 2017년 3월 12일 오전 2시 30분은 존재하지 않지만, 오전 2시 30분 UTC-05(오전 3시 30분 UTC-04와 동일)로 해석해야 한다.
+            America/New_York에서 2017년 3월 12일 오전 2:30은 존재하지 않지만, 오전 2:30 UTC-05(오전 3:30 UTC-04와 동일)로 해석해야 한다.
             UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0))))에서 _offsetMs_의 값은 <emu-eqn>-5 × msPerHour</emu-eqn>이다.
           </p>
         </emu-note>
         <emu-note>
-          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn>은 반드시 항상 <emu-eqn>_t_<sub>UTC</sub></emu-eqn>와 같지는 않다. 마찬가지로 <emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn>도 반드시 항상 <emu-eqn>_t_<sub>local</sub></emu-eqn>과 같지는 않다.</p>
+          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn>가 반드시 항상 <emu-eqn>_t_<sub>UTC</sub></emu-eqn>와 같은 것은 아니다. 마찬가지로 <emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn>도 반드시 항상 <emu-eqn>_t_<sub>local</sub></emu-eqn>과 같은 것은 아니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -34656,15 +34639,15 @@
           <dd>밀리초 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _hour_가 유한하지 않거나, _min_이 유한하지 않거나, _sec_가 유한하지 않거나, _ms_가 유한하지 않으면, *NaN*을 반환한다.
-          1. _h_를 𝔽(! ToIntegerOrInfinity(_hour_))로 설정한다.
-          1. _m_을 𝔽(! ToIntegerOrInfinity(_min_))으로 설정한다.
-          1. _s_를 𝔽(! ToIntegerOrInfinity(_sec_))로 설정한다.
-          1. _milli_를 𝔽(! ToIntegerOrInfinity(_ms_))로 설정한다.
-          1. ((_h_ × msPerHour + _m_ × msPerMinute) + _s_ × msPerSecond) + _milli_를 반환한다.
+          1. _hour_가 유한하지 않거나, _min_이 유한하지 않거나, _sec_가 유한하지 않거나, _ms_가 유한하지 않으면 *NaN*을 반환한다.
+          1. _h_를 ! ToIntegerOrInfinity(_hour_)로 둔다.
+          1. _m_을 ! ToIntegerOrInfinity(_min_)로 둔다.
+          1. _s_를 ! ToIntegerOrInfinity(_sec_)로 둔다.
+          1. _milli_를 ! ToIntegerOrInfinity(_ms_)로 둔다.
+          1. ((𝔽(_h_) × 𝔽(msPerHour) + 𝔽(_m_) × 𝔽(msPerMinute)) + 𝔽(_s_) × 𝔽(msPerSecond)) + 𝔽(_milli_)를 반환한다.
         </emu-alg>
         <emu-note>
-          <p>MakeTime의 산술 연산은 결합법칙이 성립하지 않는 부동소수점 산술이므로 연산을 올바른 순서로 수행해야 한다.</p>
+          <p>MakeTime의 산술 연산은 부동소수점 산술이며 결합법칙이 성립하지 않으므로, 연산은 올바른 순서로 수행해야 한다.</p>
         </emu-note>
       </emu-clause>
 
@@ -34678,18 +34661,18 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>일수를 계산한다.</dd>
+          <dd>일 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _year_가 유한하지 않거나, _month_가 유한하지 않거나, _date_가 유한하지 않으면, *NaN*을 반환한다.
-          1. _y_를 𝔽(! ToIntegerOrInfinity(_year_))로 설정한다.
-          1. _m_을 𝔽(! ToIntegerOrInfinity(_month_))으로 설정한다.
-          1. _dt_를 𝔽(! ToIntegerOrInfinity(_date_))로 설정한다.
-          1. _ym_을 _y_ + 𝔽(floor(ℝ(_m_) / 12))로 설정한다.
-          1. _ym_이 유한하지 않으면, *NaN*을 반환한다.
-          1. _mn_을 𝔽(ℝ(_m_) modulo 12)로 설정한다.
-          1. YearFromTime(_tv_)가 _ym_이고, MonthFromTime(_tv_)이 _mn_이며, DateFromTime(_tv_)이 *1*<sub>𝔽</sub>인 유한한 시간 값 _tv_를 찾는다. 이것이 불가능하면(일부 인수가 범위를 벗어나므로), *NaN*을 반환한다.
-          1. Day(_tv_) + _dt_ - *1*<sub>𝔽</sub>을 반환한다.
+          1. _year_가 유한하지 않거나, _month_가 유한하지 않거나, _date_가 유한하지 않으면 *NaN*을 반환한다.
+          1. _y_를 ! ToIntegerOrInfinity(_year_)로 둔다.
+          1. _m_을 ! ToIntegerOrInfinity(_month_)로 둔다.
+          1. _dt_를 ! ToIntegerOrInfinity(_date_)로 둔다.
+          1. _ym_을 𝔽(_y_) + 𝔽(floor(_m_ / 12))로 둔다.
+          1. _ym_이 유한하지 않으면 *NaN*을 반환한다.
+          1. _mn_을 _m_ modulo 12로 둔다.
+          1. YearFromTime(_tv_) = ℝ(_ym_), MonthFromTime(_tv_) = _mn_, DateFromTime(_tv_) = 1을 만족하는 유한한 시간 값 _tv_를 찾는다. 단, 이것이 가능하지 않으면(일부 인수가 범위를 벗어났기 때문에) *NaN*을 반환한다.
+          1. 𝔽(Day(_tv_)) + 𝔽(_dt_) - *1*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -34705,9 +34688,9 @@
           <dd>밀리초 수를 계산한다.</dd>
         </dl>
         <emu-alg>
-          1. _day_가 유한하지 않거나 _time_이 유한하지 않으면, *NaN*을 반환한다.
-          1. _tv_를 _day_ × msPerDay + _time_으로 설정한다.
-          1. _tv_가 유한하지 않으면, *NaN*을 반환한다.
+          1. _day_가 유한하지 않거나 _time_이 유한하지 않으면 *NaN*을 반환한다.
+          1. _tv_를 _day_ × 𝔽(msPerDay) + _time_으로 둔다.
+          1. _tv_가 유한하지 않으면 *NaN*을 반환한다.
           1. _tv_를 반환한다.
         </emu-alg>
       </emu-clause>
@@ -35162,229 +35145,229 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getdate" type="built-in function">
         <h1>Date.prototype.getDate ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. DateFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(DateFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getday" type="built-in function">
         <h1>Date.prototype.getDay ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. WeekDay(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(WeekDay(LocalTime(_tv_)))를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getfullyear" type="built-in function">
         <h1>Date.prototype.getFullYear ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. YearFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(YearFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gethours" type="built-in function">
         <h1>Date.prototype.getHours ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. HourFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(HourFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmilliseconds" type="built-in function">
         <h1>Date.prototype.getMilliseconds ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. msFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MillisecFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getminutes" type="built-in function">
         <h1>Date.prototype.getMinutes ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. MinFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MinFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmonth" type="built-in function">
         <h1>Date.prototype.getMonth ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. MonthFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MonthFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getseconds" type="built-in function">
         <h1>Date.prototype.getSeconds ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. SecFromTime(LocalTime(_tv_))를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(SecFromTime(LocalTime(_tv_)))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettime" type="built-in function">
         <h1>Date.prototype.getTime ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _dateObj_.[[DateValue]]를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettimezoneoffset" type="built-in function">
         <h1>Date.prototype.getTimezoneOffset ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. (_tv_ - LocalTime(_tv_)) / msPerMinute를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. (_tv_ - LocalTime(_tv_)) / 𝔽(msPerMinute)를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcdate" type="built-in function">
         <h1>Date.prototype.getUTCDate ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. DateFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(DateFromTime(_tv_))를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcday" type="built-in function">
         <h1>Date.prototype.getUTCDay ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. WeekDay(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(WeekDay(_tv_))를 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcfullyear" type="built-in function">
         <h1>Date.prototype.getUTCFullYear ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. YearFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(YearFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutchours" type="built-in function">
         <h1>Date.prototype.getUTCHours ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. HourFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(HourFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmilliseconds" type="built-in function">
         <h1>Date.prototype.getUTCMilliseconds ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. msFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MillisecFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcminutes" type="built-in function">
         <h1>Date.prototype.getUTCMinutes ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. MinFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MinFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmonth" type="built-in function">
         <h1>Date.prototype.getUTCMonth ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. MonthFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(MonthFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcseconds" type="built-in function">
         <h1>Date.prototype.getUTCSeconds ( )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. SecFromTime(_tv_)를 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(SecFromTime(_tv_))을 반환한다.
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setdate" type="built-in function">
         <h1>Date.prototype.setDate ( _date_ )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _dt_를 ? ToNumber(_date_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _newDate_를 MakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _newDate_를 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _u_를 TimeClip(UTC(_newDate_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
@@ -35393,65 +35376,65 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setfullyear" type="built-in function">
         <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _y_를 ? ToNumber(_year_)로 둔다.
-          1. _tv_가 *NaN*이면 _tv_를 *+0*<sub>𝔽</sub>로 설정한다; 그렇지 않으면 _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _month_가 present하면, _m_을 ? ToNumber(_month_)로 둔다; 그렇지 않으면 _m_을 MonthFromTime(_tv_)로 둔다.
-          1. _date_가 present하면, _dt_를 ? ToNumber(_date_)로 둔다; 그렇지 않으면 _dt_를 DateFromTime(_tv_)로 둔다.
-          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _tv_가 *NaN*이면 _tv_를 *+0*<sub>𝔽</sub>으로 설정하고, 그렇지 않으면 _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _month_가 존재하면 _m_을 ? ToNumber(_month_)로 두고, 그렇지 않으면 _m_을 𝔽(MonthFromTime(_tv_))로 둔다.
+          1. _date_가 존재하면 _dt_를 ? ToNumber(_date_)로 두고, 그렇지 않으면 _dt_를 𝔽(DateFromTime(_tv_))로 둔다.
+          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _u_를 TimeClip(UTC(_newDate_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *3*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *3*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_month_가 present하지 않으면, 이 method는 _month_가 value `getMonth()`로 present한 것처럼 behave합니다. _date_가 present하지 않으면, _date_가 value `getDate()`로 present한 것처럼 behave합니다.</p>
+          <p>_month_가 존재하지 않으면 이 메서드는 _month_가 `getMonth()` 값으로 존재하는 것처럼 동작한다. _date_가 존재하지 않으면 _date_가 `getDate()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.sethours" type="built-in function">
         <h1>Date.prototype.setHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _h_를 ? ToNumber(_hour_)로 둔다.
-          1. _min_이 present하면, _m_을 ? ToNumber(_min_)으로 둔다.
-          1. _sec_가 present하면, _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _min_이 present하지 않으면, _m_을 MinFromTime(_tv_)로 둔다.
-          1. _sec_가 present하지 않으면, _s_를 SecFromTime(_tv_)로 둔다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))로 둔다.
+          1. _min_이 존재하면 _m_을 ? ToNumber(_min_)로 둔다.
+          1. _sec_가 존재하면 _s_를 ? ToNumber(_sec_)로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _min_이 존재하지 않으면 _m_을 𝔽(MinFromTime(_tv_))로 둔다.
+          1. _sec_가 존재하지 않으면 _s_를 𝔽(SecFromTime(_tv_))로 둔다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_))로 둔다.
           1. _u_를 TimeClip(UTC(_date_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *4*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *4*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_min_이 present하지 않으면, 이 method는 _min_이 value `getMinutes()`로 present한 것처럼 behave합니다. _sec_가 present하지 않으면, _sec_가 value `getSeconds()`로 present한 것처럼 behave합니다. _ms_가 present하지 않으면, _ms_가 value `getMilliseconds()`로 present한 것처럼 behave합니다.</p>
+          <p>_min_이 존재하지 않으면 이 메서드는 _min_이 `getMinutes()` 값으로 존재하는 것처럼 동작한다. _sec_가 존재하지 않으면 _sec_가 `getSeconds()` 값으로 존재하는 것처럼 동작한다. _ms_가 존재하지 않으면 _ms_가 `getMilliseconds()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmilliseconds" type="built-in function">
         <h1>Date.prototype.setMilliseconds ( _ms_ )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _ms_를 ? ToNumber(_ms_)로 설정한다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _time_을 MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)로 둔다.
-          1. _u_를 TimeClip(UTC(MakeDate(Day(_tv_), _time_)))로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _time_을 MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_)로 둔다.
+          1. _u_를 TimeClip(UTC(MakeDate(𝔽(Day(_tv_)), _time_)))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
@@ -35459,81 +35442,81 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setminutes" type="built-in function">
         <h1>Date.prototype.setMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _m_을 ? ToNumber(_min_)으로 둔다.
-          1. _sec_가 present하면, _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _sec_가 present하지 않으면, _s_를 SecFromTime(_tv_)로 둔다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))로 둔다.
+          1. _m_을 ? ToNumber(_min_)로 둔다.
+          1. _sec_가 존재하면 _s_를 ? ToNumber(_sec_)로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _sec_가 존재하지 않으면 _s_를 𝔽(SecFromTime(_tv_))로 둔다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_))로 둔다.
           1. _u_를 TimeClip(UTC(_date_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *3*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *3*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_sec_가 present하지 않으면, 이 method는 _sec_가 value `getSeconds()`로 present한 것처럼 behave합니다. _ms_가 present하지 않으면, 이는 _ms_가 value `getMilliseconds()`로 present한 것처럼 behave합니다.</p>
+          <p>_sec_가 존재하지 않으면 이 메서드는 _sec_가 `getSeconds()` 값으로 존재하는 것처럼 동작한다. _ms_가 존재하지 않으면 _ms_가 `getMilliseconds()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmonth" type="built-in function">
         <h1>Date.prototype.setMonth ( _month_ [ , _date_ ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _m_을 ? ToNumber(_month_)로 둔다.
-          1. _date_가 present하면, _dt_를 ? ToNumber(_date_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _date_가 present하지 않으면, _dt_를 DateFromTime(_tv_)로 둔다.
-          1. _newDate_를 MakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _date_가 존재하면 _dt_를 ? ToNumber(_date_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _date_가 존재하지 않으면 _dt_를 𝔽(DateFromTime(_tv_))로 둔다.
+          1. _newDate_를 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _u_를 TimeClip(UTC(_newDate_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *2*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *2*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_date_가 present하지 않으면, 이 method는 _date_가 value `getDate()`로 present한 것처럼 behave합니다.</p>
+          <p>_date_가 존재하지 않으면 이 메서드는 _date_가 `getDate()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setseconds" type="built-in function">
         <h1>Date.prototype.setSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _tv_를 LocalTime(_tv_)로 설정한다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _tv_를 LocalTime(_tv_)으로 설정한다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_))로 둔다.
           1. _u_를 TimeClip(UTC(_date_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _u_로 설정한다.
           1. _u_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *2*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *2*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_ms_가 present하지 않으면, 이 method는 _ms_가 value `getMilliseconds()`로 present한 것처럼 behave합니다.</p>
+          <p>_ms_가 존재하지 않으면 이 메서드는 _ms_가 `getMilliseconds()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.settime" type="built-in function">
         <h1>Date.prototype.setTime ( _time_ )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _t_를 ? ToNumber(_time_)로 둔다.
           1. _v_를 TimeClip(_t_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
@@ -35543,14 +35526,14 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcdate" type="built-in function">
         <h1>Date.prototype.setUTCDate ( _date_ )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _dt_를 ? ToNumber(_date_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _newDate_를 MakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _newDate_를 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _v_를 TimeClip(_newDate_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
@@ -35559,63 +35542,63 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcfullyear" type="built-in function">
         <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, _tv_를 *+0*<sub>𝔽</sub>로 설정한다.
+          1. _tv_가 *NaN*이면 _tv_를 *+0*<sub>𝔽</sub>으로 설정한다.
           1. _y_를 ? ToNumber(_year_)로 둔다.
-          1. _month_가 present하면, _m_을 ? ToNumber(_month_)로 둔다; 그렇지 않으면 _m_을 MonthFromTime(_tv_)로 둔다.
-          1. _date_가 present하면, _dt_를 ? ToNumber(_date_)로 둔다; 그렇지 않으면 _dt_를 DateFromTime(_tv_)로 둔다.
-          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _month_가 존재하면 _m_을 ? ToNumber(_month_)로 두고, 그렇지 않으면 _m_을 𝔽(MonthFromTime(_tv_))로 둔다.
+          1. _date_가 존재하면 _dt_를 ? ToNumber(_date_)로 두고, 그렇지 않으면 _dt_를 𝔽(DateFromTime(_tv_))로 둔다.
+          1. _newDate_를 MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _v_를 TimeClip(_newDate_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *3*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *3*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_month_가 present하지 않으면, 이 method는 _month_가 value `getUTCMonth()`로 present한 것처럼 behave합니다. _date_가 present하지 않으면, _date_가 value `getUTCDate()`로 present한 것처럼 behave합니다.</p>
+          <p>_month_가 존재하지 않으면 이 메서드는 _month_가 `getUTCMonth()` 값으로 존재하는 것처럼 동작한다. _date_가 존재하지 않으면 _date_가 `getUTCDate()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutchours" type="built-in function">
         <h1>Date.prototype.setUTCHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _h_를 ? ToNumber(_hour_)로 둔다.
-          1. _min_이 present하면, _m_을 ? ToNumber(_min_)으로 둔다.
-          1. _sec_가 present하면, _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _min_이 present하지 않으면, _m_을 MinFromTime(_tv_)로 둔다.
-          1. _sec_가 present하지 않으면, _s_를 SecFromTime(_tv_)로 둔다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))로 둔다.
+          1. _min_이 존재하면 _m_을 ? ToNumber(_min_)로 둔다.
+          1. _sec_가 존재하면 _s_를 ? ToNumber(_sec_)로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _min_이 존재하지 않으면 _m_을 𝔽(MinFromTime(_tv_))로 둔다.
+          1. _sec_가 존재하지 않으면 _s_를 𝔽(SecFromTime(_tv_))로 둔다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_))로 둔다.
           1. _v_를 TimeClip(_date_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *4*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *4*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_min_이 present하지 않으면, 이 method는 _min_이 value `getUTCMinutes()`로 present한 것처럼 behave합니다. _sec_가 present하지 않으면, _sec_가 value `getUTCSeconds()`로 present한 것처럼 behave합니다. _ms_가 present하지 않으면, _ms_가 value `getUTCMilliseconds()`로 present한 것처럼 behave합니다.</p>
+          <p>_min_이 존재하지 않으면 이 메서드는 _min_이 `getUTCMinutes()` 값으로 존재하는 것처럼 동작한다. _sec_가 존재하지 않으면 _sec_가 `getUTCSeconds()` 값으로 존재하는 것처럼 동작한다. _ms_가 존재하지 않으면 _ms_가 `getUTCMilliseconds()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmilliseconds" type="built-in function">
         <h1>Date.prototype.setUTCMilliseconds ( _ms_ )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _ms_를 ? ToNumber(_ms_)로 설정한다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _time_을 MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)로 둔다.
-          1. _v_를 TimeClip(MakeDate(Day(_tv_), _time_))로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _time_을 MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_)로 둔다.
+          1. _v_를 TimeClip(MakeDate(𝔽(Day(_tv_)), _time_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
@@ -35623,69 +35606,69 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcminutes" type="built-in function">
         <h1>Date.prototype.setUTCMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _m_을 ? ToNumber(_min_)으로 둔다.
-          1. _sec_가 present하면, _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _sec_가 present하지 않으면, _s_를 SecFromTime(_tv_)로 둔다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))로 둔다.
+          1. _m_을 ? ToNumber(_min_)로 둔다.
+          1. _sec_가 존재하면 _s_를 ? ToNumber(_sec_)로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _sec_가 존재하지 않으면 _s_를 𝔽(SecFromTime(_tv_))로 둔다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_))로 둔다.
           1. _v_를 TimeClip(_date_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *3*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *3*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_sec_가 present하지 않으면, 이 method는 _sec_가 value `getUTCSeconds()`로 present한 것처럼 behave합니다. _ms_가 present하지 않으면, 이는 _ms_가 `getUTCMilliseconds()`에 의해 returned되는 value로 present한 것처럼 behave합니다.</p>
+          <p>_sec_가 존재하지 않으면 이 메서드는 _sec_가 `getUTCSeconds()` 값으로 존재하는 것처럼 동작한다. _ms_가 존재하지 않으면 _ms_가 `getUTCMilliseconds()`에서 반환된 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmonth" type="built-in function">
         <h1>Date.prototype.setUTCMonth ( _month_ [ , _date_ ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _m_을 ? ToNumber(_month_)로 둔다.
-          1. _date_가 present하면, _dt_를 ? ToNumber(_date_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _date_가 present하지 않으면, _dt_를 DateFromTime(_tv_)로 둔다.
-          1. _newDate_를 MakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))로 둔다.
+          1. _date_가 존재하면 _dt_를 ? ToNumber(_date_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _date_가 존재하지 않으면 _dt_를 𝔽(DateFromTime(_tv_))로 둔다.
+          1. _newDate_를 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))로 둔다.
           1. _v_를 TimeClip(_newDate_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *2*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *2*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_date_가 present하지 않으면, 이 method는 _date_가 value `getUTCDate()`로 present한 것처럼 behave합니다.</p>
+          <p>_date_가 존재하지 않으면 이 메서드는 _date_가 `getUTCDate()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcseconds" type="built-in function">
         <h1>Date.prototype.setUTCSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>이 method는 called될 때 following steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
           1. _s_를 ? ToNumber(_sec_)로 둔다.
-          1. _ms_가 present하면, _milli_를 ? ToNumber(_ms_)로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. _ms_가 present하지 않으면, _milli_를 msFromTime(_tv_)로 둔다.
-          1. _date_를 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))로 둔다.
+          1. _ms_가 존재하면 _milli_를 ? ToNumber(_ms_)로 둔다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. _ms_가 존재하지 않으면 _milli_를 𝔽(MillisecFromTime(_tv_))로 둔다.
+          1. _date_를 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_))로 둔다.
           1. _v_를 TimeClip(_date_)로 둔다.
           1. _dateObj_.[[DateValue]]를 _v_로 설정한다.
           1. _v_를 반환한다.
         </emu-alg>
-        <p>이 method의 *"length"* property는 *2*<sub>𝔽</sub>입니다.</p>
+        <p>이 메서드의 *"length"* 속성은 *2*<sub>𝔽</sub>이다.</p>
         <emu-note>
-          <p>_ms_가 present하지 않으면, 이 method는 _ms_가 value `getUTCMilliseconds()`로 present한 것처럼 behave합니다.</p>
+          <p>_ms_가 존재하지 않으면 이 메서드는 _ms_가 `getUTCMilliseconds()` 값으로 존재하는 것처럼 동작한다.</p>
         </emu-note>
       </emu-clause>
 
@@ -35774,51 +35757,51 @@ THH:mm:ss.sss
         <emu-clause id="sec-timestring" type="abstract operation">
           <h1>
             TimeString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: Number이지만 *NaN*은 아님,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _hour_를 ToZeroPaddedDecimalString(ℝ(HourFromTime(_tv_)), 2)로 둔다.
-            1. _minute_를 ToZeroPaddedDecimalString(ℝ(MinFromTime(_tv_)), 2)로 둔다.
-            1. _second_를 ToZeroPaddedDecimalString(ℝ(SecFromTime(_tv_)), 2)로 둔다.
-            1. _hour_, *":"*, _minute_, *":"*, _second_, code unit 0x0020 (SPACE), 및 *"GMT"*의 string-concatenation을 반환한다.
+            1. _hour_를 ToZeroPaddedDecimalString(HourFromTime(_tv_), 2)로 둔다.
+            1. _minute_을 ToZeroPaddedDecimalString(MinFromTime(_tv_), 2)로 둔다.
+            1. _second_를 ToZeroPaddedDecimalString(SecFromTime(_tv_), 2)로 둔다.
+            1. _hour_, *":"*, _minute_, *":"*, _second_, 코드 단위 0x0020 (SPACE), *"GMT"*를 문자열로 연결한 결과를 반환한다.
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-datestring" type="abstract operation">
           <h1>
             DateString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: Number이지만 *NaN*은 아님,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _weekday_를 Number WeekDay(_tv_)를 가진 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 안의 entry의 Name으로 둔다.
-            1. _month_를 Number MonthFromTime(_tv_)를 가진 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 안의 entry의 Name으로 둔다.
-            1. _day_를 ToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)로 둔다.
-            1. _yv_를 YearFromTime(_tv_)로 둔다.
-            1. _yv_가 *+0*<sub>𝔽</sub>이거나 _yv_ > *+0*<sub>𝔽</sub>이면, _yearSign_을 empty String으로 둔다; 그렇지 않으면 _yearSign_을 *"-"*로 둔다.
-            1. _paddedYear_를 ToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)로 둔다.
-            1. _weekday_, code unit 0x0020 (SPACE), _month_, code unit 0x0020 (SPACE), _day_, code unit 0x0020 (SPACE), _yearSign_, 및 _paddedYear_의 string-concatenation을 반환한다.
+            1. _weekday_를 <emu-xref href="#sec-todatestring-day-names"></emu-xref>에서 WeekDay Index = WeekDay(_tv_)인 항목의 Name으로 둔다.
+            1. _month_를 <emu-xref href="#sec-todatestring-month-names"></emu-xref>에서 Month Index = MonthFromTime(_tv_)인 항목의 Name으로 둔다.
+            1. _day_를 ToZeroPaddedDecimalString(DateFromTime(_tv_), 2)로 둔다.
+            1. _yv_를 YearFromTime(_tv_)으로 둔다.
+            1. _yv_ ≥ 0이면 _yearSign_을 빈 String으로 두고, 그렇지 않으면 _yearSign_을 *"-"*로 둔다.
+            1. _paddedYear_를 ToZeroPaddedDecimalString(abs(_yv_), 4)로 둔다.
+            1. _weekday_, 코드 단위 0x0020 (SPACE), _month_, 코드 단위 0x0020 (SPACE), _day_, 코드 단위 0x0020 (SPACE), _yearSign_, _paddedYear_를 문자열로 연결한 결과를 반환한다.
           </emu-alg>
-          <emu-table id="sec-todatestring-day-names" caption="Names of days of the week">
+          <emu-table id="sec-todatestring-day-names" caption="요일 이름">
             <table>
               <thead>
                 <tr>
                   <th>
-                    Number
+                    WeekDay 인덱스
                   </th>
                   <th>
-                    Name
+                    이름
                   </th>
                 </tr>
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Sun"*
@@ -35826,7 +35809,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Mon"*
@@ -35834,7 +35817,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Tue"*
@@ -35842,7 +35825,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Wed"*
@@ -35850,7 +35833,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"Thu"*
@@ -35858,7 +35841,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Fri"*
@@ -35866,7 +35849,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Sat"*
@@ -35874,21 +35857,21 @@ THH:mm:ss.sss
               </tr>
             </table>
           </emu-table>
-          <emu-table id="sec-todatestring-month-names" caption="Names of months of the year">
+          <emu-table id="sec-todatestring-month-names" caption="연중 월 이름">
             <table>
               <thead>
                 <tr>
                   <th>
-                    Number
+                    Month 인덱스
                   </th>
                   <th>
-                    Name
+                    이름
                   </th>
                 </tr>
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Jan"*
@@ -35896,7 +35879,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Feb"*
@@ -35904,7 +35887,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Mar"*
@@ -35912,7 +35895,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Apr"*
@@ -35920,7 +35903,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"May"*
@@ -35928,7 +35911,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Jun"*
@@ -35936,7 +35919,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Jul"*
@@ -35944,7 +35927,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *7*<sub>𝔽</sub>
+                  7
                 </td>
                 <td>
                   *"Aug"*
@@ -35952,7 +35935,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *8*<sub>𝔽</sub>
+                  8
                 </td>
                 <td>
                   *"Sep"*
@@ -35960,7 +35943,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *9*<sub>𝔽</sub>
+                  9
                 </td>
                 <td>
                   *"Oct"*
@@ -35968,7 +35951,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *10*<sub>𝔽</sub>
+                  10
                 </td>
                 <td>
                   *"Nov"*
@@ -35976,7 +35959,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *11*<sub>𝔽</sub>
+                  11
                 </td>
                 <td>
                   *"Dec"*
@@ -35989,43 +35972,43 @@ THH:mm:ss.sss
         <emu-clause id="sec-timezoneestring" type="abstract operation">
           <h1>
             TimeZoneString (
-              _tv_: an integral Number,
-            ): a String
+              _tv_: 정수인 Number,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정한다.
-            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
-              1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 설정한다.
+            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둔다.
+            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)가 *true*이면,
+              1. _offsetNs_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 둔다.
             1. 그렇지 않으면,
-              1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))로 설정한다.
-            1. _offset_을 𝔽(truncate(_offsetNs_ / nsPerMillisecond))로 설정한다.
-            1. _offset_이 *+0*<sub>𝔽</sub>이거나 _offset_ > *+0*<sub>𝔽</sub>이면,
-              1. _offsetSign_을 *"+"*로 설정한다.
-              1. _absOffset_을 _offset_으로 설정한다.
+              1. _offsetNs_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))로 둔다.
+            1. _offset_을 truncate(_offsetNs_ / nsPerMillisecond)로 둔다.
+            1. _offset_ ≥ 0이면,
+              1. _offsetSign_을 *"+"*로 둔다.
+              1. _absOffset_을 _offset_으로 둔다.
             1. 그렇지 않으면,
-              1. _offsetSign_을 *"-"*로 설정한다.
-              1. _absOffset_을 -_offset_으로 설정한다.
-            1. _offsetMin_을 ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2)로 설정한다.
-            1. _offsetHour_를 ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2)로 설정한다.
-            1. _tzName_을 빈 String이거나 코드 단위 0x0020 (SPACE), 코드 단위 0x0028 (LEFT PARENTHESIS), 구현 정의 시간대 이름 및 코드 단위 0x0029 (RIGHT PARENTHESIS)을 문자열 연결한 결과인 구현 정의 문자열로 설정한다.
-            1. _offsetSign_, _offsetHour_, _offsetMin_ 및 _tzName_을 문자열 연결한 결과를 반환한다.
+              1. _offsetSign_을 *"-"*로 둔다.
+              1. _absOffset_을 -_offset_으로 둔다.
+            1. _offsetMin_을 ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2)로 둔다.
+            1. _offsetHour_를 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2)로 둔다.
+            1. _tzName_을 빈 String이거나, 코드 단위 0x0020 (SPACE), 코드 단위 0x0028 (LEFT PARENTHESIS), 구현 정의 시간대 이름, 코드 단위 0x0029 (RIGHT PARENTHESIS)를 문자열로 연결한 결과인 구현 정의 문자열로 둔다.
+            1. _offsetSign_, _offsetHour_, _offsetMin_, _tzName_을 문자열로 연결한 결과를 반환한다.
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-todatestring" type="abstract operation">
           <h1>
             ToDateString (
-              _tv_: an integral Number or *NaN*,
-            ): a String
+              _tv_: 정수인 Number 또는 *NaN*,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _tv_가 *NaN*이면, *"Invalid Date"*를 반환한다.
-            1. _localTime_을 LocalTime(_tv_)로 둔다.
-            1. DateString(_localTime_), code unit 0x0020 (SPACE), TimeString(_localTime_), 및 TimeZoneString(_tv_)의 string-concatenation을 반환한다.
+            1. _tv_가 *NaN*이면 *"Invalid Date"*를 반환한다.
+            1. _localTime_을 LocalTime(_tv_)으로 둔다.
+            1. DateString(_localTime_), 코드 단위 0x0020 (SPACE), TimeString(_localTime_), TimeZoneString(_tv_)를 문자열로 연결한 결과를 반환한다.
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -36048,17 +36031,17 @@ THH:mm:ss.sss
         <p>이 method는 *this* value에 corresponding하는 instant in time을 represent하는 String value를 반환합니다. String의 format은 RFC 7231의 <code>HTTP-date</code>를 기반으로 하며, ECMAScript Dates가 support하는 full range of times를 support하도록 generalized됩니다.</p>
         <p>called될 때 following steps를 수행합니다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *"Invalid Date"*를 반환한다.
-          1. _weekday_를 Number WeekDay(_tv_)를 가진 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 안의 entry의 Name으로 둔다.
-          1. _month_를 Number MonthFromTime(_tv_)를 가진 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 안의 entry의 Name으로 둔다.
-          1. _day_를 ToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)로 둔다.
-          1. _yv_를 YearFromTime(_tv_)로 둔다.
-          1. _yv_가 *+0*<sub>𝔽</sub>이거나 _yv_ > *+0*<sub>𝔽</sub>이면, _yearSign_을 empty String으로 둔다; 그렇지 않으면 _yearSign_을 *"-"*로 둔다.
-          1. _paddedYear_를 ToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)로 둔다.
-          1. _weekday_, *","*, code unit 0x0020 (SPACE), _day_, code unit 0x0020 (SPACE), _month_, code unit 0x0020 (SPACE), _yearSign_, _paddedYear_, code unit 0x0020 (SPACE), 및 TimeString(_tv_)의 string-concatenation을 반환한다.
+          1. _tv_가 *NaN*이면 *"Invalid Date"*를 반환한다.
+          1. _weekday_를 <emu-xref href="#sec-todatestring-day-names"></emu-xref>에서 WeekDay 인덱스 = WeekDay(_tv_)인 항목의 이름으로 둔다.
+          1. _month_를 <emu-xref href="#sec-todatestring-month-names"></emu-xref>에서 Month 인덱스 = MonthFromTime(_tv_)인 항목의 이름으로 둔다.
+          1. _day_를 ToZeroPaddedDecimalString(DateFromTime(_tv_), 2)로 둔다.
+          1. _yv_를 YearFromTime(_tv_)으로 둔다.
+          1. _yv_ ≥ 0이면 _yearSign_을 빈 String으로 두고, 그렇지 않으면 _yearSign_을 *"-"*로 둔다.
+          1. _paddedYear_를 ToZeroPaddedDecimalString(abs(_yv_), 4)로 둔다.
+          1. _weekday_, *","*, 코드 단위 0x0020 (SPACE), _day_, 코드 단위 0x0020 (SPACE), _month_, 코드 단위 0x0020 (SPACE), _yearSign_, _paddedYear_, 코드 단위 0x0020 (SPACE), TimeString(_tv_)을 문자열로 연결한 결과를 반환한다.
         </emu-alg>
       </emu-clause>
 
@@ -54607,33 +54590,33 @@ THH:mm:ss.sss
       <emu-annex id="sec-date.prototype.getyear" type="built-in function">
         <h1>Date.prototype.getYear ( )</h1>
         <emu-note>
-          <p>`getFullYear` method는 “year 2000 problem”을 avoid하기 때문에 거의 모든 purposes에서 preferred됩니다.</p>
+          <p>`getFullYear` 메서드는 “2000년 문제”를 피할 수 있으므로 거의 모든 용도에서 권장된다.</p>
         </emu-note>
-        <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _tv_를 _dateObj_.[[DateValue]]로 둔다.
-          1. _tv_가 *NaN*이면, *NaN*을 반환한다.
-          1. YearFromTime(LocalTime(_tv_)) - *1900*<sub>𝔽</sub>을 반환한다.
+          1. _tv_가 *NaN*이면 *NaN*을 반환한다.
+          1. 𝔽(YearFromTime(LocalTime(_tv_))) - *1900*<sub>𝔽</sub>을 반환한다.
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-date.prototype.setyear" type="built-in function">
         <h1>Date.prototype.setYear ( _year_ )</h1>
         <emu-note>
-          <p>`setFullYear` method는 “year 2000 problem”을 avoid하기 때문에 거의 모든 purposes에서 preferred됩니다.</p>
+          <p>`setFullYear` 메서드는 “2000년 문제”를 피할 수 있으므로 거의 모든 용도에서 권장된다.</p>
         </emu-note>
-        <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행한다:</p>
         <emu-alg>
-          1. _dateObj_를 *this* value로 둔다.
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])를 수행한다.
+          1. _dateObj_를 *this* 값으로 둔다.
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])을 수행한다.
           1. _time_을 _dateObj_.[[DateValue]]로 둔다.
           1. _year_를 ? ToNumber(_year_)로 둔다.
-          1. _time_이 *NaN*이면 _time_을 *+0*<sub>𝔽</sub>으로 설정한다; 그렇지 않으면 _time_을 LocalTime(_time_)으로 설정한다.
+          1. _time_이 *NaN*이면 _time_을 *+0*<sub>𝔽</sub>으로 설정하고, 그렇지 않으면 _time_을 LocalTime(_time_)으로 설정한다.
           1. _fullYear_를 MakeFullYear(_year_)로 둔다.
-          1. _day_를 MakeDay(_fullYear_, MonthFromTime(_time_), DateFromTime(_time_))로 둔다.
-          1. _date_를 MakeDate(_day_, TimeWithinDay(_time_))로 둔다.
+          1. _day_를 MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_)))로 둔다.
+          1. _date_를 MakeDate(_day_, 𝔽(TimeWithinDay(_time_)))로 둔다.
           1. _utcTimestamp_를 TimeClip(UTC(_date_))로 둔다.
           1. _dateObj_.[[DateValue]]를 _utcTimestamp_로 설정한다.
           1. _utcTimestamp_를 반환한다.

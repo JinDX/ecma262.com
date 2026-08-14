@@ -34104,11 +34104,11 @@
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
         <emu-eqn id="eqn-SecondsPerMinute" aoid="SecondsPerMinute">SecondsPerMinute = 60</emu-eqn>
-        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = *1000*<sub>𝔽</sub></emu-eqn>
-        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = *60000*<sub>𝔽</sub> = msPerSecond × 𝔽(SecondsPerMinute)</emu-eqn>
-        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = *3600000*<sub>𝔽</sub> = msPerMinute × 𝔽(MinutesPerHour)</emu-eqn>
-        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = *86400000*<sub>𝔽</sub> = msPerHour × 𝔽(HoursPerDay)</emu-eqn>
-        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × ℝ(msPerSecond) = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = 1000</emu-eqn>
+        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
+        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
+        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
       </emu-clause>
@@ -34117,14 +34117,14 @@
         <h1>
           Day (
             _tv_: 有限の time value,
-          ): 整数の Number
+          ): 整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する日の番号を返す。</dd>
+          <dd>_tv_ が属する日の番号を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerDay))) を返す。
+          1. floor(ℝ(_tv_) / msPerDay) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34132,69 +34132,49 @@
         <h1>
           TimeWithinDay (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上（含む）msPerDay 未満（含まない）の範囲内の整数の Number
+          ): 0（含む）から msPerDay（含まない）までの区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する日の開始時からのミリ秒数を返す。</dd>
+          <dd>_tv_ が属する日の開始からのミリ秒数を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(_tv_) modulo ℝ(msPerDay)) を返す。
+          1. ℝ(_tv_) modulo msPerDay を返す。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-daysinyear" type="abstract operation" oldids="eqn-DaysInYear,sec-year-number">
-        <h1>
-          DaysInYear (
-            _y_: 整数の Number,
-          ): *365*<sub>𝔽</sub> または *366*<sub>𝔽</sub>
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>これは、年 _y_ の日数を返す。うるう年は 366 日であり、それ以外のすべての年は 365 日である。</dd>
-        </dl>
-        <emu-alg>
-          1. _ry_ を ℝ(_y_) とする。
-          1. (_ry_ modulo 400) = 0 の場合、*366*<sub>𝔽</sub> を返す。
-          1. (_ry_ modulo 100) = 0 の場合、*365*<sub>𝔽</sub> を返す。
-          1. (_ry_ modulo 4) = 0 の場合、*366*<sub>𝔽</sub> を返す。
-          1. *365*<sub>𝔽</sub> を返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear">
+      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear,sec-year-number">
         <h1>
           DayFromYear (
-            _y_: 整数の Number,
-          ): 整数の Number
+            _y_: 整数,
+          ): 整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、年 _y_ の最初の日の日番号を返す。</dd>
+          <dd>年 _y_ の最初の日の日番号を返す。</dd>
         </dl>
         <emu-alg>
-          1. _ry_ を ℝ(_y_) とする。
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] NOTE: 以下の手順において、_numberYears1_、_numberYears4_、_numberYears100_、および _numberYears400_ は、それぞれエポックから年 _y_ の開始までの間に存在する、1、4、100、および 400 で割り切れる年の数を表す。_y_ がエポックより前である場合、この数は負である。
-          1. _numberYears1_ を (_ry_ - 1970) とする。
-          1. _numberYears4_ を floor((_ry_ - 1969) / 4) とする。
-          1. _numberYears100_ を floor((_ry_ - 1901) / 100) とする。
-          1. _numberYears400_ を floor((_ry_ - 1601) / 400) とする。
-          1. 𝔽(365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_) を返す。
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注記: 以下の手順では、_numberYears1_、_numberYears4_、_numberYears100_、および _numberYears400_ は、それぞれエポックから年 _y_ の開始までに存在する、1、4、100、および 400 で割り切れる年の数を表す。_y_ がエポックより前の場合、この数は負となる。
+          1. _numberYears1_ を (_y_ - 1970) とする。
+          1. _numberYears4_ を floor((_y_ - 1969) / 4) とする。
+          1. _numberYears100_ を floor((_y_ - 1901) / 100) とする。
+          1. _numberYears400_ を floor((_y_ - 1601) / 400) とする。
+          1. 365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timefromyear" type="abstract operation" oldids="eqn-TimeFromYear">
         <h1>
           TimeFromYear (
-            _y_: 整数の Number,
+            _y_: 整数,
           ): time value
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、年 _y_ の開始時の time value を返す。</dd>
+          <dd>年 _y_ の開始時点の time value を返す。</dd>
         </dl>
         <emu-alg>
-          1. msPerDay × DayFromYear(_y_) を返す。
+          1. 𝔽(msPerDay × DayFromYear(_y_)) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34202,14 +34182,14 @@
         <h1>
           YearFromTime (
             _tv_: 有限の time value,
-          ): 整数の Number
+          ): 整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する年を返す。</dd>
+          <dd>_tv_ が属する年を返す。</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_ を満たす最大の整数の Number _y_（+∞ に最も近いもの）を返す。
+          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_ を満たす最大の整数 _y_（+∞ に最も近いもの）を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34217,7 +34197,7 @@
         <h1>
           DayWithinYear (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *365*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 365 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
         </dl>
@@ -34226,19 +34206,22 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear">
+      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
         <h1>
           InLeapYear (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> または *1*<sub>𝔽</sub>
+          ): 0 または 1
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ がうるう年内にある場合は *1*<sub>𝔽</sub> を返し、それ以外の場合は *+0*<sub>𝔽</sub> を返す。</dd>
+          <dd>_tv_ が閏年内にある場合は 1 を、それ以外の場合は 0 を返す。</dd>
         </dl>
         <emu-alg>
-          1. DaysInYear(YearFromTime(_tv_)) が *366*<sub>𝔽</sub> である場合、*1*<sub>𝔽</sub> を返す。
-          1. *+0*<sub>𝔽</sub> を返す。
+          1. _y_ を YearFromTime(_tv_) とする。
+          1. (_y_ modulo 400) = 0 の場合、1 を返す。
+          1. (_y_ modulo 100) = 0 の場合、0 を返す。
+          1. (_y_ modulo 4) = 0 の場合、1 を返す。
+          1. 0 を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34246,28 +34229,28 @@
         <h1>
           MonthFromTime (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *11*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 11 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する月を識別する Number を返す。月の値 *+0*<sub>𝔽</sub> は 1 月、*1*<sub>𝔽</sub> は 2 月、*2*<sub>𝔽</sub> は 3 月、*3*<sub>𝔽</sub> は 4 月、*4*<sub>𝔽</sub> は 5 月、*5*<sub>𝔽</sub> は 6 月、*6*<sub>𝔽</sub> は 7 月、*7*<sub>𝔽</sub> は 8 月、*8*<sub>𝔽</sub> は 9 月、*9*<sub>𝔽</sub> は 10 月、*10*<sub>𝔽</sub> は 11 月、*11*<sub>𝔽</sub> は 12 月を指定する。<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn> であり、これは 1970 年 1 月 1 日木曜日に対応することに注意されたい。</dd>
+          <dd>_tv_ が属する月を識別する整数を返す。月の値 0 は1月、1 は2月、2 は3月、3 は4月、4 は5月、5 は6月、6 は7月、7 は8月、8 は9月、9 は10月、10 は11月、11 は12月を指定する。<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn> であり、これは1970年1月1日木曜日に対応することに注意すること。</dd>
         </dl>
         <emu-alg>
           1. _inLeapYear_ を InLeapYear(_tv_) とする。
           1. _dayWithinYear_ を DayWithinYear(_tv_) とする。
-          1. _dayWithinYear_ &lt; *31*<sub>𝔽</sub> の場合、*+0*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *59*<sub>𝔽</sub> + _inLeapYear_ の場合、*1*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *90*<sub>𝔽</sub> + _inLeapYear_ の場合、*2*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *120*<sub>𝔽</sub> + _inLeapYear_ の場合、*3*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *151*<sub>𝔽</sub> + _inLeapYear_ の場合、*4*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *181*<sub>𝔽</sub> + _inLeapYear_ の場合、*5*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *212*<sub>𝔽</sub> + _inLeapYear_ の場合、*6*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *243*<sub>𝔽</sub> + _inLeapYear_ の場合、*7*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *273*<sub>𝔽</sub> + _inLeapYear_ の場合、*8*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *304*<sub>𝔽</sub> + _inLeapYear_ の場合、*9*<sub>𝔽</sub> を返す。
-          1. _dayWithinYear_ &lt; *334*<sub>𝔽</sub> + _inLeapYear_ の場合、*10*<sub>𝔽</sub> を返す。
-          1. Assert: _dayWithinYear_ &lt; *365*<sub>𝔽</sub> + _inLeapYear_ である。
-          1. *11*<sub>𝔽</sub> を返す。
+          1. _dayWithinYear_ &lt; 31 の場合、0 を返す。
+          1. _dayWithinYear_ &lt; 59 + _inLeapYear_ の場合、1 を返す。
+          1. _dayWithinYear_ &lt; 90 + _inLeapYear_ の場合、2 を返す。
+          1. _dayWithinYear_ &lt; 120 + _inLeapYear_ の場合、3 を返す。
+          1. _dayWithinYear_ &lt; 151 + _inLeapYear_ の場合、4 を返す。
+          1. _dayWithinYear_ &lt; 181 + _inLeapYear_ の場合、5 を返す。
+          1. _dayWithinYear_ &lt; 212 + _inLeapYear_ の場合、6 を返す。
+          1. _dayWithinYear_ &lt; 243 + _inLeapYear_ の場合、7 を返す。
+          1. _dayWithinYear_ &lt; 273 + _inLeapYear_ の場合、8 を返す。
+          1. _dayWithinYear_ &lt; 304 + _inLeapYear_ の場合、9 を返す。
+          1. _dayWithinYear_ &lt; 334 + _inLeapYear_ の場合、10 を返す。
+          1. 表明: _dayWithinYear_ &lt; 365 + _inLeapYear_。
+          1. 11 を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34275,29 +34258,29 @@
         <h1>
           DateFromTime (
             _tv_: 有限の time value,
-          ): *1*<sub>𝔽</sub> 以上 *31*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 1 から 31 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する月の日を返す。</dd>
+          <dd>_tv_ が属する月の日を返す。</dd>
         </dl>
         <emu-alg>
           1. _inLeapYear_ を InLeapYear(_tv_) とする。
           1. _dayWithinYear_ を DayWithinYear(_tv_) とする。
           1. _month_ を MonthFromTime(_tv_) とする。
-          1. _month_ が *+0*<sub>𝔽</sub> である場合、_dayWithinYear_ + *1*<sub>𝔽</sub> を返す。
-          1. _month_ が *1*<sub>𝔽</sub> である場合、_dayWithinYear_ - *30*<sub>𝔽</sub> を返す。
-          1. _month_ が *2*<sub>𝔽</sub> である場合、_dayWithinYear_ - *58*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *3*<sub>𝔽</sub> である場合、_dayWithinYear_ - *89*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *4*<sub>𝔽</sub> である場合、_dayWithinYear_ - *119*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *5*<sub>𝔽</sub> である場合、_dayWithinYear_ - *150*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *6*<sub>𝔽</sub> である場合、_dayWithinYear_ - *180*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *7*<sub>𝔽</sub> である場合、_dayWithinYear_ - *211*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *8*<sub>𝔽</sub> である場合、_dayWithinYear_ - *242*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *9*<sub>𝔽</sub> である場合、_dayWithinYear_ - *272*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. _month_ が *10*<sub>𝔽</sub> である場合、_dayWithinYear_ - *303*<sub>𝔽</sub> - _inLeapYear_ を返す。
-          1. Assert: _month_ は *11*<sub>𝔽</sub> である。
-          1. _dayWithinYear_ - *333*<sub>𝔽</sub> - _inLeapYear_ を返す。
+          1. _month_ = 0 の場合、_dayWithinYear_ + 1 を返す。
+          1. _month_ = 1 の場合、_dayWithinYear_ - 30 を返す。
+          1. _month_ = 2 の場合、_dayWithinYear_ - 58 - _inLeapYear_ を返す。
+          1. _month_ = 3 の場合、_dayWithinYear_ - 89 - _inLeapYear_ を返す。
+          1. _month_ = 4 の場合、_dayWithinYear_ - 119 - _inLeapYear_ を返す。
+          1. _month_ = 5 の場合、_dayWithinYear_ - 150 - _inLeapYear_ を返す。
+          1. _month_ = 6 の場合、_dayWithinYear_ - 180 - _inLeapYear_ を返す。
+          1. _month_ = 7 の場合、_dayWithinYear_ - 211 - _inLeapYear_ を返す。
+          1. _month_ = 8 の場合、_dayWithinYear_ - 242 - _inLeapYear_ を返す。
+          1. _month_ = 9 の場合、_dayWithinYear_ - 272 - _inLeapYear_ を返す。
+          1. _month_ = 10 の場合、_dayWithinYear_ - 303 - _inLeapYear_ を返す。
+          1. 表明: _month_ = 11。
+          1. _dayWithinYear_ - 333 - _inLeapYear_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34305,14 +34288,14 @@
         <h1>
           WeekDay (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *6*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 6 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する曜日を識別する Number を返す。曜日の値 *+0*<sub>𝔽</sub> は日曜日、*1*<sub>𝔽</sub> は月曜日、*2*<sub>𝔽</sub> は火曜日、*3*<sub>𝔽</sub> は水曜日、*4*<sub>𝔽</sub> は木曜日、*5*<sub>𝔽</sub> は金曜日、*6*<sub>𝔽</sub> は土曜日を指定する。<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn> であり、これは 1970 年 1 月 1 日木曜日に対応することに注意されたい。</dd>
+          <dd>_tv_ が属する曜日を識別する整数を返す。曜日の値 0 は日曜日、1 は月曜日、2 は火曜日、3 は水曜日、4 は木曜日、5 は金曜日、6 は土曜日を指定する。<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = 4</emu-eqn> であり、これは1970年1月1日木曜日に対応することに注意すること。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7) を返す。
+          1. (Day(_tv_) + 4) modulo 7 を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34320,14 +34303,14 @@
         <h1>
           HourFromTime (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *23*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 23 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する日の時を返す。</dd>
+          <dd>_tv_ が属する日の時を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerHour)) modulo HoursPerDay) を返す。
+          1. floor(ℝ(_tv_) / msPerHour) modulo HoursPerDay を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34335,14 +34318,14 @@
         <h1>
           MinFromTime (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *59*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 59 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する時の分を返す。</dd>
+          <dd>_tv_ が属する時の分を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerMinute)) modulo MinutesPerHour) を返す。
+          1. floor(ℝ(_tv_) / msPerMinute) modulo MinutesPerHour を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34350,29 +34333,29 @@
         <h1>
           SecFromTime (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *59*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 59 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する分の秒を返す。</dd>
+          <dd>_tv_ が属する分の秒を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(floor(ℝ(_tv_ / msPerSecond)) modulo SecondsPerMinute) を返す。
+          1. floor(ℝ(_tv_) / msPerSecond) modulo SecondsPerMinute を返す。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-msfromtime" type="abstract operation" oldids="eqn-msFromTime">
+      <emu-clause id="sec-millisecfromtime" type="abstract operation" oldids="sec-msfromtime,eqn-msFromTime">
         <h1>
-          msFromTime (
+          MillisecFromTime (
             _tv_: 有限の time value,
-          ): *+0*<sub>𝔽</sub> 以上 *999*<sub>𝔽</sub> 以下の範囲内の整数の Number
+          ): 0 から 999 までの両端を含む区間内の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_tv_ が属する秒のミリ秒を返す。</dd>
+          <dd>_tv_ が属する秒のミリ秒を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(ℝ(_tv_) modulo ℝ(msPerSecond)) を返す。
+          1. ℝ(_tv_) modulo msPerSecond を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34615,48 +34598,48 @@
         <dl class="header">
           <dt>description</dt>
           <dd>
-            これは、_t_ を現地時刻から UTC の time value に変換する。
-            _t_ において有効な標準時および夏時間に関する地域の政治的規則を使用して、この節で規定する方法で結果を決定するべきである。
+            _t_ をローカル時刻から UTC time value に変換する。
+            結果を決定するには、この節で指定されている方法で、_t_ において有効な標準時および夏時間に関するローカルの政治的規則を使用するべきである。
           </dd>
         </dl>
         <emu-alg>
           1. _t_ が有限でない場合、*NaN* を返す。
           1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
-          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* である場合、
+          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
             1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
           1. それ以外の場合、
-            1. _possibleInstants_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0) とする。
-            1. NOTE: 以下の手順により、_t_ が負のタイムゾーン遷移で複数回繰り返される現地時刻（たとえば、夏時間が終了する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが減少する場合）、または正のタイムゾーン遷移でスキップされる現地時刻（たとえば、夏時間が開始する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが増加する場合）を表すときに、遷移前のタイムゾーンオフセットを使用して _t_ が解釈される。
+            1. _possibleInstants_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_t_), MonthFromTime(_t_) + 1, DateFromTime(_t_), HourFromTime(_t_), MinFromTime(_t_), SecFromTime(_t_), MillisecFromTime(_t_), 0, 0) とする。
+            1. 注記: 以下の手順により、_t_ が負のタイムゾーン遷移時に複数回繰り返されるローカル時刻（例えば、夏時間が終了するとき、またはタイムゾーン規則の変更によりタイムゾーンオフセットが減少するとき）、あるいは正のタイムゾーン遷移時にスキップされるローカル時刻（例えば、夏時間が開始するとき、またはタイムゾーン規則の変更によりタイムゾーンオフセットが増加するとき）を表す場合に、_t_ が遷移前のタイムゾーンオフセットを使用して解釈されることを保証する。
             1. _possibleInstants_ が空でない場合、
               1. _disambiguatedInstant_ を _possibleInstants_[0] とする。
             1. それ以外の場合、
-              1. NOTE: _t_ は、正のタイムゾーン遷移でスキップされる現地時刻（たとえば、夏時間の開始または UTC オフセットを増加させるタイムゾーン規則の変更によるもの）を表す。
-              1. [declared="tBefore"] _possibleInstantsBefore_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0) とする。ここで、_tBefore_ は _possibleInstantsBefore_ が空でない（すなわち、_tBefore_ が遷移前の最後の現地時刻を表す）ような、_t_ より小さい最大の整数の Number である。
+              1. 注記: _t_ は正のタイムゾーン遷移時にスキップされるローカル時刻（例えば、夏時間の開始または UTC オフセットを増加させるタイムゾーン規則の変更によるもの）を表す。
+              1. [declared="tBefore"] _possibleInstantsBefore_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_tBefore_), MonthFromTime(_tBefore_) + 1, DateFromTime(_tBefore_), HourFromTime(_tBefore_), MinFromTime(_tBefore_), SecFromTime(_tBefore_), MillisecFromTime(_tBefore_), 0, 0) とする。ここで、_tBefore_ は _possibleInstantsBefore_ が空でない（すなわち、_tBefore_ が遷移前の最後のローカル時刻を表す）ような _t_ 未満の最大の整数 Number である。
               1. _disambiguatedInstant_ を _possibleInstantsBefore_ の最後の要素とする。
             1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_) とする。
           1. _offsetMs_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
           1. _t_ - 𝔽(_offsetMs_) を返す。
         </emu-alg>
         <p>
-          入力 _t_ は名目上は time value であるが、任意の Number 値であってもよい。
-          現地の UTC オフセットにかかわらず time value の範囲の境界に対応する入力をサポートできるようにするため、アルゴリズムは _t_ を time value の範囲に制限してはならない。
-          たとえば、time value の最大値は 8.64 × 10<sup>15</sup> であり、*"+275760-09-13T00:00:00Z"* に対応する。
-          その時点で現地のタイムゾーンオフセットが UTC より 1 時間進んでいる環境では、これはより大きな入力 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> で表され、*"+275760-09-13T01:00:00+01:00"* に対応する。
+          入力 _t_ は名目上は time value であるが、任意の Number 値であってよい。
+          time value の範囲の境界に対応する入力を、ローカル UTC オフセットにかかわらずサポートできるようにするため、このアルゴリズムは _t_ を time value の範囲に制限してはならない。
+          例えば、最大の time value は 8.64 × 10<sup>15</sup> であり、*"+275760-09-13T00:00:00Z"* に対応する。
+          その時点でローカルタイムゾーンオフセットが UTC より1時間進んでいる環境では、*"+275760-09-13T01:00:00+01:00"* に対応する、より大きな入力 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> で表される。
         </p>
-        <p>実装内で現地時刻 _t_ に関する政治的規則を利用できない場合、SystemTimeZoneIdentifier が *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds が 0 を返すため、結果は _t_ となる。</p>
+        <p>ローカル時刻 _t_ に対する政治的規則が実装内で利用できない場合、SystemTimeZoneIdentifier は *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds は 0 を返すため、結果は _t_ となる。</p>
         <emu-note>
-          <p>タイムゾーン対応実装は、IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用する必要がある（その他のすべての実装にも推奨される）。</p>
+          <p>タイムゾーンを認識する実装では、IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用することが要求される（その他すべての実装にも推奨される）。</p>
           <p>
-            America/New_York における 2017 年 11 月 5 日午前 1:30 は 2 回繰り返される（時計が戻される）が、午前 1:30 UTC-05 ではなく、午前 1:30 UTC-04 として解釈しなければならない。
-            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) において、_offsetMs_ の値は <emu-eqn>-4 × msPerHour</emu-eqn> である。
+            America/New_York における2017年11月5日午前1時30分は2回繰り返される（時計が後退する）が、午前1時30分 UTC-05 ではなく、午前1時30分 UTC-04 として解釈されなければならない。
+            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) では、_offsetMs_ の値は <emu-eqn>-4 × msPerHour</emu-eqn> である。
           </p>
           <p>
-            America/New_York における 2017 年 3 月 12 日午前 2:30 は存在しないが、午前 2:30 UTC-05（午前 3:30 UTC-04 と同等）として解釈しなければならない。
-            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) において、_offsetMs_ の値は <emu-eqn>-5 × msPerHour</emu-eqn> である。
+            America/New_York における2017年3月12日午前2時30分は存在しないが、午前2時30分 UTC-05（午前3時30分 UTC-04 に相当）として解釈されなければならない。
+            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) では、_offsetMs_ の値は <emu-eqn>-5 × msPerHour</emu-eqn> である。
           </p>
         </emu-note>
         <emu-note>
-          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn> は必ずしも常に <emu-eqn>_t_<sub>UTC</sub></emu-eqn> と等しいとは限らない。これに対応して、<emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn> も必ずしも常に <emu-eqn>_t_<sub>local</sub></emu-eqn> と等しいとは限らない。</p>
+          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn> は必ずしも常に <emu-eqn>_t_<sub>UTC</sub></emu-eqn> と等しいとは限らない。同様に、<emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn> も必ずしも常に <emu-eqn>_t_<sub>local</sub></emu-eqn> と等しいとは限らない。</p>
         </emu-note>
       </emu-clause>
 
@@ -34671,18 +34654,18 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、ミリ秒数を計算する。</dd>
+          <dd>ミリ秒数を計算する。</dd>
         </dl>
         <emu-alg>
           1. _hour_ が有限でない、_min_ が有限でない、_sec_ が有限でない、または _ms_ が有限でない場合、*NaN* を返す。
-          1. _h_ を 𝔽(! ToIntegerOrInfinity(_hour_)) とする。
-          1. _m_ を 𝔽(! ToIntegerOrInfinity(_min_)) とする。
-          1. _s_ を 𝔽(! ToIntegerOrInfinity(_sec_)) とする。
-          1. _milli_ を 𝔽(! ToIntegerOrInfinity(_ms_)) とする。
-          1. ((_h_ × msPerHour + _m_ × msPerMinute) + _s_ × msPerSecond) + _milli_ を返す。
+          1. _h_ を ! ToIntegerOrInfinity(_hour_) とする。
+          1. _m_ を ! ToIntegerOrInfinity(_min_) とする。
+          1. _s_ を ! ToIntegerOrInfinity(_sec_) とする。
+          1. _milli_ を ! ToIntegerOrInfinity(_ms_) とする。
+          1. ((𝔽(_h_) × 𝔽(msPerHour) + 𝔽(_m_) × 𝔽(msPerMinute)) + 𝔽(_s_) × 𝔽(msPerSecond)) + 𝔽(_milli_) を返す。
         </emu-alg>
         <emu-note>
-          <p>MakeTime における算術演算は浮動小数点演算であり、結合則を満たさないため、演算は正しい順序で実行しなければならない。</p>
+          <p>MakeTime における算術は浮動小数点演算であり、結合則が成り立たないため、演算は正しい順序で実行されなければならない。</p>
         </emu-note>
       </emu-clause>
 
@@ -34696,18 +34679,18 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、日数を計算する。</dd>
+          <dd>日数を計算する。</dd>
         </dl>
         <emu-alg>
           1. _year_ が有限でない、_month_ が有限でない、または _date_ が有限でない場合、*NaN* を返す。
-          1. _y_ を 𝔽(! ToIntegerOrInfinity(_year_)) とする。
-          1. _m_ を 𝔽(! ToIntegerOrInfinity(_month_)) とする。
-          1. _dt_ を 𝔽(! ToIntegerOrInfinity(_date_)) とする。
-          1. _ym_ を _y_ + 𝔽(floor(ℝ(_m_) / 12)) とする。
+          1. _y_ を ! ToIntegerOrInfinity(_year_) とする。
+          1. _m_ を ! ToIntegerOrInfinity(_month_) とする。
+          1. _dt_ を ! ToIntegerOrInfinity(_date_) とする。
+          1. _ym_ を 𝔽(_y_) + 𝔽(floor(_m_ / 12)) とする。
           1. _ym_ が有限でない場合、*NaN* を返す。
-          1. _mn_ を 𝔽(ℝ(_m_) modulo 12) とする。
-          1. YearFromTime(_tv_) が _ym_、MonthFromTime(_tv_) が _mn_、DateFromTime(_tv_) が *1*<sub>𝔽</sub> であるような有限の time value _tv_ を見つける。ただし、これが不可能な場合（いずれかの引数が範囲外であるため）、*NaN* を返す。
-          1. Day(_tv_) + _dt_ - *1*<sub>𝔽</sub> を返す。
+          1. _mn_ を _m_ modulo 12 とする。
+          1. YearFromTime(_tv_) = ℝ(_ym_)、MonthFromTime(_tv_) = _mn_、かつ DateFromTime(_tv_) = 1 となる有限の time value _tv_ を見つける。ただし、これが不可能な場合（いずれかの引数が範囲外であるため）は、*NaN* を返す。
+          1. 𝔽(Day(_tv_)) + 𝔽(_dt_) - *1*<sub>𝔽</sub> を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34720,11 +34703,11 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、ミリ秒数を計算する。</dd>
+          <dd>ミリ秒数を計算する。</dd>
         </dl>
         <emu-alg>
           1. _day_ が有限でない、または _time_ が有限でない場合、*NaN* を返す。
-          1. _tv_ を _day_ × msPerDay + _time_ とする。
+          1. _tv_ を _day_ × 𝔽(msPerDay) + _time_ とする。
           1. _tv_ が有限でない場合、*NaN* を返す。
           1. _tv_ を返す。
         </emu-alg>
@@ -35180,530 +35163,530 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getdate" type="built-in function">
         <h1>Date.prototype.getDate ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. DateFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(DateFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getday" type="built-in function">
         <h1>Date.prototype.getDay ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. WeekDay(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(WeekDay(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getfullyear" type="built-in function">
         <h1>Date.prototype.getFullYear ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. YearFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(YearFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gethours" type="built-in function">
         <h1>Date.prototype.getHours ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. HourFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(HourFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmilliseconds" type="built-in function">
         <h1>Date.prototype.getMilliseconds ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. msFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MillisecFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getminutes" type="built-in function">
         <h1>Date.prototype.getMinutes ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. MinFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MinFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmonth" type="built-in function">
         <h1>Date.prototype.getMonth ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. MonthFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MonthFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getseconds" type="built-in function">
         <h1>Date.prototype.getSeconds ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. SecFromTime(LocalTime(_tv_))を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(SecFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettime" type="built-in function">
         <h1>Date.prototype.getTime ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _dateObj_.[[DateValue]]を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _dateObj_.[[DateValue]] を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettimezoneoffset" type="built-in function">
         <h1>Date.prototype.getTimezoneOffset ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. (_tv_ - LocalTime(_tv_)) / msPerMinuteを返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. (_tv_ - LocalTime(_tv_)) / 𝔽(msPerMinute) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcdate" type="built-in function">
         <h1>Date.prototype.getUTCDate ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. DateFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(DateFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcday" type="built-in function">
         <h1>Date.prototype.getUTCDay ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. WeekDay(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(WeekDay(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcfullyear" type="built-in function">
         <h1>Date.prototype.getUTCFullYear ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. YearFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(YearFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutchours" type="built-in function">
         <h1>Date.prototype.getUTCHours ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. HourFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(HourFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmilliseconds" type="built-in function">
         <h1>Date.prototype.getUTCMilliseconds ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. msFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MillisecFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcminutes" type="built-in function">
         <h1>Date.prototype.getUTCMinutes ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. MinFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MinFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmonth" type="built-in function">
         <h1>Date.prototype.getUTCMonth ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. MonthFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(MonthFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcseconds" type="built-in function">
         <h1>Date.prototype.getUTCSeconds ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. SecFromTime(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(SecFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setdate" type="built-in function">
         <h1>Date.prototype.setDate ( _date_ )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _dt_を ? ToNumber(_date_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _newDate_をMakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))とする。
-          1. _u_をTimeClip(UTC(_newDate_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _dt_ を ? ToNumber(_date_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _u_ を TimeClip(UTC(_newDate_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setfullyear" type="built-in function">
         <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _y_を ? ToNumber(_year_) とする。
-          1. _tv_が*NaN*なら、_tv_を*+0*<sub>𝔽</sub>に設定する；そうでなければ、_tv_をLocalTime(_tv_)に設定する。
-          1. _month_がpresentなら、_m_を ? ToNumber(_month_) とする；そうでなければ、_m_をMonthFromTime(_tv_)とする。
-          1. _date_がpresentなら、_dt_を ? ToNumber(_date_) とする；そうでなければ、_dt_をDateFromTime(_tv_)とする。
-          1. _newDate_をMakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))とする。
-          1. _u_をTimeClip(UTC(_newDate_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _y_ を ? ToNumber(_year_) とする。
+          1. _tv_ が *NaN* の場合、_tv_ を *+0*<sub>𝔽</sub> に設定する。それ以外の場合、_tv_ を LocalTime(_tv_) に設定する。
+          1. _month_ が存在する場合、_m_ を ? ToNumber(_month_) とする。それ以外の場合、_m_ を 𝔽(MonthFromTime(_tv_)) とする。
+          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。それ以外の場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _u_ を TimeClip(UTC(_newDate_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*3*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_month_がpresentでない場合、このmethodは_month_がvalue `getMonth()`でpresentであったかのようにbehaveします。_date_がpresentでない場合、_date_がvalue `getDate()`でpresentであったかのようにbehaveします。</p>
+          <p>_month_ が存在しない場合、このメソッドは、_month_ が値 `getMonth()` で存在するかのように動作する。_date_ が存在しない場合、_date_ が値 `getDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.sethours" type="built-in function">
         <h1>Date.prototype.setHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _h_を ? ToNumber(_hour_) とする。
-          1. _min_がpresentなら、_m_を ? ToNumber(_min_) とする。
-          1. _sec_がpresentなら、_s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _min_がpresentでないなら、_m_をMinFromTime(_tv_)とする。
-          1. _sec_がpresentでないなら、_s_をSecFromTime(_tv_)とする。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))とする。
-          1. _u_をTimeClip(UTC(_date_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _h_ を ? ToNumber(_hour_) とする。
+          1. _min_ が存在する場合、_m_ を ? ToNumber(_min_) とする。
+          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _min_ が存在しない場合、_m_ を 𝔽(MinFromTime(_tv_)) とする。
+          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_)) とする。
+          1. _u_ を TimeClip(UTC(_date_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*4*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *4*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_min_がpresentでない場合、このmethodは_min_がvalue `getMinutes()`でpresentであったかのようにbehaveします。_sec_がpresentでない場合、_sec_がvalue `getSeconds()`でpresentであったかのようにbehaveします。_ms_がpresentでない場合、_ms_がvalue `getMilliseconds()`でpresentであったかのようにbehaveします。</p>
+          <p>_min_ が存在しない場合、このメソッドは、_min_ が値 `getMinutes()` で存在するかのように動作する。_sec_ が存在しない場合、_sec_ が値 `getSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmilliseconds" type="built-in function">
         <h1>Date.prototype.setMilliseconds ( _ms_ )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _ms_を ? ToNumber(_ms_) に設定する。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _time_をMakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)とする。
-          1. _u_をTimeClip(UTC(MakeDate(Day(_tv_), _time_)))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _ms_ を ? ToNumber(_ms_) に設定する。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_) とする。
+          1. _u_ を TimeClip(UTC(MakeDate(𝔽(Day(_tv_)), _time_))) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setminutes" type="built-in function">
         <h1>Date.prototype.setMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _m_を ? ToNumber(_min_) とする。
-          1. _sec_がpresentなら、_s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _sec_がpresentでないなら、_s_をSecFromTime(_tv_)とする。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))とする。
-          1. _u_をTimeClip(UTC(_date_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _m_ を ? ToNumber(_min_) とする。
+          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_)) とする。
+          1. _u_ を TimeClip(UTC(_date_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*3*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_sec_がpresentでない場合、このmethodは_sec_がvalue `getSeconds()`でpresentであったかのようにbehaveします。_ms_がpresentでない場合、これは_ms_がvalue `getMilliseconds()`でpresentであったかのようにbehaveします。</p>
+          <p>_sec_ が存在しない場合、このメソッドは、_sec_ が値 `getSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmonth" type="built-in function">
         <h1>Date.prototype.setMonth ( _month_ [ , _date_ ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _m_を ? ToNumber(_month_) とする。
-          1. _date_がpresentなら、_dt_を ? ToNumber(_date_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _date_がpresentでないなら、_dt_をDateFromTime(_tv_)とする。
-          1. _newDate_をMakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))とする。
-          1. _u_をTimeClip(UTC(_newDate_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _m_ を ? ToNumber(_month_) とする。
+          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _date_ が存在しない場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _u_ を TimeClip(UTC(_newDate_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*2*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_date_がpresentでない場合、このmethodは_date_がvalue `getDate()`でpresentであったかのようにbehaveします。</p>
+          <p>_date_ が存在しない場合、このメソッドは、_date_ が値 `getDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setseconds" type="built-in function">
         <h1>Date.prototype.setSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _tv_をLocalTime(_tv_)に設定する。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))とする。
-          1. _u_をTimeClip(UTC(_date_))とする。
-          1. _dateObj_.[[DateValue]]を_u_に設定する。
-          1. _u_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _tv_ を LocalTime(_tv_) に設定する。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_)) とする。
+          1. _u_ を TimeClip(UTC(_date_)) とする。
+          1. _dateObj_.[[DateValue]] を _u_ に設定する。
+          1. _u_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*2*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_ms_がpresentでない場合、このmethodは_ms_がvalue `getMilliseconds()`でpresentであったかのようにbehaveします。</p>
+          <p>_ms_ が存在しない場合、このメソッドは、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.settime" type="built-in function">
         <h1>Date.prototype.setTime ( _time_ )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _t_を ? ToNumber(_time_) とする。
-          1. _v_をTimeClip(_t_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _t_ を ? ToNumber(_time_) とする。
+          1. _v_ を TimeClip(_t_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcdate" type="built-in function">
         <h1>Date.prototype.setUTCDate ( _date_ )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _dt_を ? ToNumber(_date_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _newDate_をMakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))とする。
-          1. _v_をTimeClip(_newDate_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _dt_ を ? ToNumber(_date_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _v_ を TimeClip(_newDate_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcfullyear" type="built-in function">
         <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、_tv_を*+0*<sub>𝔽</sub>に設定する。
-          1. _y_を ? ToNumber(_year_) とする。
-          1. _month_がpresentなら、_m_を ? ToNumber(_month_) とする；そうでなければ、_m_をMonthFromTime(_tv_)とする。
-          1. _date_がpresentなら、_dt_を ? ToNumber(_date_) とする；そうでなければ、_dt_をDateFromTime(_tv_)とする。
-          1. _newDate_をMakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))とする。
-          1. _v_をTimeClip(_newDate_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、_tv_ を *+0*<sub>𝔽</sub> に設定する。
+          1. _y_ を ? ToNumber(_year_) とする。
+          1. _month_ が存在する場合、_m_ を ? ToNumber(_month_) とする。それ以外の場合、_m_ を 𝔽(MonthFromTime(_tv_)) とする。
+          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。それ以外の場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _v_ を TimeClip(_newDate_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*3*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_month_がpresentでない場合、このmethodは_month_がvalue `getUTCMonth()`でpresentであったかのようにbehaveします。_date_がpresentでない場合、_date_がvalue `getUTCDate()`でpresentであったかのようにbehaveします。</p>
+          <p>_month_ が存在しない場合、このメソッドは、_month_ が値 `getUTCMonth()` で存在するかのように動作する。_date_ が存在しない場合、_date_ が値 `getUTCDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutchours" type="built-in function">
         <h1>Date.prototype.setUTCHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _h_を ? ToNumber(_hour_) とする。
-          1. _min_がpresentなら、_m_を ? ToNumber(_min_) とする。
-          1. _sec_がpresentなら、_s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _min_がpresentでないなら、_m_をMinFromTime(_tv_)とする。
-          1. _sec_がpresentでないなら、_s_をSecFromTime(_tv_)とする。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))とする。
-          1. _v_をTimeClip(_date_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _h_ を ? ToNumber(_hour_) とする。
+          1. _min_ が存在する場合、_m_ を ? ToNumber(_min_) とする。
+          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _min_ が存在しない場合、_m_ を 𝔽(MinFromTime(_tv_)) とする。
+          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_)) とする。
+          1. _v_ を TimeClip(_date_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*4*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *4*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_min_がpresentでない場合、このmethodは_min_がvalue `getUTCMinutes()`でpresentであったかのようにbehaveします。_sec_がpresentでない場合、_sec_がvalue `getUTCSeconds()`でpresentであったかのようにbehaveします。_ms_がpresentでない場合、_ms_がvalue `getUTCMilliseconds()`でpresentであったかのようにbehaveします。</p>
+          <p>_min_ が存在しない場合、このメソッドは、_min_ が値 `getUTCMinutes()` で存在するかのように動作する。_sec_ が存在しない場合、_sec_ が値 `getUTCSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmilliseconds" type="built-in function">
         <h1>Date.prototype.setUTCMilliseconds ( _ms_ )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _ms_を ? ToNumber(_ms_) に設定する。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _time_をMakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)とする。
-          1. _v_をTimeClip(MakeDate(Day(_tv_), _time_))とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _ms_ を ? ToNumber(_ms_) に設定する。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_) とする。
+          1. _v_ を TimeClip(MakeDate(𝔽(Day(_tv_)), _time_)) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcminutes" type="built-in function">
         <h1>Date.prototype.setUTCMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _m_を ? ToNumber(_min_) とする。
-          1. _sec_がpresentなら、_s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _sec_がpresentでないなら、_s_をSecFromTime(_tv_)とする。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))とする。
-          1. _v_をTimeClip(_date_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _m_ を ? ToNumber(_min_) とする。
+          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_)) とする。
+          1. _v_ を TimeClip(_date_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*3*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_sec_がpresentでない場合、このmethodは_sec_がvalue `getUTCSeconds()`でpresentであったかのようにbehaveします。_ms_がpresentでない場合、_ms_が`getUTCMilliseconds()`によって返されるvalueでpresentであったかのようにbehaveします。</p>
+          <p>_sec_ が存在しない場合、このメソッドは、_sec_ が値 `getUTCSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が `getUTCMilliseconds()` によって返される値で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmonth" type="built-in function">
         <h1>Date.prototype.setUTCMonth ( _month_ [ , _date_ ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _m_を ? ToNumber(_month_) とする。
-          1. _date_がpresentなら、_dt_を ? ToNumber(_date_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _date_がpresentでないなら、_dt_をDateFromTime(_tv_)とする。
-          1. _newDate_をMakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))とする。
-          1. _v_をTimeClip(_newDate_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _m_ を ? ToNumber(_month_) とする。
+          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _date_ が存在しない場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _v_ を TimeClip(_newDate_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*2*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_date_がpresentでない場合、このmethodは_date_がvalue `getUTCDate()`でpresentであったかのようにbehaveします。</p>
+          <p>_date_ が存在しない場合、このメソッドは、_date_ が値 `getUTCDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcseconds" type="built-in function">
         <h1>Date.prototype.setUTCSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _s_を ? ToNumber(_sec_) とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. _ms_がpresentでないなら、_milli_をmsFromTime(_tv_)とする。
-          1. _date_をMakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))とする。
-          1. _v_をTimeClip(_date_)とする。
-          1. _dateObj_.[[DateValue]]を_v_に設定する。
-          1. _v_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _s_ を ? ToNumber(_sec_) とする。
+          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_)) とする。
+          1. _v_ を TimeClip(_date_) とする。
+          1. _dateObj_.[[DateValue]] を _v_ に設定する。
+          1. _v_ を返す。
         </emu-alg>
-        <p>このmethodの*"length"* propertyは*2*<sub>𝔽</sub>です。</p>
+        <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_ms_がpresentでない場合、このmethodは_ms_がvalue `getUTCMilliseconds()`でpresentであったかのようにbehaveします。</p>
+          <p>_ms_ が存在しない場合、このメソッドは、_ms_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
@@ -35792,42 +35775,42 @@ THH:mm:ss.sss
         <emu-clause id="sec-timestring" type="abstract operation">
           <h1>
             TimeString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: Number（ただし *NaN* ではない）,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _hour_をToZeroPaddedDecimalString(ℝ(HourFromTime(_tv_)), 2)とする。
-            1. _minute_をToZeroPaddedDecimalString(ℝ(MinFromTime(_tv_)), 2)とする。
-            1. _second_をToZeroPaddedDecimalString(ℝ(SecFromTime(_tv_)), 2)とする。
-            1. _hour_、*":"*、_minute_、*":"*、_second_、code unit 0x0020 (SPACE)、および*"GMT"*のstring-concatenationを返す。
+            1. _hour_ を ToZeroPaddedDecimalString(HourFromTime(_tv_), 2) とする。
+            1. _minute_ を ToZeroPaddedDecimalString(MinFromTime(_tv_), 2) とする。
+            1. _second_ を ToZeroPaddedDecimalString(SecFromTime(_tv_), 2) とする。
+            1. _hour_、*":"*、_minute_、*":"*、_second_、コード単位 0x0020 (SPACE)、および *"GMT"* を文字列連結した結果を返す。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-datestring" type="abstract operation">
           <h1>
             DateString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: Number（ただし *NaN* ではない）,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _weekday_を、WeekDay(_tv_)のNumberを持つ<emu-xref href="#sec-todatestring-day-names"></emu-xref>内のentryのNameとする。
-            1. _month_を、MonthFromTime(_tv_)のNumberを持つ<emu-xref href="#sec-todatestring-month-names"></emu-xref>内のentryのNameとする。
-            1. _day_をToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)とする。
-            1. _yv_をYearFromTime(_tv_)とする。
-            1. _yv_が*+0*<sub>𝔽</sub>または_yv_ > *+0*<sub>𝔽</sub>なら、_yearSign_をempty Stringとする；そうでなければ、_yearSign_を*"-"*とする。
-            1. _paddedYear_をToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)とする。
-            1. _weekday_、code unit 0x0020 (SPACE)、_month_、code unit 0x0020 (SPACE)、_day_、code unit 0x0020 (SPACE)、_yearSign_、および_paddedYear_のstring-concatenationを返す。
+            1. _weekday_ を、WeekDay Index = WeekDay(_tv_) である <emu-xref href="#sec-todatestring-day-names"></emu-xref> のエントリの Name とする。
+            1. _month_ を、Month Index = MonthFromTime(_tv_) である <emu-xref href="#sec-todatestring-month-names"></emu-xref> のエントリの Name とする。
+            1. _day_ を ToZeroPaddedDecimalString(DateFromTime(_tv_), 2) とする。
+            1. _yv_ を YearFromTime(_tv_) とする。
+            1. _yv_ ≥ 0 の場合、_yearSign_ を空の String とする。それ以外の場合、_yearSign_ を *"-"* とする。
+            1. _paddedYear_ を ToZeroPaddedDecimalString(abs(_yv_), 4) とする。
+            1. _weekday_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_yearSign_、および _paddedYear_ を文字列連結した結果を返す。
           </emu-alg>
-          <emu-table id="sec-todatestring-day-names" caption="Names of days of the week">
+          <emu-table id="sec-todatestring-day-names" caption="曜日の名前">
             <table>
               <thead>
                 <tr>
                   <th>
-                    Number
+                    WeekDay Index
                   </th>
                   <th>
                     Name
@@ -35836,7 +35819,7 @@ THH:mm:ss.sss
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Sun"*
@@ -35844,7 +35827,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Mon"*
@@ -35852,7 +35835,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Tue"*
@@ -35860,7 +35843,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Wed"*
@@ -35868,7 +35851,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"Thu"*
@@ -35876,7 +35859,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Fri"*
@@ -35884,7 +35867,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Sat"*
@@ -35892,12 +35875,12 @@ THH:mm:ss.sss
               </tr>
             </table>
           </emu-table>
-          <emu-table id="sec-todatestring-month-names" caption="Names of months of the year">
+          <emu-table id="sec-todatestring-month-names" caption="年の各月の名前">
             <table>
               <thead>
                 <tr>
                   <th>
-                    Number
+                    Month Index
                   </th>
                   <th>
                     Name
@@ -35906,7 +35889,7 @@ THH:mm:ss.sss
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Jan"*
@@ -35914,7 +35897,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Feb"*
@@ -35922,7 +35905,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Mar"*
@@ -35930,7 +35913,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Apr"*
@@ -35938,7 +35921,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"May"*
@@ -35946,7 +35929,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Jun"*
@@ -35954,7 +35937,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Jul"*
@@ -35962,7 +35945,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *7*<sub>𝔽</sub>
+                  7
                 </td>
                 <td>
                   *"Aug"*
@@ -35970,7 +35953,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *8*<sub>𝔽</sub>
+                  8
                 </td>
                 <td>
                   *"Sep"*
@@ -35978,7 +35961,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *9*<sub>𝔽</sub>
+                  9
                 </td>
                 <td>
                   *"Oct"*
@@ -35986,7 +35969,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *10*<sub>𝔽</sub>
+                  10
                 </td>
                 <td>
                   *"Nov"*
@@ -35994,7 +35977,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *11*<sub>𝔽</sub>
+                  11
                 </td>
                 <td>
                   *"Dec"*
@@ -36007,43 +35990,43 @@ THH:mm:ss.sss
         <emu-clause id="sec-timezoneestring" type="abstract operation">
           <h1>
             TimeZoneString (
-              _tv_: an integral Number,
-            ): a String
+              _tv_: 整数の Number,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
             1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
-            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* である場合、
+            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
               1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
             1. それ以外の場合、
               1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond)) とする。
-            1. _offset_ を 𝔽(truncate(_offsetNs_ / nsPerMillisecond)) とする。
-            1. _offset_ が *+0*<sub>𝔽</sub> であるか、または _offset_ > *+0*<sub>𝔽</sub> である場合、
+            1. _offset_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
+            1. _offset_ ≥ 0 の場合、
               1. _offsetSign_ を *"+"* とする。
               1. _absOffset_ を _offset_ とする。
             1. それ以外の場合、
               1. _offsetSign_ を *"-"* とする。
               1. _absOffset_ を -_offset_ とする。
-            1. _offsetMin_ を ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2) とする。
-            1. _offsetHour_ を ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2) とする。
-            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) の文字列連結のいずれかである、実装定義の String とする。
-            1. _offsetSign_、_offsetHour_、_offsetMin_、および _tzName_ の文字列連結を返す。
+            1. _offsetMin_ を ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2) とする。
+            1. _offsetHour_ を ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2) とする。
+            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) を文字列連結した結果のいずれかである、実装定義の文字列とする。
+            1. _offsetSign_、_offsetHour_、_offsetMin_、および _tzName_ を文字列連結した結果を返す。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-todatestring" type="abstract operation">
           <h1>
             ToDateString (
-              _tv_: an integral Number or *NaN*,
-            ): a String
+              _tv_: 整数の Number または *NaN*,
+            ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _tv_が*NaN*なら、*"Invalid Date"*を返す。
-            1. _localTime_をLocalTime(_tv_)とする。
-            1. DateString(_localTime_)、code unit 0x0020 (SPACE)、TimeString(_localTime_)、およびTimeZoneString(_tv_)のstring-concatenationを返す。
+            1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
+            1. _localTime_ を LocalTime(_tv_) とする。
+            1. DateString(_localTime_)、コード単位 0x0020 (SPACE)、TimeString(_localTime_)、および TimeZoneString(_tv_) を文字列連結した結果を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -36066,17 +36049,17 @@ THH:mm:ss.sss
         <p>このmethodは、*this* valueに対応するinstant in timeを表すString valueを返します。StringのformatはRFC 7231の<code>HTTP-date</code>に基づき、ECMAScript Datesによってsupportされるfull range of timesをsupportするようgeneralizedされています。</p>
         <p>これは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*"Invalid Date"*を返す。
-          1. _weekday_を、WeekDay(_tv_)のNumberを持つ<emu-xref href="#sec-todatestring-day-names"></emu-xref>内のentryのNameとする。
-          1. _month_を、MonthFromTime(_tv_)のNumberを持つ<emu-xref href="#sec-todatestring-month-names"></emu-xref>内のentryのNameとする。
-          1. _day_をToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)とする。
-          1. _yv_をYearFromTime(_tv_)とする。
-          1. _yv_が*+0*<sub>𝔽</sub>または_yv_ > *+0*<sub>𝔽</sub>なら、_yearSign_をempty Stringとする；そうでなければ、_yearSign_を*"-"*とする。
-          1. _paddedYear_をToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)とする。
-          1. _weekday_、*","*、code unit 0x0020 (SPACE)、_day_、code unit 0x0020 (SPACE)、_month_、code unit 0x0020 (SPACE)、_yearSign_、_paddedYear_、code unit 0x0020 (SPACE)、およびTimeString(_tv_)のstring-concatenationを返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
+          1. _weekday_ を、WeekDay Index = WeekDay(_tv_) である <emu-xref href="#sec-todatestring-day-names"></emu-xref> のエントリの Name とする。
+          1. _month_ を、Month Index = MonthFromTime(_tv_) である <emu-xref href="#sec-todatestring-month-names"></emu-xref> のエントリの Name とする。
+          1. _day_ を ToZeroPaddedDecimalString(DateFromTime(_tv_), 2) とする。
+          1. _yv_ を YearFromTime(_tv_) とする。
+          1. _yv_ ≥ 0 の場合、_yearSign_ を空の String とする。それ以外の場合、_yearSign_ を *"-"* とする。
+          1. _paddedYear_ を ToZeroPaddedDecimalString(abs(_yv_), 4) とする。
+          1. _weekday_、*","*、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_yearSign_、_paddedYear_、コード単位 0x0020 (SPACE)、および TimeString(_tv_) を文字列連結した結果を返す。
         </emu-alg>
       </emu-clause>
 
@@ -54626,36 +54609,36 @@ THH:mm:ss.sss
       <emu-annex id="sec-date.prototype.getyear" type="built-in function">
         <h1>Date.prototype.getYear ( )</h1>
         <emu-note>
-          <p>`getFullYear` methodは“year 2000 problem”をavoidするため、ほぼすべての目的でpreferredされる。</p>
+          <p>`getFullYear` メソッドは「2000年問題」を回避できるため、ほぼすべての用途で推奨される。</p>
         </emu-note>
-        <p>このmethodは呼び出されたとき、以下のstepsを実行する：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*NaN*を返す。
-          1. YearFromTime(LocalTime(_tv_)) - *1900*<sub>𝔽</sub>を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*NaN* を返す。
+          1. 𝔽(YearFromTime(LocalTime(_tv_))) - *1900*<sub>𝔽</sub> を返す。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-date.prototype.setyear" type="built-in function">
         <h1>Date.prototype.setYear ( _year_ )</h1>
         <emu-note>
-          <p>`setFullYear` methodは“year 2000 problem”をavoidするため、ほぼすべての目的でpreferredされる。</p>
+          <p>`setFullYear` メソッドは「2000年問題」を回避できるため、ほぼすべての用途で推奨される。</p>
         </emu-note>
-        <p>このmethodは呼び出されたとき、以下のstepsを実行する：</p>
+        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _time_を_dateObj_.[[DateValue]]とする。
-          1. _year_を ? ToNumber(_year_) とする。
-          1. _time_が*NaN*なら、_time_を*+0*<sub>𝔽</sub>に設定する；そうでなければ、_time_をLocalTime(_time_)に設定する。
-          1. _fullYear_をMakeFullYear(_year_)とする。
-          1. _day_をMakeDay(_fullYear_, MonthFromTime(_time_), DateFromTime(_time_))とする。
-          1. _date_をMakeDate(_day_, TimeWithinDay(_time_))とする。
-          1. _utcTimestamp_をTimeClip(UTC(_date_))とする。
-          1. _dateObj_.[[DateValue]]を_utcTimestamp_に設定する。
-          1. _utcTimestamp_を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _time_ を _dateObj_.[[DateValue]] とする。
+          1. _year_ を ? ToNumber(_year_) とする。
+          1. _time_ が *NaN* の場合、_time_ を *+0*<sub>𝔽</sub> に設定する。それ以外の場合、_time_ を LocalTime(_time_) に設定する。
+          1. _fullYear_ を MakeFullYear(_year_) とする。
+          1. _day_ を MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_))) とする。
+          1. _date_ を MakeDate(_day_, 𝔽(TimeWithinDay(_time_))) とする。
+          1. _utcTimestamp_ を TimeClip(UTC(_date_)) とする。
+          1. _dateObj_.[[DateValue]] を _utcTimestamp_ に設定する。
+          1. _utcTimestamp_ を返す。
         </emu-alg>
       </emu-annex>
 

@@ -34086,11 +34086,11 @@
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
         <emu-eqn id="eqn-SecondsPerMinute" aoid="SecondsPerMinute">SecondsPerMinute = 60</emu-eqn>
-        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = *1000*<sub>𝔽</sub></emu-eqn>
-        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = *60000*<sub>𝔽</sub> = msPerSecond × 𝔽(SecondsPerMinute)</emu-eqn>
-        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = *3600000*<sub>𝔽</sub> = msPerMinute × 𝔽(MinutesPerHour)</emu-eqn>
-        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = *86400000*<sub>𝔽</sub> = msPerHour × 𝔽(HoursPerDay)</emu-eqn>
-        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × ℝ(msPerSecond) = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = 1000</emu-eqn>
+        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
+        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
+        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
       </emu-clause>
@@ -34099,14 +34099,14 @@
         <h1>
           Day (
             _tv_: 一个有限时间值,
-          ): 一个整数 Number
+          ): 一个整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所在日的日编号。</dd>
+          <dd>它返回 _tv_ 所在日期的日编号。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(floor(ℝ(_tv_ / msPerDay)))。
+          1. 返回 floor(ℝ(_tv_) / msPerDay)。
         </emu-alg>
       </emu-clause>
 
@@ -34114,61 +34114,41 @@
         <h1>
           TimeWithinDay (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub>（包含）到 msPerDay（不包含）区间内的整数 Number
+          ): 一个处于从 0（含）到 msPerDay（不含）区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回从 _tv_ 所在日开始时起经过的毫秒数。</dd>
+          <dd>它返回自 _tv_ 所在日期开始以来的毫秒数。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(ℝ(_tv_) modulo ℝ(msPerDay))。
+          1. 返回 ℝ(_tv_) 模 msPerDay。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-daysinyear" type="abstract operation" oldids="eqn-DaysInYear,sec-year-number">
-        <h1>
-          DaysInYear (
-            _y_: 一个整数 Number,
-          ): *365*<sub>𝔽</sub> 或 *366*<sub>𝔽</sub>
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>它返回年份 _y_ 中的日数。闰年有 366 日；所有其他年份有 365 日。</dd>
-        </dl>
-        <emu-alg>
-          1. 令 _ry_ 为 ℝ(_y_)。
-          1. 如果 (_ry_ modulo 400) = 0，则返回 *366*<sub>𝔽</sub>。
-          1. 如果 (_ry_ modulo 100) = 0，则返回 *365*<sub>𝔽</sub>。
-          1. 如果 (_ry_ modulo 4) = 0，则返回 *366*<sub>𝔽</sub>。
-          1. 返回 *365*<sub>𝔽</sub>。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear">
+      <emu-clause id="sec-dayfromyear" type="abstract operation" oldids="eqn-DaysFromYear,sec-year-number">
         <h1>
           DayFromYear (
-            _y_: 一个整数 Number,
-          ): 一个整数 Number
+            _y_: 一个整数,
+          ): 一个整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它返回年份 _y_ 第一天的日编号。</dd>
         </dl>
         <emu-alg>
-          1. 令 _ry_ 为 ℝ(_y_)。
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注：在以下步骤中，_numberYears1_、_numberYears4_、_numberYears100_ 和 _numberYears400_ 分别表示纪元与年份 _y_ 开始时之间出现的可被 1、4、100 和 400 整除的年份数。如果 _y_ 早于纪元，则该数为负数。
-          1. 令 _numberYears1_ 为 (_ry_ - 1970)。
-          1. 令 _numberYears4_ 为 floor((_ry_ - 1969) / 4)。
-          1. 令 _numberYears100_ 为 floor((_ry_ - 1901) / 100)。
-          1. 令 _numberYears400_ 为 floor((_ry_ - 1601) / 400)。
-          1. 返回 𝔽(365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_)。
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注：在以下步骤中，_numberYears1_、_numberYears4_、_numberYears100_ 和 _numberYears400_ 分别表示在纪元与年份 _y_ 开始之间出现的可被 1、4、100 和 400 整除的年份数量。如果 _y_ 位于纪元之前，则该数量为负数。
+          1. 令 _numberYears1_ 为 (_y_ - 1970)。
+          1. 令 _numberYears4_ 为 floor((_y_ - 1969) / 4)。
+          1. 令 _numberYears100_ 为 floor((_y_ - 1901) / 100)。
+          1. 令 _numberYears400_ 为 floor((_y_ - 1601) / 400)。
+          1. 返回 365 × _numberYears1_ + _numberYears4_ - _numberYears100_ + _numberYears400_。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timefromyear" type="abstract operation" oldids="eqn-TimeFromYear">
         <h1>
           TimeFromYear (
-            _y_: 一个整数 Number,
+            _y_: 一个整数,
           ): 一个时间值
         </h1>
         <dl class="header">
@@ -34176,7 +34156,7 @@
           <dd>它返回年份 _y_ 开始时的时间值。</dd>
         </dl>
         <emu-alg>
-          1. 返回 msPerDay × DayFromYear(_y_)。
+          1. 返回 𝔽(msPerDay × DayFromYear(_y_))。
         </emu-alg>
       </emu-clause>
 
@@ -34184,14 +34164,14 @@
         <h1>
           YearFromTime (
             _tv_: 一个有限时间值,
-          ): 一个整数 Number
+          ): 一个整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它返回 _tv_ 所在的年份。</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] 返回满足 TimeFromYear(_y_) ≤ _tv_ 的最大整数 Number _y_（最接近 +∞）。
+          1. [declared="y"] 返回满足 TimeFromYear(_y_) ≤ _tv_ 的最大整数 _y_（最接近 +∞）。
         </emu-alg>
       </emu-clause>
 
@@ -34199,7 +34179,7 @@
         <h1>
           DayWithinYear (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *365*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 365 的闭区间内的整数
         </h1>
         <dl class="header">
         </dl>
@@ -34208,19 +34188,22 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear">
+      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
         <h1>
           InLeapYear (
             _tv_: 一个有限时间值,
-          ): *+0*<sub>𝔽</sub> 或 *1*<sub>𝔽</sub>
+          ): 0 或 1
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>如果 _tv_ 位于闰年内，则它返回 *1*<sub>𝔽</sub>；否则返回 *+0*<sub>𝔽</sub>。</dd>
+          <dd>如果 _tv_ 位于闰年中，则返回 1，否则返回 0。</dd>
         </dl>
         <emu-alg>
-          1. 如果 DaysInYear(YearFromTime(_tv_)) 是 *366*<sub>𝔽</sub>，则返回 *1*<sub>𝔽</sub>。
-          1. 返回 *+0*<sub>𝔽</sub>。
+          1. 令 _y_ 为 YearFromTime(_tv_)。
+          1. 如果（_y_ 模 400）= 0，则返回 1。
+          1. 如果（_y_ 模 100）= 0，则返回 0。
+          1. 如果（_y_ 模 4）= 0，则返回 1。
+          1. 返回 0。
         </emu-alg>
       </emu-clause>
 
@@ -34228,28 +34211,28 @@
         <h1>
           MonthFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *11*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 11 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回一个标识 _tv_ 所在月份的 Number。月份值 *+0*<sub>𝔽</sub> 指定一月；*1*<sub>𝔽</sub> 指定二月；*2*<sub>𝔽</sub> 指定三月；*3*<sub>𝔽</sub> 指定四月；*4*<sub>𝔽</sub> 指定五月；*5*<sub>𝔽</sub> 指定六月；*6*<sub>𝔽</sub> 指定七月；*7*<sub>𝔽</sub> 指定八月；*8*<sub>𝔽</sub> 指定九月；*9*<sub>𝔽</sub> 指定十月；*10*<sub>𝔽</sub> 指定十一月；而 *11*<sub>𝔽</sub> 指定十二月。请注意，<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = *+0*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
+          <dd>它返回一个标识 _tv_ 所在月份的整数。月份值 0 表示一月；1 表示二月；2 表示三月；3 表示四月；4 表示五月；5 表示六月；6 表示七月；7 表示八月；8 表示九月；9 表示十月；10 表示十一月；11 表示十二月。请注意，<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
         </dl>
         <emu-alg>
           1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
           1. 令 _dayWithinYear_ 为 DayWithinYear(_tv_)。
-          1. 如果 _dayWithinYear_ &lt; *31*<sub>𝔽</sub>，则返回 *+0*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *59*<sub>𝔽</sub> + _inLeapYear_，则返回 *1*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *90*<sub>𝔽</sub> + _inLeapYear_，则返回 *2*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *120*<sub>𝔽</sub> + _inLeapYear_，则返回 *3*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *151*<sub>𝔽</sub> + _inLeapYear_，则返回 *4*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *181*<sub>𝔽</sub> + _inLeapYear_，则返回 *5*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *212*<sub>𝔽</sub> + _inLeapYear_，则返回 *6*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *243*<sub>𝔽</sub> + _inLeapYear_，则返回 *7*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *273*<sub>𝔽</sub> + _inLeapYear_，则返回 *8*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *304*<sub>𝔽</sub> + _inLeapYear_，则返回 *9*<sub>𝔽</sub>。
-          1. 如果 _dayWithinYear_ &lt; *334*<sub>𝔽</sub> + _inLeapYear_，则返回 *10*<sub>𝔽</sub>。
-          1. 断言：_dayWithinYear_ &lt; *365*<sub>𝔽</sub> + _inLeapYear_。
-          1. 返回 *11*<sub>𝔽</sub>。
+          1. 如果 _dayWithinYear_ &lt; 31，则返回 0。
+          1. 如果 _dayWithinYear_ &lt; 59 + _inLeapYear_，则返回 1。
+          1. 如果 _dayWithinYear_ &lt; 90 + _inLeapYear_，则返回 2。
+          1. 如果 _dayWithinYear_ &lt; 120 + _inLeapYear_，则返回 3。
+          1. 如果 _dayWithinYear_ &lt; 151 + _inLeapYear_，则返回 4。
+          1. 如果 _dayWithinYear_ &lt; 181 + _inLeapYear_，则返回 5。
+          1. 如果 _dayWithinYear_ &lt; 212 + _inLeapYear_，则返回 6。
+          1. 如果 _dayWithinYear_ &lt; 243 + _inLeapYear_，则返回 7。
+          1. 如果 _dayWithinYear_ &lt; 273 + _inLeapYear_，则返回 8。
+          1. 如果 _dayWithinYear_ &lt; 304 + _inLeapYear_，则返回 9。
+          1. 如果 _dayWithinYear_ &lt; 334 + _inLeapYear_，则返回 10。
+          1. 断言：_dayWithinYear_ &lt; 365 + _inLeapYear_。
+          1. 返回 11。
         </emu-alg>
       </emu-clause>
 
@@ -34257,7 +34240,7 @@
         <h1>
           DateFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *1*<sub>𝔽</sub> 到 *31*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 1 到 31 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -34267,19 +34250,19 @@
           1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
           1. 令 _dayWithinYear_ 为 DayWithinYear(_tv_)。
           1. 令 _month_ 为 MonthFromTime(_tv_)。
-          1. 如果 _month_ 是 *+0*<sub>𝔽</sub>，则返回 _dayWithinYear_ + *1*<sub>𝔽</sub>。
-          1. 如果 _month_ 是 *1*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *30*<sub>𝔽</sub>。
-          1. 如果 _month_ 是 *2*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *58*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *3*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *89*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *4*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *119*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *5*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *150*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *6*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *180*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *7*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *211*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *8*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *242*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *9*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *272*<sub>𝔽</sub> - _inLeapYear_。
-          1. 如果 _month_ 是 *10*<sub>𝔽</sub>，则返回 _dayWithinYear_ - *303*<sub>𝔽</sub> - _inLeapYear_。
-          1. 断言：_month_ 是 *11*<sub>𝔽</sub>。
-          1. 返回 _dayWithinYear_ - *333*<sub>𝔽</sub> - _inLeapYear_。
+          1. 如果 _month_ = 0，则返回 _dayWithinYear_ + 1。
+          1. 如果 _month_ = 1，则返回 _dayWithinYear_ - 30。
+          1. 如果 _month_ = 2，则返回 _dayWithinYear_ - 58 - _inLeapYear_。
+          1. 如果 _month_ = 3，则返回 _dayWithinYear_ - 89 - _inLeapYear_。
+          1. 如果 _month_ = 4，则返回 _dayWithinYear_ - 119 - _inLeapYear_。
+          1. 如果 _month_ = 5，则返回 _dayWithinYear_ - 150 - _inLeapYear_。
+          1. 如果 _month_ = 6，则返回 _dayWithinYear_ - 180 - _inLeapYear_。
+          1. 如果 _month_ = 7，则返回 _dayWithinYear_ - 211 - _inLeapYear_。
+          1. 如果 _month_ = 8，则返回 _dayWithinYear_ - 242 - _inLeapYear_。
+          1. 如果 _month_ = 9，则返回 _dayWithinYear_ - 272 - _inLeapYear_。
+          1. 如果 _month_ = 10，则返回 _dayWithinYear_ - 303 - _inLeapYear_。
+          1. 断言：_month_ = 11。
+          1. 返回 _dayWithinYear_ - 333 - _inLeapYear_。
         </emu-alg>
       </emu-clause>
 
@@ -34287,14 +34270,14 @@
         <h1>
           WeekDay (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *6*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 6 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回一个标识 _tv_ 所在星期几的 Number。星期值 *+0*<sub>𝔽</sub> 指定星期日；*1*<sub>𝔽</sub> 指定星期一；*2*<sub>𝔽</sub> 指定星期二；*3*<sub>𝔽</sub> 指定星期三；*4*<sub>𝔽</sub> 指定星期四；*5*<sub>𝔽</sub> 指定星期五；而 *6*<sub>𝔽</sub> 指定星期六。请注意，<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = *4*<sub>𝔽</sub></emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
+          <dd>它返回一个标识 _tv_ 所在星期几的整数。星期值 0 表示星期日；1 表示星期一；2 表示星期二；3 表示星期三；4 表示星期四；5 表示星期五；6 表示星期六。请注意，<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = 4</emu-eqn>，对应于 1970 年 1 月 1 日星期四。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(ℝ(Day(_tv_) + *4*<sub>𝔽</sub>) modulo 7)。
+          1. 返回 (Day(_tv_) + 4) 模 7。
         </emu-alg>
       </emu-clause>
 
@@ -34302,14 +34285,14 @@
         <h1>
           HourFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *23*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 23 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它返回 _tv_ 所在日中的小时。</dd>
+          <dd>它返回 _tv_ 所在日期中的小时。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(floor(ℝ(_tv_ / msPerHour)) modulo HoursPerDay)。
+          1. 返回 floor(ℝ(_tv_) / msPerHour) 模 HoursPerDay。
         </emu-alg>
       </emu-clause>
 
@@ -34317,14 +34300,14 @@
         <h1>
           MinFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *59*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 59 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它返回 _tv_ 所在小时中的分钟。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(floor(ℝ(_tv_ / msPerMinute)) modulo MinutesPerHour)。
+          1. 返回 floor(ℝ(_tv_) / msPerMinute) 模 MinutesPerHour。
         </emu-alg>
       </emu-clause>
 
@@ -34332,29 +34315,29 @@
         <h1>
           SecFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *59*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 59 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它返回 _tv_ 所在分钟中的秒。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(floor(ℝ(_tv_ / msPerSecond)) modulo SecondsPerMinute)。
+          1. 返回 floor(ℝ(_tv_) / msPerSecond) 模 SecondsPerMinute。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-msfromtime" type="abstract operation" oldids="eqn-msFromTime">
+      <emu-clause id="sec-millisecfromtime" type="abstract operation" oldids="sec-msfromtime,eqn-msFromTime">
         <h1>
-          msFromTime (
+          MillisecFromTime (
             _tv_: 一个有限时间值,
-          ): 一个位于从 *+0*<sub>𝔽</sub> 到 *999*<sub>𝔽</sub> 的闭区间内的整数 Number
+          ): 一个处于从 0 到 999 的闭区间内的整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它返回 _tv_ 所在秒中的毫秒。</dd>
         </dl>
         <emu-alg>
-          1. 返回 𝔽(ℝ(_tv_) modulo ℝ(msPerSecond))。
+          1. 返回 ℝ(_tv_) 模 msPerSecond。
         </emu-alg>
       </emu-clause>
 
@@ -34598,42 +34581,42 @@
           <dt>description</dt>
           <dd>
             它将 _t_ 从本地时间转换为 UTC 时间值。
-            应使用在 _t_ 时生效的标准时间和夏令时本地政治规则，按照本节规定的方式确定结果。
+            应使用在 _t_ 时有效的有关标准时间和夏令时的本地政治规则，按照本节规定的方式确定结果。
           </dd>
         </dl>
         <emu-alg>
           1. 如果 _t_ 不是有限值，则返回 *NaN*。
           1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
+          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 为 *true*，则
             1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
           1. 否则，
-            1. 令 _possibleInstants_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_t_)), ℝ(MonthFromTime(_t_)) + 1, ℝ(DateFromTime(_t_)), ℝ(HourFromTime(_t_)), ℝ(MinFromTime(_t_)), ℝ(SecFromTime(_t_)), ℝ(msFromTime(_t_)), 0, 0)。
-            1. 注：以下步骤确保当 _t_ 表示在负时区转换处重复多次的本地时间（例如夏令时结束，或由于时区规则发生变化而减小时区偏移），或者表示在正时区转换处被跳过的本地时间（例如夏令时开始，或由于时区规则发生变化而增大时区偏移）时，使用转换前的时区偏移解释 _t_。
-            1. 如果 _possibleInstants_ 不为空，那么
+            1. 令 _possibleInstants_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_t_), MonthFromTime(_t_) + 1, DateFromTime(_t_), HourFromTime(_t_), MinFromTime(_t_), SecFromTime(_t_), MillisecFromTime(_t_), 0, 0)。
+            1. 注：以下步骤确保，当 _t_ 表示在负时区转换时多次重复的本地时间（例如夏令时结束时，或因时区规则更改而减小时区偏移时），或者表示在正时区转换时被跳过的本地时间（例如夏令时开始时，或因时区规则更改而增大时区偏移时），使用转换前的时区偏移来解释 _t_。
+            1. 如果 _possibleInstants_ 非空，则
               1. 令 _disambiguatedInstant_ 为 _possibleInstants_[0]。
             1. 否则，
-              1. 注：_t_ 表示在正时区转换处被跳过的本地时间（例如由于夏令时开始或时区规则发生变化而增大 UTC 偏移）。
-              1. [declared="tBefore"] 令 _possibleInstantsBefore_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, ℝ(YearFromTime(_tBefore_)), ℝ(MonthFromTime(_tBefore_)) + 1, ℝ(DateFromTime(_tBefore_)), ℝ(HourFromTime(_tBefore_)), ℝ(MinFromTime(_tBefore_)), ℝ(SecFromTime(_tBefore_)), ℝ(msFromTime(_tBefore_)), 0, 0)，其中 _tBefore_ 是使 _possibleInstantsBefore_ 不为空的最大整数 Number &lt; _t_（即 _tBefore_ 表示转换前的最后一个本地时间）。
+              1. 注：_t_ 表示在正时区转换时被跳过的本地时间（例如由于夏令时开始或时区规则更改增大了 UTC 偏移）。
+              1. [declared="tBefore"] 令 _possibleInstantsBefore_ 为 GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_tBefore_), MonthFromTime(_tBefore_) + 1, DateFromTime(_tBefore_), HourFromTime(_tBefore_), MinFromTime(_tBefore_), SecFromTime(_tBefore_), MillisecFromTime(_tBefore_), 0, 0)，其中 _tBefore_ 是使 _possibleInstantsBefore_ 非空的最大整数 Number &lt; _t_（即，_tBefore_ 表示转换前的最后一个本地时间）。
               1. 令 _disambiguatedInstant_ 为 _possibleInstantsBefore_ 的最后一个元素。
             1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_)。
           1. 令 _offsetMs_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
           1. 返回 _t_ - 𝔽(_offsetMs_)。
         </emu-alg>
         <p>
-          输入 _t_ 名义上是一个时间值，但可以是任何 Number 值。
-          该算法不得将 _t_ 限制在时间值范围内，从而无论本地 UTC 偏移为何，都可以支持与时间值范围边界相对应的输入。
+          输入 _t_ 名义上是一个时间值，但也可以是任意 Number 值。
+          该算法不得将 _t_ 限制在时间值范围内，以便无论本地 UTC 偏移为何，都能支持与时间值范围边界相对应的输入。
           例如，最大时间值为 8.64 × 10<sup>15</sup>，对应于 *"+275760-09-13T00:00:00Z"*。
-          在某个环境中，如果该时刻的本地时区偏移比 UTC 提前 1 小时，则它由更大的输入 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> 表示，对应于 *"+275760-09-13T01:00:00+01:00"*。
+          在某个环境中，如果该时刻的本地时区偏移比 UTC 快 1 小时，则它由更大的输入 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> 表示，对应于 *"+275760-09-13T01:00:00+01:00"*。
         </p>
-        <p>如果实现中没有本地时间 _t_ 的政治规则，则结果为 _t_，因为 SystemTimeZoneIdentifier 返回 *"UTC"*，而 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
+        <p>如果实现中无法获得本地时间 _t_ 的政治规则，则结果为 _t_，因为 SystemTimeZoneIdentifier 返回 *"UTC"*，而 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
         <emu-note>
-          <p>时区感知实现必须使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 的时区信息（并建议所有其他实现也这样做）。</p>
+          <p>对于感知时区的实现，要求使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 中的时区信息（对于所有其他实现也建议如此）。</p>
           <p>
-            America/New_York 的 2017 年 11 月 5 日凌晨 1:30 重复出现了两次（时钟后拨），但必须将其解释为 UTC-04 的凌晨 1:30，而不是 UTC-05 的凌晨 1:30。
+            America/New_York 中 2017 年 11 月 5 日凌晨 1:30 重复了两次（时钟向后拨），但必须将其解释为 UTC-04 的凌晨 1:30，而不是 UTC-05 的凌晨 1:30。
             在 UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) 中，_offsetMs_ 的值为 <emu-eqn>-4 × msPerHour</emu-eqn>。
           </p>
           <p>
-            America/New_York 的 2017 年 3 月 12 日凌晨 2:30 并不存在，但必须将其解释为 UTC-05 的凌晨 2:30（等同于 UTC-04 的凌晨 3:30）。
+            America/New_York 中 2017 年 3 月 12 日凌晨 2:30 不存在，但必须将其解释为 UTC-05 的凌晨 2:30（等同于 UTC-04 的凌晨 3:30）。
             在 UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) 中，_offsetMs_ 的值为 <emu-eqn>-5 × msPerHour</emu-eqn>。
           </p>
         </emu-note>
@@ -34657,14 +34640,14 @@
         </dl>
         <emu-alg>
           1. 如果 _hour_ 不是有限值、_min_ 不是有限值、_sec_ 不是有限值或 _ms_ 不是有限值，则返回 *NaN*。
-          1. 令 _h_ 为 𝔽(! ToIntegerOrInfinity(_hour_))。
-          1. 令 _m_ 为 𝔽(! ToIntegerOrInfinity(_min_))。
-          1. 令 _s_ 为 𝔽(! ToIntegerOrInfinity(_sec_))。
-          1. 令 _milli_ 为 𝔽(! ToIntegerOrInfinity(_ms_))。
-          1. 返回 ((_h_ × msPerHour + _m_ × msPerMinute) + _s_ × msPerSecond) + _milli_。
+          1. 令 _h_ 为 ! ToIntegerOrInfinity(_hour_)。
+          1. 令 _m_ 为 ! ToIntegerOrInfinity(_min_)。
+          1. 令 _s_ 为 ! ToIntegerOrInfinity(_sec_)。
+          1. 令 _milli_ 为 ! ToIntegerOrInfinity(_ms_)。
+          1. 返回 ((𝔽(_h_) × 𝔽(msPerHour) + 𝔽(_m_) × 𝔽(msPerMinute)) + 𝔽(_s_) × 𝔽(msPerSecond)) + 𝔽(_milli_)。
         </emu-alg>
         <emu-note>
-          <p>MakeTime 中的算术是浮点算术，它不满足结合律，因此必须按正确顺序执行这些运算。</p>
+          <p>MakeTime 中的算术是浮点算术，它不满足结合律，因此必须按正确的顺序执行运算。</p>
         </emu-note>
       </emu-clause>
 
@@ -34678,18 +34661,18 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它计算日数。</dd>
+          <dd>它计算天数。</dd>
         </dl>
         <emu-alg>
           1. 如果 _year_ 不是有限值、_month_ 不是有限值或 _date_ 不是有限值，则返回 *NaN*。
-          1. 令 _y_ 为 𝔽(! ToIntegerOrInfinity(_year_))。
-          1. 令 _m_ 为 𝔽(! ToIntegerOrInfinity(_month_))。
-          1. 令 _dt_ 为 𝔽(! ToIntegerOrInfinity(_date_))。
-          1. 令 _ym_ 为 _y_ + 𝔽(floor(ℝ(_m_) / 12))。
+          1. 令 _y_ 为 ! ToIntegerOrInfinity(_year_)。
+          1. 令 _m_ 为 ! ToIntegerOrInfinity(_month_)。
+          1. 令 _dt_ 为 ! ToIntegerOrInfinity(_date_)。
+          1. 令 _ym_ 为 𝔽(_y_) + 𝔽(floor(_m_ / 12))。
           1. 如果 _ym_ 不是有限值，则返回 *NaN*。
-          1. 令 _mn_ 为 𝔽(ℝ(_m_) modulo 12)。
-          1. 找到一个有限时间值 _tv_，使 YearFromTime(_tv_) 是 _ym_、MonthFromTime(_tv_) 是 _mn_，并且 DateFromTime(_tv_) 是 *1*<sub>𝔽</sub>；但如果无法做到这一点（因为某个参数超出范围），则返回 *NaN*。
-          1. 返回 Day(_tv_) + _dt_ - *1*<sub>𝔽</sub>。
+          1. 令 _mn_ 为 _m_ 模 12。
+          1. 找到一个有限时间值 _tv_，使得 YearFromTime(_tv_) = ℝ(_ym_)、MonthFromTime(_tv_) = _mn_ 且 DateFromTime(_tv_) = 1；但如果这不可能实现（因为某个参数超出范围），则返回 *NaN*。
+          1. 返回 𝔽(Day(_tv_)) + 𝔽(_dt_) - *1*<sub>𝔽</sub>。
         </emu-alg>
       </emu-clause>
 
@@ -34706,7 +34689,7 @@
         </dl>
         <emu-alg>
           1. 如果 _day_ 不是有限值或 _time_ 不是有限值，则返回 *NaN*。
-          1. 令 _tv_ 为 _day_ × msPerDay + _time_。
+          1. 令 _tv_ 为 _day_ × 𝔽(msPerDay) + _time_。
           1. 如果 _tv_ 不是有限值，则返回 *NaN*。
           1. 返回 _tv_。
         </emu-alg>
@@ -35162,105 +35145,105 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getdate" type="built-in function">
         <h1>Date.prototype.getDate ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 DateFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(DateFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getday" type="built-in function">
         <h1>Date.prototype.getDay ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 WeekDay(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(WeekDay(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getfullyear" type="built-in function">
         <h1>Date.prototype.getFullYear ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 YearFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(YearFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gethours" type="built-in function">
         <h1>Date.prototype.getHours ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 HourFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(HourFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmilliseconds" type="built-in function">
         <h1>Date.prototype.getMilliseconds ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 msFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MillisecFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getminutes" type="built-in function">
         <h1>Date.prototype.getMinutes ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 MinFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MinFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmonth" type="built-in function">
         <h1>Date.prototype.getMonth ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 MonthFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MonthFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getseconds" type="built-in function">
         <h1>Date.prototype.getSeconds ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 SecFromTime(LocalTime(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(SecFromTime(LocalTime(_tv_)))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettime" type="built-in function">
         <h1>Date.prototype.getTime ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 返回 _dateObj_.[[DateValue]]。
         </emu-alg>
@@ -35268,123 +35251,123 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.gettimezoneoffset" type="built-in function">
         <h1>Date.prototype.getTimezoneOffset ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 (_tv_ - LocalTime(_tv_)) / msPerMinute。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 (_tv_ - LocalTime(_tv_)) / 𝔽(msPerMinute)。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcdate" type="built-in function">
         <h1>Date.prototype.getUTCDate ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 DateFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(DateFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcday" type="built-in function">
         <h1>Date.prototype.getUTCDay ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 WeekDay(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(WeekDay(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcfullyear" type="built-in function">
         <h1>Date.prototype.getUTCFullYear ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 YearFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(YearFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutchours" type="built-in function">
         <h1>Date.prototype.getUTCHours ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 HourFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(HourFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmilliseconds" type="built-in function">
         <h1>Date.prototype.getUTCMilliseconds ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 msFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MillisecFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcminutes" type="built-in function">
         <h1>Date.prototype.getUTCMinutes ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 MinFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MinFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmonth" type="built-in function">
         <h1>Date.prototype.getUTCMonth ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 MonthFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(MonthFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcseconds" type="built-in function">
         <h1>Date.prototype.getUTCSeconds ( )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 SecFromTime(_tv_)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(SecFromTime(_tv_))。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setdate" type="built-in function">
         <h1>Date.prototype.setDate ( _date_ )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _dt_ 为 ? ToNumber(_date_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _u_ 为 TimeClip(UTC(_newDate_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
@@ -35393,65 +35376,65 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setfullyear" type="built-in function">
         <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _y_ 为 ? ToNumber(_year_)。
-          1. 如果 _tv_ 是 *NaN*，则将 _tv_ 设置为 *+0*<sub>𝔽</sub>；否则将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 如果 _month_ 存在，则令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 MonthFromTime(_tv_)。
-          1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 DateFromTime(_tv_)。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则将 _tv_ 设置为 *+0*<sub>𝔽</sub>；否则将 _tv_ 设置为 LocalTime(_tv_)。
+          1. 如果 _month_ 存在，则令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 𝔽(MonthFromTime(_tv_))。
+          1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 𝔽(DateFromTime(_tv_))。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _u_ 为 TimeClip(UTC(_newDate_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *3*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *3*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _month_ 不存在，此方法表现得仿佛 _month_ 存在且其值为 `getMonth()`。如果 _date_ 不存在，它表现得仿佛 _date_ 存在且其值为 `getDate()`。</p>
+          <p>如果 _month_ 不存在，则此方法的行为如同 _month_ 存在且其值为 `getMonth()`。如果 _date_ 不存在，则其行为如同 _date_ 存在且其值为 `getDate()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.sethours" type="built-in function">
         <h1>Date.prototype.setHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _h_ 为 ? ToNumber(_hour_)。
           1. 如果 _min_ 存在，则令 _m_ 为 ? ToNumber(_min_)。
           1. 如果 _sec_ 存在，则令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 如果 _min_ 不存在，则令 _m_ 为 MinFromTime(_tv_)。
-          1. 如果 _sec_ 不存在，则令 _s_ 为 SecFromTime(_tv_)。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))。
+          1. 如果 _min_ 不存在，则令 _m_ 为 𝔽(MinFromTime(_tv_))。
+          1. 如果 _sec_ 不存在，则令 _s_ 为 𝔽(SecFromTime(_tv_))。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_))。
           1. 令 _u_ 为 TimeClip(UTC(_date_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *4*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *4*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _min_ 不存在，此方法表现得仿佛 _min_ 存在且其值为 `getMinutes()`。如果 _sec_ 不存在，它表现得仿佛 _sec_ 存在且其值为 `getSeconds()`。如果 _ms_ 不存在，它表现得仿佛 _ms_ 存在且其值为 `getMilliseconds()`。</p>
+          <p>如果 _min_ 不存在，则此方法的行为如同 _min_ 存在且其值为 `getMinutes()`。如果 _sec_ 不存在，则其行为如同 _sec_ 存在且其值为 `getSeconds()`。如果 _ms_ 不存在，则其行为如同 _ms_ 存在且其值为 `getMilliseconds()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmilliseconds" type="built-in function">
         <h1>Date.prototype.setMilliseconds ( _ms_ )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 将 _ms_ 设置为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 令 _time_ 为 MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)。
-          1. 令 _u_ 为 TimeClip(UTC(MakeDate(Day(_tv_), _time_)))。
+          1. 令 _time_ 为 MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_)。
+          1. 令 _u_ 为 TimeClip(UTC(MakeDate(𝔽(Day(_tv_)), _time_)))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
@@ -35459,80 +35442,80 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setminutes" type="built-in function">
         <h1>Date.prototype.setMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _m_ 为 ? ToNumber(_min_)。
           1. 如果 _sec_ 存在，则令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 如果 _sec_ 不存在，则令 _s_ 为 SecFromTime(_tv_)。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))。
+          1. 如果 _sec_ 不存在，则令 _s_ 为 𝔽(SecFromTime(_tv_))。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_))。
           1. 令 _u_ 为 TimeClip(UTC(_date_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *3*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *3*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _sec_ 不存在，此方法表现得仿佛 _sec_ 存在且其值为 `getSeconds()`。如果 _ms_ 不存在，它表现得仿佛 _ms_ 存在且其值为 `getMilliseconds()`。</p>
+          <p>如果 _sec_ 不存在，则此方法的行为如同 _sec_ 存在且其值为 `getSeconds()`。如果 _ms_ 不存在，则其行为如同 _ms_ 存在且其值为 `getMilliseconds()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmonth" type="built-in function">
         <h1>Date.prototype.setMonth ( _month_ [ , _date_ ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _m_ 为 ? ToNumber(_month_)。
           1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 如果 _date_ 不存在，则令 _dt_ 为 DateFromTime(_tv_)。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))。
+          1. 如果 _date_ 不存在，则令 _dt_ 为 𝔽(DateFromTime(_tv_))。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _u_ 为 TimeClip(UTC(_newDate_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *2*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _date_ 不存在，此方法表现得仿佛 _date_ 存在且其值为 `getDate()`。</p>
+          <p>如果 _date_ 不存在，则此方法的行为如同 _date_ 存在且其值为 `getDate()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setseconds" type="built-in function">
         <h1>Date.prototype.setSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
           1. 将 _tv_ 设置为 LocalTime(_tv_)。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_))。
           1. 令 _u_ 为 TimeClip(UTC(_date_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _u_。
           1. 返回 _u_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *2*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _ms_ 不存在，此方法表现得仿佛 _ms_ 存在且其值为 `getMilliseconds()`。</p>
+          <p>如果 _ms_ 不存在，则此方法的行为如同 _ms_ 存在且其值为 `getMilliseconds()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.settime" type="built-in function">
         <h1>Date.prototype.setTime ( _time_ )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _t_ 为 ? ToNumber(_time_)。
           1. 令 _v_ 为 TimeClip(_t_)。
@@ -35543,14 +35526,14 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcdate" type="built-in function">
         <h1>Date.prototype.setUTCDate ( _date_ )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _dt_ 为 ? ToNumber(_date_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(YearFromTime(_tv_), MonthFromTime(_tv_), _dt_), TimeWithinDay(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _v_ 为 TimeClip(_newDate_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
@@ -35559,63 +35542,63 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcfullyear" type="built-in function">
         <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则将 _tv_ 设置为 *+0*<sub>𝔽</sub>。
+          1. 如果 _tv_ 为 *NaN*，则将 _tv_ 设置为 *+0*<sub>𝔽</sub>。
           1. 令 _y_ 为 ? ToNumber(_year_)。
-          1. 如果 _month_ 存在，则令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 MonthFromTime(_tv_)。
-          1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 DateFromTime(_tv_)。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), TimeWithinDay(_tv_))。
+          1. 如果 _month_ 存在，则令 _m_ 为 ? ToNumber(_month_)；否则令 _m_ 为 𝔽(MonthFromTime(_tv_))。
+          1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)；否则令 _dt_ 为 𝔽(DateFromTime(_tv_))。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _v_ 为 TimeClip(_newDate_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *3*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *3*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _month_ 不存在，此方法表现得仿佛 _month_ 存在且其值为 `getUTCMonth()`。如果 _date_ 不存在，它表现得仿佛 _date_ 存在且其值为 `getUTCDate()`。</p>
+          <p>如果 _month_ 不存在，则此方法的行为如同 _month_ 存在且其值为 `getUTCMonth()`。如果 _date_ 不存在，则其行为如同 _date_ 存在且其值为 `getUTCDate()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutchours" type="built-in function">
         <h1>Date.prototype.setUTCHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _h_ 为 ? ToNumber(_hour_)。
           1. 如果 _min_ 存在，则令 _m_ 为 ? ToNumber(_min_)。
           1. 如果 _sec_ 存在，则令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 如果 _min_ 不存在，则令 _m_ 为 MinFromTime(_tv_)。
-          1. 如果 _sec_ 不存在，则令 _s_ 为 SecFromTime(_tv_)。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(_h_, _m_, _s_, _milli_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 如果 _min_ 不存在，则令 _m_ 为 𝔽(MinFromTime(_tv_))。
+          1. 如果 _sec_ 不存在，则令 _s_ 为 𝔽(SecFromTime(_tv_))。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_))。
           1. 令 _v_ 为 TimeClip(_date_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *4*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *4*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _min_ 不存在，此方法表现得仿佛 _min_ 存在且其值为 `getUTCMinutes()`。如果 _sec_ 不存在，它表现得仿佛 _sec_ 存在且其值为 `getUTCSeconds()`。如果 _ms_ 不存在，它表现得仿佛 _ms_ 存在且其值为 `getUTCMilliseconds()`。</p>
+          <p>如果 _min_ 不存在，则此方法的行为如同 _min_ 存在且其值为 `getUTCMinutes()`。如果 _sec_ 不存在，则其行为如同 _sec_ 存在且其值为 `getUTCSeconds()`。如果 _ms_ 不存在，则其行为如同 _ms_ 存在且其值为 `getUTCMilliseconds()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmilliseconds" type="built-in function">
         <h1>Date.prototype.setUTCMilliseconds ( _ms_ )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 将 _ms_ 设置为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 令 _time_ 为 MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), SecFromTime(_tv_), _ms_)。
-          1. 令 _v_ 为 TimeClip(MakeDate(Day(_tv_), _time_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 令 _time_ 为 MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_)。
+          1. 令 _v_ 为 TimeClip(MakeDate(𝔽(Day(_tv_)), _time_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
@@ -35623,69 +35606,69 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.setutcminutes" type="built-in function">
         <h1>Date.prototype.setUTCMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _m_ 为 ? ToNumber(_min_)。
           1. 如果 _sec_ 存在，则令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 如果 _sec_ 不存在，则令 _s_ 为 SecFromTime(_tv_)。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), _m_, _s_, _milli_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 如果 _sec_ 不存在，则令 _s_ 为 𝔽(SecFromTime(_tv_))。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_))。
           1. 令 _v_ 为 TimeClip(_date_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *3*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *3*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _sec_ 不存在，此方法表现得仿佛 _sec_ 存在且其值为 `getUTCSeconds()`。如果 _ms_ 不存在，它表现得仿佛 _ms_ 存在且其值为 `getUTCMilliseconds()` 返回的值。</p>
+          <p>如果 _sec_ 不存在，则此方法的行为如同 _sec_ 存在且其值为 `getUTCSeconds()`。如果 _ms_ 不存在，则其行为如同 _ms_ 存在且其值为 `getUTCMilliseconds()` 的返回值。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmonth" type="built-in function">
         <h1>Date.prototype.setUTCMonth ( _month_ [ , _date_ ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _m_ 为 ? ToNumber(_month_)。
           1. 如果 _date_ 存在，则令 _dt_ 为 ? ToNumber(_date_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 如果 _date_ 不存在，则令 _dt_ 为 DateFromTime(_tv_)。
-          1. 令 _newDate_ 为 MakeDate(MakeDay(YearFromTime(_tv_), _m_, _dt_), TimeWithinDay(_tv_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 如果 _date_ 不存在，则令 _dt_ 为 𝔽(DateFromTime(_tv_))。
+          1. 令 _newDate_ 为 MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_)))。
           1. 令 _v_ 为 TimeClip(_newDate_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *2*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _date_ 不存在，此方法表现得仿佛 _date_ 存在且其值为 `getUTCDate()`。</p>
+          <p>如果 _date_ 不存在，则此方法的行为如同 _date_ 存在且其值为 `getUTCDate()`。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcseconds" type="built-in function">
         <h1>Date.prototype.setUTCSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
           1. 令 _s_ 为 ? ToNumber(_sec_)。
           1. 如果 _ms_ 存在，则令 _milli_ 为 ? ToNumber(_ms_)。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 如果 _ms_ 不存在，则令 _milli_ 为 msFromTime(_tv_)。
-          1. 令 _date_ 为 MakeDate(Day(_tv_), MakeTime(HourFromTime(_tv_), MinFromTime(_tv_), _s_, _milli_))。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 如果 _ms_ 不存在，则令 _milli_ 为 𝔽(MillisecFromTime(_tv_))。
+          1. 令 _date_ 为 MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_))。
           1. 令 _v_ 为 TimeClip(_date_)。
           1. 将 _dateObj_.[[DateValue]] 设置为 _v_。
           1. 返回 _v_。
         </emu-alg>
-        <p>此方法的 *"length"* 属性是 *2*<sub>𝔽</sub>。</p>
+        <p>此方法的 *"length"* 属性为 *2*<sub>𝔽</sub>。</p>
         <emu-note>
-          <p>如果 _ms_ 不存在，此方法表现得仿佛 _ms_ 存在且其值为 `getUTCMilliseconds()`。</p>
+          <p>如果 _ms_ 不存在，则此方法的行为如同 _ms_ 存在且其值为 `getUTCMilliseconds()`。</p>
         </emu-note>
       </emu-clause>
 
@@ -35774,51 +35757,51 @@ THH:mm:ss.sss
         <emu-clause id="sec-timestring" type="abstract operation">
           <h1>
             TimeString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: 一个 Number，但不是 *NaN*,
+            ): 一个 String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _hour_ 为 ToZeroPaddedDecimalString(ℝ(HourFromTime(_tv_)), 2)。
-            1. 令 _minute_ 为 ToZeroPaddedDecimalString(ℝ(MinFromTime(_tv_)), 2)。
-            1. 令 _second_ 为 ToZeroPaddedDecimalString(ℝ(SecFromTime(_tv_)), 2)。
-            1. 返回 _hour_、*":"*、_minute_、*":"*、_second_、码元 0x0020（SPACE）和 *"GMT"* 的字符串连接。
+            1. 令 _hour_ 为 ToZeroPaddedDecimalString(HourFromTime(_tv_), 2)。
+            1. 令 _minute_ 为 ToZeroPaddedDecimalString(MinFromTime(_tv_), 2)。
+            1. 令 _second_ 为 ToZeroPaddedDecimalString(SecFromTime(_tv_), 2)。
+            1. 返回 _hour_、*":"*、_minute_、*":"*、_second_、代码单元 0x0020 (SPACE) 和 *"GMT"* 的字符串拼接结果。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-datestring" type="abstract operation">
           <h1>
             DateString (
-              _tv_: a Number, but not *NaN*,
-            ): a String
+              _tv_: 一个 Number，但不是 *NaN*,
+            ): 一个 String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _weekday_ 为 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 中 Number 为 WeekDay(_tv_) 的条目的 Name。
-            1. 令 _month_ 为 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 中 Number 为 MonthFromTime(_tv_) 的条目的 Name。
-            1. 令 _day_ 为 ToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)。
+            1. 令 _weekday_ 为 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 中 WeekDay Index = WeekDay(_tv_) 的条目的 Name。
+            1. 令 _month_ 为 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 中 Month Index = MonthFromTime(_tv_) 的条目的 Name。
+            1. 令 _day_ 为 ToZeroPaddedDecimalString(DateFromTime(_tv_), 2)。
             1. 令 _yv_ 为 YearFromTime(_tv_)。
-            1. 如果 _yv_ 是 *+0*<sub>𝔽</sub> 或 _yv_ > *+0*<sub>𝔽</sub>，则令 _yearSign_ 为空 String；否则令 _yearSign_ 为 *"-"*。
-            1. 令 _paddedYear_ 为 ToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)。
-            1. 返回 _weekday_、码元 0x0020（SPACE）、_month_、码元 0x0020（SPACE）、_day_、码元 0x0020（SPACE）、_yearSign_ 和 _paddedYear_ 的字符串连接。
+            1. 如果 _yv_ ≥ 0，则令 _yearSign_ 为空 String；否则令 _yearSign_ 为 *"-"*。
+            1. 令 _paddedYear_ 为 ToZeroPaddedDecimalString(abs(_yv_), 4)。
+            1. 返回 _weekday_、代码单元 0x0020 (SPACE)、_month_、代码单元 0x0020 (SPACE)、_day_、代码单元 0x0020 (SPACE)、_yearSign_ 和 _paddedYear_ 的字符串拼接结果。
           </emu-alg>
-          <emu-table id="sec-todatestring-day-names" caption="星期中各天的名称">
+          <emu-table id="sec-todatestring-day-names" caption="星期名称">
             <table>
               <thead>
                 <tr>
                   <th>
-                    Number
+                    WeekDay 索引
                   </th>
                   <th>
-                    Name
+                    名称
                   </th>
                 </tr>
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Sun"*
@@ -35826,7 +35809,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Mon"*
@@ -35834,7 +35817,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Tue"*
@@ -35842,7 +35825,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Wed"*
@@ -35850,7 +35833,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"Thu"*
@@ -35858,7 +35841,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Fri"*
@@ -35866,7 +35849,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Sat"*
@@ -35879,16 +35862,16 @@ THH:mm:ss.sss
               <thead>
                 <tr>
                   <th>
-                    Number
+                    月份索引
                   </th>
                   <th>
-                    Name
+                    名称
                   </th>
                 </tr>
               </thead>
               <tr>
                 <td>
-                  *+0*<sub>𝔽</sub>
+                  0
                 </td>
                 <td>
                   *"Jan"*
@@ -35896,7 +35879,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *1*<sub>𝔽</sub>
+                  1
                 </td>
                 <td>
                   *"Feb"*
@@ -35904,7 +35887,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *2*<sub>𝔽</sub>
+                  2
                 </td>
                 <td>
                   *"Mar"*
@@ -35912,7 +35895,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *3*<sub>𝔽</sub>
+                  3
                 </td>
                 <td>
                   *"Apr"*
@@ -35920,7 +35903,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *4*<sub>𝔽</sub>
+                  4
                 </td>
                 <td>
                   *"May"*
@@ -35928,7 +35911,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *5*<sub>𝔽</sub>
+                  5
                 </td>
                 <td>
                   *"Jun"*
@@ -35936,7 +35919,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *6*<sub>𝔽</sub>
+                  6
                 </td>
                 <td>
                   *"Jul"*
@@ -35944,7 +35927,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *7*<sub>𝔽</sub>
+                  7
                 </td>
                 <td>
                   *"Aug"*
@@ -35952,7 +35935,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *8*<sub>𝔽</sub>
+                  8
                 </td>
                 <td>
                   *"Sep"*
@@ -35960,7 +35943,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *9*<sub>𝔽</sub>
+                  9
                 </td>
                 <td>
                   *"Oct"*
@@ -35968,7 +35951,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *10*<sub>𝔽</sub>
+                  10
                 </td>
                 <td>
                   *"Nov"*
@@ -35976,7 +35959,7 @@ THH:mm:ss.sss
               </tr>
               <tr>
                 <td>
-                  *11*<sub>𝔽</sub>
+                  11
                 </td>
                 <td>
                   *"Dec"*
@@ -35989,43 +35972,43 @@ THH:mm:ss.sss
         <emu-clause id="sec-timezoneestring" type="abstract operation">
           <h1>
             TimeZoneString (
-              _tv_: an integral Number,
-            ): a String
+              _tv_: 一个整数 Number,
+            ): 一个 String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
             1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
+            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 为 *true*，则
               1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
             1. 否则，
               1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))。
-            1. 令 _offset_ 为 𝔽(truncate(_offsetNs_ / nsPerMillisecond))。
-            1. 如果 _offset_ 是 *+0*<sub>𝔽</sub> 或 _offset_ > *+0*<sub>𝔽</sub>，那么
+            1. 令 _offset_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
+            1. 如果 _offset_ ≥ 0，则
               1. 令 _offsetSign_ 为 *"+"*。
               1. 令 _absOffset_ 为 _offset_。
             1. 否则，
               1. 令 _offsetSign_ 为 *"-"*。
               1. 令 _absOffset_ 为 -_offset_。
-            1. 令 _offsetMin_ 为 ToZeroPaddedDecimalString(ℝ(MinFromTime(_absOffset_)), 2)。
-            1. 令 _offsetHour_ 为 ToZeroPaddedDecimalString(ℝ(HourFromTime(_absOffset_)), 2)。
-            1. 令 _tzName_ 为一个由实现定义的字符串，它要么是空 String，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、由实现定义的时区名称和代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串连接结果。
-            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串连接结果。
+            1. 令 _offsetMin_ 为 ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2)。
+            1. 令 _offsetHour_ 为 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2)。
+            1. 令 _tzName_ 为一个由实现定义的字符串，它要么为空 String，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、一个由实现定义的时区名称和代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串拼接结果。
+            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串拼接结果。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-todatestring" type="abstract operation">
           <h1>
             ToDateString (
-              _tv_: an integral Number or *NaN*,
-            ): a String
+              _tv_: 一个整数 Number 或 *NaN*,
+            ): 一个 String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 如果 _tv_ 是 *NaN*，则返回 *"Invalid Date"*。
+            1. 如果 _tv_ 为 *NaN*，则返回 *"Invalid Date"*。
             1. 令 _localTime_ 为 LocalTime(_tv_)。
-            1. 返回 DateString(_localTime_)、码元 0x0020（SPACE）、TimeString(_localTime_) 和 TimeZoneString(_tv_) 的字符串连接。
+            1. 返回 DateString(_localTime_)、代码单元 0x0020 (SPACE)、TimeString(_localTime_) 和 TimeZoneString(_tv_) 的字符串拼接结果。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -36048,17 +36031,17 @@ THH:mm:ss.sss
         <p>此方法返回一个 String 值，表示与 *this* 值对应的时间瞬间。该 String 的格式基于 RFC 7231 中的 <code>HTTP-date</code>，并泛化为支持 ECMAScript Date 所支持的完整时间范围。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _dateObj_ 为 *this* value。
+          1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *"Invalid Date"*。
-          1. 令 _weekday_ 为 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 中 Number 为 WeekDay(_tv_) 的条目的 Name。
-          1. 令 _month_ 为 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 中 Number 为 MonthFromTime(_tv_) 的条目的 Name。
-          1. 令 _day_ 为 ToZeroPaddedDecimalString(ℝ(DateFromTime(_tv_)), 2)。
+          1. 如果 _tv_ 为 *NaN*，则返回 *"Invalid Date"*。
+          1. 令 _weekday_ 为 <emu-xref href="#sec-todatestring-day-names"></emu-xref> 中 WeekDay Index = WeekDay(_tv_) 的条目的 Name。
+          1. 令 _month_ 为 <emu-xref href="#sec-todatestring-month-names"></emu-xref> 中 Month Index = MonthFromTime(_tv_) 的条目的 Name。
+          1. 令 _day_ 为 ToZeroPaddedDecimalString(DateFromTime(_tv_), 2)。
           1. 令 _yv_ 为 YearFromTime(_tv_)。
-          1. 如果 _yv_ 是 *+0*<sub>𝔽</sub> 或 _yv_ > *+0*<sub>𝔽</sub>，则令 _yearSign_ 为空 String；否则令 _yearSign_ 为 *"-"*。
-          1. 令 _paddedYear_ 为 ToZeroPaddedDecimalString(abs(ℝ(_yv_)), 4)。
-          1. 返回 _weekday_、*","*、码元 0x0020（SPACE）、_day_、码元 0x0020（SPACE）、_month_、码元 0x0020（SPACE）、_yearSign_、_paddedYear_、码元 0x0020（SPACE）和 TimeString(_tv_) 的字符串连接。
+          1. 如果 _yv_ ≥ 0，则令 _yearSign_ 为空 String；否则令 _yearSign_ 为 *"-"*。
+          1. 令 _paddedYear_ 为 ToZeroPaddedDecimalString(abs(_yv_), 4)。
+          1. 返回 _weekday_、*","*、代码单元 0x0020 (SPACE)、_day_、代码单元 0x0020 (SPACE)、_month_、代码单元 0x0020 (SPACE)、_yearSign_、_paddedYear_、代码单元 0x0020 (SPACE) 和 TimeString(_tv_) 的字符串拼接结果。
         </emu-alg>
       </emu-clause>
 
@@ -54607,33 +54590,33 @@ THH:mm:ss.sss
       <emu-annex id="sec-date.prototype.getyear" type="built-in function">
         <h1>Date.prototype.getYear ( )</h1>
         <emu-note>
-          <p>几乎所有用途都首选 `getFullYear` 方法，因为它避免了“2000 年问题”。</p>
+          <p>对于几乎所有用途，都应优先使用 `getFullYear` 方法，因为它可以避免“2000 年问题”。</p>
         </emu-note>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
           1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _tv_ 为 _dateObj_.[[DateValue]]。
-          1. 如果 _tv_ 是 *NaN*，则返回 *NaN*。
-          1. 返回 YearFromTime(LocalTime(_tv_)) - *1900*<sub>𝔽</sub>。
+          1. 如果 _tv_ 为 *NaN*，则返回 *NaN*。
+          1. 返回 𝔽(YearFromTime(LocalTime(_tv_))) - *1900*<sub>𝔽</sub>。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-date.prototype.setyear" type="built-in function">
         <h1>Date.prototype.setYear ( _year_ )</h1>
         <emu-note>
-          <p>几乎所有用途都首选 `setFullYear` 方法，因为它避免了“2000 年问题”。</p>
+          <p>对于几乎所有用途，都应优先使用 `setFullYear` 方法，因为它可以避免“2000 年问题”。</p>
         </emu-note>
-        <p>此方法在被调用时执行以下步骤：</p>
+        <p>调用此方法时，它执行以下步骤：</p>
         <emu-alg>
           1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _time_ 为 _dateObj_.[[DateValue]]。
           1. 令 _year_ 为 ? ToNumber(_year_)。
-          1. 如果 _time_ 是 *NaN*，则将 _time_ 设置为 *+0*<sub>𝔽</sub>；否则将 _time_ 设置为 LocalTime(_time_)。
+          1. 如果 _time_ 为 *NaN*，则将 _time_ 设置为 *+0*<sub>𝔽</sub>；否则将 _time_ 设置为 LocalTime(_time_)。
           1. 令 _fullYear_ 为 MakeFullYear(_year_)。
-          1. 令 _day_ 为 MakeDay(_fullYear_, MonthFromTime(_time_), DateFromTime(_time_))。
-          1. 令 _date_ 为 MakeDate(_day_, TimeWithinDay(_time_))。
+          1. 令 _day_ 为 MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_)))。
+          1. 令 _date_ 为 MakeDate(_day_, 𝔽(TimeWithinDay(_time_)))。
           1. 令 _utcTimestamp_ 为 TimeClip(UTC(_date_))。
           1. 将 _dateObj_.[[DateValue]] 设置为 _utcTimestamp_。
           1. 返回 _utcTimestamp_。
