@@ -10046,11 +10046,7 @@
       <emu-alg>
         1. Return ~unused~.
       </emu-alg>
-      <emu-grammar>
-        ObjectBindingPattern :
-          `{` BindingPropertyList `}`
-          `{` BindingPropertyList `,` `}`
-      </emu-grammar>
+      <emu-grammar>ObjectBindingPattern : `{` BindingPropertyList `,`? `}`</emu-grammar>
       <emu-alg>
         1. Perform ? PropertyBindingInitialization of |BindingPropertyList| with arguments _value_ and _envRecord_.
         1. Return ~unused~.
@@ -18802,9 +18798,8 @@
         CoverParenthesizedExpressionAndArrowParameterList[?Yield, ?Await] #parencover
 
       CoverParenthesizedExpressionAndArrowParameterList[Yield, Await] :
-        `(` Expression[+In, ?Yield, ?Await] `)`
-        `(` Expression[+In, ?Yield, ?Await] `,` `)`
         `(` `)`
+        `(` Expression[+In, ?Yield, ?Await] `,`? `)`
         `(` `...` BindingIdentifier[?Yield, ?Await] `)`
         `(` `...` BindingPattern[?Yield, ?Await] `)`
         `(` Expression[+In, ?Yield, ?Await] `,` `...` BindingIdentifier[?Yield, ?Await] `)`
@@ -19001,8 +18996,7 @@
       <emu-grammar type="definition">
         ObjectLiteral[Yield, Await] :
           `{` `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `,` `}`
+          `{` PropertyDefinitionList[?Yield, ?Await] `,`? `}`
 
         PropertyDefinitionList[Yield, Await] :
           PropertyDefinition[?Yield, ?Await]
@@ -19042,11 +19036,7 @@
 
       <emu-clause id="sec-object-initializer-static-semantics-early-errors" oldids="sec-__proto__-property-names-in-object-initializers">
         <h1>Static Semantics: Early Errors</h1>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <ul>
           <li>
             It is a Syntax Error if the PropertyNameList of |PropertyDefinitionList| contains any duplicate entries for *"__proto__"* and at least two of those entries were obtained from productions of the form <emu-grammar>PropertyDefinition : PropertyName `:` AssignmentExpression</emu-grammar>. This rule is not applied if this |ObjectLiteral| is contained within a |Script| that is being parsed for ParseJSON (see step <emu-xref href="#step-json-parse-parse"></emu-xref> of ParseJSON).
@@ -19147,11 +19137,7 @@
         <emu-alg>
           1. Return OrdinaryObjectCreate(%Object.prototype%).
         </emu-alg>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <emu-alg>
           1. Let _obj_ be OrdinaryObjectCreate(%Object.prototype%).
           1. Perform ? PropertyDefinitionEvaluation of |PropertyDefinitionList| with argument _obj_.
@@ -19641,8 +19627,7 @@
 
       Arguments[Yield, Await] :
         `(` `)`
-        `(` ArgumentList[?Yield, ?Await] `)`
-        `(` ArgumentList[?Yield, ?Await] `,` `)`
+        `(` ArgumentList[?Yield, ?Await] `,`? `)`
 
       ArgumentList[Yield, Await] :
         AssignmentExpression[+In, ?Yield, ?Await]
@@ -21445,8 +21430,8 @@
         ObjectAssignmentPattern[Yield, Await] :
           `{` `}`
           `{` AssignmentRestProperty[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await]? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,`? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await] `}`
 
         ArrayAssignmentPattern[Yield, Await] :
           `[` Elision? AssignmentRestElement[?Yield, ?Await]? `]`
@@ -21519,11 +21504,7 @@
           1. Perform ? RequireObjectCoercible(_value_).
           1. Return ~unused~.
         </emu-alg>
-        <emu-grammar>
-          ObjectAssignmentPattern :
-            `{` AssignmentPropertyList `}`
-            `{` AssignmentPropertyList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectAssignmentPattern : `{` AssignmentPropertyList `,`? `}`</emu-grammar>
         <emu-alg>
           1. Perform ? RequireObjectCoercible(_value_).
           1. Perform ? PropertyDestructuringAssignmentEvaluation of |AssignmentPropertyList| with argument _value_.
@@ -22202,8 +22183,8 @@
         ObjectBindingPattern[Yield, Await] :
           `{` `}`
           `{` BindingRestProperty[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await]? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,`? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await] `}`
 
         ArrayBindingPattern[Yield, Await] :
           `[` Elision? BindingRestElement[?Yield, ?Await]? `]`
@@ -29731,8 +29712,7 @@
 
         NamedImports :
           `{` `}`
-          `{` ImportsList `}`
-          `{` ImportsList `,` `}`
+          `{` ImportsList `,`? `}`
 
         FromClause :
           `from` ModuleSpecifier
@@ -29929,8 +29909,7 @@
 
         NamedExports :
           `{` `}`
-          `{` ExportsList `}`
-          `{` ExportsList `,` `}`
+          `{` ExportsList `,`? `}`
 
         ExportsList :
           ExportSpecifier
@@ -34089,9 +34068,12 @@
         <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
         <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
         <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerDay" aoid="NanosecondsPerDay">NanosecondsPerDay = 10<sup>6</sup> × msPerDay = 8.64 × 10<sup>13</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
+        <emu-eqn id="eqn-MaxEpochNanoseconds" aoid="MaxEpochNanoseconds">MaxEpochNanoseconds = 10<sup>8</sup> × NanosecondsPerDay = 8.64 × 10<sup>21</sup></emu-eqn>
+        <emu-eqn id="eqn-MinEpochNanoseconds" aoid="MinEpochNanoseconds">MinEpochNanoseconds = -MaxEpochNanoseconds = -8.64 × 10<sup>21</sup></emu-eqn>
       </emu-clause>
 
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
@@ -34340,6 +34322,14 @@
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-epoch-nanoseconds">
+        <h1>Epoch Nanoseconds and Range</h1>
+
+        <p>An <dfn variants="epoch nanoseconds counts">epoch nanoseconds count</dfn> is an integer that represents an instant in time to nanosecond precision. It supports the same range as a time value but expressed in nanoseconds, from MinEpochNanoseconds to MaxEpochNanoseconds. There is no nanosecond equivalent of the time value *NaN*; there is no representation for no specific instant.</p>
+
+        <p>The exact moment of midnight at the beginning of 1 January 1970 UTC is represented by the value 0. The maximum value is MaxEpochNanoseconds, and the minimum value is MinEpochNanoseconds.</p>
+      </emu-clause>
+
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
@@ -34352,18 +34342,18 @@
             _millisecond_: an integer in the inclusive interval from 0 to 999,
             _microsecond_: an integer in the inclusive interval from 0 to 999,
             _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a BigInt
+          ): an epoch nanoseconds count
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>The returned value represents a number of nanoseconds since the epoch that corresponds to the given ISO 8601 calendar date and wall-clock time in UTC.</dd>
+          <dd>The returned value is the epoch nanoseconds count that corresponds to the given ISO 8601 calendar date and wall-clock time in UTC.</dd>
         </dl>
         <emu-alg>
           1. Let _date_ be MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_)).
           1. Let _time_ be MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_)).
           1. Let _ms_ be MakeDate(_date_, _time_).
           1. Assert: _ms_ is an integral Number.
-          1. Return ℤ(ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_).
+          1. Return ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_.
         </emu-alg>
       </emu-clause>
 
@@ -34387,8 +34377,8 @@
         </p>
         <p>
           Implementations that follow the requirements for time zones as described in the ECMA-402 Internationalization API specification are called <dfn>time zone aware</dfn>.
-          Time zone aware implementations must support available named time zones corresponding to the Zone and Link names of the IANA Time Zone Database, and only such names.
-          In time zone aware implementations, a primary time zone identifier is a Zone name, and a non-primary time zone identifier is a Link name, respectively, in the IANA Time Zone Database except as specifically overridden by AvailableNamedTimeZoneIdentifiers as specified in the ECMA-402 specification.
+          Time zone aware implementations must support available named time zones corresponding to the “Zone” and “<emu-not-ref>Link</emu-not-ref>” names of the <a href="https://www.iana.org/time-zones">IANA Time Zone Database</a>, and only such names.
+          In time zone aware implementations, a primary time zone identifier is a “Zone” name, and a non-primary time zone identifier is a “<emu-not-ref>Link</emu-not-ref>” name, respectively, in the IANA Time Zone Database except as specifically overridden by AvailableNamedTimeZoneIdentifiers as specified in the ECMA-402 specification.
           Implementations that do not support the entire IANA Time Zone Database are still recommended to use IANA Time Zone Database names as identifiers to represent time zones.
         </p>
       </emu-clause>
@@ -34406,12 +34396,12 @@
             _millisecond_: an integer in the inclusive interval from 0 to 999,
             _microsecond_: an integer in the inclusive interval from 0 to 999,
             _nanosecond_: an integer in the inclusive interval from 0 to 999,
-          ): a List of BigInts
+          ): a List of epoch nanoseconds counts
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            Each value in the returned List represents a number of nanoseconds since the epoch that corresponds to the given ISO 8601 calendar date and wall-clock time in the named time zone identified by _timeZoneIdentifier_.
+            Each value in the returned List represents an epoch nanoseconds count that corresponds to the given ISO 8601 calendar date and wall-clock time in the named time zone identified by _timeZoneIdentifier_.
           </dd>
         </dl>
         <p>
@@ -34426,7 +34416,7 @@
           1. Return « _epochNanoseconds_ ».
         </emu-alg>
         <emu-note>
-          <p>It is required for time zone aware implementations (and recommended for all others) to use the time zone information of the IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>.</p>
+          <p>It is required for time zone aware implementations (and recommended for all others) to use the time zone information of the <a href="https://www.iana.org/time-zones">IANA Time Zone Database</a>.</p>
           <p>1:30 AM on 5 November 2017 in America/New_York is repeated twice, so GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) would return a List of length 2 in which the first element represents 05:30 UTC (corresponding with 01:30 US Eastern Daylight Time at UTC offset -04:00) and the second element represents 06:30 UTC (corresponding with 01:30 US Eastern Standard Time at UTC offset -05:00).</p>
           <p>2:30 AM on 12 March 2017 in America/New_York does not exist, so GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) would return an empty List.</p>
         </emu-note>
@@ -34436,12 +34426,12 @@
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
             _timeZoneIdentifier_: a String,
-            _epochNanoseconds_: a BigInt,
+            _epochNanoseconds_: an epoch nanoseconds count,
           ): an integer
         </h1>
         <dl class="header">
         </dl>
-        <p>The returned integer represents the offset from UTC of the named time zone identified by _timeZoneIdentifier_, at the instant corresponding with _epochNanoseconds_ relative to the epoch, both in nanoseconds.</p>
+        <p>The returned integer represents the offset from UTC, in nanoseconds, of the named time zone identified by _timeZoneIdentifier_, at the instant corresponding with the epoch nanoseconds count _epochNanoseconds_.</p>
         <p>The default implementation of GetNamedTimeZoneOffsetNanoseconds, to be used for ECMAScript implementations that do not include local political rules for any time zones, performs the following steps when called:</p>
         <emu-alg>
           1. Assert: _timeZoneIdentifier_ is *"UTC"*.
@@ -34554,7 +34544,7 @@
           1. If IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) is *true*, then
             1. Let _offsetNs_ be ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_).
           1. Else,
-            1. Let _offsetNs_ be GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond)).
+            1. Let _offsetNs_ be GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond).
           1. Let _offsetMs_ be truncate(_offsetNs_ / nsPerMillisecond).
           1. Return _tv_ + 𝔽(_offsetMs_).
         </emu-alg>
@@ -34609,7 +34599,7 @@
         </p>
         <p>If political rules for the local time _t_ are not available within the implementation, the result is _t_ because SystemTimeZoneIdentifier returns *"UTC"* and GetNamedTimeZoneOffsetNanoseconds returns 0.</p>
         <emu-note>
-          <p>It is required for time zone aware implementations (and recommended for all others) to use the time zone information of the IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a>.</p>
+          <p>It is required for time zone aware implementations (and recommended for all others) to use the time zone information of the <a href="https://www.iana.org/time-zones">IANA Time Zone Database</a>.</p>
           <p>
             1:30 AM on 5 November 2017 in America/New_York is repeated twice (fall backward), but it must be interpreted as 1:30 AM UTC-04 instead of 1:30 AM UTC-05.
             In UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))), the value of _offsetMs_ is <emu-eqn>-4 × msPerHour</emu-eqn>.
@@ -35981,7 +35971,7 @@ THH:mm:ss.sss
             1. If IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) is *true*, then
               1. Let _offsetNs_ be ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_).
             1. Else,
-              1. Let _offsetNs_ be GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond)).
+              1. Let _offsetNs_ be GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond).
             1. Let _offset_ be truncate(_offsetNs_ / nsPerMillisecond).
             1. If _offset_ ≥ 0, then
               1. Let _offsetSign_ be *"+"*.
@@ -49384,16 +49374,18 @@ THH:mm:ss.sss
             1. If _numberLimit_ is *NaN*, then
               1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
+            1. If _numberLimit_ is finite and _numberLimit_ > 𝔽(2<sup>53</sup> - 1), then
+              1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
+              1. Return ? IteratorClose(_iterated_, _error_).
             1. Let _intLimit_ be ! ToIntegerOrInfinity(_numberLimit_).
             1. If _intLimit_ &lt; 0, then
               1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
             1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _intLimit_ and performs the following steps when called:
-              1. Let _remaining_ be _intLimit_.
-              1. Repeat, while _remaining_ > 0,
-                1. If _remaining_ ≠ +∞, then
-                  1. Set _remaining_ to _remaining_ - 1.
+              1. Let _remaining_ be 𝔽(_intLimit_).
+              1. Repeat, while _remaining_ > *+0*<sub>𝔽</sub>,
+                1. Set _remaining_ to _remaining_ - *1*<sub>𝔽</sub>.
                 1. Let _next_ be ? IteratorStep(_iterated_).
                 1. If _next_ is ~done~, return ReturnCompletion(*undefined*).
               1. Repeat,
@@ -49418,14 +49410,15 @@ THH:mm:ss.sss
               1. Let _error_ be ThrowCompletion(a newly created *TypeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
-            1. Let _counter_ be 0.
+            1. Let _counter_ be *+0*<sub>𝔽</sub>.
             1. Repeat,
               1. Let _value_ be ? IteratorStepValue(_iterated_).
               1. If _value_ is ~done~, return *true*.
-              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)).
               1. IfAbruptCloseIterator(_result_, _iterated_).
               1. If ToBoolean(_result_) is *false*, return ? IteratorClose(_iterated_, NormalCompletion(*false*)).
-              1. Set _counter_ to _counter_ + 1.
+              1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+              1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
           </emu-alg>
         </emu-clause>
 
@@ -49441,16 +49434,17 @@ THH:mm:ss.sss
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
             1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _predicate_ and performs the following steps when called:
-              1. Let _counter_ be 0.
+              1. Let _counter_ be *+0*<sub>𝔽</sub>.
               1. Repeat,
                 1. Let _value_ be ? IteratorStepValue(_iterated_).
                 1. If _value_ is ~done~, return ReturnCompletion(*undefined*).
-                1. Let _selected_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
+                1. Let _selected_ be Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)).
                 1. IfAbruptCloseIterator(_selected_, _iterated_).
                 1. If ToBoolean(_selected_) is *true*, then
                   1. Let _completion_ be Completion(Yield(_value_)).
                   1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. Set _counter_ to _counter_ + 1.
+                1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+                1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
             1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »).
             1. Set _result_.[[UnderlyingIterators]] to « _iterated_ ».
             1. Return _result_.
@@ -49468,14 +49462,15 @@ THH:mm:ss.sss
               1. Let _error_ be ThrowCompletion(a newly created *TypeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
-            1. Let _counter_ be 0.
+            1. Let _counter_ be *+0*<sub>𝔽</sub>.
             1. Repeat,
               1. Let _value_ be ? IteratorStepValue(_iterated_).
               1. If _value_ is ~done~, return *undefined*.
-              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)).
               1. IfAbruptCloseIterator(_result_, _iterated_).
               1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(_value_)).
-              1. Set _counter_ to _counter_ + 1.
+              1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+              1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
           </emu-alg>
         </emu-clause>
 
@@ -49491,11 +49486,11 @@ THH:mm:ss.sss
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
             1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
-              1. Let _counter_ be 0.
+              1. Let _counter_ be *+0*<sub>𝔽</sub>.
               1. Repeat,
                 1. Let _value_ be ? IteratorStepValue(_iterated_).
                 1. If _value_ is ~done~, return ReturnCompletion(*undefined*).
-                1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
+                1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »)).
                 1. IfAbruptCloseIterator(_mapped_, _iterated_).
                 1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~)).
                 1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
@@ -49511,7 +49506,8 @@ THH:mm:ss.sss
                       1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
                       1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                       1. Return ? IteratorClose(_iterated_, _completion_).
-                1. Set _counter_ to _counter_ + 1.
+                1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+                1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
             1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »).
             1. Set _result_.[[UnderlyingIterators]] to « _iterated_ ».
             1. Return _result_.
@@ -49529,13 +49525,14 @@ THH:mm:ss.sss
               1. Let _error_ be ThrowCompletion(a newly created *TypeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
-            1. Let _counter_ be 0.
+            1. Let _counter_ be *+0*<sub>𝔽</sub>.
             1. Repeat,
               1. Let _value_ be ? IteratorStepValue(_iterated_).
               1. If _value_ is ~done~, return *undefined*.
-              1. Let _result_ be Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _result_ be Completion(Call(_procedure_, *undefined*, « _value_, _counter_ »)).
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. Set _counter_ to _counter_ + 1.
+              1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+              1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
           </emu-alg>
         </emu-clause>
 
@@ -49551,15 +49548,16 @@ THH:mm:ss.sss
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
             1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
-              1. Let _counter_ be 0.
+              1. Let _counter_ be *+0*<sub>𝔽</sub>.
               1. Repeat,
                 1. Let _value_ be ? IteratorStepValue(_iterated_).
                 1. If _value_ is ~done~, return ReturnCompletion(*undefined*).
-                1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
+                1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »)).
                 1. IfAbruptCloseIterator(_mapped_, _iterated_).
                 1. Let _completion_ be Completion(Yield(_mapped_)).
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. Set _counter_ to _counter_ + 1.
+                1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+                1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
             1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »).
             1. Set _result_.[[UnderlyingIterators]] to « _iterated_ ».
             1. Return _result_.
@@ -49580,17 +49578,18 @@ THH:mm:ss.sss
             1. If _initialValue_ is not present, then
               1. Let _accumulator_ be ? IteratorStepValue(_iterated_).
               1. If _accumulator_ is ~done~, throw a *TypeError* exception.
-              1. Let _counter_ be 1.
+              1. Let _counter_ be *1*<sub>𝔽</sub>.
             1. Else,
               1. Let _accumulator_ be _initialValue_.
-              1. Let _counter_ be 0.
+              1. Let _counter_ be *+0*<sub>𝔽</sub>.
             1. Repeat,
               1. Let _value_ be ? IteratorStepValue(_iterated_).
               1. If _value_ is ~done~, return _accumulator_.
-              1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)).
+              1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, _counter_ »)).
               1. IfAbruptCloseIterator(_result_, _iterated_).
               1. Set _accumulator_ to _result_.
-              1. Set _counter_ to _counter_ + 1.
+              1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+              1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
           </emu-alg>
         </emu-clause>
 
@@ -49605,14 +49604,15 @@ THH:mm:ss.sss
               1. Let _error_ be ThrowCompletion(a newly created *TypeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
-            1. Let _counter_ be 0.
+            1. Let _counter_ be *+0*<sub>𝔽</sub>.
             1. Repeat,
               1. Let _value_ be ? IteratorStepValue(_iterated_).
               1. If _value_ is ~done~, return *false*.
-              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)).
               1. IfAbruptCloseIterator(_result_, _iterated_).
               1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(*true*)).
-              1. Set _counter_ to _counter_ + 1.
+              1. NOTE: The following step will not change _counter_ once it reaches *2<sup>53</sup>*<sub>𝔽</sub>.
+              1. Set _counter_ to _counter_ + *1*<sub>𝔽</sub>.
           </emu-alg>
         </emu-clause>
 
@@ -49628,18 +49628,20 @@ THH:mm:ss.sss
             1. If _numberLimit_ is *NaN*, then
               1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
+            1. If _numberLimit_ is finite and _numberLimit_ > 𝔽(2<sup>53</sup> - 1), then
+              1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
+              1. Return ? IteratorClose(_iterated_, _error_).
             1. Let _intLimit_ be ! ToIntegerOrInfinity(_numberLimit_).
             1. If _intLimit_ &lt; 0, then
               1. Let _error_ be ThrowCompletion(a newly created *RangeError* object).
               1. Return ? IteratorClose(_iterated_, _error_).
             1. Set _iterated_ to ? GetIteratorDirect(_obj_).
             1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _intLimit_ and performs the following steps when called:
-              1. Let _remaining_ be _intLimit_.
+              1. Let _remaining_ be 𝔽(_intLimit_).
               1. Repeat,
-                1. If _remaining_ = 0, then
+                1. If _remaining_ is *+0*<sub>𝔽</sub>, then
                   1. Return ? IteratorClose(_iterated_, ReturnCompletion(*undefined*)).
-                1. If _remaining_ ≠ +∞, then
-                  1. Set _remaining_ to _remaining_ - 1.
+                1. Set _remaining_ to _remaining_ - *1*<sub>𝔽</sub>.
                 1. Let _value_ be ? IteratorStepValue(_iterated_).
                 1. If _value_ is ~done~, return ReturnCompletion(*undefined*).
                 1. Let _completion_ be Completion(Yield(_value_)).
@@ -54151,7 +54153,7 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-patterns-static-semantics-is-character-class-annexb">
         <h1>Static Semantics: IsCharacterClass</h1>
-        <p>The semantics of <emu-xref href="#sec-patterns-static-semantics-is-character-class"></emu-xref> is extended as follows:</p>
+        <p>The semantics of IsCharacterClass is extended as follows:</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
@@ -54162,7 +54164,7 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-patterns-static-semantics-character-value-annexb">
         <h1>Static Semantics: CharacterValue</h1>
-        <p>The semantics of <emu-xref href="#sec-patterns-static-semantics-character-value"></emu-xref> is extended as follows:</p>
+        <p>The semantics of CharacterValue is extended as follows:</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
@@ -54183,8 +54185,7 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-compilesubpattern-annexb" oldids="sec-regular-expression-patterns-semantics">
         <h1>Runtime Semantics: CompileSubpattern</h1>
-        <p>The semantics of CompileSubpattern is extended as follows:</p>
-
+        <p>The semantics of CompileSubpattern with arguments _regexpRecord_ and _direction_ is extended as follows:</p>
         <p>The rule for <emu-grammar>Term :: QuantifiableAssertion Quantifier</emu-grammar> is the same as for <emu-grammar>Term :: Atom Quantifier</emu-grammar> but with |QuantifiableAssertion| substituted for |Atom|.</p>
         <p>The rule for <emu-grammar>Term :: ExtendedAtom Quantifier</emu-grammar> is the same as for <emu-grammar>Term :: Atom Quantifier</emu-grammar> but with |ExtendedAtom| substituted for |Atom|.</p>
         <p>The rule for <emu-grammar>Term :: ExtendedAtom</emu-grammar> is the same as for <emu-grammar>Term :: Atom</emu-grammar> but with |ExtendedAtom| substituted for |Atom|.</p>
@@ -54192,12 +54193,16 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-compileassertion-annexb">
         <h1>Runtime Semantics: CompileAssertion</h1>
-        <p>CompileAssertion rules for the <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> and <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> productions are also used for the |QuantifiableAssertion| productions, but with |QuantifiableAssertion| substituted for |Assertion|.</p>
+        <p>The semantics of CompileAssertion with argument _regexpRecord_ is extended as follows:</p>
+        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Atom|.</p>
+        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Atom|.</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">
         <h1>Runtime Semantics: CompileAtom</h1>
-        <p>CompileAtom rules for the |Atom| productions except for <emu-grammar>Atom :: PatternCharacter</emu-grammar> are also used for the |ExtendedAtom| productions, but with |ExtendedAtom| substituted for |Atom|. The following rules, with parameter _direction_, are also added:</p>
+        <p>The semantics of CompileAtom with arguments _regexpRecord_ and _direction_ is extended as follows:</p>
+        <p>Rules for the |Atom| productions except for <emu-grammar>Atom :: PatternCharacter</emu-grammar> are also used for the |ExtendedAtom| productions, but with |ExtendedAtom| substituted for |Atom|.</p>
+        <p>The following rules are also added:</p>
         <emu-grammar>ExtendedAtom :: `\` [lookahead == `c`]</emu-grammar>
         <emu-alg>
           1. Let _charSet_ be the CharSet containing the single character `\\` U+005C (REVERSE SOLIDUS).
@@ -54213,9 +54218,8 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-compiletocharset-annexb">
         <h1>Runtime Semantics: CompileToCharSet</h1>
-        <p>The semantics of <emu-xref href="#sec-compiletocharset"></emu-xref> is extended as follows:</p>
-
-        <p>The following two rules replace the corresponding rules of CompileToCharSet.</p>
+        <p>The semantics of CompileToCharSet with argument _regexpRecord_ is extended as follows:</p>
+        <p>Two rules are replaced:</p>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
           1. Let _charSet_ be CompileToCharSet of the first |ClassAtom| with argument _regexpRecord_.
@@ -54232,8 +54236,7 @@ THH:mm:ss.sss
           1. Let _rangeSet_ be CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_).
           1. Return the union of _rangeSet_ and _remainingSet_.
         </emu-alg>
-
-        <p>In addition, the following rules are added to CompileToCharSet.</p>
+        <p>The following rules are also added:</p>
         <emu-grammar>ClassEscape :: `c` ClassControlLetter</emu-grammar>
         <emu-alg>
           1. Let _charValue_ be the CharacterValue of this |ClassEscape|.
@@ -54269,8 +54272,7 @@ THH:mm:ss.sss
 
       <emu-annex id="sec-parsepattern-annexb">
         <h1>Static Semantics: ParsePattern ( _patternText_, _u_, _v_ )</h1>
-        <p>The semantics of <emu-xref href="#sec-parsepattern"></emu-xref> is extended as follows:</p>
-        <p>The abstract operation ParsePattern takes arguments _patternText_ (a sequence of Unicode code points), _u_ (a Boolean), and _v_ (a Boolean). It performs the following steps when called:</p>
+        <p>The semantics of ParsePattern with arguments _patternText_, _u_, and _v_ is extended as follows, with modifications <ins>highlighted</ins>:</p>
         <emu-alg>
           1. If _v_ is *true* and _u_ is *true*, then
             1. Let _parseResult_ be a List containing one or more *SyntaxError* objects.
@@ -54279,8 +54281,8 @@ THH:mm:ss.sss
           1. Else if _u_ is *true*, then
             1. Let _parseResult_ be ParseText(_patternText_, |Pattern[+UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|).
           1. Else,
-            1. Let _parseResult_ be ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|).
-            1. If _parseResult_ is a Parse Node and _parseResult_ contains a |GroupName|, then
+            1. <ins>Let _parseResult_ be ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|).</ins>
+            1. <ins>If _parseResult_ is a Parse Node and _parseResult_ contains a |GroupName|, then</ins>
               1. Set _parseResult_ to ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|).
           1. Return _parseResult_.
         </emu-alg>
@@ -54618,9 +54620,8 @@ THH:mm:ss.sss
           1. Let _dateObj_ be the *this* value.
           1. Perform ? RequireInternalSlot(_dateObj_, [[DateValue]]).
           1. Let _time_ be _dateObj_.[[DateValue]].
-          1. Let _year_ be ? ToNumber(_year_).
           1. If _time_ is *NaN*, set _time_ to *+0*<sub>𝔽</sub>; else set _time_ to LocalTime(_time_).
-          1. Let _fullYear_ be MakeFullYear(_year_).
+          1. Let _fullYear_ be MakeFullYear(? ToNumber(_year_)).
           1. Let _day_ be MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_))).
           1. Let _date_ be MakeDate(_day_, 𝔽(TimeWithinDay(_time_))).
           1. Let _utcTimestamp_ be TimeClip(UTC(_date_)).
@@ -54772,22 +54773,26 @@ THH:mm:ss.sss
           `for` `(` `var` BindingIdentifier[?Yield, ?Await] Initializer[~In, ?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
       </emu-grammar>
       <p>This production only applies when parsing non-strict code.</p>
-      <p>The static semantics of ContainsDuplicateLabels in <emu-xref href="#sec-static-semantics-containsduplicatelabels"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of ContainsDuplicateLabels with argument _labelSet_ are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Return ContainsDuplicateLabels of |Statement| with argument _labelSet_.
       </emu-alg>
-      <p>The static semantics of ContainsUndefinedBreakTarget in <emu-xref href="#sec-static-semantics-containsundefinedbreaktarget"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of ContainsUndefinedBreakTarget with argument _labelSet_ are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Return ContainsUndefinedBreakTarget of |Statement| with argument _labelSet_.
       </emu-alg>
-      <p>The static semantics of ContainsUndefinedContinueTarget in <emu-xref href="#sec-static-semantics-containsundefinedcontinuetarget"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of ContainsUndefinedContinueTarget with arguments _iterationSet_ and _labelSet_ are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Return ContainsUndefinedContinueTarget of |Statement| with arguments _iterationSet_ and « ».
       </emu-alg>
-      <p>The static semantics of IsDestructuring in <emu-xref href="#sec-static-semantics-isdestructuring"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of IsDestructuring are augmented with the following:</p>
       <emu-grammar>
         BindingIdentifier :
           Identifier
@@ -54797,21 +54802,24 @@ THH:mm:ss.sss
       <emu-alg>
         1. Return *false*.
       </emu-alg>
-      <p>The static semantics of VarDeclaredNames in <emu-xref href="#sec-static-semantics-vardeclarednames"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of VarDeclaredNames are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Let _names1_ be the BoundNames of |BindingIdentifier|.
         1. Let _names2_ be the VarDeclaredNames of |Statement|.
         1. Return the list-concatenation of _names1_ and _names2_.
       </emu-alg>
-      <p>The static semantics of VarScopedDeclarations in <emu-xref href="#sec-static-semantics-varscopeddeclarations"></emu-xref> are augmented with the following:</p>
+
+      <p>The static semantics of VarScopedDeclarations are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Let _decls1_ be « |BindingIdentifier| ».
         1. Let _decls2_ be the VarScopedDeclarations of |Statement|.
         1. Return the list-concatenation of _decls1_ and _decls2_.
       </emu-alg>
-      <p>The runtime semantics of ForInOfLoopEvaluation in <emu-xref href="#sec-runtime-semantics-forinofloopevaluation"></emu-xref> are augmented with the following:</p>
+
+      <p>The runtime semantics of ForInOfLoopEvaluation with argument _labelSet_ are augmented with the following:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. Let _bindingId_ be the StringValue of |BindingIdentifier|.
