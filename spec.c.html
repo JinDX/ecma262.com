@@ -38860,18 +38860,18 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 如果 HasEitherUnicodeFlag(_regexpRecord_) 是 *true* 且 _regexpRecord_.[[IgnoreCase]] 是 *true*，则
-              1. 如果 Unicode Character Database 的文件 <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> 为 _char_ 提供 simple 或 common case folding 映射，则返回把该映射应用于 _char_ 的结果。
+            1. 如果 HasEitherUnicodeFlag(_regexpRecord_) 为 *true* 且 _regexpRecord_.[[IgnoreCase]] 为 *true*，那么
+              1. 如果 Unicode 字符数据库的文件 <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> 为 _char_ 提供了简单或通用大小写折叠映射，则返回将该映射应用于 _char_ 的结果。
               1. 返回 _char_。
-            1. 如果 _regexpRecord_.[[IgnoreCase]] 是 *false*，则返回 _char_。
-            1. 断言：_char_ 是 UTF-16 码元。
-            1. 令 _codePoint_ 为其数值为 _char_ 的数值的码点。
-            1. 令 _u_ 为依据 Unicode Default Case Conversion 算法的 toUppercase(« _codePoint_ »)。
-            1. 令 _uString_ 为 CodePointsToString(_u_)。
-            1. 如果 _uString_ 的长度 ≠ 1，则返回 _char_。
-            1. 令 _codeUnit_ 为 _uString_ 的单个码元元素。
-            1. 如果 _char_ 的数值 ≥ 128 且 _codeUnit_ 的数值 &lt; 128，则返回 _char_。
-            1. 返回 _codeUnit_。
+            1. 如果 _regexpRecord_.[[IgnoreCase]] 为 *false*，返回 _char_。
+            1. 断言：_char_ 是一个 UTF-16 代码单元。
+            1. 令 _codePoint_ 为数值与 _char_ 的数值相同的码点。
+            1. 根据 Unicode 默认大小写转换算法，令 _mappedCodePoints_ 为 toUppercase(« _codePoint_ »)。
+            1. 如果 CodePointsToString(_mappedCodePoints_) 的长度 ≠ 1，返回 _char_。
+            1. 断言：_mappedCodePoints_ 中的元素数量为 1。
+            1. 令 _mappedCodePoint_ 为 _mappedCodePoints_ 中唯一的码点元素。
+            1. 如果 _char_ 的数值 ≥ 128 且 _mappedCodePoint_ 的数值 &lt; 128，返回 _char_。
+            1. 返回数值与 _mappedCodePoint_ 的数值相同的代码单元。
           </emu-alg>
           <emu-note>
             <p>在 HasEitherUnicodeFlag(_regexpRecord_) 是 *true* 的大小写无关匹配中，所有字符在比较之前都会隐式使用 Unicode Standard 提供的 simple 映射进行 case-fold。simple 映射始终映射到单个码点，因此它不会例如把 `ß`（U+00DF LATIN SMALL LETTER SHARP S）映射为 `ss` 或 `SS`。不过，它可能把 Basic Latin 块之外的码点映射到其中的码点——例如，`ſ`（U+017F LATIN SMALL LETTER LONG S）会 case-fold 为 `s`（U+0073 LATIN SMALL LETTER S），而 `K`（U+212A KELVIN SIGN）会 case-fold 为 `k`（U+006B LATIN SMALL LETTER K）。包含这些码点的 Strings 会被诸如 `/[a-z]/ui` 的正则表达式匹配。</p>

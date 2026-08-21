@@ -38860,18 +38860,18 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. HasEitherUnicodeFlag(_regexpRecord_)가 *true*이고 _regexpRecord_.[[IgnoreCase]]가 *true*이면, 다음을 수행한다.
-              1. Unicode Character Database의 file <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a>가 _char_에 대한 simple 또는 common case folding mapping을 provide하면, 그 mapping을 _char_에 apply한 result를 반환한다.
+            1. HasEitherUnicodeFlag(_regexpRecord_)가 *true*이고 _regexpRecord_.[[IgnoreCase]]가 *true*이면,
+              1. Unicode Character Database의 <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> 파일이 _char_에 대해 단순 또는 공통 대소문자 접기 매핑을 제공하면, 해당 매핑을 _char_에 적용한 결과를 반환한다.
               1. _char_를 반환한다.
             1. _regexpRecord_.[[IgnoreCase]]가 *false*이면, _char_를 반환한다.
-            1. Assert: _char_는 UTF-16 code unit이다.
-            1. _codePoint_를 numeric value가 _char_의 numeric value인 code point로 둔다.
-            1. _u_를 Unicode Default Case Conversion algorithm에 따른 toUppercase(« _codePoint_ »)로 둔다.
-            1. _uString_을 CodePointsToString(_u_)으로 둔다.
-            1. _uString_의 length ≠ 1이면, _char_를 반환한다.
-            1. _codeUnit_을 _uString_의 single code unit element로 둔다.
-            1. _char_의 numeric value ≥ 128이고 _codeUnit_의 numeric value &lt; 128이면, _char_를 반환한다.
-            1. _codeUnit_을 반환한다.
+            1. 단언: _char_는 UTF-16 코드 단위이다.
+            1. _codePoint_를 숫자 값이 _char_의 숫자 값인 코드 포인트로 둔다.
+            1. Unicode 기본 대소문자 변환 알고리즘에 따라 _mappedCodePoints_를 toUppercase(« _codePoint_ »)로 둔다.
+            1. CodePointsToString(_mappedCodePoints_)의 길이가 ≠ 1이면, _char_를 반환한다.
+            1. 단언: _mappedCodePoints_의 요소 수는 1이다.
+            1. _mappedCodePoint_를 _mappedCodePoints_의 유일한 코드 포인트 요소로 둔다.
+            1. _char_의 숫자 값 ≥ 128이고 _mappedCodePoint_의 숫자 값이 &lt; 128이면, _char_를 반환한다.
+            1. 숫자 값이 _mappedCodePoint_의 숫자 값인 코드 단위를 반환한다.
           </emu-alg>
           <emu-note>
             <p>HasEitherUnicodeFlag(_regexpRecord_)가 *true*인 case-insignificant matches에서, all characters는 compared되기 immediately before Unicode Standard가 provided하는 simple mapping을 사용하여 implicitly case-folded됩니다. simple mapping은 always single code point로 maps하므로, 예를 들어 `ß` (U+00DF LATIN SMALL LETTER SHARP S)를 `ss` 또는 `SS`로 map하지 않습니다. 그러나 Basic Latin block 밖의 code points를 그 안의 code points로 map할 수 있습니다 — 예를 들어, `ſ` (U+017F LATIN SMALL LETTER LONG S)는 `s` (U+0073 LATIN SMALL LETTER S)로 case-fold되고 `K` (U+212A KELVIN SIGN)는 `k` (U+006B LATIN SMALL LETTER K)로 case-fold됩니다. those code points를 contain하는 Strings는 `/[a-z]/ui`와 같은 regular expressions에 의해 matched됩니다.</p>

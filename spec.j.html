@@ -38879,18 +38879,18 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. HasEitherUnicodeFlag(_regexpRecord_)が*true*であり、かつ_regexpRecord_.[[IgnoreCase]]が*true*なら、
-              1. Unicode Character Databaseのfile <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a>が_char_に対するsimpleまたはcommon case folding mappingを提供するなら、そのmappingを_char_にapplyしたresultを返す。
-              1. _char_を返す。
-            1. _regexpRecord_.[[IgnoreCase]]が*false*なら、_char_を返す。
-            1. Assert: _char_はUTF-16 code unitである。
-            1. _codePoint_をnumeric valueが_char_のnumeric valueであるcode pointとする。
-            1. _u_を、Unicode Default Case Conversion algorithmに従ったtoUppercase(« _codePoint_ »)とする。
-            1. _uString_をCodePointsToString(_u_)とする。
-            1. _uString_のlength ≠ 1なら、_char_を返す。
-            1. _codeUnit_を_uString_のsingle code unit elementとする。
-            1. _char_のnumeric value ≥ 128であり、かつ_codeUnit_のnumeric value &lt; 128なら、_char_を返す。
-            1. _codeUnit_を返す。
+            1. HasEitherUnicodeFlag(_regexpRecord_) が *true* であり、かつ _regexpRecord_.[[IgnoreCase]] が *true* である場合、
+              1. Unicode 文字データベースのファイル <a href="https://unicode.org/Public/UCD/latest/ucd/CaseFolding.txt"><code>CaseFolding.txt</code></a> が _char_ に対する単純または共通のケースフォールディングマッピングを提供している場合、そのマッピングを _char_ に適用した結果を返す。
+              1. _char_ を返す。
+            1. _regexpRecord_.[[IgnoreCase]] が *false* の場合、_char_ を返す。
+            1. 表明: _char_ は UTF-16 コード単位である。
+            1. _codePoint_ を、その数値が _char_ の数値と等しいコードポイントとする。
+            1. Unicode Default Case Conversion アルゴリズムに従って、_mappedCodePoints_ を toUppercase(« _codePoint_ ») とする。
+            1. CodePointsToString(_mappedCodePoints_) の長さが 1 でない場合、_char_ を返す。
+            1. 表明: _mappedCodePoints_ の要素数は 1 である。
+            1. _mappedCodePoint_ を _mappedCodePoints_ の唯一のコードポイント要素とする。
+            1. _char_ の数値が ≥ 128 であり、かつ _mappedCodePoint_ の数値が &lt; 128 である場合、_char_ を返す。
+            1. その数値が _mappedCodePoint_ の数値と等しいコード単位を返す。
           </emu-alg>
           <emu-note>
             <p>HasEitherUnicodeFlag(_regexpRecord_)が*true*であるcase-insignificant matchesでは、すべてのcharactersは、comparedされる直前にUnicode Standardによってprovidedされるsimple mappingを使用してimplicitly case-foldedされます。simple mappingは常にsingle code pointへmapするため、例えば`ß`（U+00DF LATIN SMALL LETTER SHARP S）を`ss`や`SS`へmapしません。ただし、Basic Latin blockの外側にあるcode pointsをその内側のcode pointsへmapすることはあります—例えば、`ſ`（U+017F LATIN SMALL LETTER LONG S）は`s`（U+0073 LATIN SMALL LETTER S）へcase-foldし、`K`（U+212A KELVIN SIGN）は`k`（U+006B LATIN SMALL LETTER K）へcase-foldします。それらのcode pointsを含むStringsは`/[a-z]/ui`のようなregular expressionsによってmatchedされます。</p>
