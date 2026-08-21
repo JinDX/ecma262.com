@@ -13810,20 +13810,20 @@
         <dd>an ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. 令 _callerContext_ 为运行中执行上下文。
+        1. 令 _callerContext_ 为正在运行的执行上下文。
         1. 令 _calleeContext_ 为 PrepareForOrdinaryCall(_func_, *undefined*)。
-        1. 断言：_calleeContext_ 现在是运行中执行上下文。
+        1. 断言：_calleeContext_ 现在是正在运行的执行上下文。
         1. 如果 _func_.[[IsClassConstructor]] 是 *true*，则
-          1. 令 _error_ 为新创建的 *TypeError* 对象。
-          1. 注：_error_ 在 _calleeContext_ 中、使用 _func_ 的关联 Realm Record 创建。
-          1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为运行中执行上下文。
+          1. 令 _error_ 为一个新创建的 *TypeError* 对象。
+          1. 注意：_error_ 是在 _calleeContext_ 中使用与 _func_ 关联的 Realm 记录创建的。
+          1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为正在运行的执行上下文。
           1. 抛出 _error_。
         1. 执行 OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)。
         1. 令 _result_ 为 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))。
-        1. [id="step-call-pop-context-stack"] 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为运行中执行上下文。
-        1. 如果 _result_ 是 return completion，则返回 _result_.[[Value]]。
-        1. 断言：_result_ 是 throw completion。
-        1. 返回 ? _result_。
+        1. [id="step-call-pop-context-stack"] 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为正在运行的执行上下文。
+        1. 如果 _result_ 是抛出完成，则返回 ? _result_。
+        1. 断言：_result_ 是返回完成。
+        1. 返回 _result_.[[Value]]。
       </emu-alg>
       <emu-note>
         <p>当 _calleeContext_ 在步骤 <emu-xref href="#step-call-pop-context-stack"></emu-xref> 中从执行上下文栈中移除时，如果它已暂停并被可访问的 Generator 保留以供稍后恢复，则不得销毁它。</p>
@@ -13980,29 +13980,28 @@
         <dd>an ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. 令 _callerContext_ 为运行中执行上下文。
+        1. 令 _callerContext_ 为正在运行的执行上下文。
         1. 令 _kind_ 为 _func_.[[ConstructorKind]]。
         1. 如果 _kind_ 是 ~base~，则
           1. 令 _thisArg_ 为 ? OrdinaryCreateFromConstructor(_newTarget_, *"%Object.prototype%"*)。
         1. 令 _calleeContext_ 为 PrepareForOrdinaryCall(_func_, _newTarget_)。
-        1. 断言：_calleeContext_ 现在是运行中执行上下文。
+        1. 断言：_calleeContext_ 现在是正在运行的执行上下文。
         1. 如果 _kind_ 是 ~base~，则
           1. 执行 OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)。
           1. 令 _initializeResult_ 为 Completion(InitializeInstanceElements(_thisArg_, _func_))。
-          1. 如果 _initializeResult_ 是 abrupt completion，则
-            1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为运行中执行上下文。
+          1. 如果 _initializeResult_ 是突然完成，则
+            1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为正在运行的执行上下文。
             1. 返回 ? _initializeResult_。
         1. 令 _ctorEnv_ 为 _calleeContext_ 的 LexicalEnvironment。
         1. 令 _result_ 为 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))。
-        1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为运行中执行上下文。
-        1. 如果 _result_ 是 throw completion，则
-          1. 返回 ? _result_。
-        1. 断言：_result_ 是 return completion。
-        1. 如果 _result_.[[Value]] 是 Object，则返回 _result_.[[Value]]。
+        1. 从执行上下文栈中移除 _calleeContext_，并将 _callerContext_ 恢复为正在运行的执行上下文。
+        1. 如果 _result_ 是抛出完成，则返回 ? _result_。
+        1. 断言：_result_ 是返回完成。
+        1. 如果 _result_.[[Value]] 是一个 Object，则返回 _result_.[[Value]]。
         1. 如果 _kind_ 是 ~base~，则返回 _thisArg_。
-        1. 如果 _result_.[[Value]] 不是 *undefined*，则抛出 *TypeError* 异常。
+        1. 如果 _result_.[[Value]] 不是 *undefined*，则抛出一个 *TypeError* 异常。
         1. 令 _thisBinding_ 为 ? _ctorEnv_.GetThisBinding()。
-        1. 断言：_thisBinding_ 是 Object。
+        1. 断言：_thisBinding_ 是一个 Object。
         1. 返回 _thisBinding_。
       </emu-alg>
     </emu-clause>

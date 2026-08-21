@@ -13810,20 +13810,20 @@
         <dd>an ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. _callerContext_를 running execution context로 둔다.
-        1. _calleeContext_를 PrepareForOrdinaryCall(_func_, *undefined*)로 둔다.
-        1. Assert: _calleeContext_는 이제 running execution context이다.
-        1. _func_.[[IsClassConstructor]]가 *true*이면, 다음을 수행한다.
-          1. _error_를 newly created *TypeError* object로 둔다.
-          1. NOTE: _error_는 _func_의 associated Realm Record를 가진 _calleeContext_ 안에서 created됩니다.
-          1. execution context stack에서 _calleeContext_를 remove하고 _callerContext_를 running execution context로 restore한다.
-          1. _error_를 throw한다.
+        1. _callerContext_를 실행 중인 실행 컨텍스트라 한다.
+        1. _calleeContext_를 PrepareForOrdinaryCall(_func_, *undefined*)이라 한다.
+        1. 단언: _calleeContext_는 이제 실행 중인 실행 컨텍스트이다.
+        1. _func_.[[IsClassConstructor]]가 *true*이면 다음을 수행한다.
+          1. _error_를 새로 생성된 *TypeError* 객체라 한다.
+          1. 참고: _error_는 _func_에 연결된 Realm 레코드를 사용하여 _calleeContext_에서 생성된다.
+          1. 실행 컨텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 중인 실행 컨텍스트로 복원한다.
+          1. _error_를 던진다.
         1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)를 수행한다.
-        1. _result_를 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))로 둔다.
-        1. [id="step-call-pop-context-stack"] execution context stack에서 _calleeContext_를 remove하고 _callerContext_를 running execution context로 restore한다.
-        1. _result_가 return completion이면, _result_.[[Value]]를 반환한다.
-        1. Assert: _result_는 throw completion이다.
-        1. ? _result_를 반환한다.
+        1. _result_를 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))이라 한다.
+        1. [id="step-call-pop-context-stack"] 실행 컨텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 중인 실행 컨텍스트로 복원한다.
+        1. _result_가 throw 완료이면 ? _result_를 반환한다.
+        1. 단언: _result_는 return 완료이다.
+        1. _result_.[[Value]]를 반환한다.
       </emu-alg>
       <emu-note>
         <p>step <emu-xref href="#step-call-pop-context-stack"></emu-xref>에서 _calleeContext_가 execution context stack에서 removed될 때, accessible Generator에 의해 later resumption을 위해 suspended되고 retained되어 있다면 destroyed되어서는 안 됩니다.</p>
@@ -13980,29 +13980,28 @@
         <dd>an ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. _callerContext_를 running execution context로 둔다.
-        1. _kind_를 _func_.[[ConstructorKind]]로 둔다.
-        1. _kind_가 ~base~이면, 다음을 수행한다.
-          1. _thisArg_를 ? OrdinaryCreateFromConstructor(_newTarget_, *"%Object.prototype%"*)로 둔다.
-        1. _calleeContext_를 PrepareForOrdinaryCall(_func_, _newTarget_)으로 둔다.
-        1. Assert: _calleeContext_는 이제 running execution context이다.
-        1. _kind_가 ~base~이면, 다음을 수행한다.
+        1. _callerContext_를 실행 중인 실행 컨텍스트라 한다.
+        1. _kind_를 _func_.[[ConstructorKind]]라 한다.
+        1. _kind_가 ~base~이면 다음을 수행한다.
+          1. _thisArg_를 ? OrdinaryCreateFromConstructor(_newTarget_, *"%Object.prototype%"*)라 한다.
+        1. _calleeContext_를 PrepareForOrdinaryCall(_func_, _newTarget_)이라 한다.
+        1. 단언: _calleeContext_는 이제 실행 중인 실행 컨텍스트이다.
+        1. _kind_가 ~base~이면 다음을 수행한다.
           1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)를 수행한다.
-          1. _initializeResult_를 Completion(InitializeInstanceElements(_thisArg_, _func_))로 둔다.
-          1. _initializeResult_가 abrupt completion이면, 다음을 수행한다.
-            1. execution context stack에서 _calleeContext_를 remove하고 _callerContext_를 running execution context로 restore한다.
+          1. _initializeResult_를 Completion(InitializeInstanceElements(_thisArg_, _func_))이라 한다.
+          1. _initializeResult_가 갑작스러운 완료이면 다음을 수행한다.
+            1. 실행 컨텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 중인 실행 컨텍스트로 복원한다.
             1. ? _initializeResult_를 반환한다.
-        1. _ctorEnv_를 _calleeContext_의 LexicalEnvironment로 둔다.
-        1. _result_를 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))로 둔다.
-        1. execution context stack에서 _calleeContext_를 remove하고 _callerContext_를 running execution context로 restore한다.
-        1. _result_가 throw completion이면, 다음을 수행한다.
-          1. ? _result_를 반환한다.
-        1. Assert: _result_는 return completion이다.
-        1. _result_.[[Value]]가 Object이면, _result_.[[Value]]를 반환한다.
-        1. _kind_가 ~base~이면, _thisArg_를 반환한다.
-        1. _result_.[[Value]]가 *undefined*가 아니면, *TypeError* exception을 throw한다.
-        1. _thisBinding_을 ? _ctorEnv_.GetThisBinding()으로 둔다.
-        1. Assert: _thisBinding_은 Object이다.
+        1. _ctorEnv_를 _calleeContext_의 LexicalEnvironment라 한다.
+        1. _result_를 Completion(OrdinaryCallEvaluateBody(_func_, _argList_))이라 한다.
+        1. 실행 컨텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 중인 실행 컨텍스트로 복원한다.
+        1. _result_가 throw 완료이면 ? _result_를 반환한다.
+        1. 단언: _result_는 return 완료이다.
+        1. _result_.[[Value]]가 Object이면 _result_.[[Value]]를 반환한다.
+        1. _kind_가 ~base~이면 _thisArg_를 반환한다.
+        1. _result_.[[Value]]가 *undefined*가 아니면 *TypeError* 예외를 던진다.
+        1. _thisBinding_을 ? _ctorEnv_.GetThisBinding()이라 한다.
+        1. 단언: _thisBinding_은 Object이다.
         1. _thisBinding_을 반환한다.
       </emu-alg>
     </emu-clause>

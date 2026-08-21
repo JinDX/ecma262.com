@@ -13828,20 +13828,20 @@
         <dd>ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. _callerContext_をrunning execution contextとする。
-        1. _calleeContext_をPrepareForOrdinaryCall(_func_, *undefined*)とする。
-        1. Assert: _calleeContext_は現在running execution contextである。
-        1. _func_.[[IsClassConstructor]]が*true*なら、
-          1. _error_を新しく作成された*TypeError* objectとする。
-          1. NOTE: _error_は、_func_に関連付けられたRealm Recordを伴う_calleeContext_内で作成される。
-          1. _calleeContext_をexecution context stackから削除し、_callerContext_をrunning execution contextとして復元する。
-          1. _error_をthrowする。
-        1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)を実行する。
-        1. _result_をCompletion(OrdinaryCallEvaluateBody(_func_, _argList_))とする。
-        1. [id="step-call-pop-context-stack"] _calleeContext_をexecution context stackから削除し、_callerContext_をrunning execution contextとして復元する。
-        1. _result_がreturn completionなら、_result_.[[Value]]を返す。
-        1. Assert: _result_はthrow completionである。
-        1. ? _result_を返す。
+        1. _callerContext_ を実行中の実行コンテキストとする。
+        1. _calleeContext_ を PrepareForOrdinaryCall(_func_, *undefined*) とする。
+        1. 表明: 現在、_calleeContext_ は実行中の実行コンテキストである。
+        1. _func_.[[IsClassConstructor]] が *true* である場合、
+          1. _error_ を新たに作成された *TypeError* オブジェクトとする。
+          1. 注記: _error_ は、_func_ に関連付けられた Realm Record を使用して _calleeContext_ 内で作成される。
+          1. 実行コンテキストスタックから _calleeContext_ を取り除き、_callerContext_ を実行中の実行コンテキストとして復元する。
+          1. _error_ をスローする。
+        1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_) を実行する。
+        1. _result_ を Completion(OrdinaryCallEvaluateBody(_func_, _argList_)) とする。
+        1. [id="step-call-pop-context-stack"] 実行コンテキストスタックから _calleeContext_ を取り除き、_callerContext_ を実行中の実行コンテキストとして復元する。
+        1. _result_ が throw 完了である場合、? _result_ を返す。
+        1. 表明: _result_ は return 完了である。
+        1. _result_.[[Value]] を返す。
       </emu-alg>
       <emu-note>
         <p>ステップ<emu-xref href="#step-call-pop-context-stack"></emu-xref>で_calleeContext_がexecution context stackから削除されるとき、それがsuspendedであり、accessible Generatorによる後続のresumptionのために保持されている場合、破棄してはなりません。</p>
@@ -13998,30 +13998,29 @@
         <dd>ECMAScript function object _func_</dd>
       </dl>
       <emu-alg>
-        1. _callerContext_をrunning execution contextとする。
-        1. _kind_を_func_.[[ConstructorKind]]とする。
-        1. _kind_が~base~なら、
-          1. _thisArg_を ? OrdinaryCreateFromConstructor(_newTarget_, *"%Object.prototype%"*) とする。
-        1. _calleeContext_をPrepareForOrdinaryCall(_func_, _newTarget_)とする。
-        1. Assert: _calleeContext_は現在running execution contextである。
-        1. _kind_が~base~なら、
-          1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_)を実行する。
-          1. _initializeResult_をCompletion(InitializeInstanceElements(_thisArg_, _func_))とする。
-          1. _initializeResult_がabrupt completionなら、
-            1. _calleeContext_をexecution context stackから削除し、_callerContext_をrunning execution contextとして復元する。
-            1. ? _initializeResult_を返す。
-        1. _ctorEnv_を_calleeContext_のLexicalEnvironmentとする。
-        1. _result_をCompletion(OrdinaryCallEvaluateBody(_func_, _argList_))とする。
-        1. _calleeContext_をexecution context stackから削除し、_callerContext_をrunning execution contextとして復元する。
-        1. _result_がthrow completionなら、
-          1. ? _result_を返す。
-        1. Assert: _result_はreturn completionである。
-        1. _result_.[[Value]]がObjectなら、_result_.[[Value]]を返す。
-        1. _kind_が~base~なら、_thisArg_を返す。
-        1. _result_.[[Value]]が*undefined*でないなら、*TypeError*例外をthrowする。
-        1. _thisBinding_を ? _ctorEnv_.GetThisBinding() とする。
-        1. Assert: _thisBinding_はObjectである。
-        1. _thisBinding_を返す。
+        1. _callerContext_ を実行中の実行コンテキストとする。
+        1. _kind_ を _func_.[[ConstructorKind]] とする。
+        1. _kind_ が ~base~ である場合、
+          1. _thisArg_ を ? OrdinaryCreateFromConstructor(_newTarget_, *"%Object.prototype%"*) とする。
+        1. _calleeContext_ を PrepareForOrdinaryCall(_func_, _newTarget_) とする。
+        1. 表明: 現在、_calleeContext_ は実行中の実行コンテキストである。
+        1. _kind_ が ~base~ である場合、
+          1. OrdinaryCallBindThis(_func_, _calleeContext_, _thisArg_) を実行する。
+          1. _initializeResult_ を Completion(InitializeInstanceElements(_thisArg_, _func_)) とする。
+          1. _initializeResult_ が中途完了である場合、
+            1. 実行コンテキストスタックから _calleeContext_ を取り除き、_callerContext_ を実行中の実行コンテキストとして復元する。
+            1. ? _initializeResult_ を返す。
+        1. _ctorEnv_ を _calleeContext_ の LexicalEnvironment とする。
+        1. _result_ を Completion(OrdinaryCallEvaluateBody(_func_, _argList_)) とする。
+        1. 実行コンテキストスタックから _calleeContext_ を取り除き、_callerContext_ を実行中の実行コンテキストとして復元する。
+        1. _result_ が throw 完了である場合、? _result_ を返す。
+        1. 表明: _result_ は return 完了である。
+        1. _result_.[[Value]] が Object である場合、_result_.[[Value]] を返す。
+        1. _kind_ が ~base~ である場合、_thisArg_ を返す。
+        1. _result_.[[Value]] が *undefined* でない場合、*TypeError* 例外をスローする。
+        1. _thisBinding_ を ? _ctorEnv_.GetThisBinding() とする。
+        1. 表明: _thisBinding_ は Object である。
+        1. _thisBinding_ を返す。
       </emu-alg>
     </emu-clause>
 
