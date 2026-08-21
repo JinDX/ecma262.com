@@ -5336,6 +5336,31 @@
       </emu-note>
     </emu-clause>
 
+    <emu-clause id="sec-snaptointeger" type="abstract operation">
+      <h1>
+        SnapToInteger (
+          _arg_: 一个 ECMAScript 语言值,
+          _nonIntHandling_: ~reject~ 或 ~truncate~,
+          optional _minimum_: 一个整数,
+          optional _maximum_: 一个整数,
+        ): 包含一个整数的正常完成或抛出完成
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>它将 _arg_ 转换为表示其 Number 值的整数，拒绝非有限值，并通过拒绝或截断来处理有限的非<emu-xref href="#integral-number">整数</emu-xref>值，还可选择施加闭区间约束。</dd>
+      </dl>
+      <emu-alg>
+        1. 令 _number_ 为 ? ToNumber(_arg_)。
+        1. 如果 _number_ 是 *NaN*、*+∞*<sub>𝔽</sub> 或 *-∞*<sub>𝔽</sub> 之一，则抛出一个 *RangeError* 异常。
+        1. 令 _mv_ 为 ℝ(_number_)。
+        1. 如果 _nonIntHandling_ 为 ~truncate~，则将 _mv_ 设置为 truncate(_mv_)。
+        1. 如果 _mv_ 不是整数，则抛出一个 *RangeError* 异常。
+        1. 如果 _minimum_ 存在且 _mv_ &lt; _minimum_，则抛出一个 *RangeError* 异常。
+        1. 如果 _maximum_ 存在且 _mv_ > _maximum_，则抛出一个 *RangeError* 异常。
+        1. 返回 _mv_。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-tofixedsizeinteger" type="abstract operation">
       <h1>
         ToFixedSizeInteger (
@@ -5726,8 +5751,8 @@
       </dl>
       <emu-alg>
         1. 令 _length_ 为 ? ToIntegerOrInfinity(_arg_)。
-        1. 令 _clampedLen_ 为将 _length_ 限制在 0 和 2<sup>53</sup> - 1 之间的结果。
-        1. 返回 𝔽(_clampedLen_)。
+        1. 令 _clampedLength_ 为将 _length_ 限制在 0 和 2<sup>53</sup> - 1 之间的结果。
+        1. 返回 𝔽(_clampedLength_)。
       </emu-alg>
     </emu-clause>
 
@@ -10047,11 +10072,7 @@
       <emu-alg>
         1. 返回 ~unused~。
       </emu-alg>
-      <emu-grammar>
-        ObjectBindingPattern :
-          `{` BindingPropertyList `}`
-          `{` BindingPropertyList `,` `}`
-      </emu-grammar>
+      <emu-grammar>ObjectBindingPattern : `{` BindingPropertyList `,`? `}`</emu-grammar>
       <emu-alg>
         1. 执行 ? |BindingPropertyList| 带实参 _value_ 和 _envRecord_ 的 PropertyBindingInitialization。
         1. 返回 ~unused~。
@@ -18803,9 +18824,8 @@
         CoverParenthesizedExpressionAndArrowParameterList[?Yield, ?Await] #parencover
 
       CoverParenthesizedExpressionAndArrowParameterList[Yield, Await] :
-        `(` Expression[+In, ?Yield, ?Await] `)`
-        `(` Expression[+In, ?Yield, ?Await] `,` `)`
         `(` `)`
+        `(` Expression[+In, ?Yield, ?Await] `,`? `)`
         `(` `...` BindingIdentifier[?Yield, ?Await] `)`
         `(` `...` BindingPattern[?Yield, ?Await] `)`
         `(` Expression[+In, ?Yield, ?Await] `,` `...` BindingIdentifier[?Yield, ?Await] `)`
@@ -19002,8 +19022,7 @@
       <emu-grammar type="definition">
         ObjectLiteral[Yield, Await] :
           `{` `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `,` `}`
+          `{` PropertyDefinitionList[?Yield, ?Await] `,`? `}`
 
         PropertyDefinitionList[Yield, Await] :
           PropertyDefinition[?Yield, ?Await]
@@ -19043,11 +19062,7 @@
 
       <emu-clause id="sec-object-initializer-static-semantics-early-errors" oldids="sec-__proto__-property-names-in-object-initializers">
         <h1>Static Semantics: 早期错误</h1>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <ul>
           <li>
             如果 |PropertyDefinitionList| 的 PropertyNameList 中包含任何重复的 *"__proto__"* 条目，且这些条目中至少有两个是从形式为 <emu-grammar>PropertyDefinition : PropertyName `:` AssignmentExpression</emu-grammar> 的产生式得到的，则为 Syntax Error。如果此 |ObjectLiteral| 包含在一个正为 ParseJSON 解析的 |Script| 中，则不应用此规则（参见 ParseJSON 的第 <emu-xref href="#step-json-parse-parse"></emu-xref> 步）。
@@ -19148,11 +19163,7 @@
         <emu-alg>
           1. 返回 OrdinaryObjectCreate(%Object.prototype%)。
         </emu-alg>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <emu-alg>
           1. 令 _obj_ 为 OrdinaryObjectCreate(%Object.prototype%)。
           1. 执行 ? 以 _obj_ 为实参执行 |PropertyDefinitionList| 的 PropertyDefinitionEvaluation。
@@ -19642,8 +19653,7 @@
 
       Arguments[Yield, Await] :
         `(` `)`
-        `(` ArgumentList[?Yield, ?Await] `)`
-        `(` ArgumentList[?Yield, ?Await] `,` `)`
+        `(` ArgumentList[?Yield, ?Await] `,`? `)`
 
       ArgumentList[Yield, Await] :
         AssignmentExpression[+In, ?Yield, ?Await]
@@ -21446,8 +21456,8 @@
         ObjectAssignmentPattern[Yield, Await] :
           `{` `}`
           `{` AssignmentRestProperty[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await]? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,`? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await] `}`
 
         ArrayAssignmentPattern[Yield, Await] :
           `[` Elision? AssignmentRestElement[?Yield, ?Await]? `]`
@@ -21520,11 +21530,7 @@
           1. 执行 ? RequireObjectCoercible(_value_)。
           1. 返回 ~unused~。
         </emu-alg>
-        <emu-grammar>
-          ObjectAssignmentPattern :
-            `{` AssignmentPropertyList `}`
-            `{` AssignmentPropertyList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectAssignmentPattern : `{` AssignmentPropertyList `,`? `}`</emu-grammar>
         <emu-alg>
           1. 执行 ? RequireObjectCoercible(_value_)。
           1. 执行 ? 以 _value_ 为实参执行 |AssignmentPropertyList| 的 PropertyDestructuringAssignmentEvaluation。
@@ -22203,8 +22209,8 @@
         ObjectBindingPattern[Yield, Await] :
           `{` `}`
           `{` BindingRestProperty[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await]? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,`? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await] `}`
 
         ArrayBindingPattern[Yield, Await] :
           `[` Elision? BindingRestElement[?Yield, ?Await]? `]`
@@ -29732,8 +29738,7 @@
 
         NamedImports :
           `{` `}`
-          `{` ImportsList `}`
-          `{` ImportsList `,` `}`
+          `{` ImportsList `,`? `}`
 
         FromClause :
           `from` ModuleSpecifier
@@ -29930,8 +29935,7 @@
 
         NamedExports :
           `{` `}`
-          `{` ExportsList `}`
-          `{` ExportsList `,` `}`
+          `{` ExportsList `,`? `}`
 
         ExportsList :
           ExportSpecifier
@@ -33196,10 +33200,9 @@
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _x_ 为 ? ThisNumberValue(*this* value)。
-          1. 如果 _radix_ 是 *undefined*，则令 _radixMV_ 为 10。
-          1. 否则，令 _radixMV_ 为 ? ToIntegerOrInfinity(_radix_)。
-          1. 如果 _radixMV_ 不在从 2 到 36 的闭区间内，则抛出 *RangeError* 异常。
+          1. 令 _x_ 为 ? ThisNumberValue(*this* 值)。
+          1. 如果 _radix_ 为 *undefined*，则令 _radixMV_ 为 10。
+          1. 否则，令 _radixMV_ 为 ? SnapToInteger(_radix_, ~truncate~, 2, 36)。
           1. 返回 Number::toString(_x_, _radixMV_)。
         </emu-alg>
         <p>此方法不是泛型的；如果其 *this* value 不是 Number 或 Number 对象，它会抛出 *TypeError* 异常。因此，它不能被转移到其他种类的对象上作为方法使用。</p>
@@ -33344,10 +33347,9 @@
         </emu-note>
         <p>此方法在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _x_ 为 ? ThisBigIntValue(*this* value)。
-          1. 如果 _radix_ 是 *undefined*，则令 _radixMV_ 为 10。
-          1. 否则，令 _radixMV_ 为 ? ToIntegerOrInfinity(_radix_)。
-          1. 如果 _radixMV_ 不在从 2 到 36 的闭区间内，则抛出 *RangeError* 异常。
+          1. 令 _x_ 为 ? ThisBigIntValue(*this* 值)。
+          1. 如果 _radix_ 为 *undefined*，则令 _radixMV_ 为 10。
+          1. 否则，令 _radixMV_ 为 ? SnapToInteger(_radix_, ~truncate~, 2, 36)。
           1. 返回 BigInt::toString(_x_, _radixMV_)。
         </emu-alg>
         <p>此方法不是泛型的；如果其 *this* value 不是 BigInt 或 BigInt 对象，它会抛出 *TypeError* 异常。因此，它不能被转移到其他种类的对象上作为方法使用。</p>
@@ -34090,9 +34092,12 @@
         <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
         <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
         <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerDay" aoid="NanosecondsPerDay">NanosecondsPerDay = 10<sup>6</sup> × msPerDay = 8.64 × 10<sup>13</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
+        <emu-eqn id="eqn-MaxEpochNanoseconds" aoid="MaxEpochNanoseconds">MaxEpochNanoseconds = 10<sup>8</sup> × NanosecondsPerDay = 8.64 × 10<sup>21</sup></emu-eqn>
+        <emu-eqn id="eqn-MinEpochNanoseconds" aoid="MinEpochNanoseconds">MinEpochNanoseconds = -MaxEpochNanoseconds = -8.64 × 10<sup>21</sup></emu-eqn>
       </emu-clause>
 
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
@@ -34341,30 +34346,38 @@
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-epoch-nanoseconds">
+        <h1>纪元纳秒与范围</h1>
+
+        <p><dfn variants="epoch nanoseconds counts">纪元纳秒计数</dfn>是一个以纳秒精度表示时间瞬时的整数。它支持与时间值相同的范围，但以纳秒表示，即从 MinEpochNanoseconds 到 MaxEpochNanoseconds。时间值 *NaN* 没有对应的纳秒等价值；不存在表示非特定瞬时的形式。</p>
+
+        <p>UTC 1970 年 1 月 1 日开始时的午夜确切时刻由值 0 表示。最大值为 MaxEpochNanoseconds，最小值为 MinEpochNanoseconds。</p>
+      </emu-clause>
+
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
             _year_: 一个整数,
-            _month_: 一个位于从 1 到 12 的闭区间内的整数,
-            _day_: 一个位于从 1 到 31 的闭区间内的整数,
-            _hour_: 一个位于从 0 到 23 的闭区间内的整数,
-            _minute_: 一个位于从 0 到 59 的闭区间内的整数,
-            _second_: 一个位于从 0 到 59 的闭区间内的整数,
-            _millisecond_: 一个位于从 0 到 999 的闭区间内的整数,
-            _microsecond_: 一个位于从 0 到 999 的闭区间内的整数,
-            _nanosecond_: 一个位于从 0 到 999 的闭区间内的整数,
-          ): 一个 BigInt
+            _month_: 1 到 12 的闭区间内的整数,
+            _day_: 1 到 31 的闭区间内的整数,
+            _hour_: 0 到 23 的闭区间内的整数,
+            _minute_: 0 到 59 的闭区间内的整数,
+            _second_: 0 到 59 的闭区间内的整数,
+            _millisecond_: 0 到 999 的闭区间内的整数,
+            _microsecond_: 0 到 999 的闭区间内的整数,
+            _nanosecond_: 0 到 999 的闭区间内的整数,
+          ): 一个纪元纳秒计数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>返回值表示自纪元以来、与给定 ISO 8601 日历日期和 UTC 挂钟时间相对应的纳秒数。</dd>
+          <dd>返回值是与给定的 UTC ISO 8601 日历日期和钟表时间相对应的纪元纳秒计数。</dd>
         </dl>
         <emu-alg>
           1. 令 _date_ 为 MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_))。
           1. 令 _time_ 为 MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_))。
           1. 令 _ms_ 为 MakeDate(_date_, _time_)。
-          1. 断言：_ms_ 是一个整数 Number。
-          1. 返回 ℤ(ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_)。
+          1. 断言：_ms_ 是一个整数值 Number。
+          1. 返回 ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_。
         </emu-alg>
       </emu-clause>
 
@@ -34388,9 +34401,9 @@
         </p>
         <p>
           遵循 ECMA-402 国际化 API 规范中所述时区要求的实现称为<dfn>时区感知</dfn>实现。
-          时区感知实现必须支持与 IANA 时区数据库的 Zone 名称和 Link 名称相对应的可用具名时区，并且只能支持这些名称。
-          在时区感知实现中，除 ECMA-402 规范所规定的 AvailableNamedTimeZoneIdentifiers 明确覆盖的情况外，主时区标识符和非主时区标识符分别是 IANA 时区数据库中的 Zone 名称和 Link 名称。
-          仍建议未支持整个 IANA 时区数据库的实现使用 IANA 时区数据库名称作为表示时区的标识符。
+          时区感知实现必须支持与 <a href="https://www.iana.org/time-zones">IANA 时区数据库</a>中的“Zone”和“<emu-not-ref>Link</emu-not-ref>”名称相对应的可用命名时区，并且只能支持这些名称。
+          在时区感知实现中，主时区标识符是 IANA 时区数据库中的“Zone”名称，而非主时区标识符则是“<emu-not-ref>Link</emu-not-ref>”名称，除非 ECMA-402 规范中指定的 AvailableNamedTimeZoneIdentifiers 明确另有规定。
+          对于不支持整个 IANA 时区数据库的实现，仍建议使用 IANA 时区数据库名称作为表示时区的标识符。
         </p>
       </emu-clause>
 
@@ -34399,37 +34412,37 @@
           GetNamedTimeZoneEpochNanoseconds (
             _timeZoneIdentifier_: 一个 String,
             _year_: 一个整数,
-            _month_: 一个位于从 1 到 12 的闭区间内的整数,
-            _day_: 一个位于从 1 到 31 的闭区间内的整数,
-            _hour_: 一个位于从 0 到 23 的闭区间内的整数,
-            _minute_: 一个位于从 0 到 59 的闭区间内的整数,
-            _second_: 一个位于从 0 到 59 的闭区间内的整数,
-            _millisecond_: 一个位于从 0 到 999 的闭区间内的整数,
-            _microsecond_: 一个位于从 0 到 999 的闭区间内的整数,
-            _nanosecond_: 一个位于从 0 到 999 的闭区间内的整数,
-          ): 一个 BigInt 的 List
+            _month_: 1 到 12 的闭区间内的整数,
+            _day_: 1 到 31 的闭区间内的整数,
+            _hour_: 0 到 23 的闭区间内的整数,
+            _minute_: 0 到 59 的闭区间内的整数,
+            _second_: 0 到 59 的闭区间内的整数,
+            _millisecond_: 0 到 999 的闭区间内的整数,
+            _microsecond_: 0 到 999 的闭区间内的整数,
+            _nanosecond_: 0 到 999 的闭区间内的整数,
+          ): 纪元纳秒计数的 List
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            返回的 List 中的每个值都表示自纪元以来、与给定 ISO 8601 日历日期以及由 _timeZoneIdentifier_ 标识的具名时区中的挂钟时间相对应的纳秒数。
+            返回的 List 中的每个值都表示一个与给定的 ISO 8601 日历日期以及由 _timeZoneIdentifier_ 标识的命名时区中的钟表时间相对应的纪元纳秒计数。
           </dd>
         </dl>
         <p>
-          当输入表示由于负时区转换而出现多次的本地时间时（例如夏令时结束，或由于时区规则发生变化而减小时区偏移），返回的 List 将包含多个元素，并按数值升序排序。
-          当输入表示由于正时区转换而被跳过的本地时间时（例如夏令时开始，或由于时区规则发生变化而增大时区偏移），返回的 List 将为空。
+          当输入表示因负向时区转换而多次出现的本地时间时（例如夏令时结束，或因时区规则更改而减小时区偏移量），返回的 List 将包含多个元素，并按数值升序排序。
+          当输入表示因正向时区转换而被跳过的本地时间时（例如夏令时开始，或因时区规则更改而增大时区偏移量），返回的 List 将为空。
           否则，返回的 List 将包含一个元素。
         </p>
-        <p>对于不包含任何时区的本地政治规则的 ECMAScript 实现，应使用 GetNamedTimeZoneEpochNanoseconds 的默认实现；该默认实现在被调用时执行以下步骤：</p>
+        <p>GetNamedTimeZoneEpochNanoseconds 的默认实现供不包含任何时区的当地政治规则的 ECMAScript 实现使用，其在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 断言：_timeZoneIdentifier_ 是 *"UTC"*。
+          1. 断言：_timeZoneIdentifier_ 为 *"UTC"*。
           1. 令 _epochNanoseconds_ 为 GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_)。
           1. 返回 « _epochNanoseconds_ »。
         </emu-alg>
         <emu-note>
-          <p>时区感知实现必须使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 的时区信息（并建议所有其他实现也这样做）。</p>
-          <p>America/New_York 的 2017 年 11 月 5 日凌晨 1:30 重复出现了两次，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) 将返回长度为 2 的 List，其中第一个元素表示 UTC 05:30（对应于 UTC 偏移 -04:00 的美国东部夏令时 01:30），第二个元素表示 UTC 06:30（对应于 UTC 偏移 -05:00 的美国东部标准时间 01:30）。</p>
-          <p>America/New_York 的 2017 年 3 月 12 日凌晨 2:30 并不存在，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) 将返回一个空 List。</p>
+          <p>时区感知实现必须使用 <a href="https://www.iana.org/time-zones">IANA 时区数据库</a>的时区信息（并建议所有其他实现也这样做）。</p>
+          <p>America/New_York 中 2017 年 11 月 5 日凌晨 1:30 会重复出现两次，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) 将返回长度为 2 的 List，其中第一个元素表示 05:30 UTC（对应 UTC 偏移量为 -04:00 的美国东部夏令时间 01:30），第二个元素表示 06:30 UTC（对应 UTC 偏移量为 -05:00 的美国东部标准时间 01:30）。</p>
+          <p>America/New_York 中 2017 年 3 月 12 日凌晨 2:30 不存在，因此 GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) 将返回一个空 List。</p>
         </emu-note>
       </emu-clause>
 
@@ -34437,19 +34450,19 @@
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
             _timeZoneIdentifier_: 一个 String,
-            _epochNanoseconds_: 一个 BigInt,
+            _epochNanoseconds_: 一个纪元纳秒计数,
           ): 一个整数
         </h1>
         <dl class="header">
         </dl>
-        <p>返回的整数表示在相对于纪元与 _epochNanoseconds_ 相对应的时刻，由 _timeZoneIdentifier_ 标识的具名时区相对于 UTC 的偏移，两者均以纳秒为单位。</p>
-        <p>对于不包含任何时区的本地政治规则的 ECMAScript 实现，应使用 GetNamedTimeZoneOffsetNanoseconds 的默认实现；该默认实现在被调用时执行以下步骤：</p>
+        <p>返回的整数表示在与纪元纳秒计数 _epochNanoseconds_ 相对应的瞬时，由 _timeZoneIdentifier_ 标识的命名时区相对于 UTC 的偏移量，以纳秒为单位。</p>
+        <p>GetNamedTimeZoneOffsetNanoseconds 的默认实现供不包含任何时区的当地政治规则的 ECMAScript 实现使用，其在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 断言：_timeZoneIdentifier_ 是 *"UTC"*。
+          1. 断言：_timeZoneIdentifier_ 为 *"UTC"*。
           1. 返回 0。
         </emu-alg>
         <emu-note>
-          <p>时区偏移值可以是正数或负数。</p>
+          <p>时区偏移值可以为正，也可以为负。</p>
         </emu-note>
       </emu-clause>
 
@@ -34552,10 +34565,10 @@
         </dl>
         <emu-alg>
           1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
+          1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 为 *true*，则
             1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
           1. 否则，
-            1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))。
+            1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond)。
           1. 令 _offsetMs_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
           1. 返回 _tv_ + 𝔽(_offsetMs_)。
         </emu-alg>
@@ -34610,7 +34623,7 @@
         </p>
         <p>如果实现中无法获得本地时间 _t_ 的政治规则，则结果为 _t_，因为 SystemTimeZoneIdentifier 返回 *"UTC"*，而 GetNamedTimeZoneOffsetNanoseconds 返回 0。</p>
         <emu-note>
-          <p>对于感知时区的实现，要求使用 IANA 时区数据库 <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> 中的时区信息（对于所有其他实现也建议如此）。</p>
+          <p>时区感知实现必须使用 <a href="https://www.iana.org/time-zones">IANA 时区数据库</a>的时区信息（并建议所有其他实现也这样做）。</p>
           <p>
             America/New_York 中 2017 年 11 月 5 日凌晨 1:30 重复了两次（时钟向后拨），但必须将其解释为 UTC-04 的凌晨 1:30，而不是 UTC-05 的凌晨 1:30。
             在 UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) 中，_offsetMs_ 的值为 <emu-eqn>-4 × msPerHour</emu-eqn>。
@@ -35982,7 +35995,7 @@ THH:mm:ss.sss
             1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 为 *true*，则
               1. 令 _offsetNs_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
             1. 否则，
-              1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond))。
+              1. 令 _offsetNs_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond)。
             1. 令 _offset_ 为 truncate(_offsetNs_ / nsPerMillisecond)。
             1. 如果 _offset_ ≥ 0，则
               1. 令 _offsetSign_ 为 *"+"*。
@@ -35992,8 +36005,8 @@ THH:mm:ss.sss
               1. 令 _absOffset_ 为 -_offset_。
             1. 令 _offsetMin_ 为 ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2)。
             1. 令 _offsetHour_ 为 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2)。
-            1. 令 _tzName_ 为一个由实现定义的字符串，它要么为空 String，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、一个由实现定义的时区名称和代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串拼接结果。
-            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串拼接结果。
+            1. 令 _tzName_ 为一个实现定义的字符串，该字符串要么是空 String，要么是代码单元 0x0020（空格）、代码单元 0x0028（左圆括号）、一个实现定义的时区名称和代码单元 0x0029（右圆括号）的字符串连接。
+            1. 返回 _offsetSign_、_offsetHour_、_offsetMin_ 和 _tzName_ 的字符串连接。
           </emu-alg>
         </emu-clause>
 
@@ -49378,11 +49391,14 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
             1. 令 _numberLimit_ 为 Completion(ToNumber(_limit_))。
-            1. IfAbruptCloseIterator(_numberLimit_, _iterated_)。
-            1. 如果 _numberLimit_ 是 *NaN*，则
+            1. IfAbruptCloseIterator(_numberLimit_, _iterated_).
+            1. 如果 _numberLimit_ 为 *NaN*，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 如果 _numberLimit_ 为有限值且 _numberLimit_ > 𝔽(2<sup>53</sup> - 1)，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 令 _intLimit_ 为 ! ToIntegerOrInfinity(_numberLimit_)。
@@ -49390,18 +49406,17 @@ THH:mm:ss.sss
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _closure_ 为一个新的无参数 Abstract Closure，它捕获 _iterated_ 和 _intLimit_，并在被调用时执行以下步骤：
-              1. 令 _remaining_ 为 _intLimit_。
-              1. 重复，只要 _remaining_ > 0，
-                1. 如果 _remaining_ ≠ +∞，则
-                  1. 将 _remaining_ 设置为 _remaining_ - 1。
+            1. 令 _closure_ 为一个无参数的新抽象闭包，它捕获 _iterated_ 和 _intLimit_，并在被调用时执行以下步骤：
+              1. 令 _remaining_ 为 𝔽(_intLimit_)。
+              1. 当 _remaining_ > *+0*<sub>𝔽</sub> 时，重复：
+                1. 将 _remaining_ 设置为 _remaining_ - *1*<sub>𝔽</sub>。
                 1. 令 _next_ 为 ? IteratorStep(_iterated_)。
-                1. 如果 _next_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
-              1. 重复，
+                1. 如果 _next_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
+              1. 重复：
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 如果 _value_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
                 1. 令 _completion_ 为 Completion(Yield(_value_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
             1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
             1. 将 _result_.[[UnderlyingIterators]] 设置为 « _iterated_ »。
             1. 返回 _result_。
@@ -49413,20 +49428,21 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_predicate_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_predicate_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _counter_ 为 0。
-            1. 重复，
+            1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+            1. 重复：
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _value_ 是 ~done~，则返回 *true*。
-              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))。
-              1. IfAbruptCloseIterator(_result_, _iterated_)。
-              1. 如果 ToBoolean(_result_) 是 *false*，则返回 ? IteratorClose(_iterated_, NormalCompletion(*false*))。
-              1. 将 _counter_ 设置为 _counter_ + 1。
+              1. 如果 _value_ 为 ~done~，则返回 *true*。
+              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »))。
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. 如果 ToBoolean(_result_) 为 *false*，则返回 ? IteratorClose(_iterated_, NormalCompletion(*false*))。
+              1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+              1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
           </emu-alg>
         </emu-clause>
 
@@ -49435,23 +49451,24 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_predicate_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_predicate_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _closure_ 为一个新的无参数 Abstract Closure，它捕获 _iterated_ 和 _predicate_，并在被调用时执行以下步骤：
-              1. 令 _counter_ 为 0。
-              1. 重复，
+            1. 令 _closure_ 为一个无参数的新抽象闭包，它捕获 _iterated_ 和 _predicate_，并在被调用时执行以下步骤：
+              1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+              1. 重复：
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 如果 _value_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
-                1. 令 _selected_ 为 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_selected_, _iterated_)。
-                1. 如果 ToBoolean(_selected_) 是 *true*，则
+                1. 如果 _value_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
+                1. 令 _selected_ 为 Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »))。
+                1. IfAbruptCloseIterator(_selected_, _iterated_).
+                1. 如果 ToBoolean(_selected_) 为 *true*，则
                   1. 令 _completion_ 为 Completion(Yield(_value_))。
-                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. 将 _counter_ 设置为 _counter_ + 1。
+                  1. IfAbruptCloseIterator(_completion_, _iterated_).
+                1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+                1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
             1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
             1. 将 _result_.[[UnderlyingIterators]] 设置为 « _iterated_ »。
             1. 返回 _result_。
@@ -49463,20 +49480,21 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_predicate_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_predicate_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _counter_ 为 0。
-            1. 重复，
+            1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+            1. 重复：
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _value_ 是 ~done~，则返回 *undefined*。
-              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))。
-              1. IfAbruptCloseIterator(_result_, _iterated_)。
-              1. 如果 ToBoolean(_result_) 是 *true*，则返回 ? IteratorClose(_iterated_, NormalCompletion(_value_))。
-              1. 将 _counter_ 设置为 _counter_ + 1。
+              1. 如果 _value_ 为 ~done~，则返回 *undefined*。
+              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »))。
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. 如果 ToBoolean(_result_) 为 *true*，则返回 ? IteratorClose(_iterated_, NormalCompletion(_value_))。
+              1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+              1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
           </emu-alg>
         </emu-clause>
 
@@ -49485,34 +49503,35 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_mapper_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_mapper_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _closure_ 为一个新的无参数 Abstract Closure，它捕获 _iterated_ 和 _mapper_，并在被调用时执行以下步骤：
-              1. 令 _counter_ 为 0。
-              1. 重复，
+            1. 令 _closure_ 为一个无参数的新抽象闭包，它捕获 _iterated_ 和 _mapper_，并在被调用时执行以下步骤：
+              1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+              1. 重复：
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 如果 _value_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
-                1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. 如果 _value_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
+                1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »))。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_).
                 1. 令 _innerIterator_ 为 Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))。
-                1. IfAbruptCloseIterator(_innerIterator_, _iterated_)。
+                1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
                 1. 令 _innerAlive_ 为 *true*。
-                1. 重复，只要 _innerAlive_ 是 *true*，
+                1. 当 _innerAlive_ 为 *true* 时，重复：
                   1. 令 _innerValue_ 为 Completion(IteratorStepValue(_innerIterator_))。
-                  1. IfAbruptCloseIterator(_innerValue_, _iterated_)。
-                  1. 如果 _innerValue_ 是 ~done~，则
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_).
+                  1. 如果 _innerValue_ 为 ~done~，则
                     1. 将 _innerAlive_ 设置为 *false*。
                   1. 否则，
                     1. 令 _completion_ 为 Completion(Yield(_innerValue_))。
-                    1. 如果 _completion_ 是 abrupt completion，则
+                    1. 如果 _completion_ 是一个骤然完成，则
                       1. 令 _backupCompletion_ 为 Completion(IteratorClose(_innerIterator_, _completion_))。
-                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_)。
+                      1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                       1. 返回 ? IteratorClose(_iterated_, _completion_)。
-                1. 将 _counter_ 设置为 _counter_ + 1。
+                1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+                1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
             1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
             1. 将 _result_.[[UnderlyingIterators]] 设置为 « _iterated_ »。
             1. 返回 _result_。
@@ -49524,19 +49543,20 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_procedure_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_procedure_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _counter_ 为 0。
-            1. 重复，
+            1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+            1. 重复：
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _value_ 是 ~done~，则返回 *undefined*。
-              1. 令 _result_ 为 Completion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »))。
-              1. IfAbruptCloseIterator(_result_, _iterated_)。
-              1. 将 _counter_ 设置为 _counter_ + 1。
+              1. 如果 _value_ 为 ~done~，则返回 *undefined*。
+              1. 令 _result_ 为 Completion(Call(_procedure_, *undefined*, « _value_, _counter_ »))。
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+              1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
           </emu-alg>
         </emu-clause>
 
@@ -49545,22 +49565,23 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_mapper_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_mapper_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _closure_ 为一个新的无参数 Abstract Closure，它捕获 _iterated_ 和 _mapper_，并在被调用时执行以下步骤：
-              1. 令 _counter_ 为 0。
-              1. 重复，
+            1. 令 _closure_ 为一个无参数的新抽象闭包，它捕获 _iterated_ 和 _mapper_，并在被调用时执行以下步骤：
+              1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+              1. 重复：
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 如果 _value_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
-                1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))。
-                1. IfAbruptCloseIterator(_mapped_, _iterated_)。
+                1. 如果 _value_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
+                1. 令 _mapped_ 为 Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »))。
+                1. IfAbruptCloseIterator(_mapped_, _iterated_).
                 1. 令 _completion_ 为 Completion(Yield(_mapped_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
-                1. 将 _counter_ 设置为 _counter_ + 1。
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
+                1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+                1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
             1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
             1. 将 _result_.[[UnderlyingIterators]] 设置为 « _iterated_ »。
             1. 返回 _result_。
@@ -49572,26 +49593,27 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_reducer_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_reducer_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
             1. 如果 _initialValue_ 不存在，则
               1. 令 _accumulator_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _accumulator_ 是 ~done~，则抛出 *TypeError* 异常。
-              1. 令 _counter_ 为 1。
+              1. 如果 _accumulator_ 为 ~done~，则抛出 *TypeError* 异常。
+              1. 令 _counter_ 为 *1*<sub>𝔽</sub>。
             1. 否则，
               1. 令 _accumulator_ 为 _initialValue_。
-              1. 令 _counter_ 为 0。
-            1. 重复，
+              1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+            1. 重复：
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _value_ 是 ~done~，则返回 _accumulator_。
-              1. 令 _result_ 为 Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »))。
-              1. IfAbruptCloseIterator(_result_, _iterated_)。
+              1. 如果 _value_ 为 ~done~，则返回 _accumulator_。
+              1. 令 _result_ 为 Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, _counter_ »))。
+              1. IfAbruptCloseIterator(_result_, _iterated_).
               1. 将 _accumulator_ 设置为 _result_。
-              1. 将 _counter_ 设置为 _counter_ + 1。
+              1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+              1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
           </emu-alg>
         </emu-clause>
 
@@ -49600,20 +49622,21 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
-            1. 如果 IsCallable(_predicate_) 是 *false*，则
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 IsCallable(_predicate_) 为 *false*，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _counter_ 为 0。
-            1. 重复，
+            1. 令 _counter_ 为 *+0*<sub>𝔽</sub>。
+            1. 重复：
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-              1. 如果 _value_ 是 ~done~，则返回 *false*。
-              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))。
-              1. IfAbruptCloseIterator(_result_, _iterated_)。
-              1. 如果 ToBoolean(_result_) 是 *true*，则返回 ? IteratorClose(_iterated_, NormalCompletion(*true*))。
-              1. 将 _counter_ 设置为 _counter_ + 1。
+              1. 如果 _value_ 为 ~done~，则返回 *false*。
+              1. 令 _result_ 为 Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »))。
+              1. IfAbruptCloseIterator(_result_, _iterated_).
+              1. 如果 ToBoolean(_result_) 为 *true*，则返回 ? IteratorClose(_iterated_, NormalCompletion(*true*))。
+              1. 注意：一旦 _counter_ 达到 *2<sup>53</sup>*<sub>𝔽</sub>，以下步骤将不再更改 _counter_。
+              1. 将 _counter_ 设置为 _counter_ + *1*<sub>𝔽</sub>。
           </emu-alg>
         </emu-clause>
 
@@ -49622,11 +49645,14 @@ THH:mm:ss.sss
           <p>此方法在被调用时执行以下步骤：</p>
           <emu-alg>
             1. 令 _obj_ 为 *this* 值。
-            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 _obj_ 不是对象，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
             1. 令 _numberLimit_ 为 Completion(ToNumber(_limit_))。
-            1. IfAbruptCloseIterator(_numberLimit_, _iterated_)。
-            1. 如果 _numberLimit_ 是 *NaN*，则
+            1. IfAbruptCloseIterator(_numberLimit_, _iterated_).
+            1. 如果 _numberLimit_ 为 *NaN*，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 如果 _numberLimit_ 为有限值且 _numberLimit_ > 𝔽(2<sup>53</sup> - 1)，则
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 令 _intLimit_ 为 ! ToIntegerOrInfinity(_numberLimit_)。
@@ -49634,17 +49660,16 @@ THH:mm:ss.sss
               1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
               1. 返回 ? IteratorClose(_iterated_, _error_)。
             1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
-            1. 令 _closure_ 为一个新的无参数 Abstract Closure，它捕获 _iterated_ 和 _intLimit_，并在被调用时执行以下步骤：
-              1. 令 _remaining_ 为 _intLimit_。
-              1. 重复，
-                1. 如果 _remaining_ = 0，则
+            1. 令 _closure_ 为一个无参数的新抽象闭包，它捕获 _iterated_ 和 _intLimit_，并在被调用时执行以下步骤：
+              1. 令 _remaining_ 为 𝔽(_intLimit_)。
+              1. 重复：
+                1. 如果 _remaining_ 为 *+0*<sub>𝔽</sub>，则
                   1. 返回 ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))。
-                1. 如果 _remaining_ ≠ +∞，则
-                  1. 将 _remaining_ 设置为 _remaining_ - 1。
+                1. 将 _remaining_ 设置为 _remaining_ - *1*<sub>𝔽</sub>。
                 1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
-                1. 如果 _value_ 是 ~done~，则返回 ReturnCompletion(*undefined*)。
+                1. 如果 _value_ 为 ~done~，则返回 ReturnCompletion(*undefined*)。
                 1. 令 _completion_ 为 Completion(Yield(_value_))。
-                1. IfAbruptCloseIterator(_completion_, _iterated_)。
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
             1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
             1. 将 _result_.[[UnderlyingIterators]] 设置为 « _iterated_ »。
             1. 返回 _result_。
@@ -54144,8 +54169,8 @@ THH:mm:ss.sss
       </emu-annex>
 
       <emu-annex id="sec-patterns-static-semantics-is-character-class-annexb">
-        <h1>Static Semantics: IsCharacterClass</h1>
-        <p><emu-xref href="#sec-patterns-static-semantics-is-character-class"></emu-xref> 的语义按如下方式扩展：</p>
+        <h1>静态语义：IsCharacterClass</h1>
+        <p>IsCharacterClass 的语义扩展如下：</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
@@ -54155,79 +54180,80 @@ THH:mm:ss.sss
       </emu-annex>
 
       <emu-annex id="sec-patterns-static-semantics-character-value-annexb">
-        <h1>Static Semantics: CharacterValue</h1>
-        <p><emu-xref href="#sec-patterns-static-semantics-character-value"></emu-xref> 的语义按如下方式扩展：</p>
+        <h1>静态语义：CharacterValue</h1>
+        <p>CharacterValue 的语义扩展如下：</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
         <emu-alg>
-          1. 返回 U+005C（REVERSE SOLIDUS）的数值。
+          1. 返回 U+005C（反斜线）的数值。
         </emu-alg>
         <emu-grammar>ClassEscape :: `c` ClassControlLetter</emu-grammar>
         <emu-alg>
-          1. 令 _codePoint_ 为由 |ClassControlLetter| 匹配的代码点。
+          1. 令 _codePoint_ 为由 |ClassControlLetter| 匹配的码点。
           1. 令 _i_ 为 _codePoint_ 的数值。
           1. 返回 _i_ 除以 32 的余数。
         </emu-alg>
         <emu-grammar>CharacterEscape :: LegacyOctalEscapeSequence</emu-grammar>
         <emu-alg>
-          1. 返回 |LegacyOctalEscapeSequence| 的 MV（见 <emu-xref href="#sec-string-literals-static-semantics-mv"></emu-xref>）。
+          1. 返回 |LegacyOctalEscapeSequence| 的 MV（参见 <emu-xref href="#sec-string-literals-static-semantics-mv"></emu-xref>）。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-compilesubpattern-annexb" oldids="sec-regular-expression-patterns-semantics">
-        <h1>Runtime Semantics: CompileSubpattern</h1>
-        <p>CompileSubpattern 的语义按如下方式扩展：</p>
-
-        <p><emu-grammar>Term :: QuantifiableAssertion Quantifier</emu-grammar> 的规则与 <emu-grammar>Term :: Atom Quantifier</emu-grammar> 的规则相同，但将 |QuantifiableAssertion| 替换为 |Atom|。</p>
-        <p><emu-grammar>Term :: ExtendedAtom Quantifier</emu-grammar> 的规则与 <emu-grammar>Term :: Atom Quantifier</emu-grammar> 的规则相同，但将 |ExtendedAtom| 替换为 |Atom|。</p>
-        <p><emu-grammar>Term :: ExtendedAtom</emu-grammar> 的规则与 <emu-grammar>Term :: Atom</emu-grammar> 的规则相同，但将 |ExtendedAtom| 替换为 |Atom|。</p>
+        <h1>运行时语义：CompileSubpattern</h1>
+        <p>带参数 _regexpRecord_ 和 _direction_ 的 CompileSubpattern 的语义扩展如下：</p>
+        <p><emu-grammar>Term :: QuantifiableAssertion Quantifier</emu-grammar> 的规则与 <emu-grammar>Term :: Atom Quantifier</emu-grammar> 的规则相同，但将 |Atom| 替换为 |QuantifiableAssertion|。</p>
+        <p><emu-grammar>Term :: ExtendedAtom Quantifier</emu-grammar> 的规则与 <emu-grammar>Term :: Atom Quantifier</emu-grammar> 的规则相同，但将 |Atom| 替换为 |ExtendedAtom|。</p>
+        <p><emu-grammar>Term :: ExtendedAtom</emu-grammar> 的规则与 <emu-grammar>Term :: Atom</emu-grammar> 的规则相同，但将 |Atom| 替换为 |ExtendedAtom|。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileassertion-annexb">
-        <h1>Runtime Semantics: CompileAssertion</h1>
-        <p><emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> 和 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> 产生式的 CompileAssertion 规则也用于 |QuantifiableAssertion| 产生式，但将 |QuantifiableAssertion| 替换为 |Assertion|。</p>
+        <h1>运行时语义：CompileAssertion</h1>
+        <p>带参数 _regexpRecord_ 的 CompileAssertion 的语义扩展如下：</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> 的规则相同，但将 |Atom| 替换为 |QuantifiableAssertion|。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> 的规则相同，但将 |Atom| 替换为 |QuantifiableAssertion|。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">
-        <h1>Runtime Semantics: CompileAtom</h1>
-        <p>除 <emu-grammar>Atom :: PatternCharacter</emu-grammar> 外，|Atom| 产生式的 CompileAtom 规则也用于 |ExtendedAtom| 产生式，但将 |ExtendedAtom| 替换为 |Atom|。还会添加以下带参数 _direction_ 的规则：</p>
+        <h1>运行时语义：CompileAtom</h1>
+        <p>带参数 _regexpRecord_ 和 _direction_ 的 CompileAtom 的语义扩展如下：</p>
+        <p>除 <emu-grammar>Atom :: PatternCharacter</emu-grammar> 之外，|Atom| 产生式的规则也用于 |ExtendedAtom| 产生式，但将 |Atom| 替换为 |ExtendedAtom|。</p>
+        <p>还添加以下规则：</p>
         <emu-grammar>ExtendedAtom :: `\` [lookahead == `c`]</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为包含单个字符 `\\` U+005C（REVERSE SOLIDUS）的 CharSet。
+          1. 令 _charSet_ 为包含单个字符 `\\` U+005C（反斜线）的 CharSet。
           1. 返回 CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_)。
         </emu-alg>
         <emu-grammar>ExtendedAtom :: ExtendedPatternCharacter</emu-grammar>
         <emu-alg>
-          1. 令 _char_ 为 |ExtendedPatternCharacter| 表示的字符。
+          1. 令 _char_ 为由 |ExtendedPatternCharacter| 表示的字符。
           1. 令 _charSet_ 为包含字符 _char_ 的单元素 CharSet。
           1. 返回 CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_)。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-compiletocharset-annexb">
-        <h1>Runtime Semantics: CompileToCharSet</h1>
-        <p><emu-xref href="#sec-compiletocharset"></emu-xref> 的语义按如下方式扩展：</p>
-
-        <p>以下两个规则替换 CompileToCharSet 的对应规则。</p>
+        <h1>运行时语义：CompileToCharSet</h1>
+        <p>带参数 _regexpRecord_ 的 CompileToCharSet 的语义扩展如下：</p>
+        <p>替换了两条规则：</p>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为以 _regexpRecord_ 为实参的第一个 |ClassAtom| 的 CompileToCharSet。
-          1. 令 _otherSet_ 为以 _regexpRecord_ 为实参的第二个 |ClassAtom| 的 CompileToCharSet。
-          1. 令 _remainingSet_ 为以 _regexpRecord_ 为实参的 |ClassContents| 的 CompileToCharSet。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassAtom| 执行 CompileToCharSet 的结果。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassAtom| 执行 CompileToCharSet 的结果。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数对 |ClassContents| 执行 CompileToCharSet 的结果。
           1. 令 _rangeSet_ 为 CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为以 _regexpRecord_ 为实参的 |ClassAtomNoDash| 的 CompileToCharSet。
-          1. 令 _otherSet_ 为以 _regexpRecord_ 为实参的 |ClassAtom| 的 CompileToCharSet。
-          1. 令 _remainingSet_ 为以 _regexpRecord_ 为实参的 |ClassContents| 的 CompileToCharSet。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对 |ClassAtomNoDash| 执行 CompileToCharSet 的结果。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对 |ClassAtom| 执行 CompileToCharSet 的结果。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数对 |ClassContents| 执行 CompileToCharSet 的结果。
           1. 令 _rangeSet_ 为 CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
-
-        <p>此外，以下规则被添加到 CompileToCharSet。</p>
+        <p>还添加以下规则：</p>
         <emu-grammar>ClassEscape :: `c` ClassControlLetter</emu-grammar>
         <emu-alg>
           1. 令 _charValue_ 为此 |ClassEscape| 的 CharacterValue。
@@ -54236,25 +54262,25 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassAtomNoDash :: `\` [lookahead == `c`]</emu-grammar>
         <emu-alg>
-          1. 返回包含单个字符 `\\` U+005C（REVERSE SOLIDUS）的 CharSet。
+          1. 返回包含单个字符 `\\` U+005C（反斜线）的 CharSet。
         </emu-alg>
 
-        <emu-note>此产生式只能从字符类内的序列 `\c` 到达，其中该序列后面没有可接受的控制字符。</emu-note>
+        <emu-note>仅当字符类中的序列 `\c` 后面没有可接受的控制字符时，才可能到达此产生式。</emu-note>
 
         <emu-annex id="sec-runtime-semantics-characterrangeorunion-abstract-operation" type="abstract operation">
           <h1>
             CharacterRangeOrUnion (
-              _regexpRecord_: a RegExp Record,
-              _charSet_: a CharSet,
-              _otherSet_: a CharSet,
-            ): a CharSet
+              _regexpRecord_: 一个 RegExp 记录,
+              _charSet_: 一个 CharSet,
+              _otherSet_: 一个 CharSet,
+            ): 一个 CharSet
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 如果 HasEitherUnicodeFlag(_regexpRecord_) 是 *false*，则
-              1. 如果 _charSet_ 不恰好包含一个字符，或 _otherSet_ 不恰好包含一个字符，则
-                1. 令 _remainingSet_ 为包含单个字符 `-` U+002D（HYPHEN-MINUS）的 CharSet。
+            1. 如果 HasEitherUnicodeFlag(_regexpRecord_) 为 *false*，则
+              1. 如果 _charSet_ 未恰好包含一个字符或 _otherSet_ 未恰好包含一个字符，则
+                1. 令 _remainingSet_ 为包含单个字符 `-` U+002D（连字符-减号）的 CharSet。
                 1. 返回 CharSet _charSet_、_otherSet_ 和 _remainingSet_ 的并集。
             1. 返回 CharacterRange(_charSet_, _otherSet_)。
           </emu-alg>
@@ -54262,19 +54288,18 @@ THH:mm:ss.sss
       </emu-annex>
 
       <emu-annex id="sec-parsepattern-annexb">
-        <h1>Static Semantics: ParsePattern ( _patternText_, _u_, _v_ )</h1>
-        <p><emu-xref href="#sec-parsepattern"></emu-xref> 的语义按如下方式扩展：</p>
-        <p>抽象操作 ParsePattern 接受实参 _patternText_（Unicode 代码点序列）、_u_（Boolean）和 _v_（Boolean）。它在被调用时执行以下步骤：</p>
+        <h1>静态语义：ParsePattern ( _patternText_, _u_, _v_ )</h1>
+        <p>带参数 _patternText_、_u_ 和 _v_ 的 ParsePattern 的语义扩展如下，其中修改处已<ins>突出显示</ins>：</p>
         <emu-alg>
-          1. 如果 _v_ 是 *true* 且 _u_ 是 *true*，则
+          1. 如果 _v_ 为 *true* 且 _u_ 为 *true*，则
             1. 令 _parseResult_ 为包含一个或多个 *SyntaxError* 对象的 List。
-          1. 否则，如果 _v_ 是 *true*，则
+          1. 否则，如果 _v_ 为 *true*，则
             1. 令 _parseResult_ 为 ParseText(_patternText_, |Pattern[+UnicodeMode, +UnicodeSetsMode, +NamedCaptureGroups]|)。
-          1. 否则，如果 _u_ 是 *true*，则
+          1. 否则，如果 _u_ 为 *true*，则
             1. 令 _parseResult_ 为 ParseText(_patternText_, |Pattern[+UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|)。
           1. 否则，
-            1. 令 _parseResult_ 为 ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|)。
-            1. 如果 _parseResult_ 是 Parse Node 且 _parseResult_ 包含 |GroupName|，则
+            1. <ins>令 _parseResult_ 为 ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|)。</ins>
+            1. <ins>如果 _parseResult_ 是解析节点且 _parseResult_ 包含 |GroupName|，则</ins>
               1. 将 _parseResult_ 设置为 ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|)。
           1. 返回 _parseResult_。
         </emu-alg>
@@ -54612,9 +54637,8 @@ THH:mm:ss.sss
           1. 令 _dateObj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_dateObj_, [[DateValue]])。
           1. 令 _time_ 为 _dateObj_.[[DateValue]]。
-          1. 令 _year_ 为 ? ToNumber(_year_)。
-          1. 如果 _time_ 为 *NaN*，则将 _time_ 设置为 *+0*<sub>𝔽</sub>；否则将 _time_ 设置为 LocalTime(_time_)。
-          1. 令 _fullYear_ 为 MakeFullYear(_year_)。
+          1. 如果 _time_ 为 *NaN*，则将 _time_ 设置为 *+0*<sub>𝔽</sub>；否则，将 _time_ 设置为 LocalTime(_time_)。
+          1. 令 _fullYear_ 为 MakeFullYear(? ToNumber(_year_))。
           1. 令 _day_ 为 MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_)))。
           1. 令 _date_ 为 MakeDate(_day_, 𝔽(TimeWithinDay(_time_)))。
           1. 令 _utcTimestamp_ 为 TimeClip(UTC(_date_))。
@@ -54760,28 +54784,32 @@ THH:mm:ss.sss
 
     <emu-annex id="sec-initializers-in-forin-statement-heads">
       <h1>ForIn 语句头中的初始化器</h1>
-      <p>以下内容扩充 <emu-xref href="#sec-for-in-and-for-of-statements"></emu-xref> 中的 |ForInOfStatement| 产生式：</p>
+      <p>以下内容补充了 <emu-xref href="#sec-for-in-and-for-of-statements"></emu-xref> 中的 |ForInOfStatement| 产生式：</p>
       <emu-grammar type="definition">
         ForInOfStatement[Yield, Await, Return] :
           `for` `(` `var` BindingIdentifier[?Yield, ?Await] Initializer[~In, ?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
       </emu-grammar>
-      <p>此产生式仅在解析非严格代码时适用。</p>
-      <p><emu-xref href="#sec-static-semantics-containsduplicatelabels"></emu-xref> 中 ContainsDuplicateLabels 的静态语义通过以下内容扩充：</p>
+      <p>此产生式仅适用于解析非严格模式代码时。</p>
+
+      <p>ContainsDuplicateLabels 接受参数 _labelSet_ 时的静态语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回以 _labelSet_ 为实参的 |Statement| 的 ContainsDuplicateLabels。
+        1. 返回以 _labelSet_ 为参数对 |Statement| 执行 ContainsDuplicateLabels 的结果。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-containsundefinedbreaktarget"></emu-xref> 中 ContainsUndefinedBreakTarget 的静态语义通过以下内容扩充：</p>
+
+      <p>ContainsUndefinedBreakTarget 接受参数 _labelSet_ 时的静态语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回以 _labelSet_ 为实参的 |Statement| 的 ContainsUndefinedBreakTarget。
+        1. 返回以 _labelSet_ 为参数对 |Statement| 执行 ContainsUndefinedBreakTarget 的结果。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-containsundefinedcontinuetarget"></emu-xref> 中 ContainsUndefinedContinueTarget 的静态语义通过以下内容扩充：</p>
+
+      <p>ContainsUndefinedContinueTarget 接受参数 _iterationSet_ 和 _labelSet_ 时的静态语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回以 _iterationSet_ 和 « » 为实参的 |Statement| 的 ContainsUndefinedContinueTarget。
+        1. 返回以 _iterationSet_ 和 « » 为参数对 |Statement| 执行 ContainsUndefinedContinueTarget 的结果。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-isdestructuring"></emu-xref> 中 IsDestructuring 的静态语义通过以下内容扩充：</p>
+
+      <p>IsDestructuring 的静态语义补充如下：</p>
       <emu-grammar>
         BindingIdentifier :
           Identifier
@@ -54791,29 +54819,32 @@ THH:mm:ss.sss
       <emu-alg>
         1. 返回 *false*。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-vardeclarednames"></emu-xref> 中 VarDeclaredNames 的静态语义通过以下内容扩充：</p>
+
+      <p>VarDeclaredNames 的静态语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. 令 _names1_ 为 |BindingIdentifier| 的 BoundNames。
         1. 令 _names2_ 为 |Statement| 的 VarDeclaredNames。
-        1. 返回 _names1_ 和 _names2_ 的列表连接。
+        1. 返回 _names1_ 和 _names2_ 的列表串联结果。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-varscopeddeclarations"></emu-xref> 中 VarScopedDeclarations 的静态语义通过以下内容扩充：</p>
+
+      <p>VarScopedDeclarations 的静态语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. 令 _decls1_ 为 « |BindingIdentifier| »。
         1. 令 _decls2_ 为 |Statement| 的 VarScopedDeclarations。
-        1. 返回 _decls1_ 和 _decls2_ 的列表连接。
+        1. 返回 _decls1_ 和 _decls2_ 的列表串联结果。
       </emu-alg>
-      <p><emu-xref href="#sec-runtime-semantics-forinofloopevaluation"></emu-xref> 中 ForInOfLoopEvaluation 的运行时语义通过以下内容扩充：</p>
+
+      <p>ForInOfLoopEvaluation 接受参数 _labelSet_ 时的运行时语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
         1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
         1. 令 _lhs_ 为 ? ResolveBinding(_bindingId_)。
-        1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-          1. 令 _value_ 为以 _bindingId_ 为实参的 |Initializer| 的 NamedEvaluation。
+        1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 为 *true*，则
+          1. 令 _value_ 为以 _bindingId_ 为参数对 |Initializer| 执行 NamedEvaluation 的结果。
         1. 否则，
-          1. 令 _rhs_ 为 ? |Initializer| 的求值。
+          1. 令 _rhs_ 为对 |Initializer| 执行 ? Evaluation 的结果。
           1. 令 _value_ 为 ? GetValue(_rhs_)。
         1. 执行 ? PutValue(_lhs_, _value_)。
         1. 令 _keyResult_ 为 ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~)。

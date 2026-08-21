@@ -5334,6 +5334,31 @@
       </emu-note>
     </emu-clause>
 
+    <emu-clause id="sec-snaptointeger" type="abstract operation">
+      <h1>
+        SnapToInteger (
+          _arg_: ECMAScript 言語値,
+          _nonIntHandling_: ~reject~ または ~truncate~,
+          optional _minimum_: 整数,
+          optional _maximum_: 整数,
+        ): 整数を含む通常完了または throw 完了
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>これは _arg_ をその Number 値を表す整数に変換し、非有限値を拒否し、有限の非<emu-xref href="#integral-number">整数</emu-xref>値を拒否または切り捨てることによって処理し、必要に応じて両端を含む制約境界を課す。</dd>
+      </dl>
+      <emu-alg>
+        1. _number_ を ? ToNumber(_arg_) とする。
+        1. _number_ が *NaN*、*+∞*<sub>𝔽</sub>、または *-∞*<sub>𝔽</sub> のいずれかである場合、*RangeError* 例外をスローする。
+        1. _mv_ を ℝ(_number_) とする。
+        1. _nonIntHandling_ が ~truncate~ の場合、_mv_ を truncate(_mv_) に設定する。
+        1. _mv_ が整数でない場合、*RangeError* 例外をスローする。
+        1. _minimum_ が存在し、_mv_ &lt; _minimum_ の場合、*RangeError* 例外をスローする。
+        1. _maximum_ が存在し、_mv_ > _maximum_ の場合、*RangeError* 例外をスローする。
+        1. _mv_ を返す。
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-tofixedsizeinteger" type="abstract operation">
       <h1>
         ToFixedSizeInteger (
@@ -5724,8 +5749,8 @@
       </dl>
       <emu-alg>
         1. _length_を? ToIntegerOrInfinity(_arg_)とする。
-        1. _clampedLen_を、_length_を0以上2<sup>53</sup> - 1以下にクランプした結果とする。
-        1. 𝔽(_clampedLen_)を返す。
+        1. _clampedLength_を、_length_を0以上2<sup>53</sup> - 1以下にクランプした結果とする。
+        1. 𝔽(_clampedLength_)を返す。
       </emu-alg>
     </emu-clause>
 
@@ -10065,11 +10090,7 @@
       <emu-alg>
         1. ~unused~を返す。
       </emu-alg>
-      <emu-grammar>
-        ObjectBindingPattern :
-          `{` BindingPropertyList `}`
-          `{` BindingPropertyList `,` `}`
-      </emu-grammar>
+      <emu-grammar>ObjectBindingPattern : `{` BindingPropertyList `,`? `}`</emu-grammar>
       <emu-alg>
         1. 引数_value_および_envRecord_を伴う|BindingPropertyList|のPropertyBindingInitializationを ? で実行する。
         1. ~unused~を返す。
@@ -18821,9 +18842,8 @@
         CoverParenthesizedExpressionAndArrowParameterList[?Yield, ?Await] #parencover
 
       CoverParenthesizedExpressionAndArrowParameterList[Yield, Await] :
-        `(` Expression[+In, ?Yield, ?Await] `)`
-        `(` Expression[+In, ?Yield, ?Await] `,` `)`
         `(` `)`
+        `(` Expression[+In, ?Yield, ?Await] `,`? `)`
         `(` `...` BindingIdentifier[?Yield, ?Await] `)`
         `(` `...` BindingPattern[?Yield, ?Await] `)`
         `(` Expression[+In, ?Yield, ?Await] `,` `...` BindingIdentifier[?Yield, ?Await] `)`
@@ -19020,8 +19040,7 @@
       <emu-grammar type="definition">
         ObjectLiteral[Yield, Await] :
           `{` `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `}`
-          `{` PropertyDefinitionList[?Yield, ?Await] `,` `}`
+          `{` PropertyDefinitionList[?Yield, ?Await] `,`? `}`
 
         PropertyDefinitionList[Yield, Await] :
           PropertyDefinition[?Yield, ?Await]
@@ -19061,11 +19080,7 @@
 
       <emu-clause id="sec-object-initializer-static-semantics-early-errors" oldids="sec-__proto__-property-names-in-object-initializers">
         <h1>Static Semantics: Early Errors</h1>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <ul>
           <li>
             |PropertyDefinitionList| の PropertyNameList に *"__proto__"* に対する重複エントリが含まれ、かつそれらのエントリの少なくとも2つが <emu-grammar>PropertyDefinition : PropertyName `:` AssignmentExpression</emu-grammar> という形式の生成規則から得られたものである場合、Syntax Error である。この規則は、この |ObjectLiteral| が ParseJSON のために解析されている |Script| 内に含まれている場合には適用されない（ParseJSON のステップ <emu-xref href="#step-json-parse-parse"></emu-xref> を参照）。
@@ -19166,11 +19181,7 @@
         <emu-alg>
           1. OrdinaryObjectCreate(%Object.prototype%)を返す。
         </emu-alg>
-        <emu-grammar>
-          ObjectLiteral :
-            `{` PropertyDefinitionList `}`
-            `{` PropertyDefinitionList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectLiteral : `{` PropertyDefinitionList `,`? `}`</emu-grammar>
         <emu-alg>
           1. _obj_をOrdinaryObjectCreate(%Object.prototype%)とする。
           1. 引数_obj_を伴う|PropertyDefinitionList|の ? PropertyDefinitionEvaluationを実行する。
@@ -19660,8 +19671,7 @@
 
       Arguments[Yield, Await] :
         `(` `)`
-        `(` ArgumentList[?Yield, ?Await] `)`
-        `(` ArgumentList[?Yield, ?Await] `,` `)`
+        `(` ArgumentList[?Yield, ?Await] `,`? `)`
 
       ArgumentList[Yield, Await] :
         AssignmentExpression[+In, ?Yield, ?Await]
@@ -21464,8 +21474,8 @@
         ObjectAssignmentPattern[Yield, Await] :
           `{` `}`
           `{` AssignmentRestProperty[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `}`
-          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await]? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,`? `}`
+          `{` AssignmentPropertyList[?Yield, ?Await] `,` AssignmentRestProperty[?Yield, ?Await] `}`
 
         ArrayAssignmentPattern[Yield, Await] :
           `[` Elision? AssignmentRestElement[?Yield, ?Await]? `]`
@@ -21538,11 +21548,7 @@
           1. ? RequireObjectCoercible(_value_)を実行する。
           1. ~unused~を返す。
         </emu-alg>
-        <emu-grammar>
-          ObjectAssignmentPattern :
-            `{` AssignmentPropertyList `}`
-            `{` AssignmentPropertyList `,` `}`
-        </emu-grammar>
+        <emu-grammar>ObjectAssignmentPattern : `{` AssignmentPropertyList `,`? `}`</emu-grammar>
         <emu-alg>
           1. ? RequireObjectCoercible(_value_)を実行する。
           1. 引数_value_を伴う|AssignmentPropertyList|の ? PropertyDestructuringAssignmentEvaluationを実行する。
@@ -22221,8 +22227,8 @@
         ObjectBindingPattern[Yield, Await] :
           `{` `}`
           `{` BindingRestProperty[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `}`
-          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await]? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,`? `}`
+          `{` BindingPropertyList[?Yield, ?Await] `,` BindingRestProperty[?Yield, ?Await] `}`
 
         ArrayBindingPattern[Yield, Await] :
           `[` Elision? BindingRestElement[?Yield, ?Await]? `]`
@@ -29750,8 +29756,7 @@
 
         NamedImports :
           `{` `}`
-          `{` ImportsList `}`
-          `{` ImportsList `,` `}`
+          `{` ImportsList `,`? `}`
 
         FromClause :
           `from` ModuleSpecifier
@@ -29948,8 +29953,7 @@
 
         NamedExports :
           `{` `}`
-          `{` ExportsList `}`
-          `{` ExportsList `,` `}`
+          `{` ExportsList `,`? `}`
 
         ExportsList :
           ExportSpecifier
@@ -33214,11 +33218,10 @@
         </emu-note>
         <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _x_を ? ThisNumberValue(*this* value) とする。
-          1. _radix_が*undefined*なら、_radixMV_を10とする。
-          1. そうでなければ、_radixMV_を ? ToIntegerOrInfinity(_radix_) とする。
-          1. _radixMV_が2から36までのinclusive interval内にないなら、*RangeError*例外をthrowする。
-          1. Number::toString(_x_, _radixMV_)を返す。
+          1. _x_ を ? ThisNumberValue(*this* 値) とする。
+          1. _radix_ が *undefined* の場合、_radixMV_ を 10 とする。
+          1. それ以外の場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
+          1. Number::toString(_x_, _radixMV_) を返す。
         </emu-alg>
         <p>このmethodはgenericではありません；その*this* valueがNumberまたはNumber objectでない場合、*TypeError*例外をthrowします。したがって、methodとして使用するために他の種類のobjectsへtransferすることはできません。</p>
         <p>このmethodの*"length"* propertyは*1*<sub>𝔽</sub>です。</p>
@@ -33362,11 +33365,10 @@
         </emu-note>
         <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _x_を ? ThisBigIntValue(*this* value) とする。
-          1. _radix_が*undefined*なら、_radixMV_を10とする。
-          1. そうでなければ、_radixMV_を ? ToIntegerOrInfinity(_radix_) とする。
-          1. _radixMV_が2から36までのinclusive interval内にないなら、*RangeError*例外をthrowする。
-          1. BigInt::toString(_x_, _radixMV_)を返す。
+          1. _x_ を ? ThisBigIntValue(*this* 値) とする。
+          1. _radix_ が *undefined* の場合、_radixMV_ を 10 とする。
+          1. それ以外の場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
+          1. BigInt::toString(_x_, _radixMV_) を返す。
         </emu-alg>
         <p>このmethodはgenericではありません；その*this* valueがBigIntまたはBigInt objectでない場合、*TypeError*例外をthrowします。したがって、methodとして使用するために他の種類のobjectsへtransferすることはできません。</p>
       </emu-clause>
@@ -34108,9 +34110,12 @@
         <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
         <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
         <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerDay" aoid="NanosecondsPerDay">NanosecondsPerDay = 10<sup>6</sup> × msPerDay = 8.64 × 10<sup>13</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
         <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
+        <emu-eqn id="eqn-MaxEpochNanoseconds" aoid="MaxEpochNanoseconds">MaxEpochNanoseconds = 10<sup>8</sup> × NanosecondsPerDay = 8.64 × 10<sup>21</sup></emu-eqn>
+        <emu-eqn id="eqn-MinEpochNanoseconds" aoid="MinEpochNanoseconds">MinEpochNanoseconds = -MaxEpochNanoseconds = -8.64 × 10<sup>21</sup></emu-eqn>
       </emu-clause>
 
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
@@ -34359,30 +34364,38 @@
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-epoch-nanoseconds">
+        <h1>エポックナノ秒と範囲</h1>
+
+        <p><dfn variants="epoch nanoseconds counts">エポックナノ秒数</dfn>とは、ある時点をナノ秒精度で表す整数である。これは時間値と同じ範囲をサポートするが、ナノ秒単位で表され、その範囲は MinEpochNanoseconds から MaxEpochNanoseconds までである。時間値 *NaN* に相当するナノ秒値は存在せず、特定の時点を表さないための表現も存在しない。</p>
+
+        <p>1970 年 1 月 1 日 UTC の開始時点における午前 0 時ちょうどは、値 0 で表される。最大値は MaxEpochNanoseconds であり、最小値は MinEpochNanoseconds である。</p>
+      </emu-clause>
+
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
             _year_: 整数,
-            _month_: 1 以上 12 以下の範囲内の整数,
-            _day_: 1 以上 31 以下の範囲内の整数,
-            _hour_: 0 以上 23 以下の範囲内の整数,
-            _minute_: 0 以上 59 以下の範囲内の整数,
-            _second_: 0 以上 59 以下の範囲内の整数,
-            _millisecond_: 0 以上 999 以下の範囲内の整数,
-            _microsecond_: 0 以上 999 以下の範囲内の整数,
-            _nanosecond_: 0 以上 999 以下の範囲内の整数,
-          ): BigInt
+            _month_: 1 以上 12 以下の整数,
+            _day_: 1 以上 31 以下の整数,
+            _hour_: 0 以上 23 以下の整数,
+            _minute_: 0 以上 59 以下の整数,
+            _second_: 0 以上 59 以下の整数,
+            _millisecond_: 0 以上 999 以下の整数,
+            _microsecond_: 0 以上 999 以下の整数,
+            _nanosecond_: 0 以上 999 以下の整数,
+          ): エポックナノ秒数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>返される値は、指定された ISO 8601 暦の日付および UTC の壁時計時刻に対応する、エポックからのナノ秒数を表す。</dd>
+          <dd>返される値は、指定された ISO 8601 カレンダー日付と UTC の壁時計時刻に対応するエポックナノ秒数である。</dd>
         </dl>
         <emu-alg>
           1. _date_ を MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_)) とする。
           1. _time_ を MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_)) とする。
           1. _ms_ を MakeDate(_date_, _time_) とする。
-          1. Assert: _ms_ は整数の Number である。
-          1. ℤ(ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_) を返す。
+          1. 表明: _ms_ は整数値の Number である。
+          1. ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34405,10 +34418,10 @@
           さらに、実装は任意の数のその他の利用可能な名前付きタイムゾーンをサポートしてもよい。
         </p>
         <p>
-          ECMA-402 Internationalization API 仕様に記述されているタイムゾーンの要件に従う実装を、<dfn>タイムゾーン対応</dfn>と呼ぶ。
-          タイムゾーン対応実装は、IANA Time Zone Database の Zone 名および Link 名に対応する利用可能な名前付きタイムゾーンをサポートしなければならず、それらの名前のみをサポートしなければならない。
-          タイムゾーン対応実装において、プライマリタイムゾーン識別子と非プライマリタイムゾーン識別子は、ECMA-402 仕様で規定される AvailableNamedTimeZoneIdentifiers によって明示的に上書きされる場合を除き、それぞれ IANA Time Zone Database の Zone 名と Link 名である。
-          IANA Time Zone Database 全体をサポートしない実装にも、タイムゾーンを表す識別子として IANA Time Zone Database の名前を使用することが推奨される。
+          ECMA-402 国際化 API 仕様に記述されているタイムゾーンの要件に従う実装を、<dfn>タイムゾーン対応</dfn>と呼ぶ。
+          タイムゾーン対応の実装は、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>の「Zone」名および「<emu-not-ref>Link</emu-not-ref>」名に対応する利用可能な名前付きタイムゾーンだけをサポートしなければならない。
+          タイムゾーン対応の実装では、プライマリタイムゾーン識別子と非プライマリタイムゾーン識別子は、ECMA-402 仕様で規定されている AvailableNamedTimeZoneIdentifiers によって明示的に上書きされる場合を除き、それぞれ IANA タイムゾーンデータベースの「Zone」名と「<emu-not-ref>Link</emu-not-ref>」名である。
+          IANA タイムゾーンデータベース全体をサポートしない実装にも、タイムゾーンを表す識別子として IANA タイムゾーンデータベースの名前を使用することが引き続き推奨される。
         </p>
       </emu-clause>
 
@@ -34417,37 +34430,37 @@
           GetNamedTimeZoneEpochNanoseconds (
             _timeZoneIdentifier_: String,
             _year_: 整数,
-            _month_: 1 以上 12 以下の範囲内の整数,
-            _day_: 1 以上 31 以下の範囲内の整数,
-            _hour_: 0 以上 23 以下の範囲内の整数,
-            _minute_: 0 以上 59 以下の範囲内の整数,
-            _second_: 0 以上 59 以下の範囲内の整数,
-            _millisecond_: 0 以上 999 以下の範囲内の整数,
-            _microsecond_: 0 以上 999 以下の範囲内の整数,
-            _nanosecond_: 0 以上 999 以下の範囲内の整数,
-          ): BigInt の List
+            _month_: 1 以上 12 以下の整数,
+            _day_: 1 以上 31 以下の整数,
+            _hour_: 0 以上 23 以下の整数,
+            _minute_: 0 以上 59 以下の整数,
+            _second_: 0 以上 59 以下の整数,
+            _millisecond_: 0 以上 999 以下の整数,
+            _microsecond_: 0 以上 999 以下の整数,
+            _nanosecond_: 0 以上 999 以下の整数,
+          ): エポックナノ秒数の List
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            返される List 内の各値は、指定された ISO 8601 暦の日付、および _timeZoneIdentifier_ によって識別される名前付きタイムゾーンの壁時計時刻に対応する、エポックからのナノ秒数を表す。
+            返される List の各値は、_timeZoneIdentifier_ によって識別される名前付きタイムゾーンにおける、指定された ISO 8601 カレンダー日付と壁時計時刻に対応するエポックナノ秒数を表す。
           </dd>
         </dl>
         <p>
-          入力が負のタイムゾーン遷移によって複数回発生する現地時刻を表す場合（たとえば、夏時間が終了する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが減少する場合）、返される List は複数の要素を持ち、数値の昇順に並べられる。
-          入力が正のタイムゾーン遷移によってスキップされる現地時刻を表す場合（たとえば、夏時間が開始する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが増加する場合）、返される List は空になる。
+          入力が、負のタイムゾーン遷移（例えば、夏時間が終了するとき、またはタイムゾーン規則の変更によってタイムゾーンオフセットが減少するとき）によって複数回発生するローカル時刻を表す場合、返される List は複数の要素を持ち、数値の昇順にソートされる。
+          入力が、正のタイムゾーン遷移（例えば、夏時間が始まるとき、またはタイムゾーン規則の変更によってタイムゾーンオフセットが増加するとき）によって飛ばされるローカル時刻を表す場合、返される List は空になる。
           それ以外の場合、返される List は 1 つの要素を持つ。
         </p>
-        <p>いずれのタイムゾーンについても地域の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneEpochNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する。</p>
+        <p>どのタイムゾーンについても地域固有の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneEpochNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. Assert: _timeZoneIdentifier_ は *"UTC"* である。
+          1. 表明: _timeZoneIdentifier_ は *"UTC"* である。
           1. _epochNanoseconds_ を GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_) とする。
           1. « _epochNanoseconds_ » を返す。
         </emu-alg>
         <emu-note>
-          <p>タイムゾーン対応実装は、IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用する必要がある（その他のすべての実装にも推奨される）。</p>
-          <p>America/New_York における 2017 年 11 月 5 日午前 1:30 は 2 回繰り返されるため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) は長さ 2 の List を返し、その第 1 要素は 05:30 UTC（UTC オフセット -04:00 の米国東部夏時間 01:30 に対応）を表し、第 2 要素は 06:30 UTC（UTC オフセット -05:00 の米国東部標準時 01:30 に対応）を表す。</p>
-          <p>America/New_York における 2017 年 3 月 12 日午前 2:30 は存在しないため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) は空の List を返す。</p>
+          <p>タイムゾーン対応実装では、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが必須である（その他のすべての実装にも推奨される）。</p>
+          <p>America/New_York における 2017 年 11 月 5 日午前 1 時 30 分は 2 回繰り返されるため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) は長さ 2 の List を返す。この List の最初の要素は 05:30 UTC（UTC オフセット -04:00 の米国東部夏時間 01:30 に対応）を表し、2 番目の要素は 06:30 UTC（UTC オフセット -05:00 の米国東部標準時 01:30 に対応）を表す。</p>
+          <p>America/New_York における 2017 年 3 月 12 日午前 2 時 30 分は存在しないため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) は空の List を返す。</p>
         </emu-note>
       </emu-clause>
 
@@ -34455,19 +34468,19 @@
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
             _timeZoneIdentifier_: String,
-            _epochNanoseconds_: BigInt,
+            _epochNanoseconds_: エポックナノ秒数,
           ): 整数
         </h1>
         <dl class="header">
         </dl>
-        <p>返される整数は、_timeZoneIdentifier_ によって識別される名前付きタイムゾーンの、エポックを基準として _epochNanoseconds_ に対応する時点における UTC からのオフセットを表す。どちらもナノ秒単位である。</p>
-        <p>いずれのタイムゾーンについても地域の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneOffsetNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する。</p>
+        <p>返される整数は、エポックナノ秒数 _epochNanoseconds_ に対応する時点における、_timeZoneIdentifier_ によって識別される名前付きタイムゾーンの UTC からのオフセットをナノ秒単位で表す。</p>
+        <p>どのタイムゾーンについても地域固有の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneOffsetNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. Assert: _timeZoneIdentifier_ は *"UTC"* である。
+          1. 表明: _timeZoneIdentifier_ は *"UTC"* である。
           1. 0 を返す。
         </emu-alg>
         <emu-note>
-          <p>タイムゾーンオフセット値は正または負である場合がある。</p>
+          <p>タイムゾーンオフセット値は正または負となり得る。</p>
         </emu-note>
       </emu-clause>
 
@@ -34570,10 +34583,10 @@
         </dl>
         <emu-alg>
           1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
-          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* である場合、
+          1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
             1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
           1. それ以外の場合、
-            1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond)) とする。
+            1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond) とする。
           1. _offsetMs_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
           1. _tv_ + 𝔽(_offsetMs_) を返す。
         </emu-alg>
@@ -34628,7 +34641,7 @@
         </p>
         <p>ローカル時刻 _t_ に対する政治的規則が実装内で利用できない場合、SystemTimeZoneIdentifier は *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds は 0 を返すため、結果は _t_ となる。</p>
         <emu-note>
-          <p>タイムゾーンを認識する実装では、IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用することが要求される（その他すべての実装にも推奨される）。</p>
+          <p>タイムゾーン対応の実装には、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが要求される（その他のすべての実装にも推奨される）。</p>
           <p>
             America/New_York における2017年11月5日午前1時30分は2回繰り返される（時計が後退する）が、午前1時30分 UTC-05 ではなく、午前1時30分 UTC-04 として解釈されなければならない。
             UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) では、_offsetMs_ の値は <emu-eqn>-4 × msPerHour</emu-eqn> である。
@@ -36000,7 +36013,7 @@ THH:mm:ss.sss
             1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
               1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
             1. それ以外の場合、
-              1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℤ(ℝ(_tv_) × nsPerMillisecond)) とする。
+              1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond) とする。
             1. _offset_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
             1. _offset_ ≥ 0 の場合、
               1. _offsetSign_ を *"+"* とする。
@@ -36010,7 +36023,7 @@ THH:mm:ss.sss
               1. _absOffset_ を -_offset_ とする。
             1. _offsetMin_ を ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2) とする。
             1. _offsetHour_ を ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2) とする。
-            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) を文字列連結した結果のいずれかである、実装定義の文字列とする。
+            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) を文字列連結した実装定義の文字列のいずれかとする。
             1. _offsetSign_、_offsetHour_、_offsetMin_、および _tzName_ を文字列連結した結果を返す。
           </emu-alg>
         </emu-clause>
@@ -49396,34 +49409,36 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.drop ( _limit_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. _numberLimit_をCompletion(ToNumber(_limit_))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _numberLimit_ を Completion(ToNumber(_limit_)) とする。
             1. IfAbruptCloseIterator(_numberLimit_, _iterated_).
-            1. _numberLimit_が*NaN*なら、
-              1. _error_をThrowCompletion(a newly created *RangeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _intLimit_を ! ToIntegerOrInfinity(_numberLimit_) とする。
-            1. _intLimit_ &lt; 0なら、
-              1. _error_をThrowCompletion(a newly created *RangeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _closure_を、_iterated_と_intLimit_をcaptureし、呼び出されたときに以下のstepsを実行する、parametersを持たないnew Abstract Closureとする：
-              1. _remaining_を_intLimit_とする。
-              1. _remaining_ > 0である間、繰り返す：
-                1. _remaining_ ≠ +∞なら、
-                  1. _remaining_を_remaining_ - 1に設定する。
-                1. _next_を ? IteratorStep(_iterated_) とする。
-                1. _next_が~done~なら、ReturnCompletion(*undefined*)を返す。
-              1. 繰り返す：
-                1. _value_を ? IteratorStepValue(_iterated_) とする。
-                1. _value_が~done~なら、ReturnCompletion(*undefined*)を返す。
-                1. _completion_をCompletion(Yield(_value_))とする。
+            1. _numberLimit_ が *NaN* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _numberLimit_ が有限であり、かつ _numberLimit_ > 𝔽(2<sup>53</sup> - 1) の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _intLimit_ を ! ToIntegerOrInfinity(_numberLimit_) とする。
+            1. _intLimit_ &lt; 0 の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _iterated_ と _intLimit_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメーターを持たない新しい Abstract Closure を _closure_ とする:
+              1. _remaining_ を 𝔽(_intLimit_) とする。
+              1. _remaining_ > *+0*<sub>𝔽</sub> である間、繰り返す。
+                1. _remaining_ を _remaining_ - *1*<sub>𝔽</sub> に設定する。
+                1. _next_ を ? IteratorStep(_iterated_) とする。
+                1. _next_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+              1. 繰り返す。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+                1. _completion_ を Completion(Yield(_value_)) とする。
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-            1. _result_をCreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)とする。
-            1. _result_.[[UnderlyingIterators]]を« _iterated_ »に設定する。
-            1. _result_を返す。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -49431,21 +49446,22 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.every ( _predicate_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_predicate_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _counter_を0とする。
-            1. 繰り返す：
-              1. _value_を ? IteratorStepValue(_iterated_) とする。
-              1. _value_が~done~なら、*true*を返す。
-              1. _result_をCompletion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_predicate_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _counter_ を *+0*<sub>𝔽</sub> とする。
+            1. 繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、*true* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)) とする。
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. ToBoolean(_result_)が*false*なら、? IteratorClose(_iterated_, NormalCompletion(*false*))を返す。
-              1. _counter_を_counter_ + 1に設定する。
+              1. ToBoolean(_result_) が *false* の場合、? IteratorClose(_iterated_, NormalCompletion(*false*)) を返す。
+              1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+              1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
           </emu-alg>
         </emu-clause>
 
@@ -49453,27 +49469,28 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.filter ( _predicate_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_predicate_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _closure_を、_iterated_と_predicate_をcaptureし、呼び出されたときに以下のstepsを実行する、parametersを持たないnew Abstract Closureとする：
-              1. _counter_を0とする。
-              1. 繰り返す：
-                1. _value_を ? IteratorStepValue(_iterated_) とする。
-                1. _value_が~done~なら、ReturnCompletion(*undefined*)を返す。
-                1. _selected_をCompletion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_predicate_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _iterated_ と _predicate_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメーターを持たない新しい Abstract Closure を _closure_ とする:
+              1. _counter_ を *+0*<sub>𝔽</sub> とする。
+              1. 繰り返す。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+                1. _selected_ を Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)) とする。
                 1. IfAbruptCloseIterator(_selected_, _iterated_).
-                1. ToBoolean(_selected_)が*true*なら、
-                  1. _completion_をCompletion(Yield(_value_))とする。
+                1. ToBoolean(_selected_) が *true* の場合、
+                  1. _completion_ を Completion(Yield(_value_)) とする。
                   1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. _counter_を_counter_ + 1に設定する。
-            1. _result_をCreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)とする。
-            1. _result_.[[UnderlyingIterators]]を« _iterated_ »に設定する。
-            1. _result_を返す。
+                1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+                1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -49481,21 +49498,22 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.find ( _predicate_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_predicate_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _counter_を0とする。
-            1. 繰り返す：
-              1. _value_を ? IteratorStepValue(_iterated_) とする。
-              1. _value_が~done~なら、*undefined*を返す。
-              1. _result_をCompletion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_predicate_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _counter_ を *+0*<sub>𝔽</sub> とする。
+            1. 繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、*undefined* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)) とする。
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. ToBoolean(_result_)が*true*なら、? IteratorClose(_iterated_, NormalCompletion(_value_))を返す。
-              1. _counter_を_counter_ + 1に設定する。
+              1. ToBoolean(_result_) が *true* の場合、? IteratorClose(_iterated_, NormalCompletion(_value_)) を返す。
+              1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+              1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
           </emu-alg>
         </emu-clause>
 
@@ -49503,38 +49521,39 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_mapper_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _closure_を、_iterated_と_mapper_をcaptureし、呼び出されたときに以下のstepsを実行する、parametersを持たないnew Abstract Closureとする：
-              1. _counter_を0とする。
-              1. 繰り返す：
-                1. _value_を ? IteratorStepValue(_iterated_) とする。
-                1. _value_が~done~なら、ReturnCompletion(*undefined*)を返す。
-                1. _mapped_をCompletion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_mapper_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _iterated_ と _mapper_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメーターを持たない新しい Abstract Closure を _closure_ とする:
+              1. _counter_ を *+0*<sub>𝔽</sub> とする。
+              1. 繰り返す。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+                1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »)) とする。
                 1. IfAbruptCloseIterator(_mapped_, _iterated_).
-                1. _innerIterator_をCompletion(GetIteratorFlattenable(_mapped_, ~reject-primitives~))とする。
+                1. _innerIterator_ を Completion(GetIteratorFlattenable(_mapped_, ~reject-primitives~)) とする。
                 1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
-                1. _innerAlive_を*true*とする。
-                1. _innerAlive_が*true*である間、繰り返す：
-                  1. _innerValue_をCompletion(IteratorStepValue(_innerIterator_))とする。
+                1. _innerAlive_ を *true* とする。
+                1. _innerAlive_ が *true* である間、繰り返す。
+                  1. _innerValue_ を Completion(IteratorStepValue(_innerIterator_)) とする。
                   1. IfAbruptCloseIterator(_innerValue_, _iterated_).
-                  1. _innerValue_が~done~なら、
-                    1. _innerAlive_を*false*に設定する。
-                  1. そうでなければ、
-                    1. _completion_をCompletion(Yield(_innerValue_))とする。
-                    1. _completion_がabrupt completionなら、
-                      1. _backupCompletion_をCompletion(IteratorClose(_innerIterator_, _completion_))とする。
+                  1. _innerValue_ が ~done~ の場合、
+                    1. _innerAlive_ を *false* に設定する。
+                  1. それ以外の場合、
+                    1. _completion_ を Completion(Yield(_innerValue_)) とする。
+                    1. _completion_ が中断完了の場合、
+                      1. _backupCompletion_ を Completion(IteratorClose(_innerIterator_, _completion_)) とする。
                       1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
-                      1. ? IteratorClose(_iterated_, _completion_)を返す。
-                1. _counter_を_counter_ + 1に設定する。
-            1. _result_をCreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)とする。
-            1. _result_.[[UnderlyingIterators]]を« _iterated_ »に設定する。
-            1. _result_を返す。
+                      1. ? IteratorClose(_iterated_, _completion_) を返す。
+                1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+                1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -49542,20 +49561,21 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.forEach ( _procedure_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_procedure_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _counter_を0とする。
-            1. 繰り返す：
-              1. _value_を ? IteratorStepValue(_iterated_) とする。
-              1. _value_が~done~なら、*undefined*を返す。
-              1. _result_をCompletion(Call(_procedure_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_procedure_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _counter_ を *+0*<sub>𝔽</sub> とする。
+            1. 繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、*undefined* を返す。
+              1. _result_ を Completion(Call(_procedure_, *undefined*, « _value_, _counter_ »)) とする。
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. _counter_を_counter_ + 1に設定する。
+              1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+              1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
           </emu-alg>
         </emu-clause>
 
@@ -49563,26 +49583,27 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_mapper_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _closure_を、_iterated_と_mapper_をcaptureし、呼び出されたときに以下のstepsを実行する、parametersを持たないnew Abstract Closureとする：
-              1. _counter_を0とする。
-              1. 繰り返す：
-                1. _value_を ? IteratorStepValue(_iterated_) とする。
-                1. _value_が~done~なら、ReturnCompletion(*undefined*)を返す。
-                1. _mapped_をCompletion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_mapper_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _iterated_ と _mapper_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメーターを持たない新しい Abstract Closure を _closure_ とする:
+              1. _counter_ を *+0*<sub>𝔽</sub> とする。
+              1. 繰り返す。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+                1. _mapped_ を Completion(Call(_mapper_, *undefined*, « _value_, _counter_ »)) とする。
                 1. IfAbruptCloseIterator(_mapped_, _iterated_).
-                1. _completion_をCompletion(Yield(_mapped_))とする。
+                1. _completion_ を Completion(Yield(_mapped_)) とする。
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-                1. _counter_を_counter_ + 1に設定する。
-            1. _result_をCreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)とする。
-            1. _result_.[[UnderlyingIterators]]を« _iterated_ »に設定する。
-            1. _result_を返す。
+                1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+                1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -49590,83 +49611,87 @@ THH:mm:ss.sss
           <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
           <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_reducer_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _initialValue_が存在しないなら、
-              1. _accumulator_を ? IteratorStepValue(_iterated_) とする。
-              1. _accumulator_が~done~なら、*TypeError*例外をthrowする。
-              1. _counter_を1とする。
-            1. そうでなければ、
-              1. _accumulator_を_initialValue_とする。
-              1. _counter_を0とする。
-            1. 繰り返す：
-              1. _value_を ? IteratorStepValue(_iterated_) とする。
-              1. _value_が~done~なら、_accumulator_を返す。
-              1. _result_をCompletion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_reducer_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _initialValue_ が指定されていない場合、
+              1. _accumulator_ を ? IteratorStepValue(_iterated_) とする。
+              1. _accumulator_ が ~done~ の場合、*TypeError* 例外をスローする。
+              1. _counter_ を *1*<sub>𝔽</sub> とする。
+            1. それ以外の場合、
+              1. _accumulator_ を _initialValue_ とする。
+              1. _counter_ を *+0*<sub>𝔽</sub> とする。
+            1. 繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、_accumulator_ を返す。
+              1. _result_ を Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, _counter_ »)) とする。
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. _accumulator_を_result_に設定する。
-              1. _counter_を_counter_ + 1に設定する。
+              1. _accumulator_ を _result_ に設定する。
+              1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+              1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.some" type="built-in function">
           <h1>Iterator.prototype.some ( _predicate_ )</h1>
-          <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
+          <p>このメソッドは、呼び出されると次の手順を実行する:</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. IsCallable(_predicate_)が*false*なら、
-              1. _error_をThrowCompletion(a newly created *TypeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _counter_を0とする。
-            1. 繰り返す：
-              1. _value_を ? IteratorStepValue(_iterated_) とする。
-              1. _value_が~done~なら、*false*を返す。
-              1. _result_をCompletion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. IsCallable(_predicate_) が *false* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _counter_ を *+0*<sub>𝔽</sub> とする。
+            1. 繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、*false* を返す。
+              1. _result_ を Completion(Call(_predicate_, *undefined*, « _value_, _counter_ »)) とする。
               1. IfAbruptCloseIterator(_result_, _iterated_).
-              1. ToBoolean(_result_)が*true*なら、? IteratorClose(_iterated_, NormalCompletion(*true*))を返す。
-              1. _counter_を_counter_ + 1に設定する。
+              1. ToBoolean(_result_) が *true* の場合、? IteratorClose(_iterated_, NormalCompletion(*true*)) を返す。
+              1. 注記: 次のステップでは、_counter_ が *2<sup>53</sup>*<sub>𝔽</sub> に達すると、それ以降 _counter_ は変更されない。
+              1. _counter_ を _counter_ + *1*<sub>𝔽</sub> に設定する。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-iterator.prototype.take" type="built-in function">
           <h1>Iterator.prototype.take ( _limit_ )</h1>
-          <p>このmethodは、呼び出されたときに以下のstepsを実行する：</p>
+          <p>このメソッドは、呼び出されると次の手順を実行する:</p>
           <emu-alg>
-            1. _obj_を*this* valueとする。
-            1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-            1. _iterated_をIterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }とする。
-            1. _numberLimit_をCompletion(ToNumber(_limit_))とする。
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _numberLimit_ を Completion(ToNumber(_limit_)) とする。
             1. IfAbruptCloseIterator(_numberLimit_, _iterated_).
-            1. _numberLimit_が*NaN*なら、
-              1. _error_をThrowCompletion(a newly created *RangeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _intLimit_を ! ToIntegerOrInfinity(_numberLimit_) とする。
-            1. _intLimit_ &lt; 0なら、
-              1. _error_をThrowCompletion(a newly created *RangeError* object)とする。
-              1. ? IteratorClose(_iterated_, _error_)を返す。
-            1. _iterated_を ? GetIteratorDirect(_obj_) に設定する。
-            1. _closure_を、_iterated_と_intLimit_をcaptureし、呼び出されたときに以下のstepsを実行する、parametersを持たないnew Abstract Closureとする：
-              1. _remaining_を_intLimit_とする。
-              1. 繰り返す：
-                1. _remaining_ = 0なら、
-                  1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*))を返す。
-                1. _remaining_ ≠ +∞なら、
-                  1. _remaining_を_remaining_ - 1に設定する。
-                1. _value_を ? IteratorStepValue(_iterated_) とする。
-                1. _value_が~done~なら、ReturnCompletion(*undefined*)を返す。
-                1. _completion_をCompletion(Yield(_value_))とする。
+            1. _numberLimit_ が *NaN* の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _numberLimit_ が有限であり、かつ _numberLimit_ > 𝔽(2<sup>53</sup> - 1) の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _intLimit_ を ! ToIntegerOrInfinity(_numberLimit_) とする。
+            1. _intLimit_ &lt; 0 の場合、
+              1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _iterated_ と _intLimit_ をキャプチャし、呼び出されたときに次の手順を実行する、パラメーターを持たない新しい Abstract Closure を _closure_ とする:
+              1. _remaining_ を 𝔽(_intLimit_) とする。
+              1. 繰り返す。
+                1. _remaining_ が *+0*<sub>𝔽</sub> の場合、
+                  1. ? IteratorClose(_iterated_, ReturnCompletion(*undefined*)) を返す。
+                1. _remaining_ を _remaining_ - *1*<sub>𝔽</sub> に設定する。
+                1. _value_ を ? IteratorStepValue(_iterated_) とする。
+                1. _value_ が ~done~ の場合、ReturnCompletion(*undefined*) を返す。
+                1. _completion_ を Completion(Yield(_value_)) とする。
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-            1. _result_をCreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)とする。
-            1. _result_.[[UnderlyingIterators]]を« _iterated_ »に設定する。
-            1. _result_を返す。
+            1. _result_ を CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] ») とする。
+            1. _result_.[[UnderlyingIterators]] を « _iterated_ » に設定する。
+            1. _result_ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -54163,102 +54188,103 @@ THH:mm:ss.sss
       </emu-annex>
 
       <emu-annex id="sec-patterns-static-semantics-is-character-class-annexb">
-        <h1>Static Semantics: IsCharacterClass</h1>
-        <p><emu-xref href="#sec-patterns-static-semantics-is-character-class"></emu-xref>のsemanticsは以下のようにextendedされる：</p>
+        <h1>静的セマンティクス: IsCharacterClass</h1>
+        <p>IsCharacterClass のセマンティクスを次のように拡張する:</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
         <emu-alg>
-          1. *false*を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-patterns-static-semantics-character-value-annexb">
-        <h1>Static Semantics: CharacterValue</h1>
-        <p><emu-xref href="#sec-patterns-static-semantics-character-value"></emu-xref>のsemanticsは以下のようにextendedされる：</p>
+        <h1>静的セマンティクス: CharacterValue</h1>
+        <p>CharacterValue のセマンティクスを次のように拡張する:</p>
         <emu-grammar>
           ClassAtomNoDash :: `\` [lookahead == `c`]
         </emu-grammar>
         <emu-alg>
-          1. U+005C (REVERSE SOLIDUS)のnumeric valueを返す。
+          1. U+005C (REVERSE SOLIDUS) の数値を返す。
         </emu-alg>
         <emu-grammar>ClassEscape :: `c` ClassControlLetter</emu-grammar>
         <emu-alg>
-          1. _codePoint_を|ClassControlLetter|によりmatchedされるcode pointとする。
-          1. _i_を_codePoint_のnumeric valueとする。
-          1. _i_を32で割ったremainderを返す。
+          1. _codePoint_ を |ClassControlLetter| によってマッチされたコードポイントとする。
+          1. _i_ を _codePoint_ の数値とする。
+          1. _i_ を 32 で除算した余りを返す。
         </emu-alg>
         <emu-grammar>CharacterEscape :: LegacyOctalEscapeSequence</emu-grammar>
         <emu-alg>
-          1. |LegacyOctalEscapeSequence|のMVを返す（<emu-xref href="#sec-string-literals-static-semantics-mv"></emu-xref>を参照）。
+          1. |LegacyOctalEscapeSequence| の MV を返す (<emu-xref href="#sec-string-literals-static-semantics-mv"></emu-xref> を参照)。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-compilesubpattern-annexb" oldids="sec-regular-expression-patterns-semantics">
-        <h1>Runtime Semantics: CompileSubpattern</h1>
-        <p>CompileSubpatternのsemanticsは以下のようにextendedされる：</p>
-
-        <p><emu-grammar>Term :: QuantifiableAssertion Quantifier</emu-grammar>のruleは、|Atom|を|QuantifiableAssertion|でsubstitutedすることを除き、<emu-grammar>Term :: Atom Quantifier</emu-grammar>の場合と同じである。</p>
-        <p><emu-grammar>Term :: ExtendedAtom Quantifier</emu-grammar>のruleは、|Atom|を|ExtendedAtom|でsubstitutedすることを除き、<emu-grammar>Term :: Atom Quantifier</emu-grammar>の場合と同じである。</p>
-        <p><emu-grammar>Term :: ExtendedAtom</emu-grammar>のruleは、|Atom|を|ExtendedAtom|でsubstitutedすることを除き、<emu-grammar>Term :: Atom</emu-grammar>の場合と同じである。</p>
+        <h1>実行時セマンティクス: CompileSubpattern</h1>
+        <p>_regexpRecord_ および _direction_ を引数とする CompileSubpattern のセマンティクスを次のように拡張する:</p>
+        <p><emu-grammar>Term :: QuantifiableAssertion Quantifier</emu-grammar> の規則は <emu-grammar>Term :: Atom Quantifier</emu-grammar> の規則と同じだが、|Atom| を |QuantifiableAssertion| に置き換える。</p>
+        <p><emu-grammar>Term :: ExtendedAtom Quantifier</emu-grammar> の規則は <emu-grammar>Term :: Atom Quantifier</emu-grammar> の規則と同じだが、|Atom| を |ExtendedAtom| に置き換える。</p>
+        <p><emu-grammar>Term :: ExtendedAtom</emu-grammar> の規則は <emu-grammar>Term :: Atom</emu-grammar> の規則と同じだが、|Atom| を |ExtendedAtom| に置き換える。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileassertion-annexb">
-        <h1>Runtime Semantics: CompileAssertion</h1>
-        <p><emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar>および<emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> productionsのCompileAssertion rulesは、|Assertion|を|QuantifiableAssertion|でsubstitutedすることを除き、|QuantifiableAssertion| productionsにも使用される。</p>
+        <h1>実行時セマンティクス: CompileAssertion</h1>
+        <p>_regexpRecord_ を引数とする CompileAssertion のセマンティクスを次のように拡張する:</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> の規則は <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> の規則と同じだが、|Atom| を |QuantifiableAssertion| に置き換える。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> の規則は <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> の規則と同じだが、|Atom| を |QuantifiableAssertion| に置き換える。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">
-        <h1>Runtime Semantics: CompileAtom</h1>
-        <p><emu-grammar>Atom :: PatternCharacter</emu-grammar>を除く|Atom| productionsのCompileAtom rulesは、|Atom|を|ExtendedAtom|でsubstitutedすることを除き、|ExtendedAtom| productionsにも使用される。parameter _direction_を持つ以下のrulesもaddedされる：</p>
+        <h1>実行時セマンティクス: CompileAtom</h1>
+        <p>_regexpRecord_ および _direction_ を引数とする CompileAtom のセマンティクスを次のように拡張する:</p>
+        <p>|Atom| の生成規則のうち、<emu-grammar>Atom :: PatternCharacter</emu-grammar> を除く規則は |ExtendedAtom| の生成規則にも使用されるが、|Atom| を |ExtendedAtom| に置き換える。</p>
+        <p>さらに、次の規則も追加する:</p>
         <emu-grammar>ExtendedAtom :: `\` [lookahead == `c`]</emu-grammar>
         <emu-alg>
-          1. _charSet_を、single character `\\` U+005C (REVERSE SOLIDUS)を含むCharSetとする。
-          1. CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_)を返す。
+          1. _charSet_ を単一の文字 `\\` U+005C (REVERSE SOLIDUS) を含む CharSet とする。
+          1. CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_) を返す。
         </emu-alg>
         <emu-grammar>ExtendedAtom :: ExtendedPatternCharacter</emu-grammar>
         <emu-alg>
-          1. _char_を|ExtendedPatternCharacter|によりrepresentedされるcharacterとする。
-          1. _charSet_をcharacter _char_を含むone-element CharSetとする。
-          1. CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_)を返す。
+          1. _char_ を |ExtendedPatternCharacter| が表す文字とする。
+          1. _charSet_ を文字 _char_ を含む 1 要素の CharSet とする。
+          1. CharacterSetMatcher(_regexpRecord_, _charSet_, *false*, _direction_) を返す。
         </emu-alg>
       </emu-annex>
 
       <emu-annex id="sec-compiletocharset-annexb">
-        <h1>Runtime Semantics: CompileToCharSet</h1>
-        <p><emu-xref href="#sec-compiletocharset"></emu-xref>のsemanticsは以下のようにextendedされる：</p>
-
-        <p>以下の2つのrulesは、CompileToCharSetのcorresponding rulesをreplaceする。</p>
+        <h1>実行時セマンティクス: CompileToCharSet</h1>
+        <p>_regexpRecord_ を引数とする CompileToCharSet のセマンティクスを次のように拡張する:</p>
+        <p>次の 2 つの規則を置き換える:</p>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. _charSet_をargument _regexpRecord_を伴うfirst |ClassAtom|のCompileToCharSetとする。
-          1. _otherSet_をargument _regexpRecord_を伴うsecond |ClassAtom|のCompileToCharSetとする。
-          1. _remainingSet_をargument _regexpRecord_を伴う|ClassContents|のCompileToCharSetとする。
-          1. _rangeSet_をCharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)とする。
-          1. _rangeSet_と_remainingSet_のunionを返す。
+          1. _charSet_ を、_regexpRecord_ を引数として最初の |ClassAtom| に対して CompileToCharSet を適用した結果とする。
+          1. _otherSet_ を、_regexpRecord_ を引数として 2 番目の |ClassAtom| に対して CompileToCharSet を適用した結果とする。
+          1. _remainingSet_ を、_regexpRecord_ を引数として |ClassContents| に対して CompileToCharSet を適用した結果とする。
+          1. _rangeSet_ を CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_) とする。
+          1. _rangeSet_ と _remainingSet_ の和集合を返す。
         </emu-alg>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. _charSet_をargument _regexpRecord_を伴う|ClassAtomNoDash|のCompileToCharSetとする。
-          1. _otherSet_をargument _regexpRecord_を伴う|ClassAtom|のCompileToCharSetとする。
-          1. _remainingSet_をargument _regexpRecord_を伴う|ClassContents|のCompileToCharSetとする。
-          1. _rangeSet_をCharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)とする。
-          1. _rangeSet_と_remainingSet_のunionを返す。
+          1. _charSet_ を、_regexpRecord_ を引数として |ClassAtomNoDash| に対して CompileToCharSet を適用した結果とする。
+          1. _otherSet_ を、_regexpRecord_ を引数として |ClassAtom| に対して CompileToCharSet を適用した結果とする。
+          1. _remainingSet_ を、_regexpRecord_ を引数として |ClassContents| に対して CompileToCharSet を適用した結果とする。
+          1. _rangeSet_ を CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_) とする。
+          1. _rangeSet_ と _remainingSet_ の和集合を返す。
         </emu-alg>
-
-        <p>さらに、以下のrulesがCompileToCharSetにaddedされる。</p>
+        <p>さらに、次の規則も追加する:</p>
         <emu-grammar>ClassEscape :: `c` ClassControlLetter</emu-grammar>
         <emu-alg>
-          1. _charValue_をこの|ClassEscape|のCharacterValueとする。
-          1. _char_をcharacter valueが_charValue_であるcharacterとする。
-          1. single character _char_を含むCharSetを返す。
+          1. _charValue_ をこの |ClassEscape| の CharacterValue とする。
+          1. _char_ を文字値が _charValue_ である文字とする。
+          1. 単一の文字 _char_ を含む CharSet を返す。
         </emu-alg>
         <emu-grammar>ClassAtomNoDash :: `\` [lookahead == `c`]</emu-grammar>
         <emu-alg>
-          1. single character `\\` U+005C (REVERSE SOLIDUS)を含むCharSetを返す。
+          1. 単一の文字 `\\` U+005C (REVERSE SOLIDUS) を含む CharSet を返す。
         </emu-alg>
 
-        <emu-note>このproductionは、acceptable control characterが続かないcharacter class内のsequence `\c`からのみreachedされうる。</emu-note>
+        <emu-note>この生成規則には、文字クラス内のシーケンス `\c` の後に許容可能な制御文字が続かない場合にのみ到達できる。</emu-note>
 
         <emu-annex id="sec-runtime-semantics-characterrangeorunion-abstract-operation" type="abstract operation">
           <h1>
@@ -54271,31 +54297,30 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. HasEitherUnicodeFlag(_regexpRecord_)が*false*なら、
-              1. _charSet_がexactly one characterをcontainしない、または_otherSet_がexactly one characterをcontainしないなら、
-                1. _remainingSet_をsingle character `-` U+002D (HYPHEN-MINUS)を含むCharSetとする。
-                1. CharSets _charSet_、_otherSet_および_remainingSet_のunionを返す。
-            1. CharacterRange(_charSet_, _otherSet_)を返す。
+            1. HasEitherUnicodeFlag(_regexpRecord_) が *false* の場合、
+              1. _charSet_ が正確に 1 文字を含まない、または _otherSet_ が正確に 1 文字を含まない場合、
+                1. _remainingSet_ を単一の文字 `-` U+002D (HYPHEN-MINUS) を含む CharSet とする。
+                1. CharSet _charSet_、_otherSet_、および _remainingSet_ の和集合を返す。
+            1. CharacterRange(_charSet_, _otherSet_) を返す。
           </emu-alg>
         </emu-annex>
       </emu-annex>
 
       <emu-annex id="sec-parsepattern-annexb">
-        <h1>Static Semantics: ParsePattern ( _patternText_, _u_, _v_ )</h1>
-        <p><emu-xref href="#sec-parsepattern"></emu-xref>のsemanticsは以下のようにextendedされる：</p>
-        <p>abstract operation ParsePatternはarguments _patternText_（Unicode code pointsのsequence）、_u_（Boolean）、および_v_（Boolean）を取る。呼び出されたとき、以下のstepsを実行する：</p>
+        <h1>静的セマンティクス: ParsePattern ( _patternText_, _u_, _v_ )</h1>
+        <p>_patternText_、_u_、および _v_ を引数とする ParsePattern のセマンティクスを次のように拡張し、変更箇所を<ins>強調表示する</ins>:</p>
         <emu-alg>
-          1. _v_が*true*であり_u_が*true*なら、
-            1. _parseResult_を1つ以上の*SyntaxError* objectsを含むListとする。
-          1. そうでなく、_v_が*true*なら、
-            1. _parseResult_をParseText(_patternText_, |Pattern[+UnicodeMode, +UnicodeSetsMode, +NamedCaptureGroups]|)とする。
-          1. そうでなく、_u_が*true*なら、
-            1. _parseResult_をParseText(_patternText_, |Pattern[+UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|)とする。
-          1. そうでなければ、
-            1. _parseResult_をParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|)とする。
-            1. _parseResult_がParse Nodeであり、_parseResult_が|GroupName|を含むなら、
-              1. _parseResult_をParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|)に設定する。
-          1. _parseResult_を返す。
+          1. _v_ が *true* であり、かつ _u_ が *true* の場合、
+            1. _parseResult_ を 1 つ以上の *SyntaxError* オブジェクトを含む List とする。
+          1. それ以外で、_v_ が *true* の場合、
+            1. _parseResult_ を ParseText(_patternText_, |Pattern[+UnicodeMode, +UnicodeSetsMode, +NamedCaptureGroups]|) とする。
+          1. それ以外で、_u_ が *true* の場合、
+            1. _parseResult_ を ParseText(_patternText_, |Pattern[+UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|) とする。
+          1. それ以外の場合、
+            1. <ins>_parseResult_ を ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, ~NamedCaptureGroups]|) とする。</ins>
+            1. <ins>_parseResult_ が Parse Node であり、かつ _parseResult_ が |GroupName| を含む場合、</ins>
+              1. _parseResult_ を ParseText(_patternText_, |Pattern[~UnicodeMode, ~UnicodeSetsMode, +NamedCaptureGroups]|) に設定する。
+          1. _parseResult_ を返す。
         </emu-alg>
       </emu-annex>
     </emu-annex>
@@ -54631,9 +54656,8 @@ THH:mm:ss.sss
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _time_ を _dateObj_.[[DateValue]] とする。
-          1. _year_ を ? ToNumber(_year_) とする。
           1. _time_ が *NaN* の場合、_time_ を *+0*<sub>𝔽</sub> に設定する。それ以外の場合、_time_ を LocalTime(_time_) に設定する。
-          1. _fullYear_ を MakeFullYear(_year_) とする。
+          1. _fullYear_ を MakeFullYear(? ToNumber(_year_)) とする。
           1. _day_ を MakeDay(_fullYear_, 𝔽(MonthFromTime(_time_)), 𝔽(DateFromTime(_time_))) とする。
           1. _date_ を MakeDate(_day_, 𝔽(TimeWithinDay(_time_))) とする。
           1. _utcTimestamp_ を TimeClip(UTC(_date_)) とする。
@@ -54778,29 +54802,33 @@ THH:mm:ss.sss
     </emu-annex>
 
     <emu-annex id="sec-initializers-in-forin-statement-heads">
-      <h1>ForIn Statement Heads内のInitializers</h1>
-      <p>以下は<emu-xref href="#sec-for-in-and-for-of-statements"></emu-xref>内の|ForInOfStatement| productionをaugmentsする：</p>
+      <h1>ForIn 文のヘッドにおける初期化子</h1>
+      <p>次の内容により、<emu-xref href="#sec-for-in-and-for-of-statements"></emu-xref> にある |ForInOfStatement| 生成規則を拡張する:</p>
       <emu-grammar type="definition">
         ForInOfStatement[Yield, Await, Return] :
           `for` `(` `var` BindingIdentifier[?Yield, ?Await] Initializer[~In, ?Yield, ?Await] `in` Expression[+In, ?Yield, ?Await] `)` Statement[?Yield, ?Await, ?Return]
       </emu-grammar>
-      <p>このproductionは、non-strict codeをparsingするときにのみappliesする。</p>
-      <p><emu-xref href="#sec-static-semantics-containsduplicatelabels"></emu-xref>内のContainsDuplicateLabelsのstatic semanticsは以下でaugmentedされる：</p>
+      <p>この生成規則は、非 strict コードを解析する場合にのみ適用される。</p>
+
+      <p>_labelSet_ を引数とする ContainsDuplicateLabels の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. argument _labelSet_を伴う|Statement|のContainsDuplicateLabelsを返す。
+        1. _labelSet_ を引数とする |Statement| の ContainsDuplicateLabels を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-containsundefinedbreaktarget"></emu-xref>内のContainsUndefinedBreakTargetのstatic semanticsは以下でaugmentedされる：</p>
+
+      <p>_labelSet_ を引数とする ContainsUndefinedBreakTarget の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. argument _labelSet_を伴う|Statement|のContainsUndefinedBreakTargetを返す。
+        1. _labelSet_ を引数とする |Statement| の ContainsUndefinedBreakTarget を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-containsundefinedcontinuetarget"></emu-xref>内のContainsUndefinedContinueTargetのstatic semanticsは以下でaugmentedされる：</p>
+
+      <p>_iterationSet_ および _labelSet_ を引数とする ContainsUndefinedContinueTarget の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. arguments _iterationSet_および « » を伴う|Statement|のContainsUndefinedContinueTargetを返す。
+        1. _iterationSet_ および « » を引数とする |Statement| の ContainsUndefinedContinueTarget を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-isdestructuring"></emu-xref>内のIsDestructuringのstatic semanticsは以下でaugmentedされる：</p>
+
+      <p>IsDestructuring の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>
         BindingIdentifier :
           Identifier
@@ -54808,35 +54836,38 @@ THH:mm:ss.sss
           `await`
       </emu-grammar>
       <emu-alg>
-        1. *false*を返す。
+        1. *false* を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-vardeclarednames"></emu-xref>内のVarDeclaredNamesのstatic semanticsは以下でaugmentedされる：</p>
+
+      <p>VarDeclaredNames の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _names1_を|BindingIdentifier|のBoundNamesとする。
-        1. _names2_を|Statement|のVarDeclaredNamesとする。
-        1. _names1_と_names2_のlist-concatenationを返す。
+        1. _names1_ を |BindingIdentifier| の BoundNames とする。
+        1. _names2_ を |Statement| の VarDeclaredNames とする。
+        1. _names1_ と _names2_ のリスト連結を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-static-semantics-varscopeddeclarations"></emu-xref>内のVarScopedDeclarationsのstatic semanticsは以下でaugmentedされる：</p>
+
+      <p>VarScopedDeclarations の静的セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _decls1_を « |BindingIdentifier| » とする。
-        1. _decls2_を|Statement|のVarScopedDeclarationsとする。
-        1. _decls1_と_decls2_のlist-concatenationを返す。
+        1. _decls1_ を « |BindingIdentifier| » とする。
+        1. _decls2_ を |Statement| の VarScopedDeclarations とする。
+        1. _decls1_ と _decls2_ のリスト連結を返す。
       </emu-alg>
-      <p><emu-xref href="#sec-runtime-semantics-forinofloopevaluation"></emu-xref>内のForInOfLoopEvaluationのruntime semanticsは以下でaugmentedされる：</p>
+
+      <p>_labelSet_ を引数とする ForInOfLoopEvaluation の実行時セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _bindingId_を|BindingIdentifier|のStringValueとする。
-        1. _lhs_を ? ResolveBinding(_bindingId_) とする。
-        1. IsAnonymousFunctionDefinition(|Initializer|)が*true*なら、
-          1. _value_をargument _bindingId_を伴う|Initializer|のNamedEvaluationとする。
-        1. そうでなければ、
-          1. _rhs_を ? |Initializer|のEvaluation とする。
-          1. _value_を ? GetValue(_rhs_) とする。
-        1. ? PutValue(_lhs_, _value_)を実行する。
-        1. _keyResult_を ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~) とする。
-        1. ? ForIn/OfBodyEvaluation(|BindingIdentifier|, |Statement|, _keyResult_, ~enumerate~, ~var-binding~, _labelSet_)を返す。
+        1. _bindingId_ を |BindingIdentifier| の StringValue とする。
+        1. _lhs_ を ? ResolveBinding(_bindingId_) とする。
+        1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
+          1. _value_ を、_bindingId_ を引数として |Initializer| に対して ? NamedEvaluation を適用した結果とする。
+        1. それ以外の場合、
+          1. _rhs_ を |Initializer| に対して ? Evaluation を適用した結果とする。
+          1. _value_ を ? GetValue(_rhs_) とする。
+        1. ? PutValue(_lhs_, _value_) を実行する。
+        1. _keyResult_ を ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~) とする。
+        1. ? ForIn/OfBodyEvaluation(|BindingIdentifier|, |Statement|, _keyResult_, ~enumerate~, ~var-binding~, _labelSet_) を返す。
       </emu-alg>
     </emu-annex>
 
