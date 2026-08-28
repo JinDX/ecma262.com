@@ -11748,15 +11748,15 @@
             <dd>name이 _name_인 bound identifier의 value를 반환합니다. 그러나 binding이 indirect binding이면 target binding의 value가 returned됩니다. binding이 존재하지만 uninitialized이면 *ReferenceError*가 thrown됩니다.</dd>
           </dl>
           <emu-alg>
-            1. Assert: _strict_는 *true*이다.
-            1. Assert: _envRecord_는 _name_에 대한 binding을 가진다.
-            1. _name_에 대한 binding이 indirect binding이면, 다음을 수행한다.
-              1. _module_과 _targetName_을 _name_에 대한 이 binding이 created될 때 provided된 indirection value로 둔다.
-              1. _targetEnv_를 _module_.[[Environment]]로 둔다.
-              1. _targetEnv_가 ~empty~이면, *ReferenceError* exception을 throw한다.
-              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_targetName_, *true*)</emu-meta>를 반환한다.
-            1. _envRecord_ 안의 _name_에 대한 binding이 uninitialized binding이면, *ReferenceError* exception을 throw한다.
-            1. _envRecord_ 안에서 현재 _name_에 bound된 value를 반환한다.
+            1. 단언: _strict_는 *true*입니다.
+            1. 단언: _envRecord_에는 _name_에 대한 바인딩이 있습니다.
+            1. _name_에 대한 바인딩이 간접 바인딩이면,
+              1. _module_과 _targetName_을 이 _name_에 대한 바인딩이 생성될 때 제공된 간접 참조 값으로 둡니다.
+              1. _targetEnv_를 _module_.[[Environment]]로 둡니다.
+              1. _targetEnv_가 ~empty~이면 *ReferenceError* 예외를 발생시킵니다.
+              1. ? _targetEnv_.GetBindingValue(_targetName_, *true*)를 반환합니다.
+            1. _envRecord_에서 _name_에 대한 바인딩이 초기화되지 않은 바인딩이면 *ReferenceError* 예외를 발생시킵니다.
+            1. 현재 _envRecord_에서 _name_에 바인딩된 값을 반환합니다.
           </emu-alg>
           <emu-note>
             <p>|Module|은 항상 strict mode code이므로 _strict_는 항상 *true*입니다.</p>
@@ -19318,18 +19318,18 @@
       <emu-grammar type="definition">
         TemplateLiteral[Yield, Await, Tagged] :
           NoSubstitutionTemplate
-          SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          SubstitutionTemplate[?Yield, ?Await]
 
-        SubstitutionTemplate[Yield, Await, Tagged] :
-          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
+        SubstitutionTemplate[Yield, Await] :
+          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await]
 
-        TemplateSpans[Yield, Await, Tagged] :
+        TemplateSpans[Yield, Await] :
           TemplateTail
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateTail
+          TemplateMiddleList[?Yield, ?Await] TemplateTail
 
-        TemplateMiddleList[Yield, Await, Tagged] :
+        TemplateMiddleList[Yield, Await] :
           TemplateMiddle Expression[+In, ?Yield, ?Await]
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
+          TemplateMiddleList[?Yield, ?Await] TemplateMiddle Expression[+In, ?Yield, ?Await]
       </emu-grammar>
 
       <emu-clause id="sec-static-semantics-template-early-errors" oldids="sec-primary-expression-template-literals-static-semantics-early-errors">
@@ -19339,45 +19339,19 @@
         </emu-grammar>
         <ul>
           <li>
-            <sub>[Tagged]</sub> parameter가 set되지 않았고 |NoSubstitutionTemplate|가 |NotEscapeSequence|를 Contains하면 Syntax Error입니다.
+            <sub>[Tagged]</sub> 매개변수가 설정되지 않았고 인수 ~cooked~를 사용한 |TemplateLiteral|의 TemplateStrings에 *undefined*가 포함되어 있으면 구문 오류입니다.
           </li>
         </ul>
 
         <emu-grammar>
-          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await]
         </emu-grammar>
         <ul>
           <li>
-            argument *false*를 가진 |TemplateLiteral|의 TemplateStrings 안의 element 수가 2<sup>32</sup> 이상이면 Syntax Error입니다.
+            <sub>[Tagged]</sub> 매개변수가 설정되지 않았고 인수 ~cooked~를 사용한 |TemplateLiteral|의 TemplateStrings에 *undefined*가 포함되어 있으면 구문 오류입니다.
           </li>
-        </ul>
-
-        <emu-grammar>
-          SubstitutionTemplate[Yield, Await, Tagged] : TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
-        </emu-grammar>
-        <ul>
           <li>
-            <sub>[Tagged]</sub> parameter가 set되지 않았고 |TemplateHead|가 |NotEscapeSequence|를 Contains하면 Syntax Error입니다.
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateSpans[Yield, Await, Tagged] : TemplateTail
-        </emu-grammar>
-        <ul>
-          <li>
-            <sub>[Tagged]</sub> parameter가 set되지 않았고 |TemplateTail|이 |NotEscapeSequence|를 Contains하면 Syntax Error입니다.
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateMiddleList[Yield, Await, Tagged] :
-            TemplateMiddle Expression[+In, ?Yield, ?Await]
-            TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
-        </emu-grammar>
-        <ul>
-          <li>
-            <sub>[Tagged]</sub> parameter가 set되지 않았고 |TemplateMiddle|이 |NotEscapeSequence|를 Contains하면 Syntax Error입니다.
+            인수 ~cooked~를 사용한 |TemplateLiteral|의 TemplateStrings에 있는 요소 수가 2<sup>32</sup>보다 크거나 같으면 구문 오류입니다.
           </li>
         </ul>
       </emu-clause>
@@ -19385,40 +19359,40 @@
       <emu-clause id="sec-static-semantics-templatestrings" type="sdo">
         <h1>
           Static Semantics: TemplateStrings (
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a List of either Strings or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-grammar>TemplateLiteral : NoSubstitutionTemplate</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|NoSubstitutionTemplate|, _raw_) »를 반환한다.
+          1. « TemplateString(|NoSubstitutionTemplate|, _escapes_) »를 반환합니다.
         </emu-alg>
         <emu-grammar>SubstitutionTemplate : TemplateHead Expression TemplateSpans</emu-grammar>
         <emu-alg>
-          1. _head_를 « TemplateString(|TemplateHead|, _raw_) »로 둔다.
-          1. _tail_을 argument _raw_를 가진 |TemplateSpans|의 TemplateStrings로 둔다.
-          1. _head_와 _tail_의 list-concatenation을 반환한다.
+          1. _head_를 « TemplateString(|TemplateHead|, _escapes_) »로 둡니다.
+          1. _tail_을 인수 _escapes_를 사용한 |TemplateSpans|의 TemplateStrings로 둡니다.
+          1. _head_와 _tail_을 목록 연결한 결과를 반환합니다.
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateTail</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|TemplateTail|, _raw_) »를 반환한다.
+          1. « TemplateString(|TemplateTail|, _escapes_) »를 반환합니다.
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateMiddleList TemplateTail</emu-grammar>
         <emu-alg>
-          1. _middle_을 argument _raw_를 가진 |TemplateMiddleList|의 TemplateStrings로 둔다.
-          1. _tail_을 « TemplateString(|TemplateTail|, _raw_) »로 둔다.
-          1. _middle_과 _tail_의 list-concatenation을 반환한다.
+          1. _middle_을 인수 _escapes_를 사용한 |TemplateMiddleList|의 TemplateStrings로 둡니다.
+          1. _tail_을 « TemplateString(|TemplateTail|, _escapes_) »로 둡니다.
+          1. _middle_과 _tail_을 목록 연결한 결과를 반환합니다.
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|TemplateMiddle|, _raw_) »를 반환한다.
+          1. « TemplateString(|TemplateMiddle|, _escapes_) »를 반환합니다.
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddleList TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. _front_를 argument _raw_를 가진 |TemplateMiddleList|의 TemplateStrings로 둔다.
-          1. _last_를 « TemplateString(|TemplateMiddle|, _raw_) »로 둔다.
-          1. _front_와 _last_의 list-concatenation을 반환한다.
+          1. _front_를 인수 _escapes_를 사용한 |TemplateMiddleList|의 TemplateStrings로 둡니다.
+          1. _last_를 « TemplateString(|TemplateMiddle|, _escapes_) »로 둡니다.
+          1. _front_와 _last_를 목록 연결한 결과를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -19426,20 +19400,17 @@
         <h1>
           Static Semantics: TemplateString (
             _templateToken_: a |NoSubstitutionTemplate| Parse Node, a |TemplateHead| Parse Node, a |TemplateMiddle| Parse Node, or a |TemplateTail| Parse Node,
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a String or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _raw_가 *true*이면, 다음을 수행한다.
-            1. _string_을 _templateToken_의 TRV로 둔다.
-          1. 그렇지 않으면,
-            1. _string_을 _templateToken_의 TV로 둔다.
-          1. _string_을 반환한다.
+          1. _escapes_가 ~raw~이면 _templateToken_의 TRV를 반환합니다.
+          1. _templateToken_의 TV를 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>이 operation은 _raw_가 *false*이고 _templateToken_이 |NotEscapeSequence|를 contain하면 *undefined*를 반환합니다. 그 밖의 모든 경우에는 String을 반환합니다.</p>
+          <p>이 연산은 _escapes_가 ~raw~이고 _templateToken_에 |NotEscapeSequence|가 포함되어 있으면 *undefined*를 반환합니다. 그 밖의 모든 경우에는 String을 반환합니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -19452,31 +19423,31 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _realm_을 current Realm Record로 둔다.
-          1. _templateRegistry_를 _realm_.[[TemplateMap]]으로 둔다.
-          1. _templateRegistry_의 각 element _element_에 대해, 다음을 수행한다.
-            1. _element_.[[Site]]가 _templateLiteral_과 같은 Parse Node이면, 다음을 수행한다.
-              1. _element_.[[Array]]를 반환한다.
-          1. _rawStrings_를 argument *true*를 가진 _templateLiteral_의 TemplateStrings로 둔다.
-          1. Assert: _rawStrings_는 String의 List이다.
-          1. _cookedStrings_를 argument *false*를 가진 _templateLiteral_의 TemplateStrings로 둔다.
-          1. _count_를 List _cookedStrings_ 안의 element 수로 둔다.
-          1. Assert: _count_ ≤ 2<sup>32</sup> - 1이다.
-          1. _template_을 ! ArrayCreate(_count_)로 둔다.
-          1. _rawObj_를 ! ArrayCreate(_count_)로 둔다.
-          1. _index_를 0으로 둔다.
-          1. _index_ &lt; _count_인 동안 Repeat,
-            1. _propertyKey_를 ! ToString(𝔽(_index_))로 둔다.
-            1. _cookedValue_를 _cookedStrings_[_index_]로 둔다.
-            1. ! DefinePropertyOrThrow(_template_, _propertyKey_, PropertyDescriptor { [[Value]]: _cookedValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })를 수행한다.
-            1. _rawValue_를 String value _rawStrings_[_index_]로 둔다.
-            1. ! DefinePropertyOrThrow(_rawObj_, _propertyKey_, PropertyDescriptor { [[Value]]: _rawValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })를 수행한다.
-            1. _index_를 _index_ + 1로 설정한다.
-          1. ! SetIntegrityLevel(_rawObj_, ~frozen~)을 수행한다.
-          1. ! DefinePropertyOrThrow(_template_, *"raw"*, PropertyDescriptor { [[Value]]: _rawObj_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* })를 수행한다.
-          1. ! SetIntegrityLevel(_template_, ~frozen~)을 수행한다.
-          1. Record { [[Site]]: _templateLiteral_, [[Array]]: _template_ }를 _realm_.[[TemplateMap]]에 append한다.
-          1. _template_을 반환한다.
+          1. _realm_을 현재 Realm Record로 둡니다.
+          1. _templateRegistry_를 _realm_.[[TemplateMap]]으로 둡니다.
+          1. _templateRegistry_의 각 요소 _element_에 대해 다음을 수행합니다.
+            1. _element_.[[Site]]가 _templateLiteral_과 동일한 Parse Node이면,
+              1. _element_.[[Array]]를 반환합니다.
+          1. _rawStrings_를 인수 ~raw~를 사용한 _templateLiteral_의 TemplateStrings로 둡니다.
+          1. 단언: _rawStrings_는 Strings의 List입니다.
+          1. _cookedStrings_를 인수 ~cooked~를 사용한 _templateLiteral_의 TemplateStrings로 둡니다.
+          1. _count_를 List _cookedStrings_의 요소 수로 둡니다.
+          1. 단언: _count_ ≤ 2<sup>32</sup> - 1.
+          1. _template_을 ! ArrayCreate(_count_)로 둡니다.
+          1. _rawObj_를 ! ArrayCreate(_count_)로 둡니다.
+          1. _index_를 0으로 둡니다.
+          1. _index_ &lt; _count_인 동안 반복합니다.
+            1. _propertyKey_를 ! ToString(𝔽(_index_))으로 둡니다.
+            1. _cookedValue_를 _cookedStrings_[_index_]로 둡니다.
+            1. ! DefinePropertyOrThrow(_template_, _propertyKey_, PropertyDescriptor { [[Value]]: _cookedValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })를 수행합니다.
+            1. _rawValue_를 String 값 _rawStrings_[_index_]로 둡니다.
+            1. ! DefinePropertyOrThrow(_rawObj_, _propertyKey_, PropertyDescriptor { [[Value]]: _rawValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })를 수행합니다.
+            1. _index_를 _index_ + 1로 설정합니다.
+          1. ! SetIntegrityLevel(_rawObj_, ~frozen~)을 수행합니다.
+          1. ! DefinePropertyOrThrow(_template_, *"raw"*, PropertyDescriptor { [[Value]]: _rawObj_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* })를 수행합니다.
+          1. ! SetIntegrityLevel(_template_, ~frozen~)을 수행합니다.
+          1. Record { [[Site]]: _templateLiteral_, [[Array]]: _template_ }를 _realm_.[[TemplateMap]]에 추가합니다.
+          1. _template_을 반환합니다.
         </emu-alg>
         <emu-note>
           <p>template object의 creation은 abrupt completion을 result할 수 없습니다.</p>

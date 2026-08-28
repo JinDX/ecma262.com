@@ -11766,15 +11766,15 @@
             <dd>これは、名前が_name_である自身のbound identifierの値を返します。ただし、bindingがindirect bindingである場合、target bindingの値が返されます。bindingが存在するが未初期化である場合、*ReferenceError*がthrowされます。</dd>
           </dl>
           <emu-alg>
-            1. Assert: _strict_は*true*である。
-            1. Assert: _envRecord_は_name_に対するbindingを持つ。
-            1. _name_に対するbindingがindirect bindingであるなら、
-              1. _module_および_targetName_を、この_name_に対するbindingが作成されたときに提供されたindirection valuesとする。
-              1. _targetEnv_を_module_.[[Environment]]とする。
-              1. _targetEnv_が~empty~なら、*ReferenceError*例外をthrowする。
-              1. ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_targetName_, *true*)</emu-meta>を返す。
-            1. _envRecord_内の_name_に対するbindingが未初期化のbindingなら、*ReferenceError*例外をthrowする。
-            1. _envRecord_内で_name_に現在bindされている値を返す。
+            1. Assert: _strict_ は *true* である。
+            1. Assert: _envRecord_ は _name_ に対するバインディングを持つ。
+            1. _name_ に対するバインディングが間接バインディングである場合、
+              1. _module_ と _targetName_ を、この _name_ に対するバインディングが作成されたときに提供された間接参照値とする。
+              1. _targetEnv_ を _module_.[[Environment]] とする。
+              1. _targetEnv_ が ~empty~ の場合、*ReferenceError* 例外を投げる。
+              1. ? _targetEnv_.GetBindingValue(_targetName_, *true*) を返す。
+            1. _envRecord_ 内の _name_ に対するバインディングが未初期化バインディングである場合、*ReferenceError* 例外を投げる。
+            1. _envRecord_ 内で現在 _name_ にバインドされている値を返す。
           </emu-alg>
           <emu-note>
             <p>|Module|は常にstrict mode codeであるため、_strict_は常に*true*になります。</p>
@@ -19336,18 +19336,18 @@
       <emu-grammar type="definition">
         TemplateLiteral[Yield, Await, Tagged] :
           NoSubstitutionTemplate
-          SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          SubstitutionTemplate[?Yield, ?Await]
 
-        SubstitutionTemplate[Yield, Await, Tagged] :
-          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
+        SubstitutionTemplate[Yield, Await] :
+          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await]
 
-        TemplateSpans[Yield, Await, Tagged] :
+        TemplateSpans[Yield, Await] :
           TemplateTail
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateTail
+          TemplateMiddleList[?Yield, ?Await] TemplateTail
 
-        TemplateMiddleList[Yield, Await, Tagged] :
+        TemplateMiddleList[Yield, Await] :
           TemplateMiddle Expression[+In, ?Yield, ?Await]
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
+          TemplateMiddleList[?Yield, ?Await] TemplateMiddle Expression[+In, ?Yield, ?Await]
       </emu-grammar>
 
       <emu-clause id="sec-static-semantics-template-early-errors" oldids="sec-primary-expression-template-literals-static-semantics-early-errors">
@@ -19357,45 +19357,19 @@
         </emu-grammar>
         <ul>
           <li>
-            <sub>[Tagged]</sub> parameterが設定されておらず、かつ|NoSubstitutionTemplate|が|NotEscapeSequence|をContainsする場合、それはSyntax Errorです。
+            <sub>[Tagged]</sub> パラメーターが設定されておらず、引数 ~cooked~ を指定した |TemplateLiteral| の TemplateStrings に *undefined* が含まれている場合、構文エラーとなる。
           </li>
         </ul>
 
         <emu-grammar>
-          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await]
         </emu-grammar>
         <ul>
           <li>
-            argument *false*を伴う|TemplateLiteral|のTemplateStrings内のelements数が2<sup>32</sup>以上である場合、それはSyntax Errorです。
+            <sub>[Tagged]</sub> パラメーターが設定されておらず、引数 ~cooked~ を指定した |TemplateLiteral| の TemplateStrings に *undefined* が含まれている場合、構文エラーとなる。
           </li>
-        </ul>
-
-        <emu-grammar>
-          SubstitutionTemplate[Yield, Await, Tagged] : TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
-        </emu-grammar>
-        <ul>
           <li>
-            <sub>[Tagged]</sub> parameterが設定されておらず、かつ|TemplateHead|が|NotEscapeSequence|をContainsする場合、それはSyntax Errorです。
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateSpans[Yield, Await, Tagged] : TemplateTail
-        </emu-grammar>
-        <ul>
-          <li>
-            <sub>[Tagged]</sub> parameterが設定されておらず、かつ|TemplateTail|が|NotEscapeSequence|をContainsする場合、それはSyntax Errorです。
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateMiddleList[Yield, Await, Tagged] :
-            TemplateMiddle Expression[+In, ?Yield, ?Await]
-            TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
-        </emu-grammar>
-        <ul>
-          <li>
-            <sub>[Tagged]</sub> parameterが設定されておらず、かつ|TemplateMiddle|が|NotEscapeSequence|をContainsする場合、それはSyntax Errorです。
+            引数 ~cooked~ を指定した |TemplateLiteral| の TemplateStrings の要素数が 2<sup>32</sup> 以上の場合、構文エラーとなる。
           </li>
         </ul>
       </emu-clause>
@@ -19403,40 +19377,40 @@
       <emu-clause id="sec-static-semantics-templatestrings" type="sdo">
         <h1>
           Static Semantics: TemplateStrings (
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a List of either Strings or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-grammar>TemplateLiteral : NoSubstitutionTemplate</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|NoSubstitutionTemplate|, _raw_) »を返す。
+          1. « TemplateString(|NoSubstitutionTemplate|, _escapes_) » を返す。
         </emu-alg>
         <emu-grammar>SubstitutionTemplate : TemplateHead Expression TemplateSpans</emu-grammar>
         <emu-alg>
-          1. _head_を« TemplateString(|TemplateHead|, _raw_) »とする。
-          1. _tail_を、argument _raw_を伴う|TemplateSpans|のTemplateStringsとする。
-          1. _head_と_tail_のlist-concatenationを返す。
+          1. _head_ を « TemplateString(|TemplateHead|, _escapes_) » とする。
+          1. _tail_ を、引数 _escapes_ を指定した |TemplateSpans| の TemplateStrings とする。
+          1. _head_ と _tail_ をリスト連結した結果を返す。
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateTail</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|TemplateTail|, _raw_) »を返す。
+          1. « TemplateString(|TemplateTail|, _escapes_) » を返す。
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateMiddleList TemplateTail</emu-grammar>
         <emu-alg>
-          1. _middle_を、argument _raw_を伴う|TemplateMiddleList|のTemplateStringsとする。
-          1. _tail_を« TemplateString(|TemplateTail|, _raw_) »とする。
-          1. _middle_と_tail_のlist-concatenationを返す。
+          1. _middle_ を、引数 _escapes_ を指定した |TemplateMiddleList| の TemplateStrings とする。
+          1. _tail_ を « TemplateString(|TemplateTail|, _escapes_) » とする。
+          1. _middle_ と _tail_ をリスト連結した結果を返す。
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. « TemplateString(|TemplateMiddle|, _raw_) »を返す。
+          1. « TemplateString(|TemplateMiddle|, _escapes_) » を返す。
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddleList TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. _front_を、argument _raw_を伴う|TemplateMiddleList|のTemplateStringsとする。
-          1. _last_を« TemplateString(|TemplateMiddle|, _raw_) »とする。
-          1. _front_と_last_のlist-concatenationを返す。
+          1. _front_ を、引数 _escapes_ を指定した |TemplateMiddleList| の TemplateStrings とする。
+          1. _last_ を « TemplateString(|TemplateMiddle|, _escapes_) » とする。
+          1. _front_ と _last_ をリスト連結した結果を返す。
         </emu-alg>
       </emu-clause>
 
@@ -19444,20 +19418,17 @@
         <h1>
           Static Semantics: TemplateString (
             _templateToken_: a |NoSubstitutionTemplate| Parse Node, a |TemplateHead| Parse Node, a |TemplateMiddle| Parse Node, or a |TemplateTail| Parse Node,
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a String or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _raw_が*true*なら、
-            1. _string_を_templateToken_のTRVとする。
-          1. そうでなければ、
-            1. _string_を_templateToken_のTVとする。
-          1. _string_を返す。
+          1. _escapes_ が ~raw~ の場合、_templateToken_ の TRV を返す。
+          1. _templateToken_ の TV を返す。
         </emu-alg>
         <emu-note>
-          <p>このoperationは、_raw_が*false*であり、かつ_templateToken_が|NotEscapeSequence|を含む場合、*undefined*を返します。それ以外の場合、Stringを返します。</p>
+          <p>この操作は、_escapes_ が ~raw~ であり、_templateToken_ に |NotEscapeSequence| が含まれている場合、*undefined* を返す。それ以外のすべての場合では、String を返す。</p>
         </emu-note>
       </emu-clause>
 
@@ -19470,31 +19441,31 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _realm_をcurrent Realm Recordとする。
-          1. _templateRegistry_を_realm_.[[TemplateMap]]とする。
-          1. _templateRegistry_の各要素_element_について、以下を行う
-            1. _element_.[[Site]]が_templateLiteral_と同じParse Nodeなら、
-              1. _element_.[[Array]]を返す。
-          1. _rawStrings_を、argument *true*を伴う_templateLiteral_のTemplateStringsとする。
-          1. Assert: _rawStrings_はStringsのListである。
-          1. _cookedStrings_を、argument *false*を伴う_templateLiteral_のTemplateStringsとする。
-          1. _count_をList _cookedStrings_内のelements数とする。
+          1. _realm_ を現在の Realm Record とする。
+          1. _templateRegistry_ を _realm_.[[TemplateMap]] とする。
+          1. _templateRegistry_ の各要素 _element_ について、次を行う。
+            1. _element_.[[Site]] が _templateLiteral_ と同じ Parse Node である場合、
+              1. _element_.[[Array]] を返す。
+          1. _rawStrings_ を、引数 ~raw~ を指定した _templateLiteral_ の TemplateStrings とする。
+          1. Assert: _rawStrings_ は Strings の List である。
+          1. _cookedStrings_ を、引数 ~cooked~ を指定した _templateLiteral_ の TemplateStrings とする。
+          1. _count_ を List _cookedStrings_ の要素数とする。
           1. Assert: _count_ ≤ 2<sup>32</sup> - 1.
-          1. _template_を ! ArrayCreate(_count_) とする。
-          1. _rawObj_を ! ArrayCreate(_count_) とする。
-          1. _index_を0とする。
-          1. _index_ &lt; _count_である間、繰り返す
-            1. _propertyKey_を ! ToString(𝔽(_index_)) とする。
-            1. _cookedValue_を_cookedStrings_[_index_]とする。
-            1. ! DefinePropertyOrThrow(_template_, _propertyKey_, PropertyDescriptor { [[Value]]: _cookedValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })を実行する。
-            1. _rawValue_をString値_rawStrings_[_index_]とする。
-            1. ! DefinePropertyOrThrow(_rawObj_, _propertyKey_, PropertyDescriptor { [[Value]]: _rawValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })を実行する。
-            1. _index_を_index_ + 1に設定する。
-          1. ! SetIntegrityLevel(_rawObj_, ~frozen~)を実行する。
-          1. ! DefinePropertyOrThrow(_template_, *"raw"*, PropertyDescriptor { [[Value]]: _rawObj_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* })を実行する。
-          1. ! SetIntegrityLevel(_template_, ~frozen~)を実行する。
-          1. Record { [[Site]]: _templateLiteral_, [[Array]]: _template_ }を_realm_.[[TemplateMap]]へappendする。
-          1. _template_を返す。
+          1. _template_ を ! ArrayCreate(_count_) とする。
+          1. _rawObj_ を ! ArrayCreate(_count_) とする。
+          1. _index_ を 0 とする。
+          1. _index_ &lt; _count_ である間、次を繰り返す。
+            1. _propertyKey_ を ! ToString(𝔽(_index_)) とする。
+            1. _cookedValue_ を _cookedStrings_[_index_] とする。
+            1. ! DefinePropertyOrThrow(_template_, _propertyKey_, PropertyDescriptor { [[Value]]: _cookedValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* }) を実行する。
+            1. _rawValue_ を String 値 _rawStrings_[_index_] とする。
+            1. ! DefinePropertyOrThrow(_rawObj_, _propertyKey_, PropertyDescriptor { [[Value]]: _rawValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* }) を実行する。
+            1. _index_ を _index_ + 1 に設定する。
+          1. ! SetIntegrityLevel(_rawObj_, ~frozen~) を実行する。
+          1. ! DefinePropertyOrThrow(_template_, *"raw"*, PropertyDescriptor { [[Value]]: _rawObj_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }) を実行する。
+          1. ! SetIntegrityLevel(_template_, ~frozen~) を実行する。
+          1. Record { [[Site]]: _templateLiteral_, [[Array]]: _template_ } を _realm_.[[TemplateMap]] に追加する。
+          1. _template_ を返す。
         </emu-alg>
         <emu-note>
           <p>template objectの作成はabrupt completionをもたらすことはありません。</p>

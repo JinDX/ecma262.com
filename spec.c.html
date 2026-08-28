@@ -11748,13 +11748,13 @@
             <dd>它返回其名称为 _name_ 的已绑定标识符的值。不过，如果该绑定是间接绑定，则返回目标绑定的值。如果该绑定存在但未初始化，则会抛出 *ReferenceError*。</dd>
           </dl>
           <emu-alg>
-            1. 断言：_strict_ 是 *true*。
+            1. 断言：_strict_ 为 *true*。
             1. 断言：_envRecord_ 具有 _name_ 的绑定。
             1. 如果 _name_ 的绑定是间接绑定，则
-              1. 令 _module_ 和 _targetName_ 为创建 _name_ 的此绑定时提供的间接值。
+              1. 令 _module_ 和 _targetName_ 为创建此 _name_ 绑定时提供的间接引用值。
               1. 令 _targetEnv_ 为 _module_.[[Environment]]。
-              1. 如果 _targetEnv_ 是 ~empty~，则抛出 *ReferenceError* 异常。
-              1. 返回 ? <emu-meta effects="user-code">_targetEnv_.GetBindingValue(_targetName_, *true*)</emu-meta>。
+              1. 如果 _targetEnv_ 为 ~empty~，则抛出 *ReferenceError* 异常。
+              1. 返回 ? _targetEnv_.GetBindingValue(_targetName_, *true*)。
             1. 如果 _envRecord_ 中 _name_ 的绑定是未初始化绑定，则抛出 *ReferenceError* 异常。
             1. 返回 _envRecord_ 中当前绑定到 _name_ 的值。
           </emu-alg>
@@ -19318,18 +19318,18 @@
       <emu-grammar type="definition">
         TemplateLiteral[Yield, Await, Tagged] :
           NoSubstitutionTemplate
-          SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          SubstitutionTemplate[?Yield, ?Await]
 
-        SubstitutionTemplate[Yield, Await, Tagged] :
-          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
+        SubstitutionTemplate[Yield, Await] :
+          TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await]
 
-        TemplateSpans[Yield, Await, Tagged] :
+        TemplateSpans[Yield, Await] :
           TemplateTail
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateTail
+          TemplateMiddleList[?Yield, ?Await] TemplateTail
 
-        TemplateMiddleList[Yield, Await, Tagged] :
+        TemplateMiddleList[Yield, Await] :
           TemplateMiddle Expression[+In, ?Yield, ?Await]
-          TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
+          TemplateMiddleList[?Yield, ?Await] TemplateMiddle Expression[+In, ?Yield, ?Await]
       </emu-grammar>
 
       <emu-clause id="sec-static-semantics-template-early-errors" oldids="sec-primary-expression-template-literals-static-semantics-early-errors">
@@ -19339,45 +19339,19 @@
         </emu-grammar>
         <ul>
           <li>
-            如果未设置 <sub>[Tagged]</sub> 参数且 |NoSubstitutionTemplate| Contains |NotEscapeSequence|，则为语法错误。
+            如果未设置 <sub>[Tagged]</sub> 参数，并且以 ~cooked~ 为参数对 |TemplateLiteral| 求得的 TemplateStrings 包含 *undefined*，则为语法错误。
           </li>
         </ul>
 
         <emu-grammar>
-          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await, ?Tagged]
+          TemplateLiteral[Yield, Await, Tagged] : SubstitutionTemplate[?Yield, ?Await]
         </emu-grammar>
         <ul>
           <li>
-            如果以 *false* 为实参的 |TemplateLiteral| 的 TemplateStrings 中元素数量大于或等于 2<sup>32</sup>，则为语法错误。
+            如果未设置 <sub>[Tagged]</sub> 参数，并且以 ~cooked~ 为参数对 |TemplateLiteral| 求得的 TemplateStrings 包含 *undefined*，则为语法错误。
           </li>
-        </ul>
-
-        <emu-grammar>
-          SubstitutionTemplate[Yield, Await, Tagged] : TemplateHead Expression[+In, ?Yield, ?Await] TemplateSpans[?Yield, ?Await, ?Tagged]
-        </emu-grammar>
-        <ul>
           <li>
-            如果未设置 <sub>[Tagged]</sub> 参数且 |TemplateHead| Contains |NotEscapeSequence|，则为语法错误。
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateSpans[Yield, Await, Tagged] : TemplateTail
-        </emu-grammar>
-        <ul>
-          <li>
-            如果未设置 <sub>[Tagged]</sub> 参数且 |TemplateTail| Contains |NotEscapeSequence|，则为语法错误。
-          </li>
-        </ul>
-
-        <emu-grammar>
-          TemplateMiddleList[Yield, Await, Tagged] :
-            TemplateMiddle Expression[+In, ?Yield, ?Await]
-            TemplateMiddleList[?Yield, ?Await, ?Tagged] TemplateMiddle Expression[+In, ?Yield, ?Await]
-        </emu-grammar>
-        <ul>
-          <li>
-            如果未设置 <sub>[Tagged]</sub> 参数且 |TemplateMiddle| Contains |NotEscapeSequence|，则为语法错误。
+            如果以 ~cooked~ 为参数对 |TemplateLiteral| 求得的 TemplateStrings 中的元素数量大于或等于 2<sup>32</sup>，则为语法错误。
           </li>
         </ul>
       </emu-clause>
@@ -19385,39 +19359,39 @@
       <emu-clause id="sec-static-semantics-templatestrings" type="sdo">
         <h1>
           Static Semantics: TemplateStrings (
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a List of either Strings or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-grammar>TemplateLiteral : NoSubstitutionTemplate</emu-grammar>
         <emu-alg>
-          1. 返回 « TemplateString(|NoSubstitutionTemplate|, _raw_) »。
+          1. 返回 « TemplateString(|NoSubstitutionTemplate|, _escapes_) »。
         </emu-alg>
         <emu-grammar>SubstitutionTemplate : TemplateHead Expression TemplateSpans</emu-grammar>
         <emu-alg>
-          1. 令 _head_ 为 « TemplateString(|TemplateHead|, _raw_) »。
-          1. 令 _tail_ 为以 _raw_ 为实参的 |TemplateSpans| 的 TemplateStrings。
+          1. 令 _head_ 为 « TemplateString(|TemplateHead|, _escapes_) »。
+          1. 令 _tail_ 为以 _escapes_ 为参数对 |TemplateSpans| 求得的 TemplateStrings。
           1. 返回 _head_ 和 _tail_ 的列表连接。
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateTail</emu-grammar>
         <emu-alg>
-          1. 返回 « TemplateString(|TemplateTail|, _raw_) »。
+          1. 返回 « TemplateString(|TemplateTail|, _escapes_) »。
         </emu-alg>
         <emu-grammar>TemplateSpans : TemplateMiddleList TemplateTail</emu-grammar>
         <emu-alg>
-          1. 令 _middle_ 为以 _raw_ 为实参的 |TemplateMiddleList| 的 TemplateStrings。
-          1. 令 _tail_ 为 « TemplateString(|TemplateTail|, _raw_) »。
+          1. 令 _middle_ 为以 _escapes_ 为参数对 |TemplateMiddleList| 求得的 TemplateStrings。
+          1. 令 _tail_ 为 « TemplateString(|TemplateTail|, _escapes_) »。
           1. 返回 _middle_ 和 _tail_ 的列表连接。
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. 返回 « TemplateString(|TemplateMiddle|, _raw_) »。
+          1. 返回 « TemplateString(|TemplateMiddle|, _escapes_) »。
         </emu-alg>
         <emu-grammar>TemplateMiddleList : TemplateMiddleList TemplateMiddle Expression</emu-grammar>
         <emu-alg>
-          1. 令 _front_ 为以 _raw_ 为实参的 |TemplateMiddleList| 的 TemplateStrings。
-          1. 令 _last_ 为 « TemplateString(|TemplateMiddle|, _raw_) »。
+          1. 令 _front_ 为以 _escapes_ 为参数对 |TemplateMiddleList| 求得的 TemplateStrings。
+          1. 令 _last_ 为 « TemplateString(|TemplateMiddle|, _escapes_) »。
           1. 返回 _front_ 和 _last_ 的列表连接。
         </emu-alg>
       </emu-clause>
@@ -19426,20 +19400,17 @@
         <h1>
           Static Semantics: TemplateString (
             _templateToken_: a |NoSubstitutionTemplate| Parse Node, a |TemplateHead| Parse Node, a |TemplateMiddle| Parse Node, or a |TemplateTail| Parse Node,
-            _raw_: a Boolean,
+            _escapes_: ~raw~ or ~cooked~,
           ): a String or *undefined*
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 如果 _raw_ 是 *true*，则
-            1. 令 _string_ 为 _templateToken_ 的 TRV。
-          1. 否则，
-            1. 令 _string_ 为 _templateToken_ 的 TV。
-          1. 返回 _string_。
+          1. 如果 _escapes_ 为 ~raw~，则返回 _templateToken_ 的 TRV。
+          1. 返回 _templateToken_ 的 TV。
         </emu-alg>
         <emu-note>
-          <p>如果 _raw_ 是 *false* 且 _templateToken_ 包含 |NotEscapeSequence|，则此操作返回 *undefined*。在所有其他情况下，它返回 String。</p>
+          <p>如果 _escapes_ 为 ~raw~ 且 _templateToken_ 包含 |NotEscapeSequence|，则此操作返回 *undefined*。在所有其他情况下，它返回一个 String。</p>
         </emu-note>
       </emu-clause>
 
@@ -19452,20 +19423,20 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _realm_ 为当前 Realm Record。
+          1. 令 _realm_ 为当前 Realm 记录。
           1. 令 _templateRegistry_ 为 _realm_.[[TemplateMap]]。
-          1. 对 _templateRegistry_ 的每个元素 _element_，执行：
-            1. 如果 _element_.[[Site]] 与 _templateLiteral_ 是同一个 Parse Node，则
+          1. 对 _templateRegistry_ 的每个元素 _element_，执行
+            1. 如果 _element_.[[Site]] 与 _templateLiteral_ 是同一个解析节点，则
               1. 返回 _element_.[[Array]]。
-          1. 令 _rawStrings_ 为以 *true* 为实参的 _templateLiteral_ 的 TemplateStrings。
-          1. 断言：_rawStrings_ 是 Strings 的 List。
-          1. 令 _cookedStrings_ 为以 *false* 为实参的 _templateLiteral_ 的 TemplateStrings。
-          1. 令 _count_ 为 List _cookedStrings_ 中元素的数量。
+          1. 令 _rawStrings_ 为以 ~raw~ 为参数对 _templateLiteral_ 求得的 TemplateStrings。
+          1. 断言：_rawStrings_ 是一个 String 列表。
+          1. 令 _cookedStrings_ 为以 ~cooked~ 为参数对 _templateLiteral_ 求得的 TemplateStrings。
+          1. 令 _count_ 为列表 _cookedStrings_ 中的元素数量。
           1. 断言：_count_ ≤ 2<sup>32</sup> - 1。
           1. 令 _template_ 为 ! ArrayCreate(_count_)。
           1. 令 _rawObj_ 为 ! ArrayCreate(_count_)。
           1. 令 _index_ 为 0。
-          1. 重复，当 _index_ &lt; _count_ 时，
+          1. 重复执行，只要 _index_ &lt; _count_，
             1. 令 _propertyKey_ 为 ! ToString(𝔽(_index_))。
             1. 令 _cookedValue_ 为 _cookedStrings_[_index_]。
             1. 执行 ! DefinePropertyOrThrow(_template_, _propertyKey_, PropertyDescriptor { [[Value]]: _cookedValue_, [[Writable]]: *false*, [[Enumerable]]: *true*, [[Configurable]]: *false* })。
@@ -19475,7 +19446,7 @@
           1. 执行 ! SetIntegrityLevel(_rawObj_, ~frozen~)。
           1. 执行 ! DefinePropertyOrThrow(_template_, *"raw"*, PropertyDescriptor { [[Value]]: _rawObj_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* })。
           1. 执行 ! SetIntegrityLevel(_template_, ~frozen~)。
-          1. 将 Record { [[Site]]: _templateLiteral_, [[Array]]: _template_ } 追加到 _realm_.[[TemplateMap]]。
+          1. 将记录 { [[Site]]: _templateLiteral_, [[Array]]: _template_ } 追加到 _realm_.[[TemplateMap]]。
           1. 返回 _template_。
         </emu-alg>
         <emu-note>
