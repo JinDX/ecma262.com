@@ -3003,185 +3003,214 @@
             そのオブジェクトが[[Construct]] internal methodを持つ場合、<emu-xref href="#sec-ecmascript-function-objects-construct-argumentslist-newtarget"></emu-xref>で定義されるもの、または<emu-xref href="#sec-built-in-function-objects-construct-argumentslist-newtarget"></emu-xref>で定義されるもののいずれかを使用します。
           </li>
         </ul>
-        <p><dfn id="exotic-object" variants="exotic objects">exotic object</dfn>は、ordinary objectではないオブジェクトです。</p>
-        <p>この仕様は、exotic objectsの異なる種類を、それらのオブジェクトのinternal methodsによって認識します。特定の種類のexotic object（Array exotic objectやbound function exotic objectなど）と振る舞い上は等価であるが、その種類について指定されたinternal methodsの同じ集合を持たないオブジェクトは、その種類のexotic objectとして認識されません。</p>
-        <p><emu-xref href="#table-essential-internal-methods"></emu-xref>および他の同様の表の“Signature”列は、各internal methodの呼び出しパターンを記述します。呼び出しパターンは常に、説明的なparameter namesの括弧付きリストを含みます。parameter nameがECMAScript型名と同じである場合、その名前はparameter値の必要な型を記述します。internal methodが明示的に値を返す場合、そのparameter listの後に記号“→”および返される値の型名が続きます。signaturesで使用される型名は、<emu-xref href="#sec-ecmascript-data-types-and-values"></emu-xref>節で定義される型に、以下の追加名を加えたものを指します。“<em>any</em>”は、その値が任意のECMAScript言語型であってよいことを意味します。</p>
-        <p>internal methodは、そのparametersに加えて、常にそのmethod invocationのtargetであるオブジェクトへアクセスできます。</p>
-        <p>internal methodは暗黙的にCompletion Recordを返します。これは、その呼び出しパターンに示された戻り型の値を包むnormal completion、またはthrow completionのいずれかです。</p>
-        <emu-table id="table-essential-internal-methods" caption="Essential Internal Methods" oldids="table-5">
+        <p><dfn id="exotic-object" variants="exotic objects">特殊オブジェクト</dfn>とは、通常オブジェクトではないオブジェクトである。</p>
+        <p>この仕様では、特殊オブジェクトのさまざまな種類を、それらのオブジェクトの内部メソッドによって識別する。特定の種類の特殊オブジェクト（Array 特殊オブジェクトやバインド関数特殊オブジェクトなど）と動作上は同等であっても、その種類に対して指定されたものと同じ内部メソッドの集合を持たないオブジェクトは、その種類の特殊オブジェクトとしては認識されない。</p>
+        <p><emu-xref href="#table-essential-internal-methods"></emu-xref> およびその他の同様の表では、各内部メソッドの呼び出しパターンについて説明する。呼び出しパターンには、常に説明的なパラメーター名を丸括弧で囲んだリストが含まれる。</p>
+        <p>内部メソッドは、そのパラメーターに加えて、常にメソッド呼び出しの対象となるオブジェクトにアクセスできる。</p>
+        <p>内部メソッドは暗黙的に Completion Record を返す。これは、その呼び出しパターンに示された戻り値型の値をラップする正常完了、またはスロー完了のいずれかである。</p>
+        <emu-table id="table-essential-internal-methods" caption="Essential Internal Methods" oldids="table-5" type="internal methods" of="all objects">
           <table>
             <thead>
               <tr>
                 <th>
-                  Internal Method
-                </th>
-                <th>
-                  Signature
+                  内部メソッド
                 </th>
                 <th>
                   説明
                 </th>
+                <th>
+                  定義
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="internal-method-getprototypeof">
+              <td>[[GetPrototypeOf]] ( ): Object または *null* のいずれかを含む正常完了、またはスロー完了</td>
               <td>
-                [[GetPrototypeOf]]
+                このオブジェクトに継承プロパティを提供するオブジェクトを決定する。*null* 値は、そのようなオブジェクトが存在しないことを示す。
               </td>
               <td>
-                ( ) <b>→</b> Object | Null
-              </td>
-              <td>
-                このオブジェクトにinherited propertiesを提供するオブジェクトを決定します。*null*値は、inherited propertiesが存在しないことを示します。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[SetPrototypeOf]]
-              </td>
-              <td>
-                (Object | Null) <b>→</b> Boolean
-              </td>
-              <td>
-                このオブジェクトを、inherited propertiesを提供する別のオブジェクトに関連付けます。*null*を渡すことは、inherited propertiesが存在しないことを示します。操作が正常に完了したことを示す*true*、または操作が成功しなかったことを示す*false*を返します。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[GetPrototypeOf]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-setprototypeof">
               <td>
-                [[IsExtensible]]
+                [[SetPrototypeOf]] (
+                _proto_: Object または *null*,
+                ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
-                ( ) <b>→</b> Boolean
+                このオブジェクトを、継承プロパティを提供する別のオブジェクトに関連付ける。*null* を渡すことは、継承プロパティを提供するオブジェクトが存在しないことを示す。操作が正常に完了したことを示す *true*、または操作が成功しなかったことを示す *false* を返す。
               </td>
               <td>
-                このオブジェクトに追加のプロパティを加えることが許可されているかどうかを決定します。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[PreventExtensions]]
-              </td>
-              <td>
-                ( ) <b>→</b> Boolean
-              </td>
-              <td>
-                このオブジェクトに新しいプロパティを追加できるかどうかを制御します。操作が成功した場合は*true*、操作が失敗した場合は*false*を返します。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[SetPrototypeOf]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-isextensible">
+              <td>[[IsExtensible]] ( ): Boolean を含む正常完了、またはスロー完了</td>
               <td>
-                [[GetOwnProperty]]
+                このオブジェクトに追加のプロパティを追加することが許可されているかどうかを決定する。
               </td>
               <td>
-                (_propertyKey_) <b>→</b> Undefined | Property Descriptor
-              </td>
-              <td>
-                キーが_propertyKey_であるこのオブジェクトのown propertyについてProperty Descriptorを返すか、そのようなプロパティが存在しない場合は*undefined*を返します。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[DefineOwnProperty]]
-              </td>
-              <td>
-                (_propertyKey_, _propertyDesc_) <b>→</b> Boolean
-              </td>
-              <td>
-                キーが_propertyKey_であるown propertyを作成または変更し、_propertyDesc_によって記述される状態を持たせます。そのプロパティが正常に作成／更新された場合は*true*を返し、プロパティを作成または更新できなかった場合は*false*を返します。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[IsExtensible]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-preventextensions">
+              <td>[[PreventExtensions]] ( ): Boolean を含む正常完了、またはスロー完了</td>
               <td>
-                [[HasProperty]]
+                このオブジェクトに新しいプロパティを追加できるかどうかを制御する。操作が成功した場合は *true*、操作が成功しなかった場合は *false* を返す。
               </td>
               <td>
-                (_propertyKey_) <b>→</b> Boolean
-              </td>
-              <td>
-                このオブジェクトが、キーが_propertyKey_であるownまたはinherited propertyのいずれかを既に持っているかどうかを示すBoolean値を返します。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Get]]
-              </td>
-              <td>
-                (_propertyKey_, _receiver_) <b>→</b> <em>any</em>
-              </td>
-              <td>
-                このオブジェクトから、キーが_propertyKey_であるプロパティの値を返します。プロパティ値を取得するために何らかのECMAScriptコードを実行する必要がある場合、_receiver_はそのコードを評価する際の*this*値として使用されます。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[PreventExtensions]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-getownproperty">
               <td>
-                [[Set]]
+                [[GetOwnProperty]] (
+                _propertyKey_: プロパティキー,
+                ): Property Descriptor または *undefined* のいずれかを含む正常完了、またはスロー完了
               </td>
               <td>
-                (_propertyKey_, _value_, _receiver_) <b>→</b> Boolean
+                キーが _propertyKey_ であるこのオブジェクトの独自プロパティの Property Descriptor を返し、そのようなプロパティが存在しない場合は *undefined* を返す。
               </td>
               <td>
-                キーが_propertyKey_であるプロパティの値を_value_に設定します。プロパティ値を設定するために何らかのECMAScriptコードを実行する必要がある場合、_receiver_はそのコードを評価する際の*this*値として使用されます。プロパティ値が設定された場合は*true*、設定できなかった場合は*false*を返します。
-              </td>
-            </tr>
-            <tr>
-              <td>
-                [[Delete]]
-              </td>
-              <td>
-                (_propertyKey_) <b>→</b> Boolean
-              </td>
-              <td>
-                キーが_propertyKey_であるown propertyをこのオブジェクトから削除します。プロパティが削除されず、まだ存在している場合は*false*を返します。プロパティが削除された、または存在しない場合は*true*を返します。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[GetOwnProperty]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-defineownproperty">
               <td>
-                [[OwnPropertyKeys]]
+                [[DefineOwnProperty]] (
+                _propertyKey_: プロパティキー,
+                _propertyDesc_: Property Descriptor,
+                ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
-                ( ) <b>→</b> List of property keys
+                キーが _propertyKey_ である独自プロパティを作成または変更し、_propertyDesc_ によって記述された状態にする。操作が成功した場合は *true*、プロパティを作成または更新できなかった場合は *false* を返す。
               </td>
               <td>
-                要素がそのオブジェクトのすべてのown property keysであるListを返します。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[DefineOwnProperty]]"></emu-internal-method-dfns>
+              </td>
+            </tr>
+            <tr id="internal-method-hasproperty">
+              <td>
+                [[HasProperty]] (
+                _propertyKey_: プロパティキー,
+                ): Boolean を含む正常完了、またはスロー完了
+              </td>
+              <td>
+                このオブジェクトが、キーが _propertyKey_ である独自プロパティまたは継承プロパティのいずれかを既に持っているかどうかを示す Boolean を返す。
+              </td>
+              <td>
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[HasProperty]]"></emu-internal-method-dfns>
+              </td>
+            </tr>
+            <tr id="internal-method-get">
+              <td>
+                [[Get]] (
+                _propertyKey_: プロパティキー,
+                _receiver_: ECMAScript 言語値,
+                ): ECMAScript 言語値を含む正常完了、またはスロー完了
+              </td>
+              <td>
+                このオブジェクトから、キーが _propertyKey_ であるプロパティの値を返す。プロパティ値を取得するために ECMAScript コードを実行する必要がある場合、コードを評価するときに _receiver_ が *this* 値として使用される。
+              </td>
+              <td>
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[Get]]"></emu-internal-method-dfns>
+              </td>
+            </tr>
+            <tr id="internal-method-set">
+              <td>
+                [[Set]] (
+                _propertyKey_: プロパティキー,
+                _value_: ECMAScript 言語値,
+                _receiver_: ECMAScript 言語値,
+                ): Boolean を含む正常完了、またはスロー完了
+              </td>
+              <td>
+                キーが _propertyKey_ であるプロパティの値を _value_ に設定する。プロパティ値を設定するために ECMAScript コードを実行する必要がある場合、コードを評価するときに _receiver_ が *this* 値として使用される。プロパティ値が設定された場合は *true*、設定できなかった場合は *false* を返す。
+              </td>
+              <td>
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[Set]]"></emu-internal-method-dfns>
+              </td>
+            </tr>
+            <tr id="internal-method-delete">
+              <td>
+                [[Delete]] (
+                _propertyKey_: プロパティキー,
+                ): Boolean を含む正常完了、またはスロー完了
+              </td>
+              <td>
+                キーが _propertyKey_ である独自プロパティをこのオブジェクトから削除する。プロパティが削除されず、引き続き存在する場合は *false* を返す。プロパティが削除されたか、存在しない場合は *true* を返す。
+              </td>
+              <td>
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[Delete]]"></emu-internal-method-dfns>
+              </td>
+            </tr>
+            <tr id="internal-method-ownpropertykeys">
+              <td>[[OwnPropertyKeys]] ( ): プロパティキーの List を含む正常完了、またはスロー完了</td>
+              <td>
+                要素がそのオブジェクトのすべての独自プロパティキーである List を返す。
+              </td>
+              <td>
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[OwnPropertyKeys]]"></emu-internal-method-dfns>
               </td>
             </tr>
           </table>
         </emu-table>
-        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref>は、functionsとして呼び出され得るオブジェクトによってサポートされる追加のessential internal methodsを要約します。<dfn id="function-object" variants="function objects">function object</dfn>は、[[Call]] internal methodをサポートするオブジェクトです。<dfn id="constructor" variants="constructors">constructor</dfn>は、[[Construct]] internal methodをサポートするオブジェクトです。[[Construct]]をサポートするすべてのオブジェクトは[[Call]]をサポートしなければなりません。すなわち、すべてのconstructorはfunction objectでなければなりません。したがって、constructorは<em>constructor function</em>または<em>constructor function object</em>とも呼ばれ得ます。</p>
-        <emu-table id="table-additional-essential-internal-methods-of-function-objects" caption="Additional Essential Internal Methods of Function Objects" oldids="table-6">
+        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref> は、関数として呼び出される可能性があるオブジェクトによってサポートされる追加の必須内部メソッドを要約する。<dfn id="function-object" variants="function objects">関数オブジェクト</dfn>とは、[[Call]] 内部メソッドをサポートするオブジェクトである。<dfn id="constructor" variants="constructors">コンストラクター</dfn>とは、[[Construct]] 内部メソッドをサポートするオブジェクトである。[[Construct]] をサポートするすべてのオブジェクトは [[Call]] をサポートしなければならない。すなわち、すべてのコンストラクターは関数オブジェクトでなければならない。したがって、コンストラクターは<em>コンストラクター関数</em>または<em>コンストラクター関数オブジェクト</em>とも呼ばれる。</p>
+        <emu-table id="table-additional-essential-internal-methods-of-function-objects" caption="Additional Essential Internal Methods of Function Objects" oldids="table-6" type="internal methods" of="function objects">
           <table>
             <thead>
               <tr>
                 <th>
-                  Internal Method
-                </th>
-                <th>
-                  Signature
+                  内部メソッド
                 </th>
                 <th>
                   説明
                 </th>
+                <th>
+                  定義
+                </th>
               </tr>
             </thead>
-            <tr>
+            <tr id="internal-method-call">
               <td>
-                [[Call]]
+                [[Call]] (
+                _thisArg_: ECMAScript 言語値,
+                _argList_: ECMAScript 言語値の List,
+                ): ECMAScript 言語値を含む正常完了、またはスロー完了
               </td>
               <td>
-                (<em>any</em>, a List of <em>any</em>) <b>→</b> <em>any</em>
+                このオブジェクトに関連付けられたコードを実行する。関数呼び出し式によって呼び出される。内部メソッドへの引数は、*this* 値と、呼び出し式によって関数に渡された引数を要素とする List である。この内部メソッドを実装するオブジェクトは<em>呼び出し可能</em>である。
               </td>
               <td>
-                このオブジェクトに関連付けられたコードを実行します。function call expressionを通じて呼び出されます。internal methodへのargumentsは、*this*値と、call expressionによってfunctionに渡されたargumentsを要素とするListです。このinternal methodを実装するオブジェクトは<em>callable</em>です。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[Call]]"></emu-internal-method-dfns>
               </td>
             </tr>
-            <tr>
+            <tr id="internal-method-construct">
               <td>
-                [[Construct]]
+                [[Construct]] (
+                _argList_: ECMAScript 言語値の List,
+                _newTarget_: コンストラクター,
+                ): Object を含む正常完了、またはスロー完了
               </td>
               <td>
-                (a List of <em>any</em>, Object) <b>→</b> Object
+                オブジェクトを作成する。`new` 演算子または `super` 呼び出しによって呼び出される。内部メソッドへの第1引数は、コンストラクター呼び出しまたは `super` 呼び出しの引数を要素とする List である。第2引数は、`new` 演算子が最初に適用されたオブジェクトである。この内部メソッドを実装するオブジェクトは<em>コンストラクター</em>と呼ばれる。関数オブジェクトは必ずしもコンストラクターではなく、そのような非コンストラクター関数オブジェクトは [[Construct]] 内部メソッドを持たない。
               </td>
               <td>
-                オブジェクトを作成します。`new`演算子または`super`呼び出しを通じて呼び出されます。internal methodへの最初のargumentは、constructor呼び出しまたは`super`呼び出しのargumentsを要素とするListです。2番目のargumentは、`new`演算子が最初に適用されたオブジェクトです。このinternal methodを実装するオブジェクトは<em>constructors</em>と呼ばれます。function objectは必ずしもconstructorではなく、そのようなnon-constructor function objectsは[[Construct]] internal methodを持ちません。
+                この仕様内では、以下の型に定義がある。ホストは独自の定義を持つ追加の型を提供してもよい:
+                <emu-internal-method-dfns for="[[Construct]]"></emu-internal-method-dfns>
               </td>
             </tr>
           </table>
@@ -14194,24 +14223,26 @@
         <dd>これは_func_に*"name"* propertyを追加します。</dd>
       </dl>
       <emu-alg>
-        1. Assert: _func_はextensible objectであり、*"name"* own propertyを持たない。
-        1. _name_がSymbolなら、
-          1. _description_を_name_.[[Description]]とする。
-          1. _description_が*undefined*なら、_name_を空のStringに設定する。
-          1. そうでなければ、_name_を*"["*、_description_、および*"]"*のstring-concatenationに設定する。
-        1. そうでなく、_name_がPrivate Nameなら、
-          1. _name_を_name_.[[Description]]に設定する。
-        1. _func_が[[InitialName]] internal slotを持つなら、
-          1. _func_.[[InitialName]]を_name_に設定する。
-        1. _prefix_が存在するなら、
-          1. _prefixedName_を、_prefix_、code unit 0x0020 (SPACE)、および_name_のstring-concatenationとする。
-          1. _func_が[[InitialName]] internal slotを持つなら、
-            1. NOTE: 次のstepの選択は、このAbstract Operationが呼び出されるたびに独立して行われる。
-            1. _func_.[[InitialName]]を_name_または_prefixedName_のいずれかのimplementation-defined choiceに設定する。
-          1. _name_を_prefixedName_に設定する。
-        1. ! DefinePropertyOrThrow(_func_, *"name"*, PropertyDescriptor { [[Value]]: _name_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* })を実行する。
-        1. ~unused~を返す。
+        1. アサート: _func_ は拡張可能なオブジェクトであり、*"name"* という独自プロパティを持たない。
+        1. _name_ が Symbol である場合、
+          1. _description_ を _name_.[[Description]] とする。
+          1. _description_ が *undefined* である場合、_name_ を空の String に設定する。
+          1. そうでない場合、_name_ を *"["*、_description_、および *"]"* の文字列連結に設定する。
+        1. そうではなく、_name_ が Private Name である場合、
+          1. _name_ を _name_.[[Description]] に設定する。
+        1. _initialName_ を _name_ とする。
+        1. _prefix_ が存在する場合、
+          1. _prefixedName_ を _prefix_、コード単位 0x0020 (SPACE)、および _name_ の文字列連結とする。
+          1. _initialName_ を _prefixedName_ に設定する。
+          1. [id="step-setfunctionname-maybe-prefix-initialname", normative-optional, legacy] _initialName_ を、_name_ または _prefixedName_ のいずれかの実装定義の選択に設定する。
+          1. _name_ を _prefixedName_ に設定する。
+        1. _func_ が [[InitialName]] 内部スロットを持つ場合、_func_.[[InitialName]] を _initialName_ に設定する。
+        1. ! DefinePropertyOrThrow(_func_, *"name"*, PropertyDescriptor { [[Value]]: _name_, [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }) を実行する。
+        1. ~unused~ を返す。
       </emu-alg>
+      <emu-note>
+        <p>_func_.[[InitialName]] に _prefixedName_ を使用するかどうかの選択は、<emu-xref href="#sec-function.prototype.tostring" title></emu-xref> の出力に影響する。ステップ <emu-xref href="#step-setfunctionname-maybe-prefix-initialname"></emu-xref> において、組み込み関数ごとに異なる選択を行うことは、推奨されないレガシーな動作である。</p>
+      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-setfunctionlength" type="abstract operation">
@@ -33132,9 +33163,9 @@
 
       <emu-clause id="sec-number.prototype.tolocalestring" type="built-in function">
         <h1>Number.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodは、host environmentのcurrent localeのconventionsに従ってformattedされたthis Number valueを表すString valueをproduceします。このmethodはimplementation-definedであり、`toString`と同じものを返すことはpermissibleですが、encouragedはされません。</p>
-        <p>このmethodのoptional parametersのmeaningsはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは、この Number 値をホスト環境の現在のロケールの慣例に従って書式設定したものを表す String 値を生成する。このメソッドは実装定義であり、`toString` と同じものを返すことも許容されるが、推奨されない。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype.toprecision" type="built-in function">
@@ -33323,9 +33354,9 @@
 
       <emu-clause id="sec-bigint.prototype.tolocalestring" type="built-in function">
         <h1>BigInt.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodは、host environmentのcurrent localeのconventionsに従ってformattedされたthis BigInt valueを表すString valueをproduceします。このmethodはimplementation-definedであり、`toString`と同じものを返すことはpermissibleですが、encouragedはされません。</p>
-        <p>このmethodのoptional parametersのmeaningsはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは、この BigInt 値をホスト環境の現在のロケールの慣例に従って書式設定したものを表す String 値を生成する。このメソッドは実装定義であり、`toString` と同じものを返すことも許容されるが、推奨されない。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-bigint.prototype.tostring" type="built-in function">
@@ -34054,36 +34085,36 @@
     <h1>Date Objects</h1>
 
     <emu-clause id="sec-overview-of-date-objects-and-definitions-of-abstract-operations">
-      <h1>Date オブジェクトの概要および抽象操作の定義</h1>
-      <p>以下の抽象操作は、time value（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>で定義）を操作する。いずれの場合も、これらの関数のいずれかに対する引数が *NaN* であれば、結果は *NaN* になることに注意されたい。</p>
+      <h1>Date オブジェクトの概要と抽象操作の定義</h1>
+      <p>以下の抽象操作は、時刻値（<emu-xref href="#sec-time-values-and-time-range"></emu-xref> で定義）を操作する。いずれの場合も、これらの関数の引数のいずれかが *NaN* である場合、結果は *NaN* になることに注意。</p>
 
       <emu-clause id="sec-time-values-and-time-range">
-        <h1>Time Value と時間範囲</h1>
-        <p>ECMAScript における時間の測定は POSIX における時間の測定に類似しており、特に先発グレゴリオ暦、1970 年 1 月 1 日 UTC の開始時の午前 0 時を<dfn id="epoch">エポック</dfn>とすること、およびすべての日を正確に 86,400 秒（各秒は 1000 ミリ秒）から構成されるものとして扱うという定義を共有している。</p>
-        <p>ECMAScript の <dfn variants="time values">time value</dfn> は Number であり、ミリ秒精度で時点を表す有限の整数 Number、または特定の時点を表さない *NaN* のいずれかである。msPerDay の整数倍である time value（すなわち、ある整数 _d_ に対して msPerDay × _d_ であるもの）は、エポックから _d_ 日の完全な UTC 日が経過した後の UTC 日の開始時点（_d_ が負の場合はエポックより前）を表す。それ以外のすべての有限の time value _tv_ は、そのような倍数である直前の最大の time value _s_ を基準として定義され、_s_ と同じ UTC 日の中で、それより (_tv_ - _s_) ミリ秒後に生じる時点を表す。</p>
-        <p>Time value は UTC のうるう秒を考慮しない。正のうるう秒内の時点を表す time value は存在せず、負のうるう秒によって UTC タイムラインから除去された時点を表す time value は存在する。ただし、time value の定義は UTC との区分的な整合性をもたらし、不連続性はうるう秒の境界でのみ生じ、うるう秒以外では差はゼロとなる。</p>
-        <p>Number は -9,007,199,254,740,992 から 9,007,199,254,740,992 までのすべての整数を正確に表現できる（<emu-xref href="#sec-number.min_safe_integer"></emu-xref>および<emu-xref href="#sec-number.max_safe_integer"></emu-xref>）。time value がサポートする範囲は、それよりわずかに小さい -8,640,000,000,000,000 から 8,640,000,000,000,000 ミリ秒までである。したがって、サポートされる time value の範囲は、1970 年 1 月 1 日 UTC の開始時の午前 0 時を基準として、正確に -100,000,000 日から 100,000,000 日までとなる。</p>
-        <p>1970 年 1 月 1 日 UTC の開始時の午前 0 時という正確な時点は、time value *+0*<sub>𝔽</sub> で表される。</p>
+        <h1>時刻値と時刻範囲</h1>
+        <p>ECMAScript における時刻の測定は POSIX における時刻の測定に類似しており、特に先発グレゴリオ暦、1970年1月1日 UTC の開始時の午前0時を<dfn id="epoch">エポック</dfn>とする定義、および各日を正確に 86,400 秒（各秒は 1000 ミリ秒）から成るものとして扱う点を共有している。</p>
+        <p>ECMAScript の<dfn variants="time values">時刻値</dfn>は Number であり、ミリ秒精度で時点を表す有限の整数 Number、または特定の時点を表さない *NaN* のいずれかである。MillisecondsPerDay の整数倍である時刻値（すなわち、ある整数 _d_ に対して MillisecondsPerDay × _d_ であるもの）は、エポックから _d_ 完全 UTC 日後（_d_ が負の場合はエポックより前）の UTC 日の開始時点を表す。それ以外の有限時刻値 _tv_ は、そのような倍数であり _tv_ に先行する最大の時刻値 _s_ を基準として定義され、_s_ と同じ UTC 日内で (_tv_ - _s_) ミリ秒後に発生する時点を表す。</p>
+        <p>時刻値は UTC のうるう秒を考慮しない。正のうるう秒内の時点を表す時刻値は存在せず、負のうるう秒によって UTC タイムラインから除去された時点を表す時刻値は存在する。ただし、時刻値の定義は、それでも UTC との区分的な整合をもたらし、不連続はうるう秒の境界でのみ発生し、うるう秒以外では差はゼロである。</p>
+        <p>Number は -9,007,199,254,740,992 から 9,007,199,254,740,992 までのすべての整数を正確に表現できる（<emu-xref href="#sec-number.min_safe_integer"></emu-xref> および <emu-xref href="#sec-number.max_safe_integer"></emu-xref>）。時刻値がサポートする範囲はわずかに小さく、-8,640,000,000,000,000 から 8,640,000,000,000,000 ミリ秒までである。これにより、1970年1月1日 UTC の開始時の午前0時を基準として、正確に -100,000,000 日から 100,000,000 日までの時刻値範囲がサポートされる。</p>
+        <p>1970年1月1日 UTC の開始時の午前0時の正確な時点は、時刻値 *+0*<sub>𝔽</sub> で表される。</p>
         <emu-note>
-          <p>先発グレゴリオ暦では、うるう年は 4 で割り切れ、かつ 400 で割り切れるか、100 では割り切れない年である。</p>
-          <p>先発グレゴリオ暦の 400 年周期には 97 回のうるう年が含まれる。したがって、1 年の平均は 365.2425 日、すなわち 31,556,952,000 ミリ秒となる。このため、Number がミリ秒精度で正確に表現できる最大範囲は、1970 年を基準として約 -285,426 年から 285,426 年までである。この節で規定する time value がサポートするより小さい範囲は、1970 年を基準として約 -273,790 年から 273,790 年までである。</p>
+          <p>先発グレゴリオ暦では、うるう年は、4 で割り切れ、かつ 400 で割り切れるか 100 で割り切れない年として正確に定義される。</p>
+          <p>先発グレゴリオ暦の 400 年周期には 97 のうるう年が含まれる。これにより、1年の平均は 365.2425 日、すなわち 31,556,952,000 ミリ秒となる。したがって、Number がミリ秒精度で正確に表現できる最大範囲は、1970年を基準として約 -285,426 年から 285,426 年までである。この節で指定される時刻値がサポートするより小さい範囲は、1970年を基準として約 -273,790 年から 273,790 年までである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-related-constants">
-        <h1>時間関連の定数</h1>
-        <p>以下の節のアルゴリズムでは、これらの定数を参照する。</p>
+        <h1>時刻関連の定数</h1>
+        <p>これらの定数は、以下の節のアルゴリズムから参照される。</p>
         <emu-eqn id="eqn-HoursPerDay" aoid="HoursPerDay">HoursPerDay = 24</emu-eqn>
         <emu-eqn id="eqn-MinutesPerHour" aoid="MinutesPerHour">MinutesPerHour = 60</emu-eqn>
         <emu-eqn id="eqn-SecondsPerMinute" aoid="SecondsPerMinute">SecondsPerMinute = 60</emu-eqn>
-        <emu-eqn id="eqn-msPerSecond" aoid="msPerSecond">msPerSecond = 1000</emu-eqn>
-        <emu-eqn id="eqn-msPerMinute" aoid="msPerMinute">msPerMinute = 60000 = msPerSecond × SecondsPerMinute</emu-eqn>
-        <emu-eqn id="eqn-msPerHour" aoid="msPerHour">msPerHour = 3600000 = msPerMinute × MinutesPerHour</emu-eqn>
-        <emu-eqn id="eqn-msPerDay" aoid="msPerDay">msPerDay = 86400000 = msPerHour × HoursPerDay</emu-eqn>
-        <emu-eqn id="eqn-NanosecondsPerDay" aoid="NanosecondsPerDay">NanosecondsPerDay = 10<sup>6</sup> × msPerDay = 8.64 × 10<sup>13</sup></emu-eqn>
-        <emu-eqn id="eqn-nsPerSecond" aoid="nsPerSecond">nsPerSecond = 10<sup>6</sup> × msPerSecond = 10<sup>9</sup></emu-eqn>
-        <emu-eqn id="eqn-nsPerMillisecond" aoid="nsPerMillisecond">nsPerMillisecond = 10<sup>6</sup></emu-eqn>
-        <emu-eqn id="eqn-nsPerMicrosecond" aoid="nsPerMicrosecond">nsPerMicrosecond = 10<sup>3</sup></emu-eqn>
+        <emu-eqn id="eqn-MillisecondsPerSecond" oldids="eqn-msPerSecond" aoid="MillisecondsPerSecond">MillisecondsPerSecond = 1000</emu-eqn>
+        <emu-eqn id="eqn-MillisecondsPerMinute" oldids="eqn-msPerMinute" aoid="MillisecondsPerMinute">MillisecondsPerMinute = 60000 = MillisecondsPerSecond × SecondsPerMinute</emu-eqn>
+        <emu-eqn id="eqn-MillisecondsPerHour" oldids="eqn-msPerHour" aoid="MillisecondsPerHour">MillisecondsPerHour = 3600000 = MillisecondsPerMinute × MinutesPerHour</emu-eqn>
+        <emu-eqn id="eqn-MillisecondsPerDay" oldids="eqn-msPerDay" aoid="MillisecondsPerDay">MillisecondsPerDay = 86400000 = MillisecondsPerHour × HoursPerDay</emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerDay" aoid="NanosecondsPerDay">NanosecondsPerDay = 10<sup>6</sup> × MillisecondsPerDay = 8.64 × 10<sup>13</sup></emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerSecond" oldids="eqn-nsPerSecond" aoid="NanosecondsPerSecond">NanosecondsPerSecond = 10<sup>6</sup> × MillisecondsPerSecond = 10<sup>9</sup></emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerMillisecond" oldids="eqn-nsPerMillisecond" aoid="NanosecondsPerMillisecond">NanosecondsPerMillisecond = 10<sup>6</sup></emu-eqn>
+        <emu-eqn id="eqn-NanosecondsPerMicrosecond" oldids="eqn-nsPerMicrosecond" aoid="NanosecondsPerMicrosecond">NanosecondsPerMicrosecond = 10<sup>3</sup></emu-eqn>
         <emu-eqn id="eqn-MaxEpochNanoseconds" aoid="MaxEpochNanoseconds">MaxEpochNanoseconds = 10<sup>8</sup> × NanosecondsPerDay = 8.64 × 10<sup>21</sup></emu-eqn>
         <emu-eqn id="eqn-MinEpochNanoseconds" aoid="MinEpochNanoseconds">MinEpochNanoseconds = -MaxEpochNanoseconds = -8.64 × 10<sup>21</sup></emu-eqn>
       </emu-clause>
@@ -34091,30 +34122,30 @@
       <emu-clause id="sec-day" type="abstract operation" oldids="eqn-Day,sec-day-number-and-time-within-day">
         <h1>
           Day (
-            _tv_: 有限の time value,
+            _tv_: 有限の時刻値,
           ): 整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_ が属する日の番号を返す。</dd>
+          <dd>_tv_ が属する日の日番号を返す。</dd>
         </dl>
         <emu-alg>
-          1. floor(ℝ(_tv_) / msPerDay) を返す。
+          1. floor(ℝ(_tv_) / MillisecondsPerDay) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-timewithinday" type="abstract operation" oldids="eqn-TimeWithinDay">
         <h1>
           TimeWithinDay (
-            _tv_: 有限の time value,
-          ): 0（含む）から msPerDay（含まない）までの区間内の整数
+            _tv_: 有限の時刻値,
+          ): 0（含む）から MillisecondsPerDay（含まない）までの区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_ が属する日の開始からのミリ秒数を返す。</dd>
         </dl>
         <emu-alg>
-          1. ℝ(_tv_) modulo msPerDay を返す。
+          1. ℝ(_tv_) modulo MillisecondsPerDay を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34129,7 +34160,7 @@
           <dd>年 _y_ の最初の日の日番号を返す。</dd>
         </dl>
         <emu-alg>
-          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注記: 以下の手順では、_numberYears1_、_numberYears4_、_numberYears100_、および _numberYears400_ は、それぞれエポックから年 _y_ の開始までに存在する、1、4、100、および 400 で割り切れる年の数を表す。_y_ がエポックより前の場合、この数は負となる。
+          1. [declared="numberYears1,numberYears4,numberYears100,numberYears400"] 注記: 以下の手順では、_numberYears1_、_numberYears4_、_numberYears100_、および _numberYears400_ は、それぞれエポックから年 _y_ の開始までに現れる、1、4、100、および 400 で割り切れる年の数を表す。_y_ がエポックより前である場合、この数は負となる。
           1. _numberYears1_ を (_y_ - 1970) とする。
           1. _numberYears4_ を floor((_y_ - 1969) / 4) とする。
           1. _numberYears100_ を floor((_y_ - 1901) / 100) とする。
@@ -34142,21 +34173,21 @@
         <h1>
           TimeFromYear (
             _y_: 整数,
-          ): time value
+          ): 時刻値
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>年 _y_ の開始時点の time value を返す。</dd>
+          <dd>年 _y_ の開始時の時刻値を返す。</dd>
         </dl>
         <emu-alg>
-          1. 𝔽(msPerDay × DayFromYear(_y_)) を返す。
+          1. 𝔽(MillisecondsPerDay × DayFromYear(_y_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-yearfromtime" type="abstract operation" oldids="eqn-YearFromTime">
         <h1>
           YearFromTime (
-            _tv_: 有限の time value,
+            _tv_: 有限の時刻値,
           ): 整数
         </h1>
         <dl class="header">
@@ -34164,15 +34195,15 @@
           <dd>_tv_ が属する年を返す。</dd>
         </dl>
         <emu-alg>
-          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_ を満たす最大の整数 _y_（+∞ に最も近いもの）を返す。
+          1. [declared="y"] TimeFromYear(_y_) ≤ _tv_ となる最大の整数 _y_（+∞ に最も近いもの）を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-daywithinyear" type="abstract operation" oldids="eqn-DayWithinYear">
         <h1>
           DayWithinYear (
-            _tv_: 有限の time value,
-          ): 0 から 365 までの両端を含む区間内の整数
+            _tv_: 有限の時刻値,
+          ): 0 から 365 までの包含区間の整数
         </h1>
         <dl class="header">
         </dl>
@@ -34184,12 +34215,12 @@
       <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
         <h1>
           InLeapYear (
-            _tv_: 有限の time value,
+            _tv_: 有限の時刻値,
           ): 0 または 1
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_ が閏年内にある場合は 1 を、それ以外の場合は 0 を返す。</dd>
+          <dd>_tv_ がうるう年内にある場合は 1 を返し、それ以外の場合は 0 を返す。</dd>
         </dl>
         <emu-alg>
           1. _y_ を YearFromTime(_tv_) とする。
@@ -34203,12 +34234,12 @@
       <emu-clause id="sec-monthfromtime" type="abstract operation" oldids="eqn-MonthFromTime,sec-month-number">
         <h1>
           MonthFromTime (
-            _tv_: 有限の time value,
-          ): 0 から 11 までの両端を含む区間内の整数
+            _tv_: 有限の時刻値,
+          ): 0 から 11 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_ が属する月を識別する整数を返す。月の値 0 は1月、1 は2月、2 は3月、3 は4月、4 は5月、5 は6月、6 は7月、7 は8月、8 は9月、9 は10月、10 は11月、11 は12月を指定する。<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn> であり、これは1970年1月1日木曜日に対応することに注意すること。</dd>
+          <dd>_tv_ が属する月を識別する整数を返す。月の値 0 は1月、1 は2月、2 は3月、3 は4月、4 は5月、5 は6月、6 は7月、7 は8月、8 は9月、9 は10月、10 は11月、11 は12月を指定する。<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn> であり、1970年1月1日木曜日に対応することに注意。</dd>
         </dl>
         <emu-alg>
           1. _inLeapYear_ を InLeapYear(_tv_) とする。
@@ -34224,7 +34255,7 @@
           1. _dayWithinYear_ &lt; 273 + _inLeapYear_ の場合、8 を返す。
           1. _dayWithinYear_ &lt; 304 + _inLeapYear_ の場合、9 を返す。
           1. _dayWithinYear_ &lt; 334 + _inLeapYear_ の場合、10 を返す。
-          1. 表明: _dayWithinYear_ &lt; 365 + _inLeapYear_。
+          1. アサート: _dayWithinYear_ &lt; 365 + _inLeapYear_。
           1. 11 を返す。
         </emu-alg>
       </emu-clause>
@@ -34232,8 +34263,8 @@
       <emu-clause id="sec-datefromtime" type="abstract operation" oldids="sec-date-number">
         <h1>
           DateFromTime (
-            _tv_: 有限の time value,
-          ): 1 から 31 までの両端を含む区間内の整数
+            _tv_: 有限の時刻値,
+          ): 1 から 31 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -34254,7 +34285,7 @@
           1. _month_ = 8 の場合、_dayWithinYear_ - 242 - _inLeapYear_ を返す。
           1. _month_ = 9 の場合、_dayWithinYear_ - 272 - _inLeapYear_ を返す。
           1. _month_ = 10 の場合、_dayWithinYear_ - 303 - _inLeapYear_ を返す。
-          1. 表明: _month_ = 11。
+          1. アサート: _month_ = 11。
           1. _dayWithinYear_ - 333 - _inLeapYear_ を返す。
         </emu-alg>
       </emu-clause>
@@ -34262,12 +34293,12 @@
       <emu-clause id="sec-weekday" type="abstract operation" oldids="sec-week-day">
         <h1>
           WeekDay (
-            _tv_: 有限の time value,
-          ): 0 から 6 までの両端を含む区間内の整数
+            _tv_: 有限の時刻値,
+          ): 0 から 6 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_ が属する曜日を識別する整数を返す。曜日の値 0 は日曜日、1 は月曜日、2 は火曜日、3 は水曜日、4 は木曜日、5 は金曜日、6 は土曜日を指定する。<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = 4</emu-eqn> であり、これは1970年1月1日木曜日に対応することに注意すること。</dd>
+          <dd>_tv_ が属する曜日を識別する整数を返す。曜日の値 0 は日曜日、1 は月曜日、2 は火曜日、3 は水曜日、4 は木曜日、5 は金曜日、6 は土曜日を指定する。<emu-eqn>WeekDay(*+0*<sub>𝔽</sub>) = 4</emu-eqn> であり、1970年1月1日木曜日に対応することに注意。</dd>
         </dl>
         <emu-alg>
           1. (Day(_tv_) + 4) modulo 7 を返す。
@@ -34277,95 +34308,95 @@
       <emu-clause id="sec-hourfromtime" type="abstract operation" oldids="eqn-HourFromTime,sec-hours-minutes-second-and-milliseconds">
         <h1>
           HourFromTime (
-            _tv_: 有限の time value,
-          ): 0 から 23 までの両端を含む区間内の整数
+            _tv_: 有限の時刻値,
+          ): 0 から 23 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_ が属する日の時を返す。</dd>
         </dl>
         <emu-alg>
-          1. floor(ℝ(_tv_) / msPerHour) modulo HoursPerDay を返す。
+          1. floor(ℝ(_tv_) / MillisecondsPerHour) modulo HoursPerDay を返す。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-minfromtime" type="abstract operation" oldids="eqn-MinFromTime">
+      <emu-clause id="sec-minutefromtime" type="abstract operation" oldids="eqn-MinFromTime,sec-minfromtime">
         <h1>
-          MinFromTime (
-            _tv_: 有限の time value,
-          ): 0 から 59 までの両端を含む区間内の整数
+          MinuteFromTime (
+            _tv_: 有限の時刻値,
+          ): 0 から 59 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_ が属する時の分を返す。</dd>
         </dl>
         <emu-alg>
-          1. floor(ℝ(_tv_) / msPerMinute) modulo MinutesPerHour を返す。
+          1. floor(ℝ(_tv_) / MillisecondsPerMinute) modulo MinutesPerHour を返す。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-secfromtime" type="abstract operation" oldids="eqn-SecFromTime">
+      <emu-clause id="sec-secondfromtime" type="abstract operation" oldids="eqn-SecFromTime,sec-secfromtime">
         <h1>
-          SecFromTime (
-            _tv_: 有限の time value,
-          ): 0 から 59 までの両端を含む区間内の整数
+          SecondFromTime (
+            _tv_: 有限の時刻値,
+          ): 0 から 59 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_ が属する分の秒を返す。</dd>
         </dl>
         <emu-alg>
-          1. floor(ℝ(_tv_) / msPerSecond) modulo SecondsPerMinute を返す。
+          1. floor(ℝ(_tv_) / MillisecondsPerSecond) modulo SecondsPerMinute を返す。
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-millisecfromtime" type="abstract operation" oldids="sec-msfromtime,eqn-msFromTime">
+      <emu-clause id="sec-millisecondfromtime" type="abstract operation" oldids="sec-msfromtime,eqn-msFromTime,sec-millisecfromtime">
         <h1>
-          MillisecFromTime (
-            _tv_: 有限の time value,
-          ): 0 から 999 までの両端を含む区間内の整数
+          MillisecondFromTime (
+            _tv_: 有限の時刻値,
+          ): 0 から 999 までの包含区間の整数
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>_tv_ が属する秒のミリ秒を返す。</dd>
         </dl>
         <emu-alg>
-          1. ℝ(_tv_) modulo msPerSecond を返す。
+          1. ℝ(_tv_) modulo MillisecondsPerSecond を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-epoch-nanoseconds">
         <h1>エポックナノ秒と範囲</h1>
 
-        <p><dfn variants="epoch nanoseconds counts">エポックナノ秒数</dfn>とは、ある時点をナノ秒精度で表す整数である。これは時間値と同じ範囲をサポートするが、ナノ秒単位で表され、その範囲は MinEpochNanoseconds から MaxEpochNanoseconds までである。時間値 *NaN* に相当するナノ秒値は存在せず、特定の時点を表さないための表現も存在しない。</p>
+        <p><dfn variants="epoch nanoseconds counts">エポックナノ秒カウント</dfn>とは、ナノ秒精度で時点を表す整数である。これは時刻値と同じ範囲をナノ秒単位で表したものをサポートし、MinEpochNanoseconds から MaxEpochNanoseconds までである。時刻値 *NaN* に相当するナノ秒表現は存在せず、特定の時点がないことを表す表現も存在しない。</p>
 
-        <p>1970 年 1 月 1 日 UTC の開始時点における午前 0 時ちょうどは、値 0 で表される。最大値は MaxEpochNanoseconds であり、最小値は MinEpochNanoseconds である。</p>
+        <p>1970年1月1日 UTC の開始時の午前0時の正確な時点は値 0 で表される。最大値は MaxEpochNanoseconds、最小値は MinEpochNanoseconds である。</p>
       </emu-clause>
 
       <emu-clause id="sec-getutcepochnanoseconds" type="abstract operation">
         <h1>
           GetUTCEpochNanoseconds (
             _year_: 整数,
-            _month_: 1 以上 12 以下の整数,
-            _day_: 1 以上 31 以下の整数,
-            _hour_: 0 以上 23 以下の整数,
-            _minute_: 0 以上 59 以下の整数,
-            _second_: 0 以上 59 以下の整数,
-            _millisecond_: 0 以上 999 以下の整数,
-            _microsecond_: 0 以上 999 以下の整数,
-            _nanosecond_: 0 以上 999 以下の整数,
-          ): エポックナノ秒数
+            _month_: 1 から 12 までの包含区間の整数,
+            _day_: 1 から 31 までの包含区間の整数,
+            _hour_: 0 から 23 までの包含区間の整数,
+            _minute_: 0 から 59 までの包含区間の整数,
+            _second_: 0 から 59 までの包含区間の整数,
+            _millisecond_: 0 から 999 までの包含区間の整数,
+            _microsecond_: 0 から 999 までの包含区間の整数,
+            _nanosecond_: 0 から 999 までの包含区間の整数,
+          ): エポックナノ秒カウント
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>返される値は、指定された ISO 8601 カレンダー日付と UTC の壁時計時刻に対応するエポックナノ秒数である。</dd>
+          <dd>返される値は、指定された ISO 8601 暦の日付および UTC の時計時刻に対応するエポックナノ秒カウントである。</dd>
         </dl>
         <emu-alg>
           1. _date_ を MakeDay(𝔽(_year_), 𝔽(_month_ - 1), 𝔽(_day_)) とする。
           1. _time_ を MakeTime(𝔽(_hour_), 𝔽(_minute_), 𝔽(_second_), 𝔽(_millisecond_)) とする。
-          1. _ms_ を MakeDate(_date_, _time_) とする。
-          1. 表明: _ms_ は整数値の Number である。
-          1. ℝ(_ms_) × nsPerMillisecond + _microsecond_ × nsPerMicrosecond + _nanosecond_ を返す。
+          1. _epochMilliseconds_ を MakeDate(_date_, _time_) とする。
+          1. アサート: _epochMilliseconds_ は整数の Number である。
+          1. ℝ(_epochMilliseconds_) × NanosecondsPerMillisecond + _microsecond_ × NanosecondsPerMicrosecond + _nanosecond_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34373,25 +34404,25 @@
         <h1>タイムゾーン識別子</h1>
 
         <p>
-          ECMAScript のタイムゾーンは、0x0000 から 0x007F までの範囲内のコード単位のみで構成される String である<dfn variants="time zone identifier">タイムゾーン識別子</dfn>によって表される。
-          ECMAScript 実装がサポートするタイムゾーンは、AvailableNamedTimeZoneIdentifiers が返す Time Zone Identifier Record の [[Identifier]] フィールドによって表される<dfn variants="available named time zone">利用可能な名前付きタイムゾーン</dfn>、または IsTimeZoneOffsetString が *true* を返す String によって表される<dfn variants="offset time zone">オフセットタイムゾーン</dfn>である場合がある。
+          ECMAScript のタイムゾーンは<dfn variants="time zone identifier">タイムゾーン識別子</dfn>によって表され、これは 0x0000 から 0x007F までの包含区間にあるコード単位のみで構成される String である。
+          ECMAScript 実装によってサポートされるタイムゾーンは、AvailableNamedTimeZoneIdentifiers が返す Time Zone Identifier Record の [[Identifier]] フィールドによって表される<dfn variants="available named time zone">利用可能な名前付きタイムゾーン</dfn>、または IsTimeZoneOffsetString が *true* を返す String によって表される<dfn variants="offset time zone">オフセットタイムゾーン</dfn>であってよい。
         </p>
         <p>
           <dfn variants="primary time zone identifiers">プライマリタイムゾーン識別子</dfn>は、利用可能な名前付きタイムゾーンの優先識別子である。
           <dfn variants="non-primary time zone identifiers">非プライマリタイムゾーン識別子</dfn>は、プライマリタイムゾーン識別子ではない、利用可能な名前付きタイムゾーンの識別子である。
           <dfn variants="available named time zone identifiers">利用可能な名前付きタイムゾーン識別子</dfn>は、プライマリタイムゾーン識別子または非プライマリタイムゾーン識別子のいずれかである。
-          各利用可能な名前付きタイムゾーン識別子は、正確に 1 つの利用可能な名前付きタイムゾーンに関連付けられる。
-          各利用可能な名前付きタイムゾーンは、正確に 1 つのプライマリタイムゾーン識別子と、0 個以上の非プライマリタイムゾーン識別子に関連付けられる。
+          各利用可能な名前付きタイムゾーン識別子は、正確に1つの利用可能な名前付きタイムゾーンに関連付けられる。
+          各利用可能な名前付きタイムゾーンは、正確に1つのプライマリタイムゾーン識別子と、0個以上の非プライマリタイムゾーン識別子に関連付けられる。
         </p>
         <p>
-          ECMAScript 実装は、識別子 *"UTC"* を持つ利用可能な名前付きタイムゾーンをサポートしなければならず、この識別子は UTC タイムゾーンのプライマリタイムゾーン識別子でなければならない。
+          ECMAScript 実装は、識別子 *"UTC"* を持つ利用可能な名前付きタイムゾーンをサポートしなければならず、これは UTC タイムゾーンのプライマリタイムゾーン識別子でなければならない。
           さらに、実装は任意の数のその他の利用可能な名前付きタイムゾーンをサポートしてもよい。
         </p>
         <p>
-          ECMA-402 国際化 API 仕様に記述されているタイムゾーンの要件に従う実装を、<dfn>タイムゾーン対応</dfn>と呼ぶ。
-          タイムゾーン対応の実装は、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>の「Zone」名および「<emu-not-ref>Link</emu-not-ref>」名に対応する利用可能な名前付きタイムゾーンだけをサポートしなければならない。
-          タイムゾーン対応の実装では、プライマリタイムゾーン識別子と非プライマリタイムゾーン識別子は、ECMA-402 仕様で規定されている AvailableNamedTimeZoneIdentifiers によって明示的に上書きされる場合を除き、それぞれ IANA タイムゾーンデータベースの「Zone」名と「<emu-not-ref>Link</emu-not-ref>」名である。
-          IANA タイムゾーンデータベース全体をサポートしない実装にも、タイムゾーンを表す識別子として IANA タイムゾーンデータベースの名前を使用することが引き続き推奨される。
+          ECMA-402 国際化 API 仕様に記載されているタイムゾーンの要件に従う実装は、<dfn>タイムゾーン対応</dfn>と呼ばれる。
+          タイムゾーン対応の実装は、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>の「Zone」名および「<emu-not-ref>Link</emu-not-ref>」名に対応する利用可能な名前付きタイムゾーンをサポートしなければならず、そのような名前のみをサポートしなければならない。
+          タイムゾーン対応の実装では、ECMA-402 で指定される AvailableNamedTimeZoneIdentifiers によって明示的に上書きされる場合を除き、プライマリタイムゾーン識別子は IANA タイムゾーンデータベースの「Zone」名であり、非プライマリタイムゾーン識別子はそれぞれ「<emu-not-ref>Link</emu-not-ref>」名である。
+          IANA タイムゾーンデータベース全体をサポートしない実装でも、タイムゾーンを表す識別子として IANA タイムゾーンデータベースの名前を使用することが推奨される。
         </p>
       </emu-clause>
 
@@ -34400,37 +34431,37 @@
           GetNamedTimeZoneEpochNanoseconds (
             _timeZoneIdentifier_: String,
             _year_: 整数,
-            _month_: 1 以上 12 以下の整数,
-            _day_: 1 以上 31 以下の整数,
-            _hour_: 0 以上 23 以下の整数,
-            _minute_: 0 以上 59 以下の整数,
-            _second_: 0 以上 59 以下の整数,
-            _millisecond_: 0 以上 999 以下の整数,
-            _microsecond_: 0 以上 999 以下の整数,
-            _nanosecond_: 0 以上 999 以下の整数,
-          ): エポックナノ秒数の List
+            _month_: 1 から 12 までの包含区間の整数,
+            _day_: 1 から 31 までの包含区間の整数,
+            _hour_: 0 から 23 までの包含区間の整数,
+            _minute_: 0 から 59 までの包含区間の整数,
+            _second_: 0 から 59 までの包含区間の整数,
+            _millisecond_: 0 から 999 までの包含区間の整数,
+            _microsecond_: 0 から 999 までの包含区間の整数,
+            _nanosecond_: 0 から 999 までの包含区間の整数,
+          ): エポックナノ秒カウントの List
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            返される List の各値は、_timeZoneIdentifier_ によって識別される名前付きタイムゾーンにおける、指定された ISO 8601 カレンダー日付と壁時計時刻に対応するエポックナノ秒数を表す。
+            返される List の各値は、指定された ISO 8601 暦の日付および _timeZoneIdentifier_ で識別される名前付きタイムゾーンの時計時刻に対応するエポックナノ秒カウントを表す。
           </dd>
         </dl>
         <p>
-          入力が、負のタイムゾーン遷移（例えば、夏時間が終了するとき、またはタイムゾーン規則の変更によってタイムゾーンオフセットが減少するとき）によって複数回発生するローカル時刻を表す場合、返される List は複数の要素を持ち、数値の昇順にソートされる。
-          入力が、正のタイムゾーン遷移（例えば、夏時間が始まるとき、またはタイムゾーン規則の変更によってタイムゾーンオフセットが増加するとき）によって飛ばされるローカル時刻を表す場合、返される List は空になる。
-          それ以外の場合、返される List は 1 つの要素を持つ。
+          入力が、負のタイムゾーン遷移（例えば、夏時間が終了する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが減少する場合）によって複数回発生するローカル時刻を表す場合、返される List は複数の要素を持ち、数値の昇順でソートされる。
+          入力が、正のタイムゾーン遷移（例えば、夏時間が開始する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが増加する場合）によってスキップされるローカル時刻を表す場合、返される List は空となる。
+          それ以外の場合、返される List は1つの要素を持つ。
         </p>
-        <p>どのタイムゾーンについても地域固有の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneEpochNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する:</p>
+        <p>どのタイムゾーンについても現地の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneEpochNanoseconds のデフォルト実装は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. 表明: _timeZoneIdentifier_ は *"UTC"* である。
+          1. アサート: _timeZoneIdentifier_ は *"UTC"* である。
           1. _epochNanoseconds_ を GetUTCEpochNanoseconds(_year_, _month_, _day_, _hour_, _minute_, _second_, _millisecond_, _microsecond_, _nanosecond_) とする。
           1. « _epochNanoseconds_ » を返す。
         </emu-alg>
         <emu-note>
-          <p>タイムゾーン対応実装では、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが必須である（その他のすべての実装にも推奨される）。</p>
-          <p>America/New_York における 2017 年 11 月 5 日午前 1 時 30 分は 2 回繰り返されるため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) は長さ 2 の List を返す。この List の最初の要素は 05:30 UTC（UTC オフセット -04:00 の米国東部夏時間 01:30 に対応）を表し、2 番目の要素は 06:30 UTC（UTC オフセット -05:00 の米国東部標準時 01:30 に対応）を表す。</p>
-          <p>America/New_York における 2017 年 3 月 12 日午前 2 時 30 分は存在しないため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) は空の List を返す。</p>
+          <p>タイムゾーン対応の実装では、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが要求される（それ以外のすべての実装にも推奨される）。</p>
+          <p>America/New_York における2017年11月5日午前1時30分は2回繰り返されるため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 11, 5, 1, 30, 0, 0, 0, 0) は長さ2の List を返し、その第1要素は 05:30 UTC（UTC オフセット -04:00 の米国東部夏時間 01:30 に対応）を表し、第2要素は 06:30 UTC（UTC オフセット -05:00 の米国東部標準時 01:30 に対応）を表す。</p>
+          <p>America/New_York における2017年3月12日午前2時30分は存在しないため、GetNamedTimeZoneEpochNanoseconds(*"America/New_York"*, 2017, 3, 12, 2, 30, 0, 0, 0, 0) は空の List を返す。</p>
         </emu-note>
       </emu-clause>
 
@@ -34438,26 +34469,26 @@
         <h1>
           GetNamedTimeZoneOffsetNanoseconds (
             _timeZoneIdentifier_: String,
-            _epochNanoseconds_: エポックナノ秒数,
+            _epochNanoseconds_: エポックナノ秒カウント,
           ): 整数
         </h1>
         <dl class="header">
         </dl>
-        <p>返される整数は、エポックナノ秒数 _epochNanoseconds_ に対応する時点における、_timeZoneIdentifier_ によって識別される名前付きタイムゾーンの UTC からのオフセットをナノ秒単位で表す。</p>
-        <p>どのタイムゾーンについても地域固有の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneOffsetNanoseconds の既定の実装は、呼び出されたときに次の手順を実行する:</p>
+        <p>返される整数は、エポックナノ秒カウント _epochNanoseconds_ に対応する時点における、_timeZoneIdentifier_ で識別される名前付きタイムゾーンの UTC からのオフセットをナノ秒単位で表す。</p>
+        <p>どのタイムゾーンについても現地の政治的規則を含まない ECMAScript 実装で使用される GetNamedTimeZoneOffsetNanoseconds のデフォルト実装は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. 表明: _timeZoneIdentifier_ は *"UTC"* である。
+          1. アサート: _timeZoneIdentifier_ は *"UTC"* である。
           1. 0 を返す。
         </emu-alg>
         <emu-note>
-          <p>タイムゾーンオフセット値は正または負となり得る。</p>
+          <p>タイムゾーンオフセット値は正または負であってよい。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-time-zone-identifier-record">
         <h1>Time Zone Identifier Record</h1>
         <p><dfn variants="Time Zone Identifier Records">Time Zone Identifier Record</dfn> は、利用可能な名前付きタイムゾーン識別子と、それに対応するプライマリタイムゾーン識別子を記述するために使用される Record である。</p>
-        <p>Time Zone Identifier Record は、<emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref>に示すフィールドを持つ。</p>
+        <p>Time Zone Identifier Record は、<emu-xref href="#table-time-zone-identifier-record-fields"></emu-xref> に示すフィールドを持つ。</p>
         <emu-table id="table-time-zone-identifier-record-fields" caption="Time Zone Identifier Record のフィールド">
           <table>
             <thead>
@@ -34470,12 +34501,12 @@
             <tr>
               <td>[[Identifier]]</td>
               <td>String</td>
-              <td>実装によってサポートされる、利用可能な名前付きタイムゾーン識別子。</td>
+              <td>実装によってサポートされる利用可能な名前付きタイムゾーン識別子。</td>
             </tr>
             <tr>
               <td>[[PrimaryIdentifier]]</td>
               <td>String</td>
-              <td>[[Identifier]] の解決先となるプライマリタイムゾーン識別子。</td>
+              <td>[[Identifier]] が解決されるプライマリタイムゾーン識別子。</td>
             </tr>
           </table>
         </emu-table>
@@ -34494,22 +34525,22 @@
           </dd>
         </dl>
         <p>
-          ECMA-402 Internationalization API を実装するすべての実装を含むタイムゾーン対応実装は、ECMA-402 仕様に規定されているとおりに AvailableNamedTimeZoneIdentifiers 抽象操作を実装しなければならない。
-          タイムゾーン対応ではない実装の場合、AvailableNamedTimeZoneIdentifiers は呼び出されたときに次の手順を実行する。
+          タイムゾーン対応の実装（ECMA-402 国際化 API を実装するすべての実装を含む）は、ECMA-402 で指定されているとおりに AvailableNamedTimeZoneIdentifiers 抽象操作を実装しなければならない。
+          それ以外の場合、AvailableNamedTimeZoneIdentifiers は呼び出されたときに次の手順を実行する:
         </p>
         <emu-alg>
-          1. 実装がいずれのタイムゾーンについても地域の政治的規則を含まない場合、
+          1. 実装がどのタイムゾーンについても現地の政治的規則を含まない場合、
             1. « Time Zone Identifier Record { [[Identifier]]: *"UTC"*, [[PrimaryIdentifier]]: *"UTC"* } » を返す。
-          1. _identifiers_ を、辞書式コード単位順にソートされた、一意な利用可能な名前付きタイムゾーン識別子の List とする。
+          1. _identifiers_ を、一意な利用可能な名前付きタイムゾーン識別子をコード単位の辞書式順序でソートした List とする。
           1. _result_ を新しい空の List とする。
-          1. _identifiers_ の各要素 _identifier_ について、次の手順を行う。
+          1. _identifiers_ の各要素 _identifier_ について、次を行う。
             1. _primary_ を _identifier_ とする。
             1. _identifier_ がこの実装における非プライマリタイムゾーン識別子であり、かつ _identifier_ が *"UTC"* でない場合、
-              1. _primary_ を、_identifier_ に関連付けられたプライマリタイムゾーン識別子に設定する。
-              1. NOTE: 実装は、プライマリタイムゾーン識別子を取得するために _identifier_ を反復的に解決する必要がある場合がある。
+              1. _primary_ を _identifier_ に関連付けられたプライマリタイムゾーン識別子に設定する。
+              1. 注記: 実装は、プライマリタイムゾーン識別子を取得するために _identifier_ を反復的に解決する必要がある場合がある。
             1. _record_ を Time Zone Identifier Record { [[Identifier]]: _identifier_, [[PrimaryIdentifier]]: _primary_ } とする。
             1. _record_ を _result_ に追加する。
-          1. Assert: _result_ は、_record_.[[Identifier]] が *"UTC"* であり、かつ _record_.[[PrimaryIdentifier]] が *"UTC"* である Time Zone Identifier Record _record_ を含む。
+          1. アサート: _result_ は、_record_.[[Identifier]] が *"UTC"* であり、_record_.[[PrimaryIdentifier]] が *"UTC"* である Time Zone Identifier Record _record_ を含む。
           1. _result_ を返す。
         </emu-alg>
       </emu-clause>
@@ -34519,56 +34550,56 @@
         <dl class="header">
           <dt>description</dt>
           <dd>
-            これは、ホスト環境の現在のタイムゾーンを表す String を返す。この String は、IsTimeZoneOffsetString が *true* を返す UTC オフセットを表す String、またはプライマリタイムゾーン識別子のいずれかである。
+            ホスト環境の現在のタイムゾーンを表す String を返す。これは、IsTimeZoneOffsetString が *true* を返す UTC オフセットを表す String、またはプライマリタイムゾーン識別子のいずれかである。
           </dd>
         </dl>
 
         <emu-alg>
           1. 実装が UTC タイムゾーンのみをサポートする場合、*"UTC"* を返す。
-          1. _systemTimeZoneString_ を、プライマリタイムゾーン識別子またはオフセットタイムゾーン識別子のいずれかである、ホスト環境の現在のタイムゾーンを表す String とする。
+          1. _systemTimeZoneString_ を、ホスト環境の現在のタイムゾーンを表す String、すなわちプライマリタイムゾーン識別子またはオフセットタイムゾーン識別子とする。
           1. _systemTimeZoneString_ を返す。
         </emu-alg>
 
         <emu-note>
           <p>
-            実装が Date オブジェクトのメソッドで一般的に提供する機能水準を確保するため、そのようなものが存在する場合、SystemTimeZoneIdentifier はホスト環境のタイムゾーン設定に対応する IANA タイムゾーン名を返すことが推奨される。
-            GetNamedTimeZoneEpochNanoseconds および GetNamedTimeZoneOffsetNanoseconds は、そのような規則が存在する場合、そのタイムゾーンの標準時および夏時間に関する地域の政治的規則を反映しなければならない。
+            Date オブジェクトのメソッドで実装が一般的に提供する機能レベルを確保するため、そのようなものが存在する場合は、SystemTimeZoneIdentifier がホスト環境のタイムゾーン設定に対応する IANA タイムゾーン名を返すことが推奨される。
+            GetNamedTimeZoneEpochNanoseconds および GetNamedTimeZoneOffsetNanoseconds は、そのような規則が存在する場合、そのタイムゾーンにおける標準時および夏時間に関する現地の政治的規則を反映しなければならない。
           </p>
-          <p>たとえば、ホスト環境が、ユーザーが自身のタイムゾーンとして米国東部時間を選択したシステム上のブラウザーである場合、SystemTimeZoneIdentifier は *"America/New_York"* を返す。</p>
+          <p>例えば、ホスト環境が、ユーザーがタイムゾーンとして米国東部時間を選択したシステム上のブラウザーである場合、SystemTimeZoneIdentifier は *"America/New_York"* を返す。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-localtime" type="abstract operation">
         <h1>
           LocalTime (
-            _tv_: 有限の time value,
+            _tv_: 有限の時刻値,
           ): 整数の Number
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            これは、_tv_ を UTC から現地時刻に変換する。
-            _tv_ において有効な標準時および夏時間に関する地域の政治的規則を使用して、この節で規定する方法で結果を決定するべきである。
+            _tv_ を UTC からローカル時刻に変換する。
+            _tv_ において有効な標準時および夏時間に関する現地の政治的規則を使用し、この節で指定する方法で結果を決定するべきである。
           </dd>
         </dl>
         <emu-alg>
           1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
           1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
-            1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
-          1. それ以外の場合、
-            1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond) とする。
-          1. _offsetMs_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
-          1. _tv_ + 𝔽(_offsetMs_) を返す。
+            1. _offsetNanoseconds_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
+          1. そうでない場合、
+            1. _offsetNanoseconds_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond) とする。
+          1. _offsetMilliseconds_ を truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond) とする。
+          1. _tv_ + 𝔽(_offsetMilliseconds_) を返す。
         </emu-alg>
         <emu-note>
-          <p>実装内で現地時刻 _tv_ に関する政治的規則を利用できない場合、SystemTimeZoneIdentifier が *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds が 0 を返すため、結果は _tv_ となる。</p>
+          <p>ローカル時刻 _tv_ に関する政治的規則を実装内で利用できない場合、SystemTimeZoneIdentifier が *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds が 0 を返すため、結果は _tv_ となる。</p>
         </emu-note>
         <emu-note>
-          <p>タイムゾーン対応実装は、IANA Time Zone Database <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用する必要がある（その他のすべての実装にも推奨される）。</p>
+          <p>タイムゾーン対応の実装では、IANA タイムゾーンデータベース <a href="https://www.iana.org/time-zones/">https://www.iana.org/time-zones/</a> のタイムゾーン情報を使用することが要求される（それ以外のすべての実装にも推奨される）。</p>
         </emu-note>
         <emu-note>
-          <p>時刻が繰り返される負のタイムゾーン遷移（たとえば、夏時間が終了する場合や、タイムゾーン調整が減少する場合）では、2 つの異なる入力 time value <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> が同じ現地時刻 <emu-eqn>t<sub>local</sub></emu-eqn> に変換される。</p>
-          <p><emu-eqn>LocalTime(UTC(_tv_<sub>local</sub>))</emu-eqn> は必ずしも常に <emu-eqn>_tv_<sub>local</sub></emu-eqn> と等しいとは限らない。これに対応して、<emu-eqn>UTC(LocalTime(_tv_<sub>UTC</sub>))</emu-eqn> も必ずしも常に <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> と等しいとは限らない。</p>
+          <p>異なる2つの入力時刻値 <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> は、時刻が繰り返される負のタイムゾーン遷移（例えば、夏時間が終了する場合や、タイムゾーン調整が減少する場合）において、同じローカル時刻 <emu-eqn>t<sub>local</sub></emu-eqn> に変換される。</p>
+          <p><emu-eqn>LocalTime(UTC(_tv_<sub>local</sub>))</emu-eqn> は、必ずしも常に <emu-eqn>_tv_<sub>local</sub></emu-eqn> と等しいとは限らない。同様に、<emu-eqn>UTC(LocalTime(_tv_<sub>UTC</sub>))</emu-eqn> も、必ずしも常に <emu-eqn>_tv_<sub>UTC</sub></emu-eqn> と等しいとは限らない。</p>
         </emu-note>
       </emu-clause>
 
@@ -34576,53 +34607,53 @@
         <h1>
           UTC (
             _t_: Number,
-          ): time value
+          ): 時刻値
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>
-            _t_ をローカル時刻から UTC time value に変換する。
-            結果を決定するには、この節で指定されている方法で、_t_ において有効な標準時および夏時間に関するローカルの政治的規則を使用するべきである。
+            _t_ をローカル時刻から UTC 時刻値に変換する。
+            _t_ において有効な標準時および夏時間に関する現地の政治的規則を使用し、この節で指定する方法で結果を決定するべきである。
           </dd>
         </dl>
         <emu-alg>
           1. _t_ が有限でない場合、*NaN* を返す。
           1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
           1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
-            1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
-          1. それ以外の場合、
-            1. _possibleInstants_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_t_), MonthFromTime(_t_) + 1, DateFromTime(_t_), HourFromTime(_t_), MinFromTime(_t_), SecFromTime(_t_), MillisecFromTime(_t_), 0, 0) とする。
-            1. 注記: 以下の手順により、_t_ が負のタイムゾーン遷移時に複数回繰り返されるローカル時刻（例えば、夏時間が終了するとき、またはタイムゾーン規則の変更によりタイムゾーンオフセットが減少するとき）、あるいは正のタイムゾーン遷移時にスキップされるローカル時刻（例えば、夏時間が開始するとき、またはタイムゾーン規則の変更によりタイムゾーンオフセットが増加するとき）を表す場合に、_t_ が遷移前のタイムゾーンオフセットを使用して解釈されることを保証する。
+            1. _offsetNanoseconds_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
+          1. そうでない場合、
+            1. _possibleInstants_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_t_), MonthFromTime(_t_) + 1, DateFromTime(_t_), HourFromTime(_t_), MinuteFromTime(_t_), SecondFromTime(_t_), MillisecondFromTime(_t_), 0, 0) とする。
+            1. 注記: 以下の手順により、_t_ が負のタイムゾーン遷移（例えば、夏時間が終了する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが減少する場合）において複数回繰り返されるローカル時刻、または正のタイムゾーン遷移（例えば、夏時間が開始する場合や、タイムゾーン規則の変更によってタイムゾーンオフセットが増加する場合）においてスキップされるローカル時刻を表すとき、_t_ が遷移前のタイムゾーンオフセットを使用して解釈されることを保証する。
             1. _possibleInstants_ が空でない場合、
               1. _disambiguatedInstant_ を _possibleInstants_[0] とする。
-            1. それ以外の場合、
-              1. 注記: _t_ は正のタイムゾーン遷移時にスキップされるローカル時刻（例えば、夏時間の開始または UTC オフセットを増加させるタイムゾーン規則の変更によるもの）を表す。
-              1. [declared="tBefore"] _possibleInstantsBefore_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_tBefore_), MonthFromTime(_tBefore_) + 1, DateFromTime(_tBefore_), HourFromTime(_tBefore_), MinFromTime(_tBefore_), SecFromTime(_tBefore_), MillisecFromTime(_tBefore_), 0, 0) とする。ここで、_tBefore_ は _possibleInstantsBefore_ が空でない（すなわち、_tBefore_ が遷移前の最後のローカル時刻を表す）ような _t_ 未満の最大の整数 Number である。
+            1. そうでない場合、
+              1. 注記: _t_ は、正のタイムゾーン遷移（例えば、夏時間の開始や、UTC オフセットを増加させるタイムゾーン規則の変更）によってスキップされるローカル時刻を表す。
+              1. [declared="tBefore"] _possibleInstantsBefore_ を GetNamedTimeZoneEpochNanoseconds(_systemTimeZoneIdentifier_, YearFromTime(_tBefore_), MonthFromTime(_tBefore_) + 1, DateFromTime(_tBefore_), HourFromTime(_tBefore_), MinuteFromTime(_tBefore_), SecondFromTime(_tBefore_), MillisecondFromTime(_tBefore_), 0, 0) とする。ここで _tBefore_ は、_possibleInstantsBefore_ が空でないような _t_ 未満の最大の整数 Number である（すなわち、_tBefore_ は遷移前の最後のローカル時刻を表す）。
               1. _disambiguatedInstant_ を _possibleInstantsBefore_ の最後の要素とする。
-            1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_) とする。
-          1. _offsetMs_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
-          1. _t_ - 𝔽(_offsetMs_) を返す。
+            1. _offsetNanoseconds_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, _disambiguatedInstant_) とする。
+          1. _offsetMilliseconds_ を truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond) とする。
+          1. _t_ - 𝔽(_offsetMilliseconds_) を返す。
         </emu-alg>
         <p>
-          入力 _t_ は名目上は time value であるが、任意の Number 値であってよい。
-          time value の範囲の境界に対応する入力を、ローカル UTC オフセットにかかわらずサポートできるようにするため、このアルゴリズムは _t_ を time value の範囲に制限してはならない。
-          例えば、最大の time value は 8.64 × 10<sup>15</sup> であり、*"+275760-09-13T00:00:00Z"* に対応する。
-          その時点でローカルタイムゾーンオフセットが UTC より1時間進んでいる環境では、*"+275760-09-13T01:00:00+01:00"* に対応する、より大きな入力 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> で表される。
+          入力 _t_ は名目上は時刻値であるが、任意の Number 値であってよい。
+          アルゴリズムは _t_ を時刻値範囲に制限してはならない。これにより、ローカル UTC オフセットに関係なく、時刻値範囲の境界に対応する入力をサポートできる。
+          例えば、最大時刻値は 8.64 × 10<sup>15</sup> であり、*"+275760-09-13T00:00:00Z"* に対応する。
+          その時点でローカルタイムゾーンオフセットが UTC より1時間進んでいる環境では、これはより大きな入力 8.64 × 10<sup>15</sup> + 3.6 × 10<sup>6</sup> によって表され、*"+275760-09-13T01:00:00+01:00"* に対応する。
         </p>
-        <p>ローカル時刻 _t_ に対する政治的規則が実装内で利用できない場合、SystemTimeZoneIdentifier は *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds は 0 を返すため、結果は _t_ となる。</p>
+        <p>ローカル時刻 _t_ に関する政治的規則を実装内で利用できない場合、SystemTimeZoneIdentifier が *"UTC"* を返し、GetNamedTimeZoneOffsetNanoseconds が 0 を返すため、結果は _t_ となる。</p>
         <emu-note>
-          <p>タイムゾーン対応の実装には、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが要求される（その他のすべての実装にも推奨される）。</p>
+          <p>タイムゾーン対応の実装では、<a href="https://www.iana.org/time-zones">IANA タイムゾーンデータベース</a>のタイムゾーン情報を使用することが要求される（それ以外のすべての実装にも推奨される）。</p>
           <p>
-            America/New_York における2017年11月5日午前1時30分は2回繰り返される（時計が後退する）が、午前1時30分 UTC-05 ではなく、午前1時30分 UTC-04 として解釈されなければならない。
-            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) では、_offsetMs_ の値は <emu-eqn>-4 × msPerHour</emu-eqn> である。
+            America/New_York における2017年11月5日午前1時30分は2回繰り返される（時計を戻す）が、午前1時30分 UTC-05 ではなく午前1時30分 UTC-04 として解釈しなければならない。
+            UTC(TimeClip(MakeDate(MakeDay(2017, 10, 5), MakeTime(1, 30, 0, 0)))) において、_offsetMilliseconds_ の値は <emu-eqn>-4 × MillisecondsPerHour</emu-eqn> である。
           </p>
           <p>
-            America/New_York における2017年3月12日午前2時30分は存在しないが、午前2時30分 UTC-05（午前3時30分 UTC-04 に相当）として解釈されなければならない。
-            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) では、_offsetMs_ の値は <emu-eqn>-5 × msPerHour</emu-eqn> である。
+            America/New_York における2017年3月12日午前2時30分は存在しないが、午前2時30分 UTC-05（午前3時30分 UTC-04 と等価）として解釈しなければならない。
+            UTC(TimeClip(MakeDate(MakeDay(2017, 2, 12), MakeTime(2, 30, 0, 0)))) において、_offsetMilliseconds_ の値は <emu-eqn>-5 × MillisecondsPerHour</emu-eqn> である。
           </p>
         </emu-note>
         <emu-note>
-          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn> は必ずしも常に <emu-eqn>_t_<sub>UTC</sub></emu-eqn> と等しいとは限らない。同様に、<emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn> も必ずしも常に <emu-eqn>_t_<sub>local</sub></emu-eqn> と等しいとは限らない。</p>
+          <p><emu-eqn>UTC(LocalTime(_t_<sub>UTC</sub>))</emu-eqn> は、必ずしも常に <emu-eqn>_t_<sub>UTC</sub></emu-eqn> と等しいとは限らない。同様に、<emu-eqn>LocalTime(UTC(_t_<sub>local</sub>))</emu-eqn> も、必ずしも常に <emu-eqn>_t_<sub>local</sub></emu-eqn> と等しいとは限らない。</p>
         </emu-note>
       </emu-clause>
 
@@ -34630,9 +34661,9 @@
         <h1>
           MakeTime (
             _hour_: Number,
-            _min_: Number,
-            _sec_: Number,
-            _ms_: Number,
+            _minute_: Number,
+            _second_: Number,
+            _millisecond_: Number,
           ): Number
         </h1>
         <dl class="header">
@@ -34640,15 +34671,15 @@
           <dd>ミリ秒数を計算する。</dd>
         </dl>
         <emu-alg>
-          1. _hour_ が有限でない、_min_ が有限でない、_sec_ が有限でない、または _ms_ が有限でない場合、*NaN* を返す。
-          1. _h_ を ! ToIntegerOrInfinity(_hour_) とする。
-          1. _m_ を ! ToIntegerOrInfinity(_min_) とする。
-          1. _s_ を ! ToIntegerOrInfinity(_sec_) とする。
-          1. _milli_ を ! ToIntegerOrInfinity(_ms_) とする。
-          1. ((𝔽(_h_) × 𝔽(msPerHour) + 𝔽(_m_) × 𝔽(msPerMinute)) + 𝔽(_s_) × 𝔽(msPerSecond)) + 𝔽(_milli_) を返す。
+          1. _hour_ が有限でない、_minute_ が有限でない、_second_ が有限でない、または _millisecond_ が有限でない場合、*NaN* を返す。
+          1. _hourMV_ を ! ToIntegerOrInfinity(_hour_) とする。
+          1. _minuteMV_ を ! ToIntegerOrInfinity(_minute_) とする。
+          1. _secondMV_ を ! ToIntegerOrInfinity(_second_) とする。
+          1. _millisecondMV_ を ! ToIntegerOrInfinity(_millisecond_) とする。
+          1. ((𝔽(_hourMV_) × 𝔽(MillisecondsPerHour) + 𝔽(_minuteMV_) × 𝔽(MillisecondsPerMinute)) + 𝔽(_secondMV_) × 𝔽(MillisecondsPerSecond)) + 𝔽(_millisecondMV_) を返す。
         </emu-alg>
         <emu-note>
-          <p>MakeTime における算術は浮動小数点演算であり、結合則が成り立たないため、演算は正しい順序で実行されなければならない。</p>
+          <p>MakeTime における算術は浮動小数点算術であり、結合則が成り立たないため、演算は正しい順序で実行しなければならない。</p>
         </emu-note>
       </emu-clause>
 
@@ -34657,7 +34688,7 @@
           MakeDay (
             _year_: Number,
             _month_: Number,
-            _date_: Number,
+            _day_: Number,
           ): 有限の Number または *NaN*
         </h1>
         <dl class="header">
@@ -34665,15 +34696,15 @@
           <dd>日数を計算する。</dd>
         </dl>
         <emu-alg>
-          1. _year_ が有限でない、_month_ が有限でない、または _date_ が有限でない場合、*NaN* を返す。
-          1. _y_ を ! ToIntegerOrInfinity(_year_) とする。
-          1. _m_ を ! ToIntegerOrInfinity(_month_) とする。
-          1. _dt_ を ! ToIntegerOrInfinity(_date_) とする。
-          1. _ym_ を 𝔽(_y_) + 𝔽(floor(_m_ / 12)) とする。
-          1. _ym_ が有限でない場合、*NaN* を返す。
-          1. _mn_ を _m_ modulo 12 とする。
-          1. YearFromTime(_tv_) = ℝ(_ym_)、MonthFromTime(_tv_) = _mn_、かつ DateFromTime(_tv_) = 1 となる有限の time value _tv_ を見つける。ただし、これが不可能な場合（いずれかの引数が範囲外であるため）は、*NaN* を返す。
-          1. 𝔽(Day(_tv_)) + 𝔽(_dt_) - *1*<sub>𝔽</sub> を返す。
+          1. _year_ が有限でない、_month_ が有限でない、または _day_ が有限でない場合、*NaN* を返す。
+          1. _yearMV_ を ! ToIntegerOrInfinity(_year_) とする。
+          1. _monthMV_ を ! ToIntegerOrInfinity(_month_) とする。
+          1. _dayMV_ を ! ToIntegerOrInfinity(_day_) とする。
+          1. _balancedYear_ を 𝔽(_yearMV_) + 𝔽(floor(_monthMV_ / 12)) とする。
+          1. _balancedYear_ が有限でない場合、*NaN* を返す。
+          1. _balancedMonthMV_ を _monthMV_ modulo 12 とする。
+          1. YearFromTime(_tv_) = ℝ(_balancedYear_)、MonthFromTime(_tv_) = _balancedMonthMV_、かつ DateFromTime(_tv_) = 1 となる有限の時刻値 _tv_ を見つける。ただし、これが不可能な場合（いずれかの引数が範囲外であるため）は、*NaN* を返す。
+          1. 𝔽(Day(_tv_)) + 𝔽(_dayMV_) - *1*<sub>𝔽</sub> を返す。
         </emu-alg>
       </emu-clause>
 
@@ -34690,7 +34721,7 @@
         </dl>
         <emu-alg>
           1. _day_ が有限でない、または _time_ が有限でない場合、*NaN* を返す。
-          1. _tv_ を _day_ × 𝔽(msPerDay) + _time_ とする。
+          1. _tv_ を _day_ × 𝔽(MillisecondsPerDay) + _time_ とする。
           1. _tv_ が有限でない場合、*NaN* を返す。
           1. _tv_ を返す。
         </emu-alg>
@@ -34704,12 +34735,12 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、_year_ の整数部分に関連付けられた完全な年を返し、0 以上 99 以下の範囲内の値を 1900 年の開始からの年数として解釈する。先発グレゴリオ暦と整合させるため、「完全な年」は年 0（紀元前 1 年）の開始から経過した完全な年の符号付きの数として定義される。</dd>
+          <dd>_year_ の整数部分に関連付けられた完全な年を返し、0 から 99 までの包含区間にある値を 1900 年の開始からの年数として解釈する。先発グレゴリオ暦との整合のため、「完全な年」は年 0（紀元前1年）の開始からの完全年数の符号付きカウントとして定義される。</dd>
         </dl>
         <emu-alg>
           1. _year_ が *NaN*、*+∞*<sub>𝔽</sub>、または *-∞*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
           1. _truncated_ を ! ToIntegerOrInfinity(_year_) とする。
-          1. _truncated_ が 0 以上 99 以下の範囲内にある場合、*1900*<sub>𝔽</sub> + 𝔽(_truncated_) を返す。
+          1. _truncated_ が 0 から 99 までの包含区間にある場合、*1900*<sub>𝔽</sub> + 𝔽(_truncated_) を返す。
           1. 𝔽(_truncated_) を返す。
         </emu-alg>
       </emu-clause>
@@ -34718,11 +34749,11 @@
         <h1>
           TimeClip (
             _time_: Number,
-          ): time value
+          ): 時刻値
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>これは、ミリ秒数を計算する。</dd>
+          <dd>ミリ秒数を計算する。</dd>
         </dl>
         <emu-alg>
           1. _time_ が有限でない場合、*NaN* を返す。
@@ -34732,9 +34763,9 @@
       </emu-clause>
 
       <emu-clause id="sec-date-time-string-format">
-        <h1>日時文字列形式</h1>
-        <p>ECMAScript は、ISO 8601 暦の日付の拡張形式を簡略化した日時の文字列交換形式を定義する。その形式は次のとおりである。`YYYY-MM-DDTHH:mm:ss.sssZ`</p>
-        <p>各要素は次のとおりである。</p>
+        <h1>日時 String 形式</h1>
+        <p>ECMAScript は、ISO 8601 暦日付の拡張形式を基にした日時用の文字列交換形式を定義する。形式は次のとおりである: `YYYY-MM-DDTHH:mm:ss.sssZ`</p>
+        <p>各要素は次のとおりである:</p>
         <figure>
           <table class="lightweight-table">
             <tr>
@@ -34742,7 +34773,7 @@
                 `YYYY`
               </td>
               <td>
-                は、先発グレゴリオ暦の年を 0000 から 9999 までの 4 桁の十進数字、または *"+"* か *"-"* の後に 6 桁の十進数字が続く拡張年として表す。
+                先発グレゴリオ暦における年であり、0000 から 9999 までの4桁の10進数字、または *"+"* または *"-"* の後に6桁の10進数字が続く拡張年として表す。
               </td>
             </tr>
             <tr>
@@ -34750,7 +34781,7 @@
                 `-`
               </td>
               <td>
-                *"-"*（ハイフン）が文字列内に文字どおり 2 回出現する。
+                *"-"*（ハイフン）が文字列内にリテラルとして2回現れる。
               </td>
             </tr>
             <tr>
@@ -34758,7 +34789,7 @@
                 `MM`
               </td>
               <td>
-                は、年の月を 01（1 月）から 12（12 月）までの 2 桁の十進数字で表す。
+                年の月を、01（1月）から 12（12月）までの2桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34766,7 +34797,7 @@
                 `DD`
               </td>
               <td>
-                は、月の日を 01 から 31 までの 2 桁の十進数字で表す。
+                月の日を、01 から 31 までの2桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34774,7 +34805,7 @@
                 `T`
               </td>
               <td>
-                時刻要素の開始を示すため、*"T"* が文字列内に文字どおり出現する。
+                時刻要素の開始を示すため、*"T"* が文字列内にリテラルとして現れる。
               </td>
             </tr>
             <tr>
@@ -34782,7 +34813,7 @@
                 `HH`
               </td>
               <td>
-                は、午前 0 時から経過した完全な時間数を 00 から 24 までの 2 桁の十進数字で表す。
+                午前0時から経過した完全な時間数を、00 から 24 までの2桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34790,7 +34821,7 @@
                 `:`
               </td>
               <td>
-                *":"*（コロン）が文字列内に文字どおり 2 回出現する。
+                *":"*（コロン）が文字列内にリテラルとして2回現れる。
               </td>
             </tr>
             <tr>
@@ -34798,7 +34829,7 @@
                 `mm`
               </td>
               <td>
-                は、時の開始から経過した完全な分数を 00 から 59 までの 2 桁の十進数字で表す。
+                時の開始から経過した完全な分数を、00 から 59 までの2桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34806,7 +34837,7 @@
                 `ss`
               </td>
               <td>
-                は、分の開始から経過した完全な秒数を 00 から 59 までの 2 桁の十進数字で表す。
+                分の開始から経過した完全な秒数を、00 から 59 までの2桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34814,7 +34845,7 @@
                 `.`
               </td>
               <td>
-                *"."*（ピリオド）が文字列内に文字どおり出現する。
+                *"."*（ピリオド）が文字列内にリテラルとして現れる。
               </td>
             </tr>
             <tr>
@@ -34822,7 +34853,7 @@
                 `sss`
               </td>
               <td>
-                は、秒の開始から経過した完全なミリ秒数を 3 桁の十進数字で表す。
+                秒の開始から経過した完全なミリ秒数を、3桁の10進数字で表す。
               </td>
             </tr>
             <tr>
@@ -34830,65 +34861,65 @@
                 `Z`
               </td>
               <td>
-                は、*"Z"*（オフセットなしの UTC）または *"+"* か *"-"* の後に時刻表現 `HH:mm` が続く形式で指定される UTC オフセット表現である（それぞれ UTC より進んでいる、または遅れている現地時刻を示すための<emu-xref href="#sec-time-zone-offset-strings">タイムゾーンオフセット文字列形式</emu-xref>のサブセット）
+                *"Z"*（オフセットのない UTC の場合）、または *"+"* もしくは *"-"* の後に時刻表現 `HH:mm` が続く形で指定される UTC オフセット表現である（それぞれ UTC より進んだ、または遅れたローカル時刻を示すための <emu-xref href="#sec-time-zone-offset-strings">タイムゾーンオフセット文字列形式</emu-xref>のサブセット）
               </td>
             </tr>
           </table>
         </figure>
-        <p>この形式には、日付のみの次の形式が含まれる。</p>
+        <p>この形式には、日付のみの形式も含まれる:</p>
         <pre>
 YYYY
 YYYY-MM
 YYYY-MM-DD
         </pre>
-        <p>また、上記の日付のみの形式のいずれかの直後に、次の時刻形式のいずれかが続き、任意で UTC オフセット表現が付加される「日時」形式も含まれる。</p>
+        <p>また、上記の日付のみの形式のいずれかの直後に、以下の時刻形式のいずれかが続き、任意で UTC オフセット表現が付加される「日時」形式も含まれる:</p>
         <pre>
 THH:mm
 THH:mm:ss
 THH:mm:ss.sss
         </pre>
-        <p>範囲外または不適合な要素を含む文字列は、この形式の有効なインスタンスではない。</p>
+        <p>範囲外または形式に適合しない要素を含む文字列は、この形式の有効なインスタンスではない。</p>
         <emu-note>
-          <p>すべての日は午前 0 時に始まり、午前 0 時に終わるため、1 つの日付に関連付けられる 2 つの午前 0 時を区別するために、`00:00` と `24:00` という 2 つの表記を使用できる。これは、次の 2 つの表記が正確に同じ時点を指すことを意味する。`1995-02-04T24:00` および `1995-02-05T00:00`。</p>
+          <p>すべての日は午前0時に始まり午前0時に終わるため、`00:00` と `24:00` という2つの表記を使用して、1つの日付に関連付けることができる2つの午前0時を区別できる。これは、次の2つの表記がまったく同じ時点を指すことを意味する: `1995-02-04T24:00` と `1995-02-05T00:00`。</p>
         </emu-note>
         <emu-note>
-          <p>この形式は、RFC 9557 で定義されているタイムゾーン名による注釈をサポートせず、タイムゾーンオフセットの数値表現のみをサポートする。</p>
+          <p>この形式は、RFC 9557 で定義されるタイムゾーン名による注釈をサポートせず、タイムゾーンオフセットの数値表現のみをサポートする。</p>
         </emu-note>
 
         <emu-clause id="sec-expanded-years" oldids="sec-extended-years">
           <h1>拡張年</h1>
-          <p>1970 年 1 月 1 日から前後約 273,790 年にわたる time value の全範囲（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>）を扱うには、0 より前または 9999 より後の年を表現する必要がある。ISO 8601 は年表現の拡張を許可するが、情報交換を行う当事者間の相互合意がある場合に限られる。簡略化された ECMAScript 形式では、このような<dfn variants="expanded years">拡張年</dfn>表現は 6 桁でなければならず、常に先頭に + または - の符号を付ける。年 0 は正と見なされ、先頭に + 符号を付けなければならない。年 0 を -000000 と表現することは無効である。time value の範囲外の時点を表す拡張年を含み、<emu-xref href="#sec-date-time-string-format">日時文字列形式</emu-xref>に一致する文字列は、<emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> によって認識不能として扱われ、その関数は実装固有の動作やヒューリスティックにフォールバックせずに *NaN* を返す。</p>
+          <p>1970年1月1日から前後約 273,790 年という時刻値の全範囲（<emu-xref href="#sec-time-values-and-time-range"></emu-xref>）を網羅するには、0 より前または 9999 より後の年を表現する必要がある。ISO 8601 は年表現の拡張を許可しているが、情報交換の当事者間で相互に合意した場合に限られる。簡略化された ECMAScript 形式では、このような<dfn variants="expanded years">拡張年</dfn>表現は6桁でなければならず、常に + または - の符号を前置する。年 0 は正と見なされ、+ 符号を前置しなければならない。年 0 を -000000 と表現することは無効である。時刻値の範囲外の時点を表す拡張年を持つ <emu-xref href="#sec-date-time-string-format">日時 String 形式</emu-xref>に一致する String は、<emu-xref href="#sec-date.parse">`Date.parse`</emu-xref> によって認識不能として扱われ、その関数は実装固有の動作またはヒューリスティックにフォールバックすることなく *NaN* を返す。</p>
           <emu-note>
-            <p>拡張年を持つ日付<emu-not-ref>時刻値</emu-not-ref>の例：</p>
+            <p>拡張年を持つ日時値の例:</p>
             <figure>
               <table class="lightweight-table">
                 <tr>
                   <td>-271821-04-20T00:00:00Z</td>
-                  <td>紀元前 271822 年</td>
+                  <td>紀元前271822年</td>
                 </tr>
                 <tr>
                   <td>-000001-01-01T00:00:00Z</td>
-                  <td>紀元前 2 年</td>
+                  <td>紀元前2年</td>
                 </tr>
                 <tr>
                   <td>+000000-01-01T00:00:00Z</td>
-                  <td>紀元前 1 年</td>
+                  <td>紀元前1年</td>
                 </tr>
                 <tr>
                   <td>+000001-01-01T00:00:00Z</td>
-                  <td>西暦 1 年</td>
+                  <td>西暦1年</td>
                 </tr>
                 <tr>
                   <td>+001970-01-01T00:00:00Z</td>
-                  <td>西暦 1970 年</td>
+                  <td>西暦1970年</td>
                 </tr>
                 <tr>
                   <td>+002009-12-15T00:00:00Z</td>
-                  <td>西暦 2009 年</td>
+                  <td>西暦2009年</td>
                 </tr>
                 <tr>
                   <td>+275760-09-13T00:00:00Z</td>
-                  <td>西暦 275760 年</td>
+                  <td>西暦275760年</td>
                 </tr>
               </table>
             </figure>
@@ -34897,11 +34928,11 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-time-zone-offset-strings">
-        <h1>タイムゾーンオフセット文字列形式</h1>
+        <h1>タイムゾーンオフセット String 形式</h1>
 
         <p>
-          ECMAScript は、ISO 8601 から派生した UTC オフセットの文字列交換形式を定義する。
-          この形式は次の文法によって記述される。
+          ECMAScript は、ISO 8601 から派生した UTC オフセット用の文字列交換形式を定義する。
+          この形式は以下の文法によって記述される。
         </p>
 
         <h2>構文</h2>
@@ -34982,171 +35013,171 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. _parseResult_ を ParseText(_offsetString_, |UTCOffset|) とする。
-            1. Assert: _parseResult_ はエラーの List ではない。
-            1. Assert: _parseResult_ は |ASCIISign| Parse Node を含む。
-            1. _parsedSign_ を、_parseResult_ 内に含まれる |ASCIISign| Parse Node が一致したソーステキストとする。
+            1. アサート: _parseResult_ はエラーの List ではない。
+            1. アサート: _parseResult_ は |ASCIISign| Parse Node を含む。
+            1. _parsedSign_ を、_parseResult_ 内に含まれる |ASCIISign| Parse Node に一致したソーステキストとする。
             1. _parsedSign_ が単一のコードポイント U+002D (HYPHEN-MINUS) である場合、
               1. _sign_ を -1 とする。
-            1. それ以外の場合、
+            1. そうでない場合、
               1. _sign_ を 1 とする。
-            1. NOTE: 解析された各値は十分に短い十進数字の文字列であることが保証されるため、以下の StringToNumber の適用によって精度が失われることはない。
-            1. Assert: _parseResult_ は |Hour| Parse Node を含む。
-            1. _parsedHours_ を、_parseResult_ 内に含まれる |Hour| Parse Node が一致したソーステキストとする。
+            1. 注記: 以下の StringToNumber の適用では精度は失われない。解析された各値は、十分に短い10進数字の文字列であることが保証されているためである。
+            1. アサート: _parseResult_ は |Hour| Parse Node を含む。
+            1. _parsedHours_ を、_parseResult_ 内に含まれる |Hour| Parse Node に一致したソーステキストとする。
             1. _hours_ を ℝ(StringToNumber(CodePointsToString(_parsedHours_))) とする。
             1. _parseResult_ が |MinuteSecond| Parse Node を含まない場合、
               1. _minutes_ を 0 とする。
-            1. それ以外の場合、
-              1. _parsedMinutes_ を、_parseResult_ 内に含まれる最初の |MinuteSecond| Parse Node が一致したソーステキストとする。
+            1. そうでない場合、
+              1. _parsedMinutes_ を、_parseResult_ 内に含まれる最初の |MinuteSecond| Parse Node に一致したソーステキストとする。
               1. _minutes_ を ℝ(StringToNumber(CodePointsToString(_parsedMinutes_))) とする。
-            1. _parseResult_ が 2 つの |MinuteSecond| Parse Node を含まない場合、
+            1. _parseResult_ が2つの |MinuteSecond| Parse Node を含まない場合、
               1. _seconds_ を 0 とする。
-            1. それ以外の場合、
-              1. _parsedSeconds_ を、_parseResult_ 内に含まれる 2 番目の |MinuteSecond| Parse Node が一致したソーステキストとする。
+            1. そうでない場合、
+              1. _parsedSeconds_ を、_parseResult_ 内に含まれる2番目の |MinuteSecond| Parse Node に一致したソーステキストとする。
               1. _seconds_ を ℝ(StringToNumber(CodePointsToString(_parsedSeconds_))) とする。
             1. _parseResult_ が |TemporalDecimalFraction| Parse Node を含まない場合、
               1. _nanoseconds_ を 0 とする。
-            1. それ以外の場合、
-              1. _parsedFraction_ を、_parseResult_ 内に含まれる |TemporalDecimalFraction| Parse Node が一致したソーステキストとする。
+            1. そうでない場合、
+              1. _parsedFraction_ を、_parseResult_ 内に含まれる |TemporalDecimalFraction| Parse Node に一致したソーステキストとする。
               1. _fraction_ を CodePointsToString(_parsedFraction_) と *"000000000"* の文字列連結とする。
               1. _nanosecondsString_ を _fraction_ の 1 から 10 までの部分文字列とする。
               1. _nanoseconds_ を ℝ(StringToNumber(_nanosecondsString_)) とする。
-            1. _sign_ × (((_hours_ × MinutesPerHour + _minutes_) × SecondsPerMinute + _seconds_) × nsPerSecond + _nanoseconds_) を返す。
+            1. _sign_ × (((_hours_ × MinutesPerHour + _minutes_) × SecondsPerMinute + _seconds_) × NanosecondsPerSecond + _nanoseconds_) を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-date-constructor" oldids="this-time-value,sec-thistimevalue,thistimevalue,this-Date-object">
-      <h1>The Date Constructor</h1>
-      <p>Date constructorは：</p>
+      <h1>Date コンストラクター</h1>
+      <p>Date コンストラクター:</p>
       <ul>
-        <li><dfn>%Date%</dfn>です。</li>
-        <li>global objectの*"Date"* propertyのinitial valueです。</li>
-        <li>constructorとして呼び出されたとき、新しいDateを作成およびinitializeします。</li>
-        <li>constructorとしてではなくfunctionとして呼び出されたとき、current time（UTC）を表すStringを返します。</li>
-        <li>そのbehaviourがargumentsのnumberおよびtypesに基づいて異なるfunctionです。</li>
-        <li>class definitionの`extends` clauseのvalueとして使用できます。指定されたDate behaviourをinheritしようとするsubclass constructorsは、[[DateValue]] internal slotを持つsubclass instanceを作成およびinitializeするために、Date constructorへの`super` callを含まなければなりません。</li>
+        <li><dfn>%Date%</dfn> である。</li>
+        <li>グローバルオブジェクトの *"Date"* プロパティの初期値である。</li>
+        <li>コンストラクターとして呼び出されたとき、新しい Date を作成して初期化する。</li>
+        <li>コンストラクターとしてではなく関数として呼び出されたとき、現在時刻（UTC）を表す String を返す。</li>
+        <li>引数の数と型に応じて動作が異なる関数である。</li>
+        <li>クラス定義の `extends` 節の値として使用してもよい。指定された Date の動作を継承することを意図するサブクラスコンストラクターは、[[DateValue]] 内部スロットを持つサブクラスインスタンスを作成して初期化するために、Date コンストラクターへの `super` 呼び出しを含まなければならない。</li>
       </ul>
 
       <emu-clause id="sec-date" oldids="sec-date-constructor-date,sec-date-value,sec-date-year-month-date-hours-minutes-seconds-ms" type="built-in function">
         <h1>Date ( ..._values_ )</h1>
-        <p>このfunctionは呼び出されたとき、次のstepsを実行します：</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. NewTargetが*undefined*なら、
-            1. _now_をcurrent timeをidentifyするtime value（UTC）とする。
-            1. ToDateString(_now_)を返す。
-          1. _numberOfArgs_を_values_内のelementsの数とする。
-          1. _numberOfArgs_ = 0なら、
-            1. _dv_をcurrent timeをidentifyするtime value（UTC）とする。
-          1. そうでなく、_numberOfArgs_ = 1なら、
-            1. _value_を_values_[0]とする。
-            1. _value_がObjectであり、_value_が[[DateValue]] internal slotを持つなら、
-              1. _tv_を_value_.[[DateValue]]とする。
-            1. そうでなければ、
-              1. _v_を ? ToPrimitive(_value_) とする。
-              1. _v_がStringなら、
-                1. Assert: _v_はStringであるため、next stepはabrupt completionを返すことはない。
-                1. _tv_を、`parse` method（<emu-xref href="#sec-date.parse"></emu-xref>）の場合とexactly same mannerで、_v_をdateとしてparsingしたresultとする。
-              1. そうでなければ、
-                1. _tv_を ? ToNumber(_v_) とする。
-            1. _dv_をTimeClip(_tv_)とする。
-          1. そうでなければ、
-            1. Assert: _numberOfArgs_ ≥ 2である。
-            1. _y_を ? ToNumber(_values_[0]) とする。
-            1. _m_を ? ToNumber(_values_[1]) とする。
-            1. _numberOfArgs_ > 2なら、_dt_を ? ToNumber(_values_[2]) とする；そうでなければ、_dt_を*1*<sub>𝔽</sub>とする。
-            1. _numberOfArgs_ > 3なら、_h_を ? ToNumber(_values_[3]) とする；そうでなければ、_h_を*+0*<sub>𝔽</sub>とする。
-            1. _numberOfArgs_ > 4なら、_min_を ? ToNumber(_values_[4]) とする；そうでなければ、_min_を*+0*<sub>𝔽</sub>とする。
-            1. _numberOfArgs_ > 5なら、_s_を ? ToNumber(_values_[5]) とする；そうでなければ、_s_を*+0*<sub>𝔽</sub>とする。
-            1. _numberOfArgs_ > 6なら、_milli_を ? ToNumber(_values_[6]) とする；そうでなければ、_milli_を*+0*<sub>𝔽</sub>とする。
-            1. _yr_をMakeFullYear(_y_)とする。
-            1. _finalDate_をMakeDate(MakeDay(_yr_, _m_, _dt_), MakeTime(_h_, _min_, _s_, _milli_))とする。
-            1. _dv_をTimeClip(UTC(_finalDate_))とする。
-          1. _obj_を ? OrdinaryCreateFromConstructor(NewTarget, *"%Date.prototype%"*, « [[DateValue]] ») とする。
-          1. _obj_.[[DateValue]]を_dv_に設定する。
-          1. _obj_を返す。
+          1. NewTarget が *undefined* の場合、
+            1. _now_ を現在時刻を識別する時刻値（UTC）とする。
+            1. ToDateString(_now_) を返す。
+          1. _numberOfArgs_ を _values_ の要素数とする。
+          1. _numberOfArgs_ = 0 の場合、
+            1. _dv_ を現在時刻を識別する時刻値（UTC）とする。
+          1. そうではなく、_numberOfArgs_ = 1 の場合、
+            1. _value_ を _values_[0] とする。
+            1. _value_ が Object であり、_value_ が [[DateValue]] 内部スロットを持つ場合、
+              1. _tv_ を _value_.[[DateValue]] とする。
+            1. そうでない場合、
+              1. _v_ を ? ToPrimitive(_value_) とする。
+              1. _v_ が String の場合、
+                1. アサート: _v_ は String であるため、次の手順は中途完了を返すことはない。
+                1. _tv_ を、`parse` メソッド（<emu-xref href="#sec-date.parse"></emu-xref>）とまったく同じ方法で _v_ を日付として解析した結果とする。
+              1. そうでない場合、
+                1. _tv_ を ? ToNumber(_v_) とする。
+            1. _dv_ を TimeClip(_tv_) とする。
+          1. そうでない場合、
+            1. アサート: _numberOfArgs_ ≥ 2。
+            1. _yearNumber_ を ? ToNumber(_values_[0]) とする。
+            1. _monthNumber_ を ? ToNumber(_values_[1]) とする。
+            1. _numberOfArgs_ > 2 の場合、_dayNumber_ を ? ToNumber(_values_[2]) とする。それ以外の場合、_dayNumber_ を *1*<sub>𝔽</sub> とする。
+            1. _numberOfArgs_ > 3 の場合、_hourNumber_ を ? ToNumber(_values_[3]) とする。それ以外の場合、_hourNumber_ を *+0*<sub>𝔽</sub> とする。
+            1. _numberOfArgs_ > 4 の場合、_minuteNumber_ を ? ToNumber(_values_[4]) とする。それ以外の場合、_minuteNumber_ を *+0*<sub>𝔽</sub> とする。
+            1. _numberOfArgs_ > 5 の場合、_secondNumber_ を ? ToNumber(_values_[5]) とする。それ以外の場合、_secondNumber_ を *+0*<sub>𝔽</sub> とする。
+            1. _numberOfArgs_ > 6 の場合、_millisecondNumber_ を ? ToNumber(_values_[6]) とする。それ以外の場合、_millisecondNumber_ を *+0*<sub>𝔽</sub> とする。
+            1. _yearNumber_ を MakeFullYear(_yearNumber_) に設定する。
+            1. _finalDate_ を MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_)) とする。
+            1. _dv_ を TimeClip(UTC(_finalDate_)) とする。
+          1. _obj_ を ? OrdinaryCreateFromConstructor(NewTarget, *"%Date.prototype%"*, « [[DateValue]] ») とする。
+          1. _obj_.[[DateValue]] を _dv_ に設定する。
+          1. _obj_ を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-date-constructor">
-      <h1>Properties of the Date Constructor</h1>
-      <p>Date constructorは：</p>
+      <h1>Date コンストラクターのプロパティ</h1>
+      <p>Date コンストラクター:</p>
       <ul>
-        <li>valueが%Function.prototype%である[[Prototype]] internal slotを持ちます。</li>
-        <li>valueが*7*<sub>𝔽</sub>である*"length"* propertyを持ちます。</li>
-        <li>次のpropertiesを持ちます：</li>
+        <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>値が *7*<sub>𝔽</sub> である *"length"* プロパティを持つ。</li>
+        <li>次のプロパティを持つ:</li>
       </ul>
 
       <emu-clause id="sec-date.now" type="built-in function">
         <h1>Date.now ( )</h1>
-        <p>このfunctionは、それへのcallのoccurrenceのUTC dateおよびtimeをdesignateするtime valueを返します。</p>
+        <p>この関数は、この関数の呼び出しが発生した UTC の日付と時刻を示す時刻値を返す。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.parse" type="built-in function">
         <h1>Date.parse ( _string_ )</h1>
-        <p>このfunctionは、そのargumentにToString operatorをapplyします。ToStringがabrupt completionとなった場合、Completion Recordがimmediatelyに返されます。そうでなければ、このfunctionは得られたStringをdateおよびtimeとしてinterpretします；これは、dateおよびtimeに対応するUTC time valueであるNumberを返します。Stringのcontentsに応じて、Stringはlocal time、UTC time、またはsome other time zoneのtimeとしてinterpretedされ得ます。functionはまず、expanded yearsを含め、Date Time String Format（<emu-xref href="#sec-date-time-string-format"></emu-xref>）でdescribedされたformatに従ってStringをparseしようとします。Stringがそのformatにconformしない場合、functionは任意のimplementation-specific heuristicsまたはimplementation-specific date formatsにfall backしてもよいです。unrecognizableである、またはout-of-bounds format element valuesを含むStringsは、このfunctionに*NaN*を返させなければなりません。</p>
-        <p>Stringが<emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref>にconformする場合、absent format elementsのplaceにはsubstitute valuesが入ります。`MM`または`DD` elementsがabsentである場合、*"01"*が使用されます。`HH`、`mm`、または`ss` elementsがabsentである場合、*"00"*が使用されます。`sss` elementがabsentである場合、*"000"*が使用されます。UTC offset representationがabsentである場合、date-only formsはUTC timeとしてinterpretedされ、date-time formsはlocal timeとしてinterpretedされます。</p>
-        <p>`x`が、ECMAScriptの特定のimplementation内でmilliseconds amountがzeroである任意のDateである場合、referencedされるすべてのpropertiesがinitial valuesを持つなら、以下のexpressionsはすべて、そのimplementation内でsame numeric valueをproduceすべきです：</p>
+        <p>この関数は、その引数に ToString 演算子を適用する。ToString の結果が中途完了である場合、その Completion Record を直ちに返す。それ以外の場合、この関数は結果の String を日付と時刻として解釈し、その日付と時刻に対応する UTC 時刻値である Number を返す。String の内容に応じて、その String はローカル時刻、UTC 時刻、または他のタイムゾーンの時刻として解釈されることがある。この関数はまず、拡張年を含め、Date Time String Format（<emu-xref href="#sec-date-time-string-format"></emu-xref>）で記述されている形式に従って String を解析しようとする。String がその形式に適合しない場合、この関数は任意の実装固有のヒューリスティックまたは実装固有の日付形式にフォールバックしてもよい。認識できない String、または範囲外の形式要素値を含む String の場合、この関数は *NaN* を返さなければならない。</p>
+        <p>String が <emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref> に適合する場合、存在しない形式要素の代わりに代替値を使用する。`MM` または `DD` 要素が存在しない場合、*"01"* を使用する。`HH`、`mm`、または `ss` 要素が存在しない場合、*"00"* を使用する。`sss` 要素が存在しない場合、*"000"* を使用する。UTC オフセット表現が存在しない場合、日付のみの形式は UTC 時刻として解釈され、日時形式はローカル時刻として解釈される。</p>
+        <p>`x` が、特定の ECMAScript 実装においてミリ秒部分がゼロである任意の Date である場合、参照されるすべてのプロパティが初期値を持つならば、次のすべての式はその実装で同じ数値を生成するべきである:</p>
         <pre><code class="javascript">
           x.valueOf()
           Date.parse(x.toString())
           Date.parse(x.toUTCString())
           Date.parse(x.toISOString())
         </code></pre>
-        <p>しかし、expression</p>
+        <p>ただし、式</p>
         <pre><code class="javascript">
           Date.parse(x.toLocaleString())
         </code></pre>
-        <p>は、preceding three expressionsとsame Number valueをproduceすることはrequiredではなく、generalに、このfunctionによってproduceされるvalueは、Date Time String Format（<emu-xref href="#sec-date-time-string-format"></emu-xref>）にconformせず、かつそのimplementationで`toString`または`toUTCString` methodによってproduceされ得ない任意のString valueが与えられた場合、implementation-definedです。</p>
+        <p>は、前述の3つの式と同じ Number 値を生成することを要求されない。また一般に、Date Time String Format（<emu-xref href="#sec-date-time-string-format"></emu-xref>）に適合せず、かつその実装の `toString` または `toUTCString` メソッドによって生成できない任意の String 値が与えられた場合、この関数によって生成される値は実装定義である。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype">
         <h1>Date.prototype</h1>
-        <p>`Date.prototype`のinitial valueはDate prototype objectです。</p>
-        <p>このpropertyはattributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }を持ちます。</p>
+        <p>`Date.prototype` の初期値は Date プロトタイプオブジェクトである。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.utc" type="built-in function">
-        <h1>Date.UTC ( _year_ [ , _month_ [ , _date_ [ , _hours_ [ , _minutes_ [ , _seconds_ [ , _ms_ ] ] ] ] ] ] )</h1>
-        <p>このfunctionは呼び出されたとき、次のstepsを実行します：</p>
+        <h1>Date.UTC ( _year_ [ , _month_ [ , _day_ [ , _hour_ [ , _minute_ [ , _second_ [ , _millisecond_ ] ] ] ] ] ] )</h1>
+        <p>この関数は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _y_を ? ToNumber(_year_) とする。
-          1. _month_がpresentなら、_m_を ? ToNumber(_month_) とする；そうでなければ、_m_を*+0*<sub>𝔽</sub>とする。
-          1. _date_がpresentなら、_dt_を ? ToNumber(_date_) とする；そうでなければ、_dt_を*1*<sub>𝔽</sub>とする。
-          1. _hours_がpresentなら、_h_を ? ToNumber(_hours_) とする；そうでなければ、_h_を*+0*<sub>𝔽</sub>とする。
-          1. _minutes_がpresentなら、_min_を ? ToNumber(_minutes_) とする；そうでなければ、_min_を*+0*<sub>𝔽</sub>とする。
-          1. _seconds_がpresentなら、_s_を ? ToNumber(_seconds_) とする；そうでなければ、_s_を*+0*<sub>𝔽</sub>とする。
-          1. _ms_がpresentなら、_milli_を ? ToNumber(_ms_) とする；そうでなければ、_milli_を*+0*<sub>𝔽</sub>とする。
-          1. _yr_をMakeFullYear(_y_)とする。
-          1. TimeClip(MakeDate(MakeDay(_yr_, _m_, _dt_), MakeTime(_h_, _min_, _s_, _milli_)))を返す。
+          1. _yearNumber_ を ? ToNumber(_year_) とする。
+          1. _month_ が存在する場合、_monthNumber_ を ? ToNumber(_month_) とする。それ以外の場合、_monthNumber_ を *+0*<sub>𝔽</sub> とする。
+          1. _day_ が存在する場合、_dayNumber_ を ? ToNumber(_day_) とする。それ以外の場合、_dayNumber_ を *1*<sub>𝔽</sub> とする。
+          1. _hour_ が存在する場合、_hourNumber_ を ? ToNumber(_hour_) とする。それ以外の場合、_hourNumber_ を *+0*<sub>𝔽</sub> とする。
+          1. _minute_ が存在する場合、_minuteNumber_ を ? ToNumber(_minute_) とする。それ以外の場合、_minuteNumber_ を *+0*<sub>𝔽</sub> とする。
+          1. _second_ が存在する場合、_secondNumber_ を ? ToNumber(_second_) とする。それ以外の場合、_secondNumber_ を *+0*<sub>𝔽</sub> とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。それ以外の場合、_millisecondNumber_ を *+0*<sub>𝔽</sub> とする。
+          1. _yearNumber_ を MakeFullYear(_yearNumber_) に設定する。
+          1. TimeClip(MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_))) を返す。
         </emu-alg>
-        <p>このfunctionの*"length"* propertyは*7*<sub>𝔽</sub>です。</p>
+        <p>この関数の *"length"* プロパティは *7*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>このfunctionはDate constructorと2つの点で異なります：これはDateを作成するのではなくNumberとしてtime valueを返し、argumentsをlocal timeとしてではなくUTCとしてinterpretします。</p>
+          <p>この関数は Date コンストラクターと2つの点で異なる。Date を作成するのではなく Number として時刻値を返し、引数をローカル時刻としてではなく UTC として解釈する。</p>
         </emu-note>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-date-prototype-object">
-      <h1>Properties of the Date Prototype Object</h1>
-      <p><dfn>Date prototype object</dfn>は：</p>
+      <h1>Date プロトタイプオブジェクトのプロパティ</h1>
+      <p><dfn>Date プロトタイプオブジェクト</dfn>:</p>
       <ul>
-        <li><dfn>%Date.prototype%</dfn>です。</li>
-        <li>それ自体がordinary objectです。</li>
-        <li>Date instanceではなく、[[DateValue]] internal slotを持ちません。</li>
-        <li>valueが%Object.prototype%である[[Prototype]] internal slotを持ちます。</li>
+        <li><dfn>%Date.prototype%</dfn> である。</li>
+        <li>それ自体が通常オブジェクトである。</li>
+        <li>Date インスタンスではなく、[[DateValue]] 内部スロットを持たない。</li>
+        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
       </ul>
-      <p>明示的に別途定義されない限り、以下で定義されるDate prototype objectのmethodsはgenericではなく、それらに渡される*this* valueは、time valueへinitialized済みの[[DateValue]] internal slotを持つobjectでなければなりません。</p>
+      <p>明示的に別途定義されていない限り、以下で定義される Date プロトタイプオブジェクトのメソッドは汎用ではなく、それらに渡される *this* 値は、時刻値に初期化された [[DateValue]] 内部スロットを持つオブジェクトでなければならない。</p>
 
       <emu-clause id="sec-date.prototype.constructor">
         <h1>Date.prototype.constructor</h1>
-        <p>`Date.prototype.constructor`のinitial valueは%Date%です。</p>
+        <p>`Date.prototype.constructor` の初期値は %Date% である。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getdate" type="built-in function">
         <h1>Date.prototype.getDate ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35158,7 +35189,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getday" type="built-in function">
         <h1>Date.prototype.getDay ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35170,7 +35201,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getfullyear" type="built-in function">
         <h1>Date.prototype.getFullYear ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35182,7 +35213,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.gethours" type="built-in function">
         <h1>Date.prototype.getHours ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35194,31 +35225,31 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getmilliseconds" type="built-in function">
         <h1>Date.prototype.getMilliseconds ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(MillisecFromTime(LocalTime(_tv_))) を返す。
+          1. 𝔽(MillisecondFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getminutes" type="built-in function">
         <h1>Date.prototype.getMinutes ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(MinFromTime(LocalTime(_tv_))) を返す。
+          1. 𝔽(MinuteFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getmonth" type="built-in function">
         <h1>Date.prototype.getMonth ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35230,19 +35261,19 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getseconds" type="built-in function">
         <h1>Date.prototype.getSeconds ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(SecFromTime(LocalTime(_tv_))) を返す。
+          1. 𝔽(SecondFromTime(LocalTime(_tv_))) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.gettime" type="built-in function">
         <h1>Date.prototype.getTime ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35252,19 +35283,19 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.gettimezoneoffset" type="built-in function">
         <h1>Date.prototype.getTimezoneOffset ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. (_tv_ - LocalTime(_tv_)) / 𝔽(msPerMinute) を返す。
+          1. (_tv_ - LocalTime(_tv_)) / 𝔽(MillisecondsPerMinute) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcdate" type="built-in function">
         <h1>Date.prototype.getUTCDate ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35276,7 +35307,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getutcday" type="built-in function">
         <h1>Date.prototype.getUTCDay ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35288,7 +35319,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getutcfullyear" type="built-in function">
         <h1>Date.prototype.getUTCFullYear ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35300,7 +35331,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getutchours" type="built-in function">
         <h1>Date.prototype.getUTCHours ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35312,31 +35343,31 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getutcmilliseconds" type="built-in function">
         <h1>Date.prototype.getUTCMilliseconds ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(MillisecFromTime(_tv_)) を返す。
+          1. 𝔽(MillisecondFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcminutes" type="built-in function">
         <h1>Date.prototype.getUTCMinutes ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(MinFromTime(_tv_)) を返す。
+          1. 𝔽(MinuteFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.getutcmonth" type="built-in function">
         <h1>Date.prototype.getUTCMonth ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35348,27 +35379,27 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-date.prototype.getutcseconds" type="built-in function">
         <h1>Date.prototype.getUTCSeconds ( )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. 𝔽(SecFromTime(_tv_)) を返す。
+          1. 𝔽(SecondFromTime(_tv_)) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setdate" type="built-in function">
-        <h1>Date.prototype.setDate ( _date_ )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setDate ( _day_ )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _dt_ を ? ToNumber(_date_) とする。
+          1. _dayNumber_ を ? ToNumber(_day_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _u_ を TimeClip(UTC(_newDate_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
@@ -35376,65 +35407,65 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setfullyear" type="built-in function">
-        <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setFullYear ( _year_ [ , _month_ [ , _day_ ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _y_ を ? ToNumber(_year_) とする。
+          1. _yearNumber_ を ? ToNumber(_year_) とする。
           1. _tv_ が *NaN* の場合、_tv_ を *+0*<sub>𝔽</sub> に設定する。それ以外の場合、_tv_ を LocalTime(_tv_) に設定する。
-          1. _month_ が存在する場合、_m_ を ? ToNumber(_month_) とする。それ以外の場合、_m_ を 𝔽(MonthFromTime(_tv_)) とする。
-          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。それ以外の場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
-          1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _month_ が存在する場合、_monthNumber_ を ? ToNumber(_month_) とする。それ以外の場合、_monthNumber_ を 𝔽(MonthFromTime(_tv_)) とする。
+          1. _day_ が存在する場合、_dayNumber_ を ? ToNumber(_day_) とする。それ以外の場合、_dayNumber_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _u_ を TimeClip(UTC(_newDate_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_month_ が存在しない場合、このメソッドは、_month_ が値 `getMonth()` で存在するかのように動作する。_date_ が存在しない場合、_date_ が値 `getDate()` で存在するかのように動作する。</p>
+          <p>_month_ が存在しない場合、このメソッドは _month_ が値 `getMonth()` で存在するかのように動作する。_day_ が存在しない場合、_day_ が値 `getDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.sethours" type="built-in function">
-        <h1>Date.prototype.setHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setHours ( _hour_ [ , _minute_ [ , _second_ [ , _millisecond_ ] ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _h_ を ? ToNumber(_hour_) とする。
-          1. _min_ が存在する場合、_m_ を ? ToNumber(_min_) とする。
-          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _hourNumber_ を ? ToNumber(_hour_) とする。
+          1. _minute_ が存在する場合、_minuteNumber_ を ? ToNumber(_minute_) とする。
+          1. _second_ が存在する場合、_secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _min_ が存在しない場合、_m_ を 𝔽(MinFromTime(_tv_)) とする。
-          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_)) とする。
+          1. _minute_ が存在しない場合、_minuteNumber_ を 𝔽(MinuteFromTime(_tv_)) とする。
+          1. _second_ が存在しない場合、_secondNumber_ を 𝔽(SecondFromTime(_tv_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_)) とする。
           1. _u_ を TimeClip(UTC(_date_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *4*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_min_ が存在しない場合、このメソッドは、_min_ が値 `getMinutes()` で存在するかのように動作する。_sec_ が存在しない場合、_sec_ が値 `getSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
+          <p>_minute_ が存在しない場合、このメソッドは _minute_ が値 `getMinutes()` で存在するかのように動作する。_second_ が存在しない場合、_second_ が値 `getSeconds()` で存在するかのように動作する。_millisecond_ が存在しない場合、_millisecond_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmilliseconds" type="built-in function">
-        <h1>Date.prototype.setMilliseconds ( _ms_ )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setMilliseconds ( _millisecond_ )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _ms_ を ? ToNumber(_ms_) に設定する。
+          1. _millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_) とする。
+          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinuteFromTime(_tv_)), 𝔽(SecondFromTime(_tv_)), _millisecondNumber_) とする。
           1. _u_ を TimeClip(UTC(MakeDate(𝔽(Day(_tv_)), _time_))) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
@@ -35442,79 +35473,79 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setminutes" type="built-in function">
-        <h1>Date.prototype.setMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setMinutes ( _minute_ [ , _second_ [ , _millisecond_ ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _m_ を ? ToNumber(_min_) とする。
-          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _minuteNumber_ を ? ToNumber(_minute_) とする。
+          1. _second_ が存在する場合、_secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_)) とする。
+          1. _second_ が存在しない場合、_secondNumber_ を 𝔽(SecondFromTime(_tv_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _minuteNumber_, _secondNumber_, _millisecondNumber_)) とする。
           1. _u_ を TimeClip(UTC(_date_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_sec_ が存在しない場合、このメソッドは、_sec_ が値 `getSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
+          <p>_second_ が存在しない場合、このメソッドは _second_ が値 `getSeconds()` で存在するかのように動作する。_millisecond_ が存在しない場合、_millisecond_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setmonth" type="built-in function">
-        <h1>Date.prototype.setMonth ( _month_ [ , _date_ ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setMonth ( _month_ [ , _day_ ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _m_ を ? ToNumber(_month_) とする。
-          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。
+          1. _monthNumber_ を ? ToNumber(_month_) とする。
+          1. _day_ が存在する場合、_dayNumber_ を ? ToNumber(_day_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _date_ が存在しない場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
-          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _day_ が存在しない場合、_dayNumber_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _monthNumber_, _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _u_ を TimeClip(UTC(_newDate_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_date_ が存在しない場合、このメソッドは、_date_ が値 `getDate()` で存在するかのように動作する。</p>
+          <p>_day_ が存在しない場合、このメソッドは _day_ が値 `getDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setseconds" type="built-in function">
-        <h1>Date.prototype.setSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setSeconds ( _second_ [ , _millisecond_ ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
           1. _tv_ を LocalTime(_tv_) に設定する。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinuteFromTime(_tv_)), _secondNumber_, _millisecondNumber_)) とする。
           1. _u_ を TimeClip(UTC(_date_)) とする。
           1. _dateObj_.[[DateValue]] を _u_ に設定する。
           1. _u_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_ms_ が存在しない場合、このメソッドは、_ms_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
+          <p>_millisecond_ が存在しない場合、このメソッドは _millisecond_ が値 `getMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.settime" type="built-in function">
         <h1>Date.prototype.setTime ( _time_ )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
@@ -35526,15 +35557,15 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcdate" type="built-in function">
-        <h1>Date.prototype.setUTCDate ( _date_ )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCDate ( _day_ )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _dt_ を ? ToNumber(_date_) とする。
+          1. _dayNumber_ を ? ToNumber(_day_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), 𝔽(MonthFromTime(_tv_)), _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _v_ を TimeClip(_newDate_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
@@ -35542,63 +35573,63 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcfullyear" type="built-in function">
-        <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _date_ ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCFullYear ( _year_ [ , _month_ [ , _day_ ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、_tv_ を *+0*<sub>𝔽</sub> に設定する。
-          1. _y_ を ? ToNumber(_year_) とする。
-          1. _month_ が存在する場合、_m_ を ? ToNumber(_month_) とする。それ以外の場合、_m_ を 𝔽(MonthFromTime(_tv_)) とする。
-          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。それ以外の場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
-          1. _newDate_ を MakeDate(MakeDay(_y_, _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _yearNumber_ を ? ToNumber(_year_) とする。
+          1. _month_ が存在する場合、_monthNumber_ を ? ToNumber(_month_) とする。それ以外の場合、_monthNumber_ を 𝔽(MonthFromTime(_tv_)) とする。
+          1. _day_ が存在する場合、_dayNumber_ を ? ToNumber(_day_) とする。それ以外の場合、_dayNumber_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _v_ を TimeClip(_newDate_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_month_ が存在しない場合、このメソッドは、_month_ が値 `getUTCMonth()` で存在するかのように動作する。_date_ が存在しない場合、_date_ が値 `getUTCDate()` で存在するかのように動作する。</p>
+          <p>_month_ が存在しない場合、このメソッドは _month_ が値 `getUTCMonth()` で存在するかのように動作する。_day_ が存在しない場合、_day_ が値 `getUTCDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutchours" type="built-in function">
-        <h1>Date.prototype.setUTCHours ( _hour_ [ , _min_ [ , _sec_ [ , _ms_ ] ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCHours ( _hour_ [ , _minute_ [ , _second_ [ , _millisecond_ ] ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _h_ を ? ToNumber(_hour_) とする。
-          1. _min_ が存在する場合、_m_ を ? ToNumber(_min_) とする。
-          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _hourNumber_ を ? ToNumber(_hour_) とする。
+          1. _minute_ が存在する場合、_minuteNumber_ を ? ToNumber(_minute_) とする。
+          1. _second_ が存在する場合、_secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _min_ が存在しない場合、_m_ を 𝔽(MinFromTime(_tv_)) とする。
-          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_h_, _m_, _s_, _milli_)) とする。
+          1. _minute_ が存在しない場合、_minuteNumber_ を 𝔽(MinuteFromTime(_tv_)) とする。
+          1. _second_ が存在しない場合、_secondNumber_ を 𝔽(SecondFromTime(_tv_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_)) とする。
           1. _v_ を TimeClip(_date_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *4*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_min_ が存在しない場合、このメソッドは、_min_ が値 `getUTCMinutes()` で存在するかのように動作する。_sec_ が存在しない場合、_sec_ が値 `getUTCSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
+          <p>_minute_ が存在しない場合、このメソッドは _minute_ が値 `getUTCMinutes()` で存在するかのように動作する。_second_ が存在しない場合、_second_ が値 `getUTCSeconds()` で存在するかのように動作する。_millisecond_ が存在しない場合、_millisecond_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmilliseconds" type="built-in function">
-        <h1>Date.prototype.setUTCMilliseconds ( _ms_ )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCMilliseconds ( _millisecond_ )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _ms_ を ? ToNumber(_ms_) に設定する。
+          1. _millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), 𝔽(SecFromTime(_tv_)), _ms_) とする。
+          1. _time_ を MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinuteFromTime(_tv_)), 𝔽(SecondFromTime(_tv_)), _millisecondNumber_) とする。
           1. _v_ を TimeClip(MakeDate(𝔽(Day(_tv_)), _time_)) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
@@ -35606,197 +35637,197 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcminutes" type="built-in function">
-        <h1>Date.prototype.setUTCMinutes ( _min_ [ , _sec_ [ , _ms_ ] ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCMinutes ( _minute_ [ , _second_ [ , _millisecond_ ] ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _m_ を ? ToNumber(_min_) とする。
-          1. _sec_ が存在する場合、_s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _minuteNumber_ を ? ToNumber(_minute_) とする。
+          1. _second_ が存在する場合、_secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _sec_ が存在しない場合、_s_ を 𝔽(SecFromTime(_tv_)) とする。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _m_, _s_, _milli_)) とする。
+          1. _second_ が存在しない場合、_secondNumber_ を 𝔽(SecondFromTime(_tv_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), _minuteNumber_, _secondNumber_, _millisecondNumber_)) とする。
           1. _v_ を TimeClip(_date_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *3*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_sec_ が存在しない場合、このメソッドは、_sec_ が値 `getUTCSeconds()` で存在するかのように動作する。_ms_ が存在しない場合、_ms_ が `getUTCMilliseconds()` によって返される値で存在するかのように動作する。</p>
+          <p>_second_ が存在しない場合、このメソッドは _second_ が値 `getUTCSeconds()` で存在するかのように動作する。_millisecond_ が存在しない場合、_millisecond_ が `getUTCMilliseconds()` によって返される値で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcmonth" type="built-in function">
-        <h1>Date.prototype.setUTCMonth ( _month_ [ , _date_ ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCMonth ( _month_ [ , _day_ ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _m_ を ? ToNumber(_month_) とする。
-          1. _date_ が存在する場合、_dt_ を ? ToNumber(_date_) とする。
+          1. _monthNumber_ を ? ToNumber(_month_) とする。
+          1. _day_ が存在する場合、_dayNumber_ を ? ToNumber(_day_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _date_ が存在しない場合、_dt_ を 𝔽(DateFromTime(_tv_)) とする。
-          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _m_, _dt_), 𝔽(TimeWithinDay(_tv_))) とする。
+          1. _day_ が存在しない場合、_dayNumber_ を 𝔽(DateFromTime(_tv_)) とする。
+          1. _newDate_ を MakeDate(MakeDay(𝔽(YearFromTime(_tv_)), _monthNumber_, _dayNumber_), 𝔽(TimeWithinDay(_tv_))) とする。
           1. _v_ を TimeClip(_newDate_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_date_ が存在しない場合、このメソッドは、_date_ が値 `getUTCDate()` で存在するかのように動作する。</p>
+          <p>_day_ が存在しない場合、このメソッドは _day_ が値 `getUTCDate()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.setutcseconds" type="built-in function">
-        <h1>Date.prototype.setUTCSeconds ( _sec_ [ , _ms_ ] )</h1>
-        <p>このメソッドは、呼び出されると次の手順を実行する。</p>
+        <h1>Date.prototype.setUTCSeconds ( _second_ [ , _millisecond_ ] )</h1>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
-          1. _s_ を ? ToNumber(_sec_) とする。
-          1. _ms_ が存在する場合、_milli_ を ? ToNumber(_ms_) とする。
+          1. _secondNumber_ を ? ToNumber(_second_) とする。
+          1. _millisecond_ が存在する場合、_millisecondNumber_ を ? ToNumber(_millisecond_) とする。
           1. _tv_ が *NaN* の場合、*NaN* を返す。
-          1. _ms_ が存在しない場合、_milli_ を 𝔽(MillisecFromTime(_tv_)) とする。
-          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinFromTime(_tv_)), _s_, _milli_)) とする。
+          1. _millisecond_ が存在しない場合、_millisecondNumber_ を 𝔽(MillisecondFromTime(_tv_)) とする。
+          1. _date_ を MakeDate(𝔽(Day(_tv_)), MakeTime(𝔽(HourFromTime(_tv_)), 𝔽(MinuteFromTime(_tv_)), _secondNumber_, _millisecondNumber_)) とする。
           1. _v_ を TimeClip(_date_) とする。
           1. _dateObj_.[[DateValue]] を _v_ に設定する。
           1. _v_ を返す。
         </emu-alg>
         <p>このメソッドの *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>_ms_ が存在しない場合、このメソッドは、_ms_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
+          <p>_millisecond_ が存在しない場合、このメソッドは _millisecond_ が値 `getUTCMilliseconds()` で存在するかのように動作する。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.todatestring" type="built-in function">
         <h1>Date.prototype.toDateString ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*"Invalid Date"*を返す。
-          1. _t_をLocalTime(_tv_)とする。
-          1. DateString(_t_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
+          1. _t_ を LocalTime(_tv_) とする。
+          1. DateString(_t_) を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.toisostring" type="built-in function">
         <h1>Date.prototype.toISOString ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*RangeError*例外をthrowする。
-          1. Assert: _tv_はintegral Numberである。
-          1. _tv_が<emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref>でrepresentできないyearに対応するなら、*RangeError*例外をthrowする。
-          1. UTC time scale上で、すべてのformat elementsおよびUTC offset representation *"Z"*を含む、<emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref>における_tv_のString representationを返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*RangeError* 例外をスローする。
+          1. アサート: _tv_ は整数の Number である。
+          1. _tv_ が <emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref> で表現できない年に対応する場合、*RangeError* 例外をスローする。
+          1. UTC 時間尺度上で、すべての形式要素と UTC オフセット表現 *"Z"* を含む <emu-xref href="#sec-date-time-string-format">Date Time String Format</emu-xref> による _tv_ の String 表現を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.tojson" type="built-in function">
         <h1>Date.prototype.toJSON ( _key_ )</h1>
-        <p>このmethodは、`JSON.stringify`（<emu-xref href="#sec-json.stringify"></emu-xref>）による使用のためにDateのString representationを提供します。</p>
-        <p>これは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、`JSON.stringify`（<emu-xref href="#sec-json.stringify"></emu-xref>）で使用する Date の String 表現を提供する。</p>
+        <p>呼び出されたとき、次の手順を実行する:</p>
         <emu-alg>
-          1. _obj_を ? ToObject(*this* value) とする。
-          1. _tv_を ? ToPrimitive(_obj_, ~number~) とする。
-          1. _tv_がNumberであり、かつ_tv_がfiniteでないなら、*null*を返す。
-          1. ? Invoke(_obj_, *"toISOString"*)を返す。
+          1. _obj_ を ? ToObject(*this* 値) とする。
+          1. _tv_ を ? ToPrimitive(_obj_, ~number~) とする。
+          1. _tv_ が Number であり、_tv_ が有限でない場合、*null* を返す。
+          1. ? Invoke(_obj_, *"toISOString"*) を返す。
         </emu-alg>
         <emu-note>
-          <p>argumentはignoredされます。</p>
+          <p>引数は無視される。</p>
         </emu-note>
         <emu-note>
-          <p>このmethodは意図的にgenericです；その*this* valueがDateであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。ただし、そのようなobjectは`toISOString` methodを持つ必要があります。</p>
+          <p>このメソッドは意図的に汎用的であり、その *this* 値が Date であることを要求しない。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができる。ただし、そのようなオブジェクトが `toISOString` メソッドを持つことは要求される。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.tolocaledatestring" type="built-in function">
         <h1>Date.prototype.toLocaleDateString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodはString valueを返します。Stringのcontentsはimplementation-definedですが、host environmentのcurrent localeのconventionsに対応するconvenientでhuman-readableなformで、current time zoneにおけるDateの“date” portionを表すことを意図しています。</p>
-        <p>このmethodのoptional parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは String 値を返す。String の内容は実装定義であるが、ホスト環境の現在のロケールの慣例に対応する、便利で人間が読みやすい形式で、現在のタイムゾーンにおける Date の「日付」部分を表すことを意図している。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.tolocalestring" type="built-in function">
         <h1>Date.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodはString valueを返します。Stringのcontentsはimplementation-definedですが、host environmentのcurrent localeのconventionsに対応するconvenientでhuman-readableなformで、current time zoneにおけるDateを表すことを意図しています。</p>
-        <p>このmethodのoptional parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは String 値を返す。String の内容は実装定義であるが、ホスト環境の現在のロケールの慣例に対応する、便利で人間が読みやすい形式で、現在のタイムゾーンにおける Date を表すことを意図している。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.tolocaletimestring" type="built-in function">
         <h1>Date.prototype.toLocaleTimeString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodはString valueを返します。Stringのcontentsはimplementation-definedですが、host environmentのcurrent localeのconventionsに対応するconvenientでhuman-readableなformで、current time zoneにおけるDateの“time” portionを表すことを意図しています。</p>
-        <p>このmethodのoptional parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは String 値を返す。String の内容は実装定義であるが、ホスト環境の現在のロケールの慣例に対応する、便利で人間が読みやすい形式で、現在のタイムゾーンにおける Date の「時刻」部分を表すことを意図している。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.tostring" type="built-in function">
         <h1>Date.prototype.toString ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. ToDateString(_tv_)を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. ToDateString(_tv_) を返す。
         </emu-alg>
         <emu-note>
-          <p>`d.[[DateValue]]`が1000でevenly divisibleである任意のDate `d`について、`Date.parse(d.toString())` = `d.valueOf()`のresultになります。<emu-xref href="#sec-date.parse"></emu-xref>を参照してください。</p>
+          <p>`d.[[DateValue]]` が 1000 で割り切れる任意の Date `d` について、`Date.parse(d.toString())` = `d.valueOf()` となる。<emu-xref href="#sec-date.parse"></emu-xref> を参照。</p>
         </emu-note>
         <emu-note>
-          <p>このmethodはgenericではありません；その*this* valueがDateでない場合、*TypeError*例外をthrowします。したがって、methodとして使用するために他の種類のobjectsへtransferすることはできません。</p>
+          <p>このメソッドは汎用ではない。その *this* 値が Date でない場合、*TypeError* 例外をスローする。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことはできない。</p>
         </emu-note>
 
         <emu-clause id="sec-timestring" type="abstract operation">
           <h1>
             TimeString (
-              _tv_: Number（ただし *NaN* ではない）,
+              _tv_: Number、ただし *NaN* ではない,
             ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
             1. _hour_ を ToZeroPaddedDecimalString(HourFromTime(_tv_), 2) とする。
-            1. _minute_ を ToZeroPaddedDecimalString(MinFromTime(_tv_), 2) とする。
-            1. _second_ を ToZeroPaddedDecimalString(SecFromTime(_tv_), 2) とする。
-            1. _hour_、*":"*、_minute_、*":"*、_second_、コード単位 0x0020 (SPACE)、および *"GMT"* を文字列連結した結果を返す。
+            1. _minute_ を ToZeroPaddedDecimalString(MinuteFromTime(_tv_), 2) とする。
+            1. _second_ を ToZeroPaddedDecimalString(SecondFromTime(_tv_), 2) とする。
+            1. _hour_、*":"*、_minute_、*":"*、_second_、コード単位 0x0020 (SPACE)、および *"GMT"* の文字列連結を返す。
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-datestring" type="abstract operation">
           <h1>
             DateString (
-              _tv_: Number（ただし *NaN* ではない）,
+              _tv_: Number、ただし *NaN* ではない,
             ): String
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _weekday_ を、WeekDay Index = WeekDay(_tv_) である <emu-xref href="#sec-todatestring-day-names"></emu-xref> のエントリの Name とする。
-            1. _month_ を、Month Index = MonthFromTime(_tv_) である <emu-xref href="#sec-todatestring-month-names"></emu-xref> のエントリの Name とする。
+            1. _weekday_ を、<emu-xref href="#sec-todatestring-day-names"></emu-xref> にある WeekDay Index = WeekDay(_tv_) のエントリーの Name とする。
+            1. _month_ を、<emu-xref href="#sec-todatestring-month-names"></emu-xref> にある Month Index = MonthFromTime(_tv_) のエントリーの Name とする。
             1. _day_ を ToZeroPaddedDecimalString(DateFromTime(_tv_), 2) とする。
             1. _yv_ を YearFromTime(_tv_) とする。
             1. _yv_ ≥ 0 の場合、_yearSign_ を空の String とする。それ以外の場合、_yearSign_ を *"-"* とする。
             1. _paddedYear_ を ToZeroPaddedDecimalString(abs(_yv_), 4) とする。
-            1. _weekday_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_yearSign_、および _paddedYear_ を文字列連結した結果を返す。
+            1. _weekday_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_yearSign_、および _paddedYear_ の文字列連結を返す。
           </emu-alg>
           <emu-table id="sec-todatestring-day-names" caption="曜日の名前">
             <table>
               <thead>
                 <tr>
                   <th>
-                    WeekDay Index
+                    WeekDay インデックス
                   </th>
                   <th>
-                    Name
+                    名前
                   </th>
                 </tr>
               </thead>
@@ -35863,10 +35894,10 @@ THH:mm:ss.sss
               <thead>
                 <tr>
                   <th>
-                    Month Index
+                    月インデックス
                   </th>
                   <th>
-                    Name
+                    名前
                   </th>
                 </tr>
               </thead>
@@ -35981,20 +36012,20 @@ THH:mm:ss.sss
           <emu-alg>
             1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
             1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
-              1. _offsetNs_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
-            1. それ以外の場合、
-              1. _offsetNs_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × nsPerMillisecond) とする。
-            1. _offset_ を truncate(_offsetNs_ / nsPerMillisecond) とする。
-            1. _offset_ ≥ 0 の場合、
+              1. _offsetNanoseconds_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
+            1. そうでない場合、
+              1. _offsetNanoseconds_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond) とする。
+            1. _offsetMilliseconds_ を truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond) とする。
+            1. _offsetMilliseconds_ ≥ 0 の場合、
               1. _offsetSign_ を *"+"* とする。
-              1. _absOffset_ を _offset_ とする。
-            1. それ以外の場合、
+              1. _absOffsetMilliseconds_ を _offsetMilliseconds_ とする。
+            1. そうでない場合、
               1. _offsetSign_ を *"-"* とする。
-              1. _absOffset_ を -_offset_ とする。
-            1. _offsetMin_ を ToZeroPaddedDecimalString(MinFromTime(𝔽(_absOffset_)), 2) とする。
-            1. _offsetHour_ を ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffset_)), 2) とする。
-            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) を文字列連結した実装定義の文字列のいずれかとする。
-            1. _offsetSign_、_offsetHour_、_offsetMin_、および _tzName_ を文字列連結した結果を返す。
+              1. _absOffsetMilliseconds_ を -_offsetMilliseconds_ とする。
+            1. _offsetMinute_ を ToZeroPaddedDecimalString(MinuteFromTime(𝔽(_absOffsetMilliseconds_)), 2) とする。
+            1. _offsetHour_ を ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffsetMilliseconds_)), 2) とする。
+            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) の文字列連結のいずれかである実装定義の文字列とする。
+            1. _offsetSign_、_offsetHour_、_offsetMinute_、および _tzName_ の文字列連結を返す。
           </emu-alg>
         </emu-clause>
 
@@ -36009,76 +36040,76 @@ THH:mm:ss.sss
           <emu-alg>
             1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
             1. _localTime_ を LocalTime(_tv_) とする。
-            1. DateString(_localTime_)、コード単位 0x0020 (SPACE)、TimeString(_localTime_)、および TimeZoneString(_tv_) を文字列連結した結果を返す。
+            1. DateString(_localTime_)、コード単位 0x0020 (SPACE)、TimeString(_localTime_)、および TimeZoneString(_tv_) の文字列連結を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.totimestring" type="built-in function">
         <h1>Date.prototype.toTimeString ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
-        <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _tv_を_dateObj_.[[DateValue]]とする。
-          1. _tv_が*NaN*なら、*"Invalid Date"*を返す。
-          1. _localTime_をLocalTime(_tv_)とする。
-          1. TimeString(_localTime_)とTimeZoneString(_tv_)のstring-concatenationを返す。
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-date.prototype.toutcstring" type="built-in function">
-        <h1>Date.prototype.toUTCString ( )</h1>
-        <p>このmethodは、*this* valueに対応するinstant in timeを表すString valueを返します。StringのformatはRFC 7231の<code>HTTP-date</code>に基づき、ECMAScript Datesによってsupportされるfull range of timesをsupportするようgeneralizedされています。</p>
-        <p>これは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. _dateObj_ を *this* 値とする。
           1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
           1. _tv_ を _dateObj_.[[DateValue]] とする。
           1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
-          1. _weekday_ を、WeekDay Index = WeekDay(_tv_) である <emu-xref href="#sec-todatestring-day-names"></emu-xref> のエントリの Name とする。
-          1. _month_ を、Month Index = MonthFromTime(_tv_) である <emu-xref href="#sec-todatestring-month-names"></emu-xref> のエントリの Name とする。
+          1. _localTime_ を LocalTime(_tv_) とする。
+          1. TimeString(_localTime_) と TimeZoneString(_tv_) の文字列連結を返す。
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-date.prototype.toutcstring" type="built-in function">
+        <h1>Date.prototype.toUTCString ( )</h1>
+        <p>このメソッドは、*this* 値に対応する時点を表す String 値を返す。String の形式は RFC 7231 の <code>HTTP-date</code> に基づいており、ECMAScript の Date がサポートする時刻の全範囲をサポートするよう一般化されている。</p>
+        <p>呼び出されたとき、次の手順を実行する:</p>
+        <emu-alg>
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _tv_ を _dateObj_.[[DateValue]] とする。
+          1. _tv_ が *NaN* の場合、*"Invalid Date"* を返す。
+          1. _weekday_ を、<emu-xref href="#sec-todatestring-day-names"></emu-xref> にある WeekDay Index = WeekDay(_tv_) のエントリーの Name とする。
+          1. _month_ を、<emu-xref href="#sec-todatestring-month-names"></emu-xref> にある Month Index = MonthFromTime(_tv_) のエントリーの Name とする。
           1. _day_ を ToZeroPaddedDecimalString(DateFromTime(_tv_), 2) とする。
           1. _yv_ を YearFromTime(_tv_) とする。
           1. _yv_ ≥ 0 の場合、_yearSign_ を空の String とする。それ以外の場合、_yearSign_ を *"-"* とする。
           1. _paddedYear_ を ToZeroPaddedDecimalString(abs(_yv_), 4) とする。
-          1. _weekday_、*","*、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_yearSign_、_paddedYear_、コード単位 0x0020 (SPACE)、および TimeString(_tv_) を文字列連結した結果を返す。
+          1. _weekday_、*","*、コード単位 0x0020 (SPACE)、_day_、コード単位 0x0020 (SPACE)、_month_、コード単位 0x0020 (SPACE)、_yearSign_、_paddedYear_、コード単位 0x0020 (SPACE)、および TimeString(_tv_) の文字列連結を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype.valueof" type="built-in function">
         <h1>Date.prototype.valueOf ( )</h1>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _dateObj_を*this* valueとする。
-          1. ? RequireInternalSlot(_dateObj_, [[DateValue]])を実行する。
-          1. _dateObj_.[[DateValue]]を返す。
+          1. _dateObj_ を *this* 値とする。
+          1. ? RequireInternalSlot(_dateObj_, [[DateValue]]) を実行する。
+          1. _dateObj_.[[DateValue]] を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause oldids="sec-date.prototype-@@toprimitive" id="sec-date.prototype-%symbol.toprimitive%" type="built-in function">
         <h1>Date.prototype [ %Symbol.toPrimitive% ] ( _hint_ )</h1>
-        <p>このmethodは、Dateをprimitive valueへconvertするためにECMAScript language operatorsによって呼び出されます。_hint_にallowedなvaluesは*"default"*、*"number"*、および*"string"*です。Datesは、*"default"*を*"string"*とequivalentとして扱うという点でbuilt-in ECMAScript objectの中でuniqueです。他のすべてのbuilt-in ECMAScript objectsは*"default"*を*"number"*とequivalentとして扱います。</p>
-        <p>これは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドは、Date をプリミティブ値に変換するために ECMAScript 言語の演算子によって呼び出される。_hint_ に許可される値は *"default"*、*"number"*、および *"string"* である。Date は、*"default"* を *"string"* と同等として扱う点で、組み込み ECMAScript オブジェクトの中で独特である。その他のすべての組み込み ECMAScript オブジェクトは、*"default"* を *"number"* と同等として扱う。</p>
+        <p>呼び出されたとき、次の手順を実行する:</p>
         <emu-alg>
-          1. _obj_を*this* valueとする。
-          1. _obj_がObjectでないなら、*TypeError*例外をthrowする。
-          1. _hint_が*"string"*または*"default"*のいずれかなら、
-            1. _tryFirst_を~string~とする。
-          1. そうでなく、_hint_が*"number"*なら、
-            1. _tryFirst_を~number~とする。
-          1. そうでなければ、
-            1. *TypeError*例外をThrowする。
-          1. ? OrdinaryToPrimitive(_obj_, _tryFirst_)を返す。
+          1. _obj_ を *this* 値とする。
+          1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+          1. _hint_ が *"string"* または *"default"* のいずれかである場合、
+            1. _tryFirst_ を ~string~ とする。
+          1. そうではなく、_hint_ が *"number"* の場合、
+            1. _tryFirst_ を ~number~ とする。
+          1. そうでない場合、
+            1. *TypeError* 例外をスローする。
+          1. ? OrdinaryToPrimitive(_obj_, _tryFirst_) を返す。
         </emu-alg>
-        <p>このpropertyはattributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }を持ちます。</p>
-        <p>このmethodの*"name"* propertyのvalueは*"[Symbol.toPrimitive]"*です。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
+        <p>このメソッドの *"name"* プロパティの値は *"[Symbol.toPrimitive]"* である。</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-date-instances">
-      <h1>Properties of Date Instances</h1>
-      <p>Date instancesは、Date prototype objectからpropertiesをinheritするordinary objectsです。Date instancesはまた[[DateValue]] internal slotを持ちます。[[DateValue]] internal slotは、このDateによって表されるtime valueです。</p>
+      <h1>Date インスタンスのプロパティ</h1>
+      <p>Date インスタンスは、Date プロトタイプオブジェクトからプロパティを継承する通常オブジェクトである。Date インスタンスは [[DateValue]] 内部スロットも持つ。[[DateValue]] 内部スロットは、この Date によって表される時刻値である。</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -36422,48 +36453,48 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-string.prototype.localecompare" type="built-in function">
         <h1>String.prototype.localeCompare ( _that_ [ , _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodは、*this* value（String _string_へconvertedされる）と_that_（String _thatValue_へconvertedされる）とのimplementation-defined locale-sensitive String comparisonのresultを表す、*NaN*以外のNumberを返します。resultは、host environmentのcurrent localeのconventionsに従ったString valuesのsort orderに対応することを意図しており、_string_が_thatValue_より前にorderedされるときnegative、_string_が_thatValue_より後にorderedされるときpositive、その他すべての場合にはzero（_string_と_thatValue_の間にrelative orderingがないことを表す）になります。</p>
-        <p>comparisonsを実行する前に、このmethodはStringsをprepareするために次のstepsを実行します：</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは、*this* 値（String _string_ に変換される）と _that_（String _thatValue_ に変換される）との実装定義のロケール依存 String 比較の結果を表す、*NaN* 以外の Number を返す。この結果は、ホスト環境の現在のロケールの慣例に従った String 値のソート順序に対応することを意図しており、_string_ が _thatValue_ より前に順序付けられる場合は負、_string_ が _thatValue_ より後に順序付けられる場合は正、それ以外の場合はゼロとなる（_string_ と _thatValue_ の間に相対的な順序がないことを表す）。</p>
+        <p>比較を実行する前に、このメソッドは String を準備するために次の手順を実行する:</p>
         <emu-alg>
-          1. _thisValue_を*this* valueとする。
-          1. ? RequireObjectCoercible(_thisValue_)を実行する。
-          1. _string_を ? ToString(_thisValue_) とする。
-          1. _thatValue_を ? ToString(_that_) とする。
+          1. _thisValue_ を *this* 値とする。
+          1. ? RequireObjectCoercible(_thisValue_) を実行する。
+          1. _string_ を ? ToString(_thisValue_) とする。
+          1. _thatValue_ を ? ToString(_that_) とする。
         </emu-alg>
-        <p>このmethodのoptional secondおよびthird parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsに他のinterpretationをassignしてはなりません。</p>
-        <p>actual return valuesは、それらにadditional informationをencodingできるようimplementation-definedですが、このmethodは、two argumentsのmethodとしてconsideredされるとき、すべてのStringsのset上でtotal orderingを定義するconsistent comparatorであることがrequiredです。このmethodはまた、Unicode Standardに従うcanonical equivalenceをrecognizeおよびhonourすることがrequiredであり、canonically equivalentなdistinguishable Stringsを比較するときに*+0*<sub>𝔽</sub>を返すことを含みます。</p>
+        <p>このメソッドの省略可能な第2および第3パラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置に他の解釈を割り当ててはならない。</p>
+        <p>実際の戻り値は、追加情報をエンコードできるようにするため実装定義であるが、このメソッドを2引数のメソッドとして考えた場合、すべての String の集合上で全順序を定義する一貫した比較子であることが要求される。このメソッドはまた、Unicode 標準に従った正準等価性を認識して尊重することが要求され、区別可能だが正準等価な String を比較するときに *+0*<sub>𝔽</sub> を返すことも含まれる。</p>
         <emu-note>
-          <p>このmethod自体は`Array.prototype.sort`へのargumentとして直接適していません。後者はtwo argumentsのfunctionをrequireするためです。</p>
+          <p>このメソッド自体は、`Array.prototype.sort` の引数として直接使用するのには適していない。後者は2つの引数を取る関数を必要とするためである。</p>
         </emu-note>
         <emu-note>
-          <p>このmethodは、ECMAScript environmentがhost environmentから利用できる任意のlanguage- and/or locale-sensitive comparison functionalityにrelyしてもよく、host environmentのcurrent localeのconventionsに従ってcompareすることを意図しています。しかし、comparison capabilitiesにかかわらず、このmethodはUnicode Standardに従うcanonical equivalenceをrecognizeおよびhonourしなければなりません—例えば、以下のcomparisonsはすべて*+0*<sub>𝔽</sub>を返さなければなりません：</p>
+          <p>このメソッドは、ホスト環境から ECMAScript 環境で利用可能な任意の言語依存および／またはロケール依存の比較機能に依存してもよく、ホスト環境の現在のロケールの慣例に従って比較することを意図している。ただし、比較機能にかかわらず、このメソッドは Unicode 標準に従った正準等価性を認識して尊重しなければならない。例えば、次の比較はすべて *+0*<sub>𝔽</sub> を返さなければならない:</p>
           <pre><code class="javascript">
-            // &#x212B; ANGSTROM SIGN vs.
-            // A&#x030A; LATIN CAPITAL LETTER A + COMBINING RING ABOVE
+            // &#x212B; ANGSTROM SIGN と
+            // A&#x030A; LATIN CAPITAL LETTER A + COMBINING RING ABOVE の比較
             "\u212B".localeCompare("A\u030A")
 
-            // &#x2126; OHM SIGN vs.
-            // &#x03A9; GREEK CAPITAL LETTER OMEGA
+            // &#x2126; OHM SIGN と
+            // &#x03A9; GREEK CAPITAL LETTER OMEGA の比較
             "\u2126".localeCompare("\u03A9")
 
-            // &#x1E69; LATIN SMALL LETTER S WITH DOT BELOW AND DOT ABOVE vs.
-            // s&#x0307;&#x0323; LATIN SMALL LETTER S + COMBINING DOT ABOVE + COMBINING DOT BELOW
+            // &#x1E69; LATIN SMALL LETTER S WITH DOT BELOW AND DOT ABOVE と
+            // s&#x0307;&#x0323; LATIN SMALL LETTER S + COMBINING DOT ABOVE + COMBINING DOT BELOW の比較
             "\u1E69".localeCompare("s\u0307\u0323")
 
-            // &#x1E0B;&#x0323; LATIN SMALL LETTER D WITH DOT ABOVE + COMBINING DOT BELOW vs.
-            // &#x1E0D;&#x0307; LATIN SMALL LETTER D WITH DOT BELOW + COMBINING DOT ABOVE
+            // &#x1E0B;&#x0323; LATIN SMALL LETTER D WITH DOT ABOVE + COMBINING DOT BELOW と
+            // &#x1E0D;&#x0307; LATIN SMALL LETTER D WITH DOT BELOW + COMBINING DOT ABOVE の比較
             "\u1E0B\u0323".localeCompare("\u1E0D\u0307")
 
-            // &#x1100;&#x1161; HANGUL CHOSEONG KIYEOK + HANGUL JUNGSEONG A vs.
-            // &#xAC00; HANGUL SYLLABLE GA
+            // &#x1100;&#x1161; HANGUL CHOSEONG KIYEOK + HANGUL JUNGSEONG A と
+            // &#xAC00; HANGUL SYLLABLE GA の比較
             "\u1100\u1161".localeCompare("\uAC00")
           </code></pre>
-          <p>canonical equivalenceのdefinitionおよびdiscussionについては、Unicode Standardのchapters 2および3に加えて、<a href="https://unicode.org/reports/tr15/">Unicode Standard Annex #15, Unicode Normalization Forms</a>および<a href="https://unicode.org/notes/tn5/">Unicode Technical Note #5, Canonical Equivalence in Applications</a>を参照してください。<a href="https://unicode.org/reports/tr10/">Unicode Technical Standard #10, Unicode Collation Algorithm</a>も参照してください。</p>
-          <p>このmethodは、Unicode Standardのchapter 3, section 3.7で定義されるUnicode compatibility equivalentsまたはcompatibility decompositionsをhonourすべきでないことがrecommendedされます。</p>
+          <p>正準等価性の定義と説明については、Unicode 標準の第2章および第3章、ならびに <a href="https://unicode.org/reports/tr15/">Unicode 標準附属書 #15「Unicode 正規化形式」</a>および <a href="https://unicode.org/notes/tn5/">Unicode 技術ノート #5「アプリケーションにおける正準等価性」</a>を参照。また、<a href="https://unicode.org/reports/tr10/">Unicode 技術標準 #10「Unicode 照合アルゴリズム」</a>も参照。</p>
+          <p>このメソッドは、Unicode 標準の第3章、3.7節で定義されている Unicode 互換等価文字または互換分解を尊重しないことが推奨される。</p>
         </emu-note>
         <emu-note>
-          <p>このmethodは意図的にgenericです；その*this* valueがString objectであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。</p>
+          <p>このメソッドは意図的に汎用的であり、その *this* 値が String オブジェクトであることを要求しない。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができる。</p>
         </emu-note>
       </emu-clause>
 
@@ -36934,23 +36965,23 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-string.prototype.tolocalelowercase" type="built-in function">
         <h1>String.prototype.toLocaleLowerCase ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodは、<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>でdescribedされる通り、String valueをUTF-16 encoded code pointsのsequenceとしてinterpretします。</p>
-        <p>`toLowerCase`とexactly the sameに動作しますが、host environmentのcurrent localeのconventionsに対応するlocale-sensitive resultをyieldすることを意図している点が異なります。regular Unicode case mappingsとそのlanguageのrulesがconflictする少数のcases（Turkishなど）にのみdifferenceが生じます。</p>
-        <p>このmethodのoptional parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは、<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> で説明されているように、String 値を UTF-16 でエンコードされたコードポイントのシーケンスとして解釈する。</p>
+        <p>ホスト環境の現在のロケールの慣例に対応するロケール依存の結果を生成することを意図している点を除き、`toLowerCase` とまったく同じように動作する。違いが生じるのは、その言語の規則が通常の Unicode 大文字小文字マッピングと競合する少数のケース（トルコ語など）だけである。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
         <emu-note>
-          <p>このmethodは意図的にgenericです；その*this* valueがString objectであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。</p>
+          <p>このメソッドは意図的に汎用的であり、その *this* 値が String オブジェクトであることを要求しない。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができる。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-string.prototype.tolocaleuppercase" type="built-in function">
         <h1>String.prototype.toLocaleUpperCase ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます：</p>
-        <p>このmethodは、<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>でdescribedされる通り、String valueをUTF-16 encoded code pointsのsequenceとしてinterpretします。</p>
-        <p>`toUpperCase`とexactly the sameに動作しますが、host environmentのcurrent localeのconventionsに対応するlocale-sensitive resultをyieldすることを意図している点が異なります。regular Unicode case mappingsとそのlanguageのrulesがconflictする少数のcases（Turkishなど）にのみdifferenceが生じます。</p>
-        <p>このmethodのoptional parametersのmeaningはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する:</p>
+        <p>このメソッドは、<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref> で説明されているように、String 値を UTF-16 でエンコードされたコードポイントのシーケンスとして解釈する。</p>
+        <p>ホスト環境の現在のロケールの慣例に対応するロケール依存の結果を生成することを意図している点を除き、`toUpperCase` とまったく同じように動作する。違いが生じるのは、その言語の規則が通常の Unicode 大文字小文字マッピングと競合する少数のケース（トルコ語など）だけである。</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
         <emu-note>
-          <p>このmethodは意図的にgenericです；その*this* valueがString objectであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。</p>
+          <p>このメソッドは意図的に汎用的であり、その *this* 値が String オブジェクトであることを要求しない。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができる。</p>
         </emu-note>
       </emu-clause>
 
@@ -41073,30 +41104,30 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. Assert: _mapperFunc_がpresentなら、IsCallable(_mapperFunc_)は*true*であり、_thisArg_はpresentであり、_depth_は1である。
-            1. _targetIndex_を_start_とする。
-            1. _sourceIndex_を*+0*<sub>𝔽</sub>とする。
-            1. ℝ(_sourceIndex_) &lt; _sourceLength_の間、繰り返す
-              1. _propertyKey_を ! ToString(_sourceIndex_) とする。
-              1. _exists_を ? HasProperty(_source_, _propertyKey_) とする。
-              1. _exists_が*true*なら、
-                1. _element_を ? Get(_source_, _propertyKey_) とする。
-                1. _mapperFunc_がpresentなら、
-                  1. _element_を ? Call(_mapperFunc_, _thisArg_, « _element_, _sourceIndex_, _source_ ») に設定する。
-                1. _shouldFlatten_を*false*とする。
-                1. _depth_ > 0なら、
-                  1. _shouldFlatten_を ? IsArray(_element_) に設定する。
-                1. _shouldFlatten_が*true*なら、
-                  1. _depth_ = +∞なら、_newDepth_を+∞とする。
-                  1. そうでなければ、_newDepth_を_depth_ - 1とする。
-                  1. _elementLength_を ? LengthOfArrayLike(_element_) とする。
-                  1. _targetIndex_を ? FlattenIntoArray(_target_, _element_, _elementLength_, _targetIndex_, _newDepth_) に設定する。
-                1. そうでなければ、
-                  1. _targetIndex_ ≥ 2<sup>53</sup> - 1なら、*TypeError*例外をthrowする。
-                  1. ? CreateDataPropertyOrThrow(_target_, ! ToString(𝔽(_targetIndex_)), _element_)を実行する。
-                  1. _targetIndex_を_targetIndex_ + 1に設定する。
-              1. _sourceIndex_を_sourceIndex_ + *1*<sub>𝔽</sub>に設定する。
-            1. _targetIndex_を返す。
+            1. アサート: _mapperFunc_ が存在する場合、IsCallable(_mapperFunc_) は *true* であり、_thisArg_ が存在し、かつ _depth_ は 1 である。
+            1. _targetIndex_ を _start_ とする。
+            1. _sourceIndex_ を 0 とする。
+            1. _sourceIndex_ &lt; _sourceLength_ の間、繰り返す。
+              1. _propertyKey_ を ! ToString(𝔽(_sourceIndex_)) とする。
+              1. _exists_ を ? HasProperty(_source_, _propertyKey_) とする。
+              1. _exists_ が *true* の場合、
+                1. _element_ を ? Get(_source_, _propertyKey_) とする。
+                1. _mapperFunc_ が存在する場合、
+                  1. _element_ を ? Call(_mapperFunc_, _thisArg_, « _element_, 𝔽(_sourceIndex_), _source_ ») に設定する。
+                1. _shouldFlatten_ を *false* とする。
+                1. _depth_ > 0 の場合、
+                  1. _shouldFlatten_ を ? IsArray(_element_) に設定する。
+                1. _shouldFlatten_ が *true* の場合、
+                  1. _depth_ = +∞ の場合、_newDepth_ を +∞ とする。
+                  1. そうでない場合、_newDepth_ を _depth_ - 1 とする。
+                  1. _elementLength_ を ? LengthOfArrayLike(_element_) とする。
+                  1. _targetIndex_ を ? FlattenIntoArray(_target_, _element_, _elementLength_, _targetIndex_, _newDepth_) に設定する。
+                1. そうでない場合、
+                  1. _targetIndex_ ≥ 2<sup>53</sup> - 1 の場合、*TypeError* 例外をスローする。
+                  1. ? CreateDataPropertyOrThrow(_target_, ! ToString(𝔽(_targetIndex_)), _element_) を実行する。
+                  1. _targetIndex_ を _targetIndex_ + 1 に設定する。
+              1. _sourceIndex_ を _sourceIndex_ + 1 に設定する。
+            1. _targetIndex_ を返す。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -41754,32 +41785,32 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-array.prototype.tolocalestring" type="built-in function">
         <h1>Array.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization APIを含むECMAScript implementationは、このmethodをECMA-402 specificationで指定される通りにimplementしなければなりません。ECMAScript implementationがECMA-402 APIを含まない場合、このmethodの次のspecificationが使用されます。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で指定されているとおりにこのメソッドを実装しなければならない。それ以外の場合は、このメソッドについて以下の仕様を使用する。</p>
         <emu-note>
-          <p>ECMA-402のfirst editionは、このmethodのreplacement specificationを含みませんでした。</p>
+          <p>ECMA-402 の初版には、このメソッドの代替仕様は含まれていなかった。</p>
         </emu-note>
-        <p>このmethodのoptional parametersのmeaningsはECMA-402 specificationで定義されます；ECMA-402 supportを含まないimplementationsは、それらのparameter positionsを他の何かに使用してはなりません。</p>
-        <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
+        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されている。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはならない。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
-          1. _array_を ? ToObject(*this* value) とする。
-          1. _length_を ? LengthOfArrayLike(_array_) とする。
-          1. _separator_を、host environmentのcurrent localeにappropriateなimplementation-defined list-separator String value（*", "*など）とする。
-          1. _result_をempty Stringとする。
-          1. _k_を0とする。
-          1. _k_ &lt; _length_の間、繰り返す
-            1. _k_ > 0なら、_result_を_result_と_separator_のstring-concatenationに設定する。
-            1. _element_を ? Get(_array_, ! ToString(𝔽(_k_))) とする。
-            1. _element_が*undefined*でも*null*でもないなら、
-              1. _elementString_を ? ToString(? Invoke(_element_, *"toLocaleString"*)) とする。
-              1. _result_を_result_と_elementString_のstring-concatenationに設定する。
-            1. _k_を_k_ + 1に設定する。
-          1. _result_を返す。
+          1. _array_ を ? ToObject(*this* 値) とする。
+          1. _length_ を ? LengthOfArrayLike(_array_) とする。
+          1. _separator_ を、ホスト環境の現在のロケールに適した実装定義のリスト区切り String 値（*", "* など）とする。
+          1. _result_ を空の String とする。
+          1. _k_ を 0 とする。
+          1. _k_ &lt; _length_ の間、繰り返す。
+            1. _k_ > 0 の場合、_result_ を _result_ と _separator_ の文字列連結に設定する。
+            1. _element_ を ? Get(_array_, ! ToString(𝔽(_k_))) とする。
+            1. _element_ が *undefined* でも *null* でもない場合、
+              1. _elementString_ を ? ToString(? Invoke(_element_, *"toLocaleString"*)) とする。
+              1. _result_ を _result_ と _elementString_ の文字列連結に設定する。
+            1. _k_ を _k_ + 1 に設定する。
+          1. _result_ を返す。
         </emu-alg>
         <emu-note>
-          <p>このmethodはarrayのelementsをそれらの`toLocaleString` methodsを使用してStringsへconvertし、その後、implementation-defined locale-sensitive separator StringのoccurrencesでseparatedしてそれらのStringsをconcatenateします。このmethodは`toString`にanalogousですが、host environmentのcurrent localeのconventionsに対応するlocale-sensitive resultをyieldすることを意図している点が異なります。</p>
+          <p>このメソッドは、配列の要素をそれぞれの `toLocaleString` メソッドを使用して String に変換し、その後、実装定義のロケール依存の区切り String を間に挟んで、これらの String を連結する。このメソッドは `toString` に類似しているが、ホスト環境の現在のロケールの慣例に対応するロケール依存の結果を生成することを意図している点が異なる。</p>
         </emu-note>
         <emu-note>
-          <p>このmethodは意図的にgenericです；その*this* valueがArrayであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。</p>
+          <p>このメソッドは意図的に汎用的であり、その *this* 値が Array であることを要求しない。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができる。</p>
         </emu-note>
       </emu-clause>
 
@@ -41880,29 +41911,29 @@ THH:mm:ss.sss
         <p>このmethodは、argumentsをarrayのstartへprependし、array内でのそれらのorderがargument list内でappearするorderとsameになるようにします。</p>
         <p>これは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _obj_を ? ToObject(*this* value) とする。
-          1. _length_を ? LengthOfArrayLike(_obj_) とする。
-          1. _argCount_を_items_内のelementsの数とする。
-          1. _argCount_ > 0なら、
-            1. _length_ + _argCount_ > 2<sup>53</sup> - 1なら、*TypeError*例外をthrowする。
-            1. _k_を_length_とする。
-            1. _k_ > 0の間、繰り返す
-              1. _from_を ! ToString(𝔽(_k_ - 1)) とする。
-              1. _to_を ! ToString(𝔽(_k_ + _argCount_ - 1)) とする。
-              1. _fromPresent_を ? HasProperty(_obj_, _from_) とする。
-              1. _fromPresent_が*true*なら、
-                1. _fromValue_を ? Get(_obj_, _from_) とする。
-                1. ? Set(_obj_, _to_, _fromValue_, *true*)を実行する。
-              1. そうでなければ、
-                1. Assert: _fromPresent_は*false*である。
-                1. ? DeletePropertyOrThrow(_obj_, _to_)を実行する。
-              1. _k_を_k_ - 1に設定する。
-            1. _j_を*+0*<sub>𝔽</sub>とする。
-            1. _items_の各要素_item_について、以下を行う
-              1. ? Set(_obj_, ! ToString(_j_), _item_, *true*)を実行する。
-              1. _j_を_j_ + *1*<sub>𝔽</sub>に設定する。
-          1. ? Set(_obj_, *"length"*, 𝔽(_length_ + _argCount_), *true*)を実行する。
-          1. 𝔽(_length_ + _argCount_)を返す。
+          1. _obj_ を ? ToObject(*this* 値) とする。
+          1. _length_ を ? LengthOfArrayLike(_obj_) とする。
+          1. _argCount_ を _items_ の要素数とする。
+          1. _argCount_ > 0 の場合、
+            1. _length_ + _argCount_ > 2<sup>53</sup> - 1 の場合、*TypeError* 例外をスローする。
+            1. _k_ を _length_ とする。
+            1. _k_ > 0 の間、繰り返す。
+              1. _from_ を ! ToString(𝔽(_k_ - 1)) とする。
+              1. _to_ を ! ToString(𝔽(_k_ + _argCount_ - 1)) とする。
+              1. _fromPresent_ を ? HasProperty(_obj_, _from_) とする。
+              1. _fromPresent_ が *true* の場合、
+                1. _fromValue_ を ? Get(_obj_, _from_) とする。
+                1. ? Set(_obj_, _to_, _fromValue_, *true*) を実行する。
+              1. そうでない場合、
+                1. アサート: _fromPresent_ は *false* である。
+                1. ? DeletePropertyOrThrow(_obj_, _to_) を実行する。
+              1. _k_ を _k_ - 1 に設定する。
+            1. _j_ を 0 とする。
+            1. _items_ の各要素 _item_ について、次を行う。
+              1. ? Set(_obj_, ! ToString(𝔽(_j_)), _item_, *true*) を実行する。
+              1. _j_ を _j_ + 1 に設定する。
+          1. ? Set(_obj_, *"length"*, 𝔽(_length_ + _argCount_), *true*) を実行する。
+          1. 𝔽(_length_ + _argCount_) を返す。
         </emu-alg>
         <p>このmethodの*"length"* propertyは*1*<sub>𝔽</sub>です。</p>
         <emu-note>
@@ -42395,46 +42426,44 @@ THH:mm:ss.sss
         <h1>%TypedArray%.from ( _source_ [ , _mapper_ [ , _thisArg_ ] ] )</h1>
         <p>このmethodは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _ctor_を*this* valueとする。
-          1. IsConstructor(_ctor_)が*false*なら、*TypeError*例外をthrowする。
-          1. _mapper_が*undefined*なら、
-            1. _mapping_を*false*とする。
-          1. そうでなければ、
-            1. IsCallable(_mapper_)が*false*なら、*TypeError*例外をthrowする。
-            1. _mapping_を*true*とする。
-          1. _usingIterator_を ? GetMethod(_source_, %Symbol.iterator%) とする。
-          1. _usingIterator_が*undefined*でないなら、
-            1. _values_を ? IteratorToList(? GetIteratorFromMethod(_source_, _usingIterator_)) とする。
-            1. _length_を_values_内のelementsの数とする。
-            1. _targetObj_を ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) ») とする。
-            1. _k_を0とする。
-            1. _k_ &lt; _length_の間、繰り返す
-              1. _propertyKey_を ! ToString(𝔽(_k_)) とする。
-              1. _kValue_を_values_のfirst elementとする。
-              1. _values_からfirst elementをremoveする。
-              1. _mapping_が*true*なら、
-                1. _mappedValue_を ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) ») とする。
-              1. そうでなければ、
-                1. _mappedValue_を_kValue_とする。
-              1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*)を実行する。
-              1. _k_を_k_ + 1に設定する。
-            1. Assert: _values_は現在empty Listである。
-            1. _targetObj_を返す。
-          1. NOTE: _source_はiterable objectではないため、すでにarray-like objectであるとassumeする。
-          1. _arrayLike_を ! ToObject(_source_) とする。
-          1. _length_を ? LengthOfArrayLike(_arrayLike_) とする。
-          1. _targetObj_を ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) ») とする。
-          1. _k_を0とする。
-          1. _k_ &lt; _length_の間、繰り返す
-            1. _propertyKey_を ! ToString(𝔽(_k_)) とする。
-            1. _kValue_を ? Get(_arrayLike_, _propertyKey_) とする。
-            1. _mapping_が*true*なら、
-              1. _mappedValue_を ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) ») とする。
-            1. そうでなければ、
-              1. _mappedValue_を_kValue_とする。
-            1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*)を実行する。
-            1. _k_を_k_ + 1に設定する。
-          1. _targetObj_を返す。
+          1. _ctor_ を *this* 値とする。
+          1. IsConstructor(_ctor_) が *false* の場合、*TypeError* 例外をスローする。
+          1. _mapper_ が *undefined* の場合、
+            1. _mapping_ を *false* とする。
+          1. そうでない場合、
+            1. IsCallable(_mapper_) が *false* の場合、*TypeError* 例外をスローする。
+            1. _mapping_ を *true* とする。
+          1. _usingIterator_ を ? GetMethod(_source_, %Symbol.iterator%) とする。
+          1. _usingIterator_ が *undefined* でない場合、
+            1. _values_ を ? IteratorToList(? GetIteratorFromMethod(_source_, _usingIterator_)) とする。
+            1. _length_ を _values_ の要素数とする。
+            1. _targetObj_ を ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) ») とする。
+            1. _k_ を 0 とする。
+            1. _k_ &lt; _length_ の間、繰り返す。
+              1. _propertyKey_ を ! ToString(𝔽(_k_)) とする。
+              1. _kValue_ を _values_[_k_] とする。
+              1. _mapping_ が *true* の場合、
+                1. _mappedValue_ を ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) ») とする。
+              1. そうでない場合、
+                1. _mappedValue_ を _kValue_ とする。
+              1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*) を実行する。
+              1. _k_ を _k_ + 1 に設定する。
+            1. _targetObj_ を返す。
+          1. 注記: _source_ は反復可能オブジェクトではないため、すでに配列風オブジェクトであると仮定する。
+          1. _arrayLike_ を ! ToObject(_source_) とする。
+          1. _length_ を ? LengthOfArrayLike(_arrayLike_) とする。
+          1. _targetObj_ を ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) ») とする。
+          1. _k_ を 0 とする。
+          1. _k_ &lt; _length_ の間、繰り返す。
+            1. _propertyKey_ を ! ToString(𝔽(_k_)) とする。
+            1. _kValue_ を ? Get(_arrayLike_, _propertyKey_) とする。
+            1. _mapping_ が *true* の場合、
+              1. _mappedValue_ を ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) ») とする。
+            1. そうでない場合、
+              1. _mappedValue_ を _kValue_ とする。
+            1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*) を実行する。
+            1. _k_ を _k_ + 1 に設定する。
+          1. _targetObj_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43185,7 +43214,7 @@ THH:mm:ss.sss
         <p>これはdistinct methodであり、<emu-xref href="#sec-array.prototype.tolocalestring"></emu-xref>で定義される`Array.prototype.toLocaleString`とsame algorithmをimplementします。ただし、*"length"*の[[Get]]をperformする代わりにTypedArrayLengthがcalledされます。このalgorithmのimplementationは、underlying bufferがresizableでない場合に*this* valueがfixed lengthを持ち、そのinteger-indexed propertiesがsparseでないというknowledgeを用いてoptimizedされてもよいです。しかし、そのようなoptimizationは、algorithmのspecified behaviourにobservable changesを導入してはなりません。</p>
         <p>このmethodはgenericではありません。ValidateTypedArrayは、algorithmをevaluatingする前に、*this* valueおよび~seq-cst~をargumentsとして呼び出されます。そのresultがabrupt completionである場合、algorithmをevaluatingする代わりにそのexceptionがthrowされます。</p>
         <emu-note>
-          <p>ECMAScript implementationがECMA-402 Internationalization APIを含む場合、このmethodはECMA-402 specification内の`Array.prototype.toLocaleString`のalgorithmに基づきます。</p>
+          <p>ECMAScript 実装に ECMA-402 国際化 API が含まれている場合、このメソッドは ECMA-402 にある `Array.prototype.toLocaleString` のアルゴリズムに基づく。</p>
         </emu-note>
       </emu-clause>
 
@@ -43609,17 +43638,15 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _length_を_values_内のelementsの数とする。
-            1. ? AllocateTypedArrayBuffer(_obj_, _length_)を実行する。
-            1. _k_を0とする。
-            1. _k_ &lt; _length_の間、繰り返す
-              1. _propertyKey_を ! ToString(𝔽(_k_)) とする。
-              1. _kValue_を_values_のfirst elementとする。
-              1. _values_からfirst elementをremoveする。
-              1. ? Set(_obj_, _propertyKey_, _kValue_, *true*)を実行する。
-              1. _k_を_k_ + 1に設定する。
-            1. Assert: _values_は現在empty Listである。
-            1. ~unused~を返す。
+            1. _length_ を _values_ の要素数とする。
+            1. ? AllocateTypedArrayBuffer(_obj_, _length_) を実行する。
+            1. _k_ を 0 とする。
+            1. _k_ &lt; _length_ の間、繰り返す。
+              1. _propertyKey_ を ! ToString(𝔽(_k_)) とする。
+              1. _kValue_ を _values_[_k_] とする。
+              1. ? Set(_obj_, _propertyKey_, _kValue_, *true*) を実行する。
+              1. _k_ を _k_ + 1 に設定する。
+            1. ~unused~ を返す。
           </emu-alg>
         </emu-clause>
 
@@ -47848,7 +47875,7 @@ THH:mm:ss.sss
       <li>[[Construct]] internal methodを持たない；`new` operatorでconstructorとして使用できない。</li>
       <li>[[Call]] internal methodを持たない；functionとしてinvokeできない。</li>
     </ul>
-    <p>JSON Data Interchange FormatはECMA-404でdefinedされている。このspecificationで使用されるJSON interchange formatは、ECMA-404によってdescribedされるものとexactly sameである。`JSON.parse`および`JSON.stringify`のconforming implementationsは、ECMA-404 specificationでdescribedされるexact interchange formatを、そのformatに対するdeletionsやextensionsなしにsupportしなければならない。</p>
+    <p>JSON データ交換形式は ECMA-404 で定義されている。この仕様で使用される JSON 交換形式は、ECMA-404 で記述されているものとまったく同一である。`JSON.parse` および `JSON.stringify` の適合実装は、形式に対するいかなる削除や拡張も行わず、ECMA-404 で記述されている正確な交換形式をサポートしなければならない。</p>
 
     <emu-clause id="sec-json.israwjson" type="built-in function">
       <h1>JSON.isRawJSON ( _obj_ )</h1>
@@ -51285,15 +51312,15 @@ THH:mm:ss.sss
         <h1>Promise.try ( _callback_, ..._args_ )</h1>
         <p>このfunctionは、呼び出されたときに以下のstepsを実行する：</p>
         <emu-alg>
-          1. _ctor_を*this* valueとする。
-          1. _ctor_がObjectでないなら、*TypeError*例外をthrowする。
-          1. _promiseCapability_を ? NewPromiseCapability(_ctor_) とする。
-          1. _status_をCompletion(Call(_callback_, *undefined*, _args_))とする。
-          1. _status_がabrupt completionなら、
-            1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _status_.[[Value]] »)を実行する。
-          1. そうでなければ、
-            1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _status_.[[Value]] »)を実行する。
-          1. _promiseCapability_.[[Promise]]を返す。
+          1. _ctor_ を *this* 値とする。
+          1. _ctor_ が Object でない場合、*TypeError* 例外をスローする。
+          1. _status_ を Completion(Call(_callback_, *undefined*, _args_)) とする。
+          1. _status_ が中途完了である場合、
+            1. _promiseCapability_ を ? NewPromiseCapability(_ctor_) とする。
+            1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _status_.[[Value]] ») を実行する。
+            1. _promiseCapability_.[[Promise]] を返す。
+          1. そうでない場合、
+            1. ? PromiseResolve(_ctor_, ! _status_) を返す。
         </emu-alg>
         <emu-note>
           <p>このfunctionは、その*this* valueがPromise constructorのparameter conventionsをsupportするconstructor functionであることをexpectedする。</p>
