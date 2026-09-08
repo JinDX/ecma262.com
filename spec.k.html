@@ -42408,29 +42408,28 @@ THH:mm:ss.sss
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
           1. _ctor_를 *this* 값으로 둡니다.
-          1. IsConstructor(_ctor_)가 *false*이면, *TypeError* 예외를 던집니다.
-          1. _mapper_가 *undefined*인 경우,
+          1. IsConstructor(_ctor_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _mapper_가 *undefined*이면,
             1. _mapping_을 *false*로 둡니다.
           1. 그렇지 않으면,
-            1. IsCallable(_mapper_)가 *false*이면, *TypeError* 예외를 던집니다.
+            1. IsCallable(_mapper_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
             1. _mapping_을 *true*로 둡니다.
           1. _usingIterator_를 ? GetMethod(_source_, %Symbol.iterator%)로 둡니다.
-          1. _usingIterator_가 *undefined*가 아닌 경우,
+          1. _usingIterator_가 *undefined*가 아니면,
             1. _values_를 ? IteratorToList(? GetIteratorFromMethod(_source_, _usingIterator_))로 둡니다.
             1. _length_를 _values_의 요소 수로 둡니다.
             1. _targetObj_를 ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) »)로 둡니다.
             1. _k_를 0으로 둡니다.
             1. _k_ &lt; _length_인 동안 반복합니다.
-              1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
               1. _kValue_를 _values_[_k_]로 둡니다.
-              1. _mapping_이 *true*인 경우,
+              1. _mapping_이 *true*이면,
                 1. _mappedValue_를 ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) »)로 둡니다.
               1. 그렇지 않으면,
                 1. _mappedValue_를 _kValue_로 둡니다.
-              1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*)를 수행합니다.
+              1. ? TypedArraySetElement(_targetObj_, 𝔽(_k_), _mappedValue_)를 수행합니다.
               1. _k_를 _k_ + 1로 설정합니다.
             1. _targetObj_를 반환합니다.
-          1. 참고: _source_는 반복 가능한 객체가 아니므로, 이미 배열 유사 객체라고 가정합니다.
+          1. 참고: _source_는 반복 가능한 객체가 아니므로 이미 배열 유사 객체라고 가정합니다.
           1. _arrayLike_를 ! ToObject(_source_)로 둡니다.
           1. _length_를 ? LengthOfArrayLike(_arrayLike_)로 둡니다.
           1. _targetObj_를 ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) »)로 둡니다.
@@ -42438,11 +42437,11 @@ THH:mm:ss.sss
           1. _k_ &lt; _length_인 동안 반복합니다.
             1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
             1. _kValue_를 ? Get(_arrayLike_, _propertyKey_)로 둡니다.
-            1. _mapping_이 *true*인 경우,
+            1. _mapping_이 *true*이면,
               1. _mappedValue_를 ? Call(_mapper_, _thisArg_, « _kValue_, 𝔽(_k_) »)로 둡니다.
             1. 그렇지 않으면,
               1. _mappedValue_를 _kValue_로 둡니다.
-            1. ? Set(_targetObj_, _propertyKey_, _mappedValue_, *true*)를 수행합니다.
+            1. ? TypedArraySetElement(_targetObj_, 𝔽(_k_), _mappedValue_)를 수행합니다.
             1. _k_를 _k_ + 1로 설정합니다.
           1. _targetObj_를 반환합니다.
         </emu-alg>
@@ -42452,17 +42451,16 @@ THH:mm:ss.sss
         <h1>%TypedArray%.of ( ..._items_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _length_를 _items_ 안의 elements 수로 둔다.
-          1. _ctor_를 *this* value로 둔다.
-          1. IsConstructor(_ctor_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _newObj_를 ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) »)로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _kValue_를 _items_[_k_]로 둔다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. ? Set(_newObj_, _propertyKey_, _kValue_, *true*)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _newObj_를 반환한다.
+          1. _length_를 _items_의 요소 수로 둡니다.
+          1. _ctor_를 *this* 값으로 둡니다.
+          1. IsConstructor(_ctor_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _newObj_를 ? TypedArrayCreateFromConstructor(_ctor_, « 𝔽(_length_) »)로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 _items_[_k_]로 둡니다.
+            1. ? TypedArraySetElement(_newObj_, 𝔽(_k_), _kValue_)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _newObj_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -42498,12 +42496,12 @@ THH:mm:ss.sss
       <emu-clause id="sec-%typedarray%.prototype.at" type="built-in function">
         <h1>%TypedArray%.prototype.at ( _index_ )</h1>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _k_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
-          1. _k_ &lt; 0 또는 _k_ ≥ _length_이면, *undefined*를 반환한다.
-          1. ! Get(_obj_, ! ToString(𝔽(_k_)))를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _k_를 ? ToAbsoluteIndex(_index_, _length_)로 둡니다.
+          1. _k_ &lt; 0이거나 _k_ ≥ _length_이면 *undefined*를 반환합니다.
+          1. TypedArrayGetElement(_obj_, 𝔽(_k_))를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -42608,18 +42606,17 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.every"></emu-xref>에 defined된 `Array.prototype.every`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _testResult_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둔다.
-            1. _testResult_가 *false*이면, *false*를 반환한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. *true*를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _testResult_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둡니다.
+            1. _testResult_가 *false*이면 *false*를 반환합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. *true*를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42629,22 +42626,21 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.fill"></emu-xref>에 defined된 `Array.prototype.fill`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _obj_.[[ContentType]]이 ~bigint~이면 _value_를 ? ToBigInt(_value_)로 설정한다.
-          1. 그렇지 않으면 _value_를 ? ToNumber(_value_)로 설정한다.
-          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _endIndex_를 _length_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 둔다.
-          1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정한다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
-          1. _endIndex_를 min(_endIndex_, _length_)로 설정한다.
-          1. _k_를 _startIndex_로 둔다.
-          1. _k_ &lt; _endIndex_인 동안 반복한다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. ! Set(_obj_, _propertyKey_, _value_, *true*)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _obj_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _obj_.[[ContentType]]이 ~bigint~이면 _value_를 ? ToBigInt(_value_)로 설정합니다.
+          1. 그렇지 않으면 _value_를 ? ToNumber(_value_)로 설정합니다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _length_)로 둡니다.
+          1. _end_가 *undefined*이면 _endIndex_를 _length_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _length_)로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정합니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 설정합니다.
+          1. _endIndex_를 min(_endIndex_, _length_)로 설정합니다.
+          1. _k_를 _startIndex_로 둡니다.
+          1. _k_ &lt; _endIndex_인 동안 반복합니다.
+            1. ! TypedArraySetElement(_obj_, 𝔽(_k_), _value_)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _obj_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -42653,27 +42649,26 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.filter"></emu-xref>에 defined된 `Array.prototype.filter`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _kept_를 새 empty List로 둔다.
-          1. _captured_를 0으로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _selected_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둔다.
-            1. _selected_가 *true*이면, 다음을 수행한다.
-              1. _kValue_를 _kept_에 append한다.
-              1. _captured_를 _captured_ + 1로 설정한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _result_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_captured_) »)로 둔다.
-          1. _n_을 0으로 둔다.
-          1. _kept_의 각 element _element_에 대해, 다음을 수행한다.
-            1. ! Set(_result_, ! ToString(𝔽(_n_)), _element_, *true*)를 수행한다.
-            1. _n_을 _n_ + 1로 설정한다.
-          1. _result_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _kept_를 새로운 빈 List로 둡니다.
+          1. _captured_를 0으로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _selected_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둡니다.
+            1. _selected_가 *true*이면,
+              1. _kValue_를 _kept_에 추가합니다.
+              1. _captured_를 _captured_ + 1로 설정합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _result_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_captured_) »)로 둡니다.
+          1. _n_을 0으로 둡니다.
+          1. _kept_의 각 요소 _element_에 대해 다음을 수행합니다.
+            1. ! TypedArraySetElement(_result_, 𝔽(_n_), _element_)를 수행합니다.
+            1. _n_을 _n_ + 1로 설정합니다.
+          1. _result_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42739,17 +42734,16 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.foreach"></emu-xref>에 defined된 `Array.prototype.forEach`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. ? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. *undefined*를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. ? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. *undefined*를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42759,16 +42753,16 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.includes"></emu-xref>에 defined된 `Array.prototype.includes`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 설정한다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 설정한다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 설정한다.
-          1. _length_ = 0이면, *false*를 반환한다.
-          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 설정한다.
-          1. _k_ &lt; _length_인 동안 반복한다.
-            1. _elementK_를 ! Get(_obj_, ! ToString(𝔽(_k_)))으로 설정한다.
-            1. SameValueZero(_searchElement_, _elementK_)가 *true*이면, *true*를 반환한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. *false*를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _length_ = 0이면 *false*를 반환합니다.
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _elementK_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. SameValueZero(_searchElement_, _elementK_)가 *true*이면 *true*를 반환합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. *false*를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42778,19 +42772,19 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.indexof"></emu-xref>에 defined된 `Array.prototype.indexOf`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 둔다.
-          1. _k_ &lt; _length_인 동안, 반복한다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둔다.
-            1. _kPresent_가 *true*이면, 다음을 수행한다.
-              1. _elementK_를 ! Get(_obj_, _propertyKey_)로 둔다.
-              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면, 𝔽(_k_)를 반환한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. *-1*<sub>𝔽</sub>를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _length_ = 0이면 *-1*<sub>𝔽</sub>를 반환합니다.
+          1. _k_를 ? ToClampedIndex(_fromIndex_, _length_)로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
+            1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둡니다.
+            1. _kPresent_가 *true*이면,
+              1. _elementK_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면 𝔽(_k_)를 반환합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. *-1*<sub>𝔽</sub>를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42800,21 +42794,21 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.join"></emu-xref>에 defined된 `Array.prototype.join`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _separator_가 *undefined*이면, _sep_를 *","*로 둔다.
-          1. Else, _sep_를 ? ToString(_separator_)로 둔다.
-          1. _result_를 empty String으로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _k_ > 0이면, _result_를 _result_와 _sep_의 string-concatenation으로 설정한다.
-            1. _element_를 ! Get(_obj_, ! ToString(𝔽(_k_)))로 둔다.
-            1. _element_가 *undefined*가 아니면, 다음을 수행한다.
-              1. _elementString_을 ! ToString(_element_)로 둔다.
-              1. _result_를 _result_와 _elementString_의 string-concatenation으로 설정한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _result_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _separator_가 *undefined*이면 _sep_를 *","*로 둡니다.
+          1. 그렇지 않으면 _sep_를 ? ToString(_separator_)로 둡니다.
+          1. _result_를 빈 String으로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _k_ > 0이면 _result_를 _result_와 _sep_를 문자열 연결한 결과로 설정합니다.
+            1. _element_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _element_가 *undefined*가 아니면,
+              1. _elementString_을 ! ToString(_element_)로 둡니다.
+              1. _result_를 _result_와 _elementString_을 문자열 연결한 결과로 설정합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _result_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42834,19 +42828,19 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.lastindexof"></emu-xref>에 defined된 `Array.prototype.lastIndexOf`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _length_ = 0이면, *-1*<sub>𝔽</sub>를 반환한다.
-          1. _fromIndex_가 없으면 _k_를 _length_ - 1로 두고, 그렇지 않으면 _k_를 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)로 둔다.
-          1. _k_ ≥ 0인 동안, 반복한다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둔다.
-            1. _kPresent_가 *true*이면, 다음을 수행한다.
-              1. _elementK_를 ! Get(_obj_, _propertyKey_)로 둔다.
-              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면, 𝔽(_k_)를 반환한다.
-            1. _k_를 _k_ - 1로 설정한다.
-          1. *-1*<sub>𝔽</sub>를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _length_ = 0이면 *-1*<sub>𝔽</sub>를 반환합니다.
+          1. _fromIndex_가 제공되지 않았으면 _k_를 _length_ - 1로 두고, 그렇지 않으면 _k_를 min(? ToAbsoluteIndex(_fromIndex_, _length_), _length_ - 1)로 둡니다.
+          1. _k_ ≥ 0인 동안 반복합니다.
+            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
+            1. _kPresent_를 ! HasProperty(_obj_, _propertyKey_)로 둡니다.
+            1. _kPresent_가 *true*이면,
+              1. _elementK_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+              1. IsStrictlyEqual(_searchElement_, _elementK_)가 *true*이면 𝔽(_k_)를 반환합니다.
+            1. _k_를 _k_ - 1로 설정합니다.
+          1. *-1*<sub>𝔽</sub>를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42871,19 +42865,18 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.map"></emu-xref>에 defined된 `Array.prototype.map`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _result_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_length_) »)로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _mappedValue_를 ? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »)로 둔다.
-            1. ? Set(_result_, _propertyKey_, _mappedValue_, *true*)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _result_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _result_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_length_) »)로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _mappedValue_를 ? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »)로 둡니다.
+            1. ? TypedArraySetElement(_result_, 𝔽(_k_), _mappedValue_)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _result_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42893,25 +42886,23 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.reduce"></emu-xref>에 defined된 `Array.prototype.reduce`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _length_ = 0이고 _initialValue_가 present하지 않으면, *TypeError* exception을 throw한다.
-          1. _k_를 0으로 둔다.
-          1. _accumulator_를 *undefined*로 둔다.
-          1. _initialValue_가 present이면, 다음을 수행한다.
-            1. _accumulator_를 _initialValue_로 설정한다.
-          1. Else,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _accumulator_를 ! Get(_obj_, _propertyKey_)로 설정한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _accumulator_를 ? Call(_callback_, *undefined*, « _accumulator_, _kValue_, 𝔽(_k_), _obj_ »)로 설정한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _accumulator_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _length_ = 0이고 _initialValue_가 제공되지 않았으면 *TypeError* 예외를 발생시킵니다.
+          1. _k_를 0으로 둡니다.
+          1. _accumulator_를 *undefined*로 둡니다.
+          1. _initialValue_가 제공되었으면,
+            1. _accumulator_를 _initialValue_로 설정합니다.
+          1. 그렇지 않으면,
+            1. _accumulator_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 설정합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _accumulator_를 ? Call(_callback_, *undefined*, « _accumulator_, _kValue_, 𝔽(_k_), _obj_ »)로 설정합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _accumulator_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42921,25 +42912,23 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.reduceright"></emu-xref>에 defined된 `Array.prototype.reduceRight`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _length_ = 0이고 _initialValue_가 present하지 않으면, *TypeError* exception을 throw한다.
-          1. _k_를 _length_ - 1로 둔다.
-          1. _accumulator_를 *undefined*로 둔다.
-          1. _initialValue_가 present이면, 다음을 수행한다.
-            1. _accumulator_를 _initialValue_로 설정한다.
-          1. Else,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _accumulator_를 ! Get(_obj_, _propertyKey_)로 설정한다.
-            1. _k_를 _k_ - 1로 설정한다.
-          1. Repeat, while _k_ ≥ 0,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _accumulator_를 ? Call(_callback_, *undefined*, « _accumulator_, _kValue_, 𝔽(_k_), _obj_ »)로 설정한다.
-            1. _k_를 _k_ - 1로 설정한다.
-          1. _accumulator_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _length_ = 0이고 _initialValue_가 제공되지 않았으면 *TypeError* 예외를 발생시킵니다.
+          1. _k_를 _length_ - 1로 둡니다.
+          1. _accumulator_를 *undefined*로 둡니다.
+          1. _initialValue_가 제공되었으면,
+            1. _accumulator_를 _initialValue_로 설정합니다.
+          1. 그렇지 않으면,
+            1. _accumulator_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 설정합니다.
+            1. _k_를 _k_ - 1로 설정합니다.
+          1. _k_ ≥ 0인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _accumulator_를 ? Call(_callback_, *undefined*, « _accumulator_, _kValue_, 𝔽(_k_), _obj_ »)로 설정합니다.
+            1. _k_를 _k_ - 1로 설정합니다.
+          1. _accumulator_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -42949,21 +42938,19 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.reverse"></emu-xref>에 defined된 `Array.prototype.reverse`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _middle_을 floor(_length_ / 2)로 둔다.
-          1. _lower_를 0으로 둔다.
-          1. Repeat, while _lower_ ≠ _middle_,
-            1. _upper_를 _length_ - _lower_ - 1로 둔다.
-            1. _upperP_를 ! ToString(𝔽(_upper_))로 둔다.
-            1. _lowerP_를 ! ToString(𝔽(_lower_))로 둔다.
-            1. _lowerValue_를 ! Get(_obj_, _lowerP_)로 둔다.
-            1. _upperValue_를 ! Get(_obj_, _upperP_)로 둔다.
-            1. ! Set(_obj_, _lowerP_, _upperValue_, *true*)를 수행한다.
-            1. ! Set(_obj_, _upperP_, _lowerValue_, *true*)를 수행한다.
-            1. _lower_를 _lower_ + 1로 설정한다.
-          1. _obj_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _middle_을 floor(_length_ / 2)로 둡니다.
+          1. _lower_를 0으로 둡니다.
+          1. _lower_ ≠ _middle_인 동안 반복합니다.
+            1. _upper_를 _length_ - _lower_ - 1로 둡니다.
+            1. _lowerValue_를 TypedArrayGetElement(_obj_, 𝔽(_lower_))로 둡니다.
+            1. _upperValue_를 TypedArrayGetElement(_obj_, 𝔽(_upper_))로 둡니다.
+            1. ! TypedArraySetElement(_obj_, 𝔽(_lower_), _upperValue_)를 수행합니다.
+            1. ! TypedArraySetElement(_obj_, 𝔽(_upper_), _lowerValue_)를 수행합니다.
+            1. _lower_를 _lower_ + 1로 설정합니다.
+          1. _obj_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -43076,43 +43063,42 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.slice"></emu-xref>에 defined된 `Array.prototype.slice`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _sourceArrayLength_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _startIndex_를 ? ToClampedIndex(_start_, _sourceArrayLength_)로 둔다.
-          1. _end_가 *undefined*이면 _endIndex_를 _sourceArrayLength_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _sourceArrayLength_)로 둔다.
-          1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)로 둔다.
-          1. _resultArray_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)로 둔다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _sourceArrayLength_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _startIndex_를 ? ToClampedIndex(_start_, _sourceArrayLength_)로 둡니다.
+          1. _end_가 *undefined*이면 _endIndex_를 _sourceArrayLength_로 두고, 그렇지 않으면 _endIndex_를 ? ToClampedIndex(_end_, _sourceArrayLength_)로 둡니다.
+          1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 둡니다.
+          1. _resultArray_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_countBytes_) »)로 둡니다.
           1. _countBytes_ > 0이면,
-            1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정한다.
-            1. _endIndex_를 min(_endIndex_, TypedArrayLength(_taRecord_))로 설정한다.
-            1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)로 설정한다.
-            1. _sourceType_을 TypedArrayElementType(_obj_)으로 둔다.
-            1. _targetType_을 TypedArrayElementType(_resultArray_)으로 둔다.
+            1. _taRecord_를 ? ValidateTypedArrayBounds(_obj_, ~seq-cst~)로 설정합니다.
+            1. _endIndex_를 min(_endIndex_, TypedArrayLength(_taRecord_))로 설정합니다.
+            1. _countBytes_를 max(_endIndex_ - _startIndex_, 0)으로 설정합니다.
+            1. _sourceType_을 TypedArrayElementType(_obj_)으로 둡니다.
+            1. _targetType_을 TypedArrayElementType(_resultArray_)으로 둡니다.
             1. _sourceType_이 _targetType_이면,
-              1. 참고: 전송은 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 한다.
-              1. _sourceBuffer_를 _obj_.[[ViewedArrayBuffer]]로 둔다.
-              1. _targetBuffer_를 _resultArray_.[[ViewedArrayBuffer]]로 둔다.
-              1. _elementSize_를 TypedArrayElementSize(_obj_)로 둔다.
-              1. _sourceByteOffset_을 _obj_.[[ByteOffset]]으로 둔다.
-              1. _sourceByteIndex_를 (_startIndex_ × _elementSize_) + _sourceByteOffset_으로 둔다.
-              1. _targetByteIndex_를 _resultArray_.[[ByteOffset]]으로 둔다.
-              1. _endByteIndex_를 _targetByteIndex_ + (_countBytes_ × _elementSize_)로 둔다.
-              1. _targetByteIndex_ &lt; _endByteIndex_인 동안 반복한다.
-                1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)로 둔다.
-                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행한다.
-                1. _sourceByteIndex_를 _sourceByteIndex_ + 1로 설정한다.
-                1. _targetByteIndex_를 _targetByteIndex_ + 1로 설정한다.
+              1. 참고: 전송은 소스 데이터의 비트 수준 인코딩을 보존하는 방식으로 수행되어야 합니다.
+              1. _sourceBuffer_를 _obj_.[[ViewedArrayBuffer]]로 둡니다.
+              1. _targetBuffer_를 _resultArray_.[[ViewedArrayBuffer]]로 둡니다.
+              1. _elementSize_를 TypedArrayElementSize(_obj_)로 둡니다.
+              1. _sourceByteOffset_을 _obj_.[[ByteOffset]]으로 둡니다.
+              1. _sourceByteIndex_를 (_startIndex_ × _elementSize_) + _sourceByteOffset_으로 둡니다.
+              1. _targetByteIndex_를 _resultArray_.[[ByteOffset]]으로 둡니다.
+              1. _endByteIndex_를 _targetByteIndex_ + (_countBytes_ × _elementSize_)로 둡니다.
+              1. _targetByteIndex_ &lt; _endByteIndex_인 동안 반복합니다.
+                1. _value_를 GetValueFromBuffer(_sourceBuffer_, _sourceByteIndex_, ~uint8~, *true*, ~unordered~)로 둡니다.
+                1. SetValueInBuffer(_targetBuffer_, _targetByteIndex_, ~uint8~, _value_, *true*, ~unordered~)를 수행합니다.
+                1. _sourceByteIndex_를 _sourceByteIndex_ + 1로 설정합니다.
+                1. _targetByteIndex_를 _targetByteIndex_ + 1로 설정합니다.
             1. 그렇지 않으면,
-              1. _n_을 0으로 둔다.
-              1. _k_를 _startIndex_로 둔다.
-              1. _k_ &lt; _endIndex_인 동안 반복한다.
-                1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-                1. _kValue_를 ! Get(_obj_, _propertyKey_)으로 둔다.
-                1. ! Set(_resultArray_, ! ToString(𝔽(_n_)), _kValue_, *true*)를 수행한다.
-                1. _k_를 _k_ + 1로 설정한다.
-                1. _n_을 _n_ + 1로 설정한다.
-          1. _resultArray_를 반환한다.
+              1. _n_을 0으로 둡니다.
+              1. _k_를 _startIndex_로 둡니다.
+              1. _k_ &lt; _endIndex_인 동안 반복합니다.
+                1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+                1. ! TypedArraySetElement(_resultArray_, 𝔽(_n_), _kValue_)를 수행합니다.
+                1. _k_를 _k_ + 1로 설정합니다.
+                1. _n_을 _n_ + 1로 설정합니다.
+          1. _resultArray_를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -43122,18 +43108,17 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.some"></emu-xref>에 defined된 `Array.prototype.some`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. IsCallable(_callback_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _kValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. _testResult_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둔다.
-            1. _testResult_가 *true*이면, *true*를 반환한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. *false*를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. IsCallable(_callback_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _testResult_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둡니다.
+            1. _testResult_가 *true*이면 *true*를 반환합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. *false*를 반환합니다.
         </emu-alg>
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
       </emu-clause>
@@ -43144,19 +43129,19 @@ THH:mm:ss.sss
         <p>이 method는 generic하지 않습니다. *this* value는 [[TypedArrayName]] internal slot을 가진 object여야 합니다.</p>
         <p>called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _comparator_가 *undefined*가 아니고 IsCallable(_comparator_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. NOTE: following closure는 <emu-xref href="#sec-array.prototype.sort"></emu-xref>에서 사용되는 string comparison이 아니라 numeric comparison을 수행한다.
-          1. _comparator_를 capture하고 called될 때 다음 steps를 수행하는, parameters (_x_, _y_)를 가진 새 Abstract Closure _sortCompare_를 둔다:
-            1. ? CompareTypedArrayElements(_x_, _y_, _comparator_)를 반환한다.
-          1. _sortedList_를 ? SortIndexedProperties(_obj_, _length_, _sortCompare_, ~read-through-holes~)로 둔다.
-          1. _j_를 0으로 둔다.
-          1. Repeat, while _j_ &lt; _length_,
-            1. ! Set(_obj_, ! ToString(𝔽(_j_)), _sortedList_[_j_], *true*)를 수행한다.
-            1. _j_를 _j_ + 1로 설정한다.
-          1. _obj_를 반환한다.
+          1. _comparator_가 *undefined*가 아니고 IsCallable(_comparator_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. 참고: 다음 클로저는 <emu-xref href="#sec-array.prototype.sort"></emu-xref>에서 사용하는 문자열 비교가 아니라 숫자 비교를 수행합니다.
+          1. _sortCompare_를 _comparator_를 캡처하고 호출될 때 다음 단계를 수행하는 매개변수 (_x_, _y_)를 가진 새로운 추상 클로저로 둡니다.
+            1. ? CompareTypedArrayElements(_x_, _y_, _comparator_)를 반환합니다.
+          1. _sortedList_를 ? SortIndexedProperties(_obj_, _length_, _sortCompare_, ~read-through-holes~)로 둡니다.
+          1. _j_를 0으로 둡니다.
+          1. _j_ &lt; _length_인 동안 반복합니다.
+            1. ! TypedArraySetElement(_obj_, 𝔽(_j_), _sortedList_[_j_])를 수행합니다.
+            1. _j_를 _j_ + 1로 설정합니다.
+          1. _obj_를 반환합니다.
         </emu-alg>
         <emu-note>
           <p>*NaN*은 always any other value보다 greater로 compare되므로(CompareTypedArrayElements 참조), _comparator_가 provided되지 않을 때 *NaN* property values는 always result의 end로 sort됩니다.</p>
@@ -43203,18 +43188,17 @@ THH:mm:ss.sss
         <h1>%TypedArray%.prototype.toReversed ( )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _from_을 ! ToString(𝔽(_length_ - _k_ - 1))로 둔다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _fromValue_를 ! Get(_obj_, _from_)로 둔다.
-            1. ! Set(_resultArray_, _propertyKey_, _fromValue_, *true*)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _resultArray_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _from_을 _length_ - _k_ - 1로 둡니다.
+            1. _fromValue_를 TypedArrayGetElement(_obj_, 𝔽(_from_))로 둡니다.
+            1. ! TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _resultArray_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -43222,20 +43206,20 @@ THH:mm:ss.sss
         <h1>%TypedArray%.prototype.toSorted ( _comparator_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _comparator_가 *undefined*가 아니고 IsCallable(_comparator_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _obj_를 *this* value로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둔다.
-          1. NOTE: following closure는 <emu-xref href="#sec-array.prototype.tosorted"></emu-xref>에서 사용되는 string comparison이 아니라 numeric comparison을 수행한다.
-          1. _comparator_를 capture하고 called될 때 다음 steps를 수행하는, parameters (_x_, _y_)를 가진 새 Abstract Closure _sortCompare_를 둔다:
-            1. ? CompareTypedArrayElements(_x_, _y_, _comparator_)를 반환한다.
-          1. _sortedList_를 ? SortIndexedProperties(_obj_, _length_, _sortCompare_, ~read-through-holes~)로 둔다.
-          1. _j_를 0으로 둔다.
-          1. Repeat, while _j_ &lt; _length_,
-            1. ! Set(_resultArray_, ! ToString(𝔽(_j_)), _sortedList_[_j_], *true*)를 수행한다.
-            1. _j_를 _j_ + 1로 설정한다.
-          1. _resultArray_를 반환한다.
+          1. _comparator_가 *undefined*가 아니고 IsCallable(_comparator_)가 *false*이면 *TypeError* 예외를 발생시킵니다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둡니다.
+          1. 참고: 다음 클로저는 <emu-xref href="#sec-array.prototype.tosorted"></emu-xref>에서 사용하는 문자열 비교가 아니라 숫자 비교를 수행합니다.
+          1. _sortCompare_를 _comparator_를 캡처하고 호출될 때 다음 단계를 수행하는 매개변수 (_x_, _y_)를 가진 새로운 추상 클로저로 둡니다.
+            1. ? CompareTypedArrayElements(_x_, _y_, _comparator_)를 반환합니다.
+          1. _sortedList_를 ? SortIndexedProperties(_obj_, _length_, _sortCompare_, ~read-through-holes~)로 둡니다.
+          1. _j_를 0으로 둡니다.
+          1. _j_ &lt; _length_인 동안 반복합니다.
+            1. ! TypedArraySetElement(_resultArray_, 𝔽(_j_), _sortedList_[_j_])를 수행합니다.
+            1. _j_를 _j_ + 1로 설정합니다.
+          1. _resultArray_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -43258,22 +43242,21 @@ THH:mm:ss.sss
         <h1>%TypedArray%.prototype.with ( _index_, _value_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둔다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _actualIndex_를 ? ToAbsoluteIndex(_index_, _length_)로 둔다.
-          1. _obj_.[[ContentType]]가 ~bigint~이면 _numericValue_를 ? ToBigInt(_value_)로 두고,
-          1. 그렇지 않으면 _numericValue_를 ? ToNumber(_value_)로 둔다.
-          1. IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_))가 *false*이면, *RangeError* 예외를 던진다.
-          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둔다.
-          1. _k_를 0으로 둔다.
-          1. _k_ &lt; _length_인 동안, 반복한다.
-            1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-            1. _k_ = _actualIndex_이면, _fromValue_를 _numericValue_로 둔다.
-            1. 그렇지 않으면, _fromValue_를 ! Get(_obj_, _propertyKey_)로 둔다.
-            1. ! Set(_resultArray_, _propertyKey_, _fromValue_, *true*)를 수행한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _resultArray_를 반환한다.
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. _actualIndex_를 ? ToAbsoluteIndex(_index_, _length_)로 둡니다.
+          1. _obj_.[[ContentType]]이 ~bigint~이면 _numericValue_를 ? ToBigInt(_value_)로 둡니다.
+          1. 그렇지 않으면 _numericValue_를 ? ToNumber(_value_)로 둡니다.
+          1. IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_))가 *false*이면 *RangeError* 예외를 발생시킵니다.
+          1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둡니다.
+          1. _k_를 0으로 둡니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _k_ = _actualIndex_이면 _fromValue_를 _numericValue_로 둡니다.
+            1. 그렇지 않으면 _fromValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. ! TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)를 수행합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _resultArray_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -43623,9 +43606,8 @@ THH:mm:ss.sss
             1. ? AllocateTypedArrayBuffer(_obj_, _length_)를 수행합니다.
             1. _k_를 0으로 둡니다.
             1. _k_ &lt; _length_인 동안 반복합니다.
-              1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
               1. _kValue_를 _values_[_k_]로 둡니다.
-              1. ? Set(_obj_, _propertyKey_, _kValue_, *true*)를 수행합니다.
+              1. ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)를 수행합니다.
               1. _k_를 _k_ + 1로 설정합니다.
             1. ~unused~를 반환합니다.
           </emu-alg>
@@ -43641,15 +43623,15 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _length_를 ? LengthOfArrayLike(_arrayLike_)로 둔다.
-            1. ? AllocateTypedArrayBuffer(_obj_, _length_)를 수행한다.
-            1. _k_를 0으로 둔다.
-            1. Repeat, while _k_ &lt; _length_,
-              1. _propertyKey_를 ! ToString(𝔽(_k_))로 둔다.
-              1. _kValue_를 ? Get(_arrayLike_, _propertyKey_)로 둔다.
-              1. ? Set(_obj_, _propertyKey_, _kValue_, *true*)를 수행한다.
-              1. _k_를 _k_ + 1로 설정한다.
-            1. ~unused~를 반환한다.
+            1. _length_를 ? LengthOfArrayLike(_arrayLike_)로 둡니다.
+            1. ? AllocateTypedArrayBuffer(_obj_, _length_)를 수행합니다.
+            1. _k_를 0으로 둡니다.
+            1. _k_ &lt; _length_인 동안 반복합니다.
+              1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
+              1. _kValue_를 ? Get(_arrayLike_, _propertyKey_)로 둡니다.
+              1. ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)를 수행합니다.
+              1. _k_를 _k_ + 1로 설정합니다.
+            1. ~unused~를 반환합니다.
           </emu-alg>
         </emu-clause>
 
