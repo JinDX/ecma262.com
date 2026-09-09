@@ -3038,7 +3038,7 @@
             <tr id="internal-method-setprototypeof">
               <td>
                 [[SetPrototypeOf]] (
-                _proto_: Object 또는 *null*,
+                  _proto_: Object 또는 *null*,
                 ): Boolean을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3072,7 +3072,7 @@
             <tr id="internal-method-getownproperty">
               <td>
                 [[GetOwnProperty]] (
-                _propertyKey_: 속성 키,
+                  _propertyKey_: 속성 키,
                 ): Property Descriptor 또는 *undefined* 중 하나를 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3086,8 +3086,8 @@
             <tr id="internal-method-defineownproperty">
               <td>
                 [[DefineOwnProperty]] (
-                _propertyKey_: 속성 키,
-                _propertyDesc_: Property Descriptor,
+                  _propertyKey_: 속성 키,
+                  _propertyDesc_: Property Descriptor,
                 ): Boolean을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3101,7 +3101,7 @@
             <tr id="internal-method-hasproperty">
               <td>
                 [[HasProperty]] (
-                _propertyKey_: 속성 키,
+                  _propertyKey_: 속성 키,
                 ): Boolean을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3115,8 +3115,8 @@
             <tr id="internal-method-get">
               <td>
                 [[Get]] (
-                _propertyKey_: 속성 키,
-                _receiver_: ECMAScript 언어 값,
+                  _propertyKey_: 속성 키,
+                  _receiver_: ECMAScript 언어 값,
                 ): ECMAScript 언어 값을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3130,9 +3130,9 @@
             <tr id="internal-method-set">
               <td>
                 [[Set]] (
-                _propertyKey_: 속성 키,
-                _value_: ECMAScript 언어 값,
-                _receiver_: ECMAScript 언어 값,
+                  _propertyKey_: 속성 키,
+                  _value_: ECMAScript 언어 값,
+                  _receiver_: ECMAScript 언어 값,
                 ): Boolean을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3146,7 +3146,7 @@
             <tr id="internal-method-delete">
               <td>
                 [[Delete]] (
-                _propertyKey_: 속성 키,
+                  _propertyKey_: 속성 키,
                 ): Boolean을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3188,8 +3188,8 @@
             <tr id="internal-method-call">
               <td>
                 [[Call]] (
-                _thisArg_: ECMAScript 언어 값,
-                _argList_: ECMAScript 언어 값의 List,
+                  _thisArg_: ECMAScript 언어 값,
+                  _argList_: ECMAScript 언어 값의 List,
                 ): ECMAScript 언어 값을 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -3203,8 +3203,8 @@
             <tr id="internal-method-construct">
               <td>
                 [[Construct]] (
-                _argList_: ECMAScript 언어 값의 List,
-                _newTarget_: 생성자,
+                  _argList_: ECMAScript 언어 값의 List,
+                  _newTarget_: 생성자,
                 ): Object를 포함하는 정상 완료이거나 throw 완료
               </td>
               <td>
@@ -10139,148 +10139,148 @@
 
     <emu-clause id="sec-runtime-semantics-iteratorbindinginitialization" oldids="sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization,sec-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-arrow-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-async-arrow-function-definitions-IteratorBindingInitialization" type="sdo">
       <h1>
-        Runtime Semantics: IteratorBindingInitialization (
-          _iteratorRecord_: an Iterator Record,
-          _envRecord_: an Environment Record or *undefined*,
-        ): either a normal completion containing ~unused~ or an abrupt completion
+        런타임 의미론: IteratorBindingInitialization (
+        _iteratorRecord_: Iterator 레코드,
+        _envRecord_: Environment 레코드 또는 *undefined*,
+        ): ~unused~를 포함하는 정상 완료 또는 갑작스러운 완료
       </h1>
       <dl class="header">
       </dl>
       <emu-note>
-        <p>*undefined*가 _envRecord_로 passed되면 initialization value를 assign하기 위해 PutValue operation을 사용해야 함을 나타냅니다. 이는 non-strict function의 formal parameter list의 경우입니다. 그 경우 formal parameter binding은 같은 name을 가진 multiple parameter의 possibility를 처리하기 위해 preinitialized됩니다.</p>
+        <p>_envRecord_에 *undefined*가 전달되면 초기화 값을 할당하는 데 PutValue 연산을 사용해야 함을 나타냅니다. 이는 비엄격 함수의 형식 매개변수 목록에 해당합니다. 이 경우 동일한 이름을 가진 여러 매개변수가 존재할 가능성을 처리하기 위해 형식 매개변수 바인딩을 미리 초기화합니다.</p>
       </emu-note>
       <emu-grammar>ArrayBindingPattern : `[` `]`</emu-grammar>
       <emu-alg>
-        1. ~unused~를 반환한다.
+        1. ~unused~를 반환합니다.
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision `]`</emu-grammar>
       <emu-alg>
-        1. argument _iteratorRecord_를 가진 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 반환한다.
+        1. 인수 _iteratorRecord_를 사용한 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. |Elision|이 present하면, 다음을 수행한다.
-          1. argument _iteratorRecord_를 가진 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingRestElement|의 IteratorBindingInitialization을 ? 반환한다.
+        1. |Elision|이 존재하면,
+          1. 인수 _iteratorRecord_를 사용한 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingRestElement|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision `]`</emu-grammar>
       <emu-alg>
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingElementList|의 IteratorBindingInitialization을 ? 수행한다.
-        1. argument _iteratorRecord_를 가진 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 반환한다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingElementList|의 IteratorBindingInitialization을 ? 수행합니다.
+        1. 인수 _iteratorRecord_를 사용한 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingElementList|의 IteratorBindingInitialization을 ? 수행한다.
-        1. |Elision|이 present하면, 다음을 수행한다.
-          1. argument _iteratorRecord_를 가진 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingRestElement|의 IteratorBindingInitialization을 ? 반환한다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingElementList|의 IteratorBindingInitialization을 ? 수행합니다.
+        1. |Elision|이 존재하면,
+          1. 인수 _iteratorRecord_를 사용한 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingRestElement|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>BindingElementList : BindingElementList `,` BindingElisionElement</emu-grammar>
       <emu-alg>
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingElementList|의 IteratorBindingInitialization을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingElisionElement|의 IteratorBindingInitialization을 ? 반환한다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingElementList|의 IteratorBindingInitialization을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingElisionElement|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>BindingElisionElement : Elision BindingElement</emu-grammar>
       <emu-alg>
-        1. argument _iteratorRecord_를 가진 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |BindingElement|의 IteratorBindingInitialization을 ? 반환한다.
+        1. 인수 _iteratorRecord_를 사용한 |Elision|의 IteratorDestructuringAssignmentEvaluation을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |BindingElement|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
       <emu-alg>
-        1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-        1. _lhs_를 ? ResolveBinding(_bindingId_, _envRecord_)로 둔다.
-        1. _v_를 *undefined*로 둔다.
-        1. _iteratorRecord_.[[Done]]이 *false*이면, 다음을 수행한다.
-          1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
-          1. _next_가 ~done~이 아니면, 다음을 수행한다.
-            1. _v_를 _next_로 설정한다.
-        1. |Initializer|가 present하고 _v_가 *undefined*이면, 다음을 수행한다.
-          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면, 다음을 수행한다.
-            1. _v_를 argument _bindingId_를 가진 |Initializer|의 NamedEvaluation으로 ? 설정한다.
+        1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+        1. _lhs_를 ? ResolveBinding(_name_, _envRecord_)으로 설정합니다.
+        1. _value_를 *undefined*로 설정합니다.
+        1. _iteratorRecord_.[[Done]]이 *false*이면,
+          1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+          1. _next_가 ~done~이 아니면,
+            1. _value_를 _next_로 설정합니다.
+        1. |Initializer|가 존재하고 _value_가 *undefined*이면,
+          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
+            1. _value_를 인수 _name_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
           1. 그렇지 않으면,
-            1. _defaultValue_를 |Initializer|의 Evaluation으로 ? 둔다.
-            1. _v_를 ? GetValue(_defaultValue_)로 설정한다.
-        1. _envRecord_가 *undefined*이면, PutValue(_lhs_, _v_)를 ? 반환한다.
-        1. InitializeReferencedBinding(_lhs_, _v_)를 ? 반환한다.
+            1. _defaultValue_를 |Initializer|의 ? Evaluation으로 설정합니다.
+            1. _value_를 ? GetValue(_defaultValue_)로 설정합니다.
+        1. _envRecord_가 *undefined*이면, ? PutValue(_lhs_, _value_)를 반환합니다.
+        1. ? InitializeReferencedBinding(_lhs_, _value_)을 반환합니다.
       </emu-alg>
       <emu-grammar>BindingElement : BindingPattern Initializer?</emu-grammar>
       <emu-alg>
-        1. _v_를 *undefined*로 둔다.
-        1. _iteratorRecord_.[[Done]]이 *false*이면, 다음을 수행한다.
-          1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
-          1. _next_가 ~done~이 아니면, 다음을 수행한다.
-            1. _v_를 _next_로 설정한다.
-        1. |Initializer|가 present하고 _v_가 *undefined*이면, 다음을 수행한다.
-          1. _defaultValue_를 |Initializer|의 Evaluation으로 ? 둔다.
-          1. _v_를 ? GetValue(_defaultValue_)로 설정한다.
-        1. arguments _v_와 _envRecord_를 가진 |BindingPattern|의 BindingInitialization을 ? 반환한다.
+        1. _value_를 *undefined*로 설정합니다.
+        1. _iteratorRecord_.[[Done]]이 *false*이면,
+          1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+          1. _next_가 ~done~이 아니면,
+            1. _value_를 _next_로 설정합니다.
+        1. |Initializer|가 존재하고 _value_가 *undefined*이면,
+          1. _defaultValue_를 |Initializer|의 ? Evaluation으로 설정합니다.
+          1. _value_를 ? GetValue(_defaultValue_)로 설정합니다.
+        1. 인수 _value_ 및 _envRecord_를 사용한 |BindingPattern|의 ? BindingInitialization을 반환합니다.
       </emu-alg>
       <emu-grammar>BindingRestElement : `...` BindingIdentifier</emu-grammar>
       <emu-alg>
-        1. _lhs_를 ? ResolveBinding(|BindingIdentifier|의 StringValue, _envRecord_)로 둔다.
-        1. _array_를 ! ArrayCreate(0)으로 둔다.
-        1. _n_을 0으로 둔다.
-        1. Repeat,
-          1. _next_를 ~done~으로 둔다.
-          1. _iteratorRecord_.[[Done]]이 *false*이면, 다음을 수행한다.
-            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정한다.
-          1. _next_가 ~done~이면, 다음을 수행한다.
-            1. _envRecord_가 *undefined*이면, PutValue(_lhs_, _array_)를 ? 반환한다.
-            1. InitializeReferencedBinding(_lhs_, _array_)를 ? 반환한다.
-          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)를 수행한다.
-          1. _n_을 _n_ + 1로 설정한다.
+        1. _lhs_를 ? ResolveBinding(|BindingIdentifier|의 StringValue, _envRecord_)으로 설정합니다.
+        1. _array_를 ! ArrayCreate(0)으로 설정합니다.
+        1. _n_을 0으로 설정합니다.
+        1. 반복합니다.
+          1. _next_를 ~done~으로 설정합니다.
+          1. _iteratorRecord_.[[Done]]이 *false*이면,
+            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+          1. _next_가 ~done~이면,
+            1. _envRecord_가 *undefined*이면, ? PutValue(_lhs_, _array_)를 반환합니다.
+            1. ? InitializeReferencedBinding(_lhs_, _array_)를 반환합니다.
+          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)을 수행합니다.
+          1. _n_을 _n_ + 1로 설정합니다.
       </emu-alg>
       <emu-grammar>BindingRestElement : `...` BindingPattern</emu-grammar>
       <emu-alg>
-        1. _array_를 ! ArrayCreate(0)으로 둔다.
-        1. _n_을 0으로 둔다.
-        1. Repeat,
-          1. _next_를 ~done~으로 둔다.
-          1. _iteratorRecord_.[[Done]]이 *false*이면, 다음을 수행한다.
-            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정한다.
-          1. _next_가 ~done~이면, 다음을 수행한다.
-            1. arguments _array_와 _envRecord_를 가진 |BindingPattern|의 BindingInitialization을 ? 반환한다.
-          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)를 수행한다.
-          1. _n_을 _n_ + 1로 설정한다.
+        1. _array_를 ! ArrayCreate(0)으로 설정합니다.
+        1. _n_을 0으로 설정합니다.
+        1. 반복합니다.
+          1. _next_를 ~done~으로 설정합니다.
+          1. _iteratorRecord_.[[Done]]이 *false*이면,
+            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+          1. _next_가 ~done~이면,
+            1. 인수 _array_ 및 _envRecord_를 사용한 |BindingPattern|의 ? BindingInitialization을 반환합니다.
+          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)을 수행합니다.
+          1. _n_을 _n_ + 1로 설정합니다.
       </emu-alg>
       <emu-grammar>FormalParameters : [empty]</emu-grammar>
       <emu-alg>
-        1. ~unused~를 반환한다.
+        1. ~unused~를 반환합니다.
       </emu-alg>
       <emu-grammar>FormalParameters : FormalParameterList `,` FunctionRestParameter</emu-grammar>
       <emu-alg>
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |FormalParameterList|의 IteratorBindingInitialization을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |FunctionRestParameter|의 IteratorBindingInitialization을 ? 반환한다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |FormalParameterList|의 IteratorBindingInitialization을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |FunctionRestParameter|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>FormalParameterList : FormalParameterList `,` FormalParameter</emu-grammar>
       <emu-alg>
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |FormalParameterList|의 IteratorBindingInitialization을 ? 수행한다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 |FormalParameter|의 IteratorBindingInitialization을 ? 반환한다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |FormalParameterList|의 IteratorBindingInitialization을 ? 수행합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 |FormalParameter|의 IteratorBindingInitialization을 ? 반환합니다.
       </emu-alg>
       <emu-grammar>ArrowParameters : BindingIdentifier</emu-grammar>
       <emu-alg>
-        1. _v_를 *undefined*로 둔다.
-        1. Assert: _iteratorRecord_.[[Done]]은 *false*이다.
-        1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
-        1. _next_가 ~done~이 아니면, 다음을 수행한다.
-          1. _v_를 _next_로 설정한다.
-        1. arguments _v_와 _envRecord_를 가진 |BindingIdentifier|의 BindingInitialization을 ? 반환한다.
+        1. _value_를 *undefined*로 설정합니다.
+        1. 단언: _iteratorRecord_.[[Done]]은 *false*입니다.
+        1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+        1. _next_가 ~done~이 아니면,
+          1. _value_를 _next_로 설정합니다.
+        1. 인수 _value_ 및 _envRecord_를 사용한 |BindingIdentifier|의 ? BindingInitialization을 반환합니다.
       </emu-alg>
       <emu-grammar>ArrowParameters : CoverParenthesizedExpressionAndArrowParameterList</emu-grammar>
       <emu-alg>
-        1. _formals_를 |CoverParenthesizedExpressionAndArrowParameterList|가 cover하는 |ArrowFormalParameters|로 둔다.
-        1. arguments _iteratorRecord_와 _envRecord_를 가진 _formals_의 IteratorBindingInitialization을 ? 반환한다.
+        1. _formals_를 |CoverParenthesizedExpressionAndArrowParameterList|가 포함하는 |ArrowFormalParameters|로 설정합니다.
+        1. 인수 _iteratorRecord_ 및 _envRecord_를 사용한 _formals_의 ? IteratorBindingInitialization을 반환합니다.
       </emu-alg>
       <emu-grammar>
         AsyncArrowBindingIdentifier : BindingIdentifier
       </emu-grammar>
       <emu-alg>
-        1. _v_를 *undefined*로 둔다.
-        1. Assert: _iteratorRecord_.[[Done]]은 *false*이다.
-        1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
-        1. _next_가 ~done~이 아니면, 다음을 수행한다.
-          1. _v_를 _next_로 설정한다.
-        1. arguments _v_와 _envRecord_를 가진 |BindingIdentifier|의 BindingInitialization을 ? 반환한다.
+        1. _value_를 *undefined*로 설정합니다.
+        1. 단언: _iteratorRecord_.[[Done]]은 *false*입니다.
+        1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+        1. _next_가 ~done~이 아니면,
+          1. _value_를 _next_로 설정합니다.
+        1. 인수 _value_ 및 _envRecord_를 사용한 |BindingIdentifier|의 ? BindingInitialization을 반환합니다.
       </emu-alg>
     </emu-clause>
 
@@ -16254,31 +16254,31 @@
         <dd>a Proxy exotic object _obj_</dd>
       </dl>
       <emu-alg>
-        1. ? ValidateNonRevokedProxy(_obj_)를 수행한다.
-        1. _target_을 _obj_.[[ProxyTarget]]으로 둔다.
-        1. _handler_를 _obj_.[[ProxyHandler]]로 둔다.
-        1. Assert: _handler_는 Object이다.
-        1. _trap_을 ? GetMethod(_handler_, *"defineProperty"*)로 둔다.
-        1. _trap_이 *undefined*이면, 다음을 수행한다.
-          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_propertyKey_, _propertyDesc_)</emu-meta>를 반환한다.
-        1. _propertyDescObj_를 FromPropertyDescriptor(_propertyDesc_)로 둔다.
-        1. _boolTrapResult_를 ToBoolean(? Call(_trap_, _handler_, « _target_, _propertyKey_, _propertyDescObj_ »))로 둔다.
-        1. _boolTrapResult_가 *false*이면, *false*를 반환한다.
-        1. _targetDesc_를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_propertyKey_)</emu-meta>로 둔다.
-        1. _extensibleTarget_을 ? IsExtensible(_target_)으로 둔다.
-        1. _propertyDesc_가 [[Configurable]] field를 가지고 _propertyDesc_.[[Configurable]]이 *false*이면, 다음을 수행한다.
-          1. _settingConfigFalse_를 *true*로 둔다.
+        1. ? ValidateNonRevokedProxy(_obj_)를 수행합니다.
+        1. _target_을 _obj_.[[ProxyTarget]]으로 설정합니다.
+        1. _handler_를 _obj_.[[ProxyHandler]]로 설정합니다.
+        1. 단언: _handler_는 Object입니다.
+        1. _trap_을 ? GetMethod(_handler_, *"defineProperty"*)로 설정합니다.
+        1. _trap_이 *undefined*이면,
+          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_propertyKey_, _propertyDesc_)</emu-meta>를 반환합니다.
+        1. _propertyDescObj_를 FromPropertyDescriptor(_propertyDesc_)로 설정합니다.
+        1. _boolTrapResult_를 ToBoolean(? Call(_trap_, _handler_, « _target_, _propertyKey_, _propertyDescObj_ »))로 설정합니다.
+        1. _boolTrapResult_가 *false*이면, *false*를 반환합니다.
+        1. _targetDesc_를 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_propertyKey_)</emu-meta>로 설정합니다.
+        1. _extensibleTarget_을 ? IsExtensible(_target_)로 설정합니다.
+        1. _propertyDesc_에 [[Configurable]] 필드가 있고 _propertyDesc_.[[Configurable]]이 *false*이면,
+          1. _settingConfigurableFalse_를 *true*로 설정합니다.
         1. 그렇지 않으면,
-          1. _settingConfigFalse_를 *false*로 둔다.
-        1. _targetDesc_가 *undefined*이면, 다음을 수행한다.
-          1. _extensibleTarget_이 *false*이면, *TypeError* exception을 throw한다.
-          1. _settingConfigFalse_가 *true*이면, *TypeError* exception을 throw한다.
+          1. _settingConfigurableFalse_를 *false*로 설정합니다.
+        1. _targetDesc_가 *undefined*이면,
+          1. _extensibleTarget_이 *false*이면, *TypeError* 예외를 던집니다.
+          1. _settingConfigurableFalse_가 *true*이면, *TypeError* 예외를 던집니다.
         1. 그렇지 않으면,
-          1. IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_)가 *false*이면, *TypeError* exception을 throw한다.
-          1. _settingConfigFalse_가 *true*이고 _targetDesc_.[[Configurable]]이 *true*이면, *TypeError* exception을 throw한다.
-          1. IsDataDescriptor(_targetDesc_)가 *true*이고, _targetDesc_.[[Configurable]]이 *false*이고, _targetDesc_.[[Writable]]이 *true*이면, 다음을 수행한다.
-            1. _propertyDesc_가 [[Writable]] field를 가지고 _propertyDesc_.[[Writable]]이 *false*이면, *TypeError* exception을 throw한다.
-        1. *true*를 반환한다.
+          1. IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_)가 *false*이면, *TypeError* 예외를 던집니다.
+          1. _settingConfigurableFalse_가 *true*이고 _targetDesc_.[[Configurable]]이 *true*이면, *TypeError* 예외를 던집니다.
+          1. IsDataDescriptor(_targetDesc_)가 *true*이고, _targetDesc_.[[Configurable]]이 *false*이며, _targetDesc_.[[Writable]]이 *true*이면,
+            1. _propertyDesc_에 [[Writable]] 필드가 있고 _propertyDesc_.[[Writable]]이 *false*이면, *TypeError* 예외를 던집니다.
+        1. *true*를 반환합니다.
       </emu-alg>
       <emu-note>
         <p>Proxy object의 [[DefineOwnProperty]]는 다음 invariant를 enforce합니다:</p>
@@ -18769,8 +18769,8 @@
           IdentifierName IdentifierPart
       </emu-grammar>
       <emu-alg>
-        1. _idTextUnescaped_를 |IdentifierName|의 IdentifierCodePoints로 둔다.
-        1. CodePointsToString(_idTextUnescaped_)를 반환한다.
+        1. _nameUnescaped_를 |IdentifierName|의 IdentifierCodePoints로 설정합니다.
+        1. CodePointsToString(_nameUnescaped_)을 반환합니다.
       </emu-alg>
       <emu-grammar>
         IdentifierReference : `yield`
@@ -21698,26 +21698,24 @@
         </emu-alg>
         <emu-grammar>AssignmentElement : DestructuringAssignmentTarget Initializer?</emu-grammar>
         <emu-alg>
-          1. |DestructuringAssignmentTarget|이 |ObjectLiteral|도 |ArrayLiteral|도 아니면, 다음을 수행한다.
-            1. _leftRef_를 |DestructuringAssignmentTarget|의 Evaluation으로 ? 둔다.
-          1. _value_를 *undefined*로 둔다.
-          1. _iteratorRecord_.[[Done]]이 *false*이면, 다음을 수행한다.
-            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 둔다.
-            1. _next_가 ~done~이 아니면, 다음을 수행한다.
-              1. _value_를 _next_로 설정한다.
-          1. |Initializer|가 present이고 _value_가 *undefined*이면, 다음을 수행한다.
-            1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이고 |DestructuringAssignmentTarget|의 IsIdentifierRef가 *true*이면, 다음을 수행한다.
-              1. _target_을 |DestructuringAssignmentTarget|의 StringValue로 둔다.
-              1. _v_를 argument _target_을 가진 |Initializer|의 NamedEvaluation으로 ? 둔다.
+          1. |DestructuringAssignmentTarget|이 |ObjectLiteral|도 |ArrayLiteral|도 아니면,
+            1. _leftRef_를 |DestructuringAssignmentTarget|의 ? Evaluation으로 설정합니다.
+          1. _value_를 *undefined*로 설정합니다.
+          1. _iteratorRecord_.[[Done]]이 *false*이면,
+            1. _next_를 ? IteratorStepValue(_iteratorRecord_)로 설정합니다.
+            1. _next_가 ~done~이 아니면,
+              1. _value_를 _next_로 설정합니다.
+          1. |Initializer|가 존재하고 _value_가 *undefined*이면,
+            1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이고 |DestructuringAssignmentTarget|의 IsIdentifierRef가 *true*이면,
+              1. _target_을 |DestructuringAssignmentTarget|의 StringValue로 설정합니다.
+              1. _value_를 인수 _target_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
             1. 그렇지 않으면,
-              1. _defaultValue_를 |Initializer|의 Evaluation으로 ? 둔다.
-              1. _v_를 ? GetValue(_defaultValue_)로 둔다.
-          1. 그렇지 않으면,
-            1. _v_를 _value_로 둔다.
-          1. |DestructuringAssignmentTarget|이 |ObjectLiteral| 또는 |ArrayLiteral| 중 하나이면, 다음을 수행한다.
-            1. _nestedAssignmentPattern_을 |DestructuringAssignmentTarget|이 covered하는 |AssignmentPattern|으로 둔다.
-            1. argument _v_를 가진 _nestedAssignmentPattern_의 DestructuringAssignmentEvaluation을 ? 반환한다.
-          1. ? PutValue(_leftRef_, _v_)를 반환한다.
+              1. _defaultValue_를 |Initializer|의 ? Evaluation으로 설정합니다.
+              1. _value_를 ? GetValue(_defaultValue_)로 설정합니다.
+          1. |DestructuringAssignmentTarget|이 |ObjectLiteral| 또는 |ArrayLiteral|이면,
+            1. _nestedAssignmentPattern_을 |DestructuringAssignmentTarget|이 포함하는 |AssignmentPattern|으로 설정합니다.
+            1. 인수 _value_를 사용한 _nestedAssignmentPattern_의 ? DestructuringAssignmentEvaluation을 반환합니다.
+          1. ? PutValue(_leftRef_, _value_)를 반환합니다.
         </emu-alg>
         <emu-note>
           <p>destructuring pattern이 아닌 |DestructuringAssignmentTarget|을 iterator에 accessing하거나 |Initializer|를 evaluating하기 전에 evaluating함으로써 left-to-right evaluation order가 maintained됩니다.</p>
@@ -22114,20 +22112,20 @@
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-          1. _lhs_를 ! ResolveBinding(_bindingId_)로 둔다.
+          1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+          1. _lhs_를 ! ResolveBinding(_name_)으로 설정합니다.
           1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
-            1. _value_를 인수 _bindingId_로 |Initializer|의 NamedEvaluation을 ? 수행한 결과로 둔다.
+            1. _value_를 인수 _name_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
           1. 그렇지 않으면,
-            1. _rhs_를 |Initializer|의 Evaluation을 ? 수행한 결과로 둔다.
-            1. _value_를 ? GetValue(_rhs_)로 둔다.
+            1. _rhs_를 |Initializer|의 ? Evaluation으로 설정합니다.
+            1. _value_를 ? GetValue(_rhs_)로 설정합니다.
           1. _kind_가 ~normal~이 아니면,
-            1. 단언: IsUnresolvableReference(_lhs_)는 *false*이다.
-            1. _base_를 _lhs_.[[Base]]로 둔다.
-            1. 단언: _base_는 Declarative Environment Record이다.
-            1. AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_)를 ? 수행한다.
-          1. InitializeReferencedBinding(_lhs_, _value_)를 ? 수행한다.
-          1. ~unused~를 반환한다.
+            1. 단언: IsUnresolvableReference(_lhs_)는 *false*입니다.
+            1. _base_를 _lhs_.[[Base]]로 설정합니다.
+            1. 단언: _base_는 Declarative Environment Record입니다.
+            1. ? AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_)를 수행합니다.
+          1. ? InitializeReferencedBinding(_lhs_, _value_)를 수행합니다.
+          1. ~unused~를 반환합니다.
         </emu-alg>
         <emu-grammar>LexicalBinding : BindingPattern Initializer</emu-grammar>
         <emu-alg>
@@ -22177,15 +22175,15 @@
         </emu-alg>
         <emu-grammar>VariableDeclaration : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-          1. _lhs_를 ? ResolveBinding(_bindingId_)로 둔다.
-          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면, 다음을 수행한다.
-            1. _value_를 argument _bindingId_를 가진 |Initializer|의 NamedEvaluation으로 ? 둔다.
+          1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+          1. _lhs_를 ? ResolveBinding(_name_)으로 설정합니다.
+          1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
+            1. _value_를 인수 _name_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
           1. 그렇지 않으면,
-            1. _rhs_를 |Initializer|의 Evaluation으로 ? 둔다.
-            1. _value_를 ? GetValue(_rhs_)로 둔다.
-          1. [id="step-vardecllist-evaluation-putvalue"] ? PutValue(_lhs_, _value_)를 수행한다.
-          1. ~empty~를 반환한다.
+            1. _rhs_를 |Initializer|의 ? Evaluation으로 설정합니다.
+            1. _value_를 ? GetValue(_rhs_)로 설정합니다.
+          1. [id="step-vardecllist-evaluation-putvalue"] ? PutValue(_lhs_, _value_)를 수행합니다.
+          1. ~empty~를 반환합니다.
         </emu-alg>
         <emu-note>
           <p>|VariableDeclaration|이 with statement 안에 nested되어 있고 |VariableDeclaration| 안의 |BindingIdentifier|가 with statement의 Object Environment Record의 binding object의 property name과 same하면, step <emu-xref href="#step-vardecllist-evaluation-putvalue"></emu-xref>는 _value_를 |Identifier|의 VariableEnvironment binding에 assigning하는 대신 property에 assign합니다.</p>
@@ -22324,17 +22322,17 @@
         </emu-alg>
         <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
         <emu-alg>
-          1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-          1. _lhs_를 ? ResolveBinding(_bindingId_, _envRecord_)로 둔다.
-          1. _value_를 ? GetV(_value_, _propertyName_)로 설정한다.
-          1. |Initializer|가 present이고 _value_가 *undefined*이면, 다음을 수행한다.
-            1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면, 다음을 수행한다.
-              1. _value_를 argument _bindingId_를 가진 |Initializer|의 NamedEvaluation으로 ? 설정한다.
+          1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+          1. _lhs_를 ? ResolveBinding(_name_, _envRecord_)으로 설정합니다.
+          1. _value_를 ? GetV(_value_, _propertyName_)로 설정합니다.
+          1. |Initializer|가 존재하고 _value_가 *undefined*이면,
+            1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
+              1. _value_를 인수 _name_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
             1. 그렇지 않으면,
-              1. _defaultValue_를 |Initializer|의 Evaluation으로 ? 둔다.
-              1. _value_를 ? GetValue(_defaultValue_)로 설정한다.
-          1. _envRecord_가 *undefined*이면, ? PutValue(_lhs_, _value_)를 반환한다.
-          1. ? InitializeReferencedBinding(_lhs_, _value_)를 반환한다.
+              1. _defaultValue_를 |Initializer|의 ? Evaluation으로 설정합니다.
+              1. _value_를 ? GetValue(_defaultValue_)로 설정합니다.
+          1. _envRecord_가 *undefined*이면, ? PutValue(_lhs_, _value_)를 반환합니다.
+          1. ? InitializeReferencedBinding(_lhs_, _value_)를 반환합니다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -22681,20 +22679,20 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iterationResult_를 *undefined*로 둔다.
-          1. ? CreatePerIterationEnvironment(_perIterationBindings_)를 수행한다.
-          1. Repeat,
-            1. _test_가 ~empty~가 아니면, 다음을 수행한다.
-              1. _testRef_를 _test_의 Evaluation으로 ? 둔다.
-              1. _testValue_를 ? GetValue(_testRef_)로 둔다.
-              1. ToBoolean(_testValue_)가 *false*이면, _iterationResult_를 반환한다.
-            1. _result_를 _stmt_의 Evaluation의 Completion으로 둔다.
-            1. LoopContinues(_result_, _labelSet_)가 *false*이면, ? UpdateEmpty(_result_, _iterationResult_)를 반환한다.
-            1. _result_.[[Value]]가 ~empty~가 아니면, _iterationResult_를 _result_.[[Value]]로 설정한다.
-            1. ? CreatePerIterationEnvironment(_perIterationBindings_)를 수행한다.
-            1. _increment_가 ~empty~가 아니면, 다음을 수행한다.
-              1. _incRef_를 _increment_의 Evaluation으로 ? 둔다.
-              1. ? GetValue(_incRef_)를 수행한다.
+          1. _iterationResult_를 *undefined*로 설정합니다.
+          1. ? CreatePerIterationEnvironment(_perIterationBindings_)를 수행합니다.
+          1. 반복합니다.
+            1. _test_가 ~empty~가 아니면,
+              1. _testRef_를 _test_의 ? Evaluation으로 설정합니다.
+              1. _testValue_를 ? GetValue(_testRef_)로 설정합니다.
+              1. ToBoolean(_testValue_)이 *false*이면, _iterationResult_를 반환합니다.
+            1. _result_를 _stmt_의 Evaluation에 대한 Completion으로 설정합니다.
+            1. LoopContinues(_result_, _labelSet_)가 *false*이면, ? UpdateEmpty(_result_, _iterationResult_)를 반환합니다.
+            1. _result_.[[Value]]가 ~empty~가 아니면, _iterationResult_를 _result_.[[Value]]로 설정합니다.
+            1. ? CreatePerIterationEnvironment(_perIterationBindings_)를 수행합니다.
+            1. _increment_가 ~empty~가 아니면,
+              1. _incrementRef_를 _increment_의 ? Evaluation으로 설정합니다.
+              1. ? GetValue(_incrementRef_)를 수행합니다.
         </emu-alg>
       </emu-clause>
 
@@ -23110,8 +23108,8 @@
             `await`
         </emu-grammar>
         <emu-alg>
-          1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-          1. ? ResolveBinding(_bindingId_)를 반환한다.
+          1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+          1. ? ResolveBinding(_name_)을 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -35045,37 +35043,37 @@ THH:mm:ss.sss
         <h1>Date ( ..._values_ )</h1>
         <p>이 함수는 호출될 때 다음 단계를 수행합니다:</p>
         <emu-alg>
-          1. NewTarget이 *undefined*인 경우,
-            1. _now_를 현재 시간을 식별하는 시간 값(UTC)으로 둡니다.
+          1. NewTarget이 *undefined*이면,
+            1. _now_를 현재 시간을 식별하는 시간 값(UTC)으로 설정합니다.
             1. ToDateString(_now_)을 반환합니다.
-          1. _numberOfArgs_를 _values_의 요소 수로 둡니다.
-          1. _numberOfArgs_ = 0인 경우,
-            1. _dv_를 현재 시간을 식별하는 시간 값(UTC)으로 둡니다.
-          1. 그렇지 않고 _numberOfArgs_ = 1인 경우,
-            1. _value_를 _values_[0]으로 둡니다.
-            1. _value_가 Object이고 _value_에 [[DateValue]] 내부 슬롯이 있는 경우,
-              1. _tv_를 _value_.[[DateValue]]로 둡니다.
+          1. _numberOfArgs_를 _values_의 요소 수로 설정합니다.
+          1. _numberOfArgs_ = 0이면,
+            1. _dv_를 현재 시간을 식별하는 시간 값(UTC)으로 설정합니다.
+          1. 그렇지 않고 _numberOfArgs_ = 1이면,
+            1. _value_를 _values_[0]으로 설정합니다.
+            1. _value_가 Object이고 _value_에 [[DateValue]] 내부 슬롯이 있으면,
+              1. _tv_를 _value_.[[DateValue]]로 설정합니다.
             1. 그렇지 않으면,
-              1. _v_를 ? ToPrimitive(_value_)로 둡니다.
-              1. _v_가 String인 경우,
-                1. 단언: _v_가 String이므로 다음 단계는 절대로 갑작스러운 완료를 반환하지 않습니다.
-                1. _tv_를 `parse` 메서드(<emu-xref href="#sec-date.parse"></emu-xref>)와 정확히 동일한 방식으로 _v_를 날짜로 파싱한 결과로 둡니다.
+              1. _primitive_를 ? ToPrimitive(_value_)로 설정합니다.
+              1. _primitive_가 String이면,
+                1. 단언: _primitive_가 String이므로 다음 단계는 갑작스러운 완료를 절대로 반환하지 않습니다.
+                1. _tv_를 `parse` 메서드(<emu-xref href="#sec-date.parse"></emu-xref>)와 정확히 동일한 방식으로 _primitive_를 날짜로 파싱한 결과로 설정합니다.
               1. 그렇지 않으면,
-                1. _tv_를 ? ToNumber(_v_)로 둡니다.
-            1. _dv_를 TimeClip(_tv_)으로 둡니다.
+                1. _tv_를 ? ToNumber(_primitive_)로 설정합니다.
+            1. _dv_를 TimeClip(_tv_)로 설정합니다.
           1. 그렇지 않으면,
             1. 단언: _numberOfArgs_ ≥ 2입니다.
-            1. _yearNumber_를 ? ToNumber(_values_[0])으로 둡니다.
-            1. _monthNumber_를 ? ToNumber(_values_[1])로 둡니다.
-            1. _numberOfArgs_ > 2이면 _dayNumber_를 ? ToNumber(_values_[2])로 두고, 그렇지 않으면 _dayNumber_를 *1*<sub>𝔽</sub>로 둡니다.
-            1. _numberOfArgs_ > 3이면 _hourNumber_를 ? ToNumber(_values_[3])로 두고, 그렇지 않으면 _hourNumber_를 *+0*<sub>𝔽</sub>로 둡니다.
-            1. _numberOfArgs_ > 4이면 _minuteNumber_를 ? ToNumber(_values_[4])로 두고, 그렇지 않으면 _minuteNumber_를 *+0*<sub>𝔽</sub>로 둡니다.
-            1. _numberOfArgs_ > 5이면 _secondNumber_를 ? ToNumber(_values_[5])로 두고, 그렇지 않으면 _secondNumber_를 *+0*<sub>𝔽</sub>로 둡니다.
-            1. _numberOfArgs_ > 6이면 _millisecondNumber_를 ? ToNumber(_values_[6])로 두고, 그렇지 않으면 _millisecondNumber_를 *+0*<sub>𝔽</sub>로 둡니다.
+            1. _yearNumber_를 ? ToNumber(_values_[0])으로 설정합니다.
+            1. _monthNumber_를 ? ToNumber(_values_[1])으로 설정합니다.
+            1. _numberOfArgs_ > 2이면, _dayNumber_를 ? ToNumber(_values_[2])로 설정하고, 그렇지 않으면 _dayNumber_를 *1*<sub>𝔽</sub>로 설정합니다.
+            1. _numberOfArgs_ > 3이면, _hourNumber_를 ? ToNumber(_values_[3])로 설정하고, 그렇지 않으면 _hourNumber_를 *+0*<sub>𝔽</sub>로 설정합니다.
+            1. _numberOfArgs_ > 4이면, _minuteNumber_를 ? ToNumber(_values_[4])로 설정하고, 그렇지 않으면 _minuteNumber_를 *+0*<sub>𝔽</sub>로 설정합니다.
+            1. _numberOfArgs_ > 5이면, _secondNumber_를 ? ToNumber(_values_[5])로 설정하고, 그렇지 않으면 _secondNumber_를 *+0*<sub>𝔽</sub>로 설정합니다.
+            1. _numberOfArgs_ > 6이면, _millisecondNumber_를 ? ToNumber(_values_[6])로 설정하고, 그렇지 않으면 _millisecondNumber_를 *+0*<sub>𝔽</sub>로 설정합니다.
             1. _yearNumber_를 MakeFullYear(_yearNumber_)로 설정합니다.
-            1. _finalDate_를 MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_))로 둡니다.
-            1. _dv_를 TimeClip(UTC(_finalDate_))로 둡니다.
-          1. _obj_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Date.prototype%"*, « [[DateValue]] »)로 둡니다.
+            1. _finalDate_를 MakeDate(MakeDay(_yearNumber_, _monthNumber_, _dayNumber_), MakeTime(_hourNumber_, _minuteNumber_, _secondNumber_, _millisecondNumber_))로 설정합니다.
+            1. _dv_를 TimeClip(UTC(_finalDate_))로 설정합니다.
+          1. _obj_를 ? OrdinaryCreateFromConstructor(NewTarget, *"%Date.prototype%"*, « [[DateValue]] »)로 설정합니다.
           1. _obj_.[[DateValue]]를 _dv_로 설정합니다.
           1. _obj_를 반환합니다.
         </emu-alg>
@@ -35992,22 +35990,22 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 둡니다.
-            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*인 경우,
-              1. _offsetNanoseconds_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)으로 둡니다.
+            1. _systemTimeZoneIdentifier_를 SystemTimeZoneIdentifier()로 설정합니다.
+            1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_)이 *true*이면,
+              1. _offsetNanoseconds_를 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)로 설정합니다.
             1. 그렇지 않으면,
-              1. _offsetNanoseconds_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond)로 둡니다.
-            1. _offsetMilliseconds_를 truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond)로 둡니다.
-            1. _offsetMilliseconds_ ≥ 0인 경우,
-              1. _offsetSign_을 *"+"*로 둡니다.
-              1. _absOffsetMilliseconds_를 _offsetMilliseconds_로 둡니다.
+              1. _offsetNanoseconds_를 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond)로 설정합니다.
+            1. _offsetMilliseconds_를 truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond)로 설정합니다.
+            1. _offsetMilliseconds_ ≥ 0이면,
+              1. _offsetSign_을 *"+"*로 설정합니다.
+              1. _absOffsetMilliseconds_를 _offsetMilliseconds_로 설정합니다.
             1. 그렇지 않으면,
-              1. _offsetSign_을 *"-"*로 둡니다.
-              1. _absOffsetMilliseconds_를 -_offsetMilliseconds_로 둡니다.
-            1. _offsetMinute_을 ToZeroPaddedDecimalString(MinuteFromTime(𝔽(_absOffsetMilliseconds_)), 2)로 둡니다.
-            1. _offsetHour_를 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffsetMilliseconds_)), 2)로 둡니다.
-            1. _tzName_을 빈 String 또는 코드 단위 0x0020 (SPACE), 코드 단위 0x0028 (LEFT PARENTHESIS), 구현에서 정의된 시간대 이름, 코드 단위 0x0029 (RIGHT PARENTHESIS)를 문자열 연결한 결과 중 하나인 구현에서 정의된 문자열로 둡니다.
-            1. _offsetSign_, _offsetHour_, _offsetMinute_, _tzName_을 문자열 연결한 결과를 반환합니다.
+              1. _offsetSign_을 *"-"*로 설정합니다.
+              1. _absOffsetMilliseconds_를 -_offsetMilliseconds_로 설정합니다.
+            1. _offsetMinute_을 ToZeroPaddedDecimalString(MinuteFromTime(𝔽(_absOffsetMilliseconds_)), 2)로 설정합니다.
+            1. _offsetHour_를 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffsetMilliseconds_)), 2)로 설정합니다.
+            1. _timeZoneName_을 빈 String이거나 코드 단위 0x0020 (SPACE), 코드 단위 0x0028 (LEFT PARENTHESIS), 구현 정의 시간대 이름, 코드 단위 0x0029 (RIGHT PARENTHESIS)를 문자열 연결한 구현 정의 문자열로 설정합니다.
+            1. _offsetSign_, _offsetHour_, _offsetMinute_, _timeZoneName_을 문자열 연결한 결과를 반환합니다.
           </emu-alg>
         </emu-clause>
 
@@ -38038,8 +38036,8 @@ THH:mm:ss.sss
           GroupName :: `&lt;` RegExpIdentifierName `&gt;`
         </emu-grammar>
         <emu-alg>
-          1. _idTextUnescaped_를 |RegExpIdentifierName|의 RegExpIdentifierCodePoints로 둔다.
-          1. CodePointsToString(_idTextUnescaped_)을 반환한다.
+          1. _nameUnescaped_를 |RegExpIdentifierName|의 RegExpIdentifierCodePoints로 설정합니다.
+          1. CodePointsToString(_nameUnescaped_)을 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -41212,20 +41210,20 @@ THH:mm:ss.sss
         <p>이 method는 array의 elements를 Strings로 convert한 뒤, _separator_의 occurrences로 separated하여 these Strings를 concatenates합니다. separator가 provided되지 않으면, single comma가 separator로 사용됩니다.</p>
         <p>called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 ? ToObject(*this* value)로 둔다.
-          1. _length_를 ? LengthOfArrayLike(_obj_)로 둔다.
-          1. _separator_가 *undefined*이면, _sep_를 *","*로 둔다.
-          1. Else, _sep_를 ? ToString(_separator_)로 둔다.
-          1. _result_를 empty String으로 둔다.
-          1. _k_를 0으로 둔다.
-          1. Repeat, while _k_ &lt; _length_,
-            1. _k_ > 0이면, _result_를 _result_와 _sep_의 string-concatenation으로 설정한다.
-            1. _element_를 ? Get(_obj_, ! ToString(𝔽(_k_)))로 둔다.
-            1. _element_가 *undefined*도 *null*도 아니면, 다음을 수행한다.
-              1. _elementString_을 ? ToString(_element_)로 둔다.
-              1. _result_를 _result_와 _elementString_의 string-concatenation으로 설정한다.
-            1. _k_를 _k_ + 1로 설정한다.
-          1. _result_를 반환한다.
+          1. _obj_를 ? ToObject(*this* 값)으로 설정합니다.
+          1. _length_를 ? LengthOfArrayLike(_obj_)로 설정합니다.
+          1. _separator_가 *undefined*이면, _separatorString_을 *","*로 설정합니다.
+          1. 그렇지 않으면, _separatorString_을 ? ToString(_separator_)으로 설정합니다.
+          1. _result_를 빈 String으로 설정합니다.
+          1. _k_를 0으로 설정합니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
+            1. _k_ > 0이면, _result_를 _result_와 _separatorString_을 문자열 연결한 결과로 설정합니다.
+            1. _element_를 ? Get(_obj_, ! ToString(𝔽(_k_)))로 설정합니다.
+            1. _element_가 *undefined*도 *null*도 아니면,
+              1. _elementString_을 ? ToString(_element_)으로 설정합니다.
+              1. _result_를 _result_와 _elementString_을 문자열 연결한 결과로 설정합니다.
+            1. _k_를 _k_ + 1로 설정합니다.
+          1. _result_를 반환합니다.
         </emu-alg>
         <emu-note>
           <p>이 method는 intentionally generic입니다; its *this* value가 Array일 것을 require하지 않습니다. 따라서 method로 사용하기 위해 other kinds of objects에 transferred될 수 있습니다.</p>
@@ -42794,18 +42792,18 @@ THH:mm:ss.sss
         <p>이 method의 arguments에 대한 interpretation 및 use는 <emu-xref href="#sec-array.prototype.join"></emu-xref>에 defined된 `Array.prototype.join`의 경우와 같습니다.</p>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둡니다.
-          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
-          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
-          1. _separator_가 *undefined*이면 _sep_를 *","*로 둡니다.
-          1. 그렇지 않으면 _sep_를 ? ToString(_separator_)로 둡니다.
-          1. _result_를 빈 String으로 둡니다.
-          1. _k_를 0으로 둡니다.
+          1. _obj_를 *this* 값으로 설정합니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 설정합니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 설정합니다.
+          1. _separator_가 *undefined*이면, _separatorString_을 *","*로 설정합니다.
+          1. 그렇지 않으면, _separatorString_을 ? ToString(_separator_)으로 설정합니다.
+          1. _result_를 빈 String으로 설정합니다.
+          1. _k_를 0으로 설정합니다.
           1. _k_ &lt; _length_인 동안 반복합니다.
-            1. _k_ > 0이면 _result_를 _result_와 _sep_를 문자열 연결한 결과로 설정합니다.
-            1. _element_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
+            1. _k_ > 0이면, _result_를 _result_와 _separatorString_을 문자열 연결한 결과로 설정합니다.
+            1. _element_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 설정합니다.
             1. _element_가 *undefined*가 아니면,
-              1. _elementString_을 ! ToString(_element_)로 둡니다.
+              1. _elementString_을 ! ToString(_element_)으로 설정합니다.
               1. _result_를 _result_와 _elementString_을 문자열 연결한 결과로 설정합니다.
             1. _k_를 _k_ + 1로 설정합니다.
           1. _result_를 반환합니다.
@@ -43721,22 +43719,22 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.frombase64" type="built-in function">
         <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. _string_이 String이 아니면, *TypeError* exception을 throw한다.
-          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
-          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)으로 둔다.
-          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
-          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* exception을 throw한다.
-          1. _lastChunkHandling_을 ? Get(_opts_, *"lastChunkHandling"*)으로 둔다.
-          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정한다.
-          1. _lastChunkHandling_이 *"loose"*, *"strict"*, 또는 *"stop-before-partial"* 중 하나가 아니면, *TypeError* exception을 throw한다.
-          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_)로 둔다.
-          1. _result_.[[Error]]가 ~none~이 아니면, 다음을 수행한다.
-            1. _result_.[[Error]]를 Throw한다.
-          1. _resultLength_를 _result_.[[Bytes]] 안의 elements 수로 둔다.
-          1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 둔다.
-          1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]] 안의 elements 수이다.
-          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]]의 each index의 value를 _result_.[[Bytes]]의 corresponding index의 value로 설정한다.
-          1. _ta_를 반환한다.
+          1. _string_이 String이 아니면, *TypeError* 예외를 던집니다.
+          1. _optionsObj_를 ? GetOptionsObject(_options_)로 설정합니다.
+          1. _alphabet_을 ? Get(_optionsObj_, *"alphabet"*)으로 설정합니다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정합니다.
+          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* 예외를 던집니다.
+          1. _lastChunkHandling_을 ? Get(_optionsObj_, *"lastChunkHandling"*)으로 설정합니다.
+          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정합니다.
+          1. _lastChunkHandling_이 *"loose"*, *"strict"*, *"stop-before-partial"* 중 하나가 아니면, *TypeError* 예외를 던집니다.
+          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_)로 설정합니다.
+          1. _result_.[[Error]]가 ~none~이 아니면,
+            1. _result_.[[Error]]를 던집니다.
+          1. _resultLength_를 _result_.[[Bytes]]의 요소 수로 설정합니다.
+          1. _ta_를 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>로 설정합니다.
+          1. 단언: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]는 _result_.[[Bytes]]의 요소 수입니다.
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]]의 각 인덱스 값을 _result_.[[Bytes]]의 대응하는 인덱스 값으로 설정합니다.
+          1. _ta_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -43762,30 +43760,30 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.setfrombase64" type="built-in function">
         <h1>Uint8Array.prototype.setFromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. _into_를 *this* 값으로 둔다.
-          1. ? ValidateUint8Array(_into_)를 수행한다.
-          1. _string_이 String이 아니면 *TypeError* 예외를 발생시킨다.
-          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
-          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)으로 둔다.
-          1. _alphabet_이 *undefined*이면 _alphabet_을 *"base64"*로 설정한다.
-          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면 *TypeError* 예외를 발생시킨다.
-          1. _lastChunkHandling_을 ? Get(_opts_, *"lastChunkHandling"*)으로 둔다.
-          1. _lastChunkHandling_이 *undefined*이면 _lastChunkHandling_을 *"loose"*로 설정한다.
-          1. _lastChunkHandling_이 *"loose"*, *"strict"* 또는 *"stop-before-partial"* 중 하나가 아니면 *TypeError* 예외를 발생시킨다.
-          1. _taRecord_를 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)로 둔다.
-          1. _byteLength_를 TypedArrayLength(_taRecord_)로 둔다.
-          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)로 둔다.
-          1. _bytes_를 _result_.[[Bytes]]로 둔다.
-          1. _written_을 _bytes_의 요소 수로 둔다.
-          1. 참고: FromBase64는 사용자 코드를 호출하지 않으므로 _into_를 뒷받침하는 ArrayBuffer가 분리되거나 축소되었을 수 없다.
-          1. 단언: _written_ ≤ _byteLength_이다.
-          1. SetUint8ArrayBytes(_into_, _bytes_)를 수행한다.
+          1. _into_를 *this* 값으로 설정합니다.
+          1. ? ValidateUint8Array(_into_)를 수행합니다.
+          1. _string_이 String이 아니면, *TypeError* 예외를 던집니다.
+          1. _optionsObj_를 ? GetOptionsObject(_options_)로 설정합니다.
+          1. _alphabet_을 ? Get(_optionsObj_, *"alphabet"*)으로 설정합니다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정합니다.
+          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* 예외를 던집니다.
+          1. _lastChunkHandling_을 ? Get(_optionsObj_, *"lastChunkHandling"*)으로 설정합니다.
+          1. _lastChunkHandling_이 *undefined*이면, _lastChunkHandling_을 *"loose"*로 설정합니다.
+          1. _lastChunkHandling_이 *"loose"*, *"strict"*, *"stop-before-partial"* 중 하나가 아니면, *TypeError* 예외를 던집니다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)로 설정합니다.
+          1. _byteLength_를 TypedArrayLength(_taRecord_)로 설정합니다.
+          1. _result_를 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)로 설정합니다.
+          1. _bytes_를 _result_.[[Bytes]]로 설정합니다.
+          1. _written_을 _bytes_의 요소 수로 설정합니다.
+          1. 참고: FromBase64는 사용자 코드를 호출하지 않으므로, _into_를 뒷받침하는 ArrayBuffer는 분리되거나 축소될 수 없습니다.
+          1. 단언: _written_ ≤ _byteLength_입니다.
+          1. SetUint8ArrayBytes(_into_, _bytes_)를 수행합니다.
           1. _result_.[[Error]]가 ~none~이 아니면,
-            1. _result_.[[Error]]를 발생시킨다.
-          1. _resultObj_를 OrdinaryObjectCreate(%Object.prototype%)로 둔다.
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))를 수행한다.
-          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))를 수행한다.
-          1. _resultObj_를 반환한다.
+            1. _result_.[[Error]]를 던집니다.
+          1. _resultObj_를 OrdinaryObjectCreate(%Object.prototype%)로 설정합니다.
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]]))를 수행합니다.
+          1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_))를 수행합니다.
+          1. _resultObj_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -43815,20 +43813,20 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.tobase64" type="built-in function">
         <h1>Uint8Array.prototype.toBase64 ( [ _options_ ] )</h1>
         <emu-alg>
-          1. _obj_를 *this* value로 둔다.
-          1. ? ValidateUint8Array(_obj_)를 수행한다.
-          1. _opts_를 ? GetOptionsObject(_options_)로 둔다.
-          1. _alphabet_을 ? Get(_opts_, *"alphabet"*)으로 둔다.
-          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정한다.
-          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* exception을 throw한다.
-          1. _omitPadding_을 ToBoolean(? Get(_opts_, *"omitPadding"*)))으로 둔다.
-          1. _toEncode_를 ? GetUint8ArrayBytes(_obj_)로 둔다.
-          1. _alphabet_이 *"base64"*이면, 다음을 수행한다.
-            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 section 4에 specified된 base64 encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
-          1. Else,
-            1. Assert: _alphabet_은 *"base64url"*이다.
-            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 section 5에 specified된 base64url encoding에 따라 _toEncode_를 encoding한 결과인 code points의 sequence로 둔다. Padding은 _omitPadding_이 *false*인 경우에만 included된다.
-          1. CodePointsToString(_outAscii_)를 반환한다.
+          1. _obj_를 *this* 값으로 설정합니다.
+          1. ? ValidateUint8Array(_obj_)를 수행합니다.
+          1. _optionsObj_를 ? GetOptionsObject(_options_)로 설정합니다.
+          1. _alphabet_을 ? Get(_optionsObj_, *"alphabet"*)으로 설정합니다.
+          1. _alphabet_이 *undefined*이면, _alphabet_을 *"base64"*로 설정합니다.
+          1. _alphabet_이 *"base64"*도 *"base64url"*도 아니면, *TypeError* 예외를 던집니다.
+          1. _omitPadding_을 ToBoolean(? Get(_optionsObj_, *"omitPadding"*))으로 설정합니다.
+          1. _toEncode_를 ? GetUint8ArrayBytes(_obj_)로 설정합니다.
+          1. _alphabet_이 *"base64"*이면,
+            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 섹션 4에 명시된 base64 인코딩에 따라 _toEncode_를 인코딩한 결과인 코드 포인트 시퀀스로 설정합니다. 패딩은 _omitPadding_이 *false*인 경우에만 포함됩니다.
+          1. 그렇지 않으면,
+            1. 단언: _alphabet_은 *"base64url"*입니다.
+            1. _outAscii_를 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>의 섹션 5에 명시된 base64url 인코딩에 따라 _toEncode_를 인코딩한 결과인 코드 포인트 시퀀스로 설정합니다. 패딩은 _omitPadding_이 *false*인 경우에만 포함됩니다.
+          1. CodePointsToString(_outAscii_)을 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -46091,31 +46089,31 @@ THH:mm:ss.sss
         <h1>ArrayBuffer.prototype.slice ( _start_, _end_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. _length_를 _obj_.[[ArrayBufferByteLength]]로 둔다.
-          1. _first_를 ? ToClampedIndex(_start_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _final_을 _length_로 두고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 둔다.
-          1. _newLength_를 max(_final_ - _first_, 0)으로 둔다.
-          1. _ctor_를 ? SpeciesConstructor(_obj_, %ArrayBuffer%)로 둔다.
-          1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 둔다.
-          1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_new_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. IsDetachedBuffer(_new_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. SameValue(_new_, _obj_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. _new_.[[ArrayBufferByteLength]] &lt; _newLength_이면, *TypeError* 예외를 던진다.
-          1. 참고: 위 단계들의 부작용으로 _obj_가 분리(detach)되거나 크기 조정되었을 수 있다.
-          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던진다.
-          1. _fromBuf_를 _obj_.[[ArrayBufferData]]로 둔다.
-          1. _toBuf_를 _new_.[[ArrayBufferData]]로 둔다.
-          1. _currentLength_를 _obj_.[[ArrayBufferByteLength]]로 둔다.
-          1. _maxCount_를 _currentLength_ - _first_로 둔다.
-          1. _maxCount_ > 0이면, 다음을 수행한다.
-            1. _count_를 min(_newLength_, _maxCount_)로 둔다.
-            1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _count_)를 수행한다.
-          1. _new_를 반환한다.
+          1. _obj_를 *this* 값으로 설정합니다.
+          1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행합니다.
+          1. IsSharedArrayBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. _length_를 _obj_.[[ArrayBufferByteLength]]로 설정합니다.
+          1. _first_를 ? ToClampedIndex(_start_, _length_)로 설정합니다.
+          1. _end_가 *undefined*이면, _final_을 _length_로 설정하고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 설정합니다.
+          1. _newLength_를 max(_final_ - _first_, 0)로 설정합니다.
+          1. _ctor_를 ? SpeciesConstructor(_obj_, %ArrayBuffer%)로 설정합니다.
+          1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 설정합니다.
+          1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행합니다.
+          1. IsSharedArrayBuffer(_new_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. IsDetachedBuffer(_new_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. SameValue(_new_, _obj_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. _new_.[[ArrayBufferByteLength]] &lt; _newLength_이면, *TypeError* 예외를 던집니다.
+          1. 참고: 위 단계의 부수 효과로 인해 _obj_가 분리되거나 크기가 조정되었을 수 있습니다.
+          1. IsDetachedBuffer(_obj_)가 *true*이면, *TypeError* 예외를 던집니다.
+          1. _fromBlock_을 _obj_.[[ArrayBufferData]]로 설정합니다.
+          1. _toBlock_을 _new_.[[ArrayBufferData]]로 설정합니다.
+          1. _currentLength_를 _obj_.[[ArrayBufferByteLength]]로 설정합니다.
+          1. _maxCount_를 _currentLength_ - _first_로 설정합니다.
+          1. _maxCount_ > 0이면,
+            1. _count_를 min(_newLength_, _maxCount_)로 설정합니다.
+            1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _count_)를 수행합니다.
+          1. _new_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -46203,8 +46201,8 @@ THH:mm:ss.sss
           1. Else,
             1. Append [[ArrayBufferByteLength]] to _slots_.
           1. Let _obj_ be ? OrdinaryCreateFromConstructor(_ctor_, *"%SharedArrayBuffer.prototype%"*, _slots_).
-          1. If _allocatingGrowableBuffer_ is *true*, let _allocLength_ be _maxByteLength_; else let _allocLength_ be _byteLength_.
-          1. Let _block_ be ? CreateSharedByteDataBlock(_allocLength_).
+          1. If _allocatingGrowableBuffer_ is *true*, let _allocationLength_ be _maxByteLength_; else let _allocationLength_ be _byteLength_.
+          1. Let _block_ be ? CreateSharedByteDataBlock(_allocationLength_).
           1. Set _obj_.[[ArrayBufferData]] to _block_.
           1. If _allocatingGrowableBuffer_ is *true*, then
             1. Assert: _byteLength_ ≤ _maxByteLength_.
@@ -46420,23 +46418,23 @@ THH:mm:ss.sss
         <h1>SharedArrayBuffer.prototype.slice ( _start_, _end_ )</h1>
         <p>이 method는 called될 때 다음 steps를 수행합니다:</p>
         <emu-alg>
-          1. _obj_를 *this* 값으로 둔다.
-          1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_obj_)가 *false*이면, *TypeError* 예외를 던진다.
-          1. _length_를 ArrayBufferByteLength(_obj_, ~seq-cst~)로 둔다.
-          1. _first_를 ? ToClampedIndex(_start_, _length_)로 둔다.
-          1. _end_가 *undefined*이면 _final_을 _length_로 두고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 둔다.
-          1. _newLength_를 max(_final_ - _first_, 0)으로 둔다.
-          1. _ctor_를 ? SpeciesConstructor(_obj_, %SharedArrayBuffer%)로 둔다.
-          1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 둔다.
-          1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행한다.
-          1. IsSharedArrayBuffer(_new_)가 *false*이면, *TypeError* 예외를 던진다.
-          1. _new_.[[ArrayBufferData]]가 _obj_.[[ArrayBufferData]]와 같으면, *TypeError* 예외를 던진다.
-          1. ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_이면, *TypeError* 예외를 던진다.
-          1. _fromBuf_를 _obj_.[[ArrayBufferData]]로 둔다.
-          1. _toBuf_를 _new_.[[ArrayBufferData]]로 둔다.
-          1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _newLength_)를 수행한다.
-          1. _new_를 반환한다.
+          1. _obj_를 *this* 값으로 설정합니다.
+          1. ? RequireInternalSlot(_obj_, [[ArrayBufferData]])를 수행합니다.
+          1. IsSharedArrayBuffer(_obj_)가 *false*이면, *TypeError* 예외를 던집니다.
+          1. _length_를 ArrayBufferByteLength(_obj_, ~seq-cst~)로 설정합니다.
+          1. _first_를 ? ToClampedIndex(_start_, _length_)로 설정합니다.
+          1. _end_가 *undefined*이면, _final_을 _length_로 설정하고, 그렇지 않으면 _final_을 ? ToClampedIndex(_end_, _length_)로 설정합니다.
+          1. _newLength_를 max(_final_ - _first_, 0)로 설정합니다.
+          1. _ctor_를 ? SpeciesConstructor(_obj_, %SharedArrayBuffer%)로 설정합니다.
+          1. _new_를 ? Construct(_ctor_, « 𝔽(_newLength_) »)로 설정합니다.
+          1. ? RequireInternalSlot(_new_, [[ArrayBufferData]])를 수행합니다.
+          1. IsSharedArrayBuffer(_new_)가 *false*이면, *TypeError* 예외를 던집니다.
+          1. _new_.[[ArrayBufferData]]가 _obj_.[[ArrayBufferData]]이면, *TypeError* 예외를 던집니다.
+          1. ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_이면, *TypeError* 예외를 던집니다.
+          1. _fromBlock_을 _obj_.[[ArrayBufferData]]로 설정합니다.
+          1. _toBlock_을 _new_.[[ArrayBufferData]]로 설정합니다.
+          1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _newLength_)를 수행합니다.
+          1. _new_를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -49990,28 +49988,28 @@ THH:mm:ss.sss
         </dl>
 
         <emu-alg>
-          1. NOTE: _promiseCapability_가 intrinsic %Promise%에서 derived되므로, 아래 IfAbruptRejectPromise의 use에 entailed되는 _promiseCapability_.[[Reject]]에 대한 calls는 throw하지 않음이 guaranteed된다.
-          1. _done_을 Completion(IteratorComplete(_result_))로 둔다.
+          1. 참고: _promiseCapability_은 내장 %Promise%에서 파생되므로, 아래에서 IfAbruptRejectPromise를 사용함으로써 수반되는 _promiseCapability_.[[Reject]] 호출은 예외를 던지지 않음이 보장됩니다.
+          1. _done_을 Completion(IteratorComplete(_result_))으로 설정합니다.
           1. IfAbruptRejectPromise(_done_, _promiseCapability_).
-          1. _value_를 Completion(IteratorValue(_result_))로 둔다.
+          1. _value_를 Completion(IteratorValue(_result_))으로 설정합니다.
           1. IfAbruptRejectPromise(_value_, _promiseCapability_).
-          1. _valueWrapper_를 Completion(PromiseResolve(%Promise%, _value_))로 둔다.
-          1. _valueWrapper_가 abrupt completion이고, _done_이 *false*이며, _closeOnRejection_이 *true*이면, 다음을 수행한다.
-            1. _valueWrapper_를 Completion(IteratorClose(_syncIteratorRecord_, _valueWrapper_))로 설정한다.
+          1. _valueWrapper_를 Completion(PromiseResolve(%Promise%, _value_))으로 설정합니다.
+          1. _valueWrapper_가 갑작스러운 완료이고, _done_이 *false*이며, _closeOnRejection_이 *true*이면,
+            1. _valueWrapper_를 Completion(IteratorClose(_syncIteratorRecord_, _valueWrapper_))으로 설정합니다.
           1. IfAbruptRejectPromise(_valueWrapper_, _promiseCapability_).
-          1. _unwrap_을 parameters (_v_)를 가지고 _done_을 captures하며 called될 때 다음 steps를 수행하는 new Abstract Closure로 둔다:
-            1. CreateIteratorResultObject(_v_, _done_)를 반환한다.
-          1. _onFulfilled_를 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)로 둔다.
-          1. NOTE: _onFulfilled_는 IteratorResult object의 *"value"* property를 processing할 때, 그 value가 promise이면 it을 wait하고 new “unwrapped” IteratorResult object로 result를 re-package하기 위해 used된다.
-          1. _done_이 *true*이거나 _closeOnRejection_이 *false*이면, 다음을 수행한다.
-            1. _onRejected_를 *undefined*로 둔다.
-          1. Else,
-            1. _closeIterator_를 parameters (_error_)를 가지고 _syncIteratorRecord_를 captures하며 called될 때 다음 steps를 수행하는 new Abstract Closure로 둔다:
-              1. ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_))를 반환한다.
-            1. _onRejected_를 CreateBuiltinFunction(_closeIterator_, 1, *""*, « »)로 둔다.
-            1. NOTE: _onRejected_는 yields하는 IteratorResult object의 *"value"* property가 rejected promise일 때 Iterator를 close하는 데 used된다.
-          1. PerformPromiseThen(_valueWrapper_, _onFulfilled_, _onRejected_, _promiseCapability_)를 수행한다.
-          1. _promiseCapability_.[[Promise]]를 반환한다.
+          1. _unwrap_을 매개변수 (_value_)를 가지며 _done_을 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 설정합니다.
+            1. CreateIteratorResultObject(_value_, _done_)을 반환합니다.
+          1. _onFulfilled_를 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)로 설정합니다.
+          1. 참고: _onFulfilled_는 IteratorResult 객체의 *"value"* 속성을 처리할 때 해당 값이 promise인 경우 그 값을 기다린 다음, 결과를 새로운 “언래핑된” IteratorResult 객체로 다시 패키징하는 데 사용됩니다.
+          1. _done_이 *true*이거나 _closeOnRejection_이 *false*이면,
+            1. _onRejected_를 *undefined*로 설정합니다.
+          1. 그렇지 않으면,
+            1. _closeIterator_를 매개변수 (_error_)를 가지며 _syncIteratorRecord_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 설정합니다.
+              1. ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_))를 반환합니다.
+            1. _onRejected_를 CreateBuiltinFunction(_closeIterator_, 1, *""*, « »)로 설정합니다.
+            1. 참고: _onRejected_는 Iterator가 산출하는 IteratorResult 객체의 *"value"* 속성이 거부된 promise일 때 해당 Iterator를 닫는 데 사용됩니다.
+          1. PerformPromiseThen(_valueWrapper_, _onFulfilled_, _onRejected_, _promiseCapability_)을 수행합니다.
+          1. _promiseCapability_.[[Promise]]를 반환합니다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -52585,20 +52583,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _asyncContext_를 실행 중인 실행 컨텍스트라 하자.
-          1. _promise_를 ? PromiseResolve(%Promise%, _arg_)라 하자.
-          1. _fulfilledClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_v_)를 갖는 새로운 Abstract Closure라 하자.
-            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))을 수행한다.
-            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
-            1. NormalCompletion(*undefined*)을 반환한다.
-          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)라 하자.
-          1. _rejectedClosure_를 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는, 매개변수 (_reason_)를 갖는 새로운 Abstract Closure라 하자.
-            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))을 수행한다.
-            1. NOTE: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시된다.
-            1. NormalCompletion(*undefined*)을 반환한다.
-          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)라 하자.
-          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)을 수행한다.
-          1. ? RunCallerContext(~empty~)를 반환한다.
+          1. _asyncContext_를 실행 중인 실행 컨텍스트로 설정합니다.
+          1. _promise_를 ? PromiseResolve(%Promise%, _arg_)로 설정합니다.
+          1. _fulfilledClosure_를 매개변수 (_value_)를 가지며 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 설정합니다.
+            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_value_)))을 수행합니다.
+            1. 참고: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시됩니다.
+            1. NormalCompletion(*undefined*)을 반환합니다.
+          1. _onFulfilled_를 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)로 설정합니다.
+          1. _rejectedClosure_를 매개변수 (_reason_)를 가지며 _asyncContext_를 캡처하고 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 설정합니다.
+            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))을 수행합니다.
+            1. 참고: RunSuspendedContext가 반환한 Completion Record는 의도적으로 무시됩니다.
+            1. NormalCompletion(*undefined*)을 반환합니다.
+          1. _onRejected_를 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)로 설정합니다.
+          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)을 수행합니다.
+          1. ? RunCallerContext(~empty~)를 반환합니다.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -54818,16 +54816,16 @@ THH:mm:ss.sss
       <p>_labelSet_ 인수를 사용하는 ForInOfLoopEvaluation의 런타임 의미론은 다음과 같이 확장된다:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _bindingId_를 |BindingIdentifier|의 StringValue로 둔다.
-        1. _lhs_를 ? ResolveBinding(_bindingId_)으로 둔다.
+        1. _name_을 |BindingIdentifier|의 StringValue로 설정합니다.
+        1. _lhs_를 ? ResolveBinding(_name_)으로 설정합니다.
         1. IsAnonymousFunctionDefinition(|Initializer|)이 *true*이면,
-          1. _value_를 _bindingId_를 인수로 하는 |Initializer|의 ? NamedEvaluation으로 둔다.
+          1. _value_를 인수 _name_을 사용한 |Initializer|의 ? NamedEvaluation으로 설정합니다.
         1. 그렇지 않으면,
-          1. _rhs_를 |Initializer|의 ? Evaluation으로 둔다.
-          1. _value_를 ? GetValue(_rhs_)로 둔다.
-        1. ? PutValue(_lhs_, _value_)를 수행한다.
-        1. _keyResult_를 ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~)로 둔다.
-        1. ? ForIn/OfBodyEvaluation(|BindingIdentifier|, |Statement|, _keyResult_, ~enumerate~, ~var-binding~, _labelSet_)을 반환한다.
+          1. _rhs_를 |Initializer|의 ? Evaluation으로 설정합니다.
+          1. _value_를 ? GetValue(_rhs_)로 설정합니다.
+        1. ? PutValue(_lhs_, _value_)를 수행합니다.
+        1. _keyResult_를 ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~)로 설정합니다.
+        1. ? ForIn/OfBodyEvaluation(|BindingIdentifier|, |Statement|, _keyResult_, ~enumerate~, ~var-binding~, _labelSet_)를 반환합니다.
       </emu-alg>
     </emu-annex>
 

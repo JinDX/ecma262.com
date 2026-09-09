@@ -3036,7 +3036,7 @@
             <tr id="internal-method-setprototypeof">
               <td>
                 [[SetPrototypeOf]] (
-                _proto_: Object または *null*,
+                  _proto_: Object または *null*,
                 ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3070,7 +3070,7 @@
             <tr id="internal-method-getownproperty">
               <td>
                 [[GetOwnProperty]] (
-                _propertyKey_: プロパティキー,
+                  _propertyKey_: プロパティキー,
                 ): Property Descriptor または *undefined* のいずれかを含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3084,8 +3084,8 @@
             <tr id="internal-method-defineownproperty">
               <td>
                 [[DefineOwnProperty]] (
-                _propertyKey_: プロパティキー,
-                _propertyDesc_: Property Descriptor,
+                  _propertyKey_: プロパティキー,
+                  _propertyDesc_: Property Descriptor,
                 ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3099,7 +3099,7 @@
             <tr id="internal-method-hasproperty">
               <td>
                 [[HasProperty]] (
-                _propertyKey_: プロパティキー,
+                  _propertyKey_: プロパティキー,
                 ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3113,8 +3113,8 @@
             <tr id="internal-method-get">
               <td>
                 [[Get]] (
-                _propertyKey_: プロパティキー,
-                _receiver_: ECMAScript 言語値,
+                  _propertyKey_: プロパティキー,
+                  _receiver_: ECMAScript 言語値,
                 ): ECMAScript 言語値を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3128,9 +3128,9 @@
             <tr id="internal-method-set">
               <td>
                 [[Set]] (
-                _propertyKey_: プロパティキー,
-                _value_: ECMAScript 言語値,
-                _receiver_: ECMAScript 言語値,
+                  _propertyKey_: プロパティキー,
+                  _value_: ECMAScript 言語値,
+                  _receiver_: ECMAScript 言語値,
                 ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3144,7 +3144,7 @@
             <tr id="internal-method-delete">
               <td>
                 [[Delete]] (
-                _propertyKey_: プロパティキー,
+                  _propertyKey_: プロパティキー,
                 ): Boolean を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3186,8 +3186,8 @@
             <tr id="internal-method-call">
               <td>
                 [[Call]] (
-                _thisArg_: ECMAScript 言語値,
-                _argList_: ECMAScript 言語値の List,
+                  _thisArg_: ECMAScript 言語値,
+                  _argList_: ECMAScript 言語値の List,
                 ): ECMAScript 言語値を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -3201,8 +3201,8 @@
             <tr id="internal-method-construct">
               <td>
                 [[Construct]] (
-                _argList_: ECMAScript 言語値の List,
-                _newTarget_: コンストラクター,
+                  _argList_: ECMAScript 言語値の List,
+                  _newTarget_: コンストラクター,
                 ): Object を含む正常完了、またはスロー完了
               </td>
               <td>
@@ -10157,148 +10157,148 @@
 
     <emu-clause id="sec-runtime-semantics-iteratorbindinginitialization" oldids="sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization,sec-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-arrow-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-async-arrow-function-definitions-IteratorBindingInitialization" type="sdo">
       <h1>
-        Runtime Semantics: IteratorBindingInitialization (
-          _iteratorRecord_: an Iterator Record,
-          _envRecord_: an Environment Record or *undefined*,
-        ): either a normal completion containing ~unused~ or an abrupt completion
+        ランタイム意味論: IteratorBindingInitialization (
+        _iteratorRecord_: Iterator Record,
+        _envRecord_: Environment Record または *undefined*,
+        ): ~unused~ を含む正常完了または突然の完了
       </h1>
       <dl class="header">
       </dl>
       <emu-note>
-        <p>_envRecord_に*undefined*が渡される場合、それは初期化値を代入するためにPutValue操作を使用すべきであることを示します。これはnon-strict functionsのformal parameter listsの場合に該当します。その場合、同じ名前を持つ複数のparametersの可能性に対処するため、formal parameter bindingsは事前初期化されます。</p>
+        <p>_envRecord_ に *undefined* が渡された場合、初期化値を代入するために PutValue 操作を使用する必要があることを示す。これは、非 strict 関数の仮引数リストの場合に該当する。その場合、同じ名前を持つ複数の仮引数が存在する可能性に対処するため、仮引数の束縛は事前に初期化される。</p>
       </emu-note>
       <emu-grammar>ArrayBindingPattern : `[` `]`</emu-grammar>
       <emu-alg>
-        1. ~unused~を返す。
+        1. ~unused~ を返す。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision `]`</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_を伴う|Elision|のIteratorDestructuringAssignmentEvaluationを ? で返す。
+        1. 引数 _iteratorRecord_ を指定して |Elision| の IteratorDestructuringAssignmentEvaluation を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. |Elision|が存在するなら、
-          1. 引数_iteratorRecord_を伴う|Elision|のIteratorDestructuringAssignmentEvaluationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingRestElement|のIteratorBindingInitializationを ? で返す。
+        1. |Elision| が存在する場合、
+          1. 引数 _iteratorRecord_ を指定して |Elision| の IteratorDestructuringAssignmentEvaluation を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingRestElement| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision `]`</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingElementList|のIteratorBindingInitializationを ? で実行する。
-        1. 引数_iteratorRecord_を伴う|Elision|のIteratorDestructuringAssignmentEvaluationを ? で返す。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingElementList| の IteratorBindingInitialization を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ を指定して |Elision| の IteratorDestructuringAssignmentEvaluation を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingElementList|のIteratorBindingInitializationを ? で実行する。
-        1. |Elision|が存在するなら、
-          1. 引数_iteratorRecord_を伴う|Elision|のIteratorDestructuringAssignmentEvaluationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingRestElement|のIteratorBindingInitializationを ? で返す。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingElementList| の IteratorBindingInitialization を ? 付きで実行する。
+        1. |Elision| が存在する場合、
+          1. 引数 _iteratorRecord_ を指定して |Elision| の IteratorDestructuringAssignmentEvaluation を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingRestElement| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>BindingElementList : BindingElementList `,` BindingElisionElement</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingElementList|のIteratorBindingInitializationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingElisionElement|のIteratorBindingInitializationを ? で返す。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingElementList| の IteratorBindingInitialization を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingElisionElement| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>BindingElisionElement : Elision BindingElement</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_を伴う|Elision|のIteratorDestructuringAssignmentEvaluationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|BindingElement|のIteratorBindingInitializationを ? で返す。
+        1. 引数 _iteratorRecord_ を指定して |Elision| の IteratorDestructuringAssignmentEvaluation を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |BindingElement| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
       <emu-alg>
-        1. _bindingId_を|BindingIdentifier|のStringValueとする。
-        1. _lhs_を ? ResolveBinding(_bindingId_, _envRecord_) とする。
-        1. _v_を*undefined*とする。
-        1. _iteratorRecord_.[[Done]]が*false*なら、
-          1. _next_を ? IteratorStepValue(_iteratorRecord_) とする。
-          1. _next_が~done~でないなら、
-            1. _v_を_next_に設定する。
-        1. |Initializer|が存在し、かつ_v_が*undefined*なら、
-          1. IsAnonymousFunctionDefinition(|Initializer|)が*true*なら、
-            1. _v_を、引数_bindingId_を伴う|Initializer|のNamedEvaluationの ? 結果に設定する。
-          1. そうでなければ、
-            1. _defaultValue_を|Initializer|のEvaluationの ? 結果とする。
-            1. _v_を ? GetValue(_defaultValue_) に設定する。
-        1. _envRecord_が*undefined*なら、PutValue(_lhs_, _v_)を ? で返す。
-        1. InitializeReferencedBinding(_lhs_, _v_)を ? で返す。
+        1. _name_ を |BindingIdentifier| の StringValue とする。
+        1. _lhs_ を ? ResolveBinding(_name_, _envRecord_) とする。
+        1. _value_ を *undefined* とする。
+        1. _iteratorRecord_.[[Done]] が *false* の場合、
+          1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+          1. _next_ が ~done~ でない場合、
+            1. _value_ を _next_ に設定する。
+        1. |Initializer| が存在し、かつ _value_ が *undefined* の場合、
+          1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
+            1. _value_ を、引数 _name_ を指定した |Initializer| の ? NamedEvaluation に設定する。
+          1. それ以外の場合、
+            1. _defaultValue_ を |Initializer| の ? Evaluation とする。
+            1. _value_ を ? GetValue(_defaultValue_) に設定する。
+        1. _envRecord_ が *undefined* の場合、? PutValue(_lhs_, _value_) を返す。
+        1. ? InitializeReferencedBinding(_lhs_, _value_) を返す。
       </emu-alg>
       <emu-grammar>BindingElement : BindingPattern Initializer?</emu-grammar>
       <emu-alg>
-        1. _v_を*undefined*とする。
-        1. _iteratorRecord_.[[Done]]が*false*なら、
-          1. _next_を ? IteratorStepValue(_iteratorRecord_) とする。
-          1. _next_が~done~でないなら、
-            1. _v_を_next_に設定する。
-        1. |Initializer|が存在し、かつ_v_が*undefined*なら、
-          1. _defaultValue_を|Initializer|のEvaluationの ? 結果とする。
-          1. _v_を ? GetValue(_defaultValue_) に設定する。
-        1. 引数_v_および_envRecord_を伴う|BindingPattern|のBindingInitializationを ? で返す。
+        1. _value_ を *undefined* とする。
+        1. _iteratorRecord_.[[Done]] が *false* の場合、
+          1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+          1. _next_ が ~done~ でない場合、
+            1. _value_ を _next_ に設定する。
+        1. |Initializer| が存在し、かつ _value_ が *undefined* の場合、
+          1. _defaultValue_ を |Initializer| の ? Evaluation とする。
+          1. _value_ を ? GetValue(_defaultValue_) に設定する。
+        1. 引数 _value_ および _envRecord_ を指定して |BindingPattern| の BindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>BindingRestElement : `...` BindingIdentifier</emu-grammar>
       <emu-alg>
-        1. _lhs_を ? ResolveBinding(StringValue of |BindingIdentifier|, _envRecord_) とする。
-        1. _array_を ! ArrayCreate(0) とする。
-        1. _n_を0とする。
-        1. 繰り返す
-          1. _next_を~done~とする。
-          1. _iteratorRecord_.[[Done]]が*false*なら、
-            1. _next_を ? IteratorStepValue(_iteratorRecord_) に設定する。
-          1. _next_が~done~なら、
-            1. _envRecord_が*undefined*なら、PutValue(_lhs_, _array_)を ? で返す。
-            1. InitializeReferencedBinding(_lhs_, _array_)を ? で返す。
-          1. CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)を ! で実行する。
-          1. _n_を_n_ + 1に設定する。
+        1. _lhs_ を ? ResolveBinding(StringValue of |BindingIdentifier|, _envRecord_) とする。
+        1. _array_ を ! ArrayCreate(0) とする。
+        1. _n_ を 0 とする。
+        1. 繰り返す。
+          1. _next_ を ~done~ とする。
+          1. _iteratorRecord_.[[Done]] が *false* の場合、
+            1. _next_ を ? IteratorStepValue(_iteratorRecord_) に設定する。
+          1. _next_ が ~done~ の場合、
+            1. _envRecord_ が *undefined* の場合、? PutValue(_lhs_, _array_) を返す。
+            1. ? InitializeReferencedBinding(_lhs_, _array_) を返す。
+          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_) を実行する。
+          1. _n_ を _n_ + 1 に設定する。
       </emu-alg>
       <emu-grammar>BindingRestElement : `...` BindingPattern</emu-grammar>
       <emu-alg>
-        1. _array_を ! ArrayCreate(0) とする。
-        1. _n_を0とする。
-        1. 繰り返す
-          1. _next_を~done~とする。
-          1. _iteratorRecord_.[[Done]]が*false*なら、
-            1. _next_を ? IteratorStepValue(_iteratorRecord_) に設定する。
-          1. _next_が~done~なら、
-            1. 引数_array_および_envRecord_を伴う|BindingPattern|のBindingInitializationを ? で返す。
-          1. CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)を ! で実行する。
-          1. _n_を_n_ + 1に設定する。
+        1. _array_ を ! ArrayCreate(0) とする。
+        1. _n_ を 0 とする。
+        1. 繰り返す。
+          1. _next_ を ~done~ とする。
+          1. _iteratorRecord_.[[Done]] が *false* の場合、
+            1. _next_ を ? IteratorStepValue(_iteratorRecord_) に設定する。
+          1. _next_ が ~done~ の場合、
+            1. 引数 _array_ および _envRecord_ を指定して |BindingPattern| の BindingInitialization を行った結果を ? 付きで返す。
+          1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_) を実行する。
+          1. _n_ を _n_ + 1 に設定する。
       </emu-alg>
       <emu-grammar>FormalParameters : [empty]</emu-grammar>
       <emu-alg>
-        1. ~unused~を返す。
+        1. ~unused~ を返す。
       </emu-alg>
       <emu-grammar>FormalParameters : FormalParameterList `,` FunctionRestParameter</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_および_envRecord_を伴う|FormalParameterList|のIteratorBindingInitializationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|FunctionRestParameter|のIteratorBindingInitializationを ? で返す。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |FormalParameterList| の IteratorBindingInitialization を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |FunctionRestParameter| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>FormalParameterList : FormalParameterList `,` FormalParameter</emu-grammar>
       <emu-alg>
-        1. 引数_iteratorRecord_および_envRecord_を伴う|FormalParameterList|のIteratorBindingInitializationを ? で実行する。
-        1. 引数_iteratorRecord_および_envRecord_を伴う|FormalParameter|のIteratorBindingInitializationを ? で返す。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |FormalParameterList| の IteratorBindingInitialization を ? 付きで実行する。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して |FormalParameter| の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>ArrowParameters : BindingIdentifier</emu-grammar>
       <emu-alg>
-        1. _v_を*undefined*とする。
-        1. Assert: _iteratorRecord_.[[Done]]は*false*である。
-        1. _next_を ? IteratorStepValue(_iteratorRecord_) とする。
-        1. _next_が~done~でないなら、
-          1. _v_を_next_に設定する。
-        1. 引数_v_および_envRecord_を伴う|BindingIdentifier|のBindingInitializationを ? で返す。
+        1. _value_ を *undefined* とする。
+        1. 表明: _iteratorRecord_.[[Done]] は *false* である。
+        1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+        1. _next_ が ~done~ でない場合、
+          1. _value_ を _next_ に設定する。
+        1. 引数 _value_ および _envRecord_ を指定して |BindingIdentifier| の BindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>ArrowParameters : CoverParenthesizedExpressionAndArrowParameterList</emu-grammar>
       <emu-alg>
-        1. _formals_を、|CoverParenthesizedExpressionAndArrowParameterList|によってcoverされる|ArrowFormalParameters|とする。
-        1. 引数_iteratorRecord_および_envRecord_を伴う_formals_のIteratorBindingInitializationを ? で返す。
+        1. _formals_ を |CoverParenthesizedExpressionAndArrowParameterList| によってカバーされる |ArrowFormalParameters| とする。
+        1. 引数 _iteratorRecord_ および _envRecord_ を指定して _formals_ の IteratorBindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
       <emu-grammar>
         AsyncArrowBindingIdentifier : BindingIdentifier
       </emu-grammar>
       <emu-alg>
-        1. _v_を*undefined*とする。
-        1. Assert: _iteratorRecord_.[[Done]]は*false*である。
-        1. _next_を ? IteratorStepValue(_iteratorRecord_) とする。
-        1. _next_が~done~でないなら、
-          1. _v_を_next_に設定する。
-        1. 引数_v_および_envRecord_を伴う|BindingIdentifier|のBindingInitializationを ? で返す。
+        1. _value_ を *undefined* とする。
+        1. 表明: _iteratorRecord_.[[Done]] は *false* である。
+        1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+        1. _next_ が ~done~ でない場合、
+          1. _value_ を _next_ に設定する。
+        1. 引数 _value_ および _envRecord_ を指定して |BindingIdentifier| の BindingInitialization を行った結果を ? 付きで返す。
       </emu-alg>
     </emu-clause>
 
@@ -16272,31 +16272,31 @@
         <dd>Proxy exotic object _obj_</dd>
       </dl>
       <emu-alg>
-        1. ? ValidateNonRevokedProxy(_obj_)を実行する。
-        1. _target_を_obj_.[[ProxyTarget]]とする。
-        1. _handler_を_obj_.[[ProxyHandler]]とする。
-        1. Assert: _handler_はObjectである。
-        1. _trap_を ? GetMethod(_handler_, *"defineProperty"*) とする。
-        1. _trap_が*undefined*なら、
-          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_propertyKey_, _propertyDesc_)</emu-meta>を返す。
-        1. _propertyDescObj_をFromPropertyDescriptor(_propertyDesc_)とする。
-        1. _boolTrapResult_をToBoolean(? Call(_trap_, _handler_, « _target_, _propertyKey_, _propertyDescObj_ »))とする。
-        1. _boolTrapResult_が*false*なら、*false*を返す。
-        1. _targetDesc_を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_propertyKey_)</emu-meta> とする。
-        1. _extensibleTarget_を ? IsExtensible(_target_) とする。
-        1. _propertyDesc_が[[Configurable]] fieldを持ち、_propertyDesc_.[[Configurable]]が*false*なら、
-          1. _settingConfigFalse_を*true*とする。
-        1. そうでなければ、
-          1. _settingConfigFalse_を*false*とする。
-        1. _targetDesc_が*undefined*なら、
-          1. _extensibleTarget_が*false*なら、*TypeError*例外をthrowする。
-          1. _settingConfigFalse_が*true*なら、*TypeError*例外をthrowする。
-        1. そうでなければ、
-          1. IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_)が*false*なら、*TypeError*例外をthrowする。
-          1. _settingConfigFalse_が*true*かつ_targetDesc_.[[Configurable]]が*true*なら、*TypeError*例外をthrowする。
-          1. IsDataDescriptor(_targetDesc_)が*true*、_targetDesc_.[[Configurable]]が*false*、かつ_targetDesc_.[[Writable]]が*true*なら、
-            1. _propertyDesc_が[[Writable]] fieldを持ち、_propertyDesc_.[[Writable]]が*false*なら、*TypeError*例外をthrowする。
-        1. *true*を返す。
+        1. ? ValidateNonRevokedProxy(_obj_) を実行する。
+        1. _target_ を _obj_.[[ProxyTarget]] とする。
+        1. _handler_ を _obj_.[[ProxyHandler]] とする。
+        1. 表明: _handler_ は Object である。
+        1. _trap_ を ? GetMethod(_handler_, *"defineProperty"*) とする。
+        1. _trap_ が *undefined* の場合、
+          1. ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_propertyKey_, _propertyDesc_)</emu-meta> を返す。
+        1. _propertyDescObj_ を FromPropertyDescriptor(_propertyDesc_) とする。
+        1. _boolTrapResult_ を ToBoolean(? Call(_trap_, _handler_, « _target_, _propertyKey_, _propertyDescObj_ »)) とする。
+        1. _boolTrapResult_ が *false* の場合、*false* を返す。
+        1. _targetDesc_ を ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_propertyKey_)</emu-meta> とする。
+        1. _extensibleTarget_ を ? IsExtensible(_target_) とする。
+        1. _propertyDesc_ が [[Configurable]] フィールドを持ち、かつ _propertyDesc_.[[Configurable]] が *false* の場合、
+          1. _settingConfigurableFalse_ を *true* とする。
+        1. それ以外の場合、
+          1. _settingConfigurableFalse_ を *false* とする。
+        1. _targetDesc_ が *undefined* の場合、
+          1. _extensibleTarget_ が *false* の場合、*TypeError* 例外を投げる。
+          1. _settingConfigurableFalse_ が *true* の場合、*TypeError* 例外を投げる。
+        1. それ以外の場合、
+          1. IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_) が *false* の場合、*TypeError* 例外を投げる。
+          1. _settingConfigurableFalse_ が *true* で、かつ _targetDesc_.[[Configurable]] が *true* の場合、*TypeError* 例外を投げる。
+          1. IsDataDescriptor(_targetDesc_) が *true* で、_targetDesc_.[[Configurable]] が *false* で、かつ _targetDesc_.[[Writable]] が *true* の場合、
+            1. _propertyDesc_ が [[Writable]] フィールドを持ち、かつ _propertyDesc_.[[Writable]] が *false* の場合、*TypeError* 例外を投げる。
+        1. *true* を返す。
       </emu-alg>
       <emu-note>
         <p>Proxy objectsに対する[[DefineOwnProperty]]は次のinvariantsを強制します：</p>
@@ -18787,8 +18787,8 @@
           IdentifierName IdentifierPart
       </emu-grammar>
       <emu-alg>
-        1. _idTextUnescaped_を|IdentifierName|のIdentifierCodePointsとする。
-        1. CodePointsToString(_idTextUnescaped_)を返す。
+        1. _nameUnescaped_ を |IdentifierName| の IdentifierCodePoints とする。
+        1. CodePointsToString(_nameUnescaped_) を返す。
       </emu-alg>
       <emu-grammar>
         IdentifierReference : `yield`
@@ -21716,26 +21716,24 @@
         </emu-alg>
         <emu-grammar>AssignmentElement : DestructuringAssignmentTarget Initializer?</emu-grammar>
         <emu-alg>
-          1. |DestructuringAssignmentTarget|が|ObjectLiteral|でも|ArrayLiteral|でもないなら、
-            1. _leftRef_を|DestructuringAssignmentTarget|の ? Evaluationとする。
-          1. _value_を*undefined*とする。
-          1. _iteratorRecord_.[[Done]]が*false*なら、
-            1. _next_を ? IteratorStepValue(_iteratorRecord_) とする。
-            1. _next_が~done~でないなら、
-              1. _value_を_next_に設定する。
-          1. |Initializer|が存在し、かつ_value_が*undefined*なら、
-            1. IsAnonymousFunctionDefinition(|Initializer|)が*true*であり、かつ|DestructuringAssignmentTarget|のIsIdentifierRefが*true*なら、
-              1. _target_を|DestructuringAssignmentTarget|のStringValueとする。
-              1. _v_を、引数_target_を伴う|Initializer|の ? NamedEvaluationとする。
-            1. そうでなければ、
-              1. _defaultValue_を|Initializer|の ? Evaluationとする。
-              1. _v_を ? GetValue(_defaultValue_) とする。
-          1. そうでなければ、
-            1. _v_を_value_とする。
-          1. |DestructuringAssignmentTarget|が|ObjectLiteral|または|ArrayLiteral|のいずれかなら、
-            1. _nestedAssignmentPattern_を|DestructuringAssignmentTarget|によってcoverされる|AssignmentPattern|とする。
-            1. 引数_v_を伴う_nestedAssignmentPattern_の ? DestructuringAssignmentEvaluationを返す。
-          1. ? PutValue(_leftRef_, _v_)を返す。
+          1. |DestructuringAssignmentTarget| が |ObjectLiteral| でも |ArrayLiteral| でもない場合、
+            1. _leftRef_ を |DestructuringAssignmentTarget| の ? Evaluation とする。
+          1. _value_ を *undefined* とする。
+          1. _iteratorRecord_.[[Done]] が *false* の場合、
+            1. _next_ を ? IteratorStepValue(_iteratorRecord_) とする。
+            1. _next_ が ~done~ でない場合、
+              1. _value_ を _next_ に設定する。
+          1. |Initializer| が存在し、かつ _value_ が *undefined* の場合、
+            1. IsAnonymousFunctionDefinition(|Initializer|) が *true* で、かつ |DestructuringAssignmentTarget| の IsIdentifierRef が *true* の場合、
+              1. _target_ を |DestructuringAssignmentTarget| の StringValue とする。
+              1. _value_ を、引数 _target_ を指定した |Initializer| の ? NamedEvaluation に設定する。
+            1. それ以外の場合、
+              1. _defaultValue_ を |Initializer| の ? Evaluation とする。
+              1. _value_ を ? GetValue(_defaultValue_) に設定する。
+          1. |DestructuringAssignmentTarget| が |ObjectLiteral| または |ArrayLiteral| のいずれかである場合、
+            1. _nestedAssignmentPattern_ を |DestructuringAssignmentTarget| によってカバーされる |AssignmentPattern| とする。
+            1. 引数 _value_ を指定して _nestedAssignmentPattern_ の DestructuringAssignmentEvaluation を行った結果を ? 付きで返す。
+          1. ? PutValue(_leftRef_, _value_) を返す。
         </emu-alg>
         <emu-note>
           <p>left to right evaluation orderは、iteratorへaccessする前、または|Initializer|を評価する前に、destructuring patternではない|DestructuringAssignmentTarget|を評価することによって維持されます。</p>
@@ -22132,17 +22130,17 @@
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. _bindingId_ を |BindingIdentifier| の StringValue とする。
-          1. _lhs_ を ! ResolveBinding(_bindingId_) とする。
-          1. IsAnonymousFunctionDefinition(|Initializer|) が *true* である場合、then
-            1. _value_ を、引数 _bindingId_ で |Initializer| の NamedEvaluation とする。
-          1. Else,
-            1. _rhs_ を |Initializer| の Evaluation とする。
+          1. _name_ を |BindingIdentifier| の StringValue とする。
+          1. _lhs_ を ! ResolveBinding(_name_) とする。
+          1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
+            1. _value_ を、引数 _name_ を指定した |Initializer| の ? NamedEvaluation とする。
+          1. それ以外の場合、
+            1. _rhs_ を |Initializer| の ? Evaluation とする。
             1. _value_ を ? GetValue(_rhs_) とする。
-          1. _kind_ が ~normal~ でない場合、then
-            1. Assert: IsUnresolvableReference(_lhs_) は *false* である。
+          1. _kind_ が ~normal~ でない場合、
+            1. 表明: IsUnresolvableReference(_lhs_) は *false* である。
             1. _base_ を _lhs_.[[Base]] とする。
-            1. Assert: _base_ は Declarative Environment Record である。
+            1. 表明: _base_ は Declarative Environment Record である。
             1. ? AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_) を実行する。
           1. ? InitializeReferencedBinding(_lhs_, _value_) を実行する。
           1. ~unused~ を返す。
@@ -22195,15 +22193,15 @@
         </emu-alg>
         <emu-grammar>VariableDeclaration : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. _bindingId_を|BindingIdentifier|のStringValueとする。
-          1. _lhs_を ? ResolveBinding(_bindingId_) とする。
-          1. IsAnonymousFunctionDefinition(|Initializer|)が*true*なら、
-            1. _value_を、引数_bindingId_を伴う|Initializer|の ? NamedEvaluationとする。
-          1. そうでなければ、
-            1. _rhs_を|Initializer|の ? Evaluationとする。
-            1. _value_を ? GetValue(_rhs_) とする。
-          1. [id="step-vardecllist-evaluation-putvalue"] ? PutValue(_lhs_, _value_)を実行する。
-          1. ~empty~を返す。
+          1. _name_ を |BindingIdentifier| の StringValue とする。
+          1. _lhs_ を ? ResolveBinding(_name_) とする。
+          1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
+            1. _value_ を、引数 _name_ を指定した |Initializer| の ? NamedEvaluation とする。
+          1. それ以外の場合、
+            1. _rhs_ を |Initializer| の ? Evaluation とする。
+            1. _value_ を ? GetValue(_rhs_) とする。
+          1. [id="step-vardecllist-evaluation-putvalue"] ? PutValue(_lhs_, _value_) を実行する。
+          1. ~empty~ を返す。
         </emu-alg>
         <emu-note>
           <p>|VariableDeclaration|がwith statement内にnestedされており、|VariableDeclaration|内の|BindingIdentifier|がwith statementのObject Environment Recordのbinding objectのproperty nameと同じである場合、step <emu-xref href="#step-vardecllist-evaluation-putvalue"></emu-xref>は_value_を|Identifier|のVariableEnvironment bindingへ割り当てる代わりに、そのpropertyへ割り当てます。</p>
@@ -22342,17 +22340,17 @@
         </emu-alg>
         <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
         <emu-alg>
-          1. _bindingId_を|BindingIdentifier|のStringValueとする。
-          1. _lhs_を ? ResolveBinding(_bindingId_, _envRecord_) とする。
-          1. _value_を ? GetV(_value_, _propertyName_) に設定する。
-          1. |Initializer|が存在し、かつ_value_が*undefined*なら、
-            1. IsAnonymousFunctionDefinition(|Initializer|)が*true*なら、
-              1. _value_を、引数_bindingId_を伴う|Initializer|の ? NamedEvaluationに設定する。
-            1. そうでなければ、
-              1. _defaultValue_を|Initializer|の ? Evaluationとする。
-              1. _value_を ? GetValue(_defaultValue_) に設定する。
-          1. _envRecord_が*undefined*なら、? PutValue(_lhs_, _value_)を返す。
-          1. ? InitializeReferencedBinding(_lhs_, _value_)を返す。
+          1. _name_ を |BindingIdentifier| の StringValue とする。
+          1. _lhs_ を ? ResolveBinding(_name_, _envRecord_) とする。
+          1. _value_ を ? GetV(_value_, _propertyName_) に設定する。
+          1. |Initializer| が存在し、かつ _value_ が *undefined* の場合、
+            1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
+              1. _value_ を、引数 _name_ を指定した |Initializer| の ? NamedEvaluation に設定する。
+            1. それ以外の場合、
+              1. _defaultValue_ を |Initializer| の ? Evaluation とする。
+              1. _value_ を ? GetValue(_defaultValue_) に設定する。
+          1. _envRecord_ が *undefined* の場合、? PutValue(_lhs_, _value_) を返す。
+          1. ? InitializeReferencedBinding(_lhs_, _value_) を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -22699,20 +22697,20 @@
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _iterationResult_を*undefined*とする。
-          1. ? CreatePerIterationEnvironment(_perIterationBindings_)を実行する。
-          1. 繰り返す
-            1. _test_が~empty~でないなら、
-              1. _testRef_を_test_の ? Evaluationとする。
-              1. _testValue_を ? GetValue(_testRef_) とする。
-              1. ToBoolean(_testValue_)が*false*なら、_iterationResult_を返す。
-            1. _result_を_stmt_のEvaluationのCompletionとする。
-            1. LoopContinues(_result_, _labelSet_)が*false*なら、? UpdateEmpty(_result_, _iterationResult_)を返す。
-            1. _result_.[[Value]]が~empty~でないなら、_iterationResult_を_result_.[[Value]]に設定する。
-            1. ? CreatePerIterationEnvironment(_perIterationBindings_)を実行する。
-            1. _increment_が~empty~でないなら、
-              1. _incRef_を_increment_の ? Evaluationとする。
-              1. ? GetValue(_incRef_)を実行する。
+          1. _iterationResult_ を *undefined* とする。
+          1. ? CreatePerIterationEnvironment(_perIterationBindings_) を実行する。
+          1. 繰り返す。
+            1. _test_ が ~empty~ でない場合、
+              1. _testRef_ を _test_ の ? Evaluation とする。
+              1. _testValue_ を ? GetValue(_testRef_) とする。
+              1. ToBoolean(_testValue_) が *false* の場合、_iterationResult_ を返す。
+            1. _result_ を _stmt_ の Evaluation の Completion とする。
+            1. LoopContinues(_result_, _labelSet_) が *false* の場合、? UpdateEmpty(_result_, _iterationResult_) を返す。
+            1. _result_.[[Value]] が ~empty~ でない場合、_iterationResult_ を _result_.[[Value]] に設定する。
+            1. ? CreatePerIterationEnvironment(_perIterationBindings_) を実行する。
+            1. _increment_ が ~empty~ でない場合、
+              1. _incrementRef_ を _increment_ の ? Evaluation とする。
+              1. ? GetValue(_incrementRef_) を実行する。
         </emu-alg>
       </emu-clause>
 
@@ -23128,8 +23126,8 @@
             `await`
         </emu-grammar>
         <emu-alg>
-          1. _bindingId_を|BindingIdentifier|のStringValueとする。
-          1. ? ResolveBinding(_bindingId_)を返す。
+          1. _name_ を |BindingIdentifier| の StringValue とする。
+          1. ? ResolveBinding(_name_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -35064,25 +35062,25 @@ THH:mm:ss.sss
         <p>この関数は、呼び出されたときに次の手順を実行する:</p>
         <emu-alg>
           1. NewTarget が *undefined* の場合、
-            1. _now_ を現在時刻を識別する時刻値（UTC）とする。
+            1. _now_ を現在時刻を識別する時刻値 (UTC) とする。
             1. ToDateString(_now_) を返す。
-          1. _numberOfArgs_ を _values_ の要素数とする。
+          1. _numberOfArgs_ を _values_ 内の要素数とする。
           1. _numberOfArgs_ = 0 の場合、
-            1. _dv_ を現在時刻を識別する時刻値（UTC）とする。
-          1. そうではなく、_numberOfArgs_ = 1 の場合、
+            1. _dv_ を現在時刻を識別する時刻値 (UTC) とする。
+          1. それ以外で _numberOfArgs_ = 1 の場合、
             1. _value_ を _values_[0] とする。
-            1. _value_ が Object であり、_value_ が [[DateValue]] 内部スロットを持つ場合、
+            1. _value_ が Object であり、かつ _value_ が [[DateValue]] 内部スロットを持つ場合、
               1. _tv_ を _value_.[[DateValue]] とする。
-            1. そうでない場合、
-              1. _v_ を ? ToPrimitive(_value_) とする。
-              1. _v_ が String の場合、
-                1. アサート: _v_ は String であるため、次の手順は中途完了を返すことはない。
-                1. _tv_ を、`parse` メソッド（<emu-xref href="#sec-date.parse"></emu-xref>）とまったく同じ方法で _v_ を日付として解析した結果とする。
-              1. そうでない場合、
-                1. _tv_ を ? ToNumber(_v_) とする。
+            1. それ以外の場合、
+              1. _primitive_ を ? ToPrimitive(_value_) とする。
+              1. _primitive_ が String の場合、
+                1. 表明: _primitive_ は String であるため、次のステップが突然の完了を返すことはない。
+                1. _tv_ を、`parse` メソッド (<emu-xref href="#sec-date.parse"></emu-xref>) の場合とまったく同じ方法で _primitive_ を日付として解析した結果とする。
+              1. それ以外の場合、
+                1. _tv_ を ? ToNumber(_primitive_) とする。
             1. _dv_ を TimeClip(_tv_) とする。
-          1. そうでない場合、
-            1. アサート: _numberOfArgs_ ≥ 2。
+          1. それ以外の場合、
+            1. 表明: _numberOfArgs_ ≥ 2。
             1. _yearNumber_ を ? ToNumber(_values_[0]) とする。
             1. _monthNumber_ を ? ToNumber(_values_[1]) とする。
             1. _numberOfArgs_ > 2 の場合、_dayNumber_ を ? ToNumber(_values_[2]) とする。それ以外の場合、_dayNumber_ を *1*<sub>𝔽</sub> とする。
@@ -36013,19 +36011,19 @@ THH:mm:ss.sss
             1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
             1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* の場合、
               1. _offsetNanoseconds_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
-            1. そうでない場合、
+            1. それ以外の場合、
               1. _offsetNanoseconds_ を GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond) とする。
             1. _offsetMilliseconds_ を truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond) とする。
             1. _offsetMilliseconds_ ≥ 0 の場合、
               1. _offsetSign_ を *"+"* とする。
               1. _absOffsetMilliseconds_ を _offsetMilliseconds_ とする。
-            1. そうでない場合、
+            1. それ以外の場合、
               1. _offsetSign_ を *"-"* とする。
               1. _absOffsetMilliseconds_ を -_offsetMilliseconds_ とする。
             1. _offsetMinute_ を ToZeroPaddedDecimalString(MinuteFromTime(𝔽(_absOffsetMilliseconds_)), 2) とする。
             1. _offsetHour_ を ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffsetMilliseconds_)), 2) とする。
-            1. _tzName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) の文字列連結のいずれかである実装定義の文字列とする。
-            1. _offsetSign_、_offsetHour_、_offsetMinute_、および _tzName_ の文字列連結を返す。
+            1. _timeZoneName_ を、空の String、またはコード単位 0x0020 (SPACE)、コード単位 0x0028 (LEFT PARENTHESIS)、実装定義のタイムゾーン名、およびコード単位 0x0029 (RIGHT PARENTHESIS) を文字列連結したもののいずれかである実装定義の文字列とする。
+            1. _offsetSign_、_offsetHour_、_offsetMinute_、および _timeZoneName_ を文字列連結したものを返す。
           </emu-alg>
         </emu-clause>
 
@@ -38056,8 +38054,8 @@ THH:mm:ss.sss
           GroupName :: `&lt;` RegExpIdentifierName `&gt;`
         </emu-grammar>
         <emu-alg>
-          1. _idTextUnescaped_を|RegExpIdentifierName|のRegExpIdentifierCodePointsとする。
-          1. CodePointsToString(_idTextUnescaped_)を返す。
+          1. _nameUnescaped_ を |RegExpIdentifierName| の RegExpIdentifierCodePoints とする。
+          1. CodePointsToString(_nameUnescaped_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -41231,20 +41229,20 @@ THH:mm:ss.sss
         <p>このmethodはarrayのelementsをStringsへconvertし、その後、_separator_のoccurrencesでseparatedしてそれらのStringsをconcatenateします。separatorがprovidedされない場合、single commaがseparatorとして使用されます。</p>
         <p>これは呼び出されたとき、次のstepsを実行します：</p>
         <emu-alg>
-          1. _obj_を ? ToObject(*this* value) とする。
-          1. _length_を ? LengthOfArrayLike(_obj_) とする。
-          1. _separator_が*undefined*なら、_sep_を*","*とする。
-          1. そうでなければ、_sep_を ? ToString(_separator_) とする。
-          1. _result_をempty Stringとする。
-          1. _k_を0とする。
-          1. _k_ &lt; _length_の間、繰り返す
-            1. _k_ > 0なら、_result_を_result_と_sep_のstring-concatenationに設定する。
-            1. _element_を ? Get(_obj_, ! ToString(𝔽(_k_))) とする。
-            1. _element_が*undefined*でも*null*でもないなら、
-              1. _elementString_を ? ToString(_element_) とする。
-              1. _result_を_result_と_elementString_のstring-concatenationに設定する。
-            1. _k_を_k_ + 1に設定する。
-          1. _result_を返す。
+          1. _obj_ を ? ToObject(*this* value) とする。
+          1. _length_ を ? LengthOfArrayLike(_obj_) とする。
+          1. _separator_ が *undefined* の場合、_separatorString_ を *","* とする。
+          1. それ以外の場合、_separatorString_ を ? ToString(_separator_) とする。
+          1. _result_ を空の String とする。
+          1. _k_ を 0 とする。
+          1. _k_ &lt; _length_ の間、繰り返す。
+            1. _k_ > 0 の場合、_result_ を _result_ と _separatorString_ を文字列連結したものに設定する。
+            1. _element_ を ? Get(_obj_, ! ToString(𝔽(_k_))) とする。
+            1. _element_ が *undefined* でも *null* でもない場合、
+              1. _elementString_ を ? ToString(_element_) とする。
+              1. _result_ を _result_ と _elementString_ を文字列連結したものに設定する。
+            1. _k_ を _k_ + 1 に設定する。
+          1. _result_ を返す。
         </emu-alg>
         <emu-note>
           <p>このmethodは意図的にgenericです；その*this* valueがArrayであることをrequireしません。したがって、methodとして使用するために他の種類のobjectsへtransferできます。</p>
@@ -42816,12 +42814,12 @@ THH:mm:ss.sss
           1. _obj_ を *this* 値とする。
           1. _taRecord_ を ? ValidateTypedArray(_obj_, ~seq-cst~) とする。
           1. _length_ を TypedArrayLength(_taRecord_) とする。
-          1. _separator_ が *undefined* の場合、_sep_ を *","* とする。
-          1. それ以外の場合、_sep_ を ? ToString(_separator_) とする。
+          1. _separator_ が *undefined* の場合、_separatorString_ を *","* とする。
+          1. それ以外の場合、_separatorString_ を ? ToString(_separator_) とする。
           1. _result_ を空の String とする。
           1. _k_ を 0 とする。
           1. _k_ &lt; _length_ の間、繰り返す。
-            1. _k_ > 0 の場合、_result_ を _result_ と _sep_ を文字列連結したものに設定する。
+            1. _k_ > 0 の場合、_result_ を _result_ と _separatorString_ を文字列連結したものに設定する。
             1. _element_ を TypedArrayGetElement(_obj_, 𝔽(_k_)) とする。
             1. _element_ が *undefined* でない場合、
               1. _elementString_ を ! ToString(_element_) とする。
@@ -43740,22 +43738,22 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.frombase64" type="built-in function">
         <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. _string_がStringでないなら、*TypeError*例外をthrowする。
-          1. _opts_を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_を ? Get(_opts_, *"alphabet"*) とする。
-          1. _alphabet_が*undefined*なら、_alphabet_を*"base64"*に設定する。
-          1. _alphabet_が*"base64"*でも*"base64url"*でもないなら、*TypeError*例外をthrowする。
-          1. _lastChunkHandling_を ? Get(_opts_, *"lastChunkHandling"*) とする。
-          1. _lastChunkHandling_が*undefined*なら、_lastChunkHandling_を*"loose"*に設定する。
-          1. _lastChunkHandling_が*"loose"*、*"strict"*、または*"stop-before-partial"*のいずれでもないなら、*TypeError*例外をthrowする。
-          1. _result_をFromBase64(_string_, _alphabet_, _lastChunkHandling_)とする。
-          1. _result_.[[Error]]が~none~でないなら、
-            1. _result_.[[Error]]をthrowする。
-          1. _resultLength_を_result_.[[Bytes]]内のelementsの数とする。
-          1. _ta_を ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> とする。
-          1. Assert: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]]は_result_.[[Bytes]]内のelementsの数である。
-          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]]の各indexのvalueを、_result_.[[Bytes]]のcorresponding indexのvalueに設定する。
-          1. _ta_を返す。
+          1. _string_ が String でない場合、*TypeError* 例外を投げる。
+          1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
+          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ を *"base64"* に設定する。
+          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外を投げる。
+          1. _lastChunkHandling_ を ? Get(_optionsObj_, *"lastChunkHandling"*) とする。
+          1. _lastChunkHandling_ が *undefined* の場合、_lastChunkHandling_ を *"loose"* に設定する。
+          1. _lastChunkHandling_ が *"loose"*、*"strict"*、または *"stop-before-partial"* のいずれでもない場合、*TypeError* 例外を投げる。
+          1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_) とする。
+          1. _result_.[[Error]] が ~none~ でない場合、
+            1. _result_.[[Error]] を投げる。
+          1. _resultLength_ を _result_.[[Bytes]] 内の要素数とする。
+          1. _ta_ を ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta> とする。
+          1. 表明: _ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] は _result_.[[Bytes]] 内の要素数である。
+          1. _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] の各インデックスの値を、_result_.[[Bytes]] の対応するインデックスの値に設定する。
+          1. _ta_ を返す。
         </emu-alg>
       </emu-clause>
 
@@ -43783,24 +43781,24 @@ THH:mm:ss.sss
         <emu-alg>
           1. _into_ を *this* 値とする。
           1. ? ValidateUint8Array(_into_) を実行する。
-          1. _string_ が String でない場合、*TypeError* 例外をスローする。
-          1. _opts_ を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_ を ? Get(_opts_, *"alphabet"*) とする。
+          1. _string_ が String でない場合、*TypeError* 例外を投げる。
+          1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
+          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
           1. _alphabet_ が *undefined* の場合、_alphabet_ を *"base64"* に設定する。
-          1. _alphabet_ が *"base64"* と *"base64url"* のいずれでもない場合、*TypeError* 例外をスローする。
-          1. _lastChunkHandling_ を ? Get(_opts_, *"lastChunkHandling"*) とする。
+          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外を投げる。
+          1. _lastChunkHandling_ を ? Get(_optionsObj_, *"lastChunkHandling"*) とする。
           1. _lastChunkHandling_ が *undefined* の場合、_lastChunkHandling_ を *"loose"* に設定する。
-          1. _lastChunkHandling_ が *"loose"*、*"strict"*、*"stop-before-partial"* のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _lastChunkHandling_ が *"loose"*、*"strict"*、または *"stop-before-partial"* のいずれでもない場合、*TypeError* 例外を投げる。
           1. _taRecord_ を ? ValidateTypedArrayBounds(_into_, ~seq-cst~) とする。
           1. _byteLength_ を TypedArrayLength(_taRecord_) とする。
           1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_) とする。
           1. _bytes_ を _result_.[[Bytes]] とする。
           1. _written_ を _bytes_ 内の要素数とする。
-          1. 注記：FromBase64 はユーザーコードを一切呼び出さないため、_into_ のバッキング ArrayBuffer が切り離されたり縮小されたりすることはない。
-          1. 表明：_written_ ≤ _byteLength_。
+          1. 注記: FromBase64 はユーザーコードを呼び出さないため、_into_ の基礎となる ArrayBuffer が切り離されたり縮小されたりすることはない。
+          1. 表明: _written_ ≤ _byteLength_。
           1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
           1. _result_.[[Error]] が ~none~ でない場合、
-            1. _result_.[[Error]] をスローする。
+            1. _result_.[[Error]] を投げる。
           1. _resultObj_ を OrdinaryObjectCreate(%Object.prototype%) とする。
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"read"*, 𝔽(_result_.[[Read]])) を実行する。
           1. ! CreateDataPropertyOrThrow(_resultObj_, *"written"*, 𝔽(_written_)) を実行する。
@@ -43834,20 +43832,20 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.prototype.tobase64" type="built-in function">
         <h1>Uint8Array.prototype.toBase64 ( [ _options_ ] )</h1>
         <emu-alg>
-          1. _obj_を*this* valueとする。
-          1. ? ValidateUint8Array(_obj_)を実行する。
-          1. _opts_を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_を ? Get(_opts_, *"alphabet"*) とする。
-          1. _alphabet_が*undefined*なら、_alphabet_を*"base64"*に設定する。
-          1. _alphabet_が*"base64"*でも*"base64url"*でもないなら、*TypeError*例外をthrowする。
-          1. _omitPadding_をToBoolean(? Get(_opts_, *"omitPadding"*))とする。
-          1. _toEncode_を ? GetUint8ArrayBytes(_obj_) とする。
-          1. _alphabet_が*"base64"*なら、
-            1. _outAscii_を、_toEncode_を<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>のsection 4でspecifiedされるbase64 encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
-          1. そうでなければ、
-            1. Assert: _alphabet_は*"base64url"*である。
-            1. _outAscii_を、_toEncode_を<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a>のsection 5でspecifiedされるbase64url encodingに従ってencodingした結果のcode pointsのsequenceとする。Paddingは、_omitPadding_が*false*である場合に限りincludedされる。
-          1. CodePointsToString(_outAscii_)を返す。
+          1. _obj_ を *this* 値とする。
+          1. ? ValidateUint8Array(_obj_) を実行する。
+          1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
+          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
+          1. _alphabet_ が *undefined* の場合、_alphabet_ を *"base64"* に設定する。
+          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外を投げる。
+          1. _omitPadding_ を ToBoolean(? Get(_optionsObj_, *"omitPadding"*)) とする。
+          1. _toEncode_ を ? GetUint8ArrayBytes(_obj_) とする。
+          1. _alphabet_ が *"base64"* の場合、
+            1. _outAscii_ を、<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> の第 4 節で規定されている base64 エンコーディングに従って _toEncode_ をエンコードした結果のコードポイント列とする。_omitPadding_ が *false* の場合に限り、パディングを含める。
+          1. それ以外の場合、
+            1. 表明: _alphabet_ は *"base64url"* である。
+            1. _outAscii_ を、<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> の第 5 節で規定されている base64url エンコーディングに従って _toEncode_ をエンコードした結果のコードポイント列とする。_omitPadding_ が *false* の場合に限り、パディングを含める。
+          1. CodePointsToString(_outAscii_) を返す。
         </emu-alg>
       </emu-clause>
 
@@ -46116,7 +46114,7 @@ THH:mm:ss.sss
           1. IsDetachedBuffer(_obj_) が *true* の場合、*TypeError* 例外を投げる。
           1. _length_ を _obj_.[[ArrayBufferByteLength]] とする。
           1. _first_ を ? ToClampedIndex(_start_, _length_) とする。
-          1. _end_ が *undefined* の場合は _final_ を _length_ とし、そうでない場合は _final_ を ? ToClampedIndex(_end_, _length_) とする。
+          1. _end_ が *undefined* の場合、_final_ を _length_ とする。それ以外の場合、_final_ を ? ToClampedIndex(_end_, _length_) とする。
           1. _newLength_ を max(_final_ - _first_, 0) とする。
           1. _ctor_ を ? SpeciesConstructor(_obj_, %ArrayBuffer%) とする。
           1. _new_ を ? Construct(_ctor_, « 𝔽(_newLength_) ») とする。
@@ -46125,15 +46123,15 @@ THH:mm:ss.sss
           1. IsDetachedBuffer(_new_) が *true* の場合、*TypeError* 例外を投げる。
           1. SameValue(_new_, _obj_) が *true* の場合、*TypeError* 例外を投げる。
           1. _new_.[[ArrayBufferByteLength]] &lt; _newLength_ の場合、*TypeError* 例外を投げる。
-          1. 注: 上記のステップの副作用により、_obj_ がデタッチまたはリサイズされている可能性がある。
+          1. 注記: 上記のステップの副作用により、_obj_ が切り離されたか、サイズ変更された可能性がある。
           1. IsDetachedBuffer(_obj_) が *true* の場合、*TypeError* 例外を投げる。
-          1. _fromBuf_ を _obj_.[[ArrayBufferData]] とする。
-          1. _toBuf_ を _new_.[[ArrayBufferData]] とする。
+          1. _fromBlock_ を _obj_.[[ArrayBufferData]] とする。
+          1. _toBlock_ を _new_.[[ArrayBufferData]] とする。
           1. _currentLength_ を _obj_.[[ArrayBufferByteLength]] とする。
           1. _maxCount_ を _currentLength_ - _first_ とする。
-          1. _maxCount_ > 0 の場合、次を行う。
+          1. _maxCount_ > 0 の場合、
             1. _count_ を min(_newLength_, _maxCount_) とする。
-            1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _count_) を実行する。
+            1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _count_) を実行する。
           1. _new_ を返す。
         </emu-alg>
       </emu-clause>
@@ -46222,8 +46220,8 @@ THH:mm:ss.sss
           1. Else,
             1. Append [[ArrayBufferByteLength]] to _slots_.
           1. Let _obj_ be ? OrdinaryCreateFromConstructor(_ctor_, *"%SharedArrayBuffer.prototype%"*, _slots_).
-          1. If _allocatingGrowableBuffer_ is *true*, let _allocLength_ be _maxByteLength_; else let _allocLength_ be _byteLength_.
-          1. Let _block_ be ? CreateSharedByteDataBlock(_allocLength_).
+          1. If _allocatingGrowableBuffer_ is *true*, let _allocationLength_ be _maxByteLength_; else let _allocationLength_ be _byteLength_.
+          1. Let _block_ be ? CreateSharedByteDataBlock(_allocationLength_).
           1. Set _obj_.[[ArrayBufferData]] to _block_.
           1. If _allocatingGrowableBuffer_ is *true*, then
             1. Assert: _byteLength_ ≤ _maxByteLength_.
@@ -46444,7 +46442,7 @@ THH:mm:ss.sss
           1. IsSharedArrayBuffer(_obj_) が *false* の場合、*TypeError* 例外を投げる。
           1. _length_ を ArrayBufferByteLength(_obj_, ~seq-cst~) とする。
           1. _first_ を ? ToClampedIndex(_start_, _length_) とする。
-          1. _end_ が *undefined* の場合は _final_ を _length_ とし、そうでない場合は _final_ を ? ToClampedIndex(_end_, _length_) とする。
+          1. _end_ が *undefined* の場合、_final_ を _length_ とする。それ以外の場合、_final_ を ? ToClampedIndex(_end_, _length_) とする。
           1. _newLength_ を max(_final_ - _first_, 0) とする。
           1. _ctor_ を ? SpeciesConstructor(_obj_, %SharedArrayBuffer%) とする。
           1. _new_ を ? Construct(_ctor_, « 𝔽(_newLength_) ») とする。
@@ -46452,9 +46450,9 @@ THH:mm:ss.sss
           1. IsSharedArrayBuffer(_new_) が *false* の場合、*TypeError* 例外を投げる。
           1. _new_.[[ArrayBufferData]] が _obj_.[[ArrayBufferData]] である場合、*TypeError* 例外を投げる。
           1. ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_ の場合、*TypeError* 例外を投げる。
-          1. _fromBuf_ を _obj_.[[ArrayBufferData]] とする。
-          1. _toBuf_ を _new_.[[ArrayBufferData]] とする。
-          1. CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _newLength_) を実行する。
+          1. _fromBlock_ を _obj_.[[ArrayBufferData]] とする。
+          1. _toBlock_ を _new_.[[ArrayBufferData]] とする。
+          1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _newLength_) を実行する。
           1. _new_ を返す。
         </emu-alg>
       </emu-clause>
@@ -50009,28 +50007,28 @@ THH:mm:ss.sss
         </dl>
 
         <emu-alg>
-          1. NOTE: _promiseCapability_はintrinsic %Promise%からderivedされるため、下記のIfAbruptRejectPromiseの使用によって必要となる_promiseCapability_.[[Reject]]へのcallsは、throwしないことがguaranteedされる。
-          1. _done_をCompletion(IteratorComplete(_result_))とする。
-          1. IfAbruptRejectPromise(_done_, _promiseCapability_).
-          1. _value_をCompletion(IteratorValue(_result_))とする。
-          1. IfAbruptRejectPromise(_value_, _promiseCapability_).
-          1. _valueWrapper_をCompletion(PromiseResolve(%Promise%, _value_))とする。
-          1. _valueWrapper_がabrupt completionで、_done_が*false*で、_closeOnRejection_が*true*なら、
-            1. _valueWrapper_をCompletion(IteratorClose(_syncIteratorRecord_, _valueWrapper_))に設定する。
-          1. IfAbruptRejectPromise(_valueWrapper_, _promiseCapability_).
-          1. _unwrap_を、parameters (_v_)を持ち、_done_をcaptureし、呼び出されたときに以下のstepsを実行するnew Abstract Closureとする：
-            1. CreateIteratorResultObject(_v_, _done_)を返す。
-          1. _onFulfilled_をCreateBuiltinFunction(_unwrap_, 1, *""*, « »)とする。
-          1. NOTE: _onFulfilled_は、IteratorResult objectの*"value"* propertyを処理するとき、そのvalueがpromiseである場合にそれを待ち、resultを新しい“unwrapped” IteratorResult objectに再packageするために使用される。
-          1. _done_が*true*または_closeOnRejection_が*false*なら、
-            1. _onRejected_を*undefined*とする。
-          1. そうでなければ、
-            1. _closeIterator_を、parameters (_error_)を持ち、_syncIteratorRecord_をcaptureし、呼び出されたときに以下のstepsを実行するnew Abstract Closureとする：
-              1. ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_))を返す。
-            1. _onRejected_をCreateBuiltinFunction(_closeIterator_, 1, *""*, « »)とする。
-            1. NOTE: _onRejected_は、IteratorがyieldするIteratorResult objectの*"value"* propertyがrejected promiseである場合に、そのIteratorをcloseするために使用される。
-          1. PerformPromiseThen(_valueWrapper_, _onFulfilled_, _onRejected_, _promiseCapability_)を実行する。
-          1. _promiseCapability_.[[Promise]]を返す。
+          1. 注記: _promiseCapability_ は組み込みの %Promise% から導出されるため、以下で IfAbruptRejectPromise を使用することによって必要となる _promiseCapability_.[[Reject]] の呼び出しが例外を投げないことが保証される。
+          1. _done_ を Completion(IteratorComplete(_result_)) とする。
+          1. IfAbruptRejectPromise(_done_, _promiseCapability_)。
+          1. _value_ を Completion(IteratorValue(_result_)) とする。
+          1. IfAbruptRejectPromise(_value_, _promiseCapability_)。
+          1. _valueWrapper_ を Completion(PromiseResolve(%Promise%, _value_)) とする。
+          1. _valueWrapper_ が突然の完了であり、_done_ が *false* で、かつ _closeOnRejection_ が *true* の場合、
+            1. _valueWrapper_ を Completion(IteratorClose(_syncIteratorRecord_, _valueWrapper_)) に設定する。
+          1. IfAbruptRejectPromise(_valueWrapper_, _promiseCapability_)。
+          1. _unwrap_ を、_done_ を取り込むパラメータ (_value_) を持つ新しい抽象クロージャとし、呼び出されたときに次のステップを実行するものとする。
+            1. CreateIteratorResultObject(_value_, _done_) を返す。
+          1. _onFulfilled_ を CreateBuiltinFunction(_unwrap_, 1, *""*, « ») とする。
+          1. 注記: _onFulfilled_ は、IteratorResult オブジェクトの *"value"* プロパティを処理する際に、その値が promise である場合はその値を待機し、結果を新しい「アンラップされた」IteratorResult オブジェクトに再パッケージ化するために使用される。
+          1. _done_ が *true* または _closeOnRejection_ が *false* の場合、
+            1. _onRejected_ を *undefined* とする。
+          1. それ以外の場合、
+            1. _closeIterator_ を、_syncIteratorRecord_ を取り込むパラメータ (_error_) を持つ新しい抽象クロージャとし、呼び出されたときに次のステップを実行するものとする。
+              1. ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_)) を返す。
+            1. _onRejected_ を CreateBuiltinFunction(_closeIterator_, 1, *""*, « ») とする。
+            1. 注記: _onRejected_ は、Iterator が生成する IteratorResult オブジェクトの *"value"* プロパティが拒否された promise である場合に、その Iterator を閉じるために使用される。
+          1. PerformPromiseThen(_valueWrapper_, _onFulfilled_, _onRejected_, _promiseCapability_) を実行する。
+          1. _promiseCapability_.[[Promise]] を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -52604,20 +52602,20 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. _asyncContext_を、実行中の実行コンテキストとする。
-          1. _promise_を、? PromiseResolve(%Promise%, _arg_)とする。
-          1. _fulfilledClosure_を、_asyncContext_をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ(_v_)を持つ新しいAbstract Closureとする。
-            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))を実行する。
-            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的に無視される。
-            1. NormalCompletion(*undefined*)を返す。
-          1. _onFulfilled_を、CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)とする。
-          1. _rejectedClosure_を、_asyncContext_をキャプチャし、呼び出されたときに次の手順を実行する、パラメータ(_reason_)を持つ新しいAbstract Closureとする。
-            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))を実行する。
-            1. NOTE: RunSuspendedContextによって返されるCompletion Recordは意図的に無視される。
-            1. NormalCompletion(*undefined*)を返す。
-          1. _onRejected_を、CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)とする。
-          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)を実行する。
-          1. Return ? RunCallerContext(~empty~)。
+          1. _asyncContext_ を実行中の実行コンテキストとする。
+          1. _promise_ を ? PromiseResolve(%Promise%, _arg_) とする。
+          1. _fulfilledClosure_ を、_asyncContext_ を取り込むパラメータ (_value_) を持つ新しい抽象クロージャとし、呼び出されたときに次のステップを実行するものとする。
+            1. Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_value_))) を実行する。
+            1. 注記: RunSuspendedContext によって返される Completion Record は意図的に無視される。
+            1. NormalCompletion(*undefined*) を返す。
+          1. _onFulfilled_ を CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « ») とする。
+          1. _rejectedClosure_ を、_asyncContext_ を取り込むパラメータ (_reason_) を持つ新しい抽象クロージャとし、呼び出されたときに次のステップを実行するものとする。
+            1. Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_))) を実行する。
+            1. 注記: RunSuspendedContext によって返される Completion Record は意図的に無視される。
+            1. NormalCompletion(*undefined*) を返す。
+          1. _onRejected_ を CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « ») とする。
+          1. PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_) を実行する。
+          1. ? RunCallerContext(~empty~) を返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -54837,12 +54835,12 @@ THH:mm:ss.sss
       <p>_labelSet_ を引数とする ForInOfLoopEvaluation の実行時セマンティクスに次の内容を追加する:</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. _bindingId_ を |BindingIdentifier| の StringValue とする。
-        1. _lhs_ を ? ResolveBinding(_bindingId_) とする。
+        1. _name_ を |BindingIdentifier| の StringValue とする。
+        1. _lhs_ を ? ResolveBinding(_name_) とする。
         1. IsAnonymousFunctionDefinition(|Initializer|) が *true* の場合、
-          1. _value_ を、_bindingId_ を引数として |Initializer| に対して ? NamedEvaluation を適用した結果とする。
+          1. _value_ を、引数 _name_ を指定した |Initializer| の ? NamedEvaluation とする。
         1. それ以外の場合、
-          1. _rhs_ を |Initializer| に対して ? Evaluation を適用した結果とする。
+          1. _rhs_ を |Initializer| の ? Evaluation とする。
           1. _value_ を ? GetValue(_rhs_) とする。
         1. ? PutValue(_lhs_, _value_) を実行する。
         1. _keyResult_ を ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~) とする。

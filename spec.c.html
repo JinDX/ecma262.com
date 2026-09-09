@@ -10139,15 +10139,15 @@
 
     <emu-clause id="sec-runtime-semantics-iteratorbindinginitialization" oldids="sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization,sec-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-arrow-function-definitions-runtime-semantics-iteratorbindinginitialization,sec-async-arrow-function-definitions-IteratorBindingInitialization" type="sdo">
       <h1>
-        Runtime Semantics: IteratorBindingInitialization (
-          _iteratorRecord_: an Iterator Record,
-          _envRecord_: an Environment Record or *undefined*,
-        ): either a normal completion containing ~unused~ or an abrupt completion
+        运行时语义：IteratorBindingInitialization (
+        _iteratorRecord_：迭代器记录，
+        _envRecord_：环境记录或 *undefined*，
+        )：包含 ~unused~ 的正常完成或突然完成
       </h1>
       <dl class="header">
       </dl>
       <emu-note>
-        <p>当为 _envRecord_ 传递 *undefined* 时，表示应使用 PutValue 操作来赋予初始化值。这适用于非严格函数的形式参数列表。在这种情况下，为了处理可能存在多个同名参数的情形，形式参数绑定会被预初始化。</p>
+        <p>当为 _envRecord_ 传入 *undefined* 时，表示应使用 PutValue 操作来赋值初始化值。非严格函数的形式参数列表就是这种情况。在这种情况下，形式参数绑定会预先初始化，以处理多个参数具有相同名称的可能性。</p>
       </emu-note>
       <emu-grammar>ArrayBindingPattern : `[` `]`</emu-grammar>
       <emu-alg>
@@ -10155,65 +10155,65 @@
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision `]`</emu-grammar>
       <emu-alg>
-        1. 返回 ? |Elision| 带实参 _iteratorRecord_ 的 IteratorDestructuringAssignmentEvaluation。
+        1. 返回 ? 对 |Elision| 以 _iteratorRecord_ 为参数执行 IteratorDestructuringAssignmentEvaluation。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. 如果 |Elision| 存在，则
-          1. 执行 ? |Elision| 带实参 _iteratorRecord_ 的 IteratorDestructuringAssignmentEvaluation。
-        1. 返回 ? |BindingRestElement| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 如果存在 |Elision|，那么
+          1. 对 |Elision| 以 _iteratorRecord_ 为参数执行 ? IteratorDestructuringAssignmentEvaluation。
+        1. 返回 ? 对 |BindingRestElement| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision `]`</emu-grammar>
       <emu-alg>
-        1. 执行 ? |BindingElementList| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
-        1. 返回 ? |Elision| 带实参 _iteratorRecord_ 的 IteratorDestructuringAssignmentEvaluation。
+        1. 对 |BindingElementList| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 ? IteratorBindingInitialization。
+        1. 返回 ? 对 |Elision| 以 _iteratorRecord_ 为参数执行 IteratorDestructuringAssignmentEvaluation。
       </emu-alg>
       <emu-grammar>ArrayBindingPattern : `[` BindingElementList `,` Elision? BindingRestElement `]`</emu-grammar>
       <emu-alg>
-        1. 执行 ? |BindingElementList| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
-        1. 如果 |Elision| 存在，则
-          1. 执行 ? |Elision| 带实参 _iteratorRecord_ 的 IteratorDestructuringAssignmentEvaluation。
-        1. 返回 ? |BindingRestElement| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 对 |BindingElementList| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 ? IteratorBindingInitialization。
+        1. 如果存在 |Elision|，那么
+          1. 对 |Elision| 以 _iteratorRecord_ 为参数执行 ? IteratorDestructuringAssignmentEvaluation。
+        1. 返回 ? 对 |BindingRestElement| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>BindingElementList : BindingElementList `,` BindingElisionElement</emu-grammar>
       <emu-alg>
-        1. 执行 ? |BindingElementList| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
-        1. 返回 ? |BindingElisionElement| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 对 |BindingElementList| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 ? IteratorBindingInitialization。
+        1. 返回 ? 对 |BindingElisionElement| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>BindingElisionElement : Elision BindingElement</emu-grammar>
       <emu-alg>
-        1. 执行 ? |Elision| 带实参 _iteratorRecord_ 的 IteratorDestructuringAssignmentEvaluation。
-        1. 返回 ? |BindingElement| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 对 |Elision| 以 _iteratorRecord_ 为参数执行 ? IteratorDestructuringAssignmentEvaluation。
+        1. 返回 ? 对 |BindingElement| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
       <emu-alg>
-        1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-        1. 令 _lhs_ 为 ? ResolveBinding(_bindingId_, _envRecord_)。
-        1. 令 _v_ 为 *undefined*。
-        1. 如果 _iteratorRecord_.[[Done]] 是 *false*，则
+        1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+        1. 令 _lhs_ 为 ? ResolveBinding(_name_, _envRecord_)。
+        1. 令 _value_ 为 *undefined*。
+        1. 如果 _iteratorRecord_.[[Done]] 是 *false*，那么
           1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-          1. 如果 _next_ 不是 ~done~，则
-            1. 将 _v_ 设置为 _next_。
-        1. 如果 |Initializer| 存在且 _v_ 是 *undefined*，则
-          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-            1. 将 _v_ 设置为 ? |Initializer| 带实参 _bindingId_ 的 NamedEvaluation。
+          1. 如果 _next_ 不是 ~done~，那么
+            1. 将 _value_ 设置为 _next_。
+        1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，那么
+          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，那么
+            1. 将 _value_ 设置为 ? 对 |Initializer| 以 _name_ 为参数执行 NamedEvaluation。
           1. 否则，
-            1. 令 _defaultValue_ 为 ? |Initializer| 的 Evaluation。
-            1. 将 _v_ 设置为 ? GetValue(_defaultValue_)。
-        1. 如果 _envRecord_ 是 *undefined*，则返回 ? PutValue(_lhs_, _v_)。
-        1. 返回 ? InitializeReferencedBinding(_lhs_, _v_)。
+            1. 令 _defaultValue_ 为 ? 对 |Initializer| 执行 Evaluation。
+            1. 将 _value_ 设置为 ? GetValue(_defaultValue_)。
+        1. 如果 _envRecord_ 是 *undefined*，返回 ? PutValue(_lhs_, _value_)。
+        1. 返回 ? InitializeReferencedBinding(_lhs_, _value_)。
       </emu-alg>
       <emu-grammar>BindingElement : BindingPattern Initializer?</emu-grammar>
       <emu-alg>
-        1. 令 _v_ 为 *undefined*。
-        1. 如果 _iteratorRecord_.[[Done]] 是 *false*，则
+        1. 令 _value_ 为 *undefined*。
+        1. 如果 _iteratorRecord_.[[Done]] 是 *false*，那么
           1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-          1. 如果 _next_ 不是 ~done~，则
-            1. 将 _v_ 设置为 _next_。
-        1. 如果 |Initializer| 存在且 _v_ 是 *undefined*，则
-          1. 令 _defaultValue_ 为 ? |Initializer| 的 Evaluation。
-          1. 将 _v_ 设置为 ? GetValue(_defaultValue_)。
-        1. 返回 ? |BindingPattern| 带实参 _v_ 和 _envRecord_ 的 BindingInitialization。
+          1. 如果 _next_ 不是 ~done~，那么
+            1. 将 _value_ 设置为 _next_。
+        1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，那么
+          1. 令 _defaultValue_ 为 ? 对 |Initializer| 执行 Evaluation。
+          1. 将 _value_ 设置为 ? GetValue(_defaultValue_)。
+        1. 返回 ? 对 |BindingPattern| 以 _value_ 和 _envRecord_ 为参数执行 BindingInitialization。
       </emu-alg>
       <emu-grammar>BindingRestElement : `...` BindingIdentifier</emu-grammar>
       <emu-alg>
@@ -10222,10 +10222,10 @@
         1. 令 _n_ 为 0。
         1. 重复，
           1. 令 _next_ 为 ~done~。
-          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，则
+          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，那么
             1. 将 _next_ 设置为 ? IteratorStepValue(_iteratorRecord_)。
-          1. 如果 _next_ 是 ~done~，则
-            1. 如果 _envRecord_ 是 *undefined*，则返回 ? PutValue(_lhs_, _array_)。
+          1. 如果 _next_ 是 ~done~，那么
+            1. 如果 _envRecord_ 是 *undefined*，返回 ? PutValue(_lhs_, _array_)。
             1. 返回 ? InitializeReferencedBinding(_lhs_, _array_)。
           1. 执行 ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)。
           1. 将 _n_ 设置为 _n_ + 1。
@@ -10236,10 +10236,10 @@
         1. 令 _n_ 为 0。
         1. 重复，
           1. 令 _next_ 为 ~done~。
-          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，则
+          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，那么
             1. 将 _next_ 设置为 ? IteratorStepValue(_iteratorRecord_)。
-          1. 如果 _next_ 是 ~done~，则
-            1. 返回 ? |BindingPattern| 带实参 _array_ 和 _envRecord_ 的 BindingInitialization。
+          1. 如果 _next_ 是 ~done~，那么
+            1. 返回 ? 对 |BindingPattern| 以 _array_ 和 _envRecord_ 为参数执行 BindingInitialization。
           1. 执行 ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_n_)), _next_)。
           1. 将 _n_ 设置为 _n_ + 1。
       </emu-alg>
@@ -10249,38 +10249,38 @@
       </emu-alg>
       <emu-grammar>FormalParameters : FormalParameterList `,` FunctionRestParameter</emu-grammar>
       <emu-alg>
-        1. 执行 ? |FormalParameterList| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
-        1. 返回 ? |FunctionRestParameter| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 对 |FormalParameterList| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 ? IteratorBindingInitialization。
+        1. 返回 ? 对 |FunctionRestParameter| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>FormalParameterList : FormalParameterList `,` FormalParameter</emu-grammar>
       <emu-alg>
-        1. 执行 ? |FormalParameterList| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
-        1. 返回 ? |FormalParameter| 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 对 |FormalParameterList| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 ? IteratorBindingInitialization。
+        1. 返回 ? 对 |FormalParameter| 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>ArrowParameters : BindingIdentifier</emu-grammar>
       <emu-alg>
-        1. 令 _v_ 为 *undefined*。
+        1. 令 _value_ 为 *undefined*。
         1. 断言：_iteratorRecord_.[[Done]] 是 *false*。
         1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-        1. 如果 _next_ 不是 ~done~，则
-          1. 将 _v_ 设置为 _next_。
-        1. 返回 ? |BindingIdentifier| 带实参 _v_ 和 _envRecord_ 的 BindingInitialization。
+        1. 如果 _next_ 不是 ~done~，那么
+          1. 将 _value_ 设置为 _next_。
+        1. 返回 ? 对 |BindingIdentifier| 以 _value_ 和 _envRecord_ 为参数执行 BindingInitialization。
       </emu-alg>
       <emu-grammar>ArrowParameters : CoverParenthesizedExpressionAndArrowParameterList</emu-grammar>
       <emu-alg>
-        1. 令 _formals_ 为 |CoverParenthesizedExpressionAndArrowParameterList| 所覆盖的 |ArrowFormalParameters|。
-        1. 返回 ? _formals_ 带实参 _iteratorRecord_ 和 _envRecord_ 的 IteratorBindingInitialization。
+        1. 令 _formals_ 为被 |CoverParenthesizedExpressionAndArrowParameterList| 覆盖的 |ArrowFormalParameters|。
+        1. 返回 ? 对 _formals_ 以 _iteratorRecord_ 和 _envRecord_ 为参数执行 IteratorBindingInitialization。
       </emu-alg>
       <emu-grammar>
         AsyncArrowBindingIdentifier : BindingIdentifier
       </emu-grammar>
       <emu-alg>
-        1. 令 _v_ 为 *undefined*。
+        1. 令 _value_ 为 *undefined*。
         1. 断言：_iteratorRecord_.[[Done]] 是 *false*。
         1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-        1. 如果 _next_ 不是 ~done~，则
-          1. 将 _v_ 设置为 _next_。
-        1. 返回 ? |BindingIdentifier| 带实参 _v_ 和 _envRecord_ 的 BindingInitialization。
+        1. 如果 _next_ 不是 ~done~，那么
+          1. 将 _value_ 设置为 _next_。
+        1. 返回 ? 对 |BindingIdentifier| 以 _value_ 和 _envRecord_ 为参数执行 BindingInitialization。
       </emu-alg>
     </emu-clause>
 
@@ -16257,27 +16257,27 @@
         1. 执行 ? ValidateNonRevokedProxy(_obj_)。
         1. 令 _target_ 为 _obj_.[[ProxyTarget]]。
         1. 令 _handler_ 为 _obj_.[[ProxyHandler]]。
-        1. 断言：_handler_ 是 Object。
+        1. 断言：_handler_ 是一个对象。
         1. 令 _trap_ 为 ? GetMethod(_handler_, *"defineProperty"*)。
-        1. 如果 _trap_ 是 *undefined*，则
+        1. 如果 _trap_ 是 *undefined*，那么
           1. 返回 ? <emu-meta effects="user-code">_target_.[[DefineOwnProperty]](_propertyKey_, _propertyDesc_)</emu-meta>。
         1. 令 _propertyDescObj_ 为 FromPropertyDescriptor(_propertyDesc_)。
         1. 令 _boolTrapResult_ 为 ToBoolean(? Call(_trap_, _handler_, « _target_, _propertyKey_, _propertyDescObj_ »))。
-        1. 如果 _boolTrapResult_ 是 *false*，则返回 *false*。
+        1. 如果 _boolTrapResult_ 是 *false*，返回 *false*。
         1. 令 _targetDesc_ 为 ? <emu-meta effects="user-code">_target_.[[GetOwnProperty]](_propertyKey_)</emu-meta>。
         1. 令 _extensibleTarget_ 为 ? IsExtensible(_target_)。
-        1. 如果 _propertyDesc_ 具有 [[Configurable]] 字段且 _propertyDesc_.[[Configurable]] 是 *false*，则
-          1. 令 _settingConfigFalse_ 为 *true*。
+        1. 如果 _propertyDesc_ 具有 [[Configurable]] 字段且 _propertyDesc_.[[Configurable]] 是 *false*，那么
+          1. 令 _settingConfigurableFalse_ 为 *true*。
         1. 否则，
-          1. 令 _settingConfigFalse_ 为 *false*。
-        1. 如果 _targetDesc_ 是 *undefined*，则
-          1. 如果 _extensibleTarget_ 是 *false*，则抛出 *TypeError* 异常。
-          1. 如果 _settingConfigFalse_ 是 *true*，则抛出 *TypeError* 异常。
+          1. 令 _settingConfigurableFalse_ 为 *false*。
+        1. 如果 _targetDesc_ 是 *undefined*，那么
+          1. 如果 _extensibleTarget_ 是 *false*，抛出一个 *TypeError* 异常。
+          1. 如果 _settingConfigurableFalse_ 是 *true*，抛出一个 *TypeError* 异常。
         1. 否则，
-          1. 如果 IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_) 是 *false*，则抛出 *TypeError* 异常。
-          1. 如果 _settingConfigFalse_ 是 *true* 且 _targetDesc_.[[Configurable]] 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 IsDataDescriptor(_targetDesc_) 是 *true*、_targetDesc_.[[Configurable]] 是 *false*，且 _targetDesc_.[[Writable]] 是 *true*，则
-            1. 如果 _propertyDesc_ 具有 [[Writable]] 字段且 _propertyDesc_.[[Writable]] 是 *false*，则抛出 *TypeError* 异常。
+          1. 如果 IsCompatiblePropertyDescriptor(_extensibleTarget_, _propertyDesc_, _targetDesc_) 是 *false*，抛出一个 *TypeError* 异常。
+          1. 如果 _settingConfigurableFalse_ 是 *true* 且 _targetDesc_.[[Configurable]] 是 *true*，抛出一个 *TypeError* 异常。
+          1. 如果 IsDataDescriptor(_targetDesc_) 是 *true*、_targetDesc_.[[Configurable]] 是 *false* 且 _targetDesc_.[[Writable]] 是 *true*，那么
+            1. 如果 _propertyDesc_ 具有 [[Writable]] 字段且 _propertyDesc_.[[Writable]] 是 *false*，抛出一个 *TypeError* 异常。
         1. 返回 *true*。
       </emu-alg>
       <emu-note>
@@ -18769,8 +18769,8 @@
           IdentifierName IdentifierPart
       </emu-grammar>
       <emu-alg>
-        1. 令 _idTextUnescaped_ 为 |IdentifierName| 的 IdentifierCodePoints。
-        1. 返回 CodePointsToString(_idTextUnescaped_)。
+        1. 令 _nameUnescaped_ 为 |IdentifierName| 的 IdentifierCodePoints。
+        1. 返回 CodePointsToString(_nameUnescaped_)。
       </emu-alg>
       <emu-grammar>
         IdentifierReference : `yield`
@@ -21698,26 +21698,24 @@
         </emu-alg>
         <emu-grammar>AssignmentElement : DestructuringAssignmentTarget Initializer?</emu-grammar>
         <emu-alg>
-          1. 如果 |DestructuringAssignmentTarget| 既不是 |ObjectLiteral| 也不是 |ArrayLiteral|，则
-            1. 令 _leftRef_ 为 ? |DestructuringAssignmentTarget| 的 Evaluation。
+          1. 如果 |DestructuringAssignmentTarget| 既不是 |ObjectLiteral| 也不是 |ArrayLiteral|，那么
+            1. 令 _leftRef_ 为 ? 对 |DestructuringAssignmentTarget| 执行 Evaluation。
           1. 令 _value_ 为 *undefined*。
-          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，则
+          1. 如果 _iteratorRecord_.[[Done]] 是 *false*，那么
             1. 令 _next_ 为 ? IteratorStepValue(_iteratorRecord_)。
-            1. 如果 _next_ 不是 ~done~，则
+            1. 如果 _next_ 不是 ~done~，那么
               1. 将 _value_ 设置为 _next_。
-          1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，则
-            1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true* 且 |DestructuringAssignmentTarget| 的 IsIdentifierRef 是 *true*，则
+          1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，那么
+            1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true* 且 |DestructuringAssignmentTarget| 的 IsIdentifierRef 是 *true*，那么
               1. 令 _target_ 为 |DestructuringAssignmentTarget| 的 StringValue。
-              1. 令 _v_ 为 ? 以 _target_ 为实参执行 |Initializer| 的 NamedEvaluation。
+              1. 将 _value_ 设置为 ? 对 |Initializer| 以 _target_ 为参数执行 NamedEvaluation。
             1. 否则，
-              1. 令 _defaultValue_ 为 ? |Initializer| 的 Evaluation。
-              1. 令 _v_ 为 ? GetValue(_defaultValue_)。
-          1. 否则，
-            1. 令 _v_ 为 _value_。
-          1. 如果 |DestructuringAssignmentTarget| 是 |ObjectLiteral| 或 |ArrayLiteral|，则
-            1. 令 _nestedAssignmentPattern_ 为由 |DestructuringAssignmentTarget| 覆盖的 |AssignmentPattern|。
-            1. 返回 ? 以 _v_ 为实参执行 _nestedAssignmentPattern_ 的 DestructuringAssignmentEvaluation。
-          1. 返回 ? PutValue(_leftRef_, _v_)。
+              1. 令 _defaultValue_ 为 ? 对 |Initializer| 执行 Evaluation。
+              1. 将 _value_ 设置为 ? GetValue(_defaultValue_)。
+          1. 如果 |DestructuringAssignmentTarget| 是 |ObjectLiteral| 或 |ArrayLiteral|，那么
+            1. 令 _nestedAssignmentPattern_ 为被 |DestructuringAssignmentTarget| 覆盖的 |AssignmentPattern|。
+            1. 返回 ? 对 _nestedAssignmentPattern_ 以 _value_ 为参数执行 DestructuringAssignmentEvaluation。
+          1. 返回 ? PutValue(_leftRef_, _value_)。
         </emu-alg>
         <emu-note>
           <p>通过在访问迭代器或求值 |Initializer| 之前求值不是解构模式的 |DestructuringAssignmentTarget|，来维持从左到右的求值顺序。</p>
@@ -22114,17 +22112,17 @@
         </emu-note>
         <emu-grammar>LexicalBinding : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-          1. 令 _lhs_ 为 ! ResolveBinding(_bindingId_)。
-          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-            1. 令 _value_ 为以 _bindingId_ 为参数的 |Initializer| 的 ? NamedEvaluation。
+          1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+          1. 令 _lhs_ 为 ! ResolveBinding(_name_)。
+          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，那么
+            1. 令 _value_ 为 ? 对 |Initializer| 以 _name_ 为参数执行 NamedEvaluation。
           1. 否则，
-            1. 令 _rhs_ 为 |Initializer| 的 ? Evaluation。
+            1. 令 _rhs_ 为 ? 对 |Initializer| 执行 Evaluation。
             1. 令 _value_ 为 ? GetValue(_rhs_)。
-          1. 如果 _kind_ 不是 ~normal~，则
+          1. 如果 _kind_ 不是 ~normal~，那么
             1. 断言：IsUnresolvableReference(_lhs_) 是 *false*。
             1. 令 _base_ 为 _lhs_.[[Base]]。
-            1. 断言：_base_ 是声明式环境记录。
+            1. 断言：_base_ 是一个声明式环境记录。
             1. 执行 ? AddDisposableResource(_base_.[[DisposableResourceStack]], _value_, _kind_)。
           1. 执行 ? InitializeReferencedBinding(_lhs_, _value_)。
           1. 返回 ~unused~。
@@ -22177,12 +22175,12 @@
         </emu-alg>
         <emu-grammar>VariableDeclaration : BindingIdentifier Initializer</emu-grammar>
         <emu-alg>
-          1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-          1. 令 _lhs_ 为 ? ResolveBinding(_bindingId_)。
-          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-            1. 令 _value_ 为 ? 以 _bindingId_ 为实参执行 |Initializer| 的 NamedEvaluation。
+          1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+          1. 令 _lhs_ 为 ? ResolveBinding(_name_)。
+          1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，那么
+            1. 令 _value_ 为 ? 对 |Initializer| 以 _name_ 为参数执行 NamedEvaluation。
           1. 否则，
-            1. 令 _rhs_ 为 ? |Initializer| 的 Evaluation。
+            1. 令 _rhs_ 为 ? 对 |Initializer| 执行 Evaluation。
             1. 令 _value_ 为 ? GetValue(_rhs_)。
           1. [id="step-vardecllist-evaluation-putvalue"] 执行 ? PutValue(_lhs_, _value_)。
           1. 返回 ~empty~。
@@ -22324,16 +22322,16 @@
         </emu-alg>
         <emu-grammar>SingleNameBinding : BindingIdentifier Initializer?</emu-grammar>
         <emu-alg>
-          1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-          1. 令 _lhs_ 为 ? ResolveBinding(_bindingId_, _envRecord_)。
+          1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+          1. 令 _lhs_ 为 ? ResolveBinding(_name_, _envRecord_)。
           1. 将 _value_ 设置为 ? GetV(_value_, _propertyName_)。
-          1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，则
-            1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-              1. 将 _value_ 设置为 ? 以 _bindingId_ 为实参执行 |Initializer| 的 NamedEvaluation。
+          1. 如果存在 |Initializer| 且 _value_ 是 *undefined*，那么
+            1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，那么
+              1. 将 _value_ 设置为 ? 对 |Initializer| 以 _name_ 为参数执行 NamedEvaluation。
             1. 否则，
-              1. 令 _defaultValue_ 为 ? |Initializer| 的 Evaluation。
+              1. 令 _defaultValue_ 为 ? 对 |Initializer| 执行 Evaluation。
               1. 将 _value_ 设置为 ? GetValue(_defaultValue_)。
-          1. 如果 _envRecord_ 是 *undefined*，则返回 ? PutValue(_lhs_, _value_)。
+          1. 如果 _envRecord_ 是 *undefined*，返回 ? PutValue(_lhs_, _value_)。
           1. 返回 ? InitializeReferencedBinding(_lhs_, _value_)。
         </emu-alg>
       </emu-clause>
@@ -22683,18 +22681,18 @@
         <emu-alg>
           1. 令 _iterationResult_ 为 *undefined*。
           1. 执行 ? CreatePerIterationEnvironment(_perIterationBindings_)。
-          1. 重复：
-            1. 如果 _test_ 不是 ~empty~，则
-              1. 令 _testRef_ 为 ? _test_ 的 Evaluation。
+          1. 重复，
+            1. 如果 _test_ 不是 ~empty~，那么
+              1. 令 _testRef_ 为 ? 对 _test_ 执行 Evaluation。
               1. 令 _testValue_ 为 ? GetValue(_testRef_)。
-              1. 如果 ToBoolean(_testValue_) 是 *false*，则返回 _iterationResult_。
-            1. 令 _result_ 为 Completion(_stmt_ 的 Evaluation)。
-            1. 如果 LoopContinues(_result_, _labelSet_) 是 *false*，则返回 ? UpdateEmpty(_result_, _iterationResult_)。
-            1. 如果 _result_.[[Value]] 不是 ~empty~，则将 _iterationResult_ 设置为 _result_.[[Value]]。
+              1. 如果 ToBoolean(_testValue_) 是 *false*，返回 _iterationResult_。
+            1. 令 _result_ 为 Completion(对 _stmt_ 执行 Evaluation)。
+            1. 如果 LoopContinues(_result_, _labelSet_) 是 *false*，返回 ? UpdateEmpty(_result_, _iterationResult_)。
+            1. 如果 _result_.[[Value]] 不是 ~empty~，将 _iterationResult_ 设置为 _result_.[[Value]]。
             1. 执行 ? CreatePerIterationEnvironment(_perIterationBindings_)。
-            1. 如果 _increment_ 不是 ~empty~，则
-              1. 令 _incRef_ 为 ? _increment_ 的 Evaluation。
-              1. 执行 ? GetValue(_incRef_)。
+            1. 如果 _increment_ 不是 ~empty~，那么
+              1. 令 _incrementRef_ 为 ? 对 _increment_ 执行 Evaluation。
+              1. 执行 ? GetValue(_incrementRef_)。
         </emu-alg>
       </emu-clause>
 
@@ -23110,8 +23108,8 @@
             `await`
         </emu-grammar>
         <emu-alg>
-          1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-          1. 返回 ? ResolveBinding(_bindingId_)。
+          1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+          1. 返回 ? ResolveBinding(_name_)。
         </emu-alg>
       </emu-clause>
 
@@ -35045,23 +35043,23 @@ THH:mm:ss.sss
         <h1>Date ( ..._values_ )</h1>
         <p>调用此函数时执行以下步骤：</p>
         <emu-alg>
-          1. 如果 NewTarget 为 *undefined*，则
+          1. 如果 NewTarget 是 *undefined*，那么
             1. 令 _now_ 为标识当前时间的时间值（UTC）。
             1. 返回 ToDateString(_now_)。
           1. 令 _numberOfArgs_ 为 _values_ 中元素的数量。
-          1. 如果 _numberOfArgs_ = 0，则
+          1. 如果 _numberOfArgs_ = 0，那么
             1. 令 _dv_ 为标识当前时间的时间值（UTC）。
-          1. 否则，如果 _numberOfArgs_ = 1，则
+          1. 否则如果 _numberOfArgs_ = 1，那么
             1. 令 _value_ 为 _values_[0]。
-            1. 如果 _value_ 是一个 Object，并且 _value_ 有 [[DateValue]] 内部槽，则
+            1. 如果 _value_ 是一个对象且 _value_ 具有 [[DateValue]] 内部槽，那么
               1. 令 _tv_ 为 _value_.[[DateValue]]。
             1. 否则，
-              1. 令 _v_ 为 ? ToPrimitive(_value_)。
-              1. 如果 _v_ 是一个 String，则
-                1. 断言：下一步绝不会返回突然完成，因为 _v_ 是一个 String。
-                1. 令 _tv_ 为将 _v_ 解析为日期的结果，其方式与 `parse` 方法（<emu-xref href="#sec-date.parse"></emu-xref>）完全相同。
+              1. 令 _primitive_ 为 ? ToPrimitive(_value_)。
+              1. 如果 _primitive_ 是一个字符串，那么
+                1. 断言：下一步绝不会返回突然完成，因为 _primitive_ 是一个字符串。
+                1. 令 _tv_ 为将 _primitive_ 解析为日期的结果，其方式与 `parse` 方法（<emu-xref href="#sec-date.parse"></emu-xref>）完全相同。
               1. 否则，
-                1. 令 _tv_ 为 ? ToNumber(_v_)。
+                1. 令 _tv_ 为 ? ToNumber(_primitive_)。
             1. 令 _dv_ 为 TimeClip(_tv_)。
           1. 否则，
             1. 断言：_numberOfArgs_ ≥ 2。
@@ -35993,12 +35991,12 @@ THH:mm:ss.sss
           </dl>
           <emu-alg>
             1. 令 _systemTimeZoneIdentifier_ 为 SystemTimeZoneIdentifier()。
-            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 为 *true*，则
+            1. 如果 IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) 是 *true*，那么
               1. 令 _offsetNanoseconds_ 为 ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_)。
             1. 否则，
               1. 令 _offsetNanoseconds_ 为 GetNamedTimeZoneOffsetNanoseconds(_systemTimeZoneIdentifier_, ℝ(_tv_) × NanosecondsPerMillisecond)。
             1. 令 _offsetMilliseconds_ 为 truncate(_offsetNanoseconds_ / NanosecondsPerMillisecond)。
-            1. 如果 _offsetMilliseconds_ ≥ 0，则
+            1. 如果 _offsetMilliseconds_ ≥ 0，那么
               1. 令 _offsetSign_ 为 *"+"*。
               1. 令 _absOffsetMilliseconds_ 为 _offsetMilliseconds_。
             1. 否则，
@@ -36006,8 +36004,8 @@ THH:mm:ss.sss
               1. 令 _absOffsetMilliseconds_ 为 -_offsetMilliseconds_。
             1. 令 _offsetMinute_ 为 ToZeroPaddedDecimalString(MinuteFromTime(𝔽(_absOffsetMilliseconds_)), 2)。
             1. 令 _offsetHour_ 为 ToZeroPaddedDecimalString(HourFromTime(𝔽(_absOffsetMilliseconds_)), 2)。
-            1. 令 _tzName_ 为一个由实现定义的字符串，它要么是空 String，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、一个由实现定义的时区名称和代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串连接结果。
-            1. 返回 _offsetSign_、_offsetHour_、_offsetMinute_ 和 _tzName_ 的字符串连接结果。
+            1. 令 _timeZoneName_ 为一个由实现定义的字符串，它要么是空字符串，要么是代码单元 0x0020 (SPACE)、代码单元 0x0028 (LEFT PARENTHESIS)、一个由实现定义的时区名称以及代码单元 0x0029 (RIGHT PARENTHESIS) 的字符串连接。
+            1. 返回 _offsetSign_、_offsetHour_、_offsetMinute_ 和 _timeZoneName_ 的字符串连接。
           </emu-alg>
         </emu-clause>
 
@@ -38038,8 +38036,8 @@ THH:mm:ss.sss
           GroupName :: `&lt;` RegExpIdentifierName `&gt;`
         </emu-grammar>
         <emu-alg>
-          1. 令 _idTextUnescaped_ 为 |RegExpIdentifierName| 的 RegExpIdentifierCodePoints。
-          1. 返回 CodePointsToString(_idTextUnescaped_)。
+          1. 令 _nameUnescaped_ 为 |RegExpIdentifierName| 的 RegExpIdentifierCodePoints。
+          1. 返回 CodePointsToString(_nameUnescaped_)。
         </emu-alg>
       </emu-clause>
 
@@ -41212,16 +41210,16 @@ THH:mm:ss.sss
         <p>此方法将数组的元素转换为 String，然后将这些 String 连接起来，并由 _separator_ 的出现分隔。如果未提供 separator，则使用单个逗号作为 separator。</p>
         <p>它在被调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 如果 _separator_ 是 *undefined*，则令 _sep_ 为 *","*。
-          1. 否则，令 _sep_ 为 ? ToString(_separator_)。
-          1. 令 _result_ 为空 String。
+          1. 如果 _separator_ 是 *undefined*，令 _separatorString_ 为 *","*。
+          1. 否则，令 _separatorString_ 为 ? ToString(_separator_)。
+          1. 令 _result_ 为空字符串。
           1. 令 _k_ 为 0。
-          1. 重复，只要 _k_ &lt; _length_，
-            1. 如果 _k_ > 0，则将 _result_ 设置为 _result_ 和 _sep_ 的字符串连接。
+          1. 当 _k_ &lt; _length_ 时，重复，
+            1. 如果 _k_ > 0，将 _result_ 设置为 _result_ 和 _separatorString_ 的字符串连接。
             1. 令 _element_ 为 ? Get(_obj_, ! ToString(𝔽(_k_)))。
-            1. 如果 _element_ 既不是 *undefined* 也不是 *null*，则
+            1. 如果 _element_ 既不是 *undefined* 也不是 *null*，那么
               1. 令 _elementString_ 为 ? ToString(_element_)。
               1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接。
             1. 将 _k_ 设置为 _k_ + 1。
@@ -42797,16 +42795,16 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _separator_ 为 *undefined*，则令 _sep_ 为 *","*。
-          1. 否则，令 _sep_ 为 ? ToString(_separator_)。
-          1. 令 _result_ 为空 String。
+          1. 如果 _separator_ 是 *undefined*，令 _separatorString_ 为 *","*。
+          1. 否则，令 _separatorString_ 为 ? ToString(_separator_)。
+          1. 令 _result_ 为空字符串。
           1. 令 _k_ 为 0。
-          1. 重复执行，当 _k_ &lt; _length_ 时，
-            1. 如果 _k_ > 0，则将 _result_ 设置为 _result_ 和 _sep_ 的字符串连接结果。
+          1. 当 _k_ &lt; _length_ 时，重复，
+            1. 如果 _k_ > 0，将 _result_ 设置为 _result_ 和 _separatorString_ 的字符串连接。
             1. 令 _element_ 为 TypedArrayGetElement(_obj_, 𝔽(_k_))。
-            1. 如果 _element_ 不为 *undefined*，那么
+            1. 如果 _element_ 不是 *undefined*，那么
               1. 令 _elementString_ 为 ! ToString(_element_)。
-              1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接结果。
+              1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接。
             1. 将 _k_ 设置为 _k_ + 1。
           1. 返回 _result_。
         </emu-alg>
@@ -43721,21 +43719,21 @@ THH:mm:ss.sss
       <emu-clause id="sec-uint8array.frombase64" type="built-in function">
         <h1>Uint8Array.fromBase64 ( _string_ [ , _options_ ] )</h1>
         <emu-alg>
-          1. 如果 _string_ 不是 String，则抛出 *TypeError* 异常。
-          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _lastChunkHandling_ 为 ? Get(_opts_, *"lastChunkHandling"*)。
-          1. 如果 _lastChunkHandling_ 是 *undefined*，则将 _lastChunkHandling_ 设置为 *"loose"*。
-          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 如果 _string_ 不是字符串，抛出一个 *TypeError* 异常。
+          1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
+          1. 如果 _alphabet_ 是 *undefined*，将 _alphabet_ 设置为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，抛出一个 *TypeError* 异常。
+          1. 令 _lastChunkHandling_ 为 ? Get(_optionsObj_, *"lastChunkHandling"*)。
+          1. 如果 _lastChunkHandling_ 是 *undefined*，将 _lastChunkHandling_ 设置为 *"loose"*。
+          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，抛出一个 *TypeError* 异常。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_)。
-          1. 如果 _result_.[[Error]] 不是 ~none~，则
+          1. 如果 _result_.[[Error]] 不是 ~none~，那么
             1. 抛出 _result_.[[Error]]。
           1. 令 _resultLength_ 为 _result_.[[Bytes]] 中元素的数量。
           1. 令 _ta_ 为 ? <emu-meta suppress-effects="user-code">AllocateTypedArray(*"Uint8Array"*, %Uint8Array%, *"%Uint8Array.prototype%"*, _resultLength_)</emu-meta>。
           1. 断言：_ta_.[[ViewedArrayBuffer]].[[ArrayBufferByteLength]] 是 _result_.[[Bytes]] 中元素的数量。
-          1. 将 _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] 的每个索引处的值设置为 _result_.[[Bytes]] 中对应索引处的值。
+          1. 将 _ta_.[[ViewedArrayBuffer]].[[ArrayBufferData]] 每个索引处的值设置为 _result_.[[Bytes]] 对应索引处的值。
           1. 返回 _ta_。
         </emu-alg>
       </emu-clause>
@@ -43764,20 +43762,20 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _into_ 为 *this* 值。
           1. 执行 ? ValidateUint8Array(_into_)。
-          1. 如果 _string_ 不是字符串，则抛出 *TypeError* 异常。
-          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _lastChunkHandling_ 为 ? Get(_opts_, *"lastChunkHandling"*)。
-          1. 如果 _lastChunkHandling_ 是 *undefined*，则将 _lastChunkHandling_ 设置为 *"loose"*。
-          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 如果 _string_ 不是字符串，抛出一个 *TypeError* 异常。
+          1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
+          1. 如果 _alphabet_ 是 *undefined*，将 _alphabet_ 设置为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，抛出一个 *TypeError* 异常。
+          1. 令 _lastChunkHandling_ 为 ? Get(_optionsObj_, *"lastChunkHandling"*)。
+          1. 如果 _lastChunkHandling_ 是 *undefined*，将 _lastChunkHandling_ 设置为 *"loose"*。
+          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，抛出一个 *TypeError* 异常。
           1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)。
           1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)。
           1. 令 _bytes_ 为 _result_.[[Bytes]]。
-          1. 令 _written_ 为 _bytes_ 中的元素数量。
-          1. 注意：FromBase64 不会调用任何用户代码，因此 _into_ 的后备 ArrayBuffer 不可能已被分离或收缩。
+          1. 令 _written_ 为 _bytes_ 中元素的数量。
+          1. 注意：FromBase64 不调用任何用户代码，因此作为 _into_ 后备存储的 ArrayBuffer 不可能已被分离或收缩。
           1. 断言：_written_ ≤ _byteLength_。
           1. 执行 SetUint8ArrayBytes(_into_, _bytes_)。
           1. 如果 _result_.[[Error]] 不是 ~none~，那么
@@ -43817,17 +43815,17 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* 值。
           1. 执行 ? ValidateUint8Array(_obj_)。
-          1. 令 _opts_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_opts_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _omitPadding_ 为 ToBoolean(? Get(_opts_, *"omitPadding"*))。
+          1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
+          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
+          1. 如果 _alphabet_ 是 *undefined*，将 _alphabet_ 设置为 *"base64"*。
+          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，抛出一个 *TypeError* 异常。
+          1. 令 _omitPadding_ 为 ToBoolean(? Get(_optionsObj_, *"omitPadding"*)).
           1. 令 _toEncode_ 为 ? GetUint8ArrayBytes(_obj_)。
-          1. 如果 _alphabet_ 是 *"base64"*，则
-            1. 令 _outAscii_ 为根据 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 4 节指定的 base64 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
+          1. 如果 _alphabet_ 是 *"base64"*，那么
+            1. 令 _outAscii_ 为按照 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 4 节规定的 base64 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
           1. 否则，
             1. 断言：_alphabet_ 是 *"base64url"*。
-            1. 令 _outAscii_ 为根据 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 5 节指定的 base64url 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
+            1. 令 _outAscii_ 为按照 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 5 节规定的 base64url 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
           1. 返回 CodePointsToString(_outAscii_)。
         </emu-alg>
       </emu-clause>
@@ -46093,28 +46091,28 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[ArrayBufferData]])。
-          1. 若 IsSharedArrayBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
-          1. 若 IsDetachedBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
+          1. 如果 IsSharedArrayBuffer(_obj_) 是 *true*，抛出一个 *TypeError* 异常。
+          1. 如果 IsDetachedBuffer(_obj_) 是 *true*，抛出一个 *TypeError* 异常。
           1. 令 _length_ 为 _obj_.[[ArrayBufferByteLength]]。
           1. 令 _first_ 为 ? ToClampedIndex(_start_, _length_)。
-          1. 若 _end_ 为 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 如果 _end_ 是 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _newLength_ 为 max(_final_ - _first_, 0)。
           1. 令 _ctor_ 为 ? SpeciesConstructor(_obj_, %ArrayBuffer%)。
           1. 令 _new_ 为 ? Construct(_ctor_, « 𝔽(_newLength_) »)。
           1. 执行 ? RequireInternalSlot(_new_, [[ArrayBufferData]])。
-          1. 若 IsSharedArrayBuffer(_new_) 为 *true*，抛出 *TypeError* 异常。
-          1. 若 IsDetachedBuffer(_new_) 为 *true*，抛出 *TypeError* 异常。
-          1. 若 SameValue(_new_, _obj_) 为 *true*，抛出 *TypeError* 异常。
-          1. 若 _new_.[[ArrayBufferByteLength]] &lt; _newLength_，抛出 *TypeError* 异常。
-          1. 注：上述步骤的副作用可能已分离或调整 _obj_ 的大小。
-          1. 若 IsDetachedBuffer(_obj_) 为 *true*，抛出 *TypeError* 异常。
-          1. 令 _fromBuf_ 为 _obj_.[[ArrayBufferData]]。
-          1. 令 _toBuf_ 为 _new_.[[ArrayBufferData]]。
+          1. 如果 IsSharedArrayBuffer(_new_) 是 *true*，抛出一个 *TypeError* 异常。
+          1. 如果 IsDetachedBuffer(_new_) 是 *true*，抛出一个 *TypeError* 异常。
+          1. 如果 SameValue(_new_, _obj_) 是 *true*，抛出一个 *TypeError* 异常。
+          1. 如果 _new_.[[ArrayBufferByteLength]] &lt; _newLength_，抛出一个 *TypeError* 异常。
+          1. 注意：上述步骤的副作用可能已经分离或调整了 _obj_ 的大小。
+          1. 如果 IsDetachedBuffer(_obj_) 是 *true*，抛出一个 *TypeError* 异常。
+          1. 令 _fromBlock_ 为 _obj_.[[ArrayBufferData]]。
+          1. 令 _toBlock_ 为 _new_.[[ArrayBufferData]]。
           1. 令 _currentLength_ 为 _obj_.[[ArrayBufferByteLength]]。
           1. 令 _maxCount_ 为 _currentLength_ - _first_。
-          1. 若 _maxCount_ > 0，则
+          1. 如果 _maxCount_ > 0，那么
             1. 令 _count_ 为 min(_newLength_, _maxCount_)。
-            1. 执行 CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _count_)。
+            1. 执行 CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _count_)。
           1. 返回 _new_。
         </emu-alg>
       </emu-clause>
@@ -46196,17 +46194,17 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 令 _slots_ 为 « [[ArrayBufferData]] »。
-          1. 如果存在 _maxByteLength_ 且 _maxByteLength_ 不是 ~empty~，则令 _allocatingGrowableBuffer_ 为 *true*；否则令 _allocatingGrowableBuffer_ 为 *false*。
-          1. 如果 _allocatingGrowableBuffer_ 是 *true*，则
-            1. 如果 _byteLength_ > _maxByteLength_，则抛出 *RangeError* 异常。
+          1. 如果存在 _maxByteLength_ 且 _maxByteLength_ 不是 ~empty~，令 _allocatingGrowableBuffer_ 为 *true*；否则令 _allocatingGrowableBuffer_ 为 *false*。
+          1. 如果 _allocatingGrowableBuffer_ 是 *true*，那么
+            1. 如果 _byteLength_ > _maxByteLength_，抛出一个 *RangeError* 异常。
             1. 将 [[ArrayBufferByteLengthData]] 和 [[ArrayBufferMaxByteLength]] 追加到 _slots_。
           1. 否则，
             1. 将 [[ArrayBufferByteLength]] 追加到 _slots_。
           1. 令 _obj_ 为 ? OrdinaryCreateFromConstructor(_ctor_, *"%SharedArrayBuffer.prototype%"*, _slots_)。
-          1. 如果 _allocatingGrowableBuffer_ 是 *true*，则令 _allocLength_ 为 _maxByteLength_；否则令 _allocLength_ 为 _byteLength_。
-          1. 令 _block_ 为 ? CreateSharedByteDataBlock(_allocLength_)。
+          1. 如果 _allocatingGrowableBuffer_ 是 *true*，令 _allocationLength_ 为 _maxByteLength_；否则令 _allocationLength_ 为 _byteLength_。
+          1. 令 _block_ 为 ? CreateSharedByteDataBlock(_allocationLength_)。
           1. 将 _obj_.[[ArrayBufferData]] 设置为 _block_。
-          1. 如果 _allocatingGrowableBuffer_ 是 *true*，则
+          1. 如果 _allocatingGrowableBuffer_ 是 *true*，那么
             1. 断言：_byteLength_ ≤ _maxByteLength_。
             1. 令 _byteLengthBlock_ 为 ? CreateSharedByteDataBlock(8)。
             1. 执行 SetValueInBuffer(_byteLengthBlock_, 0, ~biguint64~, ℤ(_byteLength_), *true*, ~seq-cst~)。
@@ -46422,20 +46420,20 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[ArrayBufferData]])。
-          1. 若 IsSharedArrayBuffer(_obj_) 为 *false*，抛出 *TypeError* 异常。
+          1. 如果 IsSharedArrayBuffer(_obj_) 是 *false*，抛出一个 *TypeError* 异常。
           1. 令 _length_ 为 ArrayBufferByteLength(_obj_, ~seq-cst~)。
           1. 令 _first_ 为 ? ToClampedIndex(_start_, _length_)。
-          1. 若 _end_ 为 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
+          1. 如果 _end_ 是 *undefined*，令 _final_ 为 _length_；否则令 _final_ 为 ? ToClampedIndex(_end_, _length_)。
           1. 令 _newLength_ 为 max(_final_ - _first_, 0)。
           1. 令 _ctor_ 为 ? SpeciesConstructor(_obj_, %SharedArrayBuffer%)。
           1. 令 _new_ 为 ? Construct(_ctor_, « 𝔽(_newLength_) »)。
           1. 执行 ? RequireInternalSlot(_new_, [[ArrayBufferData]])。
-          1. 若 IsSharedArrayBuffer(_new_) 为 *false*，抛出 *TypeError* 异常。
-          1. 若 _new_.[[ArrayBufferData]] 为 _obj_.[[ArrayBufferData]]，抛出 *TypeError* 异常。
-          1. 若 ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_，抛出 *TypeError* 异常。
-          1. 令 _fromBuf_ 为 _obj_.[[ArrayBufferData]]。
-          1. 令 _toBuf_ 为 _new_.[[ArrayBufferData]]。
-          1. 执行 CopyDataBlockBytes(_toBuf_, 0, _fromBuf_, _first_, _newLength_)。
+          1. 如果 IsSharedArrayBuffer(_new_) 是 *false*，抛出一个 *TypeError* 异常。
+          1. 如果 _new_.[[ArrayBufferData]] 是 _obj_.[[ArrayBufferData]]，抛出一个 *TypeError* 异常。
+          1. 如果 ArrayBufferByteLength(_new_, ~seq-cst~) &lt; _newLength_，抛出一个 *TypeError* 异常。
+          1. 令 _fromBlock_ 为 _obj_.[[ArrayBufferData]]。
+          1. 令 _toBlock_ 为 _new_.[[ArrayBufferData]]。
+          1. 执行 CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, _first_, _newLength_)。
           1. 返回 _new_。
         </emu-alg>
       </emu-clause>
@@ -49990,26 +49988,26 @@ THH:mm:ss.sss
         </dl>
 
         <emu-alg>
-          1. 注：由于 _promiseCapability_ 派生自固有 %Promise%，因此下面使用 IfAbruptRejectPromise 所导致的对 _promiseCapability_.[[Reject]] 的调用保证不会抛出。
+          1. 注意：由于 _promiseCapability_ 派生自固有对象 %Promise%，因此下面使用 IfAbruptRejectPromise 所导致的对 _promiseCapability_.[[Reject]] 的调用保证不会抛出异常。
           1. 令 _done_ 为 Completion(IteratorComplete(_result_))。
           1. IfAbruptRejectPromise(_done_, _promiseCapability_)。
           1. 令 _value_ 为 Completion(IteratorValue(_result_))。
           1. IfAbruptRejectPromise(_value_, _promiseCapability_)。
           1. 令 _valueWrapper_ 为 Completion(PromiseResolve(%Promise%, _value_))。
-          1. 如果 _valueWrapper_ 是 abrupt completion，_done_ 是 *false*，且 _closeOnRejection_ 是 *true*，则
+          1. 如果 _valueWrapper_ 是突然完成、_done_ 是 *false* 且 _closeOnRejection_ 是 *true*，那么
             1. 将 _valueWrapper_ 设置为 Completion(IteratorClose(_syncIteratorRecord_, _valueWrapper_))。
           1. IfAbruptRejectPromise(_valueWrapper_, _promiseCapability_)。
-          1. 令 _unwrap_ 为一个新的 Abstract Closure，其参数为 (_v_)，捕获 _done_，并在被调用时执行以下步骤：
-            1. 返回 CreateIteratorResultObject(_v_, _done_)。
+          1. 令 _unwrap_ 为一个新的抽象闭包，其参数为 (_value_)，捕获 _done_，并在被调用时执行以下步骤：
+            1. 返回 CreateIteratorResultObject(_value_, _done_)。
           1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_unwrap_, 1, *""*, « »)。
-          1. 注：_onFulfilled_ 用于在处理 IteratorResult 对象的 *"value"* 属性时等待其值（如果它是 promise），并将结果重新包装到新的“已解包”IteratorResult 对象中。
-          1. 如果 _done_ 是 *true* 或 _closeOnRejection_ 是 *false*，则
+          1. 注意：_onFulfilled_ 用于处理 IteratorResult 对象的 *"value"* 属性，以便在其值是 promise 时等待该值，并将结果重新封装到一个新的“解包后的”IteratorResult 对象中。
+          1. 如果 _done_ 是 *true* 或 _closeOnRejection_ 是 *false*，那么
             1. 令 _onRejected_ 为 *undefined*。
           1. 否则，
-            1. 令 _closeIterator_ 为一个新的 Abstract Closure，其参数为 (_error_)，捕获 _syncIteratorRecord_，并在被调用时执行以下步骤：
+            1. 令 _closeIterator_ 为一个新的抽象闭包，其参数为 (_error_)，捕获 _syncIteratorRecord_，并在被调用时执行以下步骤：
               1. 返回 ? IteratorClose(_syncIteratorRecord_, ThrowCompletion(_error_))。
             1. 令 _onRejected_ 为 CreateBuiltinFunction(_closeIterator_, 1, *""*, « »)。
-            1. 注：当 IteratorResult 对象所产生的 *"value"* 属性是被拒绝的 promise 时，_onRejected_ 用于关闭 Iterator。
+            1. 注意：_onRejected_ 用于在迭代器所产生的 IteratorResult 对象的 *"value"* 属性是一个被拒绝的 promise 时关闭该迭代器。
           1. 执行 PerformPromiseThen(_valueWrapper_, _onFulfilled_, _onRejected_, _promiseCapability_)。
           1. 返回 _promiseCapability_.[[Promise]]。
         </emu-alg>
@@ -52585,16 +52583,16 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 令 _asyncContext_ 为运行中的执行上下文。
+          1. 令 _asyncContext_ 为当前运行执行上下文。
           1. 令 _promise_ 为 ? PromiseResolve(%Promise%, _arg_)。
-          1. 令 _fulfilledClosure_ 为一个新的抽象闭包，其参数为 (_v_)，它捕获 _asyncContext_ 并在被调用时执行以下步骤：
-            1. 执行 Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_v_)))。
-            1. 注：RunSuspendedContext 返回的完成记录会被有意忽略。
+          1. 令 _fulfilledClosure_ 为一个新的抽象闭包，其参数为 (_value_)，捕获 _asyncContext_，并在被调用时执行以下步骤：
+            1. 执行 Completion(RunSuspendedContext(_asyncContext_, NormalCompletion(_value_)))。
+            1. 注意：有意忽略 RunSuspendedContext 返回的完成记录。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _onFulfilled_ 为 CreateBuiltinFunction(_fulfilledClosure_, 1, *""*, « »)。
-          1. 令 _rejectedClosure_ 为一个新的抽象闭包，其参数为 (_reason_)，它捕获 _asyncContext_ 并在被调用时执行以下步骤：
+          1. 令 _rejectedClosure_ 为一个新的抽象闭包，其参数为 (_reason_)，捕获 _asyncContext_，并在被调用时执行以下步骤：
             1. 执行 Completion(RunSuspendedContext(_asyncContext_, ThrowCompletion(_reason_)))。
-            1. 注：RunSuspendedContext 返回的完成记录会被有意忽略。
+            1. 注意：有意忽略 RunSuspendedContext 返回的完成记录。
             1. 返回 NormalCompletion(*undefined*)。
           1. 令 _onRejected_ 为 CreateBuiltinFunction(_rejectedClosure_, 1, *""*, « »)。
           1. 执行 PerformPromiseThen(_promise_, _onFulfilled_, _onRejected_)。
@@ -54818,12 +54816,12 @@ THH:mm:ss.sss
       <p>ForInOfLoopEvaluation 接受参数 _labelSet_ 时的运行时语义补充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 令 _bindingId_ 为 |BindingIdentifier| 的 StringValue。
-        1. 令 _lhs_ 为 ? ResolveBinding(_bindingId_)。
-        1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 为 *true*，则
-          1. 令 _value_ 为以 _bindingId_ 为参数对 |Initializer| 执行 NamedEvaluation 的结果。
+        1. 令 _name_ 为 |BindingIdentifier| 的 StringValue。
+        1. 令 _lhs_ 为 ? ResolveBinding(_name_)。
+        1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，那么
+          1. 令 _value_ 为 ? 对 |Initializer| 以 _name_ 为参数执行 NamedEvaluation。
         1. 否则，
-          1. 令 _rhs_ 为对 |Initializer| 执行 ? Evaluation 的结果。
+          1. 令 _rhs_ 为 ? 对 |Initializer| 执行 Evaluation。
           1. 令 _value_ 为 ? GetValue(_rhs_)。
         1. 执行 ? PutValue(_lhs_, _value_)。
         1. 令 _keyResult_ 为 ? ForIn/OfHeadEvaluation(« », |Expression|, ~enumerate~)。
