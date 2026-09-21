@@ -4798,7 +4798,7 @@
     </emu-clause>
 
     <emu-clause id="sec-data-blocks">
-      <h1>Data Block</h1>
+      <h1>データブロック</h1>
       <p><dfn variants="Data Blocks">Data Block</dfn> 仕様型は、バイトサイズ（8ビット）の数値からなる、独立した可変の列を記述するために使用されます。<dfn variants="byte values">バイト値</dfn>は、0 から 255 までの閉区間内の整数です。Data Block 値は固定数のバイトで作成され、各バイトの初期値は 0 です。</p>
       <p>この仕様内での表記上の便宜のため、配列に似た構文を使用して Data Block 値の個々のバイトにアクセスできます。この表記では、Data Block 値を 0 を起点とする<emu-not-ref>整数インデックス付き</emu-not-ref>のバイト列として表します。たとえば、_dataBlock_ が5バイトの Data Block 値である場合、_dataBlock_[2] を使用してその第3バイトにアクセスできます。</p>
       <p>複数のエージェントから同時に参照できるメモリに存在する Data Block は、<dfn variants="Shared Data Blocks">Shared Data Block</dfn> と指定されます。Shared Data Block は、Shared Data Block 値の等価性を検査する目的で<em>アドレス非依存</em>の同一性を持ちます。これは、ブロックが任意のプロセス内でマッピングされている仮想アドレスではなく、そのブロックが表すメモリ内の位置の集合に結び付けられます。2つの Data Block が等しいのは、それらが含む位置の集合が等しい場合に限ります。それ以外の場合、それらは等しくなく、それらが含む位置の集合の共通部分は空です。最後に、Shared Data Block は Data Block と区別できます。</p>
@@ -4888,7 +4888,8 @@
     <emu-clause id="sec-privateelement-specification-type">
       <h1>PrivateElement 仕様型</h1>
       <p>PrivateElement 型は、private クラスフィールド、メソッド、およびアクセサーの仕様で使用される Record です。private element は Property Descriptor と関連付けられておらず、またプロパティでもありませんが、それらを参照する式の実行時意味論は、いくつかの点で configurable でないプロパティのものと似ています（private field は書込み可能なデータプロパティに類似し、private method は書込み不可能なデータプロパティに類似し、private accessor はアクセサープロパティに類似します）。対応する Record フィールドも同様の目的で使用されます。</p>
-      <p>PrivateElement 型の値は、<emu-xref href="#table-privateelement-fields"></emu-xref> によってフィールドが定義される Record です。このような値は <dfn variants="PrivateElement">PrivateElements</dfn> と呼ばれます。</p>      <emu-table id="table-privateelement-fields" caption="PrivateElement のフィールド">
+      <p>PrivateElement 型の値は、<emu-xref href="#table-privateelement-fields"></emu-xref> によってフィールドが定義される Record です。このような値は <dfn variants="PrivateElement">PrivateElements</dfn> と呼ばれます。</p>
+      <emu-table id="table-privateelement-fields" caption="PrivateElement のフィールド">
         <table>
           <thead>
             <tr>
@@ -12075,10 +12076,10 @@
             [[AgentSignifier]]
           </td>
           <td>
-            an agent signifier
+            agent signifier
           </td>
           <td>
-            この Realm を所有するエージェント
+            この realm を所有する agent
           </td>
         </tr>
         <tr>
@@ -12086,10 +12087,10 @@
             [[Intrinsics]]
           </td>
           <td>
-            a Record whose field names are intrinsic keys and whose values are objects
+            フィールド名が intrinsic key であり、その値がオブジェクトである Record
           </td>
           <td>
-            この Realm に関連付けられたコードによって使用されるイントリンシック値
+            この realm に関連付けられたコードによって使用される intrinsic 値
           </td>
         </tr>
         <tr>
@@ -12097,10 +12098,10 @@
             [[GlobalObject]]
           </td>
           <td>
-            an Object
+            Object
           </td>
           <td>
-            この Realm のグローバルオブジェクト
+            この realm のグローバルオブジェクト
           </td>
         </tr>
         <tr>
@@ -12108,10 +12109,10 @@
             [[GlobalEnv]]
           </td>
           <td>
-            a Global Environment Record
+            Global Environment Record
           </td>
           <td>
-            この Realm のグローバル環境
+            この realm のグローバル環境
           </td>
         </tr>
         <tr>
@@ -12119,11 +12120,11 @@
             [[TemplateMap]]
           </td>
           <td>
-            a List of Records with fields [[Site]] (a |TemplateLiteral| Parse Node) and [[Array]] (an Array)
+            [[Site]]（|TemplateLiteral| Parse Node）および [[Array]]（Array）というフィールドを持つ Record の List
           </td>
           <td>
-            <p>テンプレートオブジェクトは、各 Realm Record の [[TemplateMap]] を使用して Realm ごとに個別に正準化されます。各 [[Site]] 値は |TemplateLiteral| である Parse Node です。関連付けられた [[Array]] 値は、タグ関数に渡される対応するテンプレートオブジェクトです。</p>
-            <emu-note>Parse Node が到達不能になると、対応する [[Array]] も到達不能になります。そのため、実装が [[TemplateMap]] List からその組を削除しても観測不能です。</emu-note>
+            <p>Template オブジェクトは、各 realm について、その Realm Record の [[TemplateMap]] を使用して個別に正規化されます。各 [[Site]] 値は、|TemplateLiteral| である Parse Node です。関連付けられた [[Array]] 値は、tag 関数に渡される対応する template オブジェクトです。</p>
+            <emu-note>Parse Node が到達不能になると、対応する [[Array]] も到達不能になり、実装がその組を [[TemplateMap]] の List から削除しても観測できません。</emu-note>
           </td>
         </tr>
         <tr>
@@ -12131,12 +12132,12 @@
             [[LoadedModules]]
           </td>
           <td>
-            a List of LoadedModuleRequest Records
+            LoadedModuleRequest Record の List
           </td>
           <td>
-            <p>この Realm によってインポートされた指定子文字列から、解決済み Module Record への写像です。この List には、ModuleRequestsEqual(_r1_, _r2_) が *true* であるような異なる2つの Record _r1_ と _r2_ は含まれません。</p>
+            <p>この realm によってインポートされた specifier 文字列から、解決済みの Module Record への対応付けです。この List には、ModuleRequestsEqual(_r1_, _r2_) が *true* となる2つの異なる Record _r1_ および _r2_ は含まれません。</p>
             <emu-note>
-              HostLoadImportedModule（<emu-xref href="#note-HostLoadImportedModule-referrer-Realm-Record"></emu-xref>）で述べたように、Realm Record の [[LoadedModules]] は、アクティブなスクリプトまたはモジュールが存在しないコンテキストで `import()` 式を実行する場合にのみ使用されます。
+              HostLoadImportedModule（<emu-xref href="#note-HostLoadImportedModule-referrer-Realm-Record"></emu-xref>）で述べたように、Realm Record 内の [[LoadedModules]] は、アクティブな script または module が存在しないコンテキストで `import()` 式を実行する場合にのみ使用されます。
             </emu-note>
           </td>
         </tr>
@@ -12145,10 +12146,10 @@
             [[HostDefined]]
           </td>
           <td>
-            anything (default value is *undefined*)
+            任意のもの（既定値は *undefined*）
           </td>
           <td>
-            Realm Record に追加情報を関連付ける必要があるホストによる使用のために予約されたフィールドです。
+            Realm Record に追加情報を関連付ける必要がある host が使用するために予約されたフィールドです。
           </td>
         </tr>
       </table>
@@ -25503,7 +25504,6 @@
 
         ClassElement :
           ClassStaticBlock
-        `;`
       </emu-grammar>
       <emu-alg>
         1. 新しい空の List を返す。

@@ -1164,28 +1164,30 @@
         <li><em>BigInt 值</em>：与任意整数一一对应的 ECMAScript 语言值。</li>
       </ul>
 
-      <p>在本规范的表述中，使用下标后缀区分不同数值种类的数值。下标 <sub>𝔽</sub> 表示 Number 值，下标 <sub>ℤ</sub> 表示 BigInt 值。没有下标后缀的数值表示数学值。本规范中的大多数数值以十进制表示；也使用 0x 后跟数字 0-9 或字母 A-F 的形式表示十六进制数值。</p>
-      <p>一般而言，当本规范提及数值而未明确指定数值种类时，例如短语“_y_ 的长度”或“四个十六进制数字所表示的整数 ...”，该短语指的是数学值。引用 Number 值或 BigInt 值的短语会明确标明；例如，“… 中码点数量对应的 Number 值”或“… 对应的 BigInt 值”。</p>
-      <p>除非另有说明，本规范使用术语<dfn id="integer" oldids="mathematical integer" variants="integers">整数</dfn>时，指属于整数集合的数学值。本规范使用术语<dfn id="integral-number" oldids="sec-isintegralnumber,sec-isinteger" variants="integral Numbers">整数 Number 值</dfn>时，指其数学值属于整数集合的有限 Number 值。</p>
-      <p>+、×、= 和 ≥ 等数值运算符表示由操作数类型确定的相应运算。应用于数学值时，这些运算符表示通常的数学运算。应用于扩展数学值时，这些运算符表示扩展实数上的通常数学运算；不定式未被定义，在本规范中使用它们应视为编辑错误。应用于 Number 值时，这些运算符表示 IEEE 754-2019 中的相关运算。应用于 BigInt 值时，这些运算符表示对 BigInt 值的数学值执行通常的数学运算。应用于混合类型操作数（例如 Number 值和数学值）的数值运算符未被定义，应视为本规范中的编辑错误。</p>
-      <p>本文件中，数学值与 Number 或 BigInt 之间的转换始终是显式的。从数学值或扩展数学值 _x_ 到 Number 的转换表示为“_x_ 对应的 Number 值”或 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>，并在 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> 中定义。从整数 _x_ 到 BigInt 的转换表示为“_x_ 对应的<dfn id="bigint-value-for">BigInt 值</dfn>”或 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>。从 Number 或 BigInt _x_ 到数学值的转换表示为“_x_ <dfn id="mathematical-value-of">的数学值</dfn>”，或 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>。*+0*<sub>𝔽</sub> 和 *-0*<sub>𝔽</sub> 的数学值是数学值 0。非有限值的数学值未定义。_x_ <dfn id="extended-mathematical-value-of">的扩展数学值</dfn>对于有限值是 _x_ 的数学值，而对于 *+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 则分别是 +∞ 和 -∞；对于 *NaN*，其扩展数学值未定义。</p>      <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> 产生 _x_ 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> 产生 _x_ 以 10 为底的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> 产生 _x_ 以 2 为底的对数。</p>
-      <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 产生 <emu-eqn>_x1_</emu-eqn> 至 <emu-eqn>_xN_</emu-eqn> 中数学意义上最小的值。数学函数 <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 产生 <emu-eqn>_x1_</emu-eqn> 至 <emu-eqn>_xN_</emu-eqn> 中数学意义上最大的值。这些数学函数的定义域和值域均为扩展数学值。</p>
-      <p>表示法“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>”（_y_ 必须有限且非零）计算一个与 _y_ 同号（或为零）的值 _k_，使得对于某个整数 _q_，有 <emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>。</p>
-      <p>短语“将 _x_ <dfn id="clamping">钳制</dfn>在 _lower_ 和 _upper_ 之间的结果”（其中 _x_ 是扩展数学值，_lower_ 和 _upper_ 是满足 _lower_ ≤ _upper_ 的数学值）在 _x_ &lt; _lower_ 时产生 _lower_，在 _x_ > _upper_ 时产生 _upper_，否则产生 _x_。</p>
+      <p>在本规范的语言中，数值通过下标后缀在不同的数值种类之间加以区分。下标 <sub>𝔽</sub> 表示 Number，下标 <sub>ℤ</sub> 表示 BigInt。没有下标后缀的数值表示数学值。本规范中的大多数数值采用十进制表示；它还使用由 0x 后跟数字 0-9 或 A-F 形式组成的数值来表示十六进制值。</p>
+      <p>一般而言，当本规范引用某个数值时，例如短语“_y_ 的长度”或“四个十六进制数字表示的整数……”，如果没有显式指定数值种类，则该短语表示数学值。引用 Number 或 BigInt 值的短语会显式注明；例如，“……中的码点数量对应的 Number 值”或“……对应的 BigInt 值”。</p>
+      <p>当本规范使用术语<dfn id="integer" oldids="mathematical integer" variants="integers">整数</dfn>时，除非另有说明，它表示属于整数集合的数学值。当本规范使用术语<dfn id="integral-number" oldids="sec-isintegralnumber,sec-isinteger" variants="integral Numbers">整数 Number</dfn>时，它表示其数学值属于整数集合的有限 Number 值。</p>
+      <p>诸如 +、×、= 和 ≥ 之类的数值运算符，根据操作数的类型表示相应的运算。当应用于数学值时，这些运算符表示通常的数学运算。当应用于扩展数学值时，这些运算符表示扩展实数上的通常数学运算；未定式未定义，在本规范中使用未定式应被视为编辑错误。当应用于 Number 时，这些运算符表示 IEEE 754-2019 中相应的运算。当应用于 BigInt 时，这些运算符表示应用于该 BigInt 数学值的通常数学运算。应用于混合类型操作数（例如一个 Number 和一个数学值）的数值运算符未定义，应被视为本规范中的编辑错误。</p>
+      <p>本文件中，数学值与 Number 或 BigInt 之间的转换始终是显式的。从数学值或扩展数学值 _x_ 到 Number 的转换表示为“_x_ 对应的 Number 值”或 <emu-eqn id="𝔽" aoid="𝔽">𝔽(_x_)</emu-eqn>，并在 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> 中定义。从整数 _x_ 到 BigInt 的转换表示为“_x_ <dfn id="bigint-value-for">对应的 BigInt 值</dfn>”或 <emu-eqn id="ℤ" aoid="ℤ">ℤ(_x_)</emu-eqn>。从 Number 或 BigInt _x_ 到数学值的转换表示为“_x_ <dfn id="mathematical-value-of">的数学值</dfn>”，或 <emu-eqn id="ℝ" aoid="ℝ">ℝ(_x_)</emu-eqn>。*+0*<sub>𝔽</sub> 和 *-0*<sub>𝔽</sub> 的数学值是数学值 0。非有限值的数学值未定义。_x_ <dfn id="extended-mathematical-value-of">的扩展数学值</dfn>对于有限值是 _x_ 的数学值，而对于 *+∞*<sub>𝔽</sub> 和 *-∞*<sub>𝔽</sub> 则分别是 +∞ 和 -∞；对于 *NaN*，其扩展数学值未定义。</p>
+      <p>数学函数 <emu-eqn id="eqn-abs" aoid="abs">abs(_x_)</emu-eqn> 产生 _x_ 的绝对值；如果 _x_ &lt; 0，则该值为 <emu-eqn>-_x_</emu-eqn>，否则为 _x_ 本身。</p>
+      <p>数学函数 <emu-eqn id="eqn-ln" aoid="ln">ln(_x_)</emu-eqn> 产生 _x_ 的自然对数。数学函数 <emu-eqn id="eqn-log10" aoid="log10">log10(_x_)</emu-eqn> 产生 _x_ 的以 10 为底的对数。数学函数 <emu-eqn id="eqn-log2" aoid="log2">log2(_x_)</emu-eqn> 产生 _x_ 的以 2 为底的对数。</p>
+      <p>数学函数 <emu-eqn id="eqn-min" aoid="min">min(_x1_, _x2_, … , _xN_)</emu-eqn> 产生从 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中数学意义上最小的值。数学函数 <emu-eqn id="eqn-max" aoid="max">max(_x1_, _x2_, ..., _xN_)</emu-eqn> 产生从 <emu-eqn>_x1_</emu-eqn> 到 <emu-eqn>_xN_</emu-eqn> 中数学意义上最大的值。这些数学函数的定义域和值域都是扩展数学值。</p>
+      <p>记法“<emu-eqn id="eqn-modulo" aoid="modulo">_x_ modulo _y_</emu-eqn>”（_y_ 必须是有限且非零的）计算一个与 _y_ 同号（或为零）的值 _k_，使得对于某个整数 _q_，有 <emu-eqn>abs(_k_) &lt; abs(_y_) and _x_ - _k_ = _q_ × _y_</emu-eqn>。</p>
+      <p>短语“将 _x_ <dfn id="clamping">限制</dfn>在 _lower_ 和 _upper_ 之间的结果”（其中 _x_ 是扩展数学值，_lower_ 和 _upper_ 是满足 _lower_ ≤ _upper_ 的数学值）在 _x_ &lt; _lower_ 时产生 _lower_，在 _x_ > _upper_ 时产生 _upper_，否则产生 _x_。</p>
       <p>数学函数 <emu-eqn id="eqn-floor" aoid="floor">floor(_x_)</emu-eqn> 产生不大于 _x_ 的最大整数（最接近 +∞）。</p>
       <emu-note>
         <p><emu-eqn>floor(_x_) = _x_ - (_x_ modulo 1)</emu-eqn>。</p>
       </emu-note>
-      <p>数学函数 <emu-eqn id="eqn-truncate" aoid="truncate">truncate(_x_)</emu-eqn> 通过向零舍入移除 _x_ 的小数部分；如果 _x_ &lt; 0，则产生 <emu-eqn>-floor(-_x_)</emu-eqn>，否则产生 <emu-eqn>floor(_x_)</emu-eqn>。</p>
-      <p>数学函数 min、max、abs、floor 和 truncate 未针对 Number 值和 BigInt 值定义，使用非数学值作为实参调用这些方法的任何情况都属于本规范中的编辑错误。</p>
-      <p>从下界 _a_ 到上界 _b_ 的<dfn id="interval">区间</dfn>，是由相同数值类型的数值组成的集合，该集合可能无限，也可能为空。每个边界都会被描述为包含或不包含，但不能同时为两者。区间有以下四种：</p>
+      <p>数学函数 <emu-eqn id="eqn-truncate" aoid="truncate">truncate(_x_)</emu-eqn> 通过向零舍入来移除 _x_ 的小数部分；如果 _x_ &lt; 0，则产生 <emu-eqn>-floor(-_x_)</emu-eqn>，否则产生 <emu-eqn>floor(_x_)</emu-eqn>。</p>
+      <p>数学函数 min、max、abs、floor 和 truncate 未针对 Number 和 BigInt 定义，任何以非数学值作为参数使用这些方法的情况都属于本规范中的编辑错误。</p>
+      <p>从下界 _a_ 到上界 _b_ 的<dfn id="interval">区间</dfn>是由相同数值类型的数值构成的集合，该集合可能是无限的，也可能为空。每个边界都将被描述为包含或不包含，但不会同时为两者。区间有以下四种：</p>
       <ul>
-        <li>从 _a_（包含）到 _b_（包含）的区间，也称为从 _a_ 到 _b_ 的<dfn id="inclusive-interval">闭区间</dfn>，包含且仅包含相同数值类型中满足 _a_ ≤ _x_ ≤ _b_ 的所有值 _x_。</li>
-        <li>从 _a_（包含）到 _b_（不包含）的区间，包含且仅包含相同数值类型中满足 _a_ ≤ _x_ &lt; _b_ 的所有值 _x_。</li>
-        <li>从 _a_（不包含）到 _b_（包含）的区间，包含且仅包含相同数值类型中满足 _a_ &lt; _x_ ≤ _b_ 的所有值 _x_。</li>
-        <li>从 _a_（不包含）到 _b_（不包含）的区间，包含且仅包含相同数值类型中满足 _a_ &lt; _x_ &lt; _b_ 的所有值 _x_。</li>
+        <li>从 _a_（包含）到 _b_（包含）的区间，也称为从 _a_ 到 _b_ 的<dfn id="inclusive-interval">闭区间</dfn>，包含所有满足 _a_ ≤ _x_ ≤ _b_ 的相同数值类型的值 _x_，且不包含其他值。</li>
+        <li>从 _a_（包含）到 _b_（不包含）的区间包含所有满足 _a_ ≤ _x_ &lt; _b_ 的相同数值类型的值 _x_，且不包含其他值。</li>
+        <li>从 _a_（不包含）到 _b_（包含）的区间包含所有满足 _a_ &lt; _x_ ≤ _b_ 的相同数值类型的值 _x_，且不包含其他值。</li>
+        <li>从 _a_（不包含）到 _b_（不包含）的区间包含所有满足 _a_ &lt; _x_ &lt; _b_ 的相同数值类型的值 _x_，且不包含其他值。</li>
       </ul>
-      <p>例如，从 1（包含）到 2（不包含）的区间由 1 和 2 之间的所有数学值组成，包括 1，但不包括 2。为定义区间，规定 *-0*<sub>𝔽</sub> &lt; <!-- 此处的注释用于避免 ecmarkup 对与 0 的比较发出警告 --> *+0*<sub>𝔽</sub>，因此，例如，下界为 *+0*<sub>𝔽</sub> 的闭区间包含 *+0*<sub>𝔽</sub>，但不包含 *-0*<sub>𝔽</sub>。区间从不包含 *NaN*。</p>
+      <p>例如，从 1（包含）到 2（不包含）的区间由 1 和 2 之间的所有数学值组成，其中包含 1，但不包含 2。为了定义区间，*-0*<sub>𝔽</sub> &lt; <!-- 此处的注释用于避免 ecmarkup 抱怨与 0 进行比较 --> *+0*<sub>𝔽</sub>，因此，例如，下界为 *+0*<sub>𝔽</sub> 的闭区间包含 *+0*<sub>𝔽</sub>，但不包含 *-0*<sub>𝔽</sub>。*NaN* 永远不会包含在区间中。</p>
     </emu-clause>
 
     <emu-clause id="sec-value-notation">
@@ -25503,7 +25505,6 @@
 
         ClassElement :
           ClassStaticBlock
-        `;`
       </emu-grammar>
       <emu-alg>
         1. 返回新的空 List。
@@ -52864,11 +52865,11 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-memory-model-fundamentals">
     <h1>内存模型基础</h1>
-    <p>共享内存访问（读取和写入）分为以下定义的两组：原子访问和数据访问。原子访问是顺序一致的，即代理集群中的所有代理都认同事件存在严格全序。非原子访问不存在所有代理都认同的严格全序，即它们是无序的。</p>
+    <p>共享内存访问（读取和写入）分为以下定义的两组：原子访问和数据访问。原子访问是顺序一致的，也就是说，代理集群中的所有代理都认同事件存在一个严格全序。非原子访问不存在所有代理都认同的严格全序，也就是说，它们是无序的。</p>
     <emu-note>
       <p>不支持弱于顺序一致但强于无序的排序方式，例如 release-acquire。</p>
     </emu-note>
-    <p><dfn variants="Shared Data Block events">Shared Data Block 事件</dfn>是 ReadSharedMemory、WriteSharedMemory 或 ReadModifyWriteSharedMemory Record 中的任一种。<dfn variants="read events">读取事件</dfn>是 ReadSharedMemory 或 ReadModifyWriteSharedMemory。<dfn variants="write events">写入事件</dfn>是 WriteSharedMemory 或 ReadModifyWriteSharedMemory。</p>
+    <p><dfn variants="Shared Data Block events">Shared Data Block 事件</dfn>是 <dfn>ReadSharedMemory</dfn>、<dfn>WriteSharedMemory</dfn> 或 <dfn>ReadModifyWriteSharedMemory</dfn> Record 中的任一种。<dfn variants="read events">读取事件</dfn>是 ReadSharedMemory 或 ReadModifyWriteSharedMemory。<dfn variants="write events">写入事件</dfn>是 WriteSharedMemory 或 ReadModifyWriteSharedMemory。</p>
 
     <emu-table id="table-readsharedmemory-fields" caption="ReadSharedMemory 事件字段">
       <table>
