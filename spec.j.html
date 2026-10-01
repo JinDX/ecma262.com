@@ -1964,29 +1964,29 @@
 
       <emu-clause id="sec-ecmascript-language-types-number-type">
         <h1>Number 型</h1>
-        <p><dfn variants="is a Number,is not a Number">Number 型</dfn>は、IEEE 浮動小数点算術標準で規定される倍精度浮動小数点 IEEE 754-2019 binary64 値を表す、正確に 18,437,736,874,454,810,627（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn>）個の値を持ちます。ただし、IEEE 標準の 9,007,199,254,740,990（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn>）個の異なる NaN 値は、ECMAScript では単一の特別な *NaN* 値として表されます。（*NaN* 値は、プログラム式 `NaN` によって生成されることに注意してください。）一部の実装では、外部コードがさまざまな NaN 値の違いを検出できる場合がありますが、そのような動作は実装定義です。ECMAScript コードにとって、すべての *NaN* 値は互いに区別できません。</p>
+        <p><dfn variants="is a Number,is not a Number">Number 型</dfn>は正確に 18,437,736,874,454,810,627 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn> 個）の値を持ち、IEEE 二進浮動小数点算術標準で規定されている倍精度浮動小数点 IEEE 754-2019 binary64 値を表す。ただし、IEEE 標準の 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）の異なる NaN 値は、ECMAScript では単一の特別な *NaN* 値として表される。（*NaN* 値はプログラム式 `NaN` によって生成されることに注意。）一部の実装では、外部コードがさまざまな NaN 値の違いを検出できる場合があるが、そのような動作は実装定義であり、ECMAScript コードにとって、すべての *NaN* 値は互いに区別できない。</p>
         <emu-note>
-          <p>Number 値を ArrayBuffer（<emu-xref href="#sec-arraybuffer-objects"></emu-xref> を参照）または SharedArrayBuffer（<emu-xref href="#sec-sharedarraybuffer-objects"></emu-xref> を参照）に格納した後に観測される可能性のあるビットパターンは、ECMAScript 実装が使用するその Number 値の内部表現と必ずしも同じではありません。</p>
+          <p>Number 値が ArrayBuffer（<emu-xref href="#sec-arraybuffer-objects"></emu-xref> を参照）または SharedArrayBuffer（<emu-xref href="#sec-sharedarraybuffer-objects"></emu-xref> を参照）に格納された後に観測される可能性のあるビットパターンは、ECMAScript 実装が使用するその Number 値の内部表現と必ずしも同じではない。</p>
         </emu-note>
-        <p>ほかに、*positive Infinity* および *negative Infinity* と呼ばれる2つの特別な値があります。簡潔に記述するため、説明上、これらの値をそれぞれ記号 *+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> とも呼びます。（これら2つの無限大の Number 値は、プログラム式 `+Infinity`（または単に `Infinity`）および `-Infinity` によって生成されることに注意してください。）</p>
-        <p>残りの 18,437,736,874,454,810,624（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup></emu-eqn>）個の値を<dfn id="finite">有限</dfn>の数と呼びます。その半分は正の数、半分は負の数であり、有限の正の Number 値それぞれについて、同じ大きさを持つ対応する負の値があります。</p>
-        <p>*positive zero* と *negative zero* の両方が存在することに注意してください。簡潔に記述するため、説明上、これらの値をそれぞれ記号 *+0*<sub>𝔽</sub> および *-0*<sub>𝔽</sub> とも呼びます。（これら2つの異なるゼロの Number 値は、プログラム式 `+0`（または単に `0`）および `-0` によって生成されることに注意してください。）</p>
-        <p>18,437,736,874,454,810,622（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> - 2</emu-eqn>）個の有限でゼロではない値には、次の2種類があります。</p>
-        <p>そのうち 18,428,729,675,200,069,632（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>54</sup></emu-eqn>）個は正規化されており、次の形式を持ちます。</p>
+        <p>ほかに、*正の無限大*および*負の無限大*と呼ばれる 2 つの特別な値がある。簡潔にするため、説明上、これらの値はそれぞれ記号 *+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> でも表される。（これら 2 つの無限大の Number 値は、プログラム式 `+Infinity`（または単に `Infinity`）および `-Infinity` によって生成されることに注意。）</p>
+        <p>残りの 18,437,736,874,454,810,624 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup></emu-eqn> 個）の各値は<dfn id="finite-number" variants="finite Numbers" oldids="finite">有限 Number</dfn>である。その半分は正の数で、半分は負の数であり、各正の有限 Number には、同じ絶対値を持つ対応する負の Number が存在する。</p>
+        <p>*正のゼロ*と*負のゼロ*の両方が存在することに注意。簡潔にするため、説明上、これらの値はそれぞれ記号 *+0*<sub>𝔽</sub> および *-0*<sub>𝔽</sub> でも表される。（これら 2 つの異なるゼロの Number 値は、プログラム式 `+0`（または単に `0`）および `-0` によって生成されることに注意。）</p>
+        <p>18,437,736,874,454,810,622 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> - 2</emu-eqn> 個）の有限な非ゼロ値には、次の 2 種類がある。</p>
+        <p>そのうち 18,428,729,675,200,069,632 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>54</sup></emu-eqn> 個）は正規化されており、次の形式を持つ。</p>
         <div class="math-display">
           _s_ × _m_ × 2<sup>_e_</sup>
         </div>
-        <p>ここで、_s_ は 1 または -1、_m_ は 2<sup>52</sup>（含む）から 2<sup>53</sup>（含まない）までの区間内の整数、_e_ は -1074 から 971 までの閉区間内の整数です。</p>
-        <p>残りの 9,007,199,254,740,990（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn>）個の値は非正規化されており、次の形式を持ちます。</p>
+        <p>ここで _s_ は 1 または -1、_m_ は 2<sup>52</sup>（以上）から 2<sup>53</sup>（未満）までの区間にある整数、_e_ は -1074 から 971 までの両端を含む区間にある整数である。</p>
+        <p>残りの 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）の値は非正規化されており、次の形式を持つ。</p>
         <div class="math-display">
           _s_ × _m_ × 2<sup>_e_</sup>
         </div>
-        <p>ここで、_s_ は 1 または -1、_m_ は 0（含まない）から 2<sup>52</sup>（含まない）までの区間内の整数、_e_ は -1074 です。</p>
-        <p>絶対値が 2<sup>53</sup> 以下であるすべての正および負の整数は、Number 型で表現できることに注意してください。整数 0 は Number 型では *+0*<sub>𝔽</sub> と *-0*<sub>𝔽</sub> の2つの表現を持ちます。</p>
-        <p>有限の数がゼロではなく、それを表すために使用される整数 _m_（上記の2つの形式のいずれか）が奇数である場合、その数は<em>奇数の仮数</em>を持ちます。それ以外の場合は、<em>偶数の仮数</em>を持ちます。</p>
-        <p>この仕様では、_x_ が正確な実数の数学的量（π のような無理数である場合もあります）を表す場合の「_x_ に<dfn id="number-value-for" oldids="number-value">対応する Number 値</dfn>」という語句は、次の方法で選択される Number 値を意味します。Number 型のすべての有限値から *-0*<sub>𝔽</sub> を除き、さらに Number 型では表現できない2つの値、すなわち 2<sup>1024</sup>（<emu-eqn>+1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）および <emu-eqn>-2<sup>1024</sup></emu-eqn>（<emu-eqn>-1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）を追加した集合を考えます。この集合から、値が _x_ に最も近い要素を選択します。集合内の2つの値が同じだけ近い場合は、偶数の仮数を持つ方を選択します。この目的のため、追加した2つの値 2<sup>1024</sup> および <emu-eqn>-2<sup>1024</sup></emu-eqn> は、偶数の仮数を持つものとみなします。最後に、2<sup>1024</sup> が選択された場合は *+∞*<sub>𝔽</sub> に置き換え、<emu-eqn>-2<sup>1024</sup></emu-eqn> が選択された場合は *-∞*<sub>𝔽</sub> に置き換え、*+0*<sub>𝔽</sub> が選択された場合は _x_ &lt; 0 の場合に限って *-0*<sub>𝔽</sub> に置き換え、それ以外の選択された値は変更せず使用します。その結果が _x_ に対応する Number 値です。（この手順は IEEE 754-2019 の roundTiesToEven モードの動作に正確に対応します。）</p>
-        <p>+∞ に対応する Number 値は *+∞*<sub>𝔽</sub> であり、-∞ に対応する Number 値は *-∞*<sub>𝔽</sub> です。</p>
-        <p>一部の ECMAScript 演算子は、<emu-eqn>-2<sup>31</sup></emu-eqn> から <emu-eqn>2<sup>31</sup> - 1</emu-eqn> までの閉区間や、0 から <emu-eqn>2<sup>16</sup> - 1</emu-eqn> までの閉区間など、特定の範囲内の整数のみを扱います。これらの演算子は Number 型の任意の値を受け入れますが、まず各値を期待される範囲内の整数値に変換します。<emu-xref href="#sec-type-conversion"></emu-xref> の数値変換操作の説明を参照してください。</p>
+        <p>ここで _s_ は 1 または -1、_m_ は 0（より大きい）から 2<sup>52</sup>（未満）までの区間にある整数、_e_ は -1074 である。</p>
+        <p>絶対値が 2<sup>53</sup> 以下であるすべての正および負の整数は、Number 型で表現可能であることに注意。整数 0 は Number 型において 2 つの表現、すなわち *+0*<sub>𝔽</sub> と *-0*<sub>𝔽</sub> を持つ。</p>
+        <p>有限 Number が非ゼロであり、それを表すために（上記の 2 つの形式のいずれかで）使用される整数 _m_ が奇数である場合、その有限 Number は<em>奇数仮数</em>を持つ。それ以外の場合、<em>偶数仮数</em>を持つ。</p>
+        <p>この仕様において、「_x_ に対する<dfn id="number-value-for" oldids="number-value">Number 値</dfn>」という語句で、_x_ が正確な実数の数学的量（π のような無理数である場合もある）を表す場合、それは次の方法で選択される Number 値を意味する。*-0*<sub>𝔽</sub> を除くすべての有限 Number の集合に、Number 型では表現できない 2 つの追加の値、すなわち 2<sup>1024</sup>（これは <emu-eqn>+1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）および <emu-eqn>-2<sup>1024</sup></emu-eqn>（これは <emu-eqn>-1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）を加えた和集合からなる集合を考える。この集合の要素のうち、値が _x_ に最も近いものを選択する。集合の 2 つの値が等しく近い場合は、偶数仮数を持つ方を選択する。この目的では、2 つの追加の値 2<sup>1024</sup> および <emu-eqn>-2<sup>1024</sup></emu-eqn> は偶数仮数を持つものとみなす。最後に、2<sup>1024</sup> が選択された場合は、それを *+∞*<sub>𝔽</sub> に置き換える。<emu-eqn>-2<sup>1024</sup></emu-eqn> が選択された場合は、それを *-∞*<sub>𝔽</sub> に置き換える。*+0*<sub>𝔽</sub> が選択された場合は、_x_ &lt; 0 の場合に限り、それを *-0*<sub>𝔽</sub> に置き換える。それ以外の選択された値は変更せずに使用する。その結果が _x_ に対する Number 値である。（この手順は IEEE 754-2019 の roundTiesToEven モードの動作に正確に対応する。）</p>
+        <p>+∞ に対する Number 値は *+∞*<sub>𝔽</sub> であり、-∞ に対する Number 値は *-∞*<sub>𝔽</sub> である。</p>
+        <p>一部の ECMAScript 演算子は、<emu-eqn>-2<sup>31</sup></emu-eqn> から <emu-eqn>2<sup>31</sup> - 1</emu-eqn> までの両端を含む区間や、0 から <emu-eqn>2<sup>16</sup> - 1</emu-eqn> までの両端を含む区間など、特定の範囲の整数のみを扱う。これらの演算子は Number 型の任意の値を受け入れるが、まずそのような各値を期待される範囲の整数値に変換する。<emu-xref href="#sec-type-conversion"></emu-xref> にある数値変換演算の説明を参照。</p>
 
         <emu-clause id="sec-numeric-types-number-unaryMinus" type="numeric method">
           <h1>
@@ -2049,7 +2049,7 @@
                 1. *+0*<sub>𝔽</sub> を返す。
               1. _exponent_ が奇数の整数 Number である場合、*-∞*<sub>𝔽</sub> を返す。
               1. *+∞*<sub>𝔽</sub> を返す。
-            1. 表明: _base_ は有限であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. 表明: _base_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
             1. _exponent_ が *+∞*<sub>𝔽</sub> である場合、
               1. abs(ℝ(_base_)) > 1 である場合、*+∞*<sub>𝔽</sub> を返す。
               1. abs(ℝ(_base_)) = 1 である場合、*NaN* を返す。
@@ -2058,9 +2058,9 @@
               1. abs(ℝ(_base_)) > 1 である場合、*+0*<sub>𝔽</sub> を返す。
               1. abs(ℝ(_base_)) = 1 である場合、*NaN* を返す。
               1. *+∞*<sub>𝔽</sub> を返す。
-            1. 表明: _exponent_ は有限であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
-            1. _base_ &lt; *-0*<sub>𝔽</sub> であり、_exponent_ が整数 Number でない場合、*NaN* を返す。
-            1. ℝ(_base_) を ℝ(_exponent_) 乗した結果を表す、実装近似の Number 値を返す。
+            1. 表明: _exponent_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. _base_ &lt; *-0*<sub>𝔽</sub> であり、かつ _exponent_ が整数 Number でない場合、*NaN* を返す。
+            1. ℝ(_base_) を ℝ(_exponent_) 乗した結果を表す、実装によって近似された Number 値を返す。
           </emu-alg>
           <emu-note>
             <p>_base_ が *1*<sub>𝔽</sub> または *-1*<sub>𝔽</sub> で、_exponent_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> である場合、あるいは _base_ が *1*<sub>𝔽</sub> で _exponent_ が *NaN* である場合の _base_ `**` _exponent_ の結果は、IEEE 754-2019 と異なります。ECMAScript の初版では、この操作の結果として *NaN* が規定されていましたが、IEEE 754 の後の改訂では *1*<sub>𝔽</sub> が規定されました。互換性のため、歴史的な ECMAScript の動作が維持されています。</p>
@@ -2155,7 +2155,8 @@
             1. _denominator_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、_numerator_ を返す。
             1. _denominator_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
             1. _numerator_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_numerator_ を返す。
-            1. 表明: _numerator_ と _denominator_ は有限かつゼロではない。
+            1. 表明: _numerator_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. 表明: _denominator_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
             1. _quotient_ を ℝ(_numerator_) / ℝ(_denominator_) とする。
             1. _truncatedQuotient_ を truncate(_quotient_) とする。
             1. _remainder_ を ℝ(_numerator_) - (ℝ(_denominator_) × _truncatedQuotient_) とする。
@@ -2181,12 +2182,12 @@
           </dl>
           <emu-alg>
             1. _x_ が *NaN* または _y_ が *NaN* である場合、*NaN* を返す。
-            1. _x_ が *+∞*<sub>𝔽</sub> かつ _y_ が *-∞*<sub>𝔽</sub> である場合、*NaN* を返す。
-            1. _x_ が *-∞*<sub>𝔽</sub> かつ _y_ が *+∞*<sub>𝔽</sub> である場合、*NaN* を返す。
+            1. _x_ が *+∞*<sub>𝔽</sub> であり、_y_ が *-∞*<sub>𝔽</sub> である場合、*NaN* を返す。
+            1. _x_ が *-∞*<sub>𝔽</sub> であり、_y_ が *+∞*<sub>𝔽</sub> である場合、*NaN* を返す。
             1. _x_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、_x_ を返す。
             1. _y_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、_y_ を返す。
-            1. 表明: _x_ と _y_ はどちらも有限である。
-            1. _x_ が *-0*<sub>𝔽</sub> かつ _y_ が *-0*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
+            1. 表明: _x_ および _y_ は有限 Number である。
+            1. _x_ が *-0*<sub>𝔽</sub> であり、_y_ が *-0*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
             1. 𝔽(ℝ(_x_) + ℝ(_y_)) を返す。
           </emu-alg>
           <emu-note>
@@ -2277,13 +2278,13 @@
             1. _x_ が *NaN* である場合、*undefined* を返す。
             1. _y_ が *NaN* である場合、*undefined* を返す。
             1. _x_ が _y_ である場合、*false* を返す。
-            1. _x_ が *+0*<sub>𝔽</sub> かつ _y_ が *-0*<sub>𝔽</sub> である場合、*false* を返す。
-            1. _x_ が *-0*<sub>𝔽</sub> かつ _y_ が *+0*<sub>𝔽</sub> である場合、*false* を返す。
+            1. _x_ が *+0*<sub>𝔽</sub> であり、_y_ が *-0*<sub>𝔽</sub> である場合、*false* を返す。
+            1. _x_ が *-0*<sub>𝔽</sub> であり、_y_ が *+0*<sub>𝔽</sub> である場合、*false* を返す。
             1. _x_ が *+∞*<sub>𝔽</sub> である場合、*false* を返す。
             1. _y_ が *+∞*<sub>𝔽</sub> である場合、*true* を返す。
             1. _y_ が *-∞*<sub>𝔽</sub> である場合、*false* を返す。
             1. _x_ が *-∞*<sub>𝔽</sub> である場合、*true* を返す。
-            1. 表明: _x_ と _y_ は有限である。
+            1. 表明: _x_ および _y_ は有限 Number である。
             1. ℝ(_x_) &lt; ℝ(_y_) である場合、*true* を返す。
             1. *false* を返す。
           </emu-alg>
@@ -6157,24 +6158,23 @@
       <emu-alg>
         1. SameType(_x_, _y_) が *true* である場合、
           1. IsStrictlyEqual(_x_, _y_) を返す。
-        1. _x_ が *null* かつ _y_ が *undefined* である場合、*true* を返す。
-        1. _x_ が *undefined* かつ _y_ が *null* である場合、*true* を返す。
-        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] ホストが Web ブラウザーであるか、その他の方法で <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref> をサポートする場合、
-          1. _x_ が Object であり、_x_ が [[IsHTMLDDA]] 内部スロットを持ち、_y_ が *undefined* または *null* のいずれかである場合、*true* を返す。
-          1. _x_ が *undefined* または *null* のいずれかであり、_y_ が Object で、_y_ が [[IsHTMLDDA]] 内部スロットを持つ場合、*true* を返す。
-        1. _x_ が Number かつ _y_ が String である場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
-        1. _x_ が String かつ _y_ が Number である場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
-        1. _x_ が BigInt かつ _y_ が String である場合、
+        1. _x_ が *null* であり、_y_ が *undefined* である場合、*true* を返す。
+        1. _x_ が *undefined* であり、_y_ が *null* である場合、*true* を返す。
+        1. [id="step-abstract-equality-comparison-web-compat-insertion-point", normative-optional] ホストがウェブブラウザーであるか、またはその他の方法で <emu-xref href="#sec-IsHTMLDDA-internal-slot" title></emu-xref> をサポートする場合、
+          1. _x_ が Object であり、_x_ が [[IsHTMLDDA]] 内部スロットを持ち、かつ _y_ が *undefined* または *null* のいずれかである場合、*true* を返す。
+          1. _x_ が *undefined* または *null* のいずれかであり、_y_ が Object であり、かつ _y_ が [[IsHTMLDDA]] 内部スロットを持つ場合、*true* を返す。
+        1. _x_ が Number であり、_y_ が String である場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
+        1. _x_ が String であり、_y_ が Number である場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
+        1. _x_ が BigInt であり、_y_ が String である場合、
           1. _n_ を StringToBigInt(_y_) とする。
           1. _n_ が *undefined* である場合、*false* を返す。
           1. ! IsLooselyEqual(_x_, _n_) を返す。
-        1. _x_ が String かつ _y_ が BigInt である場合、! IsLooselyEqual(_y_, _x_) を返す。
+        1. _x_ が String であり、_y_ が BigInt である場合、! IsLooselyEqual(_y_, _x_) を返す。
         1. _x_ が Boolean である場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
         1. _y_ が Boolean である場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
         1. _x_ が String、Number、BigInt、または Symbol のいずれかであり、_y_ が Object である場合、! IsLooselyEqual(_x_, ? ToPrimitive(_y_)) を返す。
         1. _x_ が Object であり、_y_ が String、Number、BigInt、または Symbol のいずれかである場合、! IsLooselyEqual(? ToPrimitive(_x_), _y_) を返す。
-        1. _x_ が BigInt かつ _y_ が Number であるか、または _x_ が Number かつ _y_ が BigInt である場合、
-          1. _x_ が有限でないか、_y_ が有限でない場合、*false* を返す。
+        1. _x_ が BigInt であり、_y_ が有限 Number である場合、または _x_ が有限 Number であり、_y_ が BigInt である場合、
           1. ℝ(_x_) = ℝ(_y_) である場合、*true* を返す。
           1. *false* を返す。
         1. *false* を返す。
@@ -30676,7 +30676,7 @@
       <p>呼び出されたとき、次の手順を実行します。</p>
       <emu-alg>
         1. _number_ を ? ToNumber(_value_) とする。
-        1. _number_ が有限である場合、*true* を返す。
+        1. _number_ が有限 Number である場合、*true* を返す。
         1. *false* を返す。
       </emu-alg>
     </emu-clause>
@@ -32921,17 +32921,16 @@
 
       <emu-clause id="sec-number.isfinite" type="built-in function">
         <h1>Number.isFinite ( _number_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
-          1. _number_ が Number でない場合、*false* を返す。
-          1. _number_ が有限でない場合、*false* を返す。
-          1. *true* を返す。
+          1. _number_ が有限 Number である場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-number.isinteger" type="built-in function">
         <h1>Number.isInteger ( _number_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _number_ が整数 Number である場合、*true* を返す。
           1. *false* を返す。
@@ -32940,23 +32939,23 @@
 
       <emu-clause id="sec-number.isnan" type="built-in function">
         <h1>Number.isNaN ( _number_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _number_ が Number でない場合、*false* を返す。
           1. _number_ が *NaN* である場合、*true* を返す。
           1. *false* を返す。
         </emu-alg>
         <emu-note>
-          <p>この関数は、引数が *NaN* であるかを判定する前に Number へ変換しない点で、グローバル isNaN 関数（<emu-xref href="#sec-isnan-number"></emu-xref>）とは異なります。</p>
+          <p>この関数は、引数が *NaN* であるかどうかを判定する前に引数を Number に変換しないという点で、グローバル isNaN 関数（<emu-xref href="#sec-isnan-number"></emu-xref>）とは異なる。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-number.issafeinteger" type="built-in function">
         <h1>Number.isSafeInteger ( _number_ )</h1>
         <emu-note>
-          <p>整数 _n_ は、_n_ に対する Number 値が他のいかなる整数に対する Number 値でもない場合に限り、「<dfn id="safe-integer">安全な整数</dfn>」です。</p>
+          <p>整数 _n_ が「<dfn id="safe-integer">安全な整数</dfn>」であるのは、_n_ に対する Number 値が他のいかなる整数に対する Number 値でもない場合に限る。</p>
         </emu-note>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _number_ が整数 Number である場合、
             1. abs(ℝ(_number_)) ≤ 2<sup>53</sup> - 1 である場合、*true* を返す。
@@ -32967,111 +32966,112 @@
       <emu-clause id="sec-number.max_safe_integer">
         <h1>Number.MAX_SAFE_INTEGER</h1>
         <emu-note>
-          <p>IEEE 754-2019 の精度制限によって必要となる丸め動作のため、`Number.MAX_SAFE_INTEGER` より大きいすべての整数に対する Number 値は、少なくとも1つの他の整数と共有されます。したがって、このような絶対値の大きい整数は<emu-xref href="#safe-integer">安全</emu-xref>ではなく、Number 値として正確に表現できることも、互いに区別できることさえも保証されません。たとえば、`9007199254740992` と `9007199254740993` はどちらも Number 値 *9007199254740992*<sub>𝔽</sub> に評価されます。</p>
+          <p>IEEE 754-2019 の精度制限によって必要となる丸め動作により、`Number.MAX_SAFE_INTEGER` より大きいすべての整数に対する Number 値は、少なくとも 1 つの別の整数と共有される。したがって、そのような絶対値の大きい整数は<emu-xref href="#safe-integer">安全</emu-xref>ではなく、Number 値として正確に表現できることも、互いに区別できることさえも保証されない。たとえば、`9007199254740992` と `9007199254740993` はどちらも Number 値 *9007199254740992*<sub>𝔽</sub> に評価される。</p>
         </emu-note>
-        <p>`Number.MAX_SAFE_INTEGER` の値は *9007199254740991*<sub>𝔽</sub>（𝔽(2<sup>53</sup> - 1)）です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.MAX_SAFE_INTEGER` の値は *9007199254740991*<sub>𝔽</sub>（𝔽(2<sup>53</sup> - 1)）である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.max_value">
         <h1>Number.MAX_VALUE</h1>
-        <p>`Number.MAX_VALUE` の値は Number 型の最大の正の有限値であり、約 <emu-eqn>1.7976931348623157 × 10<sup>308</sup></emu-eqn> です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.MAX_VALUE` の値は最大の正の有限 Number であり、これはおよそ <emu-eqn>1.7976931348623157 × 10<sup>308</sup></emu-eqn> である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.min_safe_integer">
         <h1>Number.MIN_SAFE_INTEGER</h1>
         <emu-note>
-          <p>IEEE 754-2019 の精度制限によって必要となる丸め動作のため、`Number.MIN_SAFE_INTEGER` より小さいすべての整数に対する Number 値は、少なくとも1つの他の整数と共有されます。したがって、このような絶対値の大きい整数は<emu-xref href="#safe-integer">安全</emu-xref>ではなく、Number 値として正確に表現できることも、互いに区別できることさえも保証されません。たとえば、`-9007199254740992` と `-9007199254740993` はどちらも Number 値 *-9007199254740992*<sub>𝔽</sub> に評価されます。</p>
+          <p>IEEE 754-2019 の精度制限によって必要となる丸め動作により、`Number.MIN_SAFE_INTEGER` より小さいすべての整数に対する Number 値は、少なくとも 1 つの別の整数と共有される。したがって、そのような絶対値の大きい整数は<emu-xref href="#safe-integer">安全</emu-xref>ではなく、Number 値として正確に表現できることも、互いに区別できることさえも保証されない。たとえば、`-9007199254740992` と `-9007199254740993` はどちらも Number 値 *-9007199254740992*<sub>𝔽</sub> に評価される。</p>
         </emu-note>
-        <p>`Number.MIN_SAFE_INTEGER` の値は *-9007199254740991*<sub>𝔽</sub>（𝔽(-(2<sup>53</sup> - 1))）です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.MIN_SAFE_INTEGER` の値は *-9007199254740991*<sub>𝔽</sub>（𝔽(-(2<sup>53</sup> - 1))）である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.min_value">
         <h1>Number.MIN_VALUE</h1>
-        <p>`Number.MIN_VALUE` の値は Number 型の最小の正の値であり、約 <emu-eqn>5 × 10<sup>-324</sup></emu-eqn> です。</p>
-        <p>IEEE 754-2019 の倍精度2進表現では、可能な最小値は非正規化数です。実装が非正規化値をサポートしない場合、`Number.MIN_VALUE` の値は、その実装が実際に表現できる最小の非ゼロ正値でなければなりません。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.MIN_VALUE` の値は Number 型の最小の正の値であり、これはおよそ <emu-eqn>5 × 10<sup>-324</sup></emu-eqn> である。</p>
+        <p>IEEE 754-2019 倍精度二進表現では、可能な最小値は非正規化数である。実装が非正規化値をサポートしない場合、`Number.MIN_VALUE` の値は、その実装によって実際に表現できる最小の非ゼロ正値でなければならない。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.nan">
         <h1>Number.NaN</h1>
-        <p>`Number.NaN` の値は *NaN* です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.NaN` の値は *NaN* である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.negative_infinity">
         <h1>Number.NEGATIVE_INFINITY</h1>
-        <p>`Number.NEGATIVE_INFINITY` の値は *-∞*<sub>𝔽</sub> です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.NEGATIVE_INFINITY` の値は *-∞*<sub>𝔽</sub> である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.parsefloat" type="built-in function">
         <h1>Number.parseFloat ( _string_ )</h1>
-        <p>*"parseFloat"* プロパティの初期値は %parseFloat% です。</p>
+        <p>*"parseFloat"* プロパティの初期値は %parseFloat% である。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.parseint" type="built-in function">
         <h1>Number.parseInt ( _string_, _radix_ )</h1>
-        <p>*"parseInt"* プロパティの初期値は %parseInt% です。</p>
+        <p>*"parseInt"* プロパティの初期値は %parseInt% である。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.positive_infinity">
         <h1>Number.POSITIVE_INFINITY</h1>
-        <p>`Number.POSITIVE_INFINITY` の値は *+∞*<sub>𝔽</sub> です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.POSITIVE_INFINITY` の値は *+∞*<sub>𝔽</sub> である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype">
         <h1>Number.prototype</h1>
-        <p>`Number.prototype` の初期値は Number prototype オブジェクトです。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`Number.prototype` の初期値は Number プロトタイプオブジェクトである。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-number-prototype-object">
-      <h1>Number Prototype オブジェクトのプロパティ</h1>
-      <p><dfn>Number prototype オブジェクト</dfn>は:</p>
+      <h1>Number プロトタイプオブジェクトのプロパティ</h1>
+      <p><dfn>Number プロトタイプオブジェクト</dfn>は、次のとおりである。</p>
       <ul>
-        <li><dfn>%Number.prototype%</dfn> です。</li>
-        <li>通常オブジェクトです。</li>
-        <li>それ自体が Number オブジェクトです。値が *+0*<sub>𝔽</sub> である [[NumberData]] 内部スロットを持ちます。</li>
-        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持ちます。</li>
+        <li><dfn>%Number.prototype%</dfn> である。</li>
+        <li>通常のオブジェクトである。</li>
+        <li>それ自体が Number オブジェクトであり、値 *+0*<sub>𝔽</sub> を持つ [[NumberData]] 内部スロットを持つ。</li>
+        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
       </ul>
-      <p>明示的に別段の規定がない限り、以下で定義される Number prototype オブジェクトのメソッドは汎用ではなく、それらに渡される *this* 値は Number 値、または Number 値に初期化された [[NumberData]] 内部スロットを持つオブジェクトのいずれかでなければなりません。</p>
-      <p>メソッドの仕様内の「この Number 値」という語句は、メソッド呼出しの *this* 値を引数として渡して抽象操作 ThisNumberValue を呼び出した結果を指します。</p>
+      <p>明示的に別段の規定がない限り、以下で定義される Number プロトタイプオブジェクトのメソッドは汎用ではなく、それらに渡される *this* 値は Number 値、または Number 値で初期化された [[NumberData]] 内部スロットを持つオブジェクトでなければならない。</p>
+      <p>メソッドの仕様内における「この Number 値」という語句は、そのメソッド呼び出しの *this* 値を引数として抽象演算 ThisNumberValue を呼び出すことによって返される結果を指す。</p>
 
       <emu-clause id="sec-number.prototype.constructor">
         <h1>Number.prototype.constructor</h1>
-        <p>`Number.prototype.constructor` の初期値は %Number% です。</p>
+        <p>`Number.prototype.constructor` の初期値は %Number% である。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype.toexponential" type="built-in function">
         <h1>Number.prototype.toExponential ( _fractionDigits_ )</h1>
-        <p>このメソッドは、この Number 値を10進指数表記で表した String を返します。仮数の小数点の前には1桁、仮数の小数点の後には _fractionDigits_ 桁があります。_fractionDigits_ が *undefined* である場合、Number を一意に指定するために必要なだけの仮数桁を含みます（この場合は Number が常に指数表記で出力される点を除き、ToString と同様です）。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>このメソッドは、この Number 値を、仮数の小数点の前に 1 桁、仮数の小数点の後に _fractionDigits_ 桁を持つ 10 進指数表記で表した String を返す。_fractionDigits_ が *undefined* の場合、Number を一意に特定するために必要なだけの仮数桁を含む（この場合 Number が常に指数表記で出力されることを除けば ToString と同様である）。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _number_ を ? ThisNumberValue(*this* 値) とする。
           1. _fractionCount_ を ? ToIntegerOrInfinity(_fractionDigits_) とする。
           1. 表明: _fractionDigits_ が *undefined* である場合、_fractionCount_ は 0 である。
-          1. _number_ が有限でない場合、Number::toString(_number_, 10) を返す。
-          1. _fractionCount_ &lt; 0 または _fractionCount_ > 100 である場合、*RangeError* 例外をスローする。
+          1. _number_ が有限 Number でない場合、Number::toString(_number_, 10) を返す。
+          1. _fractionCount_ が整数でない場合、*RangeError* 例外を投げる。
+          1. _fractionCount_ &lt; 0 または _fractionCount_ > 100 である場合、*RangeError* 例外を投げる。
           1. _number_ を ℝ(_number_) に設定する。
           1. _sign_ を空の String とする。
           1. _number_ &lt; 0 である場合、
             1. _sign_ を *"-"* に設定する。
             1. _number_ を -_number_ に設定する。
           1. _number_ = 0 である場合、
-            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO) が _fractionCount_ + 1 回出現する String 値とする。
+            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO) が _fractionCount_ + 1 個並んだ String 値とする。
             1. _exponent_ を 0 とする。
-          1. そうでない場合、
+          1. それ以外の場合、
             1. _fractionDigits_ が *undefined* でない場合、
-              1. _exponent_ および _intSignificand_ を、10<sup>_fractionCount_</sup> ≤ _intSignificand_ &lt; 10<sup>_fractionCount_ + 1</sup> を満たし、_intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> - _number_ が可能な限り 0 に近くなる整数とする。そのような _exponent_ と _intSignificand_ の組が2つ存在する場合、_intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> が大きい方の _exponent_ と _intSignificand_ を選択する。
-            1. そうでない場合、
-              1. [id="step-number-proto-toexponential-intermediate-values"] _exponent_、_intSignificand_、および _ff_ を、_ff_ ≥ 0、10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) であり、かつ _ff_ が可能な限り小さくなる整数とする。_intSignificand_ の10進表現は _ff_ + 1 桁を持ち、_intSignificand_ は 10 で割り切れず、_intSignificand_ の最下位桁はこれらの基準によって必ずしも一意に決定されないことに注意する。
+              1. 10<sup>_fractionCount_</sup> ≤ _intSignificand_ &lt; 10<sup>_fractionCount_ + 1</sup> であり、_intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> - _number_ が可能な限り 0 に近くなるような整数 _exponent_ および _intSignificand_ とする。そのような _exponent_ と _intSignificand_ の組が 2 つある場合、_intSignificand_ × 10<sup>_exponent_ - _fractionCount_</sup> が大きい方の _exponent_ と _intSignificand_ を選ぶ。
+            1. それ以外の場合、
+              1. [id="step-number-proto-toexponential-intermediate-values"] _ff_ ≥ 0、10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) であり、_ff_ が可能な限り小さくなるような整数 _exponent_、_intSignificand_、および _ff_ とする。_intSignificand_ の 10 進表現は _ff_ + 1 桁を持ち、_intSignificand_ は 10 で割り切れず、_intSignificand_ の最下位桁はこれらの基準によって必ずしも一意に決定されないことに注意。
               1. _fractionCount_ を _ff_ に設定する。
-            1. _significand_ を _intSignificand_ の10進表現の数字（順番どおりで、先頭のゼロなし）からなる String 値とする。
+            1. _significand_ を、_intSignificand_ の 10 進表現の数字からなる String 値（順番どおりで、先頭のゼロを含まない）とする。
           1. _fractionCount_ ≠ 0 である場合、
             1. _intPart_ を _significand_ の最初のコード単位とする。
             1. _fractionalPart_ を _significand_ の残りの _fractionCount_ 個のコード単位とする。
@@ -33079,21 +33079,21 @@
           1. _exponent_ = 0 である場合、
             1. _exponentSign_ を *"+"* とする。
             1. _exponentDigits_ を *"0"* とする。
-          1. そうでない場合、
+          1. それ以外の場合、
             1. _exponent_ > 0 である場合、
               1. _exponentSign_ を *"+"* とする。
-            1. そうでない場合、
-              1. 表明: _exponent_ &lt; 0。
+            1. それ以外の場合、
+              1. 表明: _exponent_ &lt; 0 である。
               1. _exponentSign_ を *"-"* とする。
               1. _exponent_ を -_exponent_ に設定する。
-            1. _exponentDigits_ を _exponent_ の10進表現の数字（順番どおりで、先頭のゼロなし）からなる String 値とする。
+            1. _exponentDigits_ を、_exponent_ の 10 進表現の数字からなる String 値（順番どおりで、先頭のゼロを含まない）とする。
           1. _significand_ を _significand_、*"e"*、_exponentSign_、および _exponentDigits_ の文字列連結に設定する。
           1. _sign_ と _significand_ の文字列連結を返す。
         </emu-alg>
         <emu-note>
-          <p>上記の規則で要求されるより高精度な変換を提供する実装には、手順 <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> の次の代替版を指針として使用することが推奨されます。</p>
+          <p>上記の規則で要求されるよりも正確な変換を提供する実装については、手順 <emu-xref href="#step-number-proto-toexponential-intermediate-values"></emu-xref> の次の代替版を指針として使用することを推奨する。</p>
           <emu-alg replaces-step="step-number-proto-toexponential-intermediate-values">
-            1. _exponent_、_intSignificand_、および _ff_ を、_ff_ ≥ 0、10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) であり、かつ _ff_ が可能な限り小さくなる整数とする。_intSignificand_ に複数の可能性がある場合、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) に最も近くなる _intSignificand_ を選択する。そのような _intSignificand_ の値が2つ存在する場合、偶数である方を選択する。
+            1. _ff_ ≥ 0、10<sup>_ff_</sup> ≤ _intSignificand_ &lt; 10<sup>_ff_ + 1</sup>、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) であり、_ff_ が可能な限り小さくなるような整数 _exponent_、_intSignificand_、および _ff_ とする。_intSignificand_ に複数の可能性がある場合、𝔽(_intSignificand_ × 10<sup>_exponent_ - _ff_</sup>) が 𝔽(_number_) に最も近くなる _intSignificand_ を選択する。そのような _intSignificand_ の値が 2 つある場合、偶数である方を選択する。
           </emu-alg>
         </emu-note>
       </emu-clause>
@@ -33101,16 +33101,16 @@
       <emu-clause id="sec-number.prototype.tofixed" type="built-in function">
         <h1>Number.prototype.toFixed ( _fractionDigits_ )</h1>
         <emu-note>
-          <p>このメソッドは、この Number 値を10進固定小数点表記で表し、小数点の後に _fractionDigits_ 桁を持つ String を返します。_fractionDigits_ が *undefined* である場合、0 とみなされます。</p>
+          <p>このメソッドは、この Number 値を、小数点の後に _fractionDigits_ 桁を持つ 10 進固定小数点表記で表した String を返す。_fractionDigits_ が *undefined* の場合、0 が仮定される。</p>
         </emu-note>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _number_ を ? ThisNumberValue(*this* 値) とする。
           1. _fractionCount_ を ? ToIntegerOrInfinity(_fractionDigits_) とする。
           1. 表明: _fractionDigits_ が *undefined* である場合、_fractionCount_ は 0 である。
-          1. _fractionCount_ が有限でない場合、*RangeError* 例外をスローする。
-          1. _fractionCount_ &lt; 0 または _fractionCount_ > 100 である場合、*RangeError* 例外をスローする。
-          1. _number_ が有限でない場合、Number::toString(_number_, 10) を返す。
+          1. _fractionCount_ が整数でない場合、*RangeError* 例外を投げる。
+          1. _fractionCount_ &lt; 0 または _fractionCount_ > 100 である場合、*RangeError* 例外を投げる。
+          1. _number_ が有限 Number でない場合、Number::toString(_number_, 10) を返す。
           1. _number_ を ℝ(_number_) に設定する。
           1. _sign_ を空の String とする。
           1. _number_ &lt; 0 である場合、
@@ -33118,13 +33118,13 @@
             1. _number_ を -_number_ に設定する。
           1. _number_ ≥ 10<sup>21</sup> である場合、
             1. _digitString_ を ! ToString(𝔽(_number_)) とする。
-          1. そうでない場合、
-            1. _intValue_ を、_intValue_ / 10<sup>_fractionCount_</sup> - _number_ が可能な限り 0 に近くなる整数とする。そのような _intValue_ が2つ存在する場合、大きい方の _intValue_ を選択する。
-            1. _intValue_ = 0 である場合、_digitString_ を *"0"* とする。そうでない場合、_digitString_ を _intValue_ の10進表現の数字（順番どおりで、先頭のゼロなし）からなる String 値とする。
+          1. それ以外の場合、
+            1. _intValue_ / 10<sup>_fractionCount_</sup> - _number_ が可能な限り 0 に近くなる整数 _intValue_ とする。そのような _intValue_ が 2 つある場合、大きい方の _intValue_ を選ぶ。
+            1. _intValue_ = 0 である場合、_digitString_ を *"0"* とする。それ以外の場合、_digitString_ を _intValue_ の 10 進表現の数字からなる String 値（順番どおりで、先頭のゼロを含まない）とする。
             1. _fractionCount_ ≠ 0 である場合、
               1. _digitCount_ を _digitString_ の長さとする。
               1. _digitCount_ ≤ _fractionCount_ である場合、
-                1. _zeroPad_ を、コード単位 0x0030 (DIGIT ZERO) が _fractionCount_ + 1 - _digitCount_ 回出現する String 値とする。
+                1. _zeroPad_ を、コード単位 0x0030 (DIGIT ZERO) が _fractionCount_ + 1 - _digitCount_ 個並んだ String 値とする。
                 1. _digitString_ を _zeroPad_ と _digitString_ の文字列連結に設定する。
                 1. _digitCount_ を _fractionCount_ + 1 に設定する。
               1. _intPart_ を _digitString_ の最初の _digitCount_ - _fractionCount_ 個のコード単位とする。
@@ -33133,61 +33133,62 @@
           1. _sign_ と _digitString_ の文字列連結を返す。
         </emu-alg>
         <emu-note>
-          <p>`toString` は数値を隣接する Number 値と区別するのに十分な有効数字だけを出力するため、一部の値では `toFixed` の出力の方が `toString` より精密になる場合があります。たとえば、</p>
+          <p>toString は数を隣接する Number 値と区別するために十分な有効数字だけを出力するため、一部の値については `toFixed` の出力の方が `toString` より精密になる場合がある。たとえば、</p>
           <p>
             `(1000000000000000128).toString()` は *"1000000000000000100"* を返す一方、<br>
-            `(1000000000000000128).toFixed(0)` は *"1000000000000000128"* を返します。
+            `(1000000000000000128).toFixed(0)` は *"1000000000000000128"* を返す。
           </p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype.tolocalestring" type="built-in function">
         <h1>Number.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization API を含む ECMAScript 実装は、ECMA-402 で規定されるとおりにこのメソッドを実装しなければなりません。それ以外の場合、このメソッドには次の仕様が使用されます。</p>
-        <p>このメソッドは、ホスト環境の現在のロケールの慣例に従って整形されたこの Number 値を表す String 値を生成します。このメソッドは実装定義であり、`toString` と同じものを返すことは許可されますが、推奨されません。</p>
-        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されます。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で規定されているとおりにこのメソッドを実装しなければならない。それ以外の場合、このメソッドについて次の仕様が使用される。</p>
+        <p>このメソッドは、ホスト環境の現在のロケールの慣例に従って書式設定された、この Number 値を表す String 値を生成する。このメソッドは実装定義であり、`toString` と同じものを返すことも許容されるが、推奨されない。</p>
+        <p>このメソッドの省略可能なパラメータの意味は ECMA-402 で定義される。ECMA-402 のサポートを含まない実装は、それらのパラメータ位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype.toprecision" type="built-in function">
         <h1>Number.prototype.toPrecision ( _precision_ )</h1>
-        <p>このメソッドは、この Number 値を、仮数の小数点の前に1桁、小数点の後に <emu-eqn>_precision_ - 1</emu-eqn> 桁を持つ10進指数表記、または _precision_ 個の有効数字を持つ10進固定表記のいずれかで表した String を返します。_precision_ が *undefined* である場合、代わりに ToString を呼び出します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>このメソッドは、この Number 値を、仮数の小数点の前に 1 桁、仮数の小数点の後に <emu-eqn>_precision_ - 1</emu-eqn> 桁を持つ 10 進指数表記、または _precision_ 桁の有効数字を持つ 10 進固定表記のいずれかで表した String を返す。_precision_ が *undefined* の場合、代わりに ToString を呼び出す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _number_ を ? ThisNumberValue(*this* 値) とする。
           1. _precision_ が *undefined* である場合、! ToString(_number_) を返す。
           1. _precisionCount_ を ? ToIntegerOrInfinity(_precision_) とする。
-          1. _number_ が有限でない場合、Number::toString(_number_, 10) を返す。
-          1. _precisionCount_ &lt; 1 または _precisionCount_ > 100 である場合、*RangeError* 例外をスローする。
+          1. _number_ が有限 Number でない場合、Number::toString(_number_, 10) を返す。
+          1. _precisionCount_ が整数でない場合、*RangeError* 例外を投げる。
+          1. _precisionCount_ &lt; 1 または _precisionCount_ > 100 である場合、*RangeError* 例外を投げる。
           1. _number_ を ℝ(_number_) に設定する。
           1. _sign_ を空の String とする。
           1. _number_ &lt; 0 である場合、
             1. _sign_ をコード単位 0x002D (HYPHEN-MINUS) に設定する。
             1. _number_ を -_number_ に設定する。
           1. _number_ = 0 である場合、
-            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO) が _precisionCount_ 回出現する String 値とする。
+            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO) が _precisionCount_ 個並んだ String 値とする。
             1. _exponent_ を 0 とする。
-          1. そうでない場合、
-            1. _exponent_ および _intSignificand_ を、10<sup>_precisionCount_ - 1</sup> ≤ _intSignificand_ &lt; 10<sup>_precisionCount_</sup> を満たし、_intSignificand_ × 10<sup>_exponent_ - _precisionCount_ + 1</sup> - _number_ が可能な限り 0 に近くなる整数とする。そのような _exponent_ と _intSignificand_ の組が2つ存在する場合、_intSignificand_ × 10<sup>_exponent_ - _precisionCount_ + 1</sup> が大きい方の _exponent_ と _intSignificand_ を選択する。
-            1. _significand_ を _intSignificand_ の10進表現の数字（順番どおりで、先頭のゼロなし）からなる String 値とする。
+          1. それ以外の場合、
+            1. 10<sup>_precisionCount_ - 1</sup> ≤ _intSignificand_ &lt; 10<sup>_precisionCount_</sup> であり、_intSignificand_ × 10<sup>_exponent_ - _precisionCount_ + 1</sup> - _number_ が可能な限り 0 に近くなるような整数 _exponent_ および _intSignificand_ とする。そのような _exponent_ と _intSignificand_ の組が 2 つある場合、_intSignificand_ × 10<sup>_exponent_ - _precisionCount_ + 1</sup> が大きい方の _exponent_ と _intSignificand_ を選ぶ。
+            1. _significand_ を、_intSignificand_ の 10 進表現の数字からなる String 値（順番どおりで、先頭のゼロを含まない）とする。
             1. _exponent_ &lt; -6 または _exponent_ ≥ _precisionCount_ である場合、
-              1. 表明: _exponent_ ≠ 0。
+              1. 表明: _exponent_ ≠ 0 である。
               1. _precisionCount_ ≠ 1 である場合、
                 1. _intPart_ を _significand_ の最初のコード単位とする。
                 1. _fractionalPart_ を _significand_ の残りの _precisionCount_ - 1 個のコード単位とする。
                 1. _significand_ を _intPart_、*"."*、および _fractionalPart_ の文字列連結に設定する。
               1. _exponent_ > 0 である場合、
                 1. _exponentSign_ をコード単位 0x002B (PLUS SIGN) とする。
-              1. そうでない場合、
-                1. 表明: _exponent_ &lt; 0。
+              1. それ以外の場合、
+                1. 表明: _exponent_ &lt; 0 である。
                 1. _exponentSign_ をコード単位 0x002D (HYPHEN-MINUS) とする。
                 1. _exponent_ を -_exponent_ に設定する。
-              1. _exponentDigits_ を _exponent_ の10進表現の数字（順番どおりで、先頭のゼロなし）からなる String 値とする。
+              1. _exponentDigits_ を、_exponent_ の 10 進表現の数字からなる String 値（順番どおりで、先頭のゼロを含まない）とする。
               1. _sign_、_significand_、コード単位 0x0065 (LATIN SMALL LETTER E)、_exponentSign_、および _exponentDigits_ の文字列連結を返す。
           1. _exponent_ = _precisionCount_ - 1 である場合、_sign_ と _significand_ の文字列連結を返す。
           1. _exponent_ ≥ 0 である場合、
             1. _significand_ を、_significand_ の最初の _exponent_ + 1 個のコード単位、コード単位 0x002E (FULL STOP)、および _significand_ の残りの _precisionCount_ - (_exponent_ + 1) 個のコード単位の文字列連結に設定する。
-          1. そうでない場合、
-            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO)、コード単位 0x002E (FULL STOP)、コード単位 0x0030 (DIGIT ZERO) の -(_exponent_ + 1) 回の出現、および String _significand_ の文字列連結に設定する。
+          1. それ以外の場合、
+            1. _significand_ を、コード単位 0x0030 (DIGIT ZERO)、コード単位 0x002E (FULL STOP)、コード単位 0x0030 (DIGIT ZERO) の -(_exponent_ + 1) 個の繰り返し、および String _significand_ の文字列連結に設定する。
           1. _sign_ と _significand_ の文字列連結を返す。
         </emu-alg>
       </emu-clause>
@@ -33195,17 +33196,17 @@
       <emu-clause id="sec-number.prototype.tostring" type="built-in function">
         <h1>Number.prototype.toString ( [ _radix_ ] )</h1>
         <emu-note>
-          <p>省略可能な _radix_ は、*2*<sub>𝔽</sub> から *36*<sub>𝔽</sub> までの閉区間内にある整数 Number 値であるべきです。_radix_ が *undefined* である場合、_radix_ の値として *10*<sub>𝔽</sub> が使用されます。</p>
+          <p>省略可能な _radix_ は、*2*<sub>𝔽</sub> から *36*<sub>𝔽</sub> までの両端を含む区間にある整数 Number 値であるべきである。_radix_ が *undefined* の場合、*10*<sub>𝔽</sub> が _radix_ の値として使用される。</p>
         </emu-note>
-        <p>このメソッドは呼び出されたとき、次の手順を実行します。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _x_ を ? ThisNumberValue(*this* 値) とする。
           1. _radix_ が *undefined* である場合、_radixMV_ を 10 とする。
-          1. そうでない場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
+          1. それ以外の場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
           1. Number::toString(_x_, _radixMV_) を返す。
         </emu-alg>
-        <p>このメソッドは汎用ではありません。*this* 値が Number または Number オブジェクトでない場合、*TypeError* 例外をスローします。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことはできません。</p>
-        <p>このメソッドの *"length"* プロパティは *1*<sub>𝔽</sub> です。</p>
+        <p>このメソッドは汎用ではなく、その *this* 値が Number または Number オブジェクトでない場合、*TypeError* 例外を投げる。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことはできない。</p>
+        <p>このメソッドの *"length"* プロパティは *1*<sub>𝔽</sub> である。</p>
       </emu-clause>
 
       <emu-clause id="sec-number.prototype.valueof" type="built-in function">
@@ -33217,8 +33218,8 @@
         <emu-clause id="sec-thisnumbervalue" type="abstract operation" oldids="thisnumbervalue">
           <h1>
             ThisNumberValue (
-              _arg_: an ECMAScript language value,
-            ): either a normal completion containing a Number or a throw completion
+              _arg_: ECMAScript 言語値,
+            ): Number を含む通常完了または throw 完了のいずれか
           </h1>
           <dl class="header">
           </dl>
@@ -33228,7 +33229,7 @@
               1. _number_ を _arg_.[[NumberData]] とする。
               1. 表明: _number_ は Number である。
               1. _number_ を返す。
-            1. *TypeError* 例外をスローする。
+            1. *TypeError* 例外を投げる。
           </emu-alg>
         </emu-clause>
       </emu-clause>
@@ -33236,7 +33237,7 @@
 
     <emu-clause id="sec-properties-of-number-instances">
       <h1>Number インスタンスのプロパティ</h1>
-      <p>Number インスタンスは、Number prototype オブジェクトからプロパティを継承する通常オブジェクトです。Number インスタンスは [[NumberData]] 内部スロットも持ちます。[[NumberData]] 内部スロットは、この Number オブジェクトによって表される Number 値です。</p>
+      <p>Number インスタンスは、Number プロトタイプオブジェクトからプロパティを継承する通常のオブジェクトである。Number インスタンスは [[NumberData]] 内部スロットも持つ。[[NumberData]] 内部スロットは、この Number オブジェクトによって表される Number 値である。</p>
     </emu-clause>
   </emu-clause>
 
@@ -33244,20 +33245,20 @@
     <h1>BigInt オブジェクト</h1>
 
     <emu-clause id="sec-bigint-constructor">
-      <h1>BigInt コンストラクター</h1>
-      <p>BigInt コンストラクターは:</p>
+      <h1>BigInt コンストラクタ</h1>
+      <p>BigInt コンストラクタは、次のとおりである。</p>
       <ul>
-        <li><dfn>%BigInt%</dfn> です。</li>
-        <li>グローバルオブジェクトの *"BigInt"* プロパティの初期値です。</li>
-        <li>コンストラクターとしてではなく関数として呼び出されたとき、型変換を実行します。</li>
-        <li>`new` 演算子とともに使用することも、サブクラス化することも意図されていません。クラス定義の `extends` 節の値として使用できますが、BigInt コンストラクターへの `super` 呼出しは例外を発生させます。</li>
+        <li><dfn>%BigInt%</dfn> である。</li>
+        <li>グローバルオブジェクトの *"BigInt"* プロパティの初期値である。</li>
+        <li>コンストラクタとしてではなく関数として呼び出された場合、型変換を実行する。</li>
+        <li>`new` 演算子とともに使用したり、サブクラス化したりすることを意図していない。クラス定義の `extends` 句の値として使用することはできるが、BigInt コンストラクタへの `super` 呼び出しは例外を発生させる。</li>
       </ul>
 
       <emu-clause id="sec-bigint-constructor-number-value" type="built-in function">
         <h1>BigInt ( _value_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
-          1. NewTarget が *undefined* でない場合、*TypeError* 例外をスローする。
+          1. NewTarget が *undefined* でない場合、*TypeError* 例外を投げる。
           1. _primitive_ を ? ToPrimitive(_value_, ~number~) とする。
           1. _primitive_ が Number である場合、? NumberToBigInt(_primitive_) を返す。
           1. ? <emu-meta suppress-effects="user-code">ToBigInt(_primitive_)</emu-meta> を返す。
@@ -33266,13 +33267,13 @@
         <emu-clause id="sec-numbertobigint" type="abstract operation">
           <h1>
             NumberToBigInt (
-              _number_: a Number,
-            ): either a normal completion containing a BigInt or a throw completion
+              _number_: Number,
+            ): BigInt を含む通常完了または throw 完了のいずれか
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _number_ が整数 Number でない場合、*RangeError* 例外をスローする。
+            1. _number_ が整数 Number でない場合、*RangeError* 例外を投げる。
             1. ℤ(ℝ(_number_)) を返す。
           </emu-alg>
         </emu-clause>
@@ -33280,16 +33281,16 @@
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-bigint-constructor">
-      <h1>BigInt コンストラクターのプロパティ</h1>
-      <p>BigInt コンストラクターは:</p>
+      <h1>BigInt コンストラクタのプロパティ</h1>
+      <p>BigInt コンストラクタは、次のとおりである。</p>
       <ul>
-        <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持ちます。</li>
-        <li>次のプロパティを持ちます。</li>
+        <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+        <li>次のプロパティを持つ。</li>
       </ul>
 
       <emu-clause id="sec-bigint.asintn" type="built-in function">
         <h1>BigInt.asIntN ( _bits_, _bigint_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _bits_ を ? ToIndex(_bits_) に設定する。
           1. _bigint_ を ? ToBigInt(_bigint_) に設定する。
@@ -33301,7 +33302,7 @@
 
       <emu-clause id="sec-bigint.asuintn" type="built-in function">
         <h1>BigInt.asUintN ( _bits_, _bigint_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _bits_ を ? ToIndex(_bits_) に設定する。
           1. _bigint_ を ? ToBigInt(_bigint_) に設定する。
@@ -33311,47 +33312,47 @@
 
       <emu-clause id="sec-bigint.prototype">
         <h1>BigInt.prototype</h1>
-        <p>`BigInt.prototype` の初期値は BigInt prototype オブジェクトです。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>`BigInt.prototype` の初期値は BigInt プロトタイプオブジェクトである。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-the-bigint-prototype-object">
-      <h1>BigInt Prototype オブジェクトのプロパティ</h1>
-      <p><dfn>BigInt prototype オブジェクト</dfn>は:</p>
+      <h1>BigInt プロトタイプオブジェクトのプロパティ</h1>
+      <p><dfn>BigInt プロトタイプオブジェクト</dfn>は、次のとおりである。</p>
       <ul>
-        <li><dfn>%BigInt.prototype%</dfn> です。</li>
-        <li>通常オブジェクトです。</li>
-        <li>BigInt オブジェクトではありません。[[BigIntData]] 内部スロットを持ちません。</li>
-        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持ちます。</li>
+        <li><dfn>%BigInt.prototype%</dfn> である。</li>
+        <li>通常のオブジェクトである。</li>
+        <li>BigInt オブジェクトではなく、[[BigIntData]] 内部スロットを持たない。</li>
+        <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
       </ul>
-      <p>メソッドの仕様内の「この BigInt 値」という語句は、メソッド呼出しの *this* 値を引数として渡して抽象操作 ThisBigIntValue を呼び出した結果を指します。</p>
+      <p>メソッドの仕様内における「この BigInt 値」という語句は、そのメソッド呼び出しの *this* 値を引数として抽象演算 ThisBigIntValue を呼び出すことによって返される結果を指す。</p>
 
       <emu-clause id="sec-bigint.prototype.constructor">
         <h1>BigInt.prototype.constructor</h1>
-        <p>`BigInt.prototype.constructor` の初期値は %BigInt% です。</p>
+        <p>`BigInt.prototype.constructor` の初期値は %BigInt% である。</p>
       </emu-clause>
 
       <emu-clause id="sec-bigint.prototype.tolocalestring" type="built-in function">
         <h1>BigInt.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>ECMA-402 Internationalization API を含む ECMAScript 実装は、ECMA-402 で規定されるとおりにこのメソッドを実装しなければなりません。それ以外の場合、このメソッドには次の仕様が使用されます。</p>
-        <p>このメソッドは、ホスト環境の現在のロケールの慣例に従って整形されたこの BigInt 値を表す String 値を生成します。このメソッドは実装定義であり、`toString` と同じものを返すことは許可されますが、推奨されません。</p>
-        <p>このメソッドの省略可能なパラメーターの意味は ECMA-402 で定義されます。ECMA-402 のサポートを含まない実装は、それらのパラメーター位置を他の目的に使用してはなりません。</p>
+        <p>ECMA-402 国際化 API を含む ECMAScript 実装は、ECMA-402 で規定されているとおりにこのメソッドを実装しなければならない。それ以外の場合、このメソッドについて次の仕様が使用される。</p>
+        <p>このメソッドは、ホスト環境の現在のロケールの慣例に従って書式設定された、この BigInt 値を表す String 値を生成する。このメソッドは実装定義であり、`toString` と同じものを返すことも許容されるが、推奨されない。</p>
+        <p>このメソッドの省略可能なパラメータの意味は ECMA-402 で定義される。ECMA-402 のサポートを含まない実装は、それらのパラメータ位置を他の目的に使用してはならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-bigint.prototype.tostring" type="built-in function">
         <h1>BigInt.prototype.toString ( [ _radix_ ] )</h1>
         <emu-note>
-          <p>省略可能な _radix_ は、*2*<sub>𝔽</sub> から *36*<sub>𝔽</sub> までの閉区間内にある整数 Number 値であるべきです。_radix_ が *undefined* である場合、_radix_ の値として *10*<sub>𝔽</sub> が使用されます。</p>
+          <p>省略可能な _radix_ は、*2*<sub>𝔽</sub> から *36*<sub>𝔽</sub> までの両端を含む区間にある整数 Number 値であるべきである。_radix_ が *undefined* の場合、*10*<sub>𝔽</sub> が _radix_ の値として使用される。</p>
         </emu-note>
-        <p>このメソッドは呼び出されたとき、次の手順を実行します。</p>
+        <p>このメソッドは、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _x_ を ? ThisBigIntValue(*this* 値) とする。
           1. _radix_ が *undefined* である場合、_radixMV_ を 10 とする。
-          1. そうでない場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
+          1. それ以外の場合、_radixMV_ を ? SnapToInteger(_radix_, ~truncate~, 2, 36) とする。
           1. BigInt::toString(_x_, _radixMV_) を返す。
         </emu-alg>
-        <p>このメソッドは汎用ではありません。*this* 値が BigInt または BigInt オブジェクトでない場合、*TypeError* 例外をスローします。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことはできません。</p>
+        <p>このメソッドは汎用ではなく、その *this* 値が BigInt または BigInt オブジェクトでない場合、*TypeError* 例外を投げる。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことはできない。</p>
       </emu-clause>
 
       <emu-clause id="sec-bigint.prototype.valueof" type="built-in function">
@@ -33363,8 +33364,8 @@
         <emu-clause id="sec-thisbigintvalue" type="abstract operation" oldids="thisbigintvalue">
           <h1>
             ThisBigIntValue (
-              _arg_: an ECMAScript language value,
-            ): either a normal completion containing a BigInt or a throw completion
+              _arg_: ECMAScript 言語値,
+            ): BigInt を含む通常完了または throw 完了のいずれか
           </h1>
           <dl class="header">
           </dl>
@@ -33373,38 +33374,38 @@
             1. _arg_ が Object であり、_arg_ が [[BigIntData]] 内部スロットを持つ場合、
               1. 表明: _arg_.[[BigIntData]] は BigInt である。
               1. _arg_.[[BigIntData]] を返す。
-            1. *TypeError* 例外をスローする。
+            1. *TypeError* 例外を投げる。
           </emu-alg>
         </emu-clause>
       </emu-clause>
 
       <emu-clause oldids="sec-bigint.prototype-@@tostringtag" id="sec-bigint.prototype-%symbol.tostringtag%">
         <h1>BigInt.prototype [ %Symbol.toStringTag% ]</h1>
-        <p>%Symbol.toStringTag% プロパティの初期値は String 値 *"BigInt"* です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持ちます。</p>
+        <p>%Symbol.toStringTag% プロパティの初期値は String 値 *"BigInt"* である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-properties-of-bigint-instances">
       <h1>BigInt インスタンスのプロパティ</h1>
-      <p>BigInt インスタンスは、BigInt prototype オブジェクトからプロパティを継承する通常オブジェクトです。BigInt インスタンスは [[BigIntData]] 内部スロットも持ちます。[[BigIntData]] 内部スロットは、この BigInt オブジェクトによって表される BigInt 値です。</p>
+      <p>BigInt インスタンスは、BigInt プロトタイプオブジェクトからプロパティを継承する通常のオブジェクトである。BigInt インスタンスは [[BigIntData]] 内部スロットも持つ。[[BigIntData]] 内部スロットは、この BigInt オブジェクトによって表される BigInt 値である。</p>
     </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-math-object">
     <h1>Math オブジェクト</h1>
-    <p>Math オブジェクトは:</p>
+    <p>Math オブジェクトは、次のとおりである。</p>
     <ul>
-      <li><dfn>%Math%</dfn> です。</li>
-      <li>グローバルオブジェクトの *"Math"* プロパティの初期値です。</li>
-      <li>通常オブジェクトです。</li>
-      <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持ちます。</li>
-      <li>関数オブジェクトではありません。</li>
-      <li>[[Construct]] 内部メソッドを持ちません。`new` 演算子を使用してコンストラクターとして使用することはできません。</li>
-      <li>[[Call]] 内部メソッドを持ちません。関数として呼び出すことはできません。</li>
+      <li><dfn>%Math%</dfn> である。</li>
+      <li>グローバルオブジェクトの *"Math"* プロパティの初期値である。</li>
+      <li>通常のオブジェクトである。</li>
+      <li>値が %Object.prototype% である [[Prototype]] 内部スロットを持つ。</li>
+      <li>関数オブジェクトではない。</li>
+      <li>[[Construct]] 内部メソッドを持たず、`new` 演算子を使用してコンストラクタとして使用することはできない。</li>
+      <li>[[Call]] 内部メソッドを持たず、関数として呼び出すことはできない。</li>
     </ul>
     <emu-note>
-      <p>この仕様では、「_x_ に対する Number 値」という語句は <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> で定義される技術的な意味を持ちます。</p>
+      <p>この仕様において、「_x_ に対する Number 値」という語句は、<emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> で定義される技術的な意味を持つ。</p>
     </emu-note>
 
     <emu-clause id="sec-value-properties-of-the-math-object">
@@ -33412,79 +33413,79 @@
 
       <emu-clause id="sec-math.e">
         <h1>Math.E</h1>
-        <p>自然対数の底 <i>e</i> に対する Number 値であり、約 2.7182818284590452354 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>自然対数の底である <i>e</i> に対する Number 値であり、およそ 2.7182818284590452354 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.ln10">
         <h1>Math.LN10</h1>
-        <p>10 の自然対数に対する Number 値であり、約 2.302585092994046 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>10 の自然対数に対する Number 値であり、およそ 2.302585092994046 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.ln2">
         <h1>Math.LN2</h1>
-        <p>2 の自然対数に対する Number 値であり、約 0.6931471805599453 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>2 の自然対数に対する Number 値であり、およそ 0.6931471805599453 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.log10e">
         <h1>Math.LOG10E</h1>
-        <p>自然対数の底 <i>e</i> の底10の対数に対する Number 値です。この値は約 0.4342944819032518 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>自然対数の底である <i>e</i> の底 10 の対数に対する Number 値であり、この値はおよそ 0.4342944819032518 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
         <emu-note>
-          <p>`Math.LOG10E` の値は、おおよそ `Math.LN10` の値の逆数です。</p>
+          <p>`Math.LOG10E` の値は、`Math.LN10` の値の逆数におよそ等しい。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.log2e">
         <h1>Math.LOG2E</h1>
-        <p>自然対数の底 <i>e</i> の底2の対数に対する Number 値です。この値は約 1.4426950408889634 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>自然対数の底である <i>e</i> の底 2 の対数に対する Number 値であり、この値はおよそ 1.4426950408889634 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
         <emu-note>
-          <p>`Math.LOG2E` の値は、おおよそ `Math.LN2` の値の逆数です。</p>
+          <p>`Math.LOG2E` の値は、`Math.LN2` の値の逆数におよそ等しい。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.pi">
         <h1>Math.PI</h1>
-        <p>円周と直径の比である π に対する Number 値であり、約 3.1415926535897932 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>円周と直径の比である π に対する Number 値であり、およそ 3.1415926535897932 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.sqrt1_2">
         <h1>Math.SQRT1_2</h1>
-        <p>½ の平方根に対する Number 値であり、約 0.7071067811865476 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>½ の平方根に対する Number 値であり、およそ 0.7071067811865476 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
         <emu-note>
-          <p>`Math.SQRT1_2` の値は、おおよそ `Math.SQRT2` の値の逆数です。</p>
+          <p>`Math.SQRT1_2` の値は、`Math.SQRT2` の値の逆数におよそ等しい。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.sqrt2">
         <h1>Math.SQRT2</h1>
-        <p>2 の平方根に対する Number 値であり、約 1.4142135623730951 です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
+        <p>2 の平方根に対する Number 値であり、およそ 1.4142135623730951 である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持つ。</p>
       </emu-clause>
 
       <emu-clause oldids="sec-math-@@tostringtag" id="sec-math-%symbol.tostringtag%">
         <h1>Math [ %Symbol.toStringTag% ]</h1>
-        <p>%Symbol.toStringTag% プロパティの初期値は String 値 *"Math"* です。</p>
-        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持ちます。</p>
+        <p>%Symbol.toStringTag% プロパティの初期値は String 値 *"Math"* である。</p>
+        <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持つ。</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-function-properties-of-the-math-object">
       <h1>Math オブジェクトの関数プロパティ</h1>
       <emu-note>
-        <p>関数 `acos`、`acosh`、`asin`、`asinh`、`atan`、`atanh`、`atan2`、`cbrt`、`cos`、`cosh`、`exp`、`expm1`、`hypot`、`log`、`log1p`、`log2`、`log10`、`pow`、`random`、`sin`、`sinh`、`tan`、および `tanh` の動作は、関心のある境界ケースを表す特定の引数値に対して特定の結果を要求する場合を除いて、ここでは厳密には規定されていません。それ以外の引数値について、これらの関数はよく知られた数学関数の結果の近似を計算することを意図していますが、近似アルゴリズムの選択にはある程度の自由が認められています。一般的な意図は、実装者が、特定のハードウェアプラットフォーム上の ECMAScript に対して、そのプラットフォーム上で C プログラマーが利用できるものと同じ数学ライブラリを使用できるようにすることです。</p>
-        <p>アルゴリズムの選択は実装に委ねられていますが、実装には、Sun Microsystems の自由に配布可能な数学ライブラリ `fdlibm`（<a href="http://www.netlib.org/fdlibm">http://www.netlib.org/fdlibm</a>）に含まれる IEEE 754-2019 算術用の近似アルゴリズムを使用することが推奨されます（ただし、この標準では規定されていません）。</p>
+        <p>`acos`、`acosh`、`asin`、`asinh`、`atan`、`atanh`、`atan2`、`cbrt`、`cos`、`cosh`、`exp`、`expm1`、`hypot`、`log`、`log1p`、`log2`、`log10`、`pow`、`random`、`sin`、`sinh`、`tan`、および `tanh` の各関数の動作は、対象となる境界ケースを表す特定の引数値に対して特定の結果を要求することを除き、ここでは厳密には規定されない。他の引数値について、これらの関数はよく知られた数学関数の結果の近似値を計算することを意図しているが、近似アルゴリズムの選択にはある程度の自由が認められる。一般的な意図は、実装者が、あるハードウェアプラットフォーム上の ECMAScript に対して、そのプラットフォーム上の C プログラマが利用できるものと同じ数学ライブラリを使用できるようにすることである。</p>
+        <p>アルゴリズムの選択は実装に委ねられているが、実装では Sun Microsystems の自由に配布可能な数学ライブラリ `fdlibm`（<a href="http://www.netlib.org/fdlibm">http://www.netlib.org/fdlibm</a>）に含まれる IEEE 754-2019 算術用の近似アルゴリズムを使用することが推奨される（ただし、この標準では規定されない）。</p>
       </emu-note>
 
       <emu-clause id="sec-math.abs" type="built-in function">
         <h1>Math.abs ( _x_ )</h1>
-        <p>この関数は _x_ の絶対値を返します。結果は _x_ と同じ大きさを持ちますが、符号は正です。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の絶対値を返す。結果は _x_ と同じ大きさを持つが、符号は正である。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* である場合、*NaN* を返す。
@@ -33497,288 +33498,288 @@
 
       <emu-clause id="sec-math.acos" type="built-in function">
         <h1>Math.acos ( _x_ )</h1>
-        <p>この関数は _x_ の逆余弦を返します。結果はラジアンで表され、*+0*<sub>𝔽</sub> から 𝔽(π) までの閉区間内にあります。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆余弦を返す。結果はラジアンで表され、*+0*<sub>𝔽</sub> から 𝔽(π) までの両端を含む区間にある。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が *NaN*、_n_ > *1*<sub>𝔽</sub>、または _n_ &lt; *-1*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
+          1. _n_ が *NaN*、_n_ > *1*<sub>𝔽</sub>、または _n_ &lt; *-1*<sub>𝔽</sub> である場合、*NaN* を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の逆余弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の逆余弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.acosh" type="built-in function">
         <h1>Math.acosh ( _x_ )</h1>
-        <p>この関数は _x_ の逆双曲線余弦を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆双曲線余弦を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *1*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. ℝ(_n_) の逆双曲線余弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の逆双曲線余弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.asin" type="built-in function">
         <h1>Math.asin ( _x_ )</h1>
-        <p>この関数は _x_ の逆正弦を返します。結果はラジアンで表され、𝔽(-π / 2) から 𝔽(π / 2) までの閉区間内にあります。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆正弦を返す。結果はラジアンで表され、𝔽(-π / 2) から 𝔽(π / 2) までの両端を含む区間にある。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ > *1*<sub>𝔽</sub> または _n_ &lt; *-1*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. ℝ(_n_) の逆正弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の逆正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.asinh" type="built-in function">
         <h1>Math.asinh ( _x_ )</h1>
-        <p>この関数は _x_ の逆双曲線正弦を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆双曲線正弦を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. ℝ(_n_) の逆双曲線正弦を表す実装近似の Number 値を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. ℝ(_n_) の逆双曲線正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.atan" type="built-in function">
         <h1>Math.atan ( _x_ )</h1>
-        <p>この関数は _x_ の逆正接を返します。結果はラジアンで表され、𝔽(-π / 2) から 𝔽(π / 2) までの閉区間内にあります。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆正接を返す。結果はラジアンで表され、𝔽(-π / 2) から 𝔽(π / 2) までの両端を含む区間にある。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. _n_ が *+∞*<sub>𝔽</sub> である場合、π / 2 を表す実装近似の Number 値を返す。
-          1. _n_ が *-∞*<sub>𝔽</sub> である場合、-π / 2 を表す実装近似の Number 値を返す。
-          1. ℝ(_n_) の逆正接を表す実装近似の Number 値を返す。
+          1. _n_ が *+∞*<sub>𝔽</sub> である場合、π / 2 を表す、実装によって近似された Number 値を返す。
+          1. _n_ が *-∞*<sub>𝔽</sub> である場合、-π / 2 を表す、実装によって近似された Number 値を返す。
+          1. ℝ(_n_) の逆正接を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.atanh" type="built-in function">
         <h1>Math.atanh ( _x_ )</h1>
-        <p>この関数は _x_ の逆双曲線正接を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の逆双曲線正接を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ > *1*<sub>𝔽</sub> または _n_ &lt; *-1*<sub>𝔽</sub> である場合、*NaN* を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+∞*<sub>𝔽</sub> を返す。
           1. _n_ が *-1*<sub>𝔽</sub> である場合、*-∞*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の逆双曲線正接を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の逆双曲線正接を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.atan2" type="built-in function">
         <h1>Math.atan2 ( _y_, _x_ )</h1>
-        <p>この関数は引数 _y_ と _x_ の商 <emu-eqn>_y_ / _x_</emu-eqn> の逆正接を返し、_y_ と _x_ の符号を使用して結果の象限を決定します。2引数の逆正接関数では、_y_ という名前の引数が先、_x_ という名前の引数が後であることは意図的かつ伝統的であることに注意してください。結果はラジアンで表され、-π から +π までの閉区間内にあります。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は引数 _y_ と _x_ の商 <emu-eqn>_y_ / _x_</emu-eqn> の逆正接を返し、_y_ と _x_ の符号を使用して結果の象限を決定する。2 引数の逆正接関数では、_y_ という名前の引数が最初で、_x_ という名前の引数が 2 番目であることは意図的かつ伝統的であることに注意。結果はラジアンで表され、-π から +π までの両端を含む区間にある。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _ny_ を ? ToNumber(_y_) とする。
           1. _nx_ を ? ToNumber(_x_) とする。
           1. _ny_ が *NaN* または _nx_ が *NaN* である場合、*NaN* を返す。
           1. _ny_ が *+∞*<sub>𝔽</sub> である場合、
-            1. _nx_ が *+∞*<sub>𝔽</sub> である場合、π / 4 を表す実装近似の Number 値を返す。
-            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、3π / 4 を表す実装近似の Number 値を返す。
-            1. π / 2 を表す実装近似の Number 値を返す。
+            1. _nx_ が *+∞*<sub>𝔽</sub> である場合、π / 4 を表す、実装によって近似された Number 値を返す。
+            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、3π / 4 を表す、実装によって近似された Number 値を返す。
+            1. π / 2 を表す、実装によって近似された Number 値を返す。
           1. _ny_ が *-∞*<sub>𝔽</sub> である場合、
-            1. _nx_ が *+∞*<sub>𝔽</sub> である場合、-π / 4 を表す実装近似の Number 値を返す。
-            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、-3π / 4 を表す実装近似の Number 値を返す。
-            1. -π / 2 を表す実装近似の Number 値を返す。
+            1. _nx_ が *+∞*<sub>𝔽</sub> である場合、-π / 4 を表す、実装によって近似された Number 値を返す。
+            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、-3π / 4 を表す、実装によって近似された Number 値を返す。
+            1. -π / 2 を表す、実装によって近似された Number 値を返す。
           1. _ny_ が *+0*<sub>𝔽</sub> である場合、
             1. _nx_ > *+0*<sub>𝔽</sub> または _nx_ が *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
-            1. π を表す実装近似の Number 値を返す。
+            1. π を表す、実装によって近似された Number 値を返す。
           1. _ny_ が *-0*<sub>𝔽</sub> である場合、
             1. _nx_ > *+0*<sub>𝔽</sub> または _nx_ が *+0*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
-            1. -π を表す実装近似の Number 値を返す。
-          1. 表明: _ny_ は有限であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. -π を表す、実装によって近似された Number 値を返す。
+          1. 表明: _ny_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
           1. _ny_ > *+0*<sub>𝔽</sub> である場合、
             1. _nx_ が *+∞*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
-            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、π を表す実装近似の Number 値を返す。
-            1. _nx_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、π / 2 を表す実装近似の Number 値を返す。
+            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、π を表す、実装によって近似された Number 値を返す。
+            1. _nx_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、π / 2 を表す、実装によって近似された Number 値を返す。
           1. _ny_ &lt; *-0*<sub>𝔽</sub> である場合、
             1. _nx_ が *+∞*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
-            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、-π を表す実装近似の Number 値を返す。
-            1. _nx_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、-π / 2 を表す実装近似の Number 値を返す。
-          1. 表明: _nx_ は有限であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. _nx_ が *-∞*<sub>𝔽</sub> である場合、-π を表す、実装によって近似された Number 値を返す。
+            1. _nx_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、-π / 2 を表す、実装によって近似された Number 値を返す。
+          1. 表明: _nx_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
           1. _result_ を abs(ℝ(_ny_) / ℝ(_nx_)) の逆正接とする。
           1. _nx_ &lt; *-0*<sub>𝔽</sub> である場合、
             1. _ny_ > *+0*<sub>𝔽</sub> である場合、_result_ を π - _result_ に設定する。
-            1. そうでない場合、_result_ を -π + _result_ に設定する。
-          1. そうでない場合、
+            1. それ以外の場合、_result_ を -π + _result_ に設定する。
+          1. それ以外の場合、
             1. _ny_ &lt; *-0*<sub>𝔽</sub> である場合、_result_ を -_result_ に設定する。
-          1. _result_ を表す実装近似の Number 値を返す。
+          1. _result_ を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.cbrt" type="built-in function">
         <h1>Math.cbrt ( _x_ )</h1>
-        <p>この関数は _x_ の立方根を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の立方根を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. ℝ(_n_) の立方根を表す実装近似の Number 値を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. ℝ(_n_) の立方根を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.ceil" type="built-in function">
         <h1>Math.ceil ( _x_ )</h1>
-        <p>この関数は、_x_ 以上である最小の（-∞ に最も近い）整数 Number 値を返します。_x_ がすでに整数 Number である場合、結果は _x_ です。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、_x_ 以上である最小の（-∞ に最も近い）整数 Number 値を返す。_x_ がすでに整数 Number である場合、結果は _x_ である。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> かつ _n_ > *-1*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
           1. _n_ が整数 Number である場合、_n_ を返す。
           1. _n_ 以上である最小の（-∞ に最も近い）整数 Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.ceil(x)` の値は `-Math.floor(-x)` の値と同じです。</p>
+          <p>`Math.ceil(x)` の値は `-Math.floor(-x)` の値と同じである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.clz32" type="built-in function">
         <h1>Math.clz32 ( _x_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToUint32(_x_) とする。
-          1. _p_ を _n_ の符号なし32ビット2進表現における先頭のゼロビット数とする。
+          1. _p_ を _n_ の符号なし 32 ビット二進表現における先頭のゼロビットの数とする。
           1. 𝔽(_p_) を返す。
         </emu-alg>
         <emu-note>
-          <p>_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、このメソッドは *32*<sub>𝔽</sub> を返します。_n_ の32ビット2進エンコーディングの最上位ビットが 1 である場合、このメソッドは *+0*<sub>𝔽</sub> を返します。</p>
+          <p>_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、このメソッドは *32*<sub>𝔽</sub> を返す。_n_ の 32 ビット二進符号化の最上位ビットが 1 である場合、このメソッドは *+0*<sub>𝔽</sub> を返す。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.cos" type="built-in function">
         <h1>Math.cos ( _x_ )</h1>
-        <p>この関数は _x_ の余弦を返します。引数はラジアンで表されます。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の余弦を返す。引数はラジアンで表される。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でない場合、*NaN* を返す。
+          1. _n_ が有限 Number でない場合、*NaN* を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*1*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の余弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の余弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.cosh" type="built-in function">
         <h1>Math.cosh ( _x_ )</h1>
-        <p>この関数は _x_ の双曲線余弦を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の双曲線余弦を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* である場合、*NaN* を返す。
           1. _n_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、*+∞*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*1*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の双曲線余弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の双曲線余弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.cosh(x)` の値は `(Math.exp(x) + Math.exp(-x)) / 2` の値と同じです。</p>
+          <p>`Math.cosh(x)` の値は `(Math.exp(x) + Math.exp(-x)) / 2` の値と同じである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.exp" type="built-in function">
         <h1>Math.exp ( _x_ )</h1>
-        <p>この関数は _x_ の指数関数（自然対数の底 _e_ を _x_ 乗した値）を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の指数関数（自然対数の底である _e_ を _x_ 乗したもの）を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*1*<sub>𝔽</sub> を返す。
           1. _n_ が *-∞*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の指数関数を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の指数関数を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.expm1" type="built-in function">
         <h1>Math.expm1 ( _x_ )</h1>
-        <p>この関数は _x_ の指数関数（自然対数の底 _e_ を _x_ 乗した値）から 1 を減算した結果を返します。_x_ の値が 0 に近い場合でも正確になる方法で結果が計算されます。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、_x_ の指数関数（自然対数の底である _e_ を _x_ 乗したもの）から 1 を引いた結果を返す。結果は、_x_ の値が 0 に近い場合でも正確になるような方法で計算される。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub>、または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *-∞*<sub>𝔽</sub> である場合、*-1*<sub>𝔽</sub> を返す。
           1. _exp_ を ℝ(_n_) の指数関数とする。
-          1. _exp_ - 1 を表す実装近似の Number 値を返す。
+          1. _exp_ - 1 を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.floor" type="built-in function">
         <h1>Math.floor ( _x_ )</h1>
-        <p>この関数は、_x_ 以下である最大の（+∞ に最も近い）整数 Number 値を返します。_x_ がすでに整数 Number である場合、結果は _x_ です。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、_x_ 以下である最大の（+∞ に最も近い）整数 Number 値を返す。_x_ がすでに整数 Number である場合、結果は _x_ である。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ &lt; *1*<sub>𝔽</sub> かつ _n_ > *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ が整数 Number である場合、_n_ を返す。
           1. _n_ 以下である最大の（+∞ に最も近い）整数 Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.floor(x)` の値は `-Math.ceil(-x)` の値と同じです。</p>
+          <p>`Math.floor(x)` の値は `-Math.ceil(-x)` の値と同じである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.fround" type="built-in function">
         <h1>Math.fround ( _x_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* である場合、*NaN* を返す。
           1. _n_ が *+0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub>、*+∞*<sub>𝔽</sub>、または *-∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. _n32_ を、roundTiesToEven モードを使用して _n_ を IEEE 754-2019 binary32 形式へ変換した結果とする。
-          1. _n64_ を _n32_ を IEEE 754-2019 binary64 形式へ変換した結果とする。
+          1. _n32_ を、roundTiesToEven モードを使用して _n_ を IEEE 754-2019 binary32 形式に変換した結果とする。
+          1. _n64_ を、_n32_ を IEEE 754-2019 binary64 形式に変換した結果とする。
           1. _n64_ に対応する ECMAScript Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.f16round" type="built-in function">
         <h1>Math.f16round ( _x_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* である場合、*NaN* を返す。
           1. _n_ が *+0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub>、*+∞*<sub>𝔽</sub>、または *-∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. _n16_ を、roundTiesToEven モードを使用して _n_ を IEEE 754-2019 binary16 形式へ変換した結果とする。
-          1. _n64_ を _n16_ を IEEE 754-2019 binary64 形式へ変換した結果とする。
+          1. _n16_ を、roundTiesToEven モードを使用して _n_ を IEEE 754-2019 binary16 形式に変換した結果とする。
+          1. _n64_ を、_n16_ を IEEE 754-2019 binary64 形式に変換した結果とする。
           1. _n64_ に対応する ECMAScript Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>二重丸めが発生する可能性があるため、この操作は binary32 にキャストしてから binary16 にキャストすることと同じではありません。たとえば数値 _k_ = *1.00048828125000022204*<sub>𝔽</sub> を考えると、Math.f16round(_k_) は *1.0009765625*<sub>𝔽</sub> ですが、Math.f16round(Math.fround(_k_)) は *1*<sub>𝔽</sub> です。</p>
-          <p>すべてのプラットフォームが binary64 から binary16 へのキャストをネイティブにサポートしているわけではありません。MIT ライセンスの <a href="https://half.sourceforge.net/">half</a> ライブラリを含め、これを提供できるさまざまなライブラリがあります。別の方法として、まず roundTiesToEven の下で binary64 から binary32 へキャストし、その結果が誤った二重丸めにつながる可能性があるかを検査できます。そのような場合は、binary32 値の仮数を調整して、最初のキャストを roundTiesToOdd の下で実行した場合に生成される値になるよう明示的に処理できます。その調整済みの値を roundTiesToEven の下で binary16 にキャストすると、正しい値が生成されます。</p>
+          <p>二重丸めの可能性があるため、この演算は binary32 にキャストしてから binary16 にキャストすることと同じではない。たとえば数 _k_ = *1.00048828125000022204*<sub>𝔽</sub> を考えると、Math.f16round(_k_) は *1.0009765625*<sub>𝔽</sub> であるが、Math.f16round(Math.fround(_k_)) は *1*<sub>𝔽</sub> である。</p>
+          <p>すべてのプラットフォームが binary64 から binary16 へのキャストをネイティブにサポートしているわけではない。MIT ライセンスの <a href="https://half.sourceforge.net/">half</a> ライブラリを含め、これを提供できるさまざまなライブラリが存在する。あるいは、まず roundTiesToEven の下で binary64 から binary32 にキャストし、その結果が不正確な二重丸めにつながる可能性があるかどうかを確認することもできる。そのような場合は、binary32 値の仮数を調整して、最初のキャストを roundTiesToOdd の下で実行した場合に生成される値になるようにすることで、明示的に処理できる。調整された値を roundTiesToEven の下で binary16 にキャストすると、正しい値が生成される。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.hypot" type="built-in function">
         <h1>Math.hypot ( ..._args_ )</h1>
-        <p>0個以上の引数が与えられた場合、この関数は各引数の平方の合計の平方根を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>0 個以上の引数を与えると、この関数はその引数の平方の総和の平方根を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _coerced_ を新しい空の List とする。
-          1. _args_ の各要素 _arg_ について、次を行う。
+          1. _args_ の各要素 _arg_ について、
             1. _n_ を ? ToNumber(_arg_) とする。
             1. _n_ を _coerced_ に追加する。
-          1. _coerced_ の各要素 _number_ について、次を行う。
+          1. _coerced_ の各要素 _number_ について、
             1. _number_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、*+∞*<sub>𝔽</sub> を返す。
           1. _onlyZero_ を *true* とする。
-          1. _coerced_ の各要素 _number_ について、次を行う。
+          1. _coerced_ の各要素 _number_ について、
             1. _number_ が *NaN* である場合、*NaN* を返す。
             1. _number_ が *+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない場合、_onlyZero_ を *false* に設定する。
           1. _onlyZero_ が *true* である場合、*+0*<sub>𝔽</sub> を返す。
-          1. _coerced_ の要素の数学値の平方の合計の平方根を表す実装近似の Number 値を返す。
+          1. _coerced_ の各要素の数学値の平方の総和の平方根を表す、実装によって近似された Number 値を返す。
         </emu-alg>
-        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> です。</p>
+        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
         <emu-note>
-          <p>実装は、この関数が2個以上の引数で呼び出されたとき、単純な実装で発生しやすいオーバーフローおよびアンダーフローによる精度損失を避けるよう注意するべきです。</p>
+          <p>この関数が 2 個以上の引数で呼び出されたときに素朴な実装で発生しやすいオーバーフローおよびアンダーフローによる精度損失を避けるよう、実装では注意すべきである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.imul" type="built-in function">
         <h1>Math.imul ( _x_, _y_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _a_ を ℝ(? ToUint32(_x_)) とする。
           1. _b_ を ℝ(? ToUint32(_y_)) とする。
@@ -33790,106 +33791,106 @@
 
       <emu-clause id="sec-math.log" type="built-in function">
         <h1>Math.log ( _x_ )</h1>
-        <p>この関数は _x_ の自然対数を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の自然対数を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. ln(ℝ(_n_)) を表す実装近似の Number 値を返す。
+          1. ln(ℝ(_n_)) を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.log1p" type="built-in function">
         <h1>Math.log1p ( _x_ )</h1>
-        <p>この関数は 1 + _x_ の自然対数を返します。x の値が 0 に近い場合でも正確になる方法で結果が計算されます。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は 1 + _x_ の自然対数を返す。結果は、x の値が 0 に近い場合でも正確になるような方法で計算される。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub>、または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *-1*<sub>𝔽</sub> である場合、*-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-1*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. ln(1 + ℝ(_n_)) を表す実装近似の Number 値を返す。
+          1. ln(1 + ℝ(_n_)) を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.log10" type="built-in function">
         <h1>Math.log10 ( _x_ )</h1>
-        <p>この関数は _x_ の底10の対数を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の底 10 の対数を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. log10(ℝ(_n_)) を表す実装近似の Number 値を返す。
+          1. log10(ℝ(_n_)) を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.log2" type="built-in function">
         <h1>Math.log2 ( _x_ )</h1>
-        <p>この関数は _x_ の底2の対数を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の底 2 の対数を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN* または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *1*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*-∞*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> である場合、*NaN* を返す。
-          1. log2(ℝ(_n_)) を表す実装近似の Number 値を返す。
+          1. log2(ℝ(_n_)) を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.max" type="built-in function">
         <h1>Math.max ( ..._args_ )</h1>
-        <p>0個以上の引数が与えられた場合、この関数は各引数に対して ToNumber を呼び出し、得られた値のうち最大のものを返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>0 個以上の引数を与えると、この関数は各引数に対して ToNumber を呼び出し、その結果の値のうち最大のものを返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _coerced_ を新しい空の List とする。
-          1. _args_ の各要素 _arg_ について、次を行う。
+          1. _args_ の各要素 _arg_ について、
             1. _n_ を ? ToNumber(_arg_) とする。
             1. _n_ を _coerced_ に追加する。
           1. _highest_ を *-∞*<sub>𝔽</sub> とする。
-          1. _coerced_ の各要素 _number_ について、次を行う。
+          1. _coerced_ の各要素 _number_ について、
             1. _number_ が *NaN* である場合、*NaN* を返す。
             1. _number_ が *+0*<sub>𝔽</sub> であり、_highest_ が *-0*<sub>𝔽</sub> である場合、_highest_ を *+0*<sub>𝔽</sub> に設定する。
             1. _number_ > _highest_ である場合、_highest_ を _number_ に設定する。
           1. _highest_ を返す。
         </emu-alg>
         <emu-note>
-          <p>最大値を決定するための値の比較は、*+0*<sub>𝔽</sub> が *-0*<sub>𝔽</sub> より大きいとみなされる点を除いて、IsLessThan アルゴリズムを使用して行われます。</p>
+          <p>最大値を決定するための値の比較は、*+0*<sub>𝔽</sub> が *-0*<sub>𝔽</sub> より大きいとみなされることを除き、IsLessThan アルゴリズムを使用して行われる。</p>
         </emu-note>
-        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> です。</p>
+        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.min" type="built-in function">
         <h1>Math.min ( ..._args_ )</h1>
-        <p>0個以上の引数が与えられた場合、この関数は各引数に対して ToNumber を呼び出し、得られた値のうち最小のものを返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>0 個以上の引数を与えると、この関数は各引数に対して ToNumber を呼び出し、その結果の値のうち最小のものを返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _coerced_ を新しい空の List とする。
-          1. _args_ の各要素 _arg_ について、次を行う。
+          1. _args_ の各要素 _arg_ について、
             1. _n_ を ? ToNumber(_arg_) とする。
             1. _n_ を _coerced_ に追加する。
           1. _lowest_ を *+∞*<sub>𝔽</sub> とする。
-          1. _coerced_ の各要素 _number_ について、次を行う。
+          1. _coerced_ の各要素 _number_ について、
             1. _number_ が *NaN* である場合、*NaN* を返す。
             1. _number_ が *-0*<sub>𝔽</sub> であり、_lowest_ が *+0*<sub>𝔽</sub> である場合、_lowest_ を *-0*<sub>𝔽</sub> に設定する。
             1. _number_ &lt; _lowest_ である場合、_lowest_ を _number_ に設定する。
           1. _lowest_ を返す。
         </emu-alg>
         <emu-note>
-          <p>最小値を決定するための値の比較は、*+0*<sub>𝔽</sub> が *-0*<sub>𝔽</sub> より大きいとみなされる点を除いて、IsLessThan アルゴリズムを使用して行われます。</p>
+          <p>最小値を決定するための値の比較は、*+0*<sub>𝔽</sub> が *-0*<sub>𝔽</sub> より大きいとみなされることを除き、IsLessThan アルゴリズムを使用して行われる。</p>
         </emu-note>
-        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> です。</p>
+        <p>この関数の *"length"* プロパティは *2*<sub>𝔽</sub> である。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.pow" type="built-in function">
         <h1>Math.pow ( _base_, _exponent_ )</h1>
-        <p>この関数は呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、呼び出されたときに次の手順を実行する。</p>
         <emu-alg>
           1. _base_ を ? ToNumber(_base_) に設定する。
           1. _exponent_ を ? ToNumber(_exponent_) に設定する。
@@ -33899,33 +33900,33 @@
 
       <emu-clause id="sec-math.random" type="built-in function">
         <h1>Math.random ( )</h1>
-        <p>この関数は、正の符号を持ち、*+0*<sub>𝔽</sub> 以上かつ *1*<sub>𝔽</sub> 未満で、その範囲上でほぼ一様な分布となるように、実装定義のアルゴリズムまたは戦略を使用してランダムまたは疑似ランダムに選択された Number 値を返します。</p>
-        <p>異なる realm に対して作成された各 `Math.random` 関数は、連続する呼出しから異なる値の列を生成しなければなりません。</p>
+        <p>この関数は、正の符号を持ち、*+0*<sub>𝔽</sub> 以上かつ *1*<sub>𝔽</sub> 未満である Number 値を返す。この値は、実装定義のアルゴリズムまたは方式を使用し、その範囲にわたってほぼ一様な分布となるようにランダムまたは擬似ランダムに選択される。</p>
+        <p>異なる realm のために作成された各 `Math.random` 関数は、連続する呼び出しから異なる値のシーケンスを生成しなければならない。</p>
       </emu-clause>
 
       <emu-clause id="sec-math.round" type="built-in function">
         <h1>Math.round ( _x_ )</h1>
-        <p>この関数は、_x_ に最も近く、かつ整数である Number 値を返します。2つの整数 Number が _x_ から同じ距離にある場合、結果は +∞ に近い方の Number 値です。_x_ がすでに整数である場合、結果は _x_ です。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、_x_ に最も近い整数 Number 値を返す。2 つの整数 Number が _x_ に等しく近い場合、結果は +∞ に近い方の Number 値となる。_x_ がすでに整数である場合、結果は _x_ である。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が整数 Number である場合、_n_ を返す。
+          1. _n_ が有限 Number でないか、または _n_ が整数 Number である場合、_n_ を返す。
           1. _n_ &lt; *0.5*<sub>𝔽</sub> かつ _n_ > *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> かつ _n_ ≥ *-0.5*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
-          1. _n_ に最も近い整数 Number を返し、等距離の場合は +∞ に近い Number を優先する。
+          1. _n_ に最も近い整数 Number を返し、同距離の場合は +∞ に近い Number を優先する。
         </emu-alg>
         <emu-note>
-          <p>`Math.round(3.5)` は 4 を返しますが、`Math.round(-3.5)` は -3 を返します。</p>
+          <p>`Math.round(3.5)` は 4 を返すが、`Math.round(-3.5)` は -3 を返す。</p>
         </emu-note>
         <emu-note>
-          <p>`Math.round(x)` の値は、常に `Math.floor(x + 0.5)` の値と同じとは限りません。`x` が *-0*<sub>𝔽</sub> である場合、または `x` が *-0*<sub>𝔽</sub> より小さいが *-0.5*<sub>𝔽</sub> 以上である場合、`Math.round(x)` は *-0*<sub>𝔽</sub> を返しますが、`Math.floor(x + 0.5)` は *+0*<sub>𝔽</sub> を返します。`Math.round(x)` は、`x + 0.5` の計算時の内部丸めによっても `Math.floor(x + 0.5)` の値と異なる場合があります。</p>
+          <p>`Math.round(x)` の値は、`Math.floor(x + 0.5)` の値と常に同じであるとは限らない。`x` が *-0*<sub>𝔽</sub> である場合、または `x` が *-0*<sub>𝔽</sub> より小さいが *-0.5*<sub>𝔽</sub> 以上である場合、`Math.round(x)` は *-0*<sub>𝔽</sub> を返すが、`Math.floor(x + 0.5)` は *+0*<sub>𝔽</sub> を返す。`Math.round(x)` は、`x + 0.5` を計算するときの内部丸めのために `Math.floor(x + 0.5)` の値と異なる場合もある。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.sign" type="built-in function">
         <h1>Math.sign ( _x_ )</h1>
-        <p>この関数は _x_ の符号を返し、_x_ が正、負、またはゼロのいずれであるかを示します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の符号を返し、_x_ が正、負、またはゼロのいずれであるかを示す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
@@ -33936,34 +33937,34 @@
 
       <emu-clause id="sec-math.sin" type="built-in function">
         <h1>Math.sin ( _x_ )</h1>
-        <p>この関数は _x_ の正弦を返します。引数はラジアンで表されます。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の正弦を返す。引数はラジアンで表される。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
-          1. ℝ(_n_) の正弦を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.sinh" type="built-in function">
         <h1>Math.sinh ( _x_ )</h1>
-        <p>この関数は _x_ の双曲線正弦を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の双曲線正弦を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
-          1. ℝ(_n_) の双曲線正弦を表す実装近似の Number 値を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. ℝ(_n_) の双曲線正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.sinh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / 2` の値と同じです。</p>
+          <p>`Math.sinh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / 2` の値と同じである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.sqrt" type="built-in function">
         <h1>Math.sqrt ( _x_ )</h1>
-        <p>この関数は _x_ の平方根を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の平方根を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、*-0*<sub>𝔽</sub>、または *+∞*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
@@ -33974,8 +33975,8 @@
 
       <emu-clause id="sec-math.sumprecise" type="built-in function">
         <h1>Math.sumPrecise ( _items_ )</h1>
-        <p>Number の iterable が与えられた場合、この関数は iterable 内の各値を合計し、その合計を返します。いずれかの値が Number でない場合、*TypeError* 例外をスローします。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>Numbers の iterable を与えると、この関数は iterable 内の各値を合計し、その総和を返す。いずれかの値が Number でない場合、*TypeError* 例外を投げる。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. ? RequireObjectCoercible(_items_) を実行する。
           1. _iteratorRecord_ を ? GetIterator(_items_, ~sync~) とする。
@@ -33983,27 +33984,27 @@
           1. _sum_ を 0 とする。
           1. _count_ を 0 とする。
           1. _next_ を ~not-started~ とする。
-          1. _next_ が ~done~ でない間、次を繰り返す。
+          1. _next_ が ~done~ でない間、繰り返す。
             1. _next_ を ? IteratorStepValue(_iteratorRecord_) に設定する。
             1. _next_ が ~done~ でない場合、
               1. _count_ ≥ 2<sup>53</sup> - 1 である場合、
-                1. 注記: この手順は実際には到達しないことが予想されており、実装がこの仕様に違反することなく入力が「合理的な大きさ」であると仮定できるようにするためだけに含まれている。
-                1. _error_ を ThrowCompletion(新しく作成された *RangeError* オブジェクト) とする。
+                1. 注記: この手順は実際には到達しないことが想定されており、実装がこの仕様に違反することなく入力が「妥当な大きさ」であることに依存できるようにするためだけに含まれている。
+                1. _error_ を ThrowCompletion(新たに作成された *RangeError* オブジェクト) とする。
                 1. ? IteratorClose(_iteratorRecord_, _error_) を返す。
               1. _next_ が Number でない場合、
-                1. _error_ を ThrowCompletion(新しく作成された *TypeError* オブジェクト) とする。
+                1. _error_ を ThrowCompletion(新たに作成された *TypeError* オブジェクト) とする。
                 1. ? IteratorClose(_iteratorRecord_, _error_) を返す。
               1. _n_ を _next_ とする。
               1. _state_ が ~not-a-number~ でない場合、
                 1. _n_ が *NaN* である場合、
                   1. _state_ を ~not-a-number~ に設定する。
-                1. そうでなく、_n_ が *+∞*<sub>𝔽</sub> である場合、
+                1. それ以外で _n_ が *+∞*<sub>𝔽</sub> である場合、
                   1. _state_ が ~minus-infinity~ である場合、_state_ を ~not-a-number~ に設定する。
-                  1. そうでない場合、_state_ を ~plus-infinity~ に設定する。
-                1. そうでなく、_n_ が *-∞*<sub>𝔽</sub> である場合、
+                  1. それ以外の場合、_state_ を ~plus-infinity~ に設定する。
+                1. それ以外で _n_ が *-∞*<sub>𝔽</sub> である場合、
                   1. _state_ が ~plus-infinity~ である場合、_state_ を ~not-a-number~ に設定する。
-                  1. そうでない場合、_state_ を ~minus-infinity~ に設定する。
-                1. そうでなく、_n_ が *-0*<sub>𝔽</sub> でなく、_state_ が ~minus-zero~ または ~finite~ のいずれかである場合、
+                  1. それ以外の場合、_state_ を ~minus-infinity~ に設定する。
+                1. それ以外で _n_ が *-0*<sub>𝔽</sub> でなく、_state_ が ~minus-zero~ または ~finite~ のいずれかである場合、
                   1. _state_ を ~finite~ に設定する。
                   1. _sum_ を _sum_ + ℝ(_n_) に設定する。
               1. _count_ を _count_ + 1 に設定する。
@@ -34014,45 +34015,45 @@
           1. 𝔽(_sum_) を返す。
         </emu-alg>
         <emu-note>
-          <p>_sum_ の値は、さまざまなアルゴリズムによって任意精度算術を使用せずに計算できます。その1つは Jonathan Richard Shewchuk による <i>Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates</i> で示されている「Grow-Expansion」アルゴリズムです。より新しいアルゴリズムは「<a href="https://arxiv.org/abs/1505.05571">Fast exact summation using small and large superaccumulators</a>」で示されており、そのコードは <a href="https://gitlab.com/radfordneal/xsum">https://gitlab.com/radfordneal/xsum</a> で利用できます。</p>
+          <p>_sum_ の値は、さまざまなアルゴリズムによって任意精度算術を使用せずに計算できる。その一つが、Jonathan Richard Shewchuk による <i>適応精度浮動小数点算術と高速で堅牢な幾何学的述語</i> で示されている「Grow-Expansion」アルゴリズムである。より新しいアルゴリズムは「<a href="https://arxiv.org/abs/1505.05571">小型および大型スーパーアキュムレータを使用した高速な正確総和</a>」で示されており、そのコードは <a href="https://gitlab.com/radfordneal/xsum">https://gitlab.com/radfordneal/xsum</a> で入手できる。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.tan" type="built-in function">
         <h1>Math.tan ( _x_ )</h1>
-        <p>この関数は _x_ の正接を返します。引数はラジアンで表されます。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の正接を返す。引数はラジアンで表される。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
-          1. ℝ(_n_) の正接を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の正接を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-math.tanh" type="built-in function">
         <h1>Math.tanh ( _x_ )</h1>
-        <p>この関数は _x_ の双曲線正接を返します。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は _x_ の双曲線正接を返す。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
           1. _n_ が *NaN*、*+0*<sub>𝔽</sub>、または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ が *+∞*<sub>𝔽</sub> である場合、*1*<sub>𝔽</sub> を返す。
           1. _n_ が *-∞*<sub>𝔽</sub> である場合、*-1*<sub>𝔽</sub> を返す。
-          1. ℝ(_n_) の双曲線正接を表す実装近似の Number 値を返す。
+          1. ℝ(_n_) の双曲線正接を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.tanh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))` の値と同じです。</p>
+          <p>`Math.tanh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))` の値と同じである。</p>
         </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-math.trunc" type="built-in function">
         <h1>Math.trunc ( _x_ )</h1>
-        <p>この関数は数値 _x_ の整数部分を返し、小数桁をすべて取り除きます。_x_ がすでに整数である場合、結果は _x_ です。</p>
-        <p>呼び出されたとき、次の手順を実行します。</p>
+        <p>この関数は、小数部分を取り除いた数 _x_ の整数部分を返す。_x_ がすでに整数である場合、結果は _x_ である。</p>
+        <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限でないか、_n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
           1. _n_ &lt; *1*<sub>𝔽</sub> かつ _n_ > *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> かつ _n_ > *-1*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
           1. *+0*<sub>𝔽</sub> の方向で _n_ に最も近い整数 Number を返す。
@@ -34071,7 +34072,7 @@
       <emu-clause id="sec-time-values-and-time-range">
         <h1>時間値と時間範囲</h1>
         <p>ECMAScript における時間の測定は POSIX における時間の測定に類似しており、特に先発グレゴリオ暦、1970年1月1日 UTC の開始時の真夜中を<dfn id="epoch">エポック</dfn>とする定義、および各日を正確に 86,400 秒（各秒は 1000 ミリ秒）から構成されるものとして扱う点を共有しています。</p>
-        <p>ECMAScript の<dfn variants="time values">時間値</dfn>は Number であり、ミリ秒精度で時点を表す有限の整数 Number、または特定の時点を表さない *NaN* のいずれかです。MillisecondsPerDay の整数倍である時間値（すなわち、ある整数 _d_ について MillisecondsPerDay × _d_ である値）は、エポックから _d_ 日分の完全な UTC 日数だけ後に続く UTC 日の開始時点を表します（負の _d_ の場合はエポックより前）。それ以外の有限時間値 _tv_ は、そのような倍数である直前の最大の時間値 _s_ を基準として定義され、_s_ と同じ UTC 日内で、そこから (_tv_ - _s_) ミリ秒後に発生する時点を表します。</p>
+        <p>ECMAScript の<dfn variants="time values">時刻値</dfn>は Number であり、ミリ秒精度で時点を表す整数 Number（<dfn variants="finite time values">有限時刻値</dfn>と呼ばれる）、または特定の時点を表さない *NaN* のいずれかである。MillisecondsPerDay の整数倍（すなわち、ある整数 _d_ に対する MillisecondsPerDay × _d_）である有限時刻値は、エポックから _d_ 日の完全な UTC 日数だけ後（_d_ が負の場合はエポックより前）の UTC 日の開始時点を表す。その他の各有限時刻値 _tv_ は、そのような倍数である直前の最大の有限時刻値 _s_ を基準として定義され、_s_ と同じ UTC 日内にありながら、それより (_tv_ - _s_) ミリ秒後に発生する時点を表す。</p>
         <p>時間値は UTC のうるう秒を考慮しません。正のうるう秒内の時点を表す時間値は存在せず、負のうるう秒によって UTC タイムラインから除去された時点を表す時間値は存在します。ただし、時間値の定義はそれでも UTC との区分的な整合をもたらし、不連続はうるう秒の境界でのみ発生し、うるう秒の外では差はゼロです。</p>
         <p>Number は -9,007,199,254,740,992 から 9,007,199,254,740,992 までのすべての整数を正確に表現できます（<emu-xref href="#sec-number.min_safe_integer"></emu-xref> および <emu-xref href="#sec-number.max_safe_integer"></emu-xref>）。時間値は、それよりわずかに小さい -8,640,000,000,000,000 から 8,640,000,000,000,000 ミリ秒の範囲をサポートします。これにより、1970年1月1日 UTC の開始時の真夜中を基準として、正確に -100,000,000 日から 100,000,000 日までの時間値範囲がサポートされます。</p>
         <p>1970年1月1日 UTC の開始時の真夜中の正確な瞬間は、時間値 *+0*<sub>𝔽</sub> で表されます。</p>
@@ -34597,7 +34598,7 @@
           </dd>
         </dl>
         <emu-alg>
-          1. _t_ が有限でない場合、*NaN* を返す。
+          1. _t_ が有限 Number でない場合、*NaN* を返す。
           1. _systemTimeZoneIdentifier_ を SystemTimeZoneIdentifier() とする。
           1. IsTimeZoneOffsetString(_systemTimeZoneIdentifier_) が *true* である場合、
             1. _offsetNanoseconds_ を ParseTimeZoneOffsetString(_systemTimeZoneIdentifier_) とする。
@@ -34651,7 +34652,7 @@
           <dd>ミリ秒数を計算します。</dd>
         </dl>
         <emu-alg>
-          1. _hour_ が有限でないか、_minute_ が有限でないか、_second_ が有限でないか、または _millisecond_ が有限でない場合、*NaN* を返す。
+          1. _hour_ が有限 Number でない、_minute_ が有限 Number でない、_second_ が有限 Number でない、または _millisecond_ が有限 Number でない場合、*NaN* を返す。
           1. _hourMV_ を ! ToIntegerOrInfinity(_hour_) とする。
           1. _minuteMV_ を ! ToIntegerOrInfinity(_minute_) とする。
           1. _secondMV_ を ! ToIntegerOrInfinity(_second_) とする。
@@ -34676,14 +34677,14 @@
           <dd>日数を計算します。</dd>
         </dl>
         <emu-alg>
-          1. _year_ が有限でないか、_month_ が有限でないか、または _day_ が有限でない場合、*NaN* を返す。
+          1. _year_ が有限 Number でない、_month_ が有限 Number でない、または _day_ が有限 Number でない場合、*NaN* を返す。
           1. _yearMV_ を ! ToIntegerOrInfinity(_year_) とする。
           1. _monthMV_ を ! ToIntegerOrInfinity(_month_) とする。
           1. _dayMV_ を ! ToIntegerOrInfinity(_day_) とする。
           1. _balancedYear_ を 𝔽(_yearMV_) + 𝔽(floor(_monthMV_ / 12)) とする。
-          1. _balancedYear_ が有限でない場合、*NaN* を返す。
+          1. _balancedYear_ が有限 Number でない場合、*NaN* を返す。
           1. _balancedMonthMV_ を _monthMV_ modulo 12 とする。
-          1. YearFromTime(_tv_) = ℝ(_balancedYear_)、MonthFromTime(_tv_) = _balancedMonthMV_、かつ DateFromTime(_tv_) = 1 を満たす有限時間値 _tv_ を見つける。ただし、これが不可能である場合（いずれかの引数が範囲外であるため）、*NaN* を返す。
+          1. YearFromTime(_tv_) = ℝ(_balancedYear_)、MonthFromTime(_tv_) = _balancedMonthMV_、かつ DateFromTime(_tv_) = 1 を満たす有限の時刻値 _tv_ を見つける。ただし、これが不可能な場合（いずれかの引数が範囲外であるため）、*NaN* を返す。
           1. 𝔽(Day(_tv_)) + 𝔽(_dayMV_) - *1*<sub>𝔽</sub> を返す。
         </emu-alg>
       </emu-clause>
@@ -34700,9 +34701,9 @@
           <dd>ミリ秒数を計算します。</dd>
         </dl>
         <emu-alg>
-          1. _day_ が有限でないか、_time_ が有限でない場合、*NaN* を返す。
+          1. _day_ が有限 Number でない、または _time_ が有限 Number でない場合、*NaN* を返す。
           1. _tv_ を _day_ × 𝔽(MillisecondsPerDay) + _time_ とする。
-          1. _tv_ が有限でない場合、*NaN* を返す。
+          1. _tv_ が有限 Number でない場合、*NaN* を返す。
           1. _tv_ を返す。
         </emu-alg>
       </emu-clause>
@@ -34736,7 +34737,7 @@
           <dd>ミリ秒数を計算します。</dd>
         </dl>
         <emu-alg>
-          1. _time_ が有限でない場合、*NaN* を返す。
+          1. _time_ が有限 Number でない場合、*NaN* を返す。
           1. abs(ℝ(_time_)) > 8.64 × 10<sup>15</sup> である場合、*NaN* を返す。
           1. 𝔽(! ToIntegerOrInfinity(_time_)) を返す。
         </emu-alg>
@@ -35718,7 +35719,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _obj_ を ? ToObject(*this* 値) とする。
           1. _tv_ を ? ToPrimitive(_obj_, ~number~) とする。
-          1. _tv_ が Number であり、_tv_ が有限でない場合、*null* を返す。
+          1. _tv_ が Number であり、かつ _tv_ が有限 Number でない場合、*null* を返す。
           1. ? Invoke(_obj_, *"toISOString"*) を返す。
         </emu-alg>
         <emu-note>
@@ -48229,7 +48230,7 @@ THH:mm:ss.sss
         <p>String 値は QUOTATION MARK (`"`) コード単位で囲まれます。コード単位 `"` および `\\` は `\\` 接頭辞によってエスケープされます。制御文字のコード単位はエスケープシーケンス `\\u`HHHH、または短縮形 `\\b` (BACKSPACE)、`\\f` (FORM FEED)、`\\n` (LINE FEED)、`\\r` (CARRIAGE RETURN)、`\\t` (CHARACTER TABULATION) に置き換えられます。</p>
       </emu-note>
       <emu-note>
-        <p>有限の数値は ToString(_number_) を呼び出したかのように文字列化されます。符号に関係なく *NaN* および *Infinity* は String 値 *"null"* として表現されます。</p>
+        <p>各有限 Number は、ToString(_number_) を呼び出した場合と同様に文字列化される。*NaN*、*+∞*<sub>𝔽</sub>、および *-∞*<sub>𝔽</sub> は、String 値 *"null"* として表される。</p>
       </emu-note>
       <emu-note>
         <p>JSON 表現を持たない値（*undefined* や関数など）は String を生成しません。代わりに *undefined* 値を生成します。配列ではこれらの値は String 値 *"null"* として表現されます。オブジェクトでは、表現できない値を持つプロパティは文字列化から除外されます。</p>
@@ -48305,21 +48306,21 @@ THH:mm:ss.sss
               1. _rawJSON_ を返す。
             1. _value_ が [[NumberData]] 内部スロットを持つ場合、
               1. _value_ を ? ToNumber(_value_) に設定する。
-            1. そうでなく、_value_ が [[StringData]] 内部スロットを持つ場合、
+            1. それ以外で _value_ が [[StringData]] 内部スロットを持つ場合、
               1. _value_ を ? ToString(_value_) に設定する。
-            1. そうでなく、_value_ が [[BooleanData]] 内部スロットを持つ場合、
+            1. それ以外で _value_ が [[BooleanData]] 内部スロットを持つ場合、
               1. _value_ を _value_.[[BooleanData]] に設定する。
-            1. そうでなく、_value_ が [[BigIntData]] 内部スロットを持つ場合、
+            1. それ以外で _value_ が [[BigIntData]] 内部スロットを持つ場合、
               1. _value_ を _value_.[[BigIntData]] に設定する。
           1. _value_ が *null* である場合、*"null"* を返す。
           1. _value_ が *true* である場合、*"true"* を返す。
           1. _value_ が *false* である場合、*"false"* を返す。
           1. _value_ が String である場合、QuoteJSONString(_value_) を返す。
           1. _value_ が Number である場合、
-            1. _value_ が有限である場合、! ToString(_value_) を返す。
+            1. _value_ が有限 Number である場合、! ToString(_value_) を返す。
             1. *"null"* を返す。
-          1. _value_ が BigInt である場合、*TypeError* 例外をスローする。
-          1. _value_ が Object かつ IsCallable(_value_) が *false* である場合、
+          1. _value_ が BigInt である場合、*TypeError* 例外を投げる。
+          1. _value_ が Object であり、IsCallable(_value_) が *false* である場合、
             1. _isArray_ を ? IsArray(_value_) とする。
             1. _isArray_ が *true* である場合、
               1. ? SerializeJSONArray(_state_, _value_) を返す。
