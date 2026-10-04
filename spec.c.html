@@ -49554,6 +49554,36 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype.join" type="built-in function">
+          <h1>Iterator.prototype.join ( _separator_ )</h1>
+          <p>此方法将迭代器的值转换为字符串，然后连接这些字符串，并在它们之间插入 _separator_。如果未提供分隔符，则使用单个逗号作为分隔符。</p>
+          <p>调用时，它执行以下步骤：</p>
+          <emu-alg>
+            1. 令 _obj_ 为 *this* 值。
+            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为迭代器记录 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 _separator_ 为 *undefined*，则
+              1. 令 _separatorString_ 为 *","*。
+            1. 否则，
+              1. 令 _separatorString_ 为 Completion(ToString(_separator_))。
+              1. IfAbruptCloseIterator(_separatorString_, _iterated_)。
+            1. 将 _iterated_ 设置为 ? GetIteratorDirect(_obj_)。
+            1. 令 _result_ 为空字符串。
+            1. 令 _first_ 为 *true*。
+            1. 重复，
+              1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
+              1. 如果 _value_ 为 ~done~，返回 _result_。
+              1. 如果 _first_ 为 *true*，则
+                1. 将 _first_ 设置为 *false*。
+              1. 否则，
+                1. 将 _result_ 设置为 _result_ 和 _separatorString_ 的字符串连接结果。
+              1. 如果 _value_ 既不是 *undefined* 也不是 *null*，则
+                1. 令 _valueString_ 为 Completion(ToString(_value_))。
+                1. IfAbruptCloseIterator(_valueString_, _iterated_)。
+                1. 将 _result_ 设置为 _result_ 和 _valueString_ 的字符串连接结果。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.map" type="built-in function">
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
           <p>调用时，此方法执行以下步骤：</p>

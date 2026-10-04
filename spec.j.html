@@ -49549,6 +49549,36 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype.join" type="built-in function">
+          <h1>Iterator.prototype.join ( _separator_ )</h1>
+          <p>このメソッドはイテレータの値を String に変換し、_separator_ の出現によって区切られたこれらの String を連結する。区切り文字が指定されていない場合、単一のコンマが区切り文字として使用される。</p>
+          <p>呼び出されたとき、次の手順を実行する:</p>
+          <emu-alg>
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _separator_ が *undefined* の場合、
+              1. _separatorString_ を *","* とする。
+            1. そうでない場合、
+              1. _separatorString_ を Completion(ToString(_separator_)) とする。
+              1. IfAbruptCloseIterator(_separatorString_, _iterated_)。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. _result_ を空の String とする。
+            1. _first_ を *true* とする。
+            1. 以下を繰り返す、
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ の場合、_result_ を返す。
+              1. _first_ が *true* の場合、
+                1. _first_ を *false* に設定する。
+              1. そうでない場合、
+                1. _result_ を _result_ と _separatorString_ の文字列連結に設定する。
+              1. _value_ が *undefined* でも *null* でもない場合、
+                1. _valueString_ を Completion(ToString(_value_)) とする。
+                1. IfAbruptCloseIterator(_valueString_, _iterated_)。
+                1. _result_ を _result_ と _valueString_ の文字列連結に設定する。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.map" type="built-in function">
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
           <p>このメソッドは呼び出されたとき、次の手順を実行します。</p>

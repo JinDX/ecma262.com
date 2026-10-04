@@ -49551,6 +49551,36 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype.join" type="built-in function">
+          <h1>Iterator.prototype.join ( _separator_ )</h1>
+          <p>이 메서드는 반복자의 값을 String으로 변환한 다음, _separator_가 나타나는 부분으로 구분하여 이 String들을 연결합니다. 구분자가 제공되지 않으면 단일 쉼표가 구분자로 사용됩니다.</p>
+          <p>호출되면 다음 단계를 수행합니다:</p>
+          <emu-alg>
+            1. _obj_를 *this* 값으로 둔다.
+            1. _obj_가 Object가 아니면 *TypeError* 예외를 던진다.
+            1. _iterated_를 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둔다.
+            1. _separator_가 *undefined*이면,
+              1. _separatorString_을 *","*로 둔다.
+            1. 그렇지 않으면,
+              1. _separatorString_을 Completion(ToString(_separator_))으로 둔다.
+              1. IfAbruptCloseIterator(_separatorString_, _iterated_).
+            1. _iterated_를 ? GetIteratorDirect(_obj_)로 설정한다.
+            1. _result_를 빈 String으로 둔다.
+            1. _first_를 *true*로 둔다.
+            1. 반복한다,
+              1. _value_를 ? IteratorStepValue(_iterated_)로 둔다.
+              1. _value_가 ~done~이면 _result_를 반환한다.
+              1. _first_가 *true*이면,
+                1. _first_를 *false*로 설정한다.
+              1. 그렇지 않으면,
+                1. _result_를 _result_와 _separatorString_의 string-concatenation으로 설정한다.
+              1. _value_가 *undefined*도 *null*도 아니면,
+                1. _valueString_을 Completion(ToString(_value_))으로 둔다.
+                1. IfAbruptCloseIterator(_valueString_, _iterated_).
+                1. _result_를 _result_와 _valueString_의 string-concatenation으로 설정한다.
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.map" type="built-in function">
           <h1>Iterator.prototype.map ( _mapper_ )</h1>
           <p>이 메서드는 호출되면 다음 단계를 수행합니다:</p>
