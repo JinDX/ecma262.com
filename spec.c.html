@@ -882,21 +882,14 @@
         <h1>one of</h1>
         <p>当文法定义中的冒号后出现“<b>one of</b>”字样时，表示后续一行或多行中的每个终结符都是一个可选定义。例如，ECMAScript 的词法文法包含以下产生式：</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit :: one of
-            `1` `2` `3` `4` `5` `6` `7` `8` `9`
+          BinaryDigit :: one of
+            `0` `1`
         </emu-grammar>
         <p>它只是以下形式的便捷简写：</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit ::
+          BinaryDigit ::
+            `0`
             `1`
-            `2`
-            `3`
-            `4`
-            `5`
-            `6`
-            `7`
-            `8`
-            `9`
         </emu-grammar>
       </emu-clause>
 
@@ -17423,7 +17416,7 @@
       </emu-grammar>
     </emu-clause>
 
-    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals">
+    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals,prod-LegacyOctalLikeDecimalIntegerLiteral">
       <h1>数值字面量</h1>
       <h2>语法</h2>
       <emu-grammar type="definition">
@@ -17456,8 +17449,7 @@
           DecimalIntegerLiteral ExponentPart[+Sep]?
 
         DecimalIntegerLiteral ::
-          `0`
-          NonZeroDigit
+          DecimalDigit
           NonZeroDigit NumericLiteralSeparator? DecimalDigits[+Sep]
           NonOctalDecimalIntegerLiteral
 
@@ -17509,13 +17501,12 @@
           LegacyOctalIntegerLiteral OctalDigit
 
         NonOctalDecimalIntegerLiteral ::
-          `0` NonOctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit
+          `0` LegacyOctalLikeDecimalDigits? NonOctalDigit
           NonOctalDecimalIntegerLiteral DecimalDigit
 
-        LegacyOctalLikeDecimalIntegerLiteral ::
-          `0` OctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral OctalDigit
+        LegacyOctalLikeDecimalDigits ::
+          OctalDigit
+          LegacyOctalLikeDecimalDigits OctalDigit
 
         OctalDigit :: one of
           `0` `1` `2` `3` `4` `5` `6` `7`
@@ -17557,21 +17548,22 @@
       <emu-clause id="sec-static-semantics-mv" oldids="sec-additional-syntax-numeric-literals-status-semantics">
         <h1>Static Semantics: MV</h1>
         <p>数值字面量表示 Number 类型或 BigInt 类型的值。</p>
+
         <ul>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar> 的 MV 是 |DecimalIntegerLiteral| 的 MV 加上（|DecimalDigits| 的 MV × 10<sup>-_n_</sup>），其中 _n_ 是 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar> 的 MV 是 |DecimalIntegerLiteral| 的 MV +（|DecimalDigits| 的 MV × 10<sup>-_n_</sup>），其中 _n_ 是 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|。
           </li>
           <li>
             <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` ExponentPart</emu-grammar> 的 MV 是 |DecimalIntegerLiteral| 的 MV × 10<sup>_e_</sup>，其中 _e_ 是 |ExponentPart| 的 MV。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar> 的 MV 是（|DecimalIntegerLiteral| 的 MV 加上（|DecimalDigits| 的 MV × 10<sup>-_n_</sup>））× 10<sup>_e_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现，而 _e_ 是 |ExponentPart| 的 MV。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar> 的 MV 是（|DecimalIntegerLiteral| 的 MV +（|DecimalDigits| 的 MV × 10<sup>-_n_</sup>））× 10<sup>_e_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|，而 _e_ 是 |ExponentPart| 的 MV。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV × 10<sup>-_n_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现。
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV × 10<sup>-_n_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV × 10<sup>_e_ - _n_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现，而 _e_ 是 |ExponentPart| 的 MV。
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV × 10<sup>_e_ - _n_</sup>，其中 _n_ 是 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|，而 _e_ 是 |ExponentPart| 的 MV。
           </li>
           <li>
             <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral ExponentPart</emu-grammar> 的 MV 是 |DecimalIntegerLiteral| 的 MV × 10<sup>_e_</sup>，其中 _e_ 是 |ExponentPart| 的 MV。
@@ -17580,49 +17572,49 @@
             <emu-grammar>DecimalIntegerLiteral :: `0`</emu-grammar> 的 MV 是 0。
           </li>
           <li>
-            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar> 的 MV 是（|NonZeroDigit| 的 MV × 10<sup>_n_</sup>）加上 |DecimalDigits| 的 MV，其中 _n_ 是 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现。
+            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar> 的 MV 是（|NonZeroDigit| 的 MV × 10<sup>_n_</sup>）+ |DecimalDigits| 的 MV，其中 _n_ 是 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|。
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar> 的 MV 是（|DecimalDigits| 的 MV × 10）加上 |DecimalDigit| 的 MV。
+            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar> 的 MV 是（|DecimalDigits| 的 MV × 10）+ |DecimalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar> 的 MV 是（|DecimalDigits| 的 MV × 10）加上 |DecimalDigit| 的 MV。
+            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar> 的 MV 是（|DecimalDigits| 的 MV × 10）+ |DecimalDigit| 的 MV。
           </li>
           <li>
             <emu-grammar>ExponentPart :: ExponentIndicator SignedInteger</emu-grammar> 的 MV 是 |SignedInteger| 的 MV。
           </li>
           <li>
-            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV 的负值。
+            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar> 的 MV 是 |DecimalDigits| 的 MV 的相反数。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `0`</emu-grammar>、<emu-grammar>HexDigit :: `0`</emu-grammar>、<emu-grammar>OctalDigit :: `0`</emu-grammar>、<emu-grammar>LegacyOctalEscapeSequence :: `0`</emu-grammar> 或 <emu-grammar>BinaryDigit :: `0`</emu-grammar> 的 MV 是 0。
+            <emu-grammar>DecimalDigit :: `0`</emu-grammar> 或 <emu-grammar>HexDigit :: `0`</emu-grammar> 或 <emu-grammar>OctalDigit :: `0`</emu-grammar> 或 <emu-grammar>LegacyOctalEscapeSequence :: `0`</emu-grammar> 或 <emu-grammar>BinaryDigit :: `0`</emu-grammar> 的 MV 是 0。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `1`</emu-grammar>、<emu-grammar>NonZeroDigit :: `1`</emu-grammar>、<emu-grammar>HexDigit :: `1`</emu-grammar>、<emu-grammar>OctalDigit :: `1`</emu-grammar> 或 <emu-grammar>BinaryDigit :: `1`</emu-grammar> 的 MV 是 1。
+            <emu-grammar>DecimalDigit :: `1`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `1`</emu-grammar> 或 <emu-grammar>HexDigit :: `1`</emu-grammar> 或 <emu-grammar>OctalDigit :: `1`</emu-grammar> 或 <emu-grammar>BinaryDigit :: `1`</emu-grammar> 的 MV 是 1。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `2`</emu-grammar>、<emu-grammar>NonZeroDigit :: `2`</emu-grammar>、<emu-grammar>HexDigit :: `2`</emu-grammar> 或 <emu-grammar>OctalDigit :: `2`</emu-grammar> 的 MV 是 2。
+            <emu-grammar>DecimalDigit :: `2`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `2`</emu-grammar> 或 <emu-grammar>HexDigit :: `2`</emu-grammar> 或 <emu-grammar>OctalDigit :: `2`</emu-grammar> 的 MV 是 2。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `3`</emu-grammar>、<emu-grammar>NonZeroDigit :: `3`</emu-grammar>、<emu-grammar>HexDigit :: `3`</emu-grammar> 或 <emu-grammar>OctalDigit :: `3`</emu-grammar> 的 MV 是 3。
+            <emu-grammar>DecimalDigit :: `3`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `3`</emu-grammar> 或 <emu-grammar>HexDigit :: `3`</emu-grammar> 或 <emu-grammar>OctalDigit :: `3`</emu-grammar> 的 MV 是 3。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `4`</emu-grammar>、<emu-grammar>NonZeroDigit :: `4`</emu-grammar>、<emu-grammar>HexDigit :: `4`</emu-grammar> 或 <emu-grammar>OctalDigit :: `4`</emu-grammar> 的 MV 是 4。
+            <emu-grammar>DecimalDigit :: `4`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `4`</emu-grammar> 或 <emu-grammar>HexDigit :: `4`</emu-grammar> 或 <emu-grammar>OctalDigit :: `4`</emu-grammar> 的 MV 是 4。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `5`</emu-grammar>、<emu-grammar>NonZeroDigit :: `5`</emu-grammar>、<emu-grammar>HexDigit :: `5`</emu-grammar> 或 <emu-grammar>OctalDigit :: `5`</emu-grammar> 的 MV 是 5。
+            <emu-grammar>DecimalDigit :: `5`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `5`</emu-grammar> 或 <emu-grammar>HexDigit :: `5`</emu-grammar> 或 <emu-grammar>OctalDigit :: `5`</emu-grammar> 的 MV 是 5。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `6`</emu-grammar>、<emu-grammar>NonZeroDigit :: `6`</emu-grammar>、<emu-grammar>HexDigit :: `6`</emu-grammar> 或 <emu-grammar>OctalDigit :: `6`</emu-grammar> 的 MV 是 6。
+            <emu-grammar>DecimalDigit :: `6`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `6`</emu-grammar> 或 <emu-grammar>HexDigit :: `6`</emu-grammar> 或 <emu-grammar>OctalDigit :: `6`</emu-grammar> 的 MV 是 6。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `7`</emu-grammar>、<emu-grammar>NonZeroDigit :: `7`</emu-grammar>、<emu-grammar>HexDigit :: `7`</emu-grammar> 或 <emu-grammar>OctalDigit :: `7`</emu-grammar> 的 MV 是 7。
+            <emu-grammar>DecimalDigit :: `7`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `7`</emu-grammar> 或 <emu-grammar>HexDigit :: `7`</emu-grammar> 或 <emu-grammar>OctalDigit :: `7`</emu-grammar> 的 MV 是 7。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `8`</emu-grammar>、<emu-grammar>NonZeroDigit :: `8`</emu-grammar>、<emu-grammar>NonOctalDigit :: `8`</emu-grammar> 或 <emu-grammar>HexDigit :: `8`</emu-grammar> 的 MV 是 8。
+            <emu-grammar>DecimalDigit :: `8`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `8`</emu-grammar> 或 <emu-grammar>NonOctalDigit :: `8`</emu-grammar> 或 <emu-grammar>HexDigit :: `8`</emu-grammar> 的 MV 是 8。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `9`</emu-grammar>、<emu-grammar>NonZeroDigit :: `9`</emu-grammar>、<emu-grammar>NonOctalDigit :: `9`</emu-grammar> 或 <emu-grammar>HexDigit :: `9`</emu-grammar> 的 MV 是 9。
+            <emu-grammar>DecimalDigit :: `9`</emu-grammar> 或 <emu-grammar>NonZeroDigit :: `9`</emu-grammar> 或 <emu-grammar>NonOctalDigit :: `9`</emu-grammar> 或 <emu-grammar>HexDigit :: `9`</emu-grammar> 的 MV 是 9。
           </li>
           <li>
             <emu-grammar>HexDigit :: `a`</emu-grammar> 或 <emu-grammar>HexDigit :: `A`</emu-grammar> 的 MV 是 10。
@@ -17643,34 +17635,34 @@
             <emu-grammar>HexDigit :: `f`</emu-grammar> 或 <emu-grammar>HexDigit :: `F`</emu-grammar> 的 MV 是 15。
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar> 的 MV 是（|BinaryDigits| 的 MV × 2）加上 |BinaryDigit| 的 MV。
+            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar> 的 MV 是（|BinaryDigits| 的 MV × 2）+ |BinaryDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar> 的 MV 是（|BinaryDigits| 的 MV × 2）加上 |BinaryDigit| 的 MV。
+            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar> 的 MV 是（|BinaryDigits| 的 MV × 2）+ |BinaryDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar> 的 MV 是（|OctalDigits| 的 MV × 8）加上 |OctalDigit| 的 MV。
+            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar> 的 MV 是（|OctalDigits| 的 MV × 8）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar> 的 MV 是（|OctalDigits| 的 MV × 8）加上 |OctalDigit| 的 MV。
+            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar> 的 MV 是（|OctalDigits| 的 MV × 8）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar> 的 MV 是（|LegacyOctalIntegerLiteral| 的 MV 乘以 8）加上 |OctalDigit| 的 MV。
+            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar> 的 MV 是（|LegacyOctalIntegerLiteral| 的 MV × 8）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit</emu-grammar> 的 MV 是（|LegacyOctalLikeDecimalIntegerLiteral| 的 MV 乘以 10）加上 |NonOctalDigit| 的 MV。
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: `0` LegacyOctalLikeDecimalDigits NonOctalDigit</emu-grammar> 的 MV 是（|LegacyOctalLikeDecimalDigits| 的 MV × 10）+ |NonOctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar> 的 MV 是（|NonOctalDecimalIntegerLiteral| 的 MV 乘以 10）加上 |DecimalDigit| 的 MV。
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar> 的 MV 是（|NonOctalDecimalIntegerLiteral| 的 MV × 10）+ |DecimalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>LegacyOctalLikeDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral OctalDigit</emu-grammar> 的 MV 是（|LegacyOctalLikeDecimalIntegerLiteral| 的 MV 乘以 10）加上 |OctalDigit| 的 MV。
+            <emu-grammar>LegacyOctalLikeDecimalDigits :: LegacyOctalLikeDecimalDigits OctalDigit</emu-grammar> 的 MV 是（|LegacyOctalLikeDecimalDigits| 的 MV × 10）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar> 的 MV 是（|HexDigits| 的 MV × 16）加上 |HexDigit| 的 MV。
+            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar> 的 MV 是（|HexDigits| 的 MV × 16）+ |HexDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar> 的 MV 是（|HexDigits| 的 MV × 16）加上 |HexDigit| 的 MV。
+            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar> 的 MV 是（|HexDigits| 的 MV × 16）+ |HexDigit| 的 MV。
           </li>
         </ul>
       </emu-clause>
@@ -17709,8 +17701,8 @@
             NonZeroDigit NumericLiteralSeparator DecimalDigits BigIntLiteralSuffix
         </emu-grammar>
         <emu-alg>
-          1. 令 _n_ 为 |DecimalDigits| 中的码点数，不包括所有 |NumericLiteralSeparator| 的出现。
-          1. 令 _mv_ 为（|NonZeroDigit| 的 MV × 10<sup>_n_</sup>）加上 |DecimalDigits| 的 MV。
+          1. 令 _n_ 为 |DecimalDigits| 中的码点数量，不包括所有出现的 |NumericLiteralSeparator|。
+          1. 令 _mv_ 为（|NonZeroDigit| 的 MV × 10<sup>_n_</sup>）+ |DecimalDigits| 的 MV。
           1. 返回 ℤ(_mv_)。
         </emu-alg>
       </emu-clause>
@@ -18055,15 +18047,16 @@
 
       <emu-clause id="sec-string-literals-static-semantics-mv">
         <h1>Static Semantics: MV</h1>
+
         <ul>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar> 的 MV 是（8 乘以 |ZeroToThree| 的 MV）加上 |OctalDigit| 的 MV。
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar> 的 MV 是（|ZeroToThree| 的 MV × 8）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar> 的 MV 是（8 乘以 |FourToSeven| 的 MV）加上 |OctalDigit| 的 MV。
+            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar> 的 MV 是（|FourToSeven| 的 MV × 8）+ |OctalDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar> 的 MV 是（64（即 8<sup>2</sup>）乘以 |ZeroToThree| 的 MV）加上（8 乘以第一个 |OctalDigit| 的 MV）再加上第二个 |OctalDigit| 的 MV。
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar> 的 MV 是（|ZeroToThree| 的 MV × 64）+（第一个 |OctalDigit| 的 MV × 8）+ 第二个 |OctalDigit| 的 MV。
           </li>
           <li>
             <emu-grammar>ZeroToThree :: `0`</emu-grammar> 的 MV 是 0。
@@ -18090,10 +18083,10 @@
             <emu-grammar>FourToSeven :: `7`</emu-grammar> 的 MV 是 7。
           </li>
           <li>
-            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar> 的 MV 是（16 乘以第一个 |HexDigit| 的 MV）加上第二个 |HexDigit| 的 MV。
+            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar> 的 MV 是（第一个 |HexDigit| 的 MV × 16）+ 第二个 |HexDigit| 的 MV。
           </li>
           <li>
-            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar> 的 MV 是（0x1000 × 第一个 |HexDigit| 的 MV）加上（0x100 × 第二个 |HexDigit| 的 MV）加上（0x10 × 第三个 |HexDigit| 的 MV）再加上第四个 |HexDigit| 的 MV。
+            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar> 的 MV 是（0x1000 × 第一个 |HexDigit| 的 MV）+（0x100 × 第二个 |HexDigit| 的 MV）+（0x10 × 第三个 |HexDigit| 的 MV）+ 第四个 |HexDigit| 的 MV。
           </li>
         </ul>
       </emu-clause>
@@ -47218,10 +47211,12 @@ THH:mm:ss.sss
           <dd>此操作在 Atomics 方法中完成所有参数强制转换之后，重新验证原子操作在后备缓冲区中的索引，因为参数强制转换可能具有任意副作用，从而可能导致缓冲区越界。当 _ta_ 的后备缓冲区是 SharedArrayBuffer 时，此操作不会抛出异常。</dd>
         </dl>
         <emu-alg>
-          1. 注：当 _ta_ 的后备缓冲区是可增长 SharedArrayBuffer 时，边界检查不是同步操作。
+          1. 注意：当 _ta_ 的后备缓冲区是可增长的 SharedArrayBuffer 时，边界检查不是同步操作。
           1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_ta_, ~unordered~)。
           1. 断言：_byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]。
-          1. 如果 _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]，则抛出 *RangeError* 异常。
+          1. 令 _elementSize_ 为 TypedArrayElementSize(_ta_)。
+          1. 令 _elementLastByteIndex_ 为 _byteIndexInBuffer_ + _elementSize_ - 1。
+          1. 如果 _elementLastByteIndex_ ≥ _taRecord_.[[CachedBufferByteLength]]，则抛出 *RangeError* 异常。
           1. 返回 ~unused~。
         </emu-alg>
       </emu-clause>
@@ -47728,12 +47723,12 @@ THH:mm:ss.sss
           1. 令 _intCount_ 为 ? ToIntegerOrInfinity(_count_)。
           1. 将 _count_ 设置为 max(_intCount_, 0)。
         1. 令 _buffer_ 为 _ta_.[[ViewedArrayBuffer]]。
-        1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
         1. 如果 IsSharedArrayBuffer(_buffer_) 是 *false*，则返回 *+0*<sub>𝔽</sub>。
+        1. 令 _block_ 为 _buffer_.[[ArrayBufferData]]。
         1. 令 _waiterList_ 为 GetWaiterList(_block_, _byteIndexInBuffer_)。
         1. 执行 EnterCriticalSection(_waiterList_)。
         1. 令 _waiters_ 为 RemoveWaiters(_waiterList_, _count_)。
-        1. 对 _waiters_ 的每个元素 _waiterRecord_，执行
+        1. 对于 _waiters_ 中的每个元素 _waiterRecord_，执行
           1. 执行 NotifyWaiter(_waiterList_, _waiterRecord_)。
         1. 执行 LeaveCriticalSection(_waiterList_)。
         1. 令 _waitersCount_ 为 _waiters_ 中的元素数量。
@@ -53595,7 +53590,7 @@ THH:mm:ss.sss
     <emu-prodref name="OctalDigits"></emu-prodref>
     <emu-prodref name="LegacyOctalIntegerLiteral"></emu-prodref>
     <emu-prodref name="NonOctalDecimalIntegerLiteral"></emu-prodref>
-    <emu-prodref name="LegacyOctalLikeDecimalIntegerLiteral"></emu-prodref>
+    <emu-prodref name="LegacyOctalLikeDecimalDigits"></emu-prodref>
     <emu-prodref name="OctalDigit"></emu-prodref>
     <emu-prodref name="NonOctalDigit"></emu-prodref>
     <emu-prodref name="HexIntegerLiteral"></emu-prodref>

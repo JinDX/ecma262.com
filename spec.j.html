@@ -882,21 +882,14 @@
         <h1>one of</h1>
         <p>文法定義において、コロンの後に“<b>one of</b>”という語が続く場合、それは、次の行または複数の行にある各終端記号が、それぞれ定義の選択肢であることを示します。たとえば、ECMAScript の字句文法には、次の生成規則が含まれます。</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit :: one of
-            `1` `2` `3` `4` `5` `6` `7` `8` `9`
+          BinaryDigit :: one of
+            `0` `1`
         </emu-grammar>
         <p>これは、次の便利な省略表記にすぎません。</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit ::
+          BinaryDigit ::
+            `0`
             `1`
-            `2`
-            `3`
-            `4`
-            `5`
-            `6`
-            `7`
-            `8`
-            `9`
         </emu-grammar>
       </emu-clause>
 
@@ -17423,7 +17416,7 @@
       </emu-grammar>
     </emu-clause>
 
-    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals">
+    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals,prod-LegacyOctalLikeDecimalIntegerLiteral">
       <h1>数値リテラル</h1>
       <h2>構文</h2>
       <emu-grammar type="definition">
@@ -17456,8 +17449,7 @@
           DecimalIntegerLiteral ExponentPart[+Sep]?
 
         DecimalIntegerLiteral ::
-          `0`
-          NonZeroDigit
+          DecimalDigit
           NonZeroDigit NumericLiteralSeparator? DecimalDigits[+Sep]
           NonOctalDecimalIntegerLiteral
 
@@ -17509,13 +17501,12 @@
           LegacyOctalIntegerLiteral OctalDigit
 
         NonOctalDecimalIntegerLiteral ::
-          `0` NonOctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit
+          `0` LegacyOctalLikeDecimalDigits? NonOctalDigit
           NonOctalDecimalIntegerLiteral DecimalDigit
 
-        LegacyOctalLikeDecimalIntegerLiteral ::
-          `0` OctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral OctalDigit
+        LegacyOctalLikeDecimalDigits ::
+          OctalDigit
+          LegacyOctalLikeDecimalDigits OctalDigit
 
         OctalDigit :: one of
           `0` `1` `2` `3` `4` `5` `6` `7`
@@ -17559,118 +17550,118 @@
         <p>数値リテラルは Number 型または BigInt 型の値を表します。</p>
         <ul>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar> の MV は、|DecimalIntegerLiteral| の MV に（|DecimalDigits| の MV × 10<sup>-_n_</sup>）を加えた値です。ここで _n_ は、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数です。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar> の MV は |DecimalIntegerLiteral| の MV + (|DecimalDigits| の MV × 10<sup>-_n_</sup>) であり、ここで _n_ は |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数である。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` ExponentPart</emu-grammar> の MV は、|DecimalIntegerLiteral| の MV × 10<sup>_e_</sup> です。ここで _e_ は |ExponentPart| の MV です。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` ExponentPart</emu-grammar> の MV は |DecimalIntegerLiteral| の MV × 10<sup>_e_</sup> であり、ここで _e_ は |ExponentPart| の MV である。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar> の MV は、（|DecimalIntegerLiteral| の MV に（|DecimalDigits| の MV × 10<sup>-_n_</sup>）を加えた値）× 10<sup>_e_</sup> です。ここで _n_ は、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数であり、_e_ は |ExponentPart| の MV です。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar> の MV は (|DecimalIntegerLiteral| の MV + (|DecimalDigits| の MV × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup> であり、ここで _n_ は |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数であり、_e_ は |ExponentPart| の MV である。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar> の MV は、|DecimalDigits| の MV × 10<sup>-_n_</sup> です。ここで _n_ は、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数です。
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar> の MV は |DecimalDigits| の MV × 10<sup>-_n_</sup> であり、ここで _n_ は |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数である。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar> の MV は、|DecimalDigits| の MV × 10<sup>_e_ - _n_</sup> です。ここで _n_ は、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数であり、_e_ は |ExponentPart| の MV です。
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar> の MV は |DecimalDigits| の MV × 10<sup>_e_ - _n_</sup> であり、ここで _n_ は |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数であり、_e_ は |ExponentPart| の MV である。
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral ExponentPart</emu-grammar> の MV は、|DecimalIntegerLiteral| の MV × 10<sup>_e_</sup> です。ここで _e_ は |ExponentPart| の MV です。
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral ExponentPart</emu-grammar> の MV は |DecimalIntegerLiteral| の MV × 10<sup>_e_</sup> であり、ここで _e_ は |ExponentPart| の MV である。
           </li>
           <li>
-            <emu-grammar>DecimalIntegerLiteral :: `0`</emu-grammar> の MV は 0 です。
+            <emu-grammar>DecimalIntegerLiteral :: `0`</emu-grammar> の MV は 0 である。
           </li>
           <li>
-            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar> の MV は、（|NonZeroDigit| の MV × 10<sup>_n_</sup>）に |DecimalDigits| の MV を加えた値です。ここで _n_ は、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数です。
+            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar> の MV は (|NonZeroDigit| の MV × 10<sup>_n_</sup>) + |DecimalDigits| の MV であり、ここで _n_ は |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数である。
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar> の MV は、（|DecimalDigits| の MV × 10）に |DecimalDigit| の MV を加えた値です。
+            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar> の MV は (|DecimalDigits| の MV × 10) + |DecimalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar> の MV は、（|DecimalDigits| の MV × 10）に |DecimalDigit| の MV を加えた値です。
+            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar> の MV は (|DecimalDigits| の MV × 10) + |DecimalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>ExponentPart :: ExponentIndicator SignedInteger</emu-grammar> の MV は |SignedInteger| の MV です。
+            <emu-grammar>ExponentPart :: ExponentIndicator SignedInteger</emu-grammar> の MV は |SignedInteger| の MV である。
           </li>
           <li>
-            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar> の MV は |DecimalDigits| の MV の負の値です。
+            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar> の MV は |DecimalDigits| の MV の負の値である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `0`</emu-grammar>、<emu-grammar>HexDigit :: `0`</emu-grammar>、<emu-grammar>OctalDigit :: `0`</emu-grammar>、<emu-grammar>LegacyOctalEscapeSequence :: `0`</emu-grammar>、または <emu-grammar>BinaryDigit :: `0`</emu-grammar> の MV は 0 です。
+            <emu-grammar>DecimalDigit :: `0`</emu-grammar>、<emu-grammar>HexDigit :: `0`</emu-grammar>、<emu-grammar>OctalDigit :: `0`</emu-grammar>、<emu-grammar>LegacyOctalEscapeSequence :: `0`</emu-grammar>、または <emu-grammar>BinaryDigit :: `0`</emu-grammar> の MV は 0 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `1`</emu-grammar>、<emu-grammar>NonZeroDigit :: `1`</emu-grammar>、<emu-grammar>HexDigit :: `1`</emu-grammar>、<emu-grammar>OctalDigit :: `1`</emu-grammar>、または <emu-grammar>BinaryDigit :: `1`</emu-grammar> の MV は 1 です。
+            <emu-grammar>DecimalDigit :: `1`</emu-grammar>、<emu-grammar>NonZeroDigit :: `1`</emu-grammar>、<emu-grammar>HexDigit :: `1`</emu-grammar>、<emu-grammar>OctalDigit :: `1`</emu-grammar>、または <emu-grammar>BinaryDigit :: `1`</emu-grammar> の MV は 1 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `2`</emu-grammar>、<emu-grammar>NonZeroDigit :: `2`</emu-grammar>、<emu-grammar>HexDigit :: `2`</emu-grammar>、または <emu-grammar>OctalDigit :: `2`</emu-grammar> の MV は 2 です。
+            <emu-grammar>DecimalDigit :: `2`</emu-grammar>、<emu-grammar>NonZeroDigit :: `2`</emu-grammar>、<emu-grammar>HexDigit :: `2`</emu-grammar>、または <emu-grammar>OctalDigit :: `2`</emu-grammar> の MV は 2 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `3`</emu-grammar>、<emu-grammar>NonZeroDigit :: `3`</emu-grammar>、<emu-grammar>HexDigit :: `3`</emu-grammar>、または <emu-grammar>OctalDigit :: `3`</emu-grammar> の MV は 3 です。
+            <emu-grammar>DecimalDigit :: `3`</emu-grammar>、<emu-grammar>NonZeroDigit :: `3`</emu-grammar>、<emu-grammar>HexDigit :: `3`</emu-grammar>、または <emu-grammar>OctalDigit :: `3`</emu-grammar> の MV は 3 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `4`</emu-grammar>、<emu-grammar>NonZeroDigit :: `4`</emu-grammar>、<emu-grammar>HexDigit :: `4`</emu-grammar>、または <emu-grammar>OctalDigit :: `4`</emu-grammar> の MV は 4 です。
+            <emu-grammar>DecimalDigit :: `4`</emu-grammar>、<emu-grammar>NonZeroDigit :: `4`</emu-grammar>、<emu-grammar>HexDigit :: `4`</emu-grammar>、または <emu-grammar>OctalDigit :: `4`</emu-grammar> の MV は 4 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `5`</emu-grammar>、<emu-grammar>NonZeroDigit :: `5`</emu-grammar>、<emu-grammar>HexDigit :: `5`</emu-grammar>、または <emu-grammar>OctalDigit :: `5`</emu-grammar> の MV は 5 です。
+            <emu-grammar>DecimalDigit :: `5`</emu-grammar>、<emu-grammar>NonZeroDigit :: `5`</emu-grammar>、<emu-grammar>HexDigit :: `5`</emu-grammar>、または <emu-grammar>OctalDigit :: `5`</emu-grammar> の MV は 5 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `6`</emu-grammar>、<emu-grammar>NonZeroDigit :: `6`</emu-grammar>、<emu-grammar>HexDigit :: `6`</emu-grammar>、または <emu-grammar>OctalDigit :: `6`</emu-grammar> の MV は 6 です。
+            <emu-grammar>DecimalDigit :: `6`</emu-grammar>、<emu-grammar>NonZeroDigit :: `6`</emu-grammar>、<emu-grammar>HexDigit :: `6`</emu-grammar>、または <emu-grammar>OctalDigit :: `6`</emu-grammar> の MV は 6 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `7`</emu-grammar>、<emu-grammar>NonZeroDigit :: `7`</emu-grammar>、<emu-grammar>HexDigit :: `7`</emu-grammar>、または <emu-grammar>OctalDigit :: `7`</emu-grammar> の MV は 7 です。
+            <emu-grammar>DecimalDigit :: `7`</emu-grammar>、<emu-grammar>NonZeroDigit :: `7`</emu-grammar>、<emu-grammar>HexDigit :: `7`</emu-grammar>、または <emu-grammar>OctalDigit :: `7`</emu-grammar> の MV は 7 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `8`</emu-grammar>、<emu-grammar>NonZeroDigit :: `8`</emu-grammar>、<emu-grammar>NonOctalDigit :: `8`</emu-grammar>、または <emu-grammar>HexDigit :: `8`</emu-grammar> の MV は 8 です。
+            <emu-grammar>DecimalDigit :: `8`</emu-grammar>、<emu-grammar>NonZeroDigit :: `8`</emu-grammar>、<emu-grammar>NonOctalDigit :: `8`</emu-grammar>、または <emu-grammar>HexDigit :: `8`</emu-grammar> の MV は 8 である。
           </li>
           <li>
-            <emu-grammar>DecimalDigit :: `9`</emu-grammar>、<emu-grammar>NonZeroDigit :: `9`</emu-grammar>、<emu-grammar>NonOctalDigit :: `9`</emu-grammar>、または <emu-grammar>HexDigit :: `9`</emu-grammar> の MV は 9 です。
+            <emu-grammar>DecimalDigit :: `9`</emu-grammar>、<emu-grammar>NonZeroDigit :: `9`</emu-grammar>、<emu-grammar>NonOctalDigit :: `9`</emu-grammar>、または <emu-grammar>HexDigit :: `9`</emu-grammar> の MV は 9 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `a`</emu-grammar> または <emu-grammar>HexDigit :: `A`</emu-grammar> の MV は 10 です。
+            <emu-grammar>HexDigit :: `a`</emu-grammar> または <emu-grammar>HexDigit :: `A`</emu-grammar> の MV は 10 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `b`</emu-grammar> または <emu-grammar>HexDigit :: `B`</emu-grammar> の MV は 11 です。
+            <emu-grammar>HexDigit :: `b`</emu-grammar> または <emu-grammar>HexDigit :: `B`</emu-grammar> の MV は 11 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `c`</emu-grammar> または <emu-grammar>HexDigit :: `C`</emu-grammar> の MV は 12 です。
+            <emu-grammar>HexDigit :: `c`</emu-grammar> または <emu-grammar>HexDigit :: `C`</emu-grammar> の MV は 12 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `d`</emu-grammar> または <emu-grammar>HexDigit :: `D`</emu-grammar> の MV は 13 です。
+            <emu-grammar>HexDigit :: `d`</emu-grammar> または <emu-grammar>HexDigit :: `D`</emu-grammar> の MV は 13 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `e`</emu-grammar> または <emu-grammar>HexDigit :: `E`</emu-grammar> の MV は 14 です。
+            <emu-grammar>HexDigit :: `e`</emu-grammar> または <emu-grammar>HexDigit :: `E`</emu-grammar> の MV は 14 である。
           </li>
           <li>
-            <emu-grammar>HexDigit :: `f`</emu-grammar> または <emu-grammar>HexDigit :: `F`</emu-grammar> の MV は 15 です。
+            <emu-grammar>HexDigit :: `f`</emu-grammar> または <emu-grammar>HexDigit :: `F`</emu-grammar> の MV は 15 である。
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar> の MV は、（|BinaryDigits| の MV × 2）に |BinaryDigit| の MV を加えた値です。
+            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar> の MV は (|BinaryDigits| の MV × 2) + |BinaryDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar> の MV は、（|BinaryDigits| の MV × 2）に |BinaryDigit| の MV を加えた値です。
+            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar> の MV は (|BinaryDigits| の MV × 2) + |BinaryDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar> の MV は、（|OctalDigits| の MV × 8）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar> の MV は (|OctalDigits| の MV × 8) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar> の MV は、（|OctalDigits| の MV × 8）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar> の MV は (|OctalDigits| の MV × 8) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar> の MV は、（|LegacyOctalIntegerLiteral| の MV × 8）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar> の MV は (|LegacyOctalIntegerLiteral| の MV × 8) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit</emu-grammar> の MV は、（|LegacyOctalLikeDecimalIntegerLiteral| の MV × 10）に |NonOctalDigit| の MV を加えた値です。
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: `0` LegacyOctalLikeDecimalDigits NonOctalDigit</emu-grammar> の MV は (|LegacyOctalLikeDecimalDigits| の MV × 10) + |NonOctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar> の MV は、（|NonOctalDecimalIntegerLiteral| の MV × 10）に |DecimalDigit| の MV を加えた値です。
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar> の MV は (|NonOctalDecimalIntegerLiteral| の MV × 10) + |DecimalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>LegacyOctalLikeDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral OctalDigit</emu-grammar> の MV は、（|LegacyOctalLikeDecimalIntegerLiteral| の MV × 10）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>LegacyOctalLikeDecimalDigits :: LegacyOctalLikeDecimalDigits OctalDigit</emu-grammar> の MV は (|LegacyOctalLikeDecimalDigits| の MV × 10) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar> の MV は、（|HexDigits| の MV × 16）に |HexDigit| の MV を加えた値です。
+            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar> の MV は (|HexDigits| の MV × 16) + |HexDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar> の MV は、（|HexDigits| の MV × 16）に |HexDigit| の MV を加えた値です。
+            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar> の MV は (|HexDigits| の MV × 16) + |HexDigit| の MV である。
           </li>
         </ul>
       </emu-clause>
@@ -17709,8 +17700,8 @@
             NonZeroDigit NumericLiteralSeparator DecimalDigits BigIntLiteralSuffix
         </emu-grammar>
         <emu-alg>
-          1. _n_ を、|NumericLiteralSeparator| のすべての出現を除いた |DecimalDigits| 内のコードポイント数とする。
-          1. _mv_ を（|NonZeroDigit| の MV × 10<sup>_n_</sup>）に |DecimalDigits| の MV を加えた値とする。
+          1. _n_ を |DecimalDigits| に含まれるコードポイント数から |NumericLiteralSeparator| のすべての出現を除いた数とする。
+          1. _mv_ を (|NonZeroDigit| の MV × 10<sup>_n_</sup>) + |DecimalDigits| の MV とする。
           1. ℤ(_mv_) を返す。
         </emu-alg>
       </emu-clause>
@@ -18057,43 +18048,43 @@
         <h1>Static Semantics: MV</h1>
         <ul>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar> の MV は、（|ZeroToThree| の MV の8倍）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar> の MV は (|ZeroToThree| の MV × 8) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar> の MV は、（|FourToSeven| の MV の8倍）に |OctalDigit| の MV を加えた値です。
+            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar> の MV は (|FourToSeven| の MV × 8) + |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar> の MV は、（64（すなわち 8<sup>2</sup>）× |ZeroToThree| の MV）に（最初の |OctalDigit| の MV の8倍）と2番目の |OctalDigit| の MV を加えた値です。
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar> の MV は (|ZeroToThree| の MV × 64) + (最初の |OctalDigit| の MV × 8) + 2 番目の |OctalDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>ZeroToThree :: `0`</emu-grammar> の MV は 0 です。
+            <emu-grammar>ZeroToThree :: `0`</emu-grammar> の MV は 0 である。
           </li>
           <li>
-            <emu-grammar>ZeroToThree :: `1`</emu-grammar> の MV は 1 です。
+            <emu-grammar>ZeroToThree :: `1`</emu-grammar> の MV は 1 である。
           </li>
           <li>
-            <emu-grammar>ZeroToThree :: `2`</emu-grammar> の MV は 2 です。
+            <emu-grammar>ZeroToThree :: `2`</emu-grammar> の MV は 2 である。
           </li>
           <li>
-            <emu-grammar>ZeroToThree :: `3`</emu-grammar> の MV は 3 です。
+            <emu-grammar>ZeroToThree :: `3`</emu-grammar> の MV は 3 である。
           </li>
           <li>
-            <emu-grammar>FourToSeven :: `4`</emu-grammar> の MV は 4 です。
+            <emu-grammar>FourToSeven :: `4`</emu-grammar> の MV は 4 である。
           </li>
           <li>
-            <emu-grammar>FourToSeven :: `5`</emu-grammar> の MV は 5 です。
+            <emu-grammar>FourToSeven :: `5`</emu-grammar> の MV は 5 である。
           </li>
           <li>
-            <emu-grammar>FourToSeven :: `6`</emu-grammar> の MV は 6 です。
+            <emu-grammar>FourToSeven :: `6`</emu-grammar> の MV は 6 である。
           </li>
           <li>
-            <emu-grammar>FourToSeven :: `7`</emu-grammar> の MV は 7 です。
+            <emu-grammar>FourToSeven :: `7`</emu-grammar> の MV は 7 である。
           </li>
           <li>
-            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar> の MV は、（最初の |HexDigit| の MV の16倍）に2番目の |HexDigit| の MV を加えた値です。
+            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar> の MV は (最初の |HexDigit| の MV × 16) + 2 番目の |HexDigit| の MV である。
           </li>
           <li>
-            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar> の MV は、（0x1000 × 最初の |HexDigit| の MV）に（0x100 × 2番目の |HexDigit| の MV）、（0x10 × 3番目の |HexDigit| の MV）、および4番目の |HexDigit| の MV を加えた値です。
+            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar> の MV は (0x1000 × 最初の |HexDigit| の MV) + (0x100 × 2 番目の |HexDigit| の MV) + (0x10 × 3 番目の |HexDigit| の MV) + 4 番目の |HexDigit| の MV である。
           </li>
         </ul>
       </emu-clause>
@@ -47213,10 +47204,12 @@ THH:mm:ss.sss
           <dd>この操作は、Atomics メソッドですべての引数の型強制が実行された後、atomic 操作のために backing buffer 内のインデックスを再検証します。引数の型強制には任意の副作用があり得て、それによってバッファが境界外になる可能性があるためです。_ta_ の backing buffer が SharedArrayBuffer である場合、この操作はスローしません。</dd>
         </dl>
         <emu-alg>
-          1. 注記: _ta_ の backing buffer が拡張可能な SharedArrayBuffer である場合、境界検査は同期操作ではない。
+          1. NOTE: _ta_ の基盤バッファが拡張可能な SharedArrayBuffer である場合、境界チェックは同期操作ではない。
           1. _taRecord_ を ? ValidateTypedArrayBounds(_ta_, ~unordered~) とする。
           1. 表明: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]。
-          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]] である場合、*RangeError* 例外をスローする。
+          1. _elementSize_ を TypedArrayElementSize(_ta_) とする。
+          1. _elementLastByteIndex_ を _byteIndexInBuffer_ + _elementSize_ - 1 とする。
+          1. _elementLastByteIndex_ ≥ _taRecord_.[[CachedBufferByteLength]] の場合、*RangeError* 例外をスローする。
           1. ~unused~ を返す。
         </emu-alg>
       </emu-clause>
@@ -47717,18 +47710,18 @@ THH:mm:ss.sss
       <emu-alg>
         1. _taRecord_ を ? ValidateIntegerTypedArray(_ta_, *true*) とする。
         1. _byteIndexInBuffer_ を ? ValidateAtomicAccess(_taRecord_, _index_) とする。
-        1. _count_ が *undefined* である場合、
+        1. _count_ が *undefined* の場合、
           1. _count_ を +∞ に設定する。
         1. そうでない場合、
           1. _intCount_ を ? ToIntegerOrInfinity(_count_) とする。
           1. _count_ を max(_intCount_, 0) に設定する。
         1. _buffer_ を _ta_.[[ViewedArrayBuffer]] とする。
+        1. IsSharedArrayBuffer(_buffer_) が *false* の場合、*+0*<sub>𝔽</sub> を返す。
         1. _block_ を _buffer_.[[ArrayBufferData]] とする。
-        1. IsSharedArrayBuffer(_buffer_) が *false* である場合、*+0*<sub>𝔽</sub> を返す。
         1. _waiterList_ を GetWaiterList(_block_, _byteIndexInBuffer_) とする。
         1. EnterCriticalSection(_waiterList_) を実行する。
         1. _waiters_ を RemoveWaiters(_waiterList_, _count_) とする。
-        1. _waiters_ の各要素 _waiterRecord_ について、次を行う。
+        1. _waiters_ の各要素 _waiterRecord_ について、以下を実行する。
           1. NotifyWaiter(_waiterList_, _waiterRecord_) を実行する。
         1. LeaveCriticalSection(_waiterList_) を実行する。
         1. _waitersCount_ を _waiters_ の要素数とする。
@@ -53590,7 +53583,7 @@ THH:mm:ss.sss
     <emu-prodref name="OctalDigits"></emu-prodref>
     <emu-prodref name="LegacyOctalIntegerLiteral"></emu-prodref>
     <emu-prodref name="NonOctalDecimalIntegerLiteral"></emu-prodref>
-    <emu-prodref name="LegacyOctalLikeDecimalIntegerLiteral"></emu-prodref>
+    <emu-prodref name="LegacyOctalLikeDecimalDigits"></emu-prodref>
     <emu-prodref name="OctalDigit"></emu-prodref>
     <emu-prodref name="NonOctalDigit"></emu-prodref>
     <emu-prodref name="HexIntegerLiteral"></emu-prodref>

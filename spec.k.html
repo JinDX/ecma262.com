@@ -882,21 +882,14 @@
         <h1>one of</h1>
         <p>문법 정의의 콜론 뒤에 “<b>one of</b>”라는 문구가 오면, 다음 한 줄 또는 여러 줄에 있는 각 단말 기호가 대안적인 정의임을 나타냅니다. 예를 들어 ECMAScript의 어휘 문법에는 다음 생성 규칙이 포함됩니다:</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit :: one of
-            `1` `2` `3` `4` `5` `6` `7` `8` `9`
+          BinaryDigit :: one of
+            `0` `1`
         </emu-grammar>
         <p>이는 단지 다음을 편리하게 축약한 표현입니다:</p>
         <emu-grammar type="definition" example>
-          NonZeroDigit ::
+          BinaryDigit ::
+            `0`
             `1`
-            `2`
-            `3`
-            `4`
-            `5`
-            `6`
-            `7`
-            `8`
-            `9`
         </emu-grammar>
       </emu-clause>
 
@@ -17423,7 +17416,7 @@
       </emu-grammar>
     </emu-clause>
 
-    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals">
+    <emu-clause id="sec-literals-numeric-literals" oldids="sec-additional-syntax-numeric-literals,prod-LegacyOctalLikeDecimalIntegerLiteral">
       <h1>숫자 리터럴</h1>
       <h2>구문</h2>
       <emu-grammar type="definition">
@@ -17456,8 +17449,7 @@
           DecimalIntegerLiteral ExponentPart[+Sep]?
 
         DecimalIntegerLiteral ::
-          `0`
-          NonZeroDigit
+          DecimalDigit
           NonZeroDigit NumericLiteralSeparator? DecimalDigits[+Sep]
           NonOctalDecimalIntegerLiteral
 
@@ -17509,13 +17501,12 @@
           LegacyOctalIntegerLiteral OctalDigit
 
         NonOctalDecimalIntegerLiteral ::
-          `0` NonOctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit
+          `0` LegacyOctalLikeDecimalDigits? NonOctalDigit
           NonOctalDecimalIntegerLiteral DecimalDigit
 
-        LegacyOctalLikeDecimalIntegerLiteral ::
-          `0` OctalDigit
-          LegacyOctalLikeDecimalIntegerLiteral OctalDigit
+        LegacyOctalLikeDecimalDigits ::
+          OctalDigit
+          LegacyOctalLikeDecimalDigits OctalDigit
 
         OctalDigit :: one of
           `0` `1` `2` `3` `4` `5` `6` `7`
@@ -17559,40 +17550,40 @@
         <p>숫자 리터럴은 Number 타입 또는 BigInt 타입의 값을 나타냅니다.</p>
         <ul>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV에 (|DecimalDigits|의 MV × 10<sup>-_n_</sup>)을 더한 값입니다. 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV + (|DecimalDigits|의 MV × 10<sup>-_n_</sup>)이며, 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` ExponentPart</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV × 10<sup>_e_</sup>입니다. 여기서 _e_는 |ExponentPart|의 MV입니다.
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` ExponentPart</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV × 10<sup>_e_</sup>이며, 여기서 _e_는 |ExponentPart|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar>의 MV는 (|DecimalIntegerLiteral|의 MV에 (|DecimalDigits|의 MV × 10<sup>-_n_</sup>)을 더한 값) × 10<sup>_e_</sup>입니다. 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수이고 _e_는 |ExponentPart|의 MV입니다.
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral `.` DecimalDigits ExponentPart</emu-grammar>의 MV는 (|DecimalIntegerLiteral|의 MV + (|DecimalDigits|의 MV × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>이며, 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수이고 _e_는 |ExponentPart|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar>의 MV는 |DecimalDigits|의 MV × 10<sup>-_n_</sup>입니다. 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits</emu-grammar>의 MV는 |DecimalDigits|의 MV × 10<sup>-_n_</sup>이며, 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar>의 MV는 |DecimalDigits|의 MV × 10<sup>_e_ - _n_</sup>입니다. 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수이고, _e_는 |ExponentPart|의 MV입니다.
+            <emu-grammar>DecimalLiteral :: `.` DecimalDigits ExponentPart</emu-grammar>의 MV는 |DecimalDigits|의 MV × 10<sup>_e_ - _n_</sup>이며, 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수이고, _e_는 |ExponentPart|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral ExponentPart</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV × 10<sup>_e_</sup>입니다. 여기서 _e_는 |ExponentPart|의 MV입니다.
+            <emu-grammar>DecimalLiteral :: DecimalIntegerLiteral ExponentPart</emu-grammar>의 MV는 |DecimalIntegerLiteral|의 MV × 10<sup>_e_</sup>이며, 여기서 _e_는 |ExponentPart|의 MV입니다.
           </li>
           <li>
             <emu-grammar>DecimalIntegerLiteral :: `0`</emu-grammar>의 MV는 0입니다.
           </li>
           <li>
-            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar>의 MV는 (|NonZeroDigit|의 MV × 10<sup>_n_</sup>)에 |DecimalDigits|의 MV를 더한 값입니다. 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
+            <emu-grammar>DecimalIntegerLiteral :: NonZeroDigit NumericLiteralSeparator? DecimalDigits</emu-grammar>의 MV는 (|NonZeroDigit|의 MV × 10<sup>_n_</sup>) + |DecimalDigits|의 MV이며, 여기서 _n_은 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수입니다.
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar>의 MV는 (|DecimalDigits|의 MV × 10)에 |DecimalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>DecimalDigits :: DecimalDigits DecimalDigit</emu-grammar>의 MV는 (|DecimalDigits|의 MV × 10) + |DecimalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar>의 MV는 (|DecimalDigits|의 MV × 10)에 |DecimalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>DecimalDigits :: DecimalDigits NumericLiteralSeparator DecimalDigit</emu-grammar>의 MV는 (|DecimalDigits|의 MV × 10) + |DecimalDigit|의 MV입니다.
           </li>
           <li>
             <emu-grammar>ExponentPart :: ExponentIndicator SignedInteger</emu-grammar>의 MV는 |SignedInteger|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar>의 MV는 |DecimalDigits|의 MV의 음수입니다.
+            <emu-grammar>SignedInteger :: `-` DecimalDigits</emu-grammar>의 MV는 |DecimalDigits|의 MV에 음의 부호를 붙인 값입니다.
           </li>
           <li>
             <emu-grammar>DecimalDigit :: `0`</emu-grammar> 또는 <emu-grammar>HexDigit :: `0`</emu-grammar> 또는 <emu-grammar>OctalDigit :: `0`</emu-grammar> 또는 <emu-grammar>LegacyOctalEscapeSequence :: `0`</emu-grammar> 또는 <emu-grammar>BinaryDigit :: `0`</emu-grammar>의 MV는 0입니다.
@@ -17643,34 +17634,34 @@
             <emu-grammar>HexDigit :: `f`</emu-grammar> 또는 <emu-grammar>HexDigit :: `F`</emu-grammar>의 MV는 15입니다.
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar>의 MV는 (|BinaryDigits|의 MV × 2)에 |BinaryDigit|의 MV를 더한 값입니다.
+            <emu-grammar>BinaryDigits :: BinaryDigits BinaryDigit</emu-grammar>의 MV는 (|BinaryDigits|의 MV × 2) + |BinaryDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar>의 MV는 (|BinaryDigits|의 MV × 2)에 |BinaryDigit|의 MV를 더한 값입니다.
+            <emu-grammar>BinaryDigits :: BinaryDigits NumericLiteralSeparator BinaryDigit</emu-grammar>의 MV는 (|BinaryDigits|의 MV × 2) + |BinaryDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar>의 MV는 (|OctalDigits|의 MV × 8)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>OctalDigits :: OctalDigits OctalDigit</emu-grammar>의 MV는 (|OctalDigits|의 MV × 8) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar>의 MV는 (|OctalDigits|의 MV × 8)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>OctalDigits :: OctalDigits NumericLiteralSeparator OctalDigit</emu-grammar>의 MV는 (|OctalDigits|의 MV × 8) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar>의 MV는 (|LegacyOctalIntegerLiteral|의 MV × 8)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>LegacyOctalIntegerLiteral :: LegacyOctalIntegerLiteral OctalDigit</emu-grammar>의 MV는 (|LegacyOctalIntegerLiteral|의 MV × 8) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral NonOctalDigit</emu-grammar>의 MV는 (|LegacyOctalLikeDecimalIntegerLiteral|의 MV × 10)에 |NonOctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: `0` LegacyOctalLikeDecimalDigits NonOctalDigit</emu-grammar>의 MV는 (|LegacyOctalLikeDecimalDigits|의 MV × 10) + |NonOctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar>의 MV는 (|NonOctalDecimalIntegerLiteral|의 MV × 10)에 |DecimalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>NonOctalDecimalIntegerLiteral :: NonOctalDecimalIntegerLiteral DecimalDigit</emu-grammar>의 MV는 (|NonOctalDecimalIntegerLiteral|의 MV × 10) + |DecimalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>LegacyOctalLikeDecimalIntegerLiteral :: LegacyOctalLikeDecimalIntegerLiteral OctalDigit</emu-grammar>의 MV는 (|LegacyOctalLikeDecimalIntegerLiteral|의 MV × 10)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>LegacyOctalLikeDecimalDigits :: LegacyOctalLikeDecimalDigits OctalDigit</emu-grammar>의 MV는 (|LegacyOctalLikeDecimalDigits|의 MV × 10) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar>의 MV는 (|HexDigits|의 MV × 16)에 |HexDigit|의 MV를 더한 값입니다.
+            <emu-grammar>HexDigits :: HexDigits HexDigit</emu-grammar>의 MV는 (|HexDigits|의 MV × 16) + |HexDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar>의 MV는 (|HexDigits|의 MV × 16)에 |HexDigit|의 MV를 더한 값입니다.
+            <emu-grammar>HexDigits :: HexDigits NumericLiteralSeparator HexDigit</emu-grammar>의 MV는 (|HexDigits|의 MV × 16) + |HexDigit|의 MV입니다.
           </li>
         </ul>
       </emu-clause>
@@ -17709,8 +17700,8 @@
             NonZeroDigit NumericLiteralSeparator DecimalDigits BigIntLiteralSuffix
         </emu-grammar>
         <emu-alg>
-          1. _n_을 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수로 둡니다.
-          1. _mv_를 (|NonZeroDigit|의 MV × 10<sup>_n_</sup>)에 |DecimalDigits|의 MV를 더한 값으로 둡니다.
+          1. _n_을 |NumericLiteralSeparator|의 모든 출현을 제외한 |DecimalDigits|의 코드 포인트 수로 설정합니다.
+          1. _mv_를 (|NonZeroDigit|의 MV × 10<sup>_n_</sup>) + |DecimalDigits|의 MV로 설정합니다.
           1. ℤ(_mv_)를 반환합니다.
         </emu-alg>
       </emu-clause>
@@ -18057,13 +18048,13 @@
         <h1>Static Semantics: MV</h1>
         <ul>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar>의 MV는 (8 × |ZeroToThree|의 MV)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit</emu-grammar>의 MV는 (|ZeroToThree|의 MV × 8) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar>의 MV는 (8 × |FourToSeven|의 MV)에 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>LegacyOctalEscapeSequence :: FourToSeven OctalDigit</emu-grammar>의 MV는 (|FourToSeven|의 MV × 8) + |OctalDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar>의 MV는 (64(즉, 8<sup>2</sup>) × |ZeroToThree|의 MV)에 (8 × 첫 번째 |OctalDigit|의 MV)와 두 번째 |OctalDigit|의 MV를 더한 값입니다.
+            <emu-grammar>LegacyOctalEscapeSequence :: ZeroToThree OctalDigit OctalDigit</emu-grammar>의 MV는 (|ZeroToThree|의 MV × 64) + (첫 번째 |OctalDigit|의 MV × 8) + 두 번째 |OctalDigit|의 MV입니다.
           </li>
           <li>
             <emu-grammar>ZeroToThree :: `0`</emu-grammar>의 MV는 0입니다.
@@ -18090,10 +18081,10 @@
             <emu-grammar>FourToSeven :: `7`</emu-grammar>의 MV는 7입니다.
           </li>
           <li>
-            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar>의 MV는 (16 × 첫 번째 |HexDigit|의 MV)에 두 번째 |HexDigit|의 MV를 더한 값입니다.
+            <emu-grammar>HexEscapeSequence :: `x` HexDigit HexDigit</emu-grammar>의 MV는 (첫 번째 |HexDigit|의 MV × 16) + 두 번째 |HexDigit|의 MV입니다.
           </li>
           <li>
-            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar>의 MV는 (0x1000 × 첫 번째 |HexDigit|의 MV)에 (0x100 × 두 번째 |HexDigit|의 MV), (0x10 × 세 번째 |HexDigit|의 MV) 및 네 번째 |HexDigit|의 MV를 더한 값입니다.
+            <emu-grammar>Hex4Digits :: HexDigit HexDigit HexDigit HexDigit</emu-grammar>의 MV는 (0x1000 × 첫 번째 |HexDigit|의 MV) + (0x100 × 두 번째 |HexDigit|의 MV) + (0x10 × 세 번째 |HexDigit|의 MV) + 네 번째 |HexDigit|의 MV입니다.
           </li>
         </ul>
       </emu-clause>
@@ -47215,10 +47206,12 @@ THH:mm:ss.sss
           <dd>Atomics 메서드에서 모든 인수 강제 변환이 수행된 후 원자적 연산을 위해 기반 버퍼 안의 인덱스를 다시 검증합니다. 인수 강제 변환은 임의의 부수 효과를 가질 수 있어 버퍼가 범위를 벗어나게 할 수 있기 때문입니다. 이 연산은 _ta_의 기반 버퍼가 SharedArrayBuffer인 경우 예외를 던지지 않습니다.</dd>
         </dl>
         <emu-alg>
-          1. 참고: _ta_의 기반 버퍼가 확장 가능한 SharedArrayBuffer일 때 범위 검사는 동기화 연산이 아닙니다.
-          1. _taRecord_를 ? ValidateTypedArrayBounds(_ta_, ~unordered~)로 둡니다.
-          1. 단언: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]]입니다.
-          1. _byteIndexInBuffer_ ≥ _taRecord_.[[CachedBufferByteLength]]이면 *RangeError* 예외를 던집니다.
+          1. 참고: _ta_의 기반 버퍼가 확장 가능한 SharedArrayBuffer인 경우, 경계 검사는 동기화 작업이 아닙니다.
+          1. _taRecord_를 ? ValidateTypedArrayBounds(_ta_, ~unordered~)로 설정합니다.
+          1. 단언: _byteIndexInBuffer_ ≥ _ta_.[[ByteOffset]].
+          1. _elementSize_를 TypedArrayElementSize(_ta_)로 설정합니다.
+          1. _elementLastByteIndex_를 _byteIndexInBuffer_ + _elementSize_ - 1로 설정합니다.
+          1. _elementLastByteIndex_ ≥ _taRecord_.[[CachedBufferByteLength]]이면 *RangeError* 예외를 던집니다.
           1. ~unused~를 반환합니다.
         </emu-alg>
       </emu-clause>
@@ -47717,23 +47710,23 @@ THH:mm:ss.sss
       <p>이 함수는 대기 큐에서 잠들어 있는 일부 에이전트에 알립니다.</p>
       <p>호출되면 다음 단계를 수행합니다:</p>
       <emu-alg>
-        1. _taRecord_를 ? ValidateIntegerTypedArray(_ta_, *true*)로 둡니다.
-        1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 둡니다.
-        1. _count_가 *undefined*이면, 다음을 수행합니다.
+        1. _taRecord_를 ? ValidateIntegerTypedArray(_ta_, *true*)로 설정합니다.
+        1. _byteIndexInBuffer_를 ? ValidateAtomicAccess(_taRecord_, _index_)로 설정합니다.
+        1. _count_가 *undefined*이면,
           1. _count_를 +∞로 설정합니다.
         1. 그렇지 않으면,
-          1. _intCount_를 ? ToIntegerOrInfinity(_count_)로 둡니다.
+          1. _intCount_를 ? ToIntegerOrInfinity(_count_)로 설정합니다.
           1. _count_를 max(_intCount_, 0)으로 설정합니다.
-        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 둡니다.
-        1. _block_을 _buffer_.[[ArrayBufferData]]로 둡니다.
-        1. IsSharedArrayBuffer(_buffer_)가 *false*이면 *+0*<sub>𝔽</sub>을 반환합니다.
-        1. _waiterList_를 GetWaiterList(_block_, _byteIndexInBuffer_)로 둡니다.
+        1. _buffer_를 _ta_.[[ViewedArrayBuffer]]로 설정합니다.
+        1. IsSharedArrayBuffer(_buffer_)가 *false*이면, *+0*<sub>𝔽</sub>를 반환합니다.
+        1. _block_을 _buffer_.[[ArrayBufferData]]로 설정합니다.
+        1. _waiterList_를 GetWaiterList(_block_, _byteIndexInBuffer_)로 설정합니다.
         1. EnterCriticalSection(_waiterList_)을 수행합니다.
-        1. _waiters_를 RemoveWaiters(_waiterList_, _count_)로 둡니다.
+        1. _waiters_를 RemoveWaiters(_waiterList_, _count_)로 설정합니다.
         1. _waiters_의 각 요소 _waiterRecord_에 대해 다음을 수행합니다.
-          1. NotifyWaiter(_waiterList_, _waiterRecord_)을 수행합니다.
-        1. LeaveCriticalSection(_waiterList_)을 수행합니다.
-        1. _waitersCount_를 _waiters_의 요소 수로 둡니다.
+          1. NotifyWaiter(_waiterList_, _waiterRecord_)를 수행합니다.
+        1. LeaveCriticalSection(_waiterList_)를 수행합니다.
+        1. _waitersCount_를 _waiters_의 요소 수로 설정합니다.
         1. 𝔽(_waitersCount_)를 반환합니다.
       </emu-alg>
     </emu-clause>
@@ -53592,7 +53585,7 @@ THH:mm:ss.sss
     <emu-prodref name="OctalDigits"></emu-prodref>
     <emu-prodref name="LegacyOctalIntegerLiteral"></emu-prodref>
     <emu-prodref name="NonOctalDecimalIntegerLiteral"></emu-prodref>
-    <emu-prodref name="LegacyOctalLikeDecimalIntegerLiteral"></emu-prodref>
+    <emu-prodref name="LegacyOctalLikeDecimalDigits"></emu-prodref>
     <emu-prodref name="OctalDigit"></emu-prodref>
     <emu-prodref name="NonOctalDigit"></emu-prodref>
     <emu-prodref name="HexIntegerLiteral"></emu-prodref>
