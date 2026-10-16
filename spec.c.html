@@ -13578,7 +13578,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>它创建一个普通对象；如果构造函数存在 *"prototype"* 属性，则从该属性取得其 [[Prototype]] 值。否则，使用由 _intrinsicDefaultProto_ 命名的内在对象作为 [[Prototype]]。_internalSlotsList_ 包含必须作为对象一部分定义的附加内部槽名称。如果未提供 _internalSlotsList_，则使用新的空 List。</dd>
+        <dd>它创建一个普通对象，如果构造函数的 *"prototype"* 属性存在，则从该属性获取对象的 [[Prototype]] 值，否则使用构造函数所属领域中由 _intrinsicDefaultProto_ 指定的内部固有对象。_internalSlotsList_ 包含必须作为该对象的一部分定义的其他内部槽的名称。</dd>
       </dl>
       <emu-alg>
         1. 断言：_intrinsicDefaultProto_ 是本规范中某个内在对象的名称。对应对象必须是预期用作对象 [[Prototype]] 值的内在对象。
@@ -13598,19 +13598,16 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>它确定创建与特定构造函数对应的对象时应使用的 [[Prototype]] 值。如果构造函数存在 *"prototype"* 属性，则从该属性获取该值。否则，使用由 _intrinsicDefaultProto_ 命名的内在对象作为 [[Prototype]]。</dd>
+        <dd>它确定使用特定构造函数构造的对象应使用的 [[Prototype]] 值。如果构造函数的 *"prototype"* 属性存在，则从该属性获取该值。否则，使用构造函数所属领域中由 _intrinsicDefaultProto_ 指定的内部固有对象。</dd>
       </dl>
       <emu-alg>
-        1. 断言：_intrinsicDefaultProto_ 是本规范中某个内在对象的名称。对应对象必须是预期用作对象 [[Prototype]] 值的内在对象。
+        1. 断言：_intrinsicDefaultProto_ 是本规范中某个内部固有对象的名称。对应的对象必须是一个旨在用作对象的 [[Prototype]] 值的内部固有对象。
         1. 令 _proto_ 为 ? Get(_ctor_, *"prototype"*)。
-        1. 如果 _proto_ 不是 Object，则
-          1. 令 _realm_ 为 ? GetFunctionRealm(_ctor_)。
-          1. 将 _proto_ 设置为 _realm_ 中名为 _intrinsicDefaultProto_ 的内在对象。
-        1. 返回 _proto_。
+        1. 如果 _proto_ 是一个 Object，则返回 _proto_。
+        1. 注：从 _ctor_ 所属领域获取的回退值与正在运行的执行上下文无关。
+        1. 令 _realm_ 为 ? GetFunctionRealm(_ctor_)。
+        1. 返回 _realm_.[[Intrinsics]] 中由 _intrinsicDefaultProto_ 标识的字段的值。
       </emu-alg>
-      <emu-note>
-        <p>如果 _ctor_ 不提供 [[Prototype]] 值，则使用的默认值取自 _ctor_ 函数的 Realm，而不是正在运行的执行上下文。</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-requireinternalslot" type="abstract operation">

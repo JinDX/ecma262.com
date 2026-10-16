@@ -13578,7 +13578,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>생성자의 *"prototype"* 프로퍼티가 존재하면 해당 프로퍼티에서 [[Prototype]] 값을 가져오는 일반 객체를 생성합니다. 그렇지 않으면 _intrinsicDefaultProto_가 이름으로 지정하는 내재 객체를 [[Prototype]]에 사용합니다. _internalSlotsList_에는 객체의 일부로 정의해야 하는 추가 내부 슬롯의 이름이 포함됩니다. _internalSlotsList_가 제공되지 않으면 새로운 빈 List를 사용합니다.</dd>
+        <dd>생성자의 *"prototype"* 속성이 존재하면 해당 속성에서 [[Prototype]] 값을 가져오고, 그렇지 않으면 생성자의 영역에서 _intrinsicDefaultProto_로 지정된 내장 객체를 [[Prototype]] 값으로 사용하는 일반 객체를 생성합니다. _internalSlotsList_에는 해당 객체의 일부로 정의해야 하는 추가 내부 슬롯의 이름이 포함됩니다.</dd>
       </dl>
       <emu-alg>
         1. 단언: _intrinsicDefaultProto_는 이 명세에서 내재 객체에 사용하는 이름입니다. 대응하는 객체는 객체의 [[Prototype]] 값으로 사용하도록 의도된 내재 객체여야 합니다.
@@ -13598,19 +13598,16 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>특정 생성자에 대응하는 객체를 생성할 때 사용해야 하는 [[Prototype]] 값을 결정합니다. 생성자의 *"prototype"* 프로퍼티가 존재하면 해당 프로퍼티에서 값을 가져옵니다. 그렇지 않으면 _intrinsicDefaultProto_가 이름으로 지정하는 내재 객체를 [[Prototype]]에 사용합니다.</dd>
+        <dd>특정 생성자를 사용하여 생성된 객체에 사용해야 하는 [[Prototype]] 값을 결정합니다. 생성자의 *"prototype"* 속성이 존재하면 해당 속성에서 값을 가져옵니다. 그렇지 않으면 생성자의 영역에서 _intrinsicDefaultProto_로 지정된 내장 객체를 사용합니다.</dd>
       </dl>
       <emu-alg>
-        1. 단언: _intrinsicDefaultProto_는 이 명세에서 내재 객체에 사용하는 이름입니다. 대응하는 객체는 객체의 [[Prototype]] 값으로 사용하도록 의도된 내재 객체여야 합니다.
-        1. _proto_를 ? Get(_ctor_, *"prototype"*)로 둡니다.
-        1. _proto_가 Object가 아니면, 다음을 수행합니다.
-          1. _realm_을 ? GetFunctionRealm(_ctor_)로 둡니다.
-          1. _proto_를 _realm_에서 _intrinsicDefaultProto_라는 이름의 내재 객체로 설정합니다.
-        1. _proto_를 반환합니다.
+        1. 단언: _intrinsicDefaultProto_는 이 명세에서 정의한 내장 객체의 이름입니다. 해당 객체는 객체의 [[Prototype]] 값으로 사용하도록 의도된 내장 객체여야 합니다.
+        1. _proto_를 ? Get(_ctor_, *"prototype"*)으로 설정합니다.
+        1. _proto_가 Object이면 _proto_를 반환합니다.
+        1. 참고: _ctor_의 영역에서 가져온 대체 값은 현재 실행 중인 실행 컨텍스트와 무관합니다.
+        1. _realm_을 ? GetFunctionRealm(_ctor_)으로 설정합니다.
+        1. _realm_.[[Intrinsics]]에서 _intrinsicDefaultProto_로 식별되는 필드의 값을 반환합니다.
       </emu-alg>
-      <emu-note>
-        <p>_ctor_가 [[Prototype]] 값을 제공하지 않으면 사용하는 기본값은 실행 중인 실행 컨텍스트가 아니라 _ctor_ 함수의 realm에서 가져옵니다.</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-requireinternalslot" type="abstract operation">

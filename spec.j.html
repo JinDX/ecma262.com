@@ -13578,7 +13578,7 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>コンストラクターの *"prototype"* プロパティが存在する場合、そのプロパティから [[Prototype]] 値を取得した通常オブジェクトを作成します。それ以外の場合、_intrinsicDefaultProto_ で指定されるイントリンシックが [[Prototype]] に使用されます。_internalSlotsList_ には、オブジェクトの一部として定義しなければならない追加の内部スロット名が含まれます。_internalSlotsList_ が提供されない場合、新しい空の List が使用されます。</dd>
+        <dd>これは、[[Prototype]] の値が、コンストラクターの *"prototype"* プロパティが存在する場合はそこから取得され、存在しない場合はコンストラクターのレルム内で _intrinsicDefaultProto_ によって指定される組み込みオブジェクトとなる通常のオブジェクトを作成する。_internalSlotsList_ には、オブジェクトの一部として定義しなければならない追加の内部スロットの名前が含まれる。</dd>
       </dl>
       <emu-alg>
         1. 表明: _intrinsicDefaultProto_ は、この仕様におけるイントリンシックオブジェクトの名前である。対応するオブジェクトは、オブジェクトの [[Prototype]] 値として使用されることを意図したイントリンシックでなければならない。
@@ -13598,19 +13598,16 @@
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>特定のコンストラクターに対応するオブジェクトを作成する際に使用するべき [[Prototype]] 値を決定します。その値は、コンストラクターの *"prototype"* プロパティが存在する場合はそこから取得されます。それ以外の場合、_intrinsicDefaultProto_ で指定されるイントリンシックが [[Prototype]] に使用されます。</dd>
+        <dd>これは、特定のコンストラクターを使用して構築されるオブジェクトに使用すべき [[Prototype]] の値を決定する。この値は、コンストラクターの *"prototype"* プロパティが存在する場合、そこから取得される。それ以外の場合は、コンストラクターのレルム内で _intrinsicDefaultProto_ によって指定される組み込みオブジェクトとなる。</dd>
       </dl>
       <emu-alg>
-        1. 表明: _intrinsicDefaultProto_ は、この仕様におけるイントリンシックオブジェクトの名前である。対応するオブジェクトは、オブジェクトの [[Prototype]] 値として使用されることを意図したイントリンシックでなければならない。
+        1. Assert: _intrinsicDefaultProto_ は、この仕様における組み込みオブジェクトの名前である。対応するオブジェクトは、オブジェクトの [[Prototype]] 値として使用されることを意図した組み込みオブジェクトでなければならない。
         1. _proto_ を ? Get(_ctor_, *"prototype"*) とする。
-        1. _proto_ が Object でない場合、
-          1. _realm_ を ? GetFunctionRealm(_ctor_) とする。
-          1. _proto_ を _realm_ の _intrinsicDefaultProto_ という名前のイントリンシックオブジェクトに設定する。
-        1. _proto_ を返す。
+        1. _proto_ が Object である場合、_proto_ を返す。
+        1. NOTE: _ctor_ のレルムから取得されるフォールバック値は、実行中の実行コンテキストに依存しない。
+        1. _realm_ を ? GetFunctionRealm(_ctor_) とする。
+        1. _realm_.[[Intrinsics]] 内の _intrinsicDefaultProto_ によって識別されるフィールドの値を返す。
       </emu-alg>
-      <emu-note>
-        <p>_ctor_ が [[Prototype]] 値を提供しない場合、使用される既定値は実行中の実行コンテキストからではなく、_ctor_ 関数の Realm から取得されます。</p>
-      </emu-note>
     </emu-clause>
 
     <emu-clause id="sec-requireinternalslot" type="abstract operation">
