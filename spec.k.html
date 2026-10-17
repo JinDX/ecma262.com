@@ -42645,17 +42645,18 @@ THH:mm:ss.sss
           1. _kept_를 새로운 빈 List로 둡니다.
           1. _captured_를 0으로 둡니다.
           1. _k_를 0으로 둡니다.
-          1. _k_ &lt; _length_인 동안 다음을 반복합니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
             1. _kValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
             1. _selected_를 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))로 둡니다.
-            1. _selected_가 *true*이면, 다음을 수행합니다.
-              1. _kValue_를 _kept_에 추가합니다.
+            1. _selected_가 *true*이면 다음을 수행합니다.
+              1. _kept_에 _kValue_를 추가합니다.
               1. _captured_를 _captured_ + 1로 설정합니다.
             1. _k_를 _k_ + 1로 설정합니다.
           1. _result_를 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_captured_) »)로 둡니다.
           1. _n_을 0으로 둡니다.
           1. _kept_의 각 요소 _element_에 대해 다음을 수행합니다.
-            1. ! TypedArraySetElement(_result_, 𝔽(_n_), _element_)를 수행합니다.
+            1. 참고: _callback_을 호출하여 _obj_의 기반 버퍼가 분리되거나 축소되면 _element_는 *undefined*일 수 있습니다.
+            1. 다음을 수행합니다: ? <emu-meta suppress-effects="user-code">TypedArraySetElement(_result_, 𝔽(_n_), _element_)</emu-meta>.
             1. _n_을 _n_ + 1로 설정합니다.
           1. _result_를 반환합니다.
         </emu-alg>
@@ -43240,10 +43241,11 @@ THH:mm:ss.sss
           1. IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_))가 *false*이면 *RangeError* 예외를 던집니다.
           1. _resultArray_를 ? TypedArrayCreateSameType(_obj_, _length_)로 둡니다.
           1. _k_를 0으로 둡니다.
-          1. _k_ &lt; _length_인 동안 다음을 반복합니다.
+          1. _k_ &lt; _length_인 동안 반복합니다.
             1. _k_ = _actualIndex_이면 _fromValue_를 _numericValue_로 둡니다.
             1. 그렇지 않으면 _fromValue_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
-            1. ! TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)를 수행합니다.
+            1. 참고: _index_ 또는 _value_가 Number나 BigInt로 변환될 때 코드를 실행하는 객체이고, 해당 코드가 _obj_의 기반 버퍼를 축소하면 _fromValue_는 *undefined*일 수 있습니다.
+            1. 다음을 수행합니다: ? <emu-meta suppress-effects="user-code">TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)</emu-meta>.
             1. _k_를 _k_ + 1로 설정합니다.
           1. _resultArray_를 반환합니다.
         </emu-alg>

@@ -42642,24 +42642,25 @@ THH:mm:ss.sss
         <p>此方法参数的解释和使用方式与 <emu-xref href="#sec-array.prototype.filter"></emu-xref> 中定义的 `Array.prototype.filter` 相同。</p>
         <p>调用时，此方法执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 *this* value。
+          1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 IsCallable(_callback_) 是 *false*，则抛出 *TypeError* 异常。
-          1. 令 _kept_ 为新的空 List。
+          1. 如果 IsCallable(_callback_) 为 *false*，则抛出 *TypeError* 异常。
+          1. 令 _kept_ 为一个新的空 List。
           1. 令 _captured_ 为 0。
           1. 令 _k_ 为 0。
-          1. 当 _k_ &lt; _length_ 时，重复执行，
+          1. 当 _k_ &lt; _length_ 时，重复执行：
             1. 令 _kValue_ 为 TypedArrayGetElement(_obj_, 𝔽(_k_))。
             1. 令 _selected_ 为 ToBoolean(? Call(_callback_, _thisArg_, « _kValue_, 𝔽(_k_), _obj_ »))。
-            1. 如果 _selected_ 是 *true*，则
+            1. 如果 _selected_ 为 *true*，则
               1. 将 _kValue_ 追加到 _kept_。
               1. 将 _captured_ 设置为 _captured_ + 1。
             1. 将 _k_ 设置为 _k_ + 1。
           1. 令 _result_ 为 ? TypedArraySpeciesCreate(_obj_, « 𝔽(_captured_) »)。
           1. 令 _n_ 为 0。
-          1. 对 _kept_ 的每个元素 _element_，执行
-            1. 执行 ! TypedArraySetElement(_result_, 𝔽(_n_), _element_)。
+          1. 对 _kept_ 中的每个元素 _element_，执行
+            1. 注：如果调用 _callback_ 导致 _obj_ 的底层缓冲区被分离或缩小，_element_ 可能为 *undefined*。
+            1. 执行 ? <emu-meta suppress-effects="user-code">TypedArraySetElement(_result_, 𝔽(_n_), _element_)</emu-meta>。
             1. 将 _n_ 设置为 _n_ + 1。
           1. 返回 _result_。
         </emu-alg>
@@ -43235,19 +43236,20 @@ THH:mm:ss.sss
         <h1>%TypedArray%.prototype.with ( _index_, _value_ )</h1>
         <p>调用时，此方法执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 *this* value。
+          1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _actualIndex_ 为 ? ToAbsoluteIndex(_index_, _length_)。
-          1. 如果 _obj_.[[ContentType]] 是 ~bigint~，则令 _numericValue_ 为 ? ToBigInt(_value_)。
+          1. 如果 _obj_.[[ContentType]] 为 ~bigint~，则令 _numericValue_ 为 ? ToBigInt(_value_)。
           1. 否则，令 _numericValue_ 为 ? ToNumber(_value_)。
-          1. 如果 IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_)) 是 *false*，则抛出 *RangeError* 异常。
+          1. 如果 IsValidIntegerIndex(_obj_, 𝔽(_actualIndex_)) 为 *false*，则抛出 *RangeError* 异常。
           1. 令 _resultArray_ 为 ? TypedArrayCreateSameType(_obj_, _length_)。
           1. 令 _k_ 为 0。
-          1. 当 _k_ &lt; _length_ 时，重复执行，
+          1. 当 _k_ &lt; _length_ 时，重复执行：
             1. 如果 _k_ = _actualIndex_，则令 _fromValue_ 为 _numericValue_。
             1. 否则，令 _fromValue_ 为 TypedArrayGetElement(_obj_, 𝔽(_k_))。
-            1. 执行 ! TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)。
+            1. 注：如果 _index_ 或 _value_ 是一个在转换为 Number 或 BigInt 时会执行代码的对象，并且该代码缩小了 _obj_ 的底层缓冲区，则 _fromValue_ 可能为 *undefined*。
+            1. 执行 ? <emu-meta suppress-effects="user-code">TypedArraySetElement(_resultArray_, 𝔽(_k_), _fromValue_)</emu-meta>。
             1. 将 _k_ 设置为 _k_ + 1。
           1. 返回 _resultArray_。
         </emu-alg>
