@@ -17239,7 +17239,7 @@
 
     <emu-clause id="sec-identifier-names">
       <h1>識別子名</h1>
-      <p>Unicode エスケープシーケンスは |IdentifierName| 内で許可され、その場合、|UnicodeEscapeSequence| の IdentifierCodePoint に等しい1つの Unicode コードポイントとして寄与します。|UnicodeEscapeSequence| に先行する `\\` は、いかなるコードポイントにも寄与しません。|UnicodeEscapeSequence| を、そうでなければ無効になるコードポイントを |IdentifierName| に含めるために使用することはできません。言い換えると、`\` |UnicodeEscapeSequence| の列を、それが寄与する |SourceCharacter| に置き換えた場合でも、結果は元の |IdentifierName| とまったく同じ |SourceCharacter| 要素の列を持つ有効な |IdentifierName| でなければなりません。この仕様における |IdentifierName| のすべての解釈は、特定のコードポイントを寄与させるためにエスケープシーケンスが使用されたかどうかにかかわらず、その実際のコードポイントに基づきます。</p>
+      <p>Unicode エスケープシーケンスは |IdentifierName| 内で許可され、その場合、|UnicodeEscapeSequence| の IdentifierCodePoint に等しい1つの Unicode コードポイントとして寄与します。|UnicodeEscapeSequence| に先行する `\\` は、いかなるコードポイントにも寄与しません。|UnicodeEscapeSequence| を、そうでなければ無効になるコードポイントを |IdentifierName| に含めるために使用することはできません。言い換えると、`\\` |UnicodeEscapeSequence| の列を、それが寄与する |SourceCharacter| に置き換えた場合でも、結果は元の |IdentifierName| とまったく同じ |SourceCharacter| 要素の列を持つ有効な |IdentifierName| でなければなりません。この仕様における |IdentifierName| のすべての解釈は、特定のコードポイントを寄与させるためにエスケープシーケンスが使用されたかどうかにかかわらず、その実際のコードポイントに基づきます。</p>
       <p>Unicode Standard に従って正準的に等価な2つの |IdentifierName| であっても、各 |UnicodeEscapeSequence| を置換した後にまったく同じコードポイント列で表現されない限り、<em>等しくありません</em>。</p>
 
       <emu-clause id="sec-identifier-names-static-semantics-early-errors">
@@ -39928,7 +39928,7 @@ THH:mm:ss.sss
             1. そうでない場合、
               1. _patternSymbol_ を |Pattern[~UnicodeMode, ~UnicodeSetsMode]| とする。
             1. _escapedPattern_ を、UTF-16 エンコードされた Unicode コードポイント（<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>）として解釈された _pattern_ と等価な _patternSymbol_ 形式の String とし、その中では以下で説明されるように特定のコードポイントがエスケープされているものとする。_escapedPattern_ は _pattern_ と異なる場合も異ならない場合もある。ただし、_escapedPattern_ を _patternSymbol_ として評価することによって得られる Abstract Closure は、構築されたオブジェクトの [[RegExpMatcher]] 内部スロットによって与えられる Abstract Closure と同一に動作しなければならない。同じ _pattern_ および _flags_ の値を使用してこの抽象操作を複数回呼び出した場合、同一の結果を生成しなければならない。
-            1. pattern 内に現れるコードポイント `/` または任意の |LineTerminator| は、*"\/"*、_escapedPattern_、*"/"*、および _flags_ の文字列連結が（適切な字句文脈において）構築された正規表現と同一に動作する |RegularExpressionLiteral| として構文解析できることを保証するために必要に応じて _escapedPattern_ 内でエスケープされなければならない。たとえば、_pattern_ が *"/"* である場合、_escapedPattern_ は *"\\/"* または *"\\u002F"* などであってもよいが、*"/"* ではいけない。これは、_flags_ が後続する `///` は |RegularExpressionLiteral| ではなく |SingleLineComment| として構文解析されるためである。_pattern_ が空の String である場合、この仕様は _escapedPattern_ を *"(?:)"* とすることで満たすことができる。
+            1. pattern 内に現れるコードポイント `/` または任意の |LineTerminator| は、*"/"*、_escapedPattern_、*"/"*、および _flags_ の文字列連結が（適切な字句文脈において）構築された正規表現と同一に動作する |RegularExpressionLiteral| として構文解析できることを保証するために必要に応じて _escapedPattern_ 内でエスケープされなければならない。たとえば、_pattern_ が *"/"* である場合、_escapedPattern_ は *"\\/"* または *"\\u002F"* などであってもよいが、*"/"* ではいけない。これは、_flags_ が後続する `///` は |RegularExpressionLiteral| ではなく |SingleLineComment| として構文解析されるためである。_pattern_ が空の String である場合、この仕様は _escapedPattern_ を *"(?:)"* とすることで満たすことができる。
             1. _escapedPattern_ を返す。
           </emu-alg>
 
@@ -41762,7 +41762,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _array_ を ? ToObject(*this* 値) とする。
           1. _length_ を ? LengthOfArrayLike(_array_) とする。
-          1. _separator_ を、ホスト環境の現在のロケールに適した実装定義のリスト区切り String 値（*" , "* など）とする。
+          1. _separator_ を、ホスト環境の現在のロケールに適した実装定義のリスト区切り String 値（*", "* など）とする。
           1. _result_ を空の String とする。
           1. _k_ を 0 とする。
           1. _k_ &lt; _length_ の間、次を繰り返す。
