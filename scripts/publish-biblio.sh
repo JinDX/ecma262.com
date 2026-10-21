@@ -5,7 +5,7 @@ set -euxo pipefail
 
 npx ecmarkup --verbose spec.html --write-biblio biblio/biblio.json /dev/null
 
-cp LICENSE.md biblio/
+cp _LICENSE.md biblio/LICENSE.md
 
 cd biblio
 
