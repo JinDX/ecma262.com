@@ -2351,16 +2351,16 @@
           <emu-alg>
             1. _leftNumber_ を ! ToInt32(_x_) とする。
             1. _rightNumber_ を ! ToInt32(_y_) とする。
-            1. _leftBits_ を ℝ(_leftNumber_) を表す32ビットの2の補数ビット列とする。
-            1. _rightBits_ を ℝ(_rightNumber_) を表す32ビットの2の補数ビット列とする。
+            1. _leftBits_ を ℝ(_leftNumber_) を表す 32 ビットの 2 の補数ビット列とする。
+            1. _rightBits_ を ℝ(_rightNumber_) を表す 32 ビットの 2 の補数ビット列とする。
             1. _op_ が `&amp;` である場合、
-              1. _result_ を _leftBits_ と _rightBits_ にビット単位 AND 演算を適用した結果とする。
+              1. _result_ を _leftBits_ と _rightBits_ にビット単位の <code>AND</code> 演算を適用した結果とする。
             1. そうでなく、_op_ が `^` である場合、
-              1. _result_ を _leftBits_ と _rightBits_ にビット単位排他的 OR（XOR）演算を適用した結果とする。
-            1. そうでない場合、
+              1. _result_ を _leftBits_ と _rightBits_ にビット単位の <code>XOR</code> (排他的 OR) 演算を適用した結果とする。
+            1. それ以外の場合、
               1. 表明: _op_ は `|` である。
-              1. _result_ を _leftBits_ と _rightBits_ にビット単位包含 OR 演算を適用した結果とする。
-            1. 32ビットの2の補数ビット列 _result_ によって表される整数に対応する Number 値を返す。
+              1. _result_ を _leftBits_ と _rightBits_ にビット単位の <code>OR</code> (包含的 OR) 演算を適用した結果とする。
+            1. 32 ビットの 2 の補数ビット列 _result_ が表す整数に対応する Number 値を返す。
           </emu-alg>
         </emu-clause>
 
@@ -2690,53 +2690,7 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-binaryand" type="abstract operation">
-          <h1>
-            BinaryAnd (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1 かつ _y_ = 1 である場合、1 を返す。
-            1. 0 を返す。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryor" type="abstract operation">
-          <h1>
-            BinaryOr (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1 または _y_ = 1 である場合、1 を返す。
-            1. 0 を返す。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryxor" type="abstract operation">
-          <h1>
-            BinaryXor (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1 かつ _y_ = 0 である場合、1 を返す。
-            1. _x_ = 0 かつ _y_ = 1 である場合、1 を返す。
-            1. 0 を返す。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-bigintbitwiseop" type="abstract operation">
+        <emu-clause id="sec-bigintbitwiseop" type="abstract operation" oldids="sec-binaryand,sec-binaryor,sec-binaryxor">
           <h1>
             BigIntBitwiseOp (
               _op_: `&amp;`, `^`, or `|`,
@@ -2751,26 +2705,27 @@
             1. _y_ を ℝ(_y_) に設定する。
             1. _result_ を 0 とする。
             1. _shift_ を 0 とする。
-            1. (_x_ = 0 または _x_ = -1) かつ (_y_ = 0 または _y_ = -1) になるまで、次を繰り返す。
-              1. _xDigit_ を _x_ modulo 2 とする。
-              1. _yDigit_ を _y_ modulo 2 とする。
+            1. (_x_ = 0 or _x_ = -1) and (_y_ = 0 or _y_ = -1) となるまで、繰り返す。
+              1. _xBit_ を _x_ modulo 2 とする。
+              1. _yBit_ を _y_ modulo 2 とする。
               1. _op_ が `&amp;` である場合、
-                1. _result_ を _result_ + 2<sup>_shift_</sup> × BinaryAnd(_xDigit_, _yDigit_) に設定する。
-              1. そうでなく、_op_ が `|` である場合、
-                1. _result_ を _result_ + 2<sup>_shift_</sup> × BinaryOr(_xDigit_, _yDigit_) に設定する。
-              1. そうでない場合、
-                1. 表明: _op_ は `^` である。
-                1. _result_ を _result_ + 2<sup>_shift_</sup> × BinaryXor(_xDigit_, _yDigit_) に設定する。
+                1. _resultBit_ を _xBit_ と _yBit_ に単一ビット <code>AND</code> 演算を適用した結果とする。
+              1. そうでなく、_op_ が `^` である場合、
+                1. _resultBit_ を _xBit_ と _yBit_ に単一ビット <code>XOR</code> (排他的 OR) 演算を適用した結果とする。
+              1. それ以外の場合、
+                1. 表明: _op_ は `|` である。
+                1. _resultBit_ を _xBit_ と _yBit_ に単一ビット <code>OR</code> (包含的 OR) 演算を適用した結果とする。
+              1. _result_ を _result_ + 2<sup>_shift_</sup> × _resultBit_ に設定する。
               1. _shift_ を _shift_ + 1 に設定する。
-              1. _x_ を (_x_ - _xDigit_) / 2 に設定する。
-              1. _y_ を (_y_ - _yDigit_) / 2 に設定する。
+              1. _x_ を (_x_ - _xBit_) / 2 に設定する。
+              1. _y_ を (_y_ - _yBit_) / 2 に設定する。
             1. _op_ が `&amp;` である場合、
-              1. _signBit_ を BinaryAnd(_x_ modulo 2, _y_ modulo 2) とする。
-            1. そうでなく、_op_ が `|` である場合、
-              1. _signBit_ を BinaryOr(_x_ modulo 2, _y_ modulo 2) とする。
-            1. そうでない場合、
-              1. 表明: _op_ は `^` である。
-              1. _signBit_ を BinaryXor(_x_ modulo 2, _y_ modulo 2) とする。
+              1. _signBit_ を (_x_ modulo 2) と (_y_ modulo 2) に単一ビット <code>AND</code> 演算を適用した結果とする。
+            1. そうでなく、_op_ が `^` である場合、
+              1. _signBit_ を (_x_ modulo 2) と (_y_ modulo 2) に単一ビット <code>XOR</code> (排他的 OR) 演算を適用した結果とする。
+            1. それ以外の場合、
+              1. 表明: _op_ は `|` である。
+              1. _signBit_ を (_x_ modulo 2) と (_y_ modulo 2) に単一ビット <code>OR</code> (包含的 OR) 演算を適用した結果とする。
             1. _signBit_ ≠ 0 である場合、
               1. _result_ を _result_ - 2<sup>_shift_</sup> に設定する。
               1. 注記: これにより符号が拡張される。
@@ -47579,18 +47534,18 @@ THH:mm:ss.sss
           <dd>この操作は引数のすべての byte 値に対してビット単位演算を atomic に実行し、byte 値の List を返します。</dd>
         </dl>
         <emu-alg>
-          1. 表明: _xBytes_ と _yBytes_ は同じ要素数を持つ。
+          1. 表明: _xBytes_ と _yBytes_ の要素数は同じである。
           1. _result_ を新しい空の List とする。
           1. _i_ を 0 とする。
-          1. _xBytes_ の各要素 _xByte_ について、次を行う。
+          1. _xBytes_ の各要素 _xByte_ について、次を実行する。
             1. _yByte_ を _yBytes_[_i_] とする。
             1. _op_ が `&amp;` である場合、
-              1. _resultByte_ を _xByte_ と _yByte_ にビット単位 AND 演算を適用した結果とする。
+              1. _resultByte_ を _xByte_ と _yByte_ にビット単位の <code>AND</code> 演算を適用した結果とする。
             1. そうでなく、_op_ が `^` である場合、
-              1. _resultByte_ を _xByte_ と _yByte_ にビット単位排他的 OR (XOR) 演算を適用した結果とする。
-            1. そうでない場合、
+              1. _resultByte_ を _xByte_ と _yByte_ にビット単位の <code>XOR</code> (排他的 OR) 演算を適用した結果とする。
+            1. それ以外の場合、
               1. 表明: _op_ は `|` である。
-              1. _resultByte_ を _xByte_ と _yByte_ にビット単位包含 OR 演算を適用した結果とする。
+              1. _resultByte_ を _xByte_ と _yByte_ にビット単位の <code>OR</code> (包含的 OR) 演算を適用した結果とする。
             1. _i_ を _i_ + 1 に設定する。
             1. _resultByte_ を _result_ に追加する。
           1. _result_ を返す。

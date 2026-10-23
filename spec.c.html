@@ -2354,12 +2354,12 @@
             1. 令 _leftBits_ 为表示 ℝ(_leftNumber_) 的 32 位二进制补码位串。
             1. 令 _rightBits_ 为表示 ℝ(_rightNumber_) 的 32 位二进制补码位串。
             1. 如果 _op_ 是 `&amp;`，则
-              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 应用按位 AND 操作的结果。
-            1. 否则如果 _op_ 是 `^`，则
-              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 应用按位异或（XOR）操作的结果。
+              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 执行按位 <code>AND</code> 运算的结果。
+            1. 否则，如果 _op_ 是 `^`，则
+              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 执行按位 <code>XOR</code>（异或）运算的结果。
             1. 否则，
               1. 断言：_op_ 是 `|`。
-              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 应用按位包含 OR 操作的结果。
+              1. 令 _result_ 为对 _leftBits_ 和 _rightBits_ 执行按位 <code>OR</code>（包含或）运算的结果。
             1. 返回由 32 位二进制补码位串 _result_ 表示的整数所对应的 Number 值。
           </emu-alg>
         </emu-clause>
@@ -2690,90 +2690,45 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-binaryand" type="abstract operation">
-          <h1>
-            BinaryAnd (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. 如果 _x_ = 1 且 _y_ = 1，则返回 1。
-            1. 返回 0。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryor" type="abstract operation">
-          <h1>
-            BinaryOr (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. 如果 _x_ = 1 或 _y_ = 1，则返回 1。
-            1. 返回 0。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryxor" type="abstract operation">
-          <h1>
-            BinaryXor (
-              _x_: 0 or 1,
-              _y_: 0 or 1,
-            ): 0 or 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. 如果 _x_ = 1 且 _y_ = 0，则返回 1。
-            1. 如果 _x_ = 0 且 _y_ = 1，则返回 1。
-            1. 返回 0。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-bigintbitwiseop" type="abstract operation">
+        <emu-clause id="sec-bigintbitwiseop" type="abstract operation" oldids="sec-binaryand,sec-binaryor,sec-binaryxor">
           <h1>
             BigIntBitwiseOp (
-              _op_: `&amp;`, `^`, or `|`,
-              _x_: a BigInt,
-              _y_: a BigInt,
-            ): a BigInt
+              _op_: `&amp;`、`^` 或 `|`，,
+              _x_: 一个 BigInt，,
+              _y_: 一个 BigInt，,
+            ): 一个 BigInt
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 将 _x_ 设置为 ℝ(_x_)。
-            1. 将 _y_ 设置为 ℝ(_y_)。
+            1. 将 _x_ 设为 ℝ(_x_)。
+            1. 将 _y_ 设为 ℝ(_y_)。
             1. 令 _result_ 为 0。
             1. 令 _shift_ 为 0。
-            1. 重复，直到 (_x_ = 0 或 _x_ = -1) 且 (_y_ = 0 或 _y_ = -1)，
-              1. 令 _xDigit_ 为 _x_ modulo 2。
-              1. 令 _yDigit_ 为 _y_ modulo 2。
+            1. 重复执行，直到 (_x_ = 0 or _x_ = -1) and (_y_ = 0 or _y_ = -1) 成立，
+              1. 令 _xBit_ 为 _x_ modulo 2。
+              1. 令 _yBit_ 为 _y_ modulo 2。
               1. 如果 _op_ 是 `&amp;`，则
-                1. 将 _result_ 设置为 _result_ + 2<sup>_shift_</sup> × BinaryAnd(_xDigit_, _yDigit_)。
-              1. 否则如果 _op_ 是 `|`，则
-                1. 将 _result_ 设置为 _result_ + 2<sup>_shift_</sup> × BinaryOr(_xDigit_, _yDigit_)。
+                1. 令 _resultBit_ 为对 _xBit_ 和 _yBit_ 执行单比特 <code>AND</code> 运算的结果。
+              1. 否则，如果 _op_ 是 `^`，则
+                1. 令 _resultBit_ 为对 _xBit_ 和 _yBit_ 执行单比特 <code>XOR</code>（异或）运算的结果。
               1. 否则，
-                1. 断言：_op_ 是 `^`。
-                1. 将 _result_ 设置为 _result_ + 2<sup>_shift_</sup> × BinaryXor(_xDigit_, _yDigit_)。
-              1. 将 _shift_ 设置为 _shift_ + 1。
-              1. 将 _x_ 设置为 (_x_ - _xDigit_) / 2。
-              1. 将 _y_ 设置为 (_y_ - _yDigit_) / 2。
+                1. 断言：_op_ 是 `|`。
+                1. 令 _resultBit_ 为对 _xBit_ 和 _yBit_ 执行单比特 <code>OR</code>（包含或）运算的结果。
+              1. 将 _result_ 设为 _result_ + 2<sup>_shift_</sup> × _resultBit_。
+              1. 将 _shift_ 设为 _shift_ + 1。
+              1. 将 _x_ 设为 (_x_ - _xBit_) / 2。
+              1. 将 _y_ 设为 (_y_ - _yBit_) / 2。
             1. 如果 _op_ 是 `&amp;`，则
-              1. 令 _signBit_ 为 BinaryAnd(_x_ modulo 2, _y_ modulo 2)。
-            1. 否则如果 _op_ 是 `|`，则
-              1. 令 _signBit_ 为 BinaryOr(_x_ modulo 2, _y_ modulo 2)。
+              1. 令 _signBit_ 为对 (_x_ modulo 2) 和 (_y_ modulo 2) 执行单比特 <code>AND</code> 运算的结果。
+            1. 否则，如果 _op_ 是 `^`，则
+              1. 令 _signBit_ 为对 (_x_ modulo 2) 和 (_y_ modulo 2) 执行单比特 <code>XOR</code>（异或）运算的结果。
             1. 否则，
-              1. 断言：_op_ 是 `^`。
-              1. 令 _signBit_ 为 BinaryXor(_x_ modulo 2, _y_ modulo 2)。
+              1. 断言：_op_ 是 `|`。
+              1. 令 _signBit_ 为对 (_x_ modulo 2) 和 (_y_ modulo 2) 执行单比特 <code>OR</code>（包含或）运算的结果。
             1. 如果 _signBit_ ≠ 0，则
-              1. 将 _result_ 设置为 _result_ - 2<sup>_shift_</sup>。
-              1. 注：这会扩展符号。
+              1. 将 _result_ 设为 _result_ - 2<sup>_shift_</sup>。
+              1. 注：这会进行符号扩展。
             1. 返回 _result_ 对应的 BigInt 值。
           </emu-alg>
         </emu-clause>
@@ -47586,19 +47541,19 @@ THH:mm:ss.sss
           <dd>此操作以原子方式对参数的所有字节值执行按位操作，并返回一个字节值 List。</dd>
         </dl>
         <emu-alg>
-          1. 断言：_xBytes_ 和 _yBytes_ 具有相同的元素数量。
-          1. 令 _result_ 为新的空 List。
+          1. 断言：_xBytes_ 和 _yBytes_ 具有相同数量的元素。
+          1. 令 _result_ 为一个新的空列表。
           1. 令 _i_ 为 0。
-          1. 对 _xBytes_ 的每个元素 _xByte_，执行
+          1. 对于 _xBytes_ 的每个元素 _xByte_，执行
             1. 令 _yByte_ 为 _yBytes_[_i_]。
             1. 如果 _op_ 是 `&amp;`，则
-              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 应用按位 AND 操作的结果。
-            1. 否则如果 _op_ 是 `^`，则
-              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 应用按位异或（XOR）操作的结果。
+              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 执行按位 <code>AND</code> 运算的结果。
+            1. 否则，如果 _op_ 是 `^`，则
+              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 执行按位 <code>XOR</code>（异或）运算的结果。
             1. 否则，
               1. 断言：_op_ 是 `|`。
-              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 应用按位包含 OR 操作的结果。
-            1. 将 _i_ 设置为 _i_ + 1。
+              1. 令 _resultByte_ 为对 _xByte_ 和 _yByte_ 执行按位 <code>OR</code>（包含或）运算的结果。
+            1. 将 _i_ 设为 _i_ + 1。
             1. 将 _resultByte_ 追加到 _result_。
           1. 返回 _result_。
         </emu-alg>

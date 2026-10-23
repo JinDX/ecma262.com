@@ -2353,14 +2353,14 @@
             1. _rightNumber_를 ! ToInt32(_y_)로 둡니다.
             1. _leftBits_를 ℝ(_leftNumber_)를 나타내는 32비트 2의 보수 비트 문자열로 둡니다.
             1. _rightBits_를 ℝ(_rightNumber_)를 나타내는 32비트 2의 보수 비트 문자열로 둡니다.
-            1. _op_가 `&amp;`이면, 다음을 수행합니다.
-              1. _result_를 _leftBits_와 _rightBits_에 비트 AND 연산을 적용한 결과로 둡니다.
-            1. 그렇지 않고 _op_가 `^`이면, 다음을 수행합니다.
-              1. _result_를 _leftBits_와 _rightBits_에 비트 배타적 OR(XOR) 연산을 적용한 결과로 둡니다.
+            1. _op_가 `&amp;`이면,
+              1. _result_를 _leftBits_와 _rightBits_에 비트 단위 <code>AND</code> 연산을 적용한 결과로 둡니다.
+            1. 그렇지 않고 _op_가 `^`이면,
+              1. _result_를 _leftBits_와 _rightBits_에 비트 단위 <code>XOR</code>(배타적 OR) 연산을 적용한 결과로 둡니다.
             1. 그렇지 않으면,
               1. 단언: _op_는 `|`입니다.
-              1. _result_를 _leftBits_와 _rightBits_에 비트 포괄적 OR 연산을 적용한 결과로 둡니다.
-            1. 32비트 2의 보수 비트 문자열 _result_가 나타내는 정수에 대한 Number 값을 반환합니다.
+              1. _result_를 _leftBits_와 _rightBits_에 비트 단위 <code>OR</code>(포괄적 OR) 연산을 적용한 결과로 둡니다.
+            1. 32비트 2의 보수 비트 문자열 _result_가 나타내는 정수에 해당하는 Number 값을 반환합니다.
           </emu-alg>
         </emu-clause>
 
@@ -2690,53 +2690,7 @@
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-binaryand" type="abstract operation">
-          <h1>
-            BinaryAnd (
-              _x_: 0 또는 1,
-              _y_: 0 또는 1,
-            ): 0 또는 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1이고 _y_ = 1이면, 1을 반환합니다.
-            1. 0을 반환합니다.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryor" type="abstract operation">
-          <h1>
-            BinaryOr (
-              _x_: 0 또는 1,
-              _y_: 0 또는 1,
-            ): 0 또는 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1이거나 _y_ = 1이면, 1을 반환합니다.
-            1. 0을 반환합니다.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-binaryxor" type="abstract operation">
-          <h1>
-            BinaryXor (
-              _x_: 0 또는 1,
-              _y_: 0 또는 1,
-            ): 0 또는 1
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _x_ = 1이고 _y_ = 0이면, 1을 반환합니다.
-            1. _x_ = 0이고 _y_ = 1이면, 1을 반환합니다.
-            1. 0을 반환합니다.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-bigintbitwiseop" type="abstract operation">
+        <emu-clause id="sec-bigintbitwiseop" type="abstract operation" oldids="sec-binaryand,sec-binaryor,sec-binaryxor">
           <h1>
             BigIntBitwiseOp (
               _op_: `&amp;`, `^`, or `|`,
@@ -2751,30 +2705,31 @@
             1. _y_를 ℝ(_y_)로 설정합니다.
             1. _result_를 0으로 둡니다.
             1. _shift_를 0으로 둡니다.
-            1. (_x_ = 0 또는 _x_ = -1)이고 (_y_ = 0 또는 _y_ = -1)이 될 때까지 다음을 반복합니다.
-              1. _xDigit_을 _x_ modulo 2로 둡니다.
-              1. _yDigit_을 _y_ modulo 2로 둡니다.
-              1. _op_가 `&amp;`이면, 다음을 수행합니다.
-                1. _result_를 _result_ + 2<sup>_shift_</sup> × BinaryAnd(_xDigit_, _yDigit_)로 설정합니다.
-              1. 그렇지 않고 _op_가 `|`이면, 다음을 수행합니다.
-                1. _result_를 _result_ + 2<sup>_shift_</sup> × BinaryOr(_xDigit_, _yDigit_)로 설정합니다.
+            1. (_x_ = 0 또는 _x_ = -1)이고 (_y_ = 0 또는 _y_ = -1)이 될 때까지 다음을 반복합니다,
+              1. _xBit_를 _x_ modulo 2로 둡니다.
+              1. _yBit_를 _y_ modulo 2로 둡니다.
+              1. _op_가 `&amp;`이면,
+                1. _resultBit_를 _xBit_와 _yBit_에 단일 비트 <code>AND</code> 연산을 적용한 결과로 둡니다.
+              1. 그렇지 않고 _op_가 `^`이면,
+                1. _resultBit_를 _xBit_와 _yBit_에 단일 비트 <code>XOR</code>(배타적 OR) 연산을 적용한 결과로 둡니다.
               1. 그렇지 않으면,
-                1. 단언: _op_는 `^`입니다.
-                1. _result_를 _result_ + 2<sup>_shift_</sup> × BinaryXor(_xDigit_, _yDigit_)로 설정합니다.
+                1. 단언: _op_는 `|`입니다.
+                1. _resultBit_를 _xBit_와 _yBit_에 단일 비트 <code>OR</code>(포괄적 OR) 연산을 적용한 결과로 둡니다.
+              1. _result_를 _result_ + 2<sup>_shift_</sup> × _resultBit_로 설정합니다.
               1. _shift_를 _shift_ + 1로 설정합니다.
-              1. _x_를 (_x_ - _xDigit_) / 2로 설정합니다.
-              1. _y_를 (_y_ - _yDigit_) / 2로 설정합니다.
-            1. _op_가 `&amp;`이면, 다음을 수행합니다.
-              1. _signBit_를 BinaryAnd(_x_ modulo 2, _y_ modulo 2)로 둡니다.
-            1. 그렇지 않고 _op_가 `|`이면, 다음을 수행합니다.
-              1. _signBit_를 BinaryOr(_x_ modulo 2, _y_ modulo 2)로 둡니다.
+              1. _x_를 (_x_ - _xBit_) / 2로 설정합니다.
+              1. _y_를 (_y_ - _yBit_) / 2로 설정합니다.
+            1. _op_가 `&amp;`이면,
+              1. _signBit_를 (_x_ modulo 2)와 (_y_ modulo 2)에 단일 비트 <code>AND</code> 연산을 적용한 결과로 둡니다.
+            1. 그렇지 않고 _op_가 `^`이면,
+              1. _signBit_를 (_x_ modulo 2)와 (_y_ modulo 2)에 단일 비트 <code>XOR</code>(배타적 OR) 연산을 적용한 결과로 둡니다.
             1. 그렇지 않으면,
-              1. 단언: _op_는 `^`입니다.
-              1. _signBit_를 BinaryXor(_x_ modulo 2, _y_ modulo 2)로 둡니다.
-            1. _signBit_ ≠ 0이면, 다음을 수행합니다.
+              1. 단언: _op_는 `|`입니다.
+              1. _signBit_를 (_x_ modulo 2)와 (_y_ modulo 2)에 단일 비트 <code>OR</code>(포괄적 OR) 연산을 적용한 결과로 둡니다.
+            1. _signBit_ ≠ 0이면,
               1. _result_를 _result_ - 2<sup>_shift_</sup>로 설정합니다.
               1. 참고: 이는 부호를 확장합니다.
-            1. _result_에 대한 BigInt 값을 반환합니다.
+            1. _result_에 해당하는 BigInt 값을 반환합니다.
           </emu-alg>
         </emu-clause>
 
@@ -6581,8 +6536,8 @@
     <emu-clause id="sec-createlistfromarraylike" type="abstract operation">
       <h1>
         CreateListFromArrayLike (
-        _obj_: ECMAScript 언어 값,
-        optional _validElementTypes_: ~any~ or ~property-key~,
+          _obj_: ECMAScript 언어 값,
+          optional _validElementTypes_: ~any~ or ~property-key~,
         ): ECMAScript 언어 값의 List를 포함하는 정상 완료 또는 예외 완료
       </h1>
       <dl class="header">
@@ -47586,15 +47541,15 @@ THH:mm:ss.sss
           1. _i_를 0으로 둡니다.
           1. _xBytes_의 각 요소 _xByte_에 대해 다음을 수행합니다.
             1. _yByte_를 _yBytes_[_i_]로 둡니다.
-            1. _op_가 `&amp;`이면, 다음을 수행합니다.
-              1. _resultByte_를 _xByte_와 _yByte_에 비트 AND 연산을 적용한 결과로 둡니다.
-            1. 그렇지 않고 _op_가 `^`이면, 다음을 수행합니다.
-              1. _resultByte_를 _xByte_와 _yByte_에 비트 배타적 OR(XOR) 연산을 적용한 결과로 둡니다.
+            1. _op_가 `&amp;`이면,
+              1. _resultByte_를 _xByte_와 _yByte_에 비트 단위 <code>AND</code> 연산을 적용한 결과로 둡니다.
+            1. 그렇지 않고 _op_가 `^`이면,
+              1. _resultByte_를 _xByte_와 _yByte_에 비트 단위 <code>XOR</code>(배타적 OR) 연산을 적용한 결과로 둡니다.
             1. 그렇지 않으면,
               1. 단언: _op_는 `|`입니다.
-              1. _resultByte_를 _xByte_와 _yByte_에 비트 포괄적 OR 연산을 적용한 결과로 둡니다.
+              1. _resultByte_를 _xByte_와 _yByte_에 비트 단위 <code>OR</code>(포괄적 OR) 연산을 적용한 결과로 둡니다.
             1. _i_를 _i_ + 1로 설정합니다.
-            1. _resultByte_를 _result_에 추가합니다.
+            1. _result_에 _resultByte_를 추가합니다.
           1. _result_를 반환합니다.
         </emu-alg>
       </emu-clause>
