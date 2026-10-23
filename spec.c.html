@@ -6582,25 +6582,25 @@
       <h1>
         CreateListFromArrayLike (
           _obj_: an ECMAScript language value,
-          optional _validElementTypes_: ~all~ or ~property-key~,
+          optional _validElementTypes_: ~any~ or ~property-key~,
         ): either a normal completion containing a List of ECMAScript language values or a throw completion
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>它用于创建一个 List 值，其元素由 _obj_ 的索引属性提供。_validElementTypes_ 指示允许作为元素的值类型。</dd>
+        <dd>它用于创建一个 List 值，其元素由 _obj_ 的索引属性提供。_validElementTypes_ 指示允许作为元素的值的类型。</dd>
       </dl>
       <emu-alg>
-        1. 如果不存在 _validElementTypes_，则将 _validElementTypes_ 设置为 ~all~。
+        1. 如果不存在 _validElementTypes_，则将 _validElementTypes_ 设为 ~any~。
         1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
         1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-        1. 令 _list_ 为新的空 List。
+        1. 令 _list_ 为一个新的空 List。
         1. 令 _index_ 为 0。
-        1. 当 _index_ &lt; _length_ 时，重复执行
+        1. 当 _index_ &lt; _length_ 时，重复执行：
           1. 令 _indexName_ 为 ! ToString(𝔽(_index_))。
           1. 令 _next_ 为 ? Get(_obj_, _indexName_)。
-          1. 如果 _validElementTypes_ 是 ~property-key~ 且 _next_ 不是属性键，则抛出 *TypeError* 异常。
+          1. 如果 _validElementTypes_ 为 ~property-key~ 且 _next_ 不是属性键，则抛出 *TypeError* 异常。
           1. 将 _next_ 追加到 _list_。
-          1. 将 _index_ 设置为 _index_ + 1。
+          1. 将 _index_ 设为 _index_ + 1。
         1. 返回 _list_。
       </emu-alg>
     </emu-clause>
@@ -41205,24 +41205,51 @@ THH:mm:ss.sss
         <p>此方法将数组元素转换为 Strings，然后连接这些 Strings，并在它们之间插入 _separator_。如果未提供分隔符，则使用单个逗号作为分隔符。</p>
         <p>调用时，它执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 ? ToObject(*this* value)。
+          1. 令 _obj_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_obj_)。
-          1. 如果 _separator_ 是 *undefined*，则令 _separatorString_ 为 *","*。
-          1. 否则，令 _separatorString_ 为 ? ToString(_separator_)。
-          1. 令 _result_ 为空 String。
-          1. 令 _k_ 为 0。
-          1. 当 _k_ &lt; _length_ 时，重复执行，
-            1. 如果 _k_ > 0，则将 _result_ 设置为 _result_ 和 _separatorString_ 的字符串连接。
-            1. 令 _element_ 为 ? Get(_obj_, ! ToString(𝔽(_k_)))。
-            1. 如果 _element_ 既不是 *undefined* 也不是 *null*，则
-              1. 令 _elementString_ 为 ? ToString(_element_)。
-              1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接。
-            1. 将 _k_ 设置为 _k_ + 1。
-          1. 返回 _result_。
+          1. 如果 _separator_ 为 *undefined*，则令 _separatorString_ 为 *","*；否则令 _separatorString_ 为 ? ToString(_separator_)。
+          1. 返回 ? JoinIndexedProperties(_obj_, _length_, _separatorString_)。
         </emu-alg>
         <emu-note>
-          <p>此方法有意设计为通用方法；它不要求其 *this* value 是 Array。因此，它可以被转移到其他种类的对象上用作方法。</p>
+          <p>此方法特意设计为泛型方法；它不要求其 *this* 值为 Array。因此，可以将其移植到其他类型的对象上作为方法使用。</p>
         </emu-note>
+
+        <emu-clause id="sec-joinindexedproperties" type="abstract operation">
+          <h1>
+            JoinIndexedProperties (
+              _obj_: an Object,
+              _length_: a non-negative integer,
+              _separator_: a String,
+              optional _methodName_: a property key,
+              optional _methodArgs_: a List of ECMAScript language values,
+            ): either a normal completion containing a String or a throw completion
+          </h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>它将 _obj_ 中从 0 到 _length_ - 1（含两端）的整数索引属性转换为字符串（可选地通过方法调用），然后以分隔符字符串分隔这些字符串并将其连接起来。</dd>
+          </dl>
+          <emu-alg>
+            1. 如果存在 _methodName_ 且不存在 _methodArgs_，则将 _methodArgs_ 设为一个新的空列表。
+            1. 令 _result_ 为空字符串。
+            1. 令 _k_ 为 0。
+            1. 当 _k_ &lt; _length_ 时，重复执行：
+              1. 如果 _k_ > 0，则将 _result_ 设为 _result_ 与 _separator_ 连接所得的字符串。
+              1. 注意：如果 _obj_ 是 TypedArray，则以下对 Get 的调用将返回正常完成记录。
+              1. 令 _element_ 为 ? Get(_obj_, ! ToString(𝔽(_k_)))。
+              1. 如果 _element_ 既不是 *undefined* 也不是 *null*，则
+                1. 如果存在 _methodName_，则
+                  1. 令 _elementString_ 为 ? ToString(? Invoke(_element_, _methodName_, _methodArgs_))。
+                1. 否则，
+                  1. 注意：如果 _obj_ 是 TypedArray，则以下对 ToString 的调用将返回正常完成记录。
+                  1. 令 _elementString_ 为 ? ToString(_element_)。
+                1. 将 _result_ 设为 _result_ 与 _elementString_ 连接所得的字符串。
+              1. 将 _k_ 设为 _k_ + 1。
+            1. 返回 _result_。
+          </emu-alg>
+          <emu-note>
+            <p>_methodArgs_ 参数旨在供依赖此操作的其他规范（例如 ECMA-402）使用。</p>
+          </emu-note>
+        </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-array.prototype.keys" type="built-in function">
@@ -41766,26 +41793,24 @@ THH:mm:ss.sss
         <p>此方法可选参数的含义定义于 ECMA-402；不包含 ECMA-402 支持的实现不得将这些参数位置用于其他用途。</p>
         <p>调用时，此方法执行以下步骤：</p>
         <emu-alg>
-          1. 令 _array_ 为 ? ToObject(*this* value)。
+          1. 令 _array_ 为 ? ToObject(*this* 值)。
           1. 令 _length_ 为 ? LengthOfArrayLike(_array_)。
-          1. 令 _separator_ 为适合宿主环境当前区域设置的、由实现定义的列表分隔符 String 值（例如 *", "*）。
-          1. 令 _result_ 为空 String。
-          1. 令 _k_ 为 0。
-          1. 当 _k_ &lt; _length_ 时，重复执行，
-            1. 如果 _k_ > 0，则将 _result_ 设置为 _result_ 和 _separator_ 的字符串连接。
-            1. 令 _element_ 为 ? Get(_array_, ! ToString(𝔽(_k_)))。
-            1. 如果 _element_ 既不是 *undefined* 也不是 *null*，则
-              1. 令 _elementString_ 为 ? ToString(? Invoke(_element_, *"toLocaleString"*)).
-              1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接。
-            1. 将 _k_ 设置为 _k_ + 1。
-          1. 返回 _result_。
+          1. 返回 ? JoinIndexedProperties(_array_, _length_, LocalizedListSeparator(), *"toLocaleString"*)。
         </emu-alg>
         <emu-note>
-          <p>此方法使用数组元素各自的 `toLocaleString` 方法将它们转换为 Strings，然后连接这些 Strings，并在它们之间插入由实现定义、对区域设置敏感的分隔符 String。此方法类似于 `toString`，只是它旨在产生符合宿主环境当前区域设置惯例的区域设置敏感结果。</p>
+          <p>此方法类似于 `toString`，但旨在生成符合宿主环境当前区域设置惯例的区域设置敏感结果。</p>
         </emu-note>
         <emu-note>
-          <p>此方法有意设计为通用方法；它不要求其 *this* value 是 Array。因此，它可以被转移到其他种类的对象上用作方法。</p>
+          <p>此方法特意设计为泛型方法；它不要求其 *this* 值为 Array。因此，可以将其移植到其他类型的对象上作为方法使用。</p>
         </emu-note>
+
+        <emu-clause id="sec-localizedlistseparator" type="implementation-defined abstract operation">
+          <h1>LocalizedListSeparator ( ): 一个 String</h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>它返回一个由实现定义的 String，适合在宿主环境当前区域设置中用作列表分隔符（例如 *", "*）。</dd>
+          </dl>
+        </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-array.prototype.toreversed" type="built-in function">
@@ -42788,21 +42813,11 @@ THH:mm:ss.sss
         <p>此方法参数的解释和使用方式与 <emu-xref href="#sec-array.prototype.join"></emu-xref> 中定义的 `Array.prototype.join` 相同。</p>
         <p>调用时，此方法执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 *this* value。
+          1. 令 _obj_ 为 *this* 值。
           1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
           1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
-          1. 如果 _separator_ 是 *undefined*，则令 _separatorString_ 为 *","*。
-          1. 否则，令 _separatorString_ 为 ? ToString(_separator_)。
-          1. 令 _result_ 为空 String。
-          1. 令 _k_ 为 0。
-          1. 当 _k_ &lt; _length_ 时，重复执行，
-            1. 如果 _k_ > 0，则将 _result_ 设置为 _result_ 和 _separatorString_ 的字符串连接。
-            1. 令 _element_ 为 TypedArrayGetElement(_obj_, 𝔽(_k_))。
-            1. 如果 _element_ 不是 *undefined*，则
-              1. 令 _elementString_ 为 ! ToString(_element_)。
-              1. 将 _result_ 设置为 _result_ 和 _elementString_ 的字符串连接。
-            1. 将 _k_ 设置为 _k_ + 1。
-          1. 返回 _result_。
+          1. 如果 _separator_ 为 *undefined*，则令 _separatorString_ 为 *","*；否则令 _separatorString_ 为 ? ToString(_separator_)。
+          1. 返回 ? JoinIndexedProperties(_obj_, _length_, _separatorString_)。
         </emu-alg>
         <p>此方法不是通用方法。*this* value 必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
       </emu-clause>
@@ -43171,11 +43186,15 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.tolocalestring" type="built-in function">
         <h1>%TypedArray%.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>这是一个独立的方法，它实现与 <emu-xref href="#sec-array.prototype.tolocalestring"></emu-xref> 中定义的 `Array.prototype.toLocaleString` 相同的算法，但使用 TypedArrayLength 替代对 *"length"* 执行 [[Get]]。当底层缓冲区不可调整大小时，可以利用 *this* value 具有固定长度且其整数索引属性不稀疏这一事实优化该算法的实现。不过，此类优化不得对算法规定的行为引入任何可观察的变化。</p>
-        <p>此方法不是通用方法。在求值该算法之前，会以 *this* value 和 ~seq-cst~ 作为参数调用 ValidateTypedArray。如果其结果是突然完成，则会抛出该异常，而不是求值该算法。</p>
-        <emu-note>
-          <p>如果 ECMAScript 实现包含 ECMA-402 国际化 API，则此方法基于 ECMA-402 中的 `Array.prototype.toLocaleString` 算法。</p>
-        </emu-note>
+        <p>包含 ECMA-402 国际化 API 的 ECMAScript 实现必须按照 ECMA-402 中的规定实现此方法。否则，使用以下对此方法的规范。</p>
+        <p>此方法参数的解释和使用方式与 <emu-xref href="#sec-array.prototype.tolocalestring"></emu-xref> 中定义的 `Array.prototype.toLocaleString` 相同。</p>
+        <p>调用此方法时，将执行以下步骤：</p>
+        <emu-alg>
+          1. 令 _obj_ 为 *this* 值。
+          1. 令 _taRecord_ 为 ? ValidateTypedArray(_obj_, ~seq-cst~)。
+          1. 令 _length_ 为 TypedArrayLength(_taRecord_)。
+          1. 返回 ? JoinIndexedProperties(_obj_, _length_, LocalizedListSeparator(), *"toLocaleString"*)。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-%typedarray%.prototype.toreversed" type="built-in function">
@@ -49348,6 +49367,39 @@ THH:mm:ss.sss
           <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
         </emu-note>
 
+        <emu-clause id="sec-iterator.prototype.chunks" type="built-in function">
+          <h1>Iterator.prototype.chunks ( _chunkSize_ )</h1>
+          <p>调用此方法时，将执行以下步骤：</p>
+          <emu-alg>
+            1. 令 _obj_ 为 *this* 值。
+            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 _chunkSize_ 不是整数 Number，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 如果 _chunkSize_ 不在从 *1*<sub>𝔽</sub> 到 𝔽(2<sup>32</sup> - 1)（含两端）的区间内，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_obj_)。
+            1. 令 _closure_ 为一个不带参数、捕获 _iterated_ 和 _chunkSize_ 的新 Abstract Closure，调用时执行以下步骤：
+              1. 令 _buffer_ 为一个新的空 List。
+              1. 重复执行：
+                1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
+                1. 如果 _value_ 为 ~done~，则
+                  1. 如果 _buffer_ 不为空，则
+                    1. 执行 Completion(Yield(CreateArrayFromList(_buffer_)))。
+                  1. 返回 ReturnCompletion(*undefined*)。
+                1. 将 _value_ 追加到 _buffer_。
+                1. 如果 _buffer_ 中的元素数量等于 ℝ(_chunkSize_)，则
+                  1. 令 _completion_ 为 Completion(Yield(CreateArrayFromList(_buffer_)))。
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
+                  1. 将 _buffer_ 设为一个新的空 List。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
+            1. 返回 _result_。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.constructor">
           <h1>Iterator.prototype.constructor</h1>
           <p>`Iterator.prototype.constructor` 是访问器属性，具有特性 { [[Enumerable]]: *false*, [[Configurable]]: *true* }。[[Getter]] 和 [[Setter]] 特性定义如下：</p>
@@ -49706,6 +49758,44 @@ THH:mm:ss.sss
               1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
               1. 如果 _value_ 是 ~done~，则返回 CreateArrayFromList(_items_)。
               1. 将 _value_ 追加到 _items_。
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.windows" type="built-in function">
+          <h1>Iterator.prototype.windows ( _windowSize_ [ , _undersized_ ] )</h1>
+          <p>调用此方法时，将执行以下步骤：</p>
+          <emu-alg>
+            1. 令 _obj_ 为 *this* 值。
+            1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
+            1. 令 _iterated_ 为 Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }。
+            1. 如果 _windowSize_ 不是整数 Number，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 如果 _windowSize_ 不在从 *1*<sub>𝔽</sub> 到 𝔽(2<sup>32</sup> - 1)（含两端）的区间内，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *RangeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 如果 _undersized_ 为 *undefined*，则将 _undersized_ 设为 *"only-full"*。
+            1. 如果 _undersized_ 既不是 *"only-full"* 也不是 *"allow-partial"*，则
+              1. 令 _error_ 为 ThrowCompletion(一个新创建的 *TypeError* 对象)。
+              1. 返回 ? IteratorClose(_iterated_, _error_)。
+            1. 将 _iterated_ 设为 ? GetIteratorDirect(_obj_)。
+            1. 令 _closure_ 为一个不带参数、捕获 _iterated_、_windowSize_ 和 _undersized_ 的新 Abstract Closure，调用时执行以下步骤：
+              1. 令 _buffer_ 为一个新的空 List。
+              1. 重复执行：
+                1. 令 _value_ 为 ? IteratorStepValue(_iterated_)。
+                1. 如果 _value_ 为 ~done~，则
+                  1. 如果 _undersized_ 为 *"allow-partial"*、_buffer_ 不为空，且 _buffer_ 中的元素数量 &lt; ℝ(_windowSize_)，则
+                    1. 执行 Completion(Yield(CreateArrayFromList(_buffer_)))。
+                  1. 返回 ReturnCompletion(*undefined*)。
+                1. 如果 _buffer_ 中的元素数量等于 ℝ(_windowSize_)，则
+                  1. 从 _buffer_ 中移除第一个元素。
+                1. 将 _value_ 追加到 _buffer_。
+                1. 如果 _buffer_ 中的元素数量等于 ℝ(_windowSize_)，则
+                  1. 令 _completion_ 为 Completion(Yield(CreateArrayFromList(_buffer_)))。
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)。
+            1. 令 _result_ 为 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)。
+            1. 将 _result_.[[UnderlyingIterators]] 设为 « _iterated_ »。
+            1. 返回 _result_。
           </emu-alg>
         </emu-clause>
 

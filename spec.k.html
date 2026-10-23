@@ -6581,24 +6581,24 @@
     <emu-clause id="sec-createlistfromarraylike" type="abstract operation">
       <h1>
         CreateListFromArrayLike (
-          _obj_: an ECMAScript language value,
-          optional _validElementTypes_: ~all~ or ~property-key~,
-        ): either a normal completion containing a List of ECMAScript language values or a throw completion
+        _obj_: ECMAScript 언어 값,
+        optional _validElementTypes_: ~any~ or ~property-key~,
+        ): ECMAScript 언어 값의 List를 포함하는 정상 완료 또는 예외 완료
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>_obj_의 인덱스 프로퍼티가 제공하는 요소를 갖는 List 값을 생성하는 데 사용됩니다. _validElementTypes_는 요소로 허용되는 값의 타입을 나타냅니다.</dd>
+        <dd>_obj_의 인덱스 속성에서 요소를 가져오는 List 값을 생성하는 데 사용됩니다. _validElementTypes_는 요소로 허용되는 값의 유형을 나타냅니다.</dd>
       </dl>
       <emu-alg>
-        1. _validElementTypes_가 존재하지 않으면, _validElementTypes_를 ~all~로 설정합니다.
-        1. _obj_가 Object가 아니면, *TypeError* 예외를 던집니다.
+        1. _validElementTypes_가 제공되지 않았으면 _validElementTypes_를 ~any~로 설정합니다.
+        1. _obj_가 Object가 아니면 *TypeError* 예외를 던집니다.
         1. _length_를 ? LengthOfArrayLike(_obj_)로 둡니다.
         1. _list_를 새로운 빈 List로 둡니다.
         1. _index_를 0으로 둡니다.
-        1. _index_ &lt; _length_인 동안 다음을 반복합니다.
-          1. _indexName_을 ! ToString(𝔽(_index_))로 둡니다.
-          1. _next_를 ? Get(_obj_, _indexName_)으로 둡니다.
-          1. _validElementTypes_가 ~property-key~이고 _next_가 프로퍼티 키가 아니면, *TypeError* 예외를 던집니다.
+        1. _index_ &lt; _length_인 동안 다음 단계를 반복합니다,
+          1. _indexName_을 ! ToString(𝔽(_index_))으로 둡니다.
+          1. _next_를 ? Get(_obj_, _indexName_)로 둡니다.
+          1. _validElementTypes_가 ~property-key~이고 _next_가 속성 키가 아니면 *TypeError* 예외를 던집니다.
           1. _next_를 _list_에 추가합니다.
           1. _index_를 _index_ + 1로 설정합니다.
         1. _list_를 반환합니다.
@@ -41203,22 +41203,49 @@ THH:mm:ss.sss
         <emu-alg>
           1. _obj_를 ? ToObject(*this* 값)으로 둡니다.
           1. _length_를 ? LengthOfArrayLike(_obj_)로 둡니다.
-          1. _separator_가 *undefined*이면 _separatorString_을 *","*로 둡니다.
-          1. 그렇지 않으면 _separatorString_을 ? ToString(_separator_)로 둡니다.
-          1. _result_를 빈 String으로 둡니다.
-          1. _k_를 0으로 둡니다.
-          1. _k_ &lt; _length_인 동안 다음을 반복합니다.
-            1. _k_ > 0이면 _result_를 _result_와 _separatorString_의 문자열 연결로 설정합니다.
-            1. _element_를 ? Get(_obj_, ! ToString(𝔽(_k_)))로 둡니다.
-            1. _element_가 *undefined*도 *null*도 아니면, 다음을 수행합니다.
-              1. _elementString_을 ? ToString(_element_)로 둡니다.
-              1. _result_를 _result_와 _elementString_의 문자열 연결로 설정합니다.
-            1. _k_를 _k_ + 1로 설정합니다.
-          1. _result_를 반환합니다.
+          1. _separator_가 *undefined*이면 _separatorString_을 *","*로 둡니다; 그렇지 않으면 _separatorString_을 ? ToString(_separator_)으로 둡니다.
+          1. ? JoinIndexedProperties(_obj_, _length_, _separatorString_)를 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>이 메서드는 의도적으로 일반적이며 *this* 값이 Array일 것을 요구하지 않습니다. 따라서 다른 종류의 객체로 옮겨 메서드로 사용할 수 있습니다.</p>
+          <p>이 메서드는 의도적으로 범용적으로 설계되었으며, *this* 값이 Array일 필요는 없습니다. 따라서 다른 종류의 객체로 옮겨 메서드로 사용할 수 있습니다.</p>
         </emu-note>
+
+        <emu-clause id="sec-joinindexedproperties" type="abstract operation">
+          <h1>
+            JoinIndexedProperties (
+              _obj_: an Object,
+              _length_: a non-negative integer,
+              _separator_: a String,
+              optional _methodName_: a property key,
+              optional _methodArgs_: a List of ECMAScript language values,
+            ): either a normal completion containing a String or a throw completion
+          </h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>0부터 _length_ - 1까지 양 끝을 포함하는 구간에 있는 _obj_의 정수 인덱스 속성을 String으로 변환한 다음(선택적으로 메서드 호출을 통해), 각 String 사이에 구분자 String을 삽입하여 연결합니다.</dd>
+          </dl>
+          <emu-alg>
+            1. _methodName_이 제공되고 _methodArgs_가 제공되지 않았으면 _methodArgs_를 새로운 빈 List로 설정합니다.
+            1. _result_를 빈 String으로 둡니다.
+            1. _k_를 0으로 둡니다.
+            1. _k_ &lt; _length_인 동안 다음 단계를 반복합니다,
+              1. _k_ > 0이면 _result_를 _result_와 _separator_를 연결한 문자열로 설정합니다.
+              1. 참고: _obj_가 TypedArray인 경우 다음 Get 호출은 정상 완료를 반환합니다.
+              1. _element_를 ? Get(_obj_, ! ToString(𝔽(_k_)))으로 둡니다.
+              1. _element_가 *undefined*도 *null*도 아니면 다음을 수행합니다.
+                1. _methodName_이 제공된 경우 다음을 수행합니다.
+                  1. _elementString_을 ? ToString(? Invoke(_element_, _methodName_, _methodArgs_))으로 둡니다.
+                1. 그렇지 않으면,
+                  1. 참고: _obj_가 TypedArray인 경우 다음 ToString 호출은 정상 완료를 반환합니다.
+                  1. _elementString_을 ? ToString(_element_)으로 둡니다.
+                1. _result_를 _result_와 _elementString_을 연결한 문자열로 설정합니다.
+              1. _k_를 _k_ + 1로 설정합니다.
+            1. _result_를 반환합니다.
+          </emu-alg>
+          <emu-note>
+            <p>_methodArgs_ 매개변수는 ECMA-402와 같이 이 연산에 의존하는 다른 명세에서 사용하기 위한 것입니다.</p>
+          </emu-note>
+        </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-array.prototype.keys" type="built-in function">
@@ -41764,24 +41791,22 @@ THH:mm:ss.sss
         <emu-alg>
           1. _array_를 ? ToObject(*this* 값)으로 둡니다.
           1. _length_를 ? LengthOfArrayLike(_array_)로 둡니다.
-          1. _separator_를 호스트 환경의 현재 로케일에 적합한 구현체 정의 목록 구분자 String 값(예: *", "*)으로 둡니다.
-          1. _result_를 빈 String으로 둡니다.
-          1. _k_를 0으로 둡니다.
-          1. _k_ &lt; _length_인 동안 다음을 반복합니다.
-            1. _k_ > 0이면 _result_를 _result_와 _separator_의 문자열 연결로 설정합니다.
-            1. _element_를 ? Get(_array_, ! ToString(𝔽(_k_)))로 둡니다.
-            1. _element_가 *undefined*도 *null*도 아니면, 다음을 수행합니다.
-              1. _elementString_을 ? ToString(? Invoke(_element_, *"toLocaleString"*)))로 둡니다.
-              1. _result_를 _result_와 _elementString_의 문자열 연결로 설정합니다.
-            1. _k_를 _k_ + 1로 설정합니다.
-          1. _result_를 반환합니다.
+          1. ? JoinIndexedProperties(_array_, _length_, LocalizedListSeparator(), *"toLocaleString"*)을 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>이 메서드는 배열의 요소를 각 요소의 `toLocaleString` 메서드를 사용하여 String으로 변환한 다음, 구현체 정의 로케일 민감 구분자 String이 나타나는 것으로 구분하여 이러한 String을 연결합니다. 이 메서드는 `toString`과 유사하지만 호스트 환경의 현재 로케일 관례에 대응하는 로케일 민감 결과를 생성하도록 의도됩니다.</p>
+          <p>이 메서드는 `toString`과 유사하지만, 호스트 환경의 현재 로캘 관례에 따라 로캘에 민감한 결과를 생성하도록 설계되었습니다.</p>
         </emu-note>
         <emu-note>
-          <p>이 메서드는 의도적으로 일반적이며 *this* 값이 Array일 것을 요구하지 않습니다. 따라서 다른 종류의 객체로 옮겨 메서드로 사용할 수 있습니다.</p>
+          <p>이 메서드는 의도적으로 범용적으로 설계되었으며, *this* 값이 Array일 필요는 없습니다. 따라서 다른 종류의 객체로 옮겨 메서드로 사용할 수 있습니다.</p>
         </emu-note>
+
+        <emu-clause id="sec-localizedlistseparator" type="implementation-defined abstract operation">
+          <h1>LocalizedListSeparator ( ): String</h1>
+          <dl class="header">
+            <dt>description</dt>
+            <dd>호스트 환경의 현재 로캘에서 목록 구분자로 사용하기에 적합한 구현 정의 String(예: *", "*)을 반환합니다.</dd>
+          </dl>
+        </emu-clause>
       </emu-clause>
 
       <emu-clause id="sec-array.prototype.toreversed" type="built-in function">
@@ -42787,18 +42812,8 @@ THH:mm:ss.sss
           1. _obj_를 *this* 값으로 둡니다.
           1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
           1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
-          1. _separator_가 *undefined*이면 _separatorString_을 *","*로 둡니다.
-          1. 그렇지 않으면 _separatorString_을 ? ToString(_separator_)로 둡니다.
-          1. _result_를 빈 String으로 둡니다.
-          1. _k_를 0으로 둡니다.
-          1. _k_ &lt; _length_인 동안 다음을 반복합니다.
-            1. _k_ > 0이면 _result_를 _result_와 _separatorString_의 문자열 연결로 설정합니다.
-            1. _element_를 TypedArrayGetElement(_obj_, 𝔽(_k_))로 둡니다.
-            1. _element_가 *undefined*가 아니면, 다음을 수행합니다.
-              1. _elementString_을 ! ToString(_element_)로 둡니다.
-              1. _result_를 _result_와 _elementString_의 문자열 연결로 설정합니다.
-            1. _k_를 _k_ + 1로 설정합니다.
-          1. _result_를 반환합니다.
+          1. _separator_가 *undefined*이면 _separatorString_을 *","*로 둡니다; 그렇지 않으면 _separatorString_을 ? ToString(_separator_)으로 둡니다.
+          1. ? JoinIndexedProperties(_obj_, _length_, _separatorString_)를 반환합니다.
         </emu-alg>
         <p>이 메서드는 일반적이지 않습니다. *this* 값은 [[TypedArrayName]] 내부 슬롯을 갖는 객체여야 합니다.</p>
       </emu-clause>
@@ -43167,11 +43182,15 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.tolocalestring" type="built-in function">
         <h1>%TypedArray%.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
-        <p>이 메서드는 <emu-xref href="#sec-array.prototype.tolocalestring"></emu-xref>에 정의된 `Array.prototype.toLocaleString`과 동일한 알고리즘을 구현하는 별개의 메서드이지만, *"length"*에 대해 [[Get]]을 수행하는 대신 TypedArrayLength를 호출합니다. 기반 버퍼의 크기를 조절할 수 없는 경우 *this* 값의 길이가 고정되어 있고 정수 인덱스 프로퍼티가 희소하지 않다는 사실을 이용하여 알고리즘 구현을 최적화할 수 있습니다. 그러나 그러한 최적화는 명시된 알고리즘 동작에 관찰 가능한 변경을 도입해서는 안 됩니다.</p>
-        <p>이 메서드는 일반적이지 않습니다. 알고리즘을 평가하기 전에 *this* 값과 ~seq-cst~를 인수로 사용하여 ValidateTypedArray를 호출합니다. 그 결과가 갑작스러운 완료이면 알고리즘을 평가하는 대신 해당 예외를 던집니다.</p>
-        <emu-note>
-          <p>ECMAScript 구현체가 ECMA-402 국제화 API를 포함하는 경우 이 메서드는 ECMA-402의 `Array.prototype.toLocaleString` 알고리즘을 기반으로 합니다.</p>
-        </emu-note>
+        <p>ECMA-402 국제화 API를 포함하는 ECMAScript 구현은 ECMA-402에 명시된 대로 이 메서드를 구현해야 합니다. 그렇지 않은 경우에는 다음에 제시된 이 메서드의 명세를 사용합니다.</p>
+        <p>이 메서드의 인수를 해석하고 사용하는 방식은 <emu-xref href="#sec-array.prototype.tolocalestring"></emu-xref>에 정의된 `Array.prototype.toLocaleString`의 경우와 동일합니다.</p>
+        <p>이 메서드는 호출될 때 다음 단계를 수행합니다.</p>
+        <emu-alg>
+          1. _obj_를 *this* 값으로 둡니다.
+          1. _taRecord_를 ? ValidateTypedArray(_obj_, ~seq-cst~)로 둡니다.
+          1. _length_를 TypedArrayLength(_taRecord_)로 둡니다.
+          1. ? JoinIndexedProperties(_obj_, _length_, LocalizedListSeparator(), *"toLocaleString"*)을 반환합니다.
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-%typedarray%.prototype.toreversed" type="built-in function">
@@ -49343,6 +49362,39 @@ THH:mm:ss.sss
           <pre><code class="javascript">Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()))</code></pre>
         </emu-note>
 
+        <emu-clause id="sec-iterator.prototype.chunks" type="built-in function">
+          <h1>Iterator.prototype.chunks ( _chunkSize_ )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행합니다.</p>
+          <emu-alg>
+            1. _obj_를 *this* 값으로 둡니다.
+            1. _obj_가 Object가 아니면 *TypeError* 예외를 던집니다.
+            1. _iterated_를 Iterator 레코드 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둡니다.
+            1. _chunkSize_가 정수인 Number가 아니면 다음을 수행합니다.
+              1. _error_를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둡니다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환합니다.
+            1. _chunkSize_가 *1*<sub>𝔽</sub>부터 𝔽(2<sup>32</sup> - 1)까지 양 끝을 포함하는 구간에 있지 않으면 다음을 수행합니다.
+              1. _error_를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둡니다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환합니다.
+            1. _iterated_를 ? GetIteratorDirect(_obj_)로 설정합니다.
+            1. _closure_를 _iterated_와 _chunkSize_를 캡처하고 매개변수가 없으며 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 둡니다.
+              1. _buffer_를 새로운 빈 List로 둡니다.
+              1. 다음 단계를 반복합니다.
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둡니다.
+                1. _value_가 ~done~이면 다음을 수행합니다.
+                  1. _buffer_가 비어 있지 않으면 다음을 수행합니다.
+                    1. Completion(Yield(CreateArrayFromList(_buffer_)))을 수행합니다.
+                  1. ReturnCompletion(*undefined*)를 반환합니다.
+                1. _value_를 _buffer_에 추가합니다.
+                1. _buffer_의 요소 수가 ℝ(_chunkSize_)이면 다음을 수행합니다.
+                  1. _completion_을 Completion(Yield(CreateArrayFromList(_buffer_)))으로 둡니다.
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행합니다.
+                  1. _buffer_를 새로운 빈 List로 설정합니다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둡니다.
+            1. _result_.[[UnderlyingIterators]]를 « _iterated_ »로 설정합니다.
+            1. _result_를 반환합니다.
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.constructor">
           <h1>Iterator.prototype.constructor</h1>
           <p>`Iterator.prototype.constructor`는 { [[Enumerable]]: *false*, [[Configurable]]: *true* } 속성을 갖는 접근자 프로퍼티입니다. [[Getter]] 및 [[Setter]] 속성은 다음과 같이 정의됩니다:</p>
@@ -49701,6 +49753,44 @@ THH:mm:ss.sss
               1. _value_를 ? IteratorStepValue(_iterated_)로 둡니다.
               1. _value_가 ~done~이면 CreateArrayFromList(_items_)를 반환합니다.
               1. _value_를 _items_에 추가합니다.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iterator.prototype.windows" type="built-in function">
+          <h1>Iterator.prototype.windows ( _windowSize_ [ , _undersized_ ] )</h1>
+          <p>이 메서드는 호출될 때 다음 단계를 수행합니다.</p>
+          <emu-alg>
+            1. _obj_를 *this* 값으로 둡니다.
+            1. _obj_가 Object가 아니면 *TypeError* 예외를 던집니다.
+            1. _iterated_를 Iterator 레코드 { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* }로 둡니다.
+            1. _windowSize_가 정수인 Number가 아니면 다음을 수행합니다.
+              1. _error_를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둡니다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환합니다.
+            1. _windowSize_가 *1*<sub>𝔽</sub>부터 𝔽(2<sup>32</sup> - 1)까지 양 끝을 포함하는 구간에 있지 않으면 다음을 수행합니다.
+              1. _error_를 ThrowCompletion(새로 생성된 *RangeError* 객체)로 둡니다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환합니다.
+            1. _undersized_가 *undefined*이면 _undersized_를 *"only-full"*로 설정합니다.
+            1. _undersized_가 *"only-full"*도 *"allow-partial"*도 아니면 다음을 수행합니다.
+              1. _error_를 ThrowCompletion(새로 생성된 *TypeError* 객체)로 둡니다.
+              1. ? IteratorClose(_iterated_, _error_)를 반환합니다.
+            1. _iterated_를 ? GetIteratorDirect(_obj_)로 설정합니다.
+            1. _closure_를 _iterated_, _windowSize_, _undersized_를 캡처하고 매개변수가 없으며 호출될 때 다음 단계를 수행하는 새로운 추상 클로저로 둡니다.
+              1. _buffer_를 새로운 빈 List로 둡니다.
+              1. 다음 단계를 반복합니다.
+                1. _value_를 ? IteratorStepValue(_iterated_)로 둡니다.
+                1. _value_가 ~done~이면 다음을 수행합니다.
+                  1. _undersized_가 *"allow-partial"*이고 _buffer_가 비어 있지 않으며 _buffer_의 요소 수가 &lt; ℝ(_windowSize_)이면 다음을 수행합니다.
+                    1. Completion(Yield(CreateArrayFromList(_buffer_)))을 수행합니다.
+                  1. ReturnCompletion(*undefined*)를 반환합니다.
+                1. _buffer_의 요소 수가 ℝ(_windowSize_)이면 다음을 수행합니다.
+                  1. _buffer_에서 첫 번째 요소를 제거합니다.
+                1. _value_를 _buffer_에 추가합니다.
+                1. _buffer_의 요소 수가 ℝ(_windowSize_)이면 다음을 수행합니다.
+                  1. _completion_을 Completion(Yield(CreateArrayFromList(_buffer_)))으로 둡니다.
+                  1. IfAbruptCloseIterator(_completion_, _iterated_)를 수행합니다.
+            1. _result_를 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둡니다.
+            1. _result_.[[UnderlyingIterators]]를 « _iterated_ »로 설정합니다.
+            1. _result_를 반환합니다.
           </emu-alg>
         </emu-clause>
 
