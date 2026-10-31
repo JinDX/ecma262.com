@@ -635,26 +635,10 @@
       <p>与えられた文脈自由文法は、<dfn variants="goal symbols">開始記号</dfn>と呼ばれる特定の単一の非終端記号からなる文から始めることで、ある<em>言語</em>を規定します。すなわち、列内の任意の非終端記号を、その非終端記号を左辺とする生成規則の右辺に繰り返し置き換えることによって得られる、終端記号のすべての可能な列の集合（無限の場合もあります）です。</p>
     </emu-clause>
 
-    <emu-clause id="sec-lexical-and-regexp-grammars">
-      <h1>字句文法と RegExp 文法</h1>
-      <p>ECMAScript の<em>字句文法</em>は、箇条 <emu-xref href="#sec-ecmascript-language-lexical-grammar"></emu-xref> に示されています。この文法の終端記号は、<emu-xref href="#sec-source-text"></emu-xref> で定義される |SourceCharacter| の規則に適合する Unicode コードポイントです。この文法は、開始記号 |InputElementDiv|、|InputElementTemplateTail|、|InputElementRegExp|、|InputElementRegExpOrTemplateTail|、または |InputElementHashbangOrRegExp| から始まり、そのようなコードポイントの列が入力要素の列に変換される方法を記述する、一連の生成規則を定義します。</p>
-      <p>空白とコメント以外の入力要素は、ECMAScript の構文文法の終端記号となり、ECMAScript の<em>トークン</em>と呼ばれます。これらのトークンは、ECMAScript 言語の予約語、識別子、リテラル、および区切り記号です。また、行終端文字はトークンとはみなされませんが、入力要素の流れの一部となり、自動セミコロン挿入（<emu-xref href="#sec-automatic-semicolon-insertion"></emu-xref>）の処理を導きます。単なる空白と単一行コメントは破棄され、構文文法の入力要素の流れには現れません。|MultiLineComment|（すなわち、複数行にまたがるかどうかにかかわらず、`/*`…`*/` という形式のコメント）も、行終端文字を含まない場合は同様に単に破棄されます。しかし、|MultiLineComment| が一つ以上の行終端文字を含む場合は、単一の行終端文字に置き換えられ、構文文法の入力要素の流れの一部となります。</p>
-      <p>ECMAScript の <em>RegExp 文法</em>は、<emu-xref href="#sec-patterns"></emu-xref> に示されています。この文法も、|SourceCharacter| で定義されるコードポイントを終端記号とします。この文法は、開始記号 |Pattern| から始まり、コードポイントの列が正規表現パターンに変換される方法を記述する、一連の生成規則を定義します。</p>
-      <p>字句文法と RegExp 文法の生成規則は、区切り記号として2つのコロン“<b>::</b>”を持つことで区別されます。字句文法と RegExp 文法は、一部の生成規則を共有します。</p>
-    </emu-clause>
-
-    <emu-clause id="sec-numeric-string-grammar">
-      <h1>数値文字列文法</h1>
-      <p><em>数値文字列文法</em>は、<emu-xref href="#sec-tonumber-applied-to-the-string-type"></emu-xref> に示されています。この文法は、|SourceCharacter| を終端記号とし、開始記号 |StringNumericLiteral| から始めて、String を数値に変換するために使用されます（これは、<emu-xref href="#sec-literals-numeric-literals">数値リテラルの字句文法</emu-xref>に似ていますが、異なるものです）。</p>
-      <p>数値文字列文法の生成規則は、区切り記号として3つのコロン“<b>:::</b>”を持つことで区別され、ソーステキストの解析には使用されません。</p>
-    </emu-clause>
-
-    <emu-clause id="sec-syntactic-grammar">
-      <h1>構文文法</h1>
-      <p>ECMAScript の<em>構文文法</em>は、箇条 <emu-xref href="#sec-ecmascript-language-expressions"></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules"></emu-xref> に示されています。この文法は、字句文法で定義された ECMAScript のトークンを終端記号とします（<emu-xref href="#sec-lexical-and-regexp-grammars"></emu-xref>）。この文法は、2つの選択可能な開始記号 |Script| と |Module| から始まり、トークンの列が、ECMAScript プログラムの構文的に正しい独立した構成要素を形成する方法を記述する、一連の生成規則を定義します。</p>
-      <p>コードポイントの流れを ECMAScript の |Script| または |Module| として解析するときは、まず字句文法を繰り返し適用することで、それを入力要素の流れに変換します。次に、構文文法を一度適用して、この入力要素の流れを解析します。入力要素の流れの中のトークンを、トークンを一つも残さずに、開始非終端記号（|Script| または |Module|）の単一のインスタンスとして解析できない場合、入力の流れには構文エラーがあります。</p>
-      <p>解析が成功すると、<em>解析木</em>が構築されます。これは、各ノードが <dfn variants="Parse Nodes">Parse Node</dfn> である、根を持つ木構造です。各 Parse Node は、文法内の記号の<em>インスタンス</em>であり、その記号から導出できるソーステキストの範囲を表します。ソーステキスト全体を表す解析木の根ノードは、その解析の開始記号のインスタンスです。Parse Node が非終端記号のインスタンスである場合、それは、その非終端記号を左辺に持つ、いずれかの生成規則のインスタンスでもあります。さらに、その生成規則の右辺の各記号に一つずつ対応する、0個以上の<em>子</em>を持ちます。各子は、対応する記号のインスタンスである Parse Node です。</p>
-      <p>新しい Parse Node は、パーサーの呼出しごとに生成され、同一のソーステキストの解析であっても、解析間で再利用されることはありません。Parse Node が<dfn>同じ Parse Node</dfn>であるとみなされるのは、ソーステキストの同じ範囲を表し、同じ文法記号のインスタンスであり、かつ同じパーサー呼出しによって生成された場合に限られます。</p>
+    <emu-clause id="sec-parsing">
+      <h1>解析</h1>
+      <p>終端記号の入力の流れは、終端記号を一つも残さずに開始記号と一致する場合、その開始記号を用いて<em>解析</em>できます。解析が成功すると、<dfn>解析木</dfn>が構築されます。これは、各ノードが <dfn variants="Parse Nodes">Parse Node</dfn> である、根を持つ木構造です。各 Parse Node は、その文法内の記号の<em>インスタンス</em>であり、その記号から導出できる入力の範囲を表します。入力全体を表す解析木の根ノードは、その解析の開始記号のインスタンスです。Parse Node が非終端記号のインスタンスである場合、それは、その非終端記号を左辺に持つ、いずれかの生成規則のインスタンスでもあります。さらに、その生成規則の右辺の各記号に一つずつ対応する、0個以上の<em>子</em>を持ちます。各子は、対応する記号のインスタンスである Parse Node です。</p>
+      <p>新しい Parse Node は、解析ごとに生成され、同一の入力の解析であっても、解析間で再利用されることはありません。Parse Node が<dfn>同じ Parse Node</dfn>であるとみなされるのは、入力の同じ範囲を表し、同じ文法記号のインスタンスであり、かつ同じパーサー呼出しによって生成された場合に限られます。</p>
       <emu-note>
         <p>同じ String を複数回解析すると、異なる Parse Node が生成されます。たとえば、次を考えます。</p>
         <pre><code class="javascript">
@@ -665,7 +649,27 @@
         <p>`eval` の各呼出しは、`str` の値を ECMAScript のソーステキストに変換し、独立した解析を実行して、それぞれ別個の Parse Node の木を作成します。各解析が、同じ String 値から得られたソーステキストに対して実行されても、それらの木は異なります。</p>
       </emu-note>
       <emu-note>Parse Node は仕様上の構成物であり、実装が類似のデータ構造を使用する必要はありません。</emu-note>
-      <p>構文文法の生成規則は、区切り記号として一つだけのコロン“<b>:</b>”を持つことで区別されます。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-lexical-and-regexp-grammars">
+      <h1>字句文法と RegExp 文法</h1>
+      <p>ECMAScript の<em>字句文法</em>は、箇条 <emu-xref href="#sec-ecmascript-language-lexical-grammar"></emu-xref> に示されています。この文法の終端記号は、<emu-xref href="#sec-source-text"></emu-xref> で定義される |SourceCharacter| の規則に適合する Unicode コードポイントです。この文法は、開始記号 |InputElementDiv|、|InputElementTemplateTail|、|InputElementRegExp|、|InputElementRegExpOrTemplateTail|、または |InputElementHashbangOrRegExp| から始まり、そのようなコードポイントの列が入力要素の列に変換される方法を記述する、一連の生成規則を定義します。</p>
+      <p>空白とコメント以外の入力要素は、ECMAScript の構文文法の終端記号となり、ECMAScript の<em>トークン</em>と呼ばれます。これらのトークンは、ECMAScript 言語の予約語、識別子、リテラル、および区切り記号です。また、行終端文字はトークンとはみなされませんが、入力要素の流れの一部となり、自動セミコロン挿入（<emu-xref href="#sec-automatic-semicolon-insertion"></emu-xref>）の処理を導きます。単なる空白と単一行コメントは破棄され、構文文法の入力要素の流れには現れません。|MultiLineComment|（すなわち、複数行にまたがるかどうかにかかわらず、`/*`…`*/` という形式のコメント）も、行終端文字を含まない場合は同様に単に破棄されます。しかし、|MultiLineComment| が一つ以上の行終端文字を含む場合は、単一の行終端文字に置き換えられ、構文文法の入力要素の流れの一部となります。</p>
+      <p>ECMAScript の <em>RegExp 文法</em>は、<emu-xref href="#sec-patterns"></emu-xref> に示されています。この文法も、|SourceCharacter| で定義されるコードポイントを終端記号とします。この文法は、開始記号 |Pattern| から始まり、コードポイントの列が正規表現パターンに変換される方法を記述する、一連の生成規則を定義します。</p>
+      <p>字句文法と RegExp 文法の生成規則は、定義する非終端記号の後に2つのコロン“<b>::</b>”を持つことで区別されます。字句文法と RegExp 文法は、一部の生成規則を共有します。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-runtime-grammars" oldids="sec-numeric-string-grammar">
+      <h1>実行時文法</h1>
+      <p>ソーステキストの解析ではなく実行時意味論にのみ使用される文法を、<dfn variants="runtime grammars">実行時文法</dfn>と呼びます。特に指定がない限り、各実行時文法は、|SourceCharacter| で定義されるコードポイントを終端記号とします。実行時文法は、<emu-xref href="#sec-tonumber-applied-to-the-string-type"></emu-xref>（開始記号 |StringNumericLiteral| または |StrDecimalLiteral| から始めて String を Number に変換するために使用）、<emu-xref href="#sec-stringintegerliteral-grammar"></emu-xref>（開始記号 |StringIntegerLiteral| から始めて String を BigInt に変換するために使用）、および <emu-xref href="#sec-time-zone-offset-strings"></emu-xref>（開始記号 |UTCOffset| から始めて、時刻値とオフセットタイムゾーンとの間の対応付けに使用）に示されています。</p>
+      <p>実行時文法の生成規則は、定義する非終端記号の後に3つのコロン“<b>:::</b>”を持つことで区別されます。</p>
+    </emu-clause>
+
+    <emu-clause id="sec-syntactic-grammar">
+      <h1>構文文法</h1>
+      <p>ECMAScript の<em>構文文法</em>は、箇条 <emu-xref href="#sec-ecmascript-language-expressions"></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules"></emu-xref> に示されています。この文法は、字句文法で定義された ECMAScript のトークンを終端記号とします（<emu-xref href="#sec-lexical-and-regexp-grammars"></emu-xref>）。この文法は、2つの選択可能な開始記号 |Script| と |Module| から始まり、トークンの列が、ECMAScript プログラムの構文的に正しい独立した構成要素を形成する方法を記述する、一連の生成規則を定義します。</p>
+      <p>コードポイントの流れを ECMAScript の |Script| または |Module| として解析するときは、まず字句文法を繰り返し適用することで、それを入力要素の流れに変換します。次に、構文文法を一度適用して、この入力要素の流れを解析します。入力要素の流れの中のトークンを、トークンを一つも残さずに、開始非終端記号（|Script| または |Module|）の単一のインスタンスとして解析できない場合、入力の流れには構文エラーがあります。</p>
+      <p>構文文法の生成規則は、定義する非終端記号の後に一つだけのコロン“<b>:</b>”を持つことで区別されます。</p>
       <p>箇条 <emu-xref href="#sec-ecmascript-language-expressions"></emu-xref> から <emu-xref href="#sec-ecmascript-language-scripts-and-modules"></emu-xref> に示される構文文法は、どのトークン列が正しい ECMAScript の |Script| または |Module| として受理されるかを完全に説明するものではありません。特定の追加のトークン列も受理されます。すなわち、列内の特定の位置（たとえば、行終端文字の前）にセミコロンを追加するだけで、その文法によって記述されるようになる列です。さらに、文法によって記述される特定のトークン列も、特定の“不適切な”位置に行終端文字が現れる場合は、受理可能とはみなされません。</p>
       <p>特定の場合には、曖昧さを避けるため、構文文法は、有効な ECMAScript の |Script| または |Module| を形成しないトークン列を許可する、一般化された生成規則を使用します。たとえば、この手法は、オブジェクトリテラルとオブジェクトの分割代入パターンに使用されます。そのような場合には、受理可能なトークン列をさらに制限する、より制約の強い<em>補助文法</em>が提供されます。通常、早期エラー規則は、そのうえで、特定のコンテキストにおいて“_p_ は _n_ を<dfn id="must-cover">被覆しなければならない</dfn>”と規定します。ここで、_p_ は Parse Node（一般化された生成規則のインスタンス）、_n_ は補助文法の非終端記号です。これは、以下を意味します。</p>
       <ol>
@@ -687,8 +691,8 @@
       <emu-clause id="sec-terminal-symbols">
         <h1>終端記号</h1>
         <p>ECMAScript の文法では、一部の終端記号は `等幅` フォントで示されます。これらは、記述されたとおりにソーステキスト内に現れなければなりません。この方法で指定されるすべての終端記号のコードポイントは、他の Unicode 範囲の外見が似たコードポイントではなく、基本ラテン文字ブロック内の対応する Unicode コードポイントとして解釈されます。終端記号内のコードポイントは、`\\` |UnicodeEscapeSequence| によって表現できません。</p>
-        <p>終端記号が個々の Unicode コードポイントである文法（すなわち、字句文法、RegExp 文法、および数値文字列文法）では、生成規則内に現れる複数の等幅のコードポイントの連続は、同じコードポイントの列をそれぞれ独立した終端記号として記述したものの、単なる短縮表記です。</p>
-        <p>たとえば、生成規則:</p>
+        <p>終端記号が個々の Unicode コードポイントである文法（たとえば、字句文法、RegExp 文法、および数値文字列文法）では、生成規則内に現れる複数の等幅のコードポイントの連続は、同じコードポイントの列をそれぞれ独立した終端記号として記述したものの、単なる短縮表記です。</p>
+        <p>たとえば、字句文法の生成規則:</p>
         <emu-grammar type="definition" example>
           HexIntegerLiteral :: `0x` HexDigits
         </emu-grammar>
@@ -697,9 +701,14 @@
           HexIntegerLiteral :: `0` `x` HexDigits
         </emu-grammar>
         <p>一方、構文文法では、等幅のコードポイントの連続は、単一の終端記号です。</p>
+        <p>たとえば、構文文法の生成規則:</p>
+        <emu-grammar type="definition" example>
+          NewTarget : `new` `.` `target`
+        </emu-grammar>
+        <p>の右辺は、3つの終端記号（`new`、`.`、および `target`）の列です。これは |WhiteSpace| を含まない入力要素の流れに適用されるため、<code>new .target</code> のような入力ソーステキストとは一致しますが、<code>new .tar get</code> とは一致しません（`tar` と `get` は、そのソーステキストから得られた流れの中で独立したトークンであるためです）。</p>
         <p>終端記号には、ほかに2つの形式があります。</p>
         <ul>
-          <li>字句文法と RegExp 文法では、通常の印字表現を持たない Unicode コードポイントは、代わりに“&lt;ABBREV>”という形式で示されます。ここで、“ABBREV”は、そのコードポイントまたはコードポイントの集合を表す覚えやすい略号です。これらの形式は、<emu-xref href="#sec-unicode-format-control-characters" title></emu-xref>、<emu-xref href="#sec-white-space" title></emu-xref>、および <emu-xref href="#sec-line-terminators" title></emu-xref> で定義されます。</li>
+          <li>終端記号が個々の Unicode コードポイントである文法では、通常の印字表現を持たないコードポイントは、代わりに“&lt;ABBREV>”という形式で示されます。ここで、“ABBREV”は、そのコードポイントまたはコードポイントの集合を表す覚えやすい略号です。これらの形式は、<emu-xref href="#sec-unicode-format-control-characters" title></emu-xref>、<emu-xref href="#sec-white-space" title></emu-xref>、および <emu-xref href="#sec-line-terminators" title></emu-xref> で定義されます。</li>
           <li>構文文法では、特定の終端記号（たとえば、|IdentifierName| と |RegularExpressionLiteral|）は、字句文法内の同名の非終端記号を参照するため、斜体で示されます。</li>
         </ul>
       </emu-clause>
@@ -1964,17 +1973,11 @@
         <p>ほかに、*正の無限大*および*負の無限大*と呼ばれる 2 つの特別な値がある。簡潔にするため、説明上、これらの値はそれぞれ記号 *+∞*<sub>𝔽</sub> および *-∞*<sub>𝔽</sub> でも表される。（これら 2 つの無限大の Number 値は、プログラム式 `+Infinity`（または単に `Infinity`）および `-Infinity` によって生成されることに注意。）</p>
         <p>残りの 18,437,736,874,454,810,624 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup></emu-eqn> 個）の各値は<dfn id="finite-number" variants="finite Numbers" oldids="finite">有限 Number</dfn>である。その半分は正の数で、半分は負の数であり、各正の有限 Number には、同じ絶対値を持つ対応する負の Number が存在する。</p>
         <p>*正のゼロ*と*負のゼロ*の両方が存在することに注意。簡潔にするため、説明上、これらの値はそれぞれ記号 *+0*<sub>𝔽</sub> および *-0*<sub>𝔽</sub> でも表される。（これら 2 つの異なるゼロの Number 値は、プログラム式 `+0`（または単に `0`）および `-0` によって生成されることに注意。）</p>
-        <p>18,437,736,874,454,810,622 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> - 2</emu-eqn> 個）の有限な非ゼロ値には、次の 2 種類がある。</p>
-        <p>そのうち 18,428,729,675,200,069,632 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>54</sup></emu-eqn> 個）は正規化されており、次の形式を持つ。</p>
-        <div class="math-display">
-          _s_ × _m_ × 2<sup>_e_</sup>
-        </div>
-        <p>ここで _s_ は 1 または -1、_m_ は 2<sup>52</sup>（以上）から 2<sup>53</sup>（未満）までの区間にある整数、_e_ は -1074 から 971 までの両端を含む区間にある整数である。</p>
-        <p>残りの 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）の値は非正規化されており、次の形式を持つ。</p>
-        <div class="math-display">
-          _s_ × _m_ × 2<sup>_e_</sup>
-        </div>
-        <p>ここで _s_ は 1 または -1、_m_ は 0（より大きい）から 2<sup>52</sup>（未満）までの区間にある整数、_e_ は -1074 である。</p>
+        <p>18,437,736,874,454,810,622 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> - 2</emu-eqn> 個）の<dfn id="non-zero-finite-number" variants="non-zero finite Number,finite non-zero Number,finite non-zero Numbers">非ゼロ有限 Number</dfn>は、対応する数学的値 <emu-eqn>_s_ × _m_ × 2<sup>_e_</sup></emu-eqn> における整数 _m_ と _e_ に基づいて、2つのグループに分けられる。ここで _s_ は 1 または -1 である。</p>
+        <ul>
+          <li>そのうち 18,428,729,675,200,069,632 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>54</sup></emu-eqn> 個）は「正規化」されている。_m_ は 2<sup>52</sup>（以上）から 2<sup>53</sup>（未満）までの区間にある整数であり、_e_ は -1074 から 971 までの両端を含む区間にある整数である。</li>
+          <li>残りの 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）は「非正規化」されており、より具体的には「非正規」である。_m_ は 0（より大きい）から 2<sup>52</sup>（未満）までの区間にある整数であり、_e_ は -1074 である。</li>
+        </ul>
         <p>絶対値が 2<sup>53</sup> 以下であるすべての正および負の整数は、Number 型で表現可能であることに注意。整数 0 は Number 型において 2 つの表現、すなわち *+0*<sub>𝔽</sub> と *-0*<sub>𝔽</sub> を持つ。</p>
         <p>有限 Number が非ゼロであり、それを表すために（上記の 2 つの形式のいずれかで）使用される整数 _m_ が奇数である場合、その有限 Number は<em>奇数仮数</em>を持つ。それ以外の場合、<em>偶数仮数</em>を持つ。</p>
         <p>この仕様において、「_x_ に対する<dfn id="number-value-for" oldids="number-value">Number 値</dfn>」という語句で、_x_ が正確な実数の数学的量（π のような無理数である場合もある）を表す場合、それは次の方法で選択される Number 値を意味する。*-0*<sub>𝔽</sub> を除くすべての有限 Number の集合に、Number 型では表現できない 2 つの追加の値、すなわち 2<sup>1024</sup>（これは <emu-eqn>+1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）および <emu-eqn>-2<sup>1024</sup></emu-eqn>（これは <emu-eqn>-1 × 2<sup>53</sup> × 2<sup>971</sup></emu-eqn>）を加えた和集合からなる集合を考える。この集合の要素のうち、値が _x_ に最も近いものを選択する。集合の 2 つの値が等しく近い場合は、偶数仮数を持つ方を選択する。この目的では、2 つの追加の値 2<sup>1024</sup> および <emu-eqn>-2<sup>1024</sup></emu-eqn> は偶数仮数を持つものとみなす。最後に、2<sup>1024</sup> が選択された場合は、それを *+∞*<sub>𝔽</sub> に置き換える。<emu-eqn>-2<sup>1024</sup></emu-eqn> が選択された場合は、それを *-∞*<sub>𝔽</sub> に置き換える。*+0*<sub>𝔽</sub> が選択された場合は、_x_ &lt; 0 の場合に限り、それを *-0*<sub>𝔽</sub> に置き換える。それ以外の選択された値は変更せずに使用する。その結果が _x_ に対する Number 値である。（この手順は IEEE 754-2019 の roundTiesToEven モードの動作に正確に対応する。）</p>
@@ -2042,7 +2045,7 @@
                 1. *+0*<sub>𝔽</sub> を返す。
               1. _exponent_ が奇数の整数 Number である場合、*-∞*<sub>𝔽</sub> を返す。
               1. *+∞*<sub>𝔽</sub> を返す。
-            1. 表明: _base_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. 表明: _base_ は非ゼロ有限 Number である。
             1. _exponent_ が *+∞*<sub>𝔽</sub> である場合、
               1. abs(ℝ(_base_)) > 1 である場合、*+∞*<sub>𝔽</sub> を返す。
               1. abs(ℝ(_base_)) = 1 である場合、*NaN* を返す。
@@ -2051,7 +2054,7 @@
               1. abs(ℝ(_base_)) > 1 である場合、*+0*<sub>𝔽</sub> を返す。
               1. abs(ℝ(_base_)) = 1 である場合、*NaN* を返す。
               1. *+∞*<sub>𝔽</sub> を返す。
-            1. 表明: _exponent_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. 表明: _exponent_ は非ゼロ有限 Number である。
             1. _base_ &lt; *-0*<sub>𝔽</sub> であり、かつ _exponent_ が整数 Number でない場合、*NaN* を返す。
             1. ℝ(_base_) を ℝ(_exponent_) 乗した結果を表す、実装によって近似された Number 値を返す。
           </emu-alg>
@@ -2148,8 +2151,7 @@
             1. _denominator_ が *+∞*<sub>𝔽</sub> または *-∞*<sub>𝔽</sub> のいずれかである場合、_numerator_ を返す。
             1. _denominator_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、*NaN* を返す。
             1. _numerator_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_numerator_ を返す。
-            1. 表明: _numerator_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
-            1. 表明: _denominator_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+            1. 表明: _numerator_ と _denominator_ は非ゼロ有限 Number である。
             1. _quotient_ を ℝ(_numerator_) / ℝ(_denominator_) とする。
             1. _truncatedQuotient_ を truncate(_quotient_) とする。
             1. _remainder_ を ℝ(_numerator_) - (ℝ(_denominator_) × _truncatedQuotient_) とする。
@@ -7402,7 +7404,7 @@
 
     <emu-clause id="sec-disposableresource-records">
       <h1>DisposableResource Record</h1>
-      <p><dfn variants="DisposableResource Records">DisposableResource Record</dfn> は、破棄可能なオブジェクトを、そのオブジェクトを破棄するために使用されるメソッドとともにカプセル化するために使用される Record 値です。DisposableResource Record は CreateDisposableResource 抽象操作によって生成されます。</p>
+      <p><dfn variants="DisposableResource Records">DisposableResource Record</dfn> は、破棄可能なオブジェクトを、そのオブジェクトを破棄するために使用されるメソッドとともにカプセル化するために使用される Record 値です。DisposableResource Record は AddDisposableResource 抽象操作によって生成されます。</p>
       <p>DisposableResource Record は、<emu-xref href="#table-disposableresource-record-fields"></emu-xref> に列挙されるフィールドを持ちます。</p>
       <emu-table id="table-disposableresource-record-fields" caption="DisposableResource Record のフィールド">
         <table>
@@ -7454,7 +7456,7 @@
       </emu-table>
     </emu-clause>
 
-    <emu-clause id="sec-adddisposableresource" type="abstract operation">
+    <emu-clause id="sec-adddisposableresource" type="abstract operation" oldids="sec-createdisposableresource">
       <h1>
         AddDisposableResource (
           _disposableResourceStack_: a List of DisposableResource Records,
@@ -7468,35 +7470,17 @@
       <emu-alg>
         1. _method_ が存在する場合、
           1. 表明: _value_ は *undefined* である。
-          1. _resource_ を ? CreateDisposableResource(*undefined*, _kind_, _method_) とする。
-        1. そうでない場合、
-          1. _value_ が *null* または *undefined* のいずれかであり、_kind_ が ~sync-dispose~ である場合、~unused~ を返す。
+          1. _resource_ を DisposableResource Record { [[ResourceValue]]: *undefined*, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ } とする。
+        1. そうでなく、_value_ が *null* または *undefined* のいずれかである場合、
+          1. _kind_ が ~sync-dispose~ である場合、~unused~ を返す。
           1. 注記: _value_ が *null* または *undefined* のいずれかであり、_kind_ が ~async-dispose~ である場合、後でリソースが破棄されるときにも Await を実行することを保証するため、そのリソースが評価されたことを記録する。
-          1. _resource_ を ? CreateDisposableResource(_value_, _kind_) とする。
+          1. _resource_ を DisposableResource Record { [[ResourceValue]]: *undefined*, [[Kind]]: ~async-dispose~, [[DisposeMethod]]: *undefined* } とする。
+        1. そうでない場合、
+          1. _method_ を ? GetDisposeMethod(_value_, _kind_) に設定する。
+          1. _method_ が *undefined* である場合、*TypeError* 例外をスローする。
+          1. _resource_ を DisposableResource Record { [[ResourceValue]]: _value_, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ } とする。
         1. _resource_ を _disposableResourceStack_ に追加する。
         1. ~unused~ を返す。
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-createdisposableresource" type="abstract operation">
-      <h1>
-        CreateDisposableResource (
-          _value_: an ECMAScript language value,
-          _kind_: ~sync-dispose~ or ~async-dispose~,
-          optional _method_: a function object,
-        ): either a normal completion containing a DisposableResource Record or a throw completion
-      </h1>
-      <dl class="header">
-      </dl>
-      <emu-alg>
-        1. _method_ が存在しない場合、
-          1. _value_ が *null* または *undefined* のいずれかである場合、
-            1. _value_ を *undefined* に設定する。
-            1. _method_ を *undefined* に設定する。
-          1. そうでない場合、
-            1. _method_ を ? GetDisposeMethod(_value_, _kind_) に設定する。
-            1. _method_ が *undefined* である場合、*TypeError* 例外をスローする。
-        1. DisposableResource Record { [[ResourceValue]]: _value_, [[Kind]]: _kind_, [[DisposeMethod]]: _method_ } を返す。
       </emu-alg>
     </emu-clause>
 
@@ -16725,7 +16709,8 @@
       </dl>
       <emu-alg>
         1. _sourceText_ が String である場合、_sourceText_ を StringToCodePoints(_sourceText_) に設定する。
-        1. _goalSymbol_ を目標記号として _sourceText_ の構文解析を試み、構文解析結果について早期エラー条件がないか解析する。構文解析と早期エラー検出は、実装定義の方法で交互に実行してもよい。
+        1. _goalSymbol_ を目標記号として _sourceText_ の<emu-xref href="#sec-parsing">解析</emu-xref>を試み、解析結果について早期エラー条件がないか解析する。解析と早期エラー検出は、実装定義の方法で交互に実行してもよい。
+        1. 注記: _goalSymbol_ が構文文法の非終端記号である場合、解析には、<emu-xref href="#sec-syntactic-grammar"></emu-xref> に記述されているとおり、_sourceText_ をコードポイントから入力要素の流れに変換する処理が含まれる。
         1. 構文解析に成功し、早期エラーが見つからなかった場合、構文解析によって得られた構文木のルートにある Parse Node（_goalSymbol_ のインスタンス）を返す。
         1. 構文解析エラーおよび/または早期エラーを表す1つ以上の *SyntaxError* オブジェクトの List を返す。複数の構文解析エラーまたは早期エラーが存在する場合、List 内のエラーオブジェクトの個数と順序は実装定義ですが、少なくとも1つは存在しなければならない。
       </emu-alg>
@@ -30583,9 +30568,9 @@
             1. 注記: レキシカルに宣言された名前はここではインスタンス化されるだけで、初期化はされない。
             1. _lexicalDecl_ の BoundNames の各要素 _name_ について、次を行う。
               1. _lexicalDecl_ の IsConstantDeclaration が *true* である場合、
-                1. ? _lexicalEnv_.CreateImmutableBinding(_name_, *true*) を実行する。
+                1. ! _lexicalEnv_.CreateImmutableBinding(_name_, *true*) を実行する。
               1. そうでない場合、
-                1. ? _lexicalEnv_.CreateMutableBinding(_name_, *false*) を実行する。
+                1. ! _lexicalEnv_.CreateMutableBinding(_name_, *false*) を実行する。
           1. _funcsToInitialize_ の各 Parse Node _funcDecl_ について、次を行う。
             1. _funcName_ を _funcDecl_ の BoundNames の唯一の要素とする。
             1. _funcObj_ を、引数 _lexicalEnv_ および _privateEnv_ を指定した _funcDecl_ の InstantiateFunctionObject とする。
@@ -33482,7 +33467,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. ℝ(_n_) の逆双曲線正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
@@ -33536,7 +33521,7 @@
           1. _ny_ が *-0*<sub>𝔽</sub> である場合、
             1. _nx_ > *+0*<sub>𝔽</sub> または _nx_ が *+0*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
             1. -π を表す、実装によって近似された Number 値を返す。
-          1. 表明: _ny_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+          1. 表明: _ny_ は非ゼロ有限 Number である。
           1. _ny_ > *+0*<sub>𝔽</sub> である場合、
             1. _nx_ が *+∞*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
             1. _nx_ が *-∞*<sub>𝔽</sub> である場合、π を表す、実装によって近似された Number 値を返す。
@@ -33545,7 +33530,7 @@
             1. _nx_ が *+∞*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
             1. _nx_ が *-∞*<sub>𝔽</sub> である場合、-π を表す、実装によって近似された Number 値を返す。
             1. _nx_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、-π / 2 を表す、実装によって近似された Number 値を返す。
-          1. 表明: _nx_ は有限 Number であり、*+0*<sub>𝔽</sub> でも *-0*<sub>𝔽</sub> でもない。
+          1. 表明: _nx_ は非ゼロ有限 Number である。
           1. _result_ を abs(ℝ(_ny_) / ℝ(_nx_)) の逆正接とする。
           1. _nx_ &lt; *-0*<sub>𝔽</sub> である場合、
             1. _ny_ > *+0*<sub>𝔽</sub> である場合、_result_ を π - _result_ に設定する。
@@ -33562,7 +33547,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. ℝ(_n_) の立方根を表す、実装によって近似された Number 値を返す。
         </emu-alg>
       </emu-clause>
@@ -33573,7 +33558,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> かつ _n_ > *-1*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
           1. _n_ が整数 Number である場合、_n_ を返す。
           1. _n_ 以上である最小の（-∞ に最も近い）整数 Number 値を返す。
@@ -33656,7 +33641,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. _n_ &lt; *1*<sub>𝔽</sub> かつ _n_ > *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ が整数 Number である場合、_n_ を返す。
           1. _n_ 以下である最大の（+∞ に最も近い）整数 Number 値を返す。
@@ -33896,7 +33881,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. ℝ(_n_) の双曲線正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
@@ -33996,7 +33981,7 @@
         <p>呼び出されたとき、次の手順を実行する。</p>
         <emu-alg>
           1. _n_ を ? ToNumber(_x_) とする。
-          1. _n_ が有限 Number でないか、または _n_ が *+0*<sub>𝔽</sub> または *-0*<sub>𝔽</sub> のいずれかである場合、_n_ を返す。
+          1. _n_ が非ゼロ有限 Number でない場合、_n_ を返す。
           1. _n_ &lt; *1*<sub>𝔽</sub> かつ _n_ > *+0*<sub>𝔽</sub> である場合、*+0*<sub>𝔽</sub> を返す。
           1. _n_ &lt; *-0*<sub>𝔽</sub> かつ _n_ > *-1*<sub>𝔽</sub> である場合、*-0*<sub>𝔽</sub> を返す。
           1. *+0*<sub>𝔽</sub> の方向で _n_ に最も近い整数 Number を返す。
@@ -36787,8 +36772,8 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause id="sec-string.prototype.split" type="built-in function">
-        <h1>String.prototype.split ( _separator_, _limit_ )</h1>
-        <p>このメソッドは、このオブジェクトを String に変換した結果の部分文字列を格納した Array を返します。部分文字列は、_separator_ の出現を左から右へ検索することによって決定されます。これらの出現自体は返される配列内のどの String にも含まれず、String 値を分割する役割を果たします。_separator_ の値は任意の長さの String であっても、%Symbol.split% メソッドを持つ RegExp などのオブジェクトであってもかまいません。</p>
+        <h1>String.prototype.split ( _separator_, _substringLimit_ )</h1>
+        <p>このメソッドは、*this* 値内の _separator_ で区切られた部分文字列を見つけ、それらを Array として返します。必要に応じて最大長 _substringLimit_ まで切り詰められます（その場合、それ以降の内容は含まれません）。_separator_ が省略されているか *undefined* である場合、String に強制変換された *this* 値のみを含む単一要素の Array が生成されます。_separator_ が空の String に強制変換される場合、*this* 値は個々のコード単位に分割されます。それ以外のすべての正常完了の結果は、切り詰めが行われる前には少なくとも1つの要素を持ちます。_separator_ が %Symbol.split% メソッドを持つ場合（たとえば、_separator_ が RegExp インスタンスである場合）、上記の処理は行われず、代わりにそのメソッドを呼び出して得た結果がそのまま返されます。</p>
         <p>呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
           1. _thisValue_ を *this* 値とする。
@@ -36796,18 +36781,18 @@ THH:mm:ss.sss
           1. _separator_ が Object である場合、
             1. _splitter_ を ? GetMethod(_separator_, %Symbol.split%) とする。
             1. _splitter_ が *undefined* でない場合、
-              1. ? Call(_splitter_, _separator_, « _thisValue_, _limit_ ») を返す。
+              1. ? Call(_splitter_, _separator_, « _thisValue_, _substringLimit_ ») を返す。
           1. _string_ を ? ToString(_thisValue_) とする。
-          1. _limit_ が *undefined* である場合、_lim_ を 2<sup>32</sup> - 1 とする。そうでない場合、_lim_ を ℝ(? ToUint32(_limit_)) とする。
+          1. _substringLimit_ が *undefined* である場合、_substringLimitInt_ を 2<sup>32</sup> - 1 とする。そうでない場合、_substringLimitInt_ を ℝ(? ToUint32(_substringLimit_)) とする。
           1. _separatorString_ を ? ToString(_separator_) とする。
-          1. _lim_ = 0 である場合、
+          1. _substringLimitInt_ = 0 である場合、
             1. CreateArrayFromList(« ») を返す。
           1. _separator_ が *undefined* である場合、
             1. CreateArrayFromList(« _string_ ») を返す。
           1. _separatorLength_ を _separatorString_ の長さとする。
           1. _separatorLength_ = 0 である場合、
             1. _stringLength_ を _string_ の長さとする。
-            1. _outLength_ を _lim_ を 0 と _stringLength_ の間にクランプした結果とする。
+            1. _outLength_ を _substringLimitInt_ を 0 と _stringLength_ の間にクランプした結果とする。
             1. _head_ を _string_ の 0 から _outLength_ までの部分文字列とする。
             1. _codeUnits_ を、_head_ の要素であるコード単位の列からなる List とする。
             1. CreateArrayFromList(_codeUnits_) を返す。
@@ -36818,18 +36803,13 @@ THH:mm:ss.sss
           1. _matchIndex_ が ~not-found~ でない間、次を繰り返す。
             1. _substring_ を _string_ の _searchStart_ から _matchIndex_ までの部分文字列とする。
             1. _substring_ を _substrings_ に追加する。
-            1. _substrings_ の要素数が _lim_ である場合、CreateArrayFromList(_substrings_) を返す。
+            1. _substrings_ の要素数が _substringLimitInt_ である場合、CreateArrayFromList(_substrings_) を返す。
             1. _searchStart_ を _matchIndex_ + _separatorLength_ に設定する。
             1. _matchIndex_ を StringIndexOf(_string_, _separatorString_, _searchStart_) に設定する。
           1. _substring_ を _string_ の _searchStart_ から始まる部分文字列とする。
           1. _substring_ を _substrings_ に追加する。
           1. CreateArrayFromList(_substrings_) を返す。
         </emu-alg>
-        <emu-note>
-          <p>_separator_ の値は空の String であってもかまいません。この場合、_separator_ は入力 String の先頭または末尾の空の<emu-not-ref>部分文字列</emu-not-ref>にも、前の separator マッチの末尾の空の<emu-not-ref>部分文字列</emu-not-ref>にも一致しません。_separator_ が空の String である場合、String は個々のコード単位要素に分割されます。結果配列の長さは String の長さと等しく、各<emu-not-ref>部分文字列</emu-not-ref>は1つのコード単位を含みます。</p>
-          <p>*this* 値が空の String である（または空の String に変換される）場合、結果は _separator_ が空の String に一致できるかどうかに依存します。一致できる場合、結果配列は要素を含みません。そうでない場合、結果配列は空の String である1つの要素を含みます。</p>
-          <p>_separator_ が *undefined* である場合、結果配列は *this* 値（String に変換されたもの）である1つの String だけを含みます。_limit_ が *undefined* でない場合、出力配列は _limit_ 個を超える要素を含まないよう切り詰められます。</p>
-        </emu-note>
         <emu-note>
           <p>このメソッドは意図的に汎用です。*this* 値が String オブジェクトであることを要求しません。したがって、メソッドとして使用するために他の種類のオブジェクトへ移すことができます。</p>
         </emu-note>
@@ -39894,16 +39874,16 @@ THH:mm:ss.sss
       </emu-clause>
 
       <emu-clause oldids="sec-regexp.prototype-@@split" id="sec-regexp.prototype-%symbol.split%" type="built-in function">
-        <h1>RegExp.prototype [ %Symbol.split% ] ( _string_, _limit_ )</h1>
+        <h1>RegExp.prototype [ %Symbol.split% ] ( _string_, _substringLimit_ )</h1>
+        <p>このメソッドは、_string_ 内で正規表現である *this* 値のマッチによって区切られた部分文字列を見つけ（その *"global"*、*"lastIndex"*、および *"sticky"* プロパティは無視します）、マッチのキャプチャを間に挿入した Array として返します。必要に応じて最大長 _substringLimit_ まで切り詰められます（その場合、それ以降の内容は含まれません）。空の String に一致できる *this* 値は、_string_ を個々の<emu-xref href="#sec-pattern-semantics">文字</emu-xref>に分割します（ただし、より長いマッチでも分割します）。まったくマッチを見つけない *this* 値は、切り詰めが行われる前には、String に強制変換された _string_ のみを含む単一要素の Array を生成します。</p>
         <emu-note>
-          <p>このメソッドは、_string_ を String に変換した結果の部分文字列を格納した Array を返します。部分文字列は、*this* 値の正規表現との一致を左から右へ検索することによって決定されます。これらの出現自体は返される配列内のどの String にも含まれず、String 値を分割する役割を果たします。</p>
-          <p>*this* 値は空の正規表現、または空の String に一致できる正規表現であってもかまいません。この場合、正規表現は入力 String の先頭または末尾の空の<emu-not-ref>部分文字列</emu-not-ref>にも、前の separator マッチの末尾の空の<emu-not-ref>部分文字列</emu-not-ref>にも一致しません。（たとえば、正規表現が空の String に一致する場合、String は個々のコード単位要素に分割されます。結果配列の長さは String の長さと等しく、各<emu-not-ref>部分文字列</emu-not-ref>は1つのコード単位を含みます。）バックトラッキングによってそのインデックスで空でない<emu-not-ref>部分文字列</emu-not-ref>マッチが得られる場合でも、String の特定のインデックスでの最初のマッチだけが考慮されます。（たとえば、`/a*?/[Symbol.split]("ab")` は配列 `["a", "b"]` に評価される一方、`/a*/[Symbol.split]("ab")` は配列 `["","b"]` に評価されます。）</p>
-          <p>_string_ が空の String である（または空の String に変換される）場合、結果は正規表現が空の String に一致できるかどうかに依存します。一致できる場合、結果配列は要素を含みません。そうでない場合、結果配列は空の String である1つの要素を含みます。</p>
-          <p>正規表現がキャプチャ括弧を含む場合、_separator_ が一致するたびに、キャプチャ括弧の結果（*undefined* の結果を含む）が出力配列へ挿入されます。たとえば、</p>
-          <pre><code class="javascript">/&lt;(\/)?([^&lt;&gt;]+)&gt;/[Symbol.split]("A&lt;B&gt;bold&lt;/B&gt;and&lt;CODE&gt;coded&lt;/CODE&gt;")</code></pre>
+          <p>バックトラッキングによってそのインデックスで空でない<emu-not-ref>部分文字列</emu-not-ref>マッチが得られる場合でも、String の特定のインデックスでの最初のマッチだけが考慮されます。（たとえば、<code>/a*?/[Symbol.split]("ab")</code> は配列 <code>["a", "b"]</code> に評価される一方、<code>/a*/[Symbol.split]("ab")</code> は配列 <code>["", "b"]</code> に評価されます。）</p>
+        </emu-note>
+        <emu-note>
+          <p>正規表現がキャプチャ括弧を含む場合、区切りが一致するたびに、キャプチャ括弧の結果（*undefined* の結果を含む）が出力配列へ挿入されます。たとえば、</p>
+          <pre><code class="javascript">/&lt;(\/)?([^&lt;&gt;]+)&gt;/[Symbol.split]("a&lt;B&gt;c&lt;/B&gt;")</code></pre>
           <p>は次の配列に評価されます。</p>
-          <pre><code class="javascript">["A", undefined, "B", "bold", "/", "B", "and", undefined, "CODE", "coded", "/", "CODE", ""]</code></pre>
-          <p>_limit_ が *undefined* でない場合、出力配列は _limit_ 個を超える要素を含まないよう切り詰められます。</p>
+          <pre><code class="javascript">["a", undefined, "B", "c", "/", "B", ""].</code></pre>
         </emu-note>
         <p>このメソッドは呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
@@ -39919,8 +39899,8 @@ THH:mm:ss.sss
           1. _splitter_ を ? Construct(_speciesCtor_, « _regexp_, _newFlags_ ») とする。
           1. _array_ を ! ArrayCreate(0) とする。
           1. _lengthA_ を 0 とする。
-          1. _limit_ が *undefined* である場合、_lim_ を 2<sup>32</sup> - 1 とする。そうでない場合、_lim_ を ℝ(? ToUint32(_limit_)) とする。
-          1. _lim_ = 0 である場合、_array_ を返す。
+          1. _substringLimit_ が *undefined* である場合、_substringLimitInt_ を 2<sup>32</sup> - 1 とする。そうでない場合、_substringLimitInt_ を ℝ(? ToUint32(_substringLimit_)) とする。
+          1. _substringLimitInt_ = 0 である場合、_array_ を返す。
           1. _string_ が空の String である場合、
             1. _matchResult_ を ? RegExpExec(_splitter_, _string_) とする。
             1. _matchResult_ が *null* でない場合、_array_ を返す。
@@ -39943,7 +39923,7 @@ THH:mm:ss.sss
                 1. _substring_ を _string_ の _lastMatchEnd_ から _searchIndex_ までの部分文字列とする。
                 1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_lengthA_)), _substring_) を実行する。
                 1. _lengthA_ を _lengthA_ + 1 に設定する。
-                1. _lengthA_ = _lim_ である場合、_array_ を返す。
+                1. _lengthA_ = _substringLimitInt_ である場合、_array_ を返す。
                 1. _lastMatchEnd_ を _matchEnd_ に設定する。
                 1. _numberOfCaptures_ を ? LengthOfArrayLike(_matchResult_) とする。
                 1. _numberOfCaptures_ を max(_numberOfCaptures_ - 1, 0) に設定する。
@@ -39953,16 +39933,13 @@ THH:mm:ss.sss
                   1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_lengthA_)), _nextCapture_) を実行する。
                   1. _captureIndex_ を _captureIndex_ + 1 に設定する。
                   1. _lengthA_ を _lengthA_ + 1 に設定する。
-                  1. _lengthA_ = _lim_ である場合、_array_ を返す。
+                  1. _lengthA_ = _substringLimitInt_ である場合、_array_ を返す。
                 1. _searchIndex_ を _lastMatchEnd_ に設定する。
           1. _substring_ を _string_ の _lastMatchEnd_ から _size_ までの部分文字列とする。
           1. ! CreateDataPropertyOrThrow(_array_, ! ToString(𝔽(_lengthA_)), _substring_) を実行する。
           1. _array_ を返す。
         </emu-alg>
         <p>このメソッドの *"name"* プロパティの値は *"[Symbol.split]"* です。</p>
-        <emu-note>
-          <p>このメソッドは、この RegExp オブジェクトの *"global"* および *"sticky"* プロパティの値を無視します。</p>
-        </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-get-regexp.prototype.sticky" type="built-in function">
@@ -49548,6 +49525,38 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
+        <emu-clause id="sec-iterator.prototype.includes" type="built-in function">
+          <h1>Iterator.prototype.includes ( _searchElement_ [ , _skippedElements_ ] )</h1>
+          <p>このメソッドは呼び出されたとき、次の手順を実行する:</p>
+          <emu-alg>
+            1. _obj_ を *this* 値とする。
+            1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
+            1. _iterated_ を Iterator Record { [[Iterator]]: _obj_, [[NextMethod]]: *undefined*, [[Done]]: *false* } とする。
+            1. _skippedElements_ が *undefined* である場合、
+              1. _toSkip_ を *+0*<sub>𝔽</sub> とする。
+            1. そうでない場合、
+              1. _skippedElements_ が *+∞<sub>𝔽</sub>*、*-∞<sub>𝔽</sub>*、整数 Number のいずれでもない場合、
+                1. _error_ を ThrowCompletion(新しく作成された *TypeError* オブジェクト) とする。
+                1. ? IteratorClose(_iterated_, _error_) を返す。
+              1. _toSkip_ を _skippedElements_ とする。
+            1. _toSkip_ &lt; *-0*<sub>𝔽</sub> である場合、
+              1. _error_ を ThrowCompletion(新しく作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _toSkip_ が有限であり、_toSkip_ > 𝔽(2<sup>53</sup> - 1) である場合、
+              1. _error_ を ThrowCompletion(新しく作成された *RangeError* オブジェクト) とする。
+              1. ? IteratorClose(_iterated_, _error_) を返す。
+            1. _skipped_ を *+0*<sub>𝔽</sub> とする。
+            1. _iterated_ を ? GetIteratorDirect(_obj_) に設定する。
+            1. 次を繰り返す。
+              1. _value_ を ? IteratorStepValue(_iterated_) とする。
+              1. _value_ が ~done~ である場合、*false* を返す。
+              1. _skipped_ &lt; _toSkip_ である場合、
+                1. _skipped_ を _skipped_ + *1*<sub>𝔽</sub> に設定する。
+              1. そうでなく、SameValueZero(_value_, _searchElement_) が *true* である場合、
+                1. ? IteratorClose(_iterated_, NormalCompletion(*true*)) を返す。
+          </emu-alg>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.prototype.join" type="built-in function">
           <h1>Iterator.prototype.join ( _separator_ )</h1>
           <p>このメソッドはイテレータの値を String に変換し、_separator_ の出現によって区切られたこれらの String を連結する。区切り文字が指定されていない場合、単一のコンマが区切り文字として使用される。</p>
@@ -50233,7 +50242,7 @@ THH:mm:ss.sss
           1. _closure_ を、_value_ と _onDispose_ を捕捉し、パラメーターを持たず、呼び出されたときに次の手順を実行する新しい Abstract Closure とする。
             1. ? Call(_onDispose_, *undefined*, « _value_ ») を返す。
           1. _func_ を CreateBuiltinFunction(_closure_, 0, *""*, « ») とする。
-          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _func_) を実行する。
+          1. ! AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _func_) を実行する。
           1. _value_ を返す。
         </emu-alg>
       </emu-clause>
@@ -50251,7 +50260,7 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
           1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外をスローする。
           1. IsCallable(_onDispose_) が *false* である場合、*TypeError* 例外をスローする。
-          1. ? AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _onDispose_) を実行する。
+          1. ! AddDisposableResource(_disposableStack_.[[DisposableResourceStack]], *undefined*, ~sync-dispose~, _onDispose_) を実行する。
           1. *undefined* を返す。
         </emu-alg>
       </emu-clause>
@@ -50427,7 +50436,7 @@ THH:mm:ss.sss
           1. _closure_ を、_value_ と _onDisposeAsync_ を捕捉し、パラメーターを持たず、呼び出されたときに次の手順を実行する新しい Abstract Closure とする。
             1. ? Call(_onDisposeAsync_, *undefined*, « _value_ ») を返す。
           1. _func_ を CreateBuiltinFunction(_closure_, 0, *""*, « ») とする。
-          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _func_) を実行する。
+          1. ! AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _func_) を実行する。
           1. _value_ を返す。
         </emu-alg>
       </emu-clause>
@@ -50445,7 +50454,7 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
           1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外をスローする。
           1. IsCallable(_onDisposeAsync_) が *false* である場合、*TypeError* 例外をスローする。
-          1. ? AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _onDisposeAsync_) を実行する。
+          1. ! AddDisposableResource(_asyncDisposableStack_.[[DisposableResourceStack]], *undefined*, ~async-dispose~, _onDisposeAsync_) を実行する。
           1. *undefined* を返す。
         </emu-alg>
       </emu-clause>
@@ -50950,7 +50959,7 @@ THH:mm:ss.sss
             1. _resolvingFuncs_ を CreateResolvingFunctions(_promiseToResolve_) とする。
             1. _thenCallResult_ を Completion(HostCallJobCallback(_then_, _thenable_, « _resolvingFuncs_.[[Resolve]], _resolvingFuncs_.[[Reject]] »)) とする。
             1. _thenCallResult_ が中断完了である場合、
-              1. ? Call(_resolvingFuncs_.[[Reject]], *undefined*, « _thenCallResult_.[[Value]] ») を返す。
+              1. ! Call(_resolvingFuncs_.[[Reject]], *undefined*, « _thenCallResult_.[[Value]] ») を返す。
             1. ! _thenCallResult_ を返す。
           1. _getThenRealmResult_ を Completion(GetFunctionRealm(_then_.[[Callback]])) とする。
           1. _getThenRealmResult_ が正常完了である場合、_thenRealm_ を _getThenRealmResult_.[[Value]] とする。
@@ -50990,7 +50999,7 @@ THH:mm:ss.sss
           1. _resolvingFuncs_ を CreateResolvingFunctions(_promise_) とする。
           1. _completion_ を Completion(Call(_executor_, *undefined*, « _resolvingFuncs_.[[Resolve]], _resolvingFuncs_.[[Reject]] »)) とする。
           1. _completion_ が中断完了である場合、
-            1. ? Call(_resolvingFuncs_.[[Reject]], *undefined*, « _completion_.[[Value]] ») を実行する。
+            1. ! Call(_resolvingFuncs_.[[Reject]], *undefined*, « _completion_.[[Value]] ») を実行する。
           1. _promise_ を返す。
         </emu-alg>
         <emu-note>
@@ -53418,7 +53427,6 @@ THH:mm:ss.sss
       </emu-alg>
 
       <emu-note>
-        <p>Shared Data Block イベントの [[NoTear]] フィールドは、そのイベントが整数 TypedArray へのアクセスによって導入された場合は *true*、浮動小数点 TypedArray または DataView へのアクセスによって導入された場合は *false* です。</p>
         <p>直感的には、この要件は、整数 TypedArray を介してメモリ範囲へアラインされた方法でアクセスする場合、等しい範囲を持つ他の write イベントとのデータ競合において、その範囲上の単一の write イベントが「勝たなければならない」ことを意味します。より正確には、この要件は、アラインされた read イベントが、すべて等しい範囲を持つ複数の異なる write イベントからのバイトで構成された値を読み取ることはできないことを意味します。ただし、アラインされた read イベントが、重なり合う範囲を持つ複数の write イベントから読み取ることは可能です。</p>
       </emu-note>
     </emu-clause>
