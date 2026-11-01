@@ -46690,11 +46690,11 @@ THH:mm:ss.sss
         <h1>get DataView.prototype.byteLength</h1>
         <p>`DataView.prototype.byteLength` 是访问器属性，其 set 访问器函数为 *undefined*。其 get 访问器函数在调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 *this* value。
+          1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[DataView]])。
           1. 断言：_obj_ 具有 [[ViewedArrayBuffer]] 内部槽。
           1. 令 _viewRecord_ 为 MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-          1. 如果 IsViewOutOfBounds(_viewRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 如果 IsViewOutOfBounds(_viewRecord_) 为 *true*，则返回 *+0*<sub>𝔽</sub>。
           1. 令 _size_ 为 GetViewByteLength(_viewRecord_)。
           1. 返回 𝔽(_size_)。
         </emu-alg>
@@ -46704,11 +46704,11 @@ THH:mm:ss.sss
         <h1>get DataView.prototype.byteOffset</h1>
         <p>`DataView.prototype.byteOffset` 是访问器属性，其 set 访问器函数为 *undefined*。其 get 访问器函数在调用时执行以下步骤：</p>
         <emu-alg>
-          1. 令 _obj_ 为 *this* value。
+          1. 令 _obj_ 为 *this* 值。
           1. 执行 ? RequireInternalSlot(_obj_, [[DataView]])。
           1. 断言：_obj_ 具有 [[ViewedArrayBuffer]] 内部槽。
           1. 令 _viewRecord_ 为 MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~)。
-          1. 如果 IsViewOutOfBounds(_viewRecord_) 是 *true*，则抛出 *TypeError* 异常。
+          1. 如果 IsViewOutOfBounds(_viewRecord_) 为 *true*，则返回 *+0*<sub>𝔽</sub>。
           1. 令 _offset_ 为 _obj_.[[ByteOffset]]。
           1. 返回 𝔽(_offset_)。
         </emu-alg>
@@ -55135,6 +55135,7 @@ THH:mm:ss.sss
   <p><emu-xref href="#sec-properties-of-the-regexp-prototype-object"></emu-xref> 在 ECMAScript 2015 中，*"source"*、*"global"*、*"ignoreCase"* 和 *"multiline"* 是定义在 RegExp 原型对象上的访问器属性。在以前的版本中，它们是定义在 RegExp 实例上的数据属性。</p>
   <p><emu-xref href="#sec-atomics.notify"></emu-xref>：在 ECMAScript 2019 中，`Atomics.wake` 已重命名为 `Atomics.notify`，以避免与 `Atomics.wait` 混淆。</p>
   <p><emu-xref href="#sec-asyncfromsynciteratorcontinuation"></emu-xref>、<emu-xref href="#sec-asyncgeneratorresume"></emu-xref>：在 ECMAScript 2019 中，`await` 入队的 Job 数量减少，这可能会导致 `then()` 调用与 `await` 表达式之间的解决顺序出现可观察差异。</p>
+  <p><emu-xref href="#sec-get-dataview.prototype.bytelength"></emu-xref>, <emu-xref href="#sec-get-dataview.prototype.byteoffset"></emu-xref>：在 ECMAScript 2027 中，`DataView.prototype.byteLength` 和 `DataView.prototype.byteOffset` 访问器被修改为在底层 ArrayBuffer 已被分离或已缩小至导致 DataView 越界时返回 *+0*<sub>𝔽</sub>，而不是抛出异常。</p>
 </emu-annex>
 
 <emu-annex id="sec-bibliography" back-matter>

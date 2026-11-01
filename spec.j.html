@@ -46682,12 +46682,12 @@ THH:mm:ss.sss
       <emu-clause id="sec-get-dataview.prototype.bytelength" type="built-in function">
         <h1>get DataView.prototype.byteLength</h1>
         <p>`DataView.prototype.byteLength` は、set アクセサー関数が *undefined* であるアクセサープロパティです。その get アクセサー関数は、呼び出されたときに次の手順を実行します。</p>
-        <emu-alg>
+          <emu-alg>
           1. _obj_ を *this* 値とする。
           1. ? RequireInternalSlot(_obj_, [[DataView]]) を実行する。
           1. 表明: _obj_ は [[ViewedArrayBuffer]] 内部スロットを持つ。
           1. _viewRecord_ を MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~) とする。
-          1. IsViewOutOfBounds(_viewRecord_) が *true* である場合、*TypeError* 例外をスローする。
+          1. IsViewOutOfBounds(_viewRecord_) が *true* ならば、*+0*<sub>𝔽</sub> を返す。
           1. _size_ を GetViewByteLength(_viewRecord_) とする。
           1. 𝔽(_size_) を返す。
         </emu-alg>
@@ -46701,7 +46701,7 @@ THH:mm:ss.sss
           1. ? RequireInternalSlot(_obj_, [[DataView]]) を実行する。
           1. 表明: _obj_ は [[ViewedArrayBuffer]] 内部スロットを持つ。
           1. _viewRecord_ を MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~) とする。
-          1. IsViewOutOfBounds(_viewRecord_) が *true* である場合、*TypeError* 例外をスローする。
+          1. IsViewOutOfBounds(_viewRecord_) が *true* ならば、*+0*<sub>𝔽</sub> を返す。
           1. _offset_ を _obj_.[[ByteOffset]] とする。
           1. 𝔽(_offset_) を返す。
         </emu-alg>
@@ -55128,6 +55128,7 @@ THH:mm:ss.sss
   <p><emu-xref href="#sec-properties-of-the-regexp-prototype-object"></emu-xref> ECMAScript 2015 では、*"source"*、*"global"*、*"ignoreCase"*、および *"multiline"* は RegExp prototype オブジェクト上に定義されるアクセサープロパティです。以前の版では、RegExp インスタンス上に定義されるデータプロパティでした。</p>
   <p><emu-xref href="#sec-atomics.notify"></emu-xref>: ECMAScript 2019 では、`Atomics.wait` との混同を防ぐため、`Atomics.wake` は `Atomics.notify` に改名されました。</p>
   <p><emu-xref href="#sec-asyncfromsynciteratorcontinuation"></emu-xref>、<emu-xref href="#sec-asyncgeneratorresume"></emu-xref>: ECMAScript 2019 では、`await` によってキューに追加される Job の数が削減され、`then()` 呼出しと `await` 式との間の resolve 順序に観測可能な差異が生じる可能性があります。</p>
+  <p><emu-xref href="#sec-get-dataview.prototype.bytelength"></emu-xref>, <emu-xref href="#sec-get-dataview.prototype.byteoffset"></emu-xref>: ECMAScript 2027 では、基になる ArrayBuffer がデタッチされた場合、または DataView が範囲外になるほど縮小された場合に、`DataView.prototype.byteLength` および `DataView.prototype.byteOffset` アクセサーが例外をスローする代わりに *+0*<sub>𝔽</sub> を返すように変更された。</p>
 </emu-annex>
 
 <emu-annex id="sec-bibliography" back-matter>

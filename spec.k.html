@@ -46686,10 +46686,10 @@ THH:mm:ss.sss
         <p>`DataView.prototype.byteLength`는 set 접근자 함수가 *undefined*인 접근자 프로퍼티입니다. get 접근자 함수는 호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>
           1. _obj_를 *this* 값으로 둡니다.
-          1. ? RequireInternalSlot(_obj_, [[DataView]])를 수행합니다.
+          1. ? RequireInternalSlot(_obj_, [[DataView]])을 수행합니다.
           1. 단언: _obj_에는 [[ViewedArrayBuffer]] 내부 슬롯이 있습니다.
           1. _viewRecord_를 MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~)로 둡니다.
-          1. IsViewOutOfBounds(_viewRecord_)가 *true*이면 *TypeError* 예외를 던집니다.
+          1. IsViewOutOfBounds(_viewRecord_)가 *true*이면 *+0*<sub>𝔽</sub>를 반환합니다.
           1. _size_를 GetViewByteLength(_viewRecord_)로 둡니다.
           1. 𝔽(_size_)를 반환합니다.
         </emu-alg>
@@ -46700,10 +46700,10 @@ THH:mm:ss.sss
         <p>`DataView.prototype.byteOffset`은 set 접근자 함수가 *undefined*인 접근자 프로퍼티입니다. get 접근자 함수는 호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>
           1. _obj_를 *this* 값으로 둡니다.
-          1. ? RequireInternalSlot(_obj_, [[DataView]])를 수행합니다.
+          1. ? RequireInternalSlot(_obj_, [[DataView]])을 수행합니다.
           1. 단언: _obj_에는 [[ViewedArrayBuffer]] 내부 슬롯이 있습니다.
           1. _viewRecord_를 MakeDataViewWithBufferWitnessRecord(_obj_, ~seq-cst~)로 둡니다.
-          1. IsViewOutOfBounds(_viewRecord_)가 *true*이면 *TypeError* 예외를 던집니다.
+          1. IsViewOutOfBounds(_viewRecord_)가 *true*이면 *+0*<sub>𝔽</sub>를 반환합니다.
           1. _offset_을 _obj_.[[ByteOffset]]으로 둡니다.
           1. 𝔽(_offset_)을 반환합니다.
         </emu-alg>
@@ -55130,6 +55130,7 @@ THH:mm:ss.sss
   <p><emu-xref href="#sec-properties-of-the-regexp-prototype-object"></emu-xref> ECMAScript 2015에서 *"source"*, *"global"*, *"ignoreCase"*, *"multiline"*은 RegExp 프로토타입 객체에 정의된 접근자 프로퍼티입니다. 이전 판에서는 RegExp 인스턴스에 정의된 데이터 프로퍼티였습니다.</p>
   <p><emu-xref href="#sec-atomics.notify"></emu-xref>: ECMAScript 2019에서 `Atomics.wake`는 `Atomics.wait`와의 혼동을 방지하기 위해 `Atomics.notify`로 이름이 변경되었습니다.</p>
   <p><emu-xref href="#sec-asyncfromsynciteratorcontinuation"></emu-xref>, <emu-xref href="#sec-asyncgeneratorresume"></emu-xref>: ECMAScript 2019에서 `await`가 큐에 넣는 Job의 수가 줄어들어 `then()` 호출과 `await` 표현식 사이의 resolve 순서에 관찰 가능한 차이가 생길 수 있게 되었습니다.</p>
+  <p><emu-xref href="#sec-get-dataview.prototype.bytelength"></emu-xref>, <emu-xref href="#sec-get-dataview.prototype.byteoffset"></emu-xref>: ECMAScript 2027에서는 기반 ArrayBuffer가 분리되었거나 크기가 줄어 DataView가 범위를 벗어난 경우, `DataView.prototype.byteLength` 및 `DataView.prototype.byteOffset` 접근자가 예외를 던지는 대신 *+0*<sub>𝔽</sub>를 반환하도록 변경되었습니다.</p>
 </emu-annex>
 
 <emu-annex id="sec-bibliography" back-matter>
