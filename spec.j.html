@@ -45436,17 +45436,18 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. _slots_ を « [[ArrayBufferData]], [[ArrayBufferByteLength]], [[ArrayBufferDetachKey]] » とする。
-          1. _maxByteLength_ が存在し、かつ _maxByteLength_ が ~empty~ でない場合、_allocatingResizableBuffer_ を *true* とする。そうでない場合、_allocatingResizableBuffer_ を *false* とする。
-          1. _allocatingResizableBuffer_ が *true* である場合、
-            1. _byteLength_ > _maxByteLength_ である場合、*RangeError* 例外をスローする。
+          1. _maxByteLength_ が存在し、_maxByteLength_ が ~empty~ でない場合、_allocatingResizableBuffer_ を *true* とする。それ以外の場合、_allocatingResizableBuffer_ を *false* とする。
+          1. _allocatingResizableBuffer_ が *true* の場合、
+            1. _byteLength_ > _maxByteLength_ の場合、*RangeError* 例外を投げる。
             1. _slots_ に [[ArrayBufferMaxByteLength]] を追加する。
           1. _obj_ を ? OrdinaryCreateFromConstructor(_ctor_, *"%ArrayBuffer.prototype%"*, _slots_) とする。
           1. _block_ を ? CreateByteDataBlock(_byteLength_) とする。
           1. _obj_.[[ArrayBufferData]] を _block_ に設定する。
           1. _obj_.[[ArrayBufferByteLength]] を _byteLength_ に設定する。
-          1. _allocatingResizableBuffer_ が *true* である場合、
-            1. _maxByteLength_ バイトからなる Data Block _block_ を作成できない場合、*RangeError* 例外をスローする。
-            1. 注記: サイズ変更可能な ArrayBuffer は、インプレースで拡張できるように設計されている。たとえば、仮想メモリを事前に予約できない場合、実装は例外をスローしてもよい。
+          1. _obj_.[[ArrayBufferDetachKey]] を ~empty~ に設定する。
+          1. _allocatingResizableBuffer_ が *true* の場合、
+            1. _maxByteLength_ バイトで構成されるデータブロック _block_ を作成できない場合、*RangeError* 例外を投げる。
+            1. 注記: サイズ変更可能な ArrayBuffer は、その場で拡張できるように実装可能な設計となっている。実装は、例えば仮想メモリーを事前に予約できない場合、例外を投げてもよい。
             1. _obj_.[[ArrayBufferMaxByteLength]] を _maxByteLength_ に設定する。
           1. _obj_ を返す。
         </emu-alg>
@@ -45485,23 +45486,23 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. ? RequireInternalSlot(_arrayBuffer_, [[ArrayBufferData]]) を実行する。
-          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* である場合、*TypeError* 例外をスローする。
-          1. _newLength_ が *undefined* である場合、
+          1. IsSharedArrayBuffer(_arrayBuffer_) が *true* の場合、*TypeError* 例外を投げる。
+          1. _newLength_ が *undefined* の場合、
             1. _newByteLength_ を _arrayBuffer_.[[ArrayBufferByteLength]] とする。
-          1. そうでない場合、
+          1. それ以外の場合、
             1. _newByteLength_ を ? ToIndex(_newLength_) とする。
-          1. IsDetachedBuffer(_arrayBuffer_) が *true* である場合、*TypeError* 例外をスローする。
-          1. _preserveResizability_ が ~preserve-resizability~ であり、IsFixedLengthArrayBuffer(_arrayBuffer_) が *false* である場合、
+          1. IsDetachedBuffer(_arrayBuffer_) が *true* の場合、*TypeError* 例外を投げる。
+          1. _preserveResizability_ が ~preserve-resizability~ であり、IsFixedLengthArrayBuffer(_arrayBuffer_) が *false* の場合、
             1. _newMaxByteLength_ を _arrayBuffer_.[[ArrayBufferMaxByteLength]] とする。
-          1. そうでない場合、
+          1. それ以外の場合、
             1. _newMaxByteLength_ を ~empty~ とする。
-          1. _arrayBuffer_.[[ArrayBufferDetachKey]] が *undefined* でない場合、*TypeError* 例外をスローする。
+          1. _arrayBuffer_.[[ArrayBufferDetachKey]] が ~empty~ でない場合、*TypeError* 例外を投げる。
           1. _newBuffer_ を ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta> とする。
           1. _copyLength_ を min(_newByteLength_, _arrayBuffer_.[[ArrayBufferByteLength]]) とする。
           1. _fromBlock_ を _arrayBuffer_.[[ArrayBufferData]] とする。
           1. _toBlock_ を _newBuffer_.[[ArrayBufferData]] とする。
           1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, 0, _copyLength_) を実行する。
-          1. 注記: 新しい Data Block の作成も、古い Data Block からのコピーも観測できない。実装はこのメソッドをゼロコピー移動または `realloc` として実装してもよい。
+          1. 注記: 新しいデータブロックの作成も、古いデータブロックからのコピーも観測可能ではない。実装は、このメソッドをゼロコピーの移動または `realloc` として実装してもよい。
           1. ! DetachArrayBuffer(_arrayBuffer_) を実行する。
           1. _newBuffer_ を返す。
         </emu-alg>
@@ -45525,7 +45526,7 @@ THH:mm:ss.sss
         <h1>
           DetachArrayBuffer (
             _arrayBuffer_: an ArrayBuffer,
-            optional _key_: anything,
+            optional _key_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -45534,8 +45535,11 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 表明: IsSharedArrayBuffer(_arrayBuffer_) は *false* である。
-          1. _key_ が存在しない場合、_key_ を *undefined* に設定する。
-          1. _arrayBuffer_.[[ArrayBufferDetachKey]] が _key_ でない場合、*TypeError* 例外をスローする。
+          1. _expectedKey_ を _arrayBuffer_.[[ArrayBufferDetachKey]] とする。
+          1. _key_ が存在する場合、
+            1. _expectedKey_ が ~empty~ であるか、SameValue(_key_, _expectedKey_) が *false* の場合、*TypeError* 例外を投げる。
+          1. それ以外の場合、
+            1. _expectedKey_ が ~empty~ でない場合、*TypeError* 例外を投げる。
           1. _arrayBuffer_.[[ArrayBufferData]] を *null* に設定する。
           1. _arrayBuffer_.[[ArrayBufferByteLength]] を 0 に設定する。
           1. ~unused~ を返す。
@@ -46088,7 +46092,7 @@ THH:mm:ss.sss
       <h1>ArrayBuffer インスタンスのプロパティ</h1>
       <p>ArrayBuffer インスタンスは ArrayBuffer prototype オブジェクトからプロパティを継承します。各 ArrayBuffer インスタンスは [[ArrayBufferData]] 内部スロット、[[ArrayBufferByteLength]] 内部スロット、および [[ArrayBufferDetachKey]] 内部スロットを持ちます。サイズ変更可能な ArrayBuffer インスタンスはそれぞれ [[ArrayBufferMaxByteLength]] 内部スロットを持ちます。</p>
       <p>[[ArrayBufferData]] が *null* である ArrayBuffer インスタンスは detached であるとみなされ、ArrayBuffer インスタンスに含まれるデータへアクセスまたは変更するすべての演算子は失敗します。</p>
-      <p>[[ArrayBufferDetachKey]] が *undefined* 以外の値に設定されている ArrayBuffer インスタンスでは、すべての DetachArrayBuffer 呼出しが同じ「detach key」を引数として渡す必要があり、そうでなければ TypeError になります。この内部スロットは、この仕様のアルゴリズムによってではなく、特定の埋込み環境によってのみ設定されます。</p>
+      <p>[[ArrayBufferDetachKey]] が ~empty~ でない ArrayBuffer インスタンスについては、DetachArrayBuffer に省略可能な第2引数として同じ「デタッチキー」を渡さなければならず、そうしない場合は TypeError が投げられる。この内部スロットが ~empty~ 以外の値に設定されるのは、特定の埋め込み環境による場合のみであり、この仕様のアルゴリズムによって設定されることはない。</p>
     </emu-clause>
 
     <emu-clause id="sec-resizable-arraybuffer-guidelines">

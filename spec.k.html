@@ -45446,9 +45446,10 @@ THH:mm:ss.sss
           1. _block_을 ? CreateByteDataBlock(_byteLength_)으로 둡니다.
           1. _obj_.[[ArrayBufferData]]를 _block_으로 설정합니다.
           1. _obj_.[[ArrayBufferByteLength]]를 _byteLength_로 설정합니다.
-          1. _allocatingResizableBuffer_가 *true*이면, 다음을 수행합니다.
-            1. _maxByteLength_ 바이트로 구성된 Data Block _block_을 생성할 수 없으면 *RangeError* 예외를 던집니다.
-            1. 참고: 크기 조절 가능한 ArrayBuffer는 제자리 확장으로 구현할 수 있도록 설계되었습니다. 예를 들어 가상 메모리를 미리 예약할 수 없는 경우 구현체는 예외를 던질 수 있습니다.
+          1. _obj_.[[ArrayBufferDetachKey]]를 ~empty~로 설정합니다.
+          1. _allocatingResizableBuffer_가 *true*이면 다음을 수행합니다.
+            1. _maxByteLength_바이트로 구성된 데이터 블록 _block_을 생성할 수 없다면 *RangeError* 예외를 던집니다.
+            1. NOTE: 크기 조정 가능한 ArrayBuffer는 제자리에서 확장하는 방식으로 구현할 수 있도록 설계되었습니다. 예를 들어 가상 메모리를 미리 예약할 수 없다면 구현체에서 예외를 던질 수 있습니다.
             1. _obj_.[[ArrayBufferMaxByteLength]]를 _maxByteLength_로 설정합니다.
           1. _obj_를 반환합니다.
         </emu-alg>
@@ -45486,24 +45487,24 @@ THH:mm:ss.sss
         <dl class="header">
         </dl>
         <emu-alg>
-          1. ? RequireInternalSlot(_arrayBuffer_, [[ArrayBufferData]])를 수행합니다.
+          1. ? RequireInternalSlot(_arrayBuffer_, [[ArrayBufferData]])을 수행합니다.
           1. IsSharedArrayBuffer(_arrayBuffer_)가 *true*이면 *TypeError* 예외를 던집니다.
-          1. _newLength_가 *undefined*이면, 다음을 수행합니다.
-            1. _newByteLength_를 _arrayBuffer_.[[ArrayBufferByteLength]]로 둡니다.
-          1. 그렇지 않으면,
-            1. _newByteLength_를 ? ToIndex(_newLength_)로 둡니다.
+          1. _newLength_가 *undefined*이면 다음을 수행합니다.
+            1. _newByteLength_를 _arrayBuffer_.[[ArrayBufferByteLength]]로 설정합니다.
+          1. 그렇지 않으면 다음을 수행합니다.
+            1. _newByteLength_를 ? ToIndex(_newLength_)로 설정합니다.
           1. IsDetachedBuffer(_arrayBuffer_)가 *true*이면 *TypeError* 예외를 던집니다.
-          1. _preserveResizability_가 ~preserve-resizability~이고 IsFixedLengthArrayBuffer(_arrayBuffer_)가 *false*이면, 다음을 수행합니다.
-            1. _newMaxByteLength_를 _arrayBuffer_.[[ArrayBufferMaxByteLength]]로 둡니다.
-          1. 그렇지 않으면,
-            1. _newMaxByteLength_를 ~empty~로 둡니다.
-          1. _arrayBuffer_.[[ArrayBufferDetachKey]]가 *undefined*가 아니면 *TypeError* 예외를 던집니다.
-          1. _newBuffer_를 ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta>로 둡니다.
-          1. _copyLength_를 min(_newByteLength_, _arrayBuffer_.[[ArrayBufferByteLength]])로 둡니다.
-          1. _fromBlock_을 _arrayBuffer_.[[ArrayBufferData]]로 둡니다.
-          1. _toBlock_을 _newBuffer_.[[ArrayBufferData]]로 둡니다.
+          1. _preserveResizability_가 ~preserve-resizability~이고 IsFixedLengthArrayBuffer(_arrayBuffer_)가 *false*이면 다음을 수행합니다.
+            1. _newMaxByteLength_를 _arrayBuffer_.[[ArrayBufferMaxByteLength]]로 설정합니다.
+          1. 그렇지 않으면 다음을 수행합니다.
+            1. _newMaxByteLength_를 ~empty~로 설정합니다.
+          1. _arrayBuffer_.[[ArrayBufferDetachKey]]가 ~empty~가 아니면 *TypeError* 예외를 던집니다.
+          1. _newBuffer_를 ? <emu-meta *suppress-effects*="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta>로 설정합니다.
+          1. _copyLength_를 min(_newByteLength_, _arrayBuffer_.[[ArrayBufferByteLength]])으로 설정합니다.
+          1. _fromBlock_을 _arrayBuffer_.[[ArrayBufferData]]로 설정합니다.
+          1. _toBlock_을 _newBuffer_.[[ArrayBufferData]]로 설정합니다.
           1. CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, 0, _copyLength_)를 수행합니다.
-          1. 참고: 새로운 Data Block 생성과 이전 Data Block에서 복사하는 작업은 모두 관찰할 수 없습니다. 구현체는 이 메서드를 복사 없는 이동 또는 `realloc`로 구현할 수 있습니다.
+          1. NOTE: 새 데이터 블록을 생성하는 작업과 이전 데이터 블록에서 복사하는 작업은 모두 관찰할 수 없습니다. 구현체는 이 메서드를 복사 없는 이동 또는 `realloc`로 구현할 수 있습니다.
           1. ! DetachArrayBuffer(_arrayBuffer_)를 수행합니다.
           1. _newBuffer_를 반환합니다.
         </emu-alg>
@@ -45527,7 +45528,7 @@ THH:mm:ss.sss
         <h1>
           DetachArrayBuffer (
             _arrayBuffer_: an ArrayBuffer,
-            optional _key_: anything,
+            optional _key_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -45536,8 +45537,11 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 단언: IsSharedArrayBuffer(_arrayBuffer_)는 *false*입니다.
-          1. _key_가 존재하지 않으면 _key_를 *undefined*로 설정합니다.
-          1. _arrayBuffer_.[[ArrayBufferDetachKey]]가 _key_가 아니면 *TypeError* 예외를 던집니다.
+          1. _expectedKey_를 _arrayBuffer_.[[ArrayBufferDetachKey]]로 설정합니다.
+          1. _key_가 존재하면 다음을 수행합니다.
+            1. _expectedKey_가 ~empty~이거나 SameValue(_key_, _expectedKey_)가 *false*이면 *TypeError* 예외를 던집니다.
+          1. 그렇지 않으면 다음을 수행합니다.
+            1. _expectedKey_가 ~empty~가 아니면 *TypeError* 예외를 던집니다.
           1. _arrayBuffer_.[[ArrayBufferData]]를 *null*로 설정합니다.
           1. _arrayBuffer_.[[ArrayBufferByteLength]]를 0으로 설정합니다.
           1. ~unused~를 반환합니다.
@@ -46090,7 +46094,7 @@ THH:mm:ss.sss
       <h1>ArrayBuffer 인스턴스의 프로퍼티</h1>
       <p>ArrayBuffer 인스턴스는 ArrayBuffer 프로토타입 객체에서 프로퍼티를 상속합니다. 각 ArrayBuffer 인스턴스에는 [[ArrayBufferData]] 내부 슬롯, [[ArrayBufferByteLength]] 내부 슬롯, [[ArrayBufferDetachKey]] 내부 슬롯이 있습니다. 크기 조절 가능한 각 ArrayBuffer 인스턴스에는 [[ArrayBufferMaxByteLength]] 내부 슬롯도 있습니다.</p>
       <p>[[ArrayBufferData]]가 *null*인 ArrayBuffer 인스턴스는 분리된 것으로 간주되며, ArrayBuffer 인스턴스에 포함된 데이터에 접근하거나 수정하는 모든 연산자는 실패합니다.</p>
-      <p>[[ArrayBufferDetachKey]]가 *undefined* 이외의 값으로 설정된 ArrayBuffer 인스턴스는 모든 DetachArrayBuffer 호출에서 동일한 “detach key”를 인수로 전달해야 하며, 그렇지 않으면 TypeError가 발생합니다. 이 내부 슬롯은 이 명세의 알고리즘이 아니라 특정 임베딩 환경에 의해서만 설정됩니다.</p>
+      <p>[[ArrayBufferDetachKey]]가 ~empty~가 아닌 ArrayBuffer 인스턴스의 경우, DetachArrayBuffer에 동일한 “분리 키”를 선택적 두 번째 인수로 전달해야 하며, 그렇지 않으면 TypeError 예외가 발생합니다. 이 내부 슬롯은 이 명세의 알고리즘이 아닌 특정 호스트 환경에서만 ~empty~가 아닌 값으로 설정됩니다.</p>
     </emu-clause>
 
     <emu-clause id="sec-resizable-arraybuffer-guidelines">

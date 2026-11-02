@@ -45442,17 +45442,18 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 令 _slots_ 为 « [[ArrayBufferData]], [[ArrayBufferByteLength]], [[ArrayBufferDetachKey]] »。
-          1. 如果存在 _maxByteLength_ 且 _maxByteLength_ 不是 ~empty~，则令 _allocatingResizableBuffer_ 为 *true*；否则令 _allocatingResizableBuffer_ 为 *false*。
-          1. 如果 _allocatingResizableBuffer_ 是 *true*，则
-            1. 如果 _byteLength_ > _maxByteLength_，则抛出 *RangeError* 异常。
+          1. 如果 _maxByteLength_ 存在且 _maxByteLength_ 不为 ~empty~，则令 _allocatingResizableBuffer_ 为 *true*；否则令 _allocatingResizableBuffer_ 为 *false*。
+          1. 如果 _allocatingResizableBuffer_ 为 *true*，那么
+            1. 如果 _byteLength_ > _maxByteLength_，抛出 *RangeError* 异常。
             1. 将 [[ArrayBufferMaxByteLength]] 追加到 _slots_。
           1. 令 _obj_ 为 ? OrdinaryCreateFromConstructor(_ctor_, *"%ArrayBuffer.prototype%"*, _slots_)。
           1. 令 _block_ 为 ? CreateByteDataBlock(_byteLength_)。
           1. 将 _obj_.[[ArrayBufferData]] 设置为 _block_。
           1. 将 _obj_.[[ArrayBufferByteLength]] 设置为 _byteLength_。
-          1. 如果 _allocatingResizableBuffer_ 是 *true*，则
-            1. 如果无法创建由 _maxByteLength_ 个字节组成的 Data Block _block_，则抛出 *RangeError* 异常。
-            1. 注：可调整大小的 ArrayBuffer 被设计为可通过原地增长实现。例如，如果无法预先保留虚拟内存，实现可以抛出异常。
+          1. 将 _obj_.[[ArrayBufferDetachKey]] 设置为 ~empty~。
+          1. 如果 _allocatingResizableBuffer_ 为 *true*，那么
+            1. 如果无法创建由 _maxByteLength_ 个字节组成的数据块 _block_，则抛出 *RangeError* 异常。
+            1. 注：可调整大小的 ArrayBuffer 被设计为能够通过原地扩容来实现。例如，如果无法预先保留虚拟内存，实现可以抛出异常。
             1. 将 _obj_.[[ArrayBufferMaxByteLength]] 设置为 _maxByteLength_。
           1. 返回 _obj_。
         </emu-alg>
@@ -45491,23 +45492,23 @@ THH:mm:ss.sss
         </dl>
         <emu-alg>
           1. 执行 ? RequireInternalSlot(_arrayBuffer_, [[ArrayBufferData]])。
-          1. 如果 IsSharedArrayBuffer(_arrayBuffer_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 _newLength_ 是 *undefined*，则
+          1. 如果 IsSharedArrayBuffer(_arrayBuffer_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 如果 _newLength_ 为 *undefined*，那么
             1. 令 _newByteLength_ 为 _arrayBuffer_.[[ArrayBufferByteLength]]。
           1. 否则，
             1. 令 _newByteLength_ 为 ? ToIndex(_newLength_)。
-          1. 如果 IsDetachedBuffer(_arrayBuffer_) 是 *true*，则抛出 *TypeError* 异常。
-          1. 如果 _preserveResizability_ 是 ~preserve-resizability~ 且 IsFixedLengthArrayBuffer(_arrayBuffer_) 是 *false*，则
+          1. 如果 IsDetachedBuffer(_arrayBuffer_) 为 *true*，则抛出 *TypeError* 异常。
+          1. 如果 _preserveResizability_ 为 ~preserve-resizability~ 且 IsFixedLengthArrayBuffer(_arrayBuffer_) 为 *false*，那么
             1. 令 _newMaxByteLength_ 为 _arrayBuffer_.[[ArrayBufferMaxByteLength]]。
           1. 否则，
             1. 令 _newMaxByteLength_ 为 ~empty~。
-          1. 如果 _arrayBuffer_.[[ArrayBufferDetachKey]] 不是 *undefined*，则抛出 *TypeError* 异常。
+          1. 如果 _arrayBuffer_.[[ArrayBufferDetachKey]] 不为 ~empty~，则抛出 *TypeError* 异常。
           1. 令 _newBuffer_ 为 ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta>。
           1. 令 _copyLength_ 为 min(_newByteLength_, _arrayBuffer_.[[ArrayBufferByteLength]])。
           1. 令 _fromBlock_ 为 _arrayBuffer_.[[ArrayBufferData]]。
           1. 令 _toBlock_ 为 _newBuffer_.[[ArrayBufferData]]。
           1. 执行 CopyDataBlockBytes(_toBlock_, 0, _fromBlock_, 0, _copyLength_)。
-          1. 注：创建新的 Data Block 和从旧 Data Block 复制都不可观察。实现可以将此方法实现为零复制移动或 `realloc`。
+          1. 注：新数据块的创建和从旧数据块复制数据均不可被观察到。实现可以将此方法实现为零复制移动或 `realloc`。
           1. 执行 ! DetachArrayBuffer(_arrayBuffer_)。
           1. 返回 _newBuffer_。
         </emu-alg>
@@ -45531,7 +45532,7 @@ THH:mm:ss.sss
         <h1>
           DetachArrayBuffer (
             _arrayBuffer_: an ArrayBuffer,
-            optional _key_: anything,
+            optional _key_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
@@ -45539,9 +45540,12 @@ THH:mm:ss.sss
           <dd>true</dd>
         </dl>
         <emu-alg>
-          1. 断言：IsSharedArrayBuffer(_arrayBuffer_) 是 *false*。
-          1. 如果不存在 _key_，则将 _key_ 设置为 *undefined*。
-          1. 如果 _arrayBuffer_.[[ArrayBufferDetachKey]] 不是 _key_，则抛出 *TypeError* 异常。
+          1. 断言：IsSharedArrayBuffer(_arrayBuffer_) 为 *false*。
+          1. 令 _expectedKey_ 为 _arrayBuffer_.[[ArrayBufferDetachKey]]。
+          1. 如果 _key_ 存在，那么
+            1. 如果 _expectedKey_ 为 ~empty~ 或 SameValue(_key_, _expectedKey_) 为 *false*，则抛出 *TypeError* 异常。
+          1. 否则，
+            1. 如果 _expectedKey_ 不为 ~empty~，则抛出 *TypeError* 异常。
           1. 将 _arrayBuffer_.[[ArrayBufferData]] 设置为 *null*。
           1. 将 _arrayBuffer_.[[ArrayBufferByteLength]] 设置为 0。
           1. 返回 ~unused~。
@@ -46094,7 +46098,7 @@ THH:mm:ss.sss
       <h1>ArrayBuffer 实例的属性</h1>
       <p>ArrayBuffer 实例从 ArrayBuffer 原型对象继承属性。每个 ArrayBuffer 实例都具有 [[ArrayBufferData]] 内部槽、[[ArrayBufferByteLength]] 内部槽和 [[ArrayBufferDetachKey]] 内部槽。每个可调整大小的 ArrayBuffer 实例还具有 [[ArrayBufferMaxByteLength]] 内部槽。</p>
       <p>[[ArrayBufferData]] 为 *null* 的 ArrayBuffer 实例被视为已分离，并且所有访问或修改 ArrayBuffer 实例中所含数据的操作都将失败。</p>
-      <p>[[ArrayBufferDetachKey]] 被设置为 *undefined* 以外值的 ArrayBuffer 实例，要求所有 DetachArrayBuffer 调用都将同一个“分离键”作为参数传递，否则会产生 TypeError。此内部槽仅由某些嵌入环境设置，而不会由本规范中的算法设置。</p>
+      <p>对于 [[ArrayBufferDetachKey]] 不为 ~empty~ 的 ArrayBuffer 实例，必须将相同的“分离键”作为可选的第二个参数传递给 DetachArrayBuffer，否则将抛出 TypeError。只有某些嵌入环境才会将此内部槽设置为 ~empty~ 以外的值，本规范中的算法不会这样做。</p>
     </emu-clause>
 
     <emu-clause id="sec-resizable-arraybuffer-guidelines">
