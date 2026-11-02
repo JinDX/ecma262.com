@@ -28059,7 +28059,7 @@
 
           <p>次に、_A_ にリンクエラーがある場合を考えます。たとえば、存在しない束縛を _C_ からインポートしようとする場合です。この場合でも、_A_ に対する InnerModuleLinking の2回目の呼出しからの早期 return を含め、上記の手順はそのまま発生します。ただし、元の _A_ に対する InnerModuleLinking まで巻き戻ると、InitializeEnvironment 中、具体的には _C_.ResolveExport() の直後で失敗します。スローされた *SyntaxError* 例外は _A_.Link まで伝播し、その _stack_ に現在存在するすべてのモジュール（これらは常にまだ ~linking~ であるモジュールと正確に一致します）をリセットします。したがって、_A_ と _B_ はどちらも ~unlinked~ になります。_C_ は ~linked~ のままであることに注意してください。</p>
 
-          <p>あるいは、_A_ に評価エラーがある場合、たとえばそのソースコードが例外をスローする場合を考えます。この場合も、_A_ に対する InnerModuleEvaluation の2回目の呼出しからの早期 return を含め、上記に対応する評価時の手順が発生します。ただし、元の _A_ に対する InnerModuleEvaluation まで巻き戻ると、仮定により失敗します。スローされた例外は _A_.Evaluate() まで伝播し、その _stack_ に現在存在するすべてのモジュール（すなわち、まだ ~evaluating~ であるモジュール）と、AsyncModuleExecutionRejected アルゴリズムを介して依存関係グラフ全体にわたってトップレベル `await` を含む、またはそれに依存するモジュールの連鎖を形成する [[AsyncParentModules]] にエラーを記録します。したがって、_A_ と _B_ はどちらも ~evaluated~ になり、例外が _A_ と _B_ の両方の [[EvaluationError]] フィールドに記録されます。一方、_C_ は [[EvaluationError]] を持たない ~evaluated~ のままです。</p>
+          <p>あるいは、_A_ に評価エラーがある場合、たとえばそのソースコードが例外をスローする場合を考えます。この場合も、_A_ に対する InnerModuleEvaluation の2回目の呼出しからの早期 return を含め、上記に対応する評価時の手順が発生します。ただし、元の _A_ に対する InnerModuleEvaluation まで巻き戻ると、仮定により失敗します。スローされた例外は _A_.Evaluate() まで伝播します。この操作は、その _stack_ に現在存在するすべてのモジュール（すなわち、まだ ~evaluating~ であるモジュール）にエラーを記録するとともに、AsyncModuleExecutionRejected アルゴリズムによって [[AsyncParentModules]] を介し、トップレベル `await` を含む、またはそれに依存するモジュールの連鎖に沿って依存関係グラフ全体にエラーを伝播します。したがって、_A_ と _B_ はどちらも ~evaluated~ になり、例外が _A_ と _B_ の両方の [[EvaluationError]] フィールドに記録されます。一方、_C_ は [[EvaluationError]] を持たない ~evaluated~ のままです。</p>
 
           <p>最後に、すべてのモジュールが非同期に完了する、サイクルを持つモジュールグラフを考えます。</p>
           <emu-figure id="figure-module-graph-cycle-async" caption="非同期の循環モジュールグラフ">
@@ -53482,7 +53482,7 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-races">
     <h1>競合</h1>
-    <p>SharedDataBlockEventSet(_execution_) に含まれる実行 _execution_ とイベント _eventA_ および _eventB_ について、次のアルゴリズムが *true* を返す場合、_eventA_ と _eventB_ は<em>競合</em>しています。</p>
+    <p>実行 _execution_ と、SharedDataBlockEventSet(_execution_) に含まれるイベント _eventA_ および _eventB_ について、次のアルゴリズムが *true* を返す場合、_eventA_ と _eventB_ は<em>競合</em>しています。</p>
     <emu-alg>
       1. _eventA_ と _eventB_ が同じ Shared Data Block event でない場合、
         1. _execution_ において _eventA_ happens-before _eventB_ と _eventB_ happens-before _eventA_ の両方が成り立つわけではない場合、
@@ -53496,7 +53496,7 @@ THH:mm:ss.sss
 
   <emu-clause id="sec-data-races">
     <h1>データ競合</h1>
-    <p>SharedDataBlockEventSet(_execution_) に含まれる実行 _execution_ とイベント _eventA_ および _eventB_ について、次のアルゴリズムが *true* を返す場合、_eventA_ と _eventB_ は<dfn>データ競合</dfn>しています。</p>
+    <p>実行 _execution_ と、SharedDataBlockEventSet(_execution_) に含まれるイベント _eventA_ および _eventB_ について、次のアルゴリズムが *true* を返す場合、_eventA_ と _eventB_ は<dfn>データ競合</dfn>しています。</p>
     <emu-alg>
       1. _execution_ において _eventA_ と _eventB_ が <emu-xref href="#sec-races">race</emu-xref> にある場合、
         1. _eventA_.[[Order]] が ~seq-cst~ でないか、または _eventB_.[[Order]] が ~seq-cst~ でない場合、
