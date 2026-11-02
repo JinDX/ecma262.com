@@ -19834,7 +19834,7 @@
               1. 如果 _argList_ 没有元素，则返回 *undefined*。
               1. 令 _evalArg_ 为 _argList_ 的第一个元素。
               1. 如果 IsStrict(this |CallExpression|) 是 *true*，则令 _strictCaller_ 为 *true*；否则令 _strictCaller_ 为 *false*。
-              1. [id="step-callexpression-evaluation-direct-eval"] 返回 ? PerformEval(_evalArg_, _strictCaller_, *true*)。
+              1. [id="step-callexpression-evaluation-direct-eval"] 返回 ? PerformEval(_evalArg_, _strictCaller_, ~direct-eval~)。
           1. 令 _thisCall_ 为此 |CallExpression|。
           1. 令 _tailCall_ 为 IsInTailPosition(_thisCall_)。
           1. 返回 ? EvaluateCall(_func_, _ref_, _args_, _tailCall_)。
@@ -30369,7 +30369,7 @@
       <p>此函数是 <dfn>%eval%</dfn> 内在对象。</p>
       <p>调用时，它执行以下步骤：</p>
       <emu-alg>
-        1. 返回 ? PerformEval(_source_, *false*, *false*)。
+        1. 返回 ? PerformEval(_source_, *false*, ~indirect-eval~)。
       </emu-alg>
 
       <emu-clause id="sec-performeval" type="abstract operation" oldids="sec-performeval-rules-outside-functions,sec-performeval-rules-outside-methods,sec-performeval-rules-outside-constructors">
@@ -30377,13 +30377,13 @@
           PerformEval (
             _source_: an ECMAScript language value,
             _strictCaller_: a Boolean,
-            _direct_: a Boolean,
+            _direct_: ~direct-eval~ or ~indirect-eval~,
           ): either a normal completion containing an ECMAScript language value or a throw completion
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 断言：如果 _direct_ 是 *false*，则 _strictCaller_ 也是 *false*。
+          1. 断言：如果 _direct_ 是 ~indirect-eval~，则 _strictCaller_ 是 *false*。
           1. 如果 _source_ 不是 String，则返回 _source_。
           1. 令 _evalRealm_ 为当前 Realm Record。
           1. 注：对于直接 eval，_evalRealm_ 同时是 `eval` 调用方和 `eval` 函数自身所在的 realm。
@@ -30392,7 +30392,7 @@
           1. 令 _inMethod_ 为 *false*。
           1. 令 _inDerivedCtor_ 为 *false*。
           1. 令 _inClassFieldInitializer_ 为 *false*。
-          1. 如果 _direct_ 是 *true*，则
+          1. 如果 _direct_ 是 ~direct-eval~，则
             1. 令 _thisEnvRecord_ 为 GetThisEnvironment()。
             1. 如果 _thisEnvRecord_ 是 Function Environment Record，则
               1. 令 _func_ 为 _thisEnvRecord_.[[FunctionObject]]。
@@ -30413,8 +30413,8 @@
           1. 如果 _strictCaller_ 是 *true*，则令 _strictEval_ 为 *true*。
           1. 否则，令 _strictEval_ 为 _script_ 的 ScriptIsStrict。
           1. 令 _runningContext_ 为正在运行的执行上下文。
-          1. 注：如果 _direct_ 是 *true*，_runningContext_ 将是执行直接 eval 的执行上下文。如果 _direct_ 是 *false*，_runningContext_ 将是调用 `eval` 函数的执行上下文。
-          1. 如果 _direct_ 是 *true*，则
+          1. 注：如果 _direct_ 是 ~direct-eval~，_runningContext_ 将是执行直接 eval 的执行上下文。如果 _direct_ 是 ~indirect-eval~，_runningContext_ 将是调用 `eval` 函数的执行上下文。
+          1. 如果 _direct_ 是 ~direct-eval~，则
             1. 令 _lexicalEnv_ 为 NewDeclarativeEnvironment(_runningContext_ 的 LexicalEnvironment)。
             1. 令 _variableEnv_ 为 _runningContext_ 的 VariableEnvironment。
             1. 令 _privateEnv_ 为 _runningContext_ 的 PrivateEnvironment。
@@ -30452,18 +30452,23 @@
             _calleeRealm_: a Realm Record,
             _paramStrings_: a List of Strings,
             _bodyString_: a String,
-            _direct_: a Boolean,
+            _compilationType_: ~direct-eval~, ~indirect-eval~, or ~function~,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>它允许宿主环境阻止某些允许开发者将字符串解释并求值为 ECMAScript 代码的 ECMAScript 函数。</dd>
+          <dt>skip return checks</dt>
+          <dd>true</dd>
         </dl>
         <p>
           _paramStrings_ 表示在使用某个函数构造函数时，将连接起来构建参数列表的字符串。_bodyString_ 表示函数体或传递给 `eval` 调用的字符串。
-          _direct_ 表示该求值是否为直接 eval。
+          _compilationType_ 描述该编译是由直接 `eval` 调用、间接 `eval` 调用还是某个函数构造函数引起的。
         </p>
-        <p>HostEnsureCanCompileStrings 的默认实现是返回 NormalCompletion(~unused~)。</p>
+        <p>HostEnsureCanCompileStrings 的默认实现在被调用时执行以下步骤：</p>
+        <emu-alg>
+          1. 返回 ~unused~。
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-evaldeclarationinstantiation" type="abstract operation" oldids="sec-web-compat-evaldeclarationinstantiation">
@@ -31753,7 +31758,7 @@
               1. 将 ? ToString(_arg_) 追加到 _paramStrings_。
             1. 令 _bodyString_ 为 ? ToString(_bodyArg_)。
             1. 令 _currentRealm_ 为当前 Realm Record。
-            1. 执行 ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, *false*)。
+            1. 执行 ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, ~function~)。
             1. 令 _paramString_ 为空 String。
             1. 如果 _argCount_ > 0，则
               1. 将 _paramString_ 设置为 _paramStrings_[0]。
@@ -33152,7 +33157,7 @@
         <emu-clause id="sec-thisnumbervalue" type="abstract operation" oldids="thisnumbervalue">
           <h1>
             ThisNumberValue (
-              _arg_: 一个 ECMAScript 语言值，,
+              _arg_: 一个 ECMAScript 语言值,
             ): 包含 Number 的正常完成或抛出完成
           </h1>
           <dl class="header">
@@ -33201,7 +33206,7 @@
         <emu-clause id="sec-numbertobigint" type="abstract operation">
           <h1>
             NumberToBigInt (
-              _number_: 一个 Number，,
+              _number_: 一个 Number,
             ): 包含 BigInt 的正常完成或抛出完成
           </h1>
           <dl class="header">
@@ -33298,7 +33303,7 @@
         <emu-clause id="sec-thisbigintvalue" type="abstract operation" oldids="thisbigintvalue">
           <h1>
             ThisBigIntValue (
-              _arg_: 一个 ECMAScript 语言值，,
+              _arg_: 一个 ECMAScript 语言值,
             ): 包含 BigInt 的正常完成或抛出完成
           </h1>
           <dl class="header">
@@ -43414,13 +43419,7 @@ THH:mm:ss.sss
               1. 执行 ? InitializeTypedArrayFromArrayBuffer(_obj_, _firstArg_, _byteOffset_, _length_)。
             1. 否则，
               1. 断言：_firstArg_ 是 Object，并且 _firstArg_ 既没有 [[TypedArrayName]] 内部槽，也没有 [[ArrayBufferData]] 内部槽。
-              1. 令 _usingIterator_ 为 ? GetMethod(_firstArg_, %Symbol.iterator%)。
-              1. 如果 _usingIterator_ 不是 *undefined*，则
-                1. 令 _values_ 为 ? IteratorToList(? GetIteratorFromMethod(_firstArg_, _usingIterator_))。
-                1. 执行 ? InitializeTypedArrayFromList(_obj_, _values_)。
-              1. 否则，
-                1. 注：_firstArg_ 不是可迭代对象，因此假定它已经是类数组对象。
-                1. 执行 ? InitializeTypedArrayFromArrayLike(_obj_, _firstArg_)。
+              1. 执行 ? InitializeTypedArrayFromElements(_obj_, _firstArg_)。
             1. 返回 _obj_。
           1. 断言：_firstArg_ 不是 Object。
           1. 令 _elementLength_ 为 ? ToIndex(_firstArg_)。
@@ -43538,43 +43537,31 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-initializetypedarrayfromlist" type="abstract operation">
+        <emu-clause id="sec-initializetypedarrayfromelements" type="abstract operation" oldids="sec-initializetypedarrayfromarraylike,sec-initializetypedarrayfromlist">
           <h1>
-            InitializeTypedArrayFromList (
+            InitializeTypedArrayFromElements (
               _obj_: a TypedArray,
-              _values_: a List of ECMAScript language values,
+              _source_: an Object,
             ): either a normal completion containing ~unused~ or a throw completion
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 令 _length_ 为 _values_ 中的元素数量。
+            1. 令 _usingIterator_ 为 ? GetMethod(_source_, %Symbol.iterator%)。
+            1. 如果 _usingIterator_ 不是 *undefined*，则
+              1. 令 _list_ 为 ? IteratorToList(? GetIteratorFromMethod(_source_, _usingIterator_))。
+              1. 令 _length_ 为 _list_ 中的元素数量。
+            1. 否则，
+              1. 注：_source_ 不可迭代，因此假定它是类数组对象。
+              1. 令 _length_ 为 ? LengthOfArrayLike(_source_)。
             1. 执行 ? AllocateTypedArrayBuffer(_obj_, _length_)。
             1. 令 _k_ 为 0。
             1. 当 _k_ &lt; _length_ 时，重复执行，
-              1. 令 _kValue_ 为 _values_[_k_]。
-              1. 执行 ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)。
-              1. 将 _k_ 设置为 _k_ + 1。
-            1. 返回 ~unused~。
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-initializetypedarrayfromarraylike" type="abstract operation">
-          <h1>
-            InitializeTypedArrayFromArrayLike (
-              _obj_: a TypedArray,
-              _arrayLike_: an Object, but not a TypedArray or an ArrayBuffer,
-            ): either a normal completion containing ~unused~ or a throw completion
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. 令 _length_ 为 ? LengthOfArrayLike(_arrayLike_)。
-            1. 执行 ? AllocateTypedArrayBuffer(_obj_, _length_)。
-            1. 令 _k_ 为 0。
-            1. 当 _k_ &lt; _length_ 时，重复执行，
-              1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
-              1. 令 _kValue_ 为 ? Get(_arrayLike_, _propertyKey_)。
+              1. 如果 _usingIterator_ 不是 *undefined*，则
+                1. 令 _kValue_ 为 _list_[_k_]。
+              1. 否则，
+                1. 令 _propertyKey_ 为 ! ToString(𝔽(_k_))。
+                1. 令 _kValue_ 为 ? Get(_source_, _propertyKey_)。
               1. 执行 ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)。
               1. 将 _k_ 设置为 _k_ + 1。
             1. 返回 ~unused~。

@@ -19832,7 +19832,7 @@
               1. _argList_에 요소가 없으면 *undefined*를 반환합니다.
               1. _evalArg_를 _argList_의 첫 번째 요소로 둡니다.
               1. IsStrict(this |CallExpression|)가 *true*이면 _strictCaller_를 *true*로 둡니다. 그렇지 않으면 _strictCaller_를 *false*로 둡니다.
-              1. [id="step-callexpression-evaluation-direct-eval"] ? PerformEval(_evalArg_, _strictCaller_, *true*)를 반환합니다.
+              1. [id="step-callexpression-evaluation-direct-eval"] ? PerformEval(_evalArg_, _strictCaller_, ~direct-eval~)를 반환합니다.
           1. _thisCall_을 이 |CallExpression|로 둡니다.
           1. _tailCall_을 IsInTailPosition(_thisCall_)으로 둡니다.
           1. ? EvaluateCall(_func_, _ref_, _args_, _tailCall_)을 반환합니다.
@@ -30363,7 +30363,7 @@
       <p>이 함수는 <dfn>%eval%</dfn> 내재 객체입니다.</p>
       <p>호출되면 다음 단계를 수행합니다:</p>
       <emu-alg>
-        1. ? PerformEval(_source_, *false*, *false*)를 반환합니다.
+        1. ? PerformEval(_source_, *false*, ~indirect-eval~)를 반환합니다.
       </emu-alg>
 
       <emu-clause id="sec-performeval" type="abstract operation" oldids="sec-performeval-rules-outside-functions,sec-performeval-rules-outside-methods,sec-performeval-rules-outside-constructors">
@@ -30371,13 +30371,13 @@
           PerformEval (
             _source_: an ECMAScript language value,
             _strictCaller_: a Boolean,
-            _direct_: a Boolean,
+            _direct_: ~direct-eval~ or ~indirect-eval~,
           ): either a normal completion containing an ECMAScript language value or a throw completion
         </h1>
         <dl class="header">
         </dl>
         <emu-alg>
-          1. 단언: _direct_가 *false*이면 _strictCaller_도 *false*입니다.
+          1. 단언: _direct_가 ~indirect-eval~이면 _strictCaller_는 *false*입니다.
           1. _source_가 String이 아니면 _source_를 반환합니다.
           1. _evalRealm_을 현재 Realm Record로 둡니다.
           1. 참고: 직접 eval의 경우 _evalRealm_은 `eval` 호출자와 `eval` 함수 자체 모두의 realm입니다.
@@ -30386,7 +30386,7 @@
           1. _inMethod_를 *false*로 둡니다.
           1. _inDerivedCtor_를 *false*로 둡니다.
           1. _inClassFieldInitializer_를 *false*로 둡니다.
-          1. _direct_가 *true*이면, 다음을 수행합니다.
+          1. _direct_가 ~direct-eval~이면, 다음을 수행합니다.
             1. _thisEnvRecord_를 GetThisEnvironment()로 둡니다.
             1. _thisEnvRecord_가 Function Environment Record이면, 다음을 수행합니다.
               1. _func_를 _thisEnvRecord_.[[FunctionObject]]로 둡니다.
@@ -30407,8 +30407,8 @@
           1. _strictCaller_가 *true*이면 _strictEval_을 *true*로 둡니다.
           1. 그렇지 않으면 _strictEval_을 _script_의 ScriptIsStrict로 둡니다.
           1. _runningContext_를 실행 중인 실행 컨텍스트로 둡니다.
-          1. 참고: _direct_가 *true*이면 _runningContext_는 직접 eval을 수행한 실행 컨텍스트입니다. _direct_가 *false*이면 _runningContext_는 `eval` 함수 호출의 실행 컨텍스트입니다.
-          1. _direct_가 *true*이면, 다음을 수행합니다.
+          1. 참고: _direct_가 ~direct-eval~이면 _runningContext_는 직접 eval을 수행한 실행 컨텍스트입니다. _direct_가 ~indirect-eval~이면 _runningContext_는 `eval` 함수 호출의 실행 컨텍스트입니다.
+          1. _direct_가 ~direct-eval~이면, 다음을 수행합니다.
             1. _lexicalEnv_를 NewDeclarativeEnvironment(_runningContext_의 LexicalEnvironment)로 둡니다.
             1. _variableEnv_를 _runningContext_의 VariableEnvironment로 둡니다.
             1. _privateEnv_를 _runningContext_의 PrivateEnvironment로 둡니다.
@@ -30446,19 +30446,23 @@
             _calleeRealm_: a Realm Record,
             _paramStrings_: a List of Strings,
             _bodyString_: a String,
-            _direct_: a Boolean,
+            _compilationType_: ~direct-eval~, ~indirect-eval~, or ~function~,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
           <dd>호스트 환경이 개발자가 문자열을 ECMAScript 코드로 해석하고 평가할 수 있게 하는 특정 ECMAScript 함수를 차단할 수 있도록 합니다.</dd>
+          <dt>skip return checks</dt>
+          <dd>true</dd>
         </dl>
         <p>
           _paramStrings_는 함수 생성자 중 하나를 사용할 때 서로 연결되어 매개변수 목록을 구성하는 문자열을 나타냅니다. _bodyString_은 함수 본문 또는 `eval` 호출에 전달된 문자열을 나타냅니다.
-          _direct_는 평가가 직접 eval인지 여부를 나타냅니다.
+          _compilationType_은 컴파일이 직접 `eval` 호출, 간접 `eval` 호출 또는 함수 생성자 중 하나로 인해 이루어지는지를 나타냅니다.
         </p>
-
-        <p>HostEnsureCanCompileStrings의 기본 구현은 NormalCompletion(~unused~)을 반환합니다.</p>
+        <p>HostEnsureCanCompileStrings의 기본 구현은 호출되면 다음 단계를 수행합니다:</p>
+        <emu-alg>
+          1. ~unused~를 반환합니다.
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-evaldeclarationinstantiation" type="abstract operation" oldids="sec-web-compat-evaldeclarationinstantiation">
@@ -31748,7 +31752,7 @@
               1. ? ToString(_arg_)을 _paramStrings_에 추가합니다.
             1. _bodyString_을 ? ToString(_bodyArg_)으로 둡니다.
             1. _currentRealm_을 현재 Realm Record로 둡니다.
-            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, *false*)를 수행합니다.
+            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, ~function~)를 수행합니다.
             1. _paramString_을 빈 String으로 둡니다.
             1. _argCount_ > 0이면, 다음을 수행합니다.
               1. _paramString_을 _paramStrings_[0]으로 설정합니다.
@@ -43410,13 +43414,7 @@ THH:mm:ss.sss
               1. ? InitializeTypedArrayFromArrayBuffer(_obj_, _firstArg_, _byteOffset_, _length_)를 수행합니다.
             1. 그렇지 않으면,
               1. 단언: _firstArg_는 Object이고 _firstArg_에는 [[TypedArrayName]] 또는 [[ArrayBufferData]] 내부 슬롯 중 어느 것도 없습니다.
-              1. _usingIterator_를 ? GetMethod(_firstArg_, %Symbol.iterator%)로 둡니다.
-              1. _usingIterator_가 *undefined*가 아니면, 다음을 수행합니다.
-                1. _values_를 ? IteratorToList(? GetIteratorFromMethod(_firstArg_, _usingIterator_))로 둡니다.
-                1. ? InitializeTypedArrayFromList(_obj_, _values_)를 수행합니다.
-              1. 그렇지 않으면,
-                1. 참고: _firstArg_는 반복 가능 객체가 아니므로 이미 배열과 유사한 객체라고 가정합니다.
-                1. ? InitializeTypedArrayFromArrayLike(_obj_, _firstArg_)를 수행합니다.
+              1. ? InitializeTypedArrayFromElements(_obj_, _firstArg_)를 수행합니다.
             1. _obj_를 반환합니다.
           1. 단언: _firstArg_는 Object가 아닙니다.
           1. _elementLength_를 ? ToIndex(_firstArg_)로 둡니다.
@@ -43534,43 +43532,31 @@ THH:mm:ss.sss
           </emu-alg>
         </emu-clause>
 
-        <emu-clause id="sec-initializetypedarrayfromlist" type="abstract operation">
+        <emu-clause id="sec-initializetypedarrayfromelements" type="abstract operation" oldids="sec-initializetypedarrayfromarraylike,sec-initializetypedarrayfromlist">
           <h1>
-            InitializeTypedArrayFromList (
+            InitializeTypedArrayFromElements (
               _obj_: a TypedArray,
-              _values_: a List of ECMAScript language values,
+              _source_: an Object,
             ): either a normal completion containing ~unused~ or a throw completion
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _length_를 _values_의 요소 수로 둡니다.
+            1. _usingIterator_를 ? GetMethod(_source_, %Symbol.iterator%)로 둡니다.
+            1. _usingIterator_가 *undefined*가 아니면, 다음을 수행합니다.
+              1. _list_를 ? IteratorToList(? GetIteratorFromMethod(_source_, _usingIterator_))로 둡니다.
+              1. _length_를 _list_의 요소 수로 둡니다.
+            1. 그렇지 않으면,
+              1. 참고: _source_는 반복 가능하지 않으므로 배열과 유사한 객체라고 가정합니다.
+              1. _length_를 ? LengthOfArrayLike(_source_)로 둡니다.
             1. ? AllocateTypedArrayBuffer(_obj_, _length_)를 수행합니다.
             1. _k_를 0으로 둡니다.
             1. _k_ &lt; _length_인 동안 다음을 반복합니다.
-              1. _kValue_를 _values_[_k_]로 둡니다.
-              1. ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)를 수행합니다.
-              1. _k_를 _k_ + 1로 설정합니다.
-            1. ~unused~를 반환합니다.
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-initializetypedarrayfromarraylike" type="abstract operation">
-          <h1>
-            InitializeTypedArrayFromArrayLike (
-              _obj_: a TypedArray,
-              _arrayLike_: an Object, but not a TypedArray or an ArrayBuffer,
-            ): either a normal completion containing ~unused~ or a throw completion
-          </h1>
-          <dl class="header">
-          </dl>
-          <emu-alg>
-            1. _length_를 ? LengthOfArrayLike(_arrayLike_)로 둡니다.
-            1. ? AllocateTypedArrayBuffer(_obj_, _length_)를 수행합니다.
-            1. _k_를 0으로 둡니다.
-            1. _k_ &lt; _length_인 동안 다음을 반복합니다.
-              1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
-              1. _kValue_를 ? Get(_arrayLike_, _propertyKey_)로 둡니다.
+              1. _usingIterator_가 *undefined*가 아니면, 다음을 수행합니다.
+                1. _kValue_를 _list_[_k_]로 둡니다.
+              1. 그렇지 않으면,
+                1. _propertyKey_를 ! ToString(𝔽(_k_))로 둡니다.
+                1. _kValue_를 ? Get(_source_, _propertyKey_)로 둡니다.
               1. ? TypedArraySetElement(_obj_, 𝔽(_k_), _kValue_)를 수행합니다.
               1. _k_를 _k_ + 1로 설정합니다.
             1. ~unused~를 반환합니다.
@@ -45499,7 +45485,7 @@ THH:mm:ss.sss
           1. 그렇지 않으면 다음을 수행합니다.
             1. _newMaxByteLength_를 ~empty~로 설정합니다.
           1. _arrayBuffer_.[[ArrayBufferDetachKey]]가 ~empty~가 아니면 *TypeError* 예외를 던집니다.
-          1. _newBuffer_를 ? <emu-meta *suppress-effects*="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta>로 설정합니다.
+          1. _newBuffer_를 ? <emu-meta suppress-effects="user-code">AllocateArrayBuffer(%ArrayBuffer%, _newByteLength_, _newMaxByteLength_)</emu-meta>로 설정합니다.
           1. _copyLength_를 min(_newByteLength_, _arrayBuffer_.[[ArrayBufferByteLength]])으로 설정합니다.
           1. _fromBlock_을 _arrayBuffer_.[[ArrayBufferData]]로 설정합니다.
           1. _toBlock_을 _newBuffer_.[[ArrayBufferData]]로 설정합니다.
