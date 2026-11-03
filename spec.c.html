@@ -30384,10 +30384,11 @@
         </dl>
         <emu-alg>
           1. 断言：如果 _direct_ 是 ~indirect-eval~，则 _strictCaller_ 是 *false*。
-          1. 如果 _source_ 不是 String，则返回 _source_。
+          1. 如果 _source_ 是 Object，则令 _sourceString_ 为 HostGetCodeForEval(_source_)；否则令 _sourceString_ 为 _source_。
+          1. 如果 _sourceString_ 不是 String，则返回 _source_。
           1. 令 _evalRealm_ 为当前 Realm Record。
           1. 注：对于直接 eval，_evalRealm_ 同时是 `eval` 调用方和 `eval` 函数自身所在的 realm。
-          1. 执行 ? HostEnsureCanCompileStrings(_evalRealm_, « », _source_, _direct_)。
+          1. 执行 ? HostEnsureCanCompileStrings(_evalRealm_, « », _sourceString_, _sourceString_, _direct_, « », _source_)。
           1. 令 _inFunc_ 为 *false*。
           1. 令 _inMethod_ 为 *false*。
           1. 令 _inDerivedCtor_ 为 *false*。
@@ -30402,7 +30403,7 @@
               1. 令 _classFieldInitializerName_ 为 _func_.[[ClassFieldInitializerName]]。
               1. 如果 _classFieldInitializerName_ 不是 ~empty~，则将 _inClassFieldInitializer_ 设置为 *true*。
           1. 按实现定义的顺序执行以下子步骤，可以交错进行解析和错误检测：
-            1. 令 _script_ 为 ParseText(_source_, |Script|)。
+            1. 令 _script_ 为 ParseText(_sourceString_, |Script|)。
             1. 如果 _script_ 是错误的 List，则抛出 *SyntaxError* 异常。
             1. 如果 _script_ Contains |ScriptBody| 是 *false*，则返回 *undefined*。
             1. 令 _body_ 为 _script_ 的 |ScriptBody|。
@@ -30452,23 +30453,44 @@
             _calleeRealm_: a Realm Record,
             _paramStrings_: a List of Strings,
             _bodyString_: a String,
+            _codeString_: a String,
             _compilationType_: ~direct-eval~, ~indirect-eval~, or ~function~,
+            _paramArgs_: a List of ECMAScript language values,
+            _bodyArg_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它允许宿主环境阻止某些允许开发者将字符串解释并求值为 ECMAScript 代码的 ECMAScript 函数。</dd>
+          <dd>它允许宿主环境阻止某些允许将 String 值解释并求值为 ECMAScript 代码的 ECMAScript 操作。</dd>
           <dt>skip return checks</dt>
           <dd>true</dd>
         </dl>
-        <p>
-          _paramStrings_ 表示在使用某个函数构造函数时，将连接起来构建参数列表的字符串。_bodyString_ 表示函数体或传递给 `eval` 调用的字符串。
-          _compilationType_ 描述该编译是由直接 `eval` 调用、间接 `eval` 调用还是某个函数构造函数引起的。
-        </p>
+        <ul>
+          <li>_calleeRealm_ 是被调用的 `eval` 函数或函数构造函数所在的 realm。</li>
+          <li>_paramStrings_ 是在使用某个函数构造函数时，将连接起来构建参数列表的字符串。</li>
+          <li>_bodyString_ 是函数体或传递给 `eval` 调用的字符串。</li>
+          <li>_codeString_ 是为 Function 拼接的字符串或传递给 `eval` 调用的字符串。</li>
+          <li>_compilationType_ 描述该编译是由直接 `eval` 调用、间接 `eval` 调用还是某个函数构造函数引起的。</li>
+          <li>_paramArgs_ 是作为前面的参数传递给某个 Function 构造函数的值。</li>
+          <li>_bodyArg_ 是传递给某个 Function 构造函数的最后一个参数，或传递给 `eval` 调用的值。</li>
+        </ul>
         <p>HostEnsureCanCompileStrings 的默认实现在被调用时执行以下步骤：</p>
         <emu-alg>
           1. 返回 ~unused~。
         </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-hostgetcodeforeval" type="host-defined abstract operation">
+        <h1>
+          HostGetCodeForEval (
+            _arg_: an Object,
+          ): a String or ~no-code~
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>它允许宿主环境返回一个表示 _arg_ 的 String，供 <emu-xref href="#sec-eval-x" title></emu-xref> 和函数构造函数解释为源文本，而不是原样返回 _arg_。</dd>
+        </dl>
+        <p>HostGetCodeForEval 的默认实现是返回 ~no-code~。</p>
       </emu-clause>
 
       <emu-clause id="sec-evaldeclarationinstantiation" type="abstract operation" oldids="sec-web-compat-evaldeclarationinstantiation">
@@ -31755,22 +31777,25 @@
             1. 令 _argCount_ 为 _paramArgs_ 中的元素数量。
             1. 令 _paramStrings_ 为新的空 List。
             1. 对 _paramArgs_ 的每个元素 _arg_，执行
-              1. 将 ? ToString(_arg_) 追加到 _paramStrings_。
-            1. 令 _bodyString_ 为 ? ToString(_bodyArg_)。
+              1. 如果 _arg_ 是 Object，则令 _paramString_ 为 HostGetCodeForEval(_arg_)；否则令 _paramString_ 为 ~no-code~。
+              1. 如果 _paramString_ 是 ~no-code~，则将 _paramString_ 设置为 ? ToString(_arg_)。
+              1. 将 _paramString_ 追加到 _paramStrings_。
+            1. 如果 _bodyArg_ 是 Object，则令 _bodyString_ 为 HostGetCodeForEval(_bodyArg_)；否则令 _bodyString_ 为 ~no-code~。
+            1. 如果 _bodyString_ 是 ~no-code~，则将 _bodyString_ 设置为 ? ToString(_bodyArg_)。
             1. 令 _currentRealm_ 为当前 Realm Record。
-            1. 执行 ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, ~function~)。
-            1. 令 _paramString_ 为空 String。
+            1. 令 _joinedParamsString_ 为空 String。
             1. 如果 _argCount_ > 0，则
-              1. 将 _paramString_ 设置为 _paramStrings_[0]。
+              1. 将 _joinedParamsString_ 设置为 _paramStrings_[0]。
               1. 令 _k_ 为 1。
               1. 当 _k_ &lt; _argCount_ 时，重复执行，
                 1. 令 _nextArgString_ 为 _paramStrings_[_k_]。
-                1. 将 _paramString_ 设置为 _paramString_、*","*（逗号）和 _nextArgString_ 的字符串连接。
+                1. 将 _joinedParamsString_ 设置为 _joinedParamsString_、*","*（逗号）和 _nextArgString_ 的字符串连接。
                 1. 将 _k_ 设置为 _k_ + 1。
             1. 令 _bodyParseString_ 为 0x000A (LINE FEED)、_bodyString_ 和 0x000A (LINE FEED) 的字符串连接。
-            1. 令 _sourceString_ 为 _prefix_、*" anonymous("*、_paramString_、0x000A (LINE FEED)、*") {"*、_bodyParseString_ 和 *"}"* 的字符串连接。
+            1. 令 _sourceString_ 为 _prefix_、*" anonymous("*、_joinedParamsString_、0x000A (LINE FEED)、*") {"*、_bodyParseString_ 和 *"}"* 的字符串连接。
+            1. 执行 ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, _sourceString_, ~function~, _paramArgs_, _bodyArg_)。
             1. 令 _sourceText_ 为 StringToCodePoints(_sourceString_)。
-            1. 令 _params_ 为 ParseText(_paramString_, _paramGrammar_)。
+            1. 令 _params_ 为 ParseText(_joinedParamsString_, _paramGrammar_)。
             1. 如果 _params_ 是错误的 List，则抛出 *SyntaxError* 异常。
             1. 令 _body_ 为 ParseText(_bodyParseString_, _bodyGrammar_)。
             1. 如果 _body_ 是错误的 List，则抛出 *SyntaxError* 异常。
@@ -55027,6 +55052,7 @@ THH:mm:ss.sss
     <p><b>HostEnqueueTimeoutJob(...)</b></p>
     <p><b>HostEnsureCanCompileStrings(...)</b></p>
     <p><b>HostFinalizeImportMeta(...)</b></p>
+    <p><b>HostGetCodeForEval(...)</b></p>
     <p><b>HostGetImportMetaProperties(...)</b></p>
     <p><b>HostGrowSharedArrayBuffer(...)</b></p>
     <p><b>HostHasSourceTextAvailable(...)</b></p>

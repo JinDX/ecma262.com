@@ -30378,10 +30378,11 @@
         </dl>
         <emu-alg>
           1. 表明: _direct_ が ~indirect-eval~ である場合、_strictCaller_ は *false* である。
-          1. _source_ が String でない場合、_source_ を返す。
+          1. _source_ が Object である場合、_sourceString_ を HostGetCodeForEval(_source_) とする。そうでない場合、_sourceString_ を _source_ とする。
+          1. _sourceString_ が String でない場合、_source_ を返す。
           1. _evalRealm_ を現在の Realm Record とする。
           1. 注記: direct eval の場合、_evalRealm_ は `eval` の呼出し元と `eval` 関数自身の両方の realm である。
-          1. ? HostEnsureCanCompileStrings(_evalRealm_, « », _source_, _direct_) を実行する。
+          1. ? HostEnsureCanCompileStrings(_evalRealm_, « », _sourceString_, _sourceString_, _direct_, « », _source_) を実行する。
           1. _inFunc_ を *false* とする。
           1. _inMethod_ を *false* とする。
           1. _inDerivedCtor_ を *false* とする。
@@ -30396,7 +30397,7 @@
               1. _classFieldInitializerName_ を _func_.[[ClassFieldInitializerName]] とする。
               1. _classFieldInitializerName_ が ~empty~ でない場合、_inClassFieldInitializer_ を *true* に設定する。
           1. 次の副手順を実装定義の順序で実行し、構文解析とエラー検出を交互に行ってもよい。
-            1. _script_ を ParseText(_source_, |Script|) とする。
+            1. _script_ を ParseText(_sourceString_, |Script|) とする。
             1. _script_ がエラーの List である場合、*SyntaxError* 例外をスローする。
             1. _script_ Contains |ScriptBody| が *false* である場合、*undefined* を返す。
             1. _body_ を _script_ の |ScriptBody| とする。
@@ -30446,23 +30447,44 @@
             _calleeRealm_: a Realm Record,
             _paramStrings_: a List of Strings,
             _bodyString_: a String,
+            _codeString_: a String,
             _compilationType_: ~direct-eval~, ~indirect-eval~, or ~function~,
+            _paramArgs_: a List of ECMAScript language values,
+            _bodyArg_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>開発者が文字列を ECMAScript コードとして解釈および評価できるようにする特定の ECMAScript 関数を、ホスト環境がブロックできるようにします。</dd>
+          <dd>String 値を ECMAScript コードとして解釈および評価できるようにする特定の ECMAScript 操作を、ホスト環境がブロックできるようにします。</dd>
           <dt>skip return checks</dt>
           <dd>true</dd>
         </dl>
-        <p>
-          _paramStrings_ は、関数コンストラクターの1つを使用するときに、パラメーターリストを構築するために連結される文字列を表します。_bodyString_ は、関数本体または `eval` 呼出しに渡された文字列を表します。
-          _compilationType_ は、コンパイルが直接の `eval` 呼出し、間接的な `eval` 呼出し、または関数コンストラクターのいずれかによって行われるかを示します。
-        </p>
+        <ul>
+          <li>_calleeRealm_ は、呼び出される `eval` 関数または関数コンストラクターの realm です。</li>
+          <li>_paramStrings_ は、関数コンストラクターの1つを使用するときに、パラメーターリストを構築するために連結される文字列です。</li>
+          <li>_bodyString_ は、関数本体または `eval` 呼出しに渡された文字列です。</li>
+          <li>_codeString_ は、Function 用に連結された文字列、または `eval` 呼出しに渡された文字列です。</li>
+          <li>_compilationType_ は、コンパイルが直接の `eval` 呼出し、間接的な `eval` 呼出し、または関数コンストラクターのいずれかによって行われるかを示します。</li>
+          <li>_paramArgs_ は、Function コンストラクターの1つに先頭側のパラメーターとして渡される値です。</li>
+          <li>_bodyArg_ は、Function コンストラクターの1つに渡される最後のパラメーター、または `eval` 呼出しに渡される値です。</li>
+        </ul>
         <p>HostEnsureCanCompileStrings の既定の実装は、呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
           1. ~unused~ を返す。
         </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-hostgetcodeforeval" type="host-defined abstract operation">
+        <h1>
+          HostGetCodeForEval (
+            _arg_: an Object,
+          ): a String or ~no-code~
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd><emu-xref href="#sec-eval-x" title></emu-xref> および関数コンストラクターが _arg_ をそのまま返すのではなくソーステキストとして解釈できるように、ホスト環境が _arg_ を表す String を返せるようにします。</dd>
+        </dl>
+        <p>HostGetCodeForEval の既定の実装は ~no-code~ を返します。</p>
       </emu-clause>
 
       <emu-clause id="sec-evaldeclarationinstantiation" type="abstract operation" oldids="sec-web-compat-evaldeclarationinstantiation">
@@ -31749,22 +31771,25 @@
             1. _argCount_ を _paramArgs_ の要素数とする。
             1. _paramStrings_ を新しい空の List とする。
             1. _paramArgs_ の各要素 _arg_ について、次を行う。
-              1. ? ToString(_arg_) を _paramStrings_ に追加する。
-            1. _bodyString_ を ? ToString(_bodyArg_) とする。
+              1. _arg_ が Object である場合、_paramString_ を HostGetCodeForEval(_arg_) とする。そうでない場合、_paramString_ を ~no-code~ とする。
+              1. _paramString_ が ~no-code~ である場合、_paramString_ を ? ToString(_arg_) に設定する。
+              1. _paramString_ を _paramStrings_ に追加する。
+            1. _bodyArg_ が Object である場合、_bodyString_ を HostGetCodeForEval(_bodyArg_) とする。そうでない場合、_bodyString_ を ~no-code~ とする。
+            1. _bodyString_ が ~no-code~ である場合、_bodyString_ を ? ToString(_bodyArg_) に設定する。
             1. _currentRealm_ を現在の Realm Record とする。
-            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, ~function~) を実行する。
-            1. _paramString_ を空の String とする。
+            1. _joinedParamsString_ を空の String とする。
             1. _argCount_ > 0 である場合、
-              1. _paramString_ を _paramStrings_[0] に設定する。
+              1. _joinedParamsString_ を _paramStrings_[0] に設定する。
               1. _k_ を 1 とする。
               1. _k_ &lt; _argCount_ の間、次を繰り返す。
                 1. _nextArgString_ を _paramStrings_[_k_] とする。
-                1. _paramString_ を _paramString_、*","*（コンマ）、および _nextArgString_ の文字列連結に設定する。
+                1. _joinedParamsString_ を _joinedParamsString_、*","*（コンマ）、および _nextArgString_ の文字列連結に設定する。
                 1. _k_ を _k_ + 1 に設定する。
             1. _bodyParseString_ を 0x000A (LINE FEED)、_bodyString_、および 0x000A (LINE FEED) の文字列連結とする。
-            1. _sourceString_ を _prefix_、*" anonymous("*、_paramString_、0x000A (LINE FEED)、*") {"*、_bodyParseString_、および *"}"* の文字列連結とする。
+            1. _sourceString_ を _prefix_、*" anonymous("*、_joinedParamsString_、0x000A (LINE FEED)、*") {"*、_bodyParseString_、および *"}"* の文字列連結とする。
+            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, _sourceString_, ~function~, _paramArgs_, _bodyArg_) を実行する。
             1. _sourceText_ を StringToCodePoints(_sourceString_) とする。
-            1. _params_ を ParseText(_paramString_, _paramGrammar_) とする。
+            1. _params_ を ParseText(_joinedParamsString_, _paramGrammar_) とする。
             1. _params_ がエラーの List である場合、*SyntaxError* 例外をスローする。
             1. _body_ を ParseText(_bodyParseString_, _bodyGrammar_) とする。
             1. _body_ がエラーの List である場合、*SyntaxError* 例外をスローする。
@@ -55020,6 +55045,7 @@ THH:mm:ss.sss
     <p><b>HostEnqueueTimeoutJob(...)</b></p>
     <p><b>HostEnsureCanCompileStrings(...)</b></p>
     <p><b>HostFinalizeImportMeta(...)</b></p>
+    <p><b>HostGetCodeForEval(...)</b></p>
     <p><b>HostGetImportMetaProperties(...)</b></p>
     <p><b>HostGrowSharedArrayBuffer(...)</b></p>
     <p><b>HostHasSourceTextAvailable(...)</b></p>

@@ -30378,10 +30378,11 @@
         </dl>
         <emu-alg>
           1. 단언: _direct_가 ~indirect-eval~이면 _strictCaller_는 *false*입니다.
-          1. _source_가 String이 아니면 _source_를 반환합니다.
+          1. _source_가 Object이면 _sourceString_을 HostGetCodeForEval(_source_)로 둡니다. 그렇지 않으면 _sourceString_을 _source_로 둡니다.
+          1. _sourceString_이 String이 아니면 _source_를 반환합니다.
           1. _evalRealm_을 현재 Realm Record로 둡니다.
           1. 참고: 직접 eval의 경우 _evalRealm_은 `eval` 호출자와 `eval` 함수 자체 모두의 realm입니다.
-          1. ? HostEnsureCanCompileStrings(_evalRealm_, « », _source_, _direct_)를 수행합니다.
+          1. ? HostEnsureCanCompileStrings(_evalRealm_, « », _sourceString_, _sourceString_, _direct_, « », _source_)를 수행합니다.
           1. _inFunc_를 *false*로 둡니다.
           1. _inMethod_를 *false*로 둡니다.
           1. _inDerivedCtor_를 *false*로 둡니다.
@@ -30396,7 +30397,7 @@
               1. _classFieldInitializerName_을 _func_.[[ClassFieldInitializerName]]으로 둡니다.
               1. _classFieldInitializerName_이 ~empty~가 아니면 _inClassFieldInitializer_를 *true*로 설정합니다.
           1. 다음 하위 단계를 구현체 정의 순서로 수행하며, 파싱과 오류 검출을 서로 섞어서 수행할 수도 있습니다:
-            1. _script_를 ParseText(_source_, |Script|)로 둡니다.
+            1. _script_를 ParseText(_sourceString_, |Script|)로 둡니다.
             1. _script_가 오류의 List이면 *SyntaxError* 예외를 던집니다.
             1. _script_ Contains |ScriptBody|가 *false*이면 *undefined*를 반환합니다.
             1. _body_를 _script_의 |ScriptBody|로 둡니다.
@@ -30446,23 +30447,44 @@
             _calleeRealm_: a Realm Record,
             _paramStrings_: a List of Strings,
             _bodyString_: a String,
+            _codeString_: a String,
             _compilationType_: ~direct-eval~, ~indirect-eval~, or ~function~,
+            _paramArgs_: a List of ECMAScript language values,
+            _bodyArg_: an ECMAScript language value,
           ): either a normal completion containing ~unused~ or a throw completion
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>호스트 환경이 개발자가 문자열을 ECMAScript 코드로 해석하고 평가할 수 있게 하는 특정 ECMAScript 함수를 차단할 수 있도록 합니다.</dd>
+          <dd>호스트 환경이 String 값을 ECMAScript 코드로 해석하고 평가할 수 있게 하는 특정 ECMAScript 연산을 차단할 수 있도록 합니다.</dd>
           <dt>skip return checks</dt>
           <dd>true</dd>
         </dl>
-        <p>
-          _paramStrings_는 함수 생성자 중 하나를 사용할 때 서로 연결되어 매개변수 목록을 구성하는 문자열을 나타냅니다. _bodyString_은 함수 본문 또는 `eval` 호출에 전달된 문자열을 나타냅니다.
-          _compilationType_은 컴파일이 직접 `eval` 호출, 간접 `eval` 호출 또는 함수 생성자 중 하나로 인해 이루어지는지를 나타냅니다.
-        </p>
+        <ul>
+          <li>_calleeRealm_은 호출되는 `eval` 함수 또는 함수 생성자의 realm입니다.</li>
+          <li>_paramStrings_는 함수 생성자 중 하나를 사용할 때 서로 연결되어 매개변수 목록을 구성하는 문자열들입니다.</li>
+          <li>_bodyString_은 함수 본문 또는 `eval` 호출에 전달된 문자열입니다.</li>
+          <li>_codeString_은 Function을 위해 연결된 문자열 또는 `eval` 호출에 전달된 문자열입니다.</li>
+          <li>_compilationType_은 컴파일이 직접 `eval` 호출, 간접 `eval` 호출 또는 함수 생성자 중 하나로 인해 이루어지는지를 나타냅니다.</li>
+          <li>_paramArgs_는 Function 생성자 중 하나의 앞쪽 매개변수들에 전달된 값들입니다.</li>
+          <li>_bodyArg_는 Function 생성자 중 하나에 전달된 마지막 매개변수이거나 `eval` 호출에 전달된 값입니다.</li>
+        </ul>
         <p>HostEnsureCanCompileStrings의 기본 구현은 호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>
           1. ~unused~를 반환합니다.
         </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-hostgetcodeforeval" type="host-defined abstract operation">
+        <h1>
+          HostGetCodeForEval (
+            _arg_: an Object,
+          ): a String or ~no-code~
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>호스트 환경이 _arg_를 나타내는 String을 반환하여, <emu-xref href="#sec-eval-x" title></emu-xref>과 함수 생성자들이 _arg_를 그대로 반환하는 대신 해당 String을 소스 텍스트로 해석할 수 있도록 합니다.</dd>
+        </dl>
+        <p>HostGetCodeForEval의 기본 구현은 ~no-code~를 반환하는 것입니다.</p>
       </emu-clause>
 
       <emu-clause id="sec-evaldeclarationinstantiation" type="abstract operation" oldids="sec-web-compat-evaldeclarationinstantiation">
@@ -31749,22 +31771,25 @@
             1. _argCount_를 _paramArgs_의 요소 수로 둡니다.
             1. _paramStrings_를 새로운 빈 List로 둡니다.
             1. _paramArgs_의 각 요소 _arg_에 대해 다음을 수행합니다.
-              1. ? ToString(_arg_)을 _paramStrings_에 추가합니다.
-            1. _bodyString_을 ? ToString(_bodyArg_)으로 둡니다.
+              1. _arg_가 Object이면 _paramString_을 HostGetCodeForEval(_arg_)로 둡니다. 그렇지 않으면 _paramString_을 ~no-code~로 둡니다.
+              1. _paramString_이 ~no-code~이면 _paramString_을 ? ToString(_arg_)으로 설정합니다.
+              1. _paramString_을 _paramStrings_에 추가합니다.
+            1. _bodyArg_가 Object이면 _bodyString_을 HostGetCodeForEval(_bodyArg_)로 둡니다. 그렇지 않으면 _bodyString_을 ~no-code~로 둡니다.
+            1. _bodyString_이 ~no-code~이면 _bodyString_을 ? ToString(_bodyArg_)으로 설정합니다.
             1. _currentRealm_을 현재 Realm Record로 둡니다.
-            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, ~function~)를 수행합니다.
-            1. _paramString_을 빈 String으로 둡니다.
+            1. _joinedParamsString_을 빈 String으로 둡니다.
             1. _argCount_ > 0이면, 다음을 수행합니다.
-              1. _paramString_을 _paramStrings_[0]으로 설정합니다.
+              1. _joinedParamsString_을 _paramStrings_[0]으로 설정합니다.
               1. _k_를 1로 둡니다.
               1. _k_ &lt; _argCount_인 동안 다음을 반복합니다.
                 1. _nextArgString_을 _paramStrings_[_k_]로 둡니다.
-                1. _paramString_을 _paramString_, *","* (쉼표) 및 _nextArgString_의 문자열 연결로 설정합니다.
+                1. _joinedParamsString_을 _joinedParamsString_, *","* (쉼표) 및 _nextArgString_의 문자열 연결로 설정합니다.
                 1. _k_를 _k_ + 1로 설정합니다.
             1. _bodyParseString_을 0x000A (LINE FEED), _bodyString_ 및 0x000A (LINE FEED)의 문자열 연결로 둡니다.
-            1. _sourceString_을 _prefix_, *" anonymous("*, _paramString_, 0x000A (LINE FEED), *") {"*, _bodyParseString_ 및 *"}"*의 문자열 연결로 둡니다.
+            1. _sourceString_을 _prefix_, *" anonymous("*, _joinedParamsString_, 0x000A (LINE FEED), *") {"*, _bodyParseString_ 및 *"}"*의 문자열 연결로 둡니다.
+            1. ? HostEnsureCanCompileStrings(_currentRealm_, _paramStrings_, _bodyString_, _sourceString_, ~function~, _paramArgs_, _bodyArg_)를 수행합니다.
             1. _sourceText_를 StringToCodePoints(_sourceString_)로 둡니다.
-            1. _params_를 ParseText(_paramString_, _paramGrammar_)로 둡니다.
+            1. _params_를 ParseText(_joinedParamsString_, _paramGrammar_)로 둡니다.
             1. _params_가 오류의 List이면 *SyntaxError* 예외를 던집니다.
             1. _body_를 ParseText(_bodyParseString_, _bodyGrammar_)로 둡니다.
             1. _body_가 오류의 List이면 *SyntaxError* 예외를 던집니다.
@@ -55021,6 +55046,7 @@ THH:mm:ss.sss
     <p><b>HostEnqueueTimeoutJob(...)</b></p>
     <p><b>HostEnsureCanCompileStrings(...)</b></p>
     <p><b>HostFinalizeImportMeta(...)</b></p>
+    <p><b>HostGetCodeForEval(...)</b></p>
     <p><b>HostGetImportMetaProperties(...)</b></p>
     <p><b>HostGrowSharedArrayBuffer(...)</b></p>
     <p><b>HostHasSourceTextAvailable(...)</b></p>
