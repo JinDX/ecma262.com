@@ -20211,7 +20211,7 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd><emu-xref href="#sec-import-calls">`import()`</emu-xref> 호출로 처음 시작된 동적 가져오기 과정을 완료하고, 해당 호출이 반환한 Promise를 적절히 이행하거나 거부합니다.</dd>
+          <dd><emu-xref href="#sec-import-calls">`import()`</emu-xref> 호출로 처음 시작된 동적 가져오기 과정을 완료하고, 해당 호출이 반환한 Promise를 적절히 resolve하거나 거부합니다.</dd>
         </dl>
         <emu-alg>
           1. _moduleCompletion_이 비정상 완료이면, 다음을 수행합니다.
@@ -39894,7 +39894,7 @@ THH:mm:ss.sss
             1. 그렇지 않으면,
               1. _patternSymbol_을 |Pattern[~UnicodeMode, ~UnicodeSetsMode]|로 둡니다.
             1. _escapedPattern_을 UTF-16 인코딩 유니코드 코드 포인트(<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>)로 해석된 _pattern_과 동등한 _patternSymbol_ 형식의 String으로 둡니다. 여기서 특정 코드 포인트는 아래 설명에 따라 이스케이프됩니다. _escapedPattern_은 _pattern_과 다를 수도 있고 다르지 않을 수도 있습니다. 그러나 _escapedPattern_을 _patternSymbol_로 평가하여 생성되는 Abstract Closure는 생성된 객체의 [[RegExpMatcher]] 내부 슬롯이 제공하는 Abstract Closure와 동일하게 동작해야 합니다. 동일한 _pattern_ 및 _flags_ 값으로 이 추상 연산을 여러 번 호출하면 동일한 결과를 생성해야 합니다.
-            1. 패턴에 나타나는 코드 포인트 `/` 또는 모든 |LineTerminator|는 *"/"*, _escapedPattern_, *"/"* 및 _flags_의 문자열 연결이 (적절한 어휘 문맥에서) 생성된 정규 표현식과 동일하게 동작하는 |RegularExpressionLiteral|로 파싱될 수 있도록 필요한 경우 _escapedPattern_에서 이스케이프해야 합니다. 예를 들어 _pattern_이 *"/"*이면 _escapedPattern_은 여러 가능성 중 *"\\/"* 또는 *"\\u002F"*일 수 있지만 *"/"*일 수는 없습니다. _flags_ 뒤의 `///`는 |RegularExpressionLiteral|이 아니라 |SingleLineComment|로 파싱되기 때문입니다. _pattern_이 빈 String이면 _escapedPattern_을 *"(?:)"*로 두어 이 명세를 충족할 수 있습니다.
+            1. 패턴에 나타나는 코드 포인트 `/` 또는 모든 |LineTerminator|는 *"/"*, _escapedPattern_, *"/"* 및 _flags_의 문자열 연결이 (적절한 어휘 문맥에서) 생성된 정규 표현식과 동일하게 동작하는 |RegularExpressionLiteral|로 파싱될 수 있도록 필요한 경우 _escapedPattern_에서 이스케이프해야 합니다. 예를 들어 _pattern_이 *"/"*이면 _escapedPattern_은 여러 가능성 중 *"\\/"* 또는 *"\\u002F"*일 수 있지만 *"/"*일 수는 없습니다. _flags_가 뒤따르는 `///`는 |RegularExpressionLiteral|이 아니라 |SingleLineComment|로 파싱되기 때문입니다. _pattern_이 빈 String이면 _escapedPattern_을 *"(?:)"*로 두어 이 명세를 충족할 수 있습니다.
             1. _escapedPattern_을 반환합니다.
           </emu-alg>
 

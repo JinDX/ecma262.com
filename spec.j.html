@@ -10906,7 +10906,7 @@
 
       <emu-clause id="sec-object-environment-records">
         <h1>Object Environment Record</h1>
-        <p>各 <dfn variants="Object Environment Records">Object Environment Record</dfn> は、<em>束縛オブジェクト</em>と呼ばれるオブジェクトに関連付けられます。Object Environment Record は、その束縛オブジェクトのプロパティ名に直接対応する文字列識別子名の集合を束縛します。|IdentifierName| の形式ではない文字列以外のプロパティキーは、束縛された識別子の集合に含まれません。自身のプロパティと継承プロパティはどちらも、その [[Enumerable]] 属性の設定にかかわらず集合に含まれます。プロパティはオブジェクトに動的に追加したり削除したりできるため、Object Environment Record によって束縛される識別子の集合は、プロパティを追加または削除する任意の操作の副作用として変化する可能性があります。このような副作用の結果として作成された束縛は、対応するプロパティの Writable 属性が *false* であっても、可変束縛とみなされます。Object Environment Record には不変束縛は存在しません。</p>
+        <p>各 <dfn variants="Object Environment Records">Object Environment Record</dfn> は、<em>束縛オブジェクト</em>と呼ばれるオブジェクトに関連付けられます。Object Environment Record は、その束縛オブジェクトのプロパティ名に直接対応する文字列識別子名の集合を束縛します。|IdentifierName| の形式の文字列ではないプロパティキーは、束縛された識別子の集合に含まれません。自身のプロパティと継承プロパティはどちらも、その [[Enumerable]] 属性の設定にかかわらず集合に含まれます。プロパティはオブジェクトに動的に追加したり削除したりできるため、Object Environment Record によって束縛される識別子の集合は、プロパティを追加または削除する任意の操作の副作用として変化する可能性があります。このような副作用の結果として作成された束縛は、対応するプロパティの Writable 属性が *false* であっても、可変束縛とみなされます。Object Environment Record には不変束縛は存在しません。</p>
         <p>`with` 文（<emu-xref href="#sec-with-statement"></emu-xref>）のために作成された Object Environment Record は、その束縛オブジェクトを、関数呼出しで使用する暗黙の *this* 値として提供できます。この機能は Boolean の [[IsWithEnvironment]] フィールドによって制御されます。</p>
         <p>Object Environment Record は、<emu-xref href="#table-additional-fields-of-object-environment-records"></emu-xref> に列挙される追加の状態フィールドを持ちます。</p>
         <emu-table id="table-additional-fields-of-object-environment-records" caption="Object Environment Record の追加フィールド">
@@ -43729,7 +43729,7 @@ THH:mm:ss.sss
           1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_) とする。
           1. _bytes_ を _result_.[[Bytes]] とする。
           1. _written_ を _bytes_ の要素数とする。
-          1. 注記: FromBase64 はユーザーコードを呼び出さないため、_into_ を基礎とする ArrayBuffer が detached または縮小されることはない。
+          1. 注記: FromBase64 はユーザーコードを呼び出さないため、_into_ の基盤となる ArrayBuffer が detached または縮小されることはない。
           1. 表明: _written_ ≤ _byteLength_。
           1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
           1. _result_.[[Error]] が ~none~ でない場合、
@@ -43752,7 +43752,7 @@ THH:mm:ss.sss
           1. _result_ を FromHex(_string_, _byteLength_) とする。
           1. _bytes_ を _result_.[[Bytes]] とする。
           1. _written_ を _bytes_ の要素数とする。
-          1. 注記: FromHex はユーザーコードを呼び出さないため、_into_ を基礎とする ArrayBuffer が detached または縮小されることはない。
+          1. 注記: FromHex はユーザーコードを呼び出さないため、_into_ の基盤となる ArrayBuffer が detached または縮小されることはない。
           1. 表明: _written_ ≤ _byteLength_。
           1. SetUint8ArrayBytes(_into_, _bytes_) を実行する。
           1. _result_.[[Error]] が ~none~ でない場合、
