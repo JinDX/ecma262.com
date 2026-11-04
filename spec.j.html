@@ -295,14 +295,14 @@
     <p>ECMAScript をホスト環境に統合しやすくするため、この仕様は、特定の機能（たとえば、抽象操作）の定義の全部または一部を、この仕様の外部の情報源に委ねます。編集上、この仕様は、以下の種類の委譲を区別します。</p>
     <!-- 以下の「実装」には、過剰な自動リンクを避けるため、dfn ではなく em を使用しています。 -->
     <p><em id="implementation">実装</em>とは、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> に列挙されている機能、または実装定義もしくは実装近似と指定されている機能を、さらに定義する外部の情報源です。非形式的な用法では、実装は、特定の Web ブラウザーなどの具体的な成果物を指します。</p>
-    <p><dfn id="implementation-defined">実装定義</dfn>の機能とは、追加の条件を付けずに、その定義を外部の情報源に委ねる機能です。この仕様は特定の動作を推奨せず、適合実装は、この仕様が定める制約の範囲内で任意の動作を自由に選択できます。</p>
-    <p><dfn id="implementation-approximated">実装近似</dfn>の機能とは、理想的な動作を推奨しながら、その定義を外部の情報源に委ねる機能です。適合実装は、この仕様が定める制約の範囲内で任意の動作を自由に選択できますが、理想に近づけるよう努めることが奨励されます。<emu-xref href="#sec-math.exp"><code>Math.exp</code></emu-xref> など、一部の数学的操作は実装近似です。</p>
+    <p><dfn id="implementation-defined" oldids="sec-terms-and-definitions-implementation-defined">実装定義</dfn>の機能とは、追加の条件を付けずに、その定義を外部の情報源に委ねる機能です。この仕様は特定の動作を推奨せず、適合実装は、この仕様が定める制約の範囲内で任意の動作を自由に選択できます。</p>
+    <p><dfn id="implementation-approximated" oldids="sec-terms-and-definitions-implementation-approximated">実装近似</dfn>の機能とは、理想的な動作を推奨しながら、その定義を外部の情報源に委ねる機能です。適合実装は、この仕様が定める制約の範囲内で任意の動作を自由に選択できますが、理想に近づけるよう努めることが奨励されます。<emu-xref href="#sec-math.exp"><code>Math.exp</code></emu-xref> など、一部の数学的操作は実装近似です。</p>
     <p><dfn id="host" variants="hosts">ホスト</dfn>とは、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> に列挙されている機能をさらに定義するものの、その他の実装定義または実装近似の機能はさらに定義しない、外部の情報源です。非形式的な用法では、ホストは、すべての Web ブラウザーの集合など、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> を介して同じ方法でこの仕様と連携する、すべての実装の集合を指します。ホストは、WHATWG HTML（<a href="https://html.spec.whatwg.org/">https://html.spec.whatwg.org/</a>）などの外部仕様であることがよくあります。言い換えると、ホスト定義の機能は、外部仕様でさらに定義されることがよくあります。</p>
     <p><dfn id="host-hook" variants="host hooks">ホストフック</dfn>とは、外部の情報源によって全部または一部が定義される抽象操作です。すべてのホストフックは、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> に列挙されていなければなりません。ホストフックは、少なくとも以下の要件に適合しなければなりません。</p>
     <ul>
       <li>正常完了またはスロー完了のいずれかを返さなければなりません。</li>
     </ul>
-    <p><dfn id="host-defined">ホスト定義</dfn>の機能とは、追加の条件を付けずにその定義を外部の情報源に委ね、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> に列挙されている機能です。ホストではない実装も、ホスト定義の機能の定義を提供してもかまいません。</p>
+    <p><dfn id="host-defined" oldids="sec-terms-and-definitions-host-defined">ホスト定義</dfn>の機能とは、追加の条件を付けずにその定義を外部の情報源に委ね、附属書 <emu-xref href="#sec-host-layering-points"></emu-xref> に列挙されている機能です。ホストではない実装も、ホスト定義の機能の定義を提供してもかまいません。</p>
     <p><dfn id="host-environment" variants="host environments">ホスト環境</dfn>とは、すべてのホスト定義の機能について、特定の定義を選択したものです。ホスト環境には通常、グローバルオブジェクトのホスト定義のプロパティとして、入力の取得や出力の提供を可能にするオブジェクトまたは関数が含まれます。</p>
     <p>この仕様は、常に最も具体的な用語を使用するという編集上の慣例に従います。たとえば、ある機能がホスト定義である場合、それを実装定義と呼ぶべきではありません。</p>
     <p>ホストと実装のどちらも、ここで定義されている言語型、仕様型、抽象操作、文法の生成規則、固有オブジェクト、および固有シンボルを介して、この仕様と連携してもかまいません。</p>
@@ -321,11 +321,11 @@
       <h1>オブジェクト</h1>
       <p>ECMAScript にはクラス定義の構文がありますが、ECMAScript のオブジェクトは、C++、Smalltalk、Java のオブジェクトのように、根本的にクラスを基盤とするものではありません。代わりに、オブジェクトはさまざまな方法で作成できます。これには、リテラル表記による作成や、オブジェクトを作成した後、そのプロパティに初期値を代入することでオブジェクトの全部または一部を初期化するコードを実行する<em>コンストラクター</em>による作成が含まれます。各コンストラクターは、<em>プロトタイプに基づく継承</em>と<em>共有プロパティ</em>を実装するために使用される *"prototype"* という名前のプロパティを持つ関数です。オブジェクトは、<b>new</b> 式でコンストラクターを使用して作成します。たとえば、`new Date(2009, 11)` は新しい Date オブジェクトを作成します。<b>new</b> を使用せずにコンストラクターを呼び出した結果は、そのコンストラクターによって異なります。たとえば、`Date()` は、オブジェクトではなく、現在の日付と時刻の文字列表現を生成します。</p>
       <p>コンストラクターによって作成されたすべてのオブジェクトは、そのコンストラクターの *"prototype"* プロパティの値への暗黙の参照（そのオブジェクトの<em>プロトタイプ</em>と呼ばれます）を持ちます。さらに、プロトタイプ自身も、そのプロトタイプへの *null* ではない暗黙の参照を持つ場合があり、以後も同様に続きます。これを<em>プロトタイプチェーン</em>と呼びます。オブジェクト内のプロパティが参照されると、その参照は、プロトタイプチェーン内でその名前のプロパティを含む最初のオブジェクトの、その名前のプロパティを指します。言い換えると、まず直接指定されたオブジェクトにそのプロパティがあるかを調べます。そのオブジェクトが指定された名前のプロパティを含む場合、それが参照先のプロパティです。そのオブジェクトが指定された名前のプロパティを含まない場合、次にそのオブジェクトのプロトタイプを調べ、以後も同様に続けます。</p>
-      <emu-figure id="figure-1" caption="オブジェクト/プロトタイプの関係">
-        <img alt="多数のボックスと矢印からなる画像。" height="354" src="img/figure-1.svg" width="719">
-      </emu-figure>
       <p>クラスを基盤とするオブジェクト指向言語では、一般に、状態はインスタンスが保持し、メソッドはクラスが保持し、継承されるのは構造と動作のみです。ECMAScript では、状態とメソッドはオブジェクトが保持し、構造、動作、および状態のすべてが継承されます。</p>
-      <p>プロトタイプが持つ特定のプロパティを直接には持たないすべてのオブジェクトは、そのプロパティとその値を共有します。図1は、これを示しています。</p>
+      <p>プロトタイプが持つ特定のプロパティを直接には持たないすべてのオブジェクトは、そのプロパティとその値を共有します。<emu-xref href="#figure-object-prototype-relationships"></emu-xref>は、これを示しています。</p>
+      <emu-figure id="figure-object-prototype-relationships" caption="オブジェクト/プロトタイプの関係" oldids="figure-1">
+        <img alt="コンストラクター、それによって作成された複数のオブジェクトインスタンス、およびコンストラクターとそのインスタンスの間のプロトタイプオブジェクトに関わる暗黙的および明示的な関係" height="354" src="img/figure-1.svg" width="719">
+      </emu-figure>
       <p><b>CF</b> はコンストラクターです（同時にオブジェクトでもあります）。`new` 式を使用して、5つのオブジェクト <b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b>、および <b>cf<sub>5</sub></b> が作成されています。これらの各オブジェクトは、*"q1"* と *"q2"* という名前のプロパティを含みます。破線は、暗黙のプロトタイプ関係を表します。したがって、たとえば、<b>cf<sub>3</sub></b> のプロトタイプは <b>CF<sub>p</sub></b> です。コンストラクター <b>CF</b> 自身は、*"P1"* と *"P2"* という名前の2つのプロパティを持ちますが、これらは <b>CF<sub>p</sub></b>、<b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b>、および <b>cf<sub>5</sub></b> からは見えません。<b>CF<sub>p</sub></b> 内の *"CFP1"* という名前のプロパティは、<b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b>、および <b>cf<sub>5</sub></b> によって共有されます（ただし、<b>CF</b> によっては共有されません）。同様に、<b>CF<sub>p</sub></b> の暗黙のプロトタイプチェーン内にある、*"q1"*、*"q2"*、または *"CFP1"* という名前ではないプロパティも共有されます。<b>CF</b> と <b>CF<sub>p</sub></b> の間には、暗黙のプロトタイプリンクがないことに注意してください。</p>
       <p>クラスを基盤とする多くのオブジェクト言語とは異なり、プロパティに値を代入することで、オブジェクトにプロパティを動的に追加できます。つまり、コンストラクターは、構築するオブジェクトのすべてのプロパティ、あるいはいずれかのプロパティについてさえ、名前を指定したり値を代入したりする必要はありません。上の図では、<b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b>、および <b>cf<sub>5</sub></b> のための新しい共有プロパティを、<b>CF<sub>p</sub></b> 内のプロパティに新しい値を代入することで追加できます。</p>
       <p>ECMAScript のオブジェクトは本質的にクラスを基盤とするものではありませんが、コンストラクター関数、プロトタイプオブジェクト、およびメソッドの共通パターンに基づいて、クラスに似た抽象化を定義すると便利なことがよくあります。ECMAScript の組込みオブジェクト自体も、そのようなクラスに似たパターンに従っています。ECMAScript 2015 以降、ECMAScript 言語にはクラス定義の構文が含まれており、プログラマーは、組込みオブジェクトが使用するものと同じ、クラスに似た抽象化パターンに従うオブジェクトを簡潔に定義できます。</p>
@@ -336,278 +336,6 @@
       <p>ECMAScript 言語は、言語の利用者の一部が、その言語で利用可能な特定の機能の使用を制限したいと考える可能性を認めています。その理由としては、安全性のため、自分たちが誤りを招きやすいと考える機能を避けるため、エラーチェックを強化するため、またはその他の自ら選んだ理由が考えられます。この可能性に対応するため、ECMAScript は、言語の厳格版を定義します。言語の厳格版は、通常の ECMAScript 言語の特定の構文的および意味論的な機能を除外し、一部の機能の詳細な意味論を変更します。また、厳格版は、言語の非厳格な形式ではエラーと規定されていない状況に対して、エラー例外をスローすることで報告しなければならない追加のエラー条件を規定します。</p>
       <p>ECMAScript の厳格版は、一般に、この言語の<em>厳格モード</em>と呼ばれます。厳格モードの選択と ECMAScript の厳格モードの構文および意味論の使用は、<emu-xref href="#sec-strict-mode-code"></emu-xref> で説明するように、個々の ECMAScript ソーステキスト単位のレベルで明示的に行われます。厳格モードは構文上のソーステキスト単位のレベルで選択されるため、そのようなソーステキスト単位内に局所的な効果を持つ制限のみを課します。厳格モードは、複数のソーステキスト単位にわたって一貫して動作しなければならない ECMAScript の意味論のいかなる側面も、制限または変更しません。完全な ECMAScript プログラムは、厳格モードと非厳格モードの両方の ECMAScript ソーステキスト単位から構成される場合があります。この場合、厳格モードは、厳格モードのソーステキスト単位内で定義されたコードを実際に実行するときにのみ適用されます。</p>
       <p>この仕様に適合するためには、ECMAScript の実装は、この仕様で定義される、制限のない完全な ECMAScript 言語と ECMAScript 言語の厳格版の両方を実装しなければなりません。さらに、実装は、制限のないソーステキスト単位と厳格モードのソーステキスト単位を、一つの複合プログラムに組み合わせることをサポートしなければなりません。</p>
-    </emu-clause>
-  </emu-clause>
-
-  <emu-clause id="sec-terms-and-definitions">
-    <h1>用語および定義</h1>
-    <p>この文書の目的のために、以下の用語および定義を適用します。</p>
-
-    <emu-clause id="sec-terms-and-definitions-implementation-approximated">
-      <h1>実装近似</h1>
-      <p>実装近似の機能は、外部の情報源によって全部または一部が定義されるものの、この仕様において推奨される理想的な動作を持つ</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-implementation-defined">
-      <h1>実装定義</h1>
-      <p>実装定義の機能は、この仕様の外部の情報源によって全部または一部が定義される</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-host-defined">
-      <h1>ホスト定義</h1>
-      <p>実装定義と同じ</p>
-      <emu-note>
-        <p>編集上の区別については、箇条 <emu-xref href="#sec-hosts-and-implementations"></emu-xref> を参照してください。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-type">
-      <h1>型</h1>
-      <p>箇条 <emu-xref href="#sec-ecmascript-data-types-and-values"></emu-xref> で定義されるデータ値の集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-primitive-value">
-      <h1>プリミティブ値</h1>
-      <p>箇条 <emu-xref href="#sec-ecmascript-data-types-and-values"></emu-xref> で定義される Undefined、Null、Boolean、Number、BigInt、Symbol、または String 型のいずれかに属する値</p>
-      <emu-note>
-        <p>プリミティブ値は、言語実装の最も低いレベルで直接表現されるデータです。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-object">
-      <h1>オブジェクト</h1>
-      <p>Object 型に属する値</p>
-      <emu-note>
-        <p>オブジェクトはプロパティの集合であり、単一のプロトタイプオブジェクトを持ちます。プロトタイプは *null* の場合があります。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-constructor">
-      <h1>コンストラクター</h1>
-      <p>オブジェクトを作成および初期化する関数オブジェクト</p>
-      <emu-note>
-        <p>コンストラクターの *"prototype"* プロパティの値は、継承と共有プロパティを実装するために使用されるプロトタイプオブジェクトです。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-prototype">
-      <h1>プロトタイプ</h1>
-      <p>他のオブジェクトに共有プロパティを提供するオブジェクト</p>
-      <emu-note>
-        <p>コンストラクターがオブジェクトを作成すると、そのオブジェクトは、プロパティ参照を解決するために、コンストラクターの *"prototype"* プロパティを暗黙に参照します。コンストラクターの *"prototype"* プロパティは、プログラム式 <code><var>constructor</var>.prototype</code> によって参照でき、オブジェクトのプロトタイプに追加されたプロパティは、継承を通じて、そのプロトタイプを共有するすべてのオブジェクトによって共有されます。あるいは、組込み関数 `Object.create` を使用して、プロトタイプを明示的に指定した新しいオブジェクトを作成することもできます。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-ordinary-object">
-      <h1>通常オブジェクト</h1>
-      <p>すべてのオブジェクトがサポートしなければならない基本内部メソッドについて、既定の動作を持つオブジェクト</p>
-    </emu-clause>
-
-    <emu-clause id="sec-exotic-object">
-      <h1>特殊オブジェクト</h1>
-      <p>一つ以上の基本内部メソッドについて、既定の動作を持たないオブジェクト</p>
-      <emu-note>
-        <p>通常オブジェクトではないオブジェクトは、すべて特殊オブジェクトです。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-standard-object">
-      <h1>標準オブジェクト</h1>
-      <p>意味論がこの仕様によって定義されるオブジェクト</p>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-object">
-      <h1>組込みオブジェクト</h1>
-      <p>ECMAScript の実装によって規定および提供されるオブジェクト</p>
-      <emu-note>
-        <p>標準の組込みオブジェクトは、この仕様で定義されます。ECMAScript の実装は、追加の種類の組込みオブジェクトを規定および提供してもかまいません。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-undefined-value">
-      <h1>undefined 値</h1>
-      <p>変数に値が代入されていないときに使用されるプリミティブ値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-undefined-type">
-      <h1>Undefined 型</h1>
-      <p>*undefined* 値を唯一の値とする型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-null-value">
-      <h1>null 値</h1>
-      <p>オブジェクト値が意図的に存在しないことを表すプリミティブ値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-null-type">
-      <h1>Null 型</h1>
-      <p>*null* 値を唯一の値とする型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-boolean-value">
-      <h1>Boolean 値</h1>
-      <p>Boolean 型に属する値</p>
-      <emu-note>
-        <p>Boolean 値は、*true* と *false* の2つだけです。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-boolean-type">
-      <h1>Boolean 型</h1>
-      <p>プリミティブ値 *true* と *false* からなる型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-boolean-object">
-      <h1>Boolean オブジェクト</h1>
-      <p>標準組込みコンストラクター Boolean のインスタンスである、Object 型に属する値</p>
-      <emu-note>
-        <p>Boolean オブジェクトは、Boolean 値を引数として渡し、`new` 式で Boolean コンストラクターを使用することによって作成されます。生成されたオブジェクトは、その Boolean 値を値とする内部スロットを持ちます。Boolean オブジェクトは、Boolean 値に型変換できます。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-string-value">
-      <h1>String 値</h1>
-      <p>0個以上の16ビット符号なし整数値からなる、有限の順序付きの列であるプリミティブ値</p>
-      <emu-note>
-        <p>String 値は、String 型に属する値です。列内の各整数値は、通常、UTF-16 テキストの単一の16ビット単位を表します。ただし、ECMAScript は、それらの値が16ビット符号なし整数でなければならないことを除き、いかなる制限や要件も課しません。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-string-type">
-      <h1>String 型</h1>
-      <p>すべての可能な String 値の集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-string-object">
-      <h1>String オブジェクト</h1>
-      <p>標準組込みコンストラクター String のインスタンスである、Object 型に属する値</p>
-      <emu-note>
-        <p>String オブジェクトは、String 値を引数として渡し、`new` 式で String コンストラクターを使用することによって作成されます。生成されたオブジェクトは、その String 値を値とする内部スロットを持ちます。String オブジェクトは、String コンストラクターを関数として呼び出すことで、String 値に型変換できます（<emu-xref href="#sec-string-constructor-string-value"></emu-xref>）。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-number-value">
-      <h1>Number 値</h1>
-      <p>IEEE 754-2019 の倍精度64ビットバイナリ形式の値に対応するプリミティブ値</p>
-      <emu-note>
-        <p>Number 値は、Number 型に属する値であり、数の直接的な表現です。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-number-type">
-      <h1>Number 型</h1>
-      <p>*NaN*（“非数”）、*+∞*<sub>𝔽</sub>（正の無限大）、および *-∞*<sub>𝔽</sub>（負の無限大）を含む、すべての可能な Number 値の集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-number-object">
-      <h1>Number オブジェクト</h1>
-      <p>標準組込みコンストラクター Number のインスタンスである、Object 型に属する値</p>
-      <emu-note>
-        <p>Number オブジェクトは、Number 値を引数として渡し、`new` 式で Number コンストラクターを使用することによって作成されます。生成されたオブジェクトは、その Number 値を値とする内部スロットを持ちます。Number オブジェクトは、Number コンストラクターを関数として呼び出すことで、Number 値に型変換できます（<emu-xref href="#sec-number-constructor-number-value"></emu-xref>）。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-infinity">
-      <h1>Infinity</h1>
-      <p>正の無限大の Number 値である Number 値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-nan">
-      <h1>NaN</h1>
-      <p>IEEE 754-2019 の NaN（“非数”）値である Number 値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-bigint-value">
-      <h1>BigInt 値</h1>
-      <p>任意精度の整数値に対応するプリミティブ値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-bigint-type">
-      <h1>BigInt 型</h1>
-      <p>すべての可能な BigInt 値の集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-bigint-object">
-      <h1>BigInt オブジェクト</h1>
-      <p>標準組込みコンストラクター BigInt のインスタンスである、Object 型に属する値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-symbol-value">
-      <h1>Symbol 値</h1>
-      <p>一意で、String ではない Object のプロパティキーを表すプリミティブ値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-symbol-type">
-      <h1>Symbol 型</h1>
-      <p>すべての可能な Symbol 値の集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-symbol-object">
-      <h1>Symbol オブジェクト</h1>
-      <p>標準組込みコンストラクター Symbol のインスタンスである、Object 型に属する値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-function">
-      <h1>関数</h1>
-      <p>サブルーチンとして呼び出せる、Object 型に属する値</p>
-      <emu-note>
-        <p>関数は、そのプロパティに加えて、呼び出されたときの動作を決定する実行可能なコードと状態を含みます。関数のコードは、ECMAScript で書かれている場合も、そうでない場合もあります。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-function">
-      <h1>組込み関数</h1>
-      <p>関数である組込みオブジェクト</p>
-      <emu-note>
-        <p>組込み関数の例には、`parseInt` と `Math.exp` があります。ホストまたは実装は、この仕様に記述されていない追加の組込み関数を提供してもかまいません。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-constructor">
-      <h1>組込みコンストラクター</h1>
-      <p>コンストラクターである組込み関数</p>
-      <emu-note>
-        <p>組込みコンストラクターの例には、`Object` と `Function` があります。ホストまたは実装は、この仕様に記述されていない追加の組込みコンストラクターを提供してもかまいません。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-property">
-      <h1>プロパティ</h1>
-      <p>キー（String 値または Symbol 値のいずれか）と値を関連付ける、オブジェクトの一部</p>
-      <emu-note>
-        <p>プロパティの形式に応じて、その値は、データ値（プリミティブ値、オブジェクト、または関数オブジェクト）として直接表現される場合と、一対のアクセサー関数によって間接的に表現される場合があります。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-method">
-      <h1>メソッド</h1>
-      <p>プロパティの値である関数</p>
-      <emu-note>
-        <p>関数がオブジェクトのメソッドとして呼び出されると、そのオブジェクトは、関数の *this* 値として関数に渡されます。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-method">
-      <h1>組込みメソッド</h1>
-      <p>組込み関数であるメソッド</p>
-      <emu-note>
-        <p>標準の組込みメソッドは、この仕様で定義されます。ホストまたは実装は、この仕様に記述されていない追加の組込みメソッドを提供してもかまいません。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-attribute">
-      <h1>属性</h1>
-      <p>プロパティの何らかの特性を定義する内部値</p>
-    </emu-clause>
-
-    <emu-clause id="sec-own-property">
-      <h1>自身のプロパティ</h1>
-      <p>そのオブジェクトに直接含まれるプロパティ</p>
-    </emu-clause>
-
-    <emu-clause id="sec-inherited-property">
-      <h1>継承されたプロパティ</h1>
-      <p>オブジェクト自身のプロパティではなく、そのオブジェクトのプロトタイプのプロパティ（自身のもの、または継承されたもの）である、オブジェクトのプロパティ</p>
     </emu-clause>
   </emu-clause>
 
@@ -1208,30 +936,30 @@
   </emu-clause>
 </emu-clause>
 
-<emu-clause id="sec-ecmascript-data-types-and-values">
+<emu-clause id="sec-ecmascript-data-types-and-values" oldids="sec-type">
   <h1>ECMAScript のデータ型と値</h1>
   <p>この仕様内のアルゴリズムは値を操作し、それぞれの値には関連付けられた型があります。取り得る値の型は、この箇条で定義されているものだけです。型はさらに、ECMAScript 言語型と仕様型に分類されます。</p>
 
   <emu-clause id="sec-ecmascript-language-types">
     <h1>ECMAScript 言語型</h1>
-    <p><dfn variants="ECMAScript language types">ECMAScript 言語型</dfn>は、ECMAScript プログラマーが ECMAScript 言語を使用して直接操作する値に対応します。ECMAScript 言語型は、Undefined、Null、Boolean、String、Symbol、Number、BigInt、および Object です。<dfn variants="ECMAScript language values">ECMAScript 言語値</dfn>は、ECMAScript 言語型によって特徴付けられる値です。</p>
+    <p><dfn variants="ECMAScript language types">ECMAScript 言語型</dfn>は、ECMAScript プログラマーが ECMAScript 言語を使用して直接操作する値に対応します。ECMAScript 言語型は、Undefined、Null、Boolean、String、Symbol、Number、BigInt、および Object です。<dfn variants="ECMAScript language values">ECMAScript 言語値</dfn>は、ECMAScript 言語型によって特徴付けられる値です。Object ではない ECMAScript 言語値を<dfn id="primitive-value" oldids="sec-primitive-value" variants="primitive values">プリミティブ値</dfn>といいます。</p>
 
-    <emu-clause id="sec-ecmascript-language-types-undefined-type">
+    <emu-clause id="sec-ecmascript-language-types-undefined-type" oldids="sec-undefined-value,sec-terms-and-definitions-undefined-type">
       <h1>Undefined 型</h1>
       <p>Undefined 型は、*undefined* と呼ばれる値を1つだけ持ちます。値が代入されていない変数は、値 *undefined* を持ちます。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-null-type">
+    <emu-clause id="sec-ecmascript-language-types-null-type" oldids="sec-terms-and-definitions-null-type,sec-null-value">
       <h1>Null 型</h1>
-      <p>Null 型は、*null* と呼ばれる値を1つだけ持ちます。</p>
+      <p>Null 型は、*null* と呼ばれる値を1つだけ持ち、これはオブジェクト値が意図的に存在しないことを表します。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-boolean-type">
+    <emu-clause id="sec-ecmascript-language-types-boolean-type" oldids="sec-terms-and-definitions-boolean-value,sec-terms-and-definitions-boolean-type">
       <h1>Boolean 型</h1>
       <p><dfn variants="is a Boolean,is not a Boolean">Boolean 型</dfn>は、*true* および *false* と呼ばれる2つの値を持つ論理的実体を表します。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-string-type">
+    <emu-clause id="sec-ecmascript-language-types-string-type" oldids="sec-terms-and-definitions-string-value,sec-terms-and-definitions-string-type">
       <h1>String 型</h1>
       <p><dfn variants="is a String,is not a String">String 型</dfn>は、0個以上の16ビット符号なし整数値（「要素」）からなる、最大長 2<sup>53</sup> - 1 要素までの、すべての順序付き列の集合です。String 型は一般に、実行中の ECMAScript プログラム内のテキストデータを表すために使用され、その場合、String 内の各要素は UTF-16 コード単位値として扱われます。各要素は、列内の位置を占めるものとみなされます。これらの位置には、非負整数によるインデックスが付けられます。最初の要素（存在する場合）はインデックス 0、次の要素（存在する場合）はインデックス 1 に位置し、以後同様です。String の長さは、その中に含まれる要素（すなわち16ビット値）の数です。空の String の長さは0であるため、要素を含みません。</p>
       <p>String の内容を解釈しない ECMAScript の操作は、それ以上の意味論を適用しません。String 値を解釈する操作は、各要素を単一の UTF-16 コード単位として扱います。ただし、ECMAScript はこれらのコード単位の値や相互関係を制限しないため、String の内容を UTF-16 で符号化された Unicode コードポイントの列としてさらに解釈する操作では、不正な部分列を考慮しなければなりません。このような操作では、数値が 0xD800 以上 0xDBFF 以下の区間にあるすべてのコード単位（Unicode 標準で<dfn id="leading-surrogate" variants="leading surrogates">先行サロゲート</dfn>、より正式には<dfn id="high-surrogate-code-unit" variants="high-surrogate code units">上位サロゲートコード単位</dfn>として定義されます）と、数値が 0xDC00 以上 0xDFFF 以下の区間にあるすべてのコード単位（<dfn id="trailing-surrogate" variants="trailing surrogates">後続サロゲート</dfn>、より正式には<dfn id="low-surrogate-code-unit" variants="low-surrogate code units">下位サロゲートコード単位</dfn>として定義されます）を、次の規則を使用して特別に扱います。</p>
@@ -1310,7 +1038,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-symbol-type">
+    <emu-clause id="sec-ecmascript-language-types-symbol-type" oldids="sec-symbol-value,sec-terms-and-definitions-symbol-type">
       <h1>Symbol 型</h1>
       <p><dfn variants="is a Symbol,is not a Symbol">Symbol 型</dfn>は、Object プロパティのキーとして使用できる、String ではないすべての値の集合です（<emu-xref href="#sec-object-type"></emu-xref>）。</p>
       <p>各 Symbol は一意かつ不変です。</p>
@@ -1964,9 +1692,9 @@
         <p>ECMAScript の初版およびそれ以降の版では、特定の演算子について、精度を失ったり切り捨てたりする可能性のある暗黙の数値変換が提供されてきました。これらのレガシーな暗黙の変換は後方互換性のために維持されていますが、プログラマーの誤りの機会を最小限に抑え、将来の版で一般化された<em>値型</em>を導入する選択肢を残すため、BigInt には提供されていません。</p>
       </emu-note>
 
-      <emu-clause id="sec-ecmascript-language-types-number-type">
+      <emu-clause id="sec-ecmascript-language-types-number-type" oldids="sec-terms-and-definitions-number-value,sec-terms-and-definitions-number-type">
         <h1>Number 型</h1>
-        <p><dfn variants="is a Number,is not a Number">Number 型</dfn>は正確に 18,437,736,874,454,810,627 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn> 個）の値を持ち、IEEE 二進浮動小数点算術標準で規定されている倍精度浮動小数点 IEEE 754-2019 binary64 値を表す。ただし、IEEE 標準の 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）の異なる NaN 値は、ECMAScript では単一の特別な *NaN* 値として表される。（*NaN* 値はプログラム式 `NaN` によって生成されることに注意。）一部の実装では、外部コードがさまざまな NaN 値の違いを検出できる場合があるが、そのような動作は実装定義であり、ECMAScript コードにとって、すべての *NaN* 値は互いに区別できない。</p>
+        <p><dfn variants="is a Number,is not a Number">Number 型</dfn>は正確に 18,437,736,874,454,810,627 個（すなわち <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn> 個）の値を持ち、IEEE 二進浮動小数点算術標準で規定されている倍精度浮動小数点 IEEE 754-2019 binary64 値を表す。ただし、IEEE 標準の 9,007,199,254,740,990 個（すなわち <emu-eqn>2<sup>53</sup> - 2</emu-eqn> 個）の異なる NaN 値は、ECMAScript では単一の特別な *NaN*（「数ではない」）値として表される。*NaN* 値はプログラム式 `NaN` によって生成されることに注意。一部の実装では、外部コードがさまざまな NaN 値の違いを検出できる場合があるが、そのような動作は実装定義であり、ECMAScript コードにとって、すべての *NaN* 値は互いに区別できない。</p>
         <emu-note>
           <p>Number 値が ArrayBuffer（<emu-xref href="#sec-arraybuffer-objects"></emu-xref> を参照）または SharedArrayBuffer（<emu-xref href="#sec-sharedarraybuffer-objects"></emu-xref> を参照）に格納された後に観測される可能性のあるビットパターンは、ECMAScript 実装が使用するその Number 値の内部表現と必ずしも同じではない。</p>
         </emu-note>
@@ -2490,7 +2218,7 @@
         </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-ecmascript-language-types-bigint-type">
+      <emu-clause id="sec-ecmascript-language-types-bigint-type" oldids="sec-terms-and-definitions-bigint-value,sec-terms-and-definitions-bigint-type">
         <h1>BigInt 型</h1>
         <p><dfn variants="is a BigInt,is not a BigInt">BigInt 型</dfn>は整数値を表します。値は任意の大きさを持つことができ、特定のビット幅に制限されません。一般に、特に明記されていない限り、操作は数学的に正確な結果を返すように設計されています。二項演算では、BigInt は2の補数の2進文字列として動作し、負の数は左側に無限にビットが設定されているものとして扱われます。</p>
 
@@ -2796,7 +2524,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-object-type">
+    <emu-clause id="sec-object-type" oldids="sec-terms-and-definitions-object,sec-property">
       <h1>Object 型</h1>
       <p><dfn variants="is an Object,is not an Object">Object 型</dfn>の各インスタンスは、単に「Object」とも呼ばれ、プロパティの集合を表します。各プロパティは、データプロパティまたはアクセサープロパティのいずれかです。</p>
       <ul>
@@ -2812,13 +2540,19 @@
       <emu-note>
         <p>すべての非負の安全な整数には、対応する整数インデックスがあります。<emu-eqn>2<sup>32</sup> - 1</emu-eqn> を除くすべての32ビット符号なし整数には、対応する配列インデックスがあります。*"-0"* は整数インデックスでも配列インデックスでもありません。</p>
       </emu-note>
-      <p>プロパティキーは、プロパティとその値にアクセスするために使用されます。プロパティへのアクセスには、値の取得と代入にそれぞれ対応する <em>get</em> と <em>set</em> の2種類があります。get および set アクセスによってアクセス可能なプロパティには、オブジェクトの直接の一部である<em>自身のプロパティ</em>と、プロパティ継承関係を介して別の関連付けられたオブジェクトから提供される<em>継承プロパティ</em>の両方が含まれます。継承プロパティは、関連付けられたオブジェクトの自身のプロパティまたは継承プロパティのいずれでもかまいません。オブジェクトの各自身のプロパティは、そのオブジェクトの他の自身のプロパティのキー値とは異なるキー値を持たなければなりません。</p>
+      <p>プロパティキーは、プロパティとその値にアクセスするために使用されます。プロパティへのアクセスには、値の取得と代入にそれぞれ対応する <em>get</em> と <em>set</em> の2種類があります。</p>
+      <p><dfn id="own-property" oldids="sec-own-property" variants="own properties">自身のプロパティ</dfn>は、オブジェクトに直接含まれるプロパティです。オブジェクトの各自身のプロパティは、そのオブジェクトの他の自身のプロパティのキーとは異なるキーを持たなければなりません。</p>
+      <p>オブジェクトの<dfn id="prototype" oldids="sec-terms-and-definitions-prototype" variants="prototypes">プロトタイプ</dfn>は、そのオブジェクトに共有プロパティを提供するオブジェクト、またはそのようなオブジェクトが存在しないことを示す *null* のいずれかです。オブジェクトの<dfn id="inherited-property" oldids="sec-inherited-property" variants="inherited properties">継承プロパティ</dfn>は、自身のプロパティではなく、そのプロトタイプの自身のプロパティまたは継承プロパティであるプロパティです。get および set アクセスによってアクセス可能なプロパティには、自身のプロパティと継承プロパティの両方が含まれます。</p>
+      <emu-note>
+        <p>多くのコンストラクターは、自身の *"prototype"* プロパティを新しく作成するオブジェクトのプロトタイプとして使用します。オブジェクトのプロトタイプに追加されたプロパティは、継承を通じて、そのプロトタイプを共有するすべてのオブジェクトに共有されます。`Object.create` 組込み関数（<emu-xref href="#sec-object.create"></emu-xref>）を使用して、プロトタイプを明示的に指定したオブジェクトを作成することもできます。</p>
+      </emu-note>
       <p>すべてのオブジェクトは論理的にはプロパティの集合ですが、プロパティへのアクセスおよび操作の意味論が異なる複数の形式のオブジェクトがあります。複数の形式のオブジェクトの定義については、<emu-xref href="#sec-object-internal-methods-and-internal-slots"></emu-xref> を参照してください。</p>
-      <p>さらに、一部のオブジェクトは呼出し可能です。これらは関数または関数オブジェクトと呼ばれ、以下でさらに説明します。ECMAScript のすべての関数は Object 型のメンバーです。</p>
+      <p>さらに、一部のオブジェクトは呼出し可能です。これらは関数または関数オブジェクトと呼ばれ、以下でさらに説明します。ECMAScript のすべての関数は Object 型のメンバーです。関数は、そのプロパティに加えて、呼出し時の動作を決定する実行可能コードと状態を含みます。関数のコードは ECMAScript で書かれている場合も、そうでない場合もあります。</p>
+      <p>プロパティの値である関数を<dfn id="method" oldids="sec-method" variants="methods">メソッド</dfn>と呼びます。<code><var>object</var>.<var>method</var>()</code> のような呼出しでは、オブジェクトが *this* 値として関数に渡されます（<emu-xref href="#sec-evaluatecall"></emu-xref> を参照）。</p>
 
       <emu-clause id="sec-property-attributes">
         <h1>プロパティ属性</h1>
-        <p>属性は、<emu-xref href="#table-object-property-attributes"></emu-xref> に記載されているように、Object プロパティの状態を定義および説明するために、この仕様で使用されます。明示的に指定されていない限り、各属性の初期値はその既定値です。</p>
+        <p>Object プロパティの状態は、その特性を定義する内部値である<dfn id="attribute" oldids="sec-attribute" variants="attribute">属性</dfn>の集合によって、<emu-xref href="#table-object-property-attributes"></emu-xref> に示すように記述されます。明示的に指定されていない限り、各属性の初期値はその既定値です。</p>
         <emu-table id="table-object-property-attributes" caption="Object プロパティの属性" oldids="table-2,table-3,table-4,table-data-property-attributes,table-accessor-property-attributes,table-default-attribute-values">
           <table>
             <thead>
@@ -2944,7 +2678,7 @@
         <p>すべてのオブジェクトは、PrivateElement の List である [[PrivateElements]] という名前の内部スロットを持ちます。この List は、オブジェクトのプライベートフィールド、メソッド、およびアクセサーの値を表します。初期状態では空の List です。</p>
         <p>内部メソッドおよび内部スロットは、この仕様内では二重角括弧 [[ ]] で囲まれた名前によって識別されます。</p>
         <p><emu-xref href="#table-essential-internal-methods"></emu-xref> は、ECMAScript コードによって作成または操作されるすべてのオブジェクトに適用される、この仕様で使用される<em>必須内部メソッド</em>をまとめたものです。すべてのオブジェクトは、すべての必須内部メソッドに対するアルゴリズムを持たなければなりません。ただし、すべてのオブジェクトがそれらのメソッドに同じアルゴリズムを使用するとは限りません。</p>
-        <p><dfn id="ordinary-object" variants="ordinary objects">通常オブジェクト</dfn>は、次の基準をすべて満たすオブジェクトです。</p>
+        <p><dfn id="ordinary-object" oldids="sec-ordinary-object" variants="ordinary objects">通常オブジェクト</dfn>は、次の基準をすべて満たすオブジェクトです。</p>
         <ul>
           <li>
             <emu-xref href="#table-essential-internal-methods"></emu-xref> に列挙された内部メソッドについて、そのオブジェクトは <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> で定義されたものを使用します。
@@ -2956,7 +2690,7 @@
             オブジェクトが [[Construct]] 内部メソッドを持つ場合、<emu-xref href="#sec-ecmascript-function-objects-construct-argumentslist-newtarget"></emu-xref> で定義されたもの、または <emu-xref href="#sec-built-in-function-objects-construct-argumentslist-newtarget"></emu-xref> で定義されたもののいずれかを使用します。
           </li>
         </ul>
-        <p><dfn id="exotic-object" variants="exotic objects">特殊オブジェクト</dfn>は、通常オブジェクトではないオブジェクトです。</p>
+        <p><dfn id="exotic-object" oldids="sec-exotic-object" variants="exotic objects">特殊オブジェクト</dfn>は、通常オブジェクトではないオブジェクトです。</p>
         <p>この仕様では、特殊オブジェクトの種類を、それらのオブジェクトの内部メソッドによって区別します。特定の種類の特殊オブジェクト（Array 特殊オブジェクトや束縛関数特殊オブジェクトなど）と動作上は同等であっても、その種類について規定された内部メソッドと同じ集合を持たないオブジェクトは、その種類の特殊オブジェクトとして認識されません。</p>
         <p><emu-xref href="#table-essential-internal-methods"></emu-xref> およびその他の同様の表は、各内部メソッドの呼出しパターンを説明します。呼出しパターンには、常に括弧で囲まれた説明的なパラメーター名のリストが含まれます。</p>
         <p>内部メソッドは、そのパラメーターに加えて、メソッド呼出しのターゲットであるオブジェクトにも常にアクセスできます。</p>
@@ -3120,7 +2854,7 @@
             </tr>
           </table>
         </emu-table>
-        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref> は、関数として呼び出すことができるオブジェクトによってサポートされる追加の必須内部メソッドをまとめたものです。<dfn id="function-object" variants="function objects">関数オブジェクト</dfn>は、[[Call]] 内部メソッドをサポートするオブジェクトです。<dfn id="constructor" variants="constructors">コンストラクター</dfn>は、[[Construct]] 内部メソッドをサポートするオブジェクトです。[[Construct]] をサポートするすべてのオブジェクトは [[Call]] をサポートしなければなりません。すなわち、すべてのコンストラクターは関数オブジェクトでなければなりません。したがって、コンストラクターを<em>コンストラクター関数</em>または<em>コンストラクター関数オブジェクト</em>と呼ぶこともできます。</p>
+        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref> は、関数として呼び出すことができるオブジェクトによってサポートされる追加の必須内部メソッドをまとめたものです。<dfn id="function-object" oldids="sec-terms-and-definitions-function" variants="function objects,function,functions">関数オブジェクト</dfn>は、[[Call]] 内部メソッドをサポートするオブジェクトです。<dfn id="constructor" oldids="sec-constructor" variants="constructors">コンストラクター</dfn>は、[[Construct]] 内部メソッドをサポートするオブジェクトです。[[Construct]] をサポートするすべてのオブジェクトは [[Call]] をサポートしなければなりません。すなわち、すべてのコンストラクターは関数オブジェクトでなければなりません。したがって、コンストラクターを<em>コンストラクター関数</em>または<em>コンストラクター関数オブジェクト</em>と呼ぶこともできます。</p>
         <emu-table id="table-additional-essential-internal-methods-of-function-objects" caption="関数オブジェクトの追加の必須内部メソッド" oldids="table-6" type="internal methods" of="function objects">
           <table>
             <thead>
@@ -14728,7 +14462,7 @@
       <h1>String 特殊オブジェクト</h1>
       <p>String オブジェクトは、String 値をカプセル化し、その String 値の個々のコード単位要素に対応する仮想的な整数インデックス付きデータプロパティを公開する特殊オブジェクトです。String 特殊オブジェクトは常に *"length"* という名前のデータプロパティを持ち、その値はカプセル化された String 値の長さです。コード単位データプロパティと *"length"* プロパティはどちらも書込み不可かつ構成不可です。</p>
 
-      <p>オブジェクトの [[GetOwnProperty]]、[[DefineOwnProperty]]、および [[OwnPropertyKeys]] 内部メソッドが以下の実装を使用し、その他の必須内部メソッドが <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> にある定義を使用する場合、そのオブジェクトは <dfn id="string-exotic-object" variants="String exotic objects">String 特殊オブジェクト</dfn>（または単に String オブジェクト）です。これらのメソッドは StringCreate でインストールされます。</p>
+      <p>オブジェクトの [[GetOwnProperty]]、[[DefineOwnProperty]]、および [[OwnPropertyKeys]] 内部メソッドが以下の実装を使用し、その他の必須内部メソッドが <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> にある定義を使用する場合、そのオブジェクトは <dfn id="string-exotic-object" oldids="sec-string-object" variants="String exotic objects,String object,String objects">String 特殊オブジェクト</dfn>（または単に String オブジェクト）です。これらのメソッドは StringCreate でインストールされます。</p>
 
       <p>String 特殊オブジェクトは通常オブジェクトと同じ内部スロットを持ちます。さらに [[StringData]] 内部スロットも持ちます。</p>
 
@@ -30290,9 +30024,13 @@
 
 <emu-clause id="sec-ecmascript-standard-built-in-objects">
   <h1>ECMAScript 標準組込みオブジェクト</h1>
-  <p>ECMAScript |Script| または |Module| が実行を開始するときは常に、特定の組込みオブジェクトを利用できます。その1つであるグローバルオブジェクトは、実行中のプログラムのグローバル環境の一部です。その他は、グローバルオブジェクトの初期プロパティとして、またはアクセス可能な組込みオブジェクトのプロパティとして間接的にアクセスできます。</p>
+  <p><dfn id="built-in-object" oldids="sec-built-in-object" variants="built-in objects">組込みオブジェクト</dfn>は、ECMAScript 実装によって提供されるオブジェクトです。<dfn id="standard-object" oldids="sec-standard-object" variants="standard objects">標準オブジェクト</dfn>は、その意味論がこの仕様で定義されるオブジェクトです。標準組込みオブジェクトはこの仕様で定義されます。実装は、追加の種類の組込みオブジェクトを規定し、提供してもかまいません。</p>
+  <p>ECMAScript |Script| または |Module| が実行を開始するときは常に、特定の標準組込みオブジェクトを利用できます。その1つであるグローバルオブジェクトは、実行中のプログラムのグローバル環境の一部です。その他は、グローバルオブジェクトの初期プロパティとして、またはアクセス可能な組込みオブジェクトのプロパティとして間接的にアクセスできます。</p>
   <p>別段の規定がない限り、関数として呼出し可能な組込みオブジェクトは、<emu-xref href="#sec-built-in-function-objects"></emu-xref> で説明される特性を持つ組込み関数オブジェクトです。別段の規定がない限り、組込みオブジェクトの [[Extensible]] 内部スロットは初期状態で値 *true* を持ちます。すべての組込み関数オブジェクトは [[Realm]] 内部スロットを持ち、その値は、そのオブジェクトが最初に作成された realm の Realm Record です。</p>
-  <p>多くの組込みオブジェクトは関数です。つまり、引数を指定して呼び出すことができます。さらに、そのうちのいくつかはコンストラクターです。つまり、`new` 演算子とともに使用することを意図した関数です。各組込み関数について、この仕様はその関数に必要な引数と、その関数オブジェクトのプロパティを説明します。各組込みコンストラクターについて、この仕様はさらに、そのコンストラクターの prototype オブジェクトのプロパティと、そのコンストラクターを呼び出す `new` 式によって返される特定のオブジェクトインスタンスのプロパティを説明します。</p>
+  <p>関数である組込みオブジェクトは<dfn id="built-in-function" oldids="sec-built-in-function" variants="built-in functions">組込み関数</dfn>です。コンストラクターである組込み関数は<dfn id="built-in-constructor" oldids="sec-built-in-constructor" variants="built-in constructors">組込みコンストラクター</dfn>です。組込み関数であるメソッドは<dfn id="built-in-method" oldids="sec-built-in-method" variants="built-in methods">組込みメソッド</dfn>です。各標準組込み関数について、この仕様はその関数に必要な引数と、その関数オブジェクトのプロパティを説明します。各標準組込みコンストラクターについて、この仕様はさらに、そのコンストラクターのプロトタイプオブジェクトのプロパティと、そのコンストラクターを呼び出す `new` 式によって返される特定のオブジェクトインスタンスのプロパティを説明します。</p>
+  <emu-note>
+    <p>組込み関数の例には `parseInt` と `Math.exp` があります。組込みコンストラクターの例には `Object` と `Function` があります。ホストや実装は、この仕様に記述されていない追加の組込み関数、コンストラクター、およびメソッドを提供してもかまいません。</p>
+  </emu-note>
   <p>特定の関数の説明で別段の規定がない限り、組込み関数またはコンストラクターに、その関数が必要とすると規定されている数より少ない引数が渡された場合、その関数またはコンストラクターは、不足する各引数として *undefined* 値が渡されたかのように正確に動作しなければなりません。このような不足している引数は「存在しない」とみなされ、仕様アルゴリズムによってそのように識別される場合があります。特定の関数の説明において、「*this* 値」および「NewTarget」という用語は、<emu-xref href="#sec-built-in-function-objects"></emu-xref> で与えられる意味を持ちます。</p>
   <p>特定の関数の説明で別段の規定がない限り、説明される組込み関数またはコンストラクターに、その関数が許容すると規定されている数より多い引数が渡された場合、余分な引数は呼出しによって評価された後、その関数によって無視されます。ただし、余分な引数が存在するという理由だけを根拠として *TypeError* 例外をスローする動作でない限り、実装はそのような引数に関連する実装固有の動作を定義してもかまいません。</p>
   <emu-note>
@@ -30336,13 +30074,13 @@
       <p>このプロパティは属性 { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持ちます。</p>
     </emu-clause>
 
-    <emu-clause id="sec-value-properties-of-the-global-object-infinity">
+    <emu-clause id="sec-value-properties-of-the-global-object-infinity" oldids="sec-terms-and-definitions-infinity">
       <h1>Infinity</h1>
       <p>グローバルオブジェクトの *"Infinity"* プロパティの初期値は *+∞*<sub>𝔽</sub> です（<emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> を参照）。</p>
       <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
     </emu-clause>
 
-    <emu-clause id="sec-value-properties-of-the-global-object-nan">
+    <emu-clause id="sec-value-properties-of-the-global-object-nan" oldids="sec-terms-and-definitions-nan">
       <h1>NaN</h1>
       <p>グローバルオブジェクトの *"NaN"* プロパティの初期値は *NaN* です（<emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref> を参照）。</p>
       <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* } を持ちます。</p>
@@ -32117,7 +31855,10 @@
 
     <emu-clause id="sec-properties-of-boolean-instances">
       <h1>Boolean インスタンスのプロパティ</h1>
-      <p>Boolean インスタンスは、Boolean prototype オブジェクトからプロパティを継承する通常オブジェクトです。Boolean インスタンスは [[BooleanData]] 内部スロットを持ちます。[[BooleanData]] 内部スロットは、この Boolean オブジェクトによって表される Boolean 値です。</p>
+      <p><dfn id="boolean-object" oldids="sec-boolean-object" variants="Boolean objects">Boolean オブジェクト</dfn>は、それが表す Boolean 値を含む [[BooleanData]] 内部スロットを持つ Object です。Boolean インスタンスは、Boolean プロトタイプオブジェクトからプロパティを継承する通常オブジェクトです。</p>
+      <emu-note>
+        <p>Boolean オブジェクトは、`new` 式で Boolean コンストラクターを使用し、Boolean 値を引数として渡すことで作成できます。Boolean オブジェクトは、`Boolean.prototype.valueOf`（<emu-xref href="#sec-boolean.prototype.valueof"></emu-xref>）を呼び出すことで、それが表す Boolean 値に変換できます。Boolean 値が期待される位置では、すべての Boolean オブジェクトは *true* に変換されます。</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
@@ -32376,7 +32117,7 @@
 
     <emu-clause id="sec-properties-of-symbol-instances">
       <h1>Symbol インスタンスのプロパティ</h1>
-      <p>Symbol インスタンスは、Symbol prototype オブジェクトからプロパティを継承する通常オブジェクトです。Symbol インスタンスは [[SymbolData]] 内部スロットを持ちます。[[SymbolData]] 内部スロットは、この Symbol オブジェクトによって表される Symbol 値です。</p>
+      <p><dfn id="symbol-object" oldids="sec-symbol-object" variants="Symbol objects">Symbol オブジェクト</dfn>は、それが表す Symbol 値を含む [[SymbolData]] 内部スロットを持つ Object です。Symbol インスタンスは、Symbol プロトタイプオブジェクトからプロパティを継承する通常オブジェクトです。</p>
     </emu-clause>
 
     <emu-clause id="sec-abstract-operations-for-symbols">
@@ -33195,7 +32936,10 @@
 
     <emu-clause id="sec-properties-of-number-instances">
       <h1>Number インスタンスのプロパティ</h1>
-      <p>Number インスタンスは、Number プロトタイプオブジェクトからプロパティを継承する通常のオブジェクトである。Number インスタンスは [[NumberData]] 内部スロットも持つ。[[NumberData]] 内部スロットは、この Number オブジェクトによって表される Number 値である。</p>
+      <p><dfn id="number-object" oldids="sec-number-object" variants="Number objects">Number オブジェクト</dfn>は、それが表す Number 値を含む [[NumberData]] 内部スロットを持つ Object です。Number インスタンスは、Number プロトタイプオブジェクトからプロパティを継承する通常オブジェクトです。</p>
+      <emu-note>
+        <p>Number オブジェクトは、`new` 式で Number コンストラクターを使用し、Number 値を引数として渡すことで作成できます。Number オブジェクトは、Number コンストラクターを関数として呼び出すことで、Number 値に強制変換できます（<emu-xref href="#sec-number-constructor-number-value"></emu-xref>）。</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
@@ -33346,7 +33090,7 @@
 
     <emu-clause id="sec-properties-of-bigint-instances">
       <h1>BigInt インスタンスのプロパティ</h1>
-      <p>BigInt インスタンスは、BigInt プロトタイプオブジェクトからプロパティを継承する通常のオブジェクトである。BigInt インスタンスは [[BigIntData]] 内部スロットも持つ。[[BigIntData]] 内部スロットは、この BigInt オブジェクトによって表される BigInt 値である。</p>
+      <p><dfn id="bigint-object" oldids="sec-bigint-object" variants="BigInt objects">BigInt オブジェクト</dfn>は、それが表す BigInt 値を含む [[BigIntData]] 内部スロットを持つ Object です。BigInt インスタンスは、BigInt プロトタイプオブジェクトからプロパティを継承する通常オブジェクトです。</p>
     </emu-clause>
   </emu-clause>
 
@@ -37101,6 +36845,9 @@ THH:mm:ss.sss
     <emu-clause id="sec-properties-of-string-instances">
       <h1>String インスタンスのプロパティ</h1>
       <p>String インスタンスは String 特殊オブジェクトであり、そのようなオブジェクトに対して規定された内部メソッドを持ちます。String インスタンスは String prototype オブジェクトからプロパティを継承します。String インスタンスは [[StringData]] 内部スロットも持ちます。[[StringData]] 内部スロットは、この String オブジェクトによって表される String 値です。</p>
+      <emu-note>
+        <p>String オブジェクトは、`new` 式で String コンストラクターを使用し、String 値を引数として渡すことで作成できます。String オブジェクトは、String コンストラクターを関数として呼び出すことで、String 値に強制変換できます（<emu-xref href="#sec-string-constructor-string-value"></emu-xref>）。</p>
+      </emu-note>
       <p>String インスタンスは *"length"* プロパティと、整数インデックス名を持つ列挙可能なプロパティの集合を持ちます。</p>
 
       <emu-clause id="sec-properties-of-string-instances-length">
@@ -50311,7 +50058,7 @@ THH:mm:ss.sss
           1. _disposableStack_ を *this* 値とする。
           1. ? RequireInternalSlot(_disposableStack_, [[DisposableState]]) を実行する。
           1. _disposableStack_.[[DisposableState]] が ~disposed~ である場合、*ReferenceError* 例外をスローする。
-          1. _newDisposableStack_ を ? OrdinaryCreateFromConstructor(%DisposableStack%, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _newDisposableStack_ を OrdinaryObjectCreate(%DisposableStack.prototype%, « [[DisposableState]], [[DisposableResourceStack]] ») とする。
           1. _newDisposableStack_.[[DisposableState]] を ~pending~ に設定する。
           1. _newDisposableStack_.[[DisposableResourceStack]] を _disposableStack_.[[DisposableResourceStack]] に設定する。
           1. _disposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
@@ -50505,7 +50252,7 @@ THH:mm:ss.sss
           1. _asyncDisposableStack_ を *this* 値とする。
           1. ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]]) を実行する。
           1. _asyncDisposableStack_.[[AsyncDisposableState]] が ~disposed~ である場合、*ReferenceError* 例外をスローする。
-          1. _newAsyncDisposableStack_ を ? OrdinaryCreateFromConstructor(%AsyncDisposableStack%, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] ») とする。
+          1. _newAsyncDisposableStack_ を OrdinaryObjectCreate(%AsyncDisposableStack.prototype%, « [[AsyncDisposableState]], [[DisposableResourceStack]] ») とする。
           1. _newAsyncDisposableStack_.[[AsyncDisposableState]] を ~pending~ に設定する。
           1. _newAsyncDisposableStack_.[[DisposableResourceStack]] を _asyncDisposableStack_.[[DisposableResourceStack]] に設定する。
           1. _asyncDisposableStack_.[[DisposableResourceStack]] を新しい空の List に設定する。
@@ -51621,8 +51368,9 @@ THH:mm:ss.sss
   <emu-clause id="sec-generatorfunction-objects">
     <h1>GeneratorFunction オブジェクト</h1>
     <p>GeneratorFunction は通常、|GeneratorDeclaration|、|GeneratorExpression|、および |GeneratorMethod| を評価することによって作成される関数です。%GeneratorFunction% intrinsic を呼び出すことによって作成することもできます。</p>
-    <emu-figure id="figure-2" caption="Generator オブジェクトの関係" informative>
-      <img alt="驚くほど多様なボックスと矢印。" height="700" src="img/figure-2.svg" width="900">
+    <p><emu-xref href="#figure-generator-relationships"></emu-xref> は、ジェネレーター関数の表現に関わるさまざまなオブジェクト間の関係を示します。</p>
+    <emu-figure id="figure-generator-relationships" caption="Generator オブジェクトの関係" informative oldids="figure-2">
+      <img alt="ジェネレーター関数、それによって作成されたジェネレーターインスタンス、両者の間のプロトタイプオブジェクト、およびいくつかの組込みオブジェクトに関わる暗黙的および明示的な関係" height="700" src="img/figure-2.svg" width="900">
     </emu-figure>
 
     <emu-clause id="sec-generatorfunction-constructor">
@@ -51672,7 +51420,7 @@ THH:mm:ss.sss
       <h1>GeneratorFunction Prototype オブジェクトのプロパティ</h1>
       <p><dfn>GeneratorFunction prototype オブジェクト</dfn>は:</p>
       <ul>
-        <li><dfn>%GeneratorFunction.prototype%</dfn> です（<emu-xref href="#figure-2"></emu-xref> を参照）。</li>
+        <li><dfn>%GeneratorFunction.prototype%</dfn> です（<emu-xref href="#figure-generator-relationships"></emu-xref> を参照）。</li>
         <li>通常オブジェクトです。</li>
         <li>関数オブジェクトではなく、[[ECMAScriptCode]] 内部スロット、または <emu-xref href="#table-internal-slots-of-ecmascript-function-objects"></emu-xref> もしくは <emu-xref href="#table-internal-slots-of-generator-instances"></emu-xref> に列挙されるその他の内部スロットを持ちません。</li>
         <li>値が %Function.prototype% である [[Prototype]] 内部スロットを持ちます。</li>

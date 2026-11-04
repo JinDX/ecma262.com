@@ -295,14 +295,14 @@
     <p>为了便于将 ECMAScript 集成到宿主环境中，本规范将某些功能（例如抽象操作）的全部或部分定义交由本规范之外的来源提供。在编辑表述上，本规范区分以下几种定义委托方式。</p>
     <!-- 下方的 "implementation" 使用 em 而非 dfn，以避免过多的自动链接。 -->
     <p><em id="implementation">实现</em>是进一步定义附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 中列举的功能，或标记为实现定义或实现近似的功能的外部来源。在非正式用法中，实现指具体的软件产物，例如某个特定的 Web 浏览器。</p>
-    <p><dfn id="implementation-defined">实现定义</dfn>的功能是将其定义交由外部来源提供且不做进一步限定的功能。本规范不对特定行为提出任何建议，符合规范的实现可以在本规范规定的约束范围内自由选择任何行为。</p>
-    <p><dfn id="implementation-approximated">实现近似</dfn>的功能是将其定义交由外部来源提供，同时建议一种理想行为的功能。尽管符合规范的实现可以在本规范规定的约束范围内自由选择任何行为，但鼓励它们尽力接近理想行为。某些数学运算，例如 <emu-xref href="#sec-math.exp"><code>Math.exp</code></emu-xref>，属于实现近似的功能。</p>
+    <p><dfn id="implementation-defined" oldids="sec-terms-and-definitions-implementation-defined">实现定义</dfn>的功能是将其定义交由外部来源提供且不做进一步限定的功能。本规范不对特定行为提出任何建议，符合规范的实现可以在本规范规定的约束范围内自由选择任何行为。</p>
+    <p><dfn id="implementation-approximated" oldids="sec-terms-and-definitions-implementation-approximated">实现近似</dfn>的功能是将其定义交由外部来源提供，同时建议一种理想行为的功能。尽管符合规范的实现可以在本规范规定的约束范围内自由选择任何行为，但鼓励它们尽力接近理想行为。某些数学运算，例如 <emu-xref href="#sec-math.exp"><code>Math.exp</code></emu-xref>，属于实现近似的功能。</p>
     <p><dfn id="host" variants="hosts">宿主</dfn>是进一步定义附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 中所列功能，但不进一步定义其他实现定义或实现近似功能的外部来源。在非正式用法中，宿主指通过附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 以相同方式与本规范对接的所有实现的集合，例如所有 Web 浏览器的集合。宿主通常是一份外部规范，例如 WHATWG HTML（<a href="https://html.spec.whatwg.org/">https://html.spec.whatwg.org/</a>）。换言之，宿主定义的功能通常在外部规范中得到进一步定义。</p>
     <p><dfn id="host-hook" variants="host hooks">宿主钩子</dfn>是由外部来源全部或部分定义的抽象操作。所有宿主钩子都必须列于附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 中。宿主钩子至少必须满足以下要求：</p>
     <ul>
       <li>它必须返回正常完成或抛出完成。</li>
     </ul>
-    <p><dfn id="host-defined">宿主定义</dfn>的功能是将其定义交由外部来源提供且不做进一步限定，并列于附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 中的功能。非宿主的实现也可以为宿主定义的功能提供定义。</p>
+    <p><dfn id="host-defined" oldids="sec-terms-and-definitions-host-defined">宿主定义</dfn>的功能是将其定义交由外部来源提供且不做进一步限定，并列于附录 <emu-xref href="#sec-host-layering-points"></emu-xref> 中的功能。非宿主的实现也可以为宿主定义的功能提供定义。</p>
     <p><dfn id="host-environment" variants="host environments">宿主环境</dfn>是对所有宿主定义功能的定义所做的一组特定选择。宿主环境通常包含可用于获取输入和提供输出的对象或函数，它们作为全局对象的宿主定义属性存在。</p>
     <p>本规范遵循始终使用最具体术语的编辑惯例。例如，如果某项功能是宿主定义的，就不应将其称为实现定义的。</p>
     <p>宿主和实现都可以通过本规范定义的语言类型、规范类型、抽象操作、语法产生式、内在对象和内在符号与本规范对接。</p>
@@ -321,11 +321,11 @@
       <h1>对象</h1>
       <p>尽管 ECMAScript 包含类定义的语法，但 ECMAScript 对象在本质上并不像 C++、Smalltalk 或 Java 中的对象那样基于类。相反，可以通过多种方式创建对象，包括使用字面量表示法，或使用<em>构造函数</em>，后者先创建对象，再通过为对象的属性赋予初始值来执行初始化其全部或部分内容的代码。每个构造函数都是一个具有名为 *"prototype"* 的属性的函数，该属性用于实现<em>基于原型的继承</em>和<em>共享属性</em>。通过在 <b>new</b> 表达式中使用构造函数来创建对象；例如，`new Date(2009, 11)` 创建一个新的 Date 对象。不使用 <b>new</b> 调用构造函数时，其结果取决于该构造函数。例如，`Date()` 生成当前日期和时间的字符串表示，而不是对象。</p>
       <p>通过构造函数创建的每个对象都具有一个指向其构造函数的 *"prototype"* 属性值的隐式引用（称为该对象的<em>原型</em>）。此外，原型还可以具有一个指向其自身原型的非 *null* 隐式引用，依此类推；这称为<em>原型链</em>。当引用对象中的某个属性时，该引用指向原型链中第一个包含该名称属性的对象上的同名属性。换言之，首先检查直接指定的对象是否具有该属性；如果该对象包含指定名称的属性，该引用就指向这个属性；如果该对象不包含指定名称的属性，则接着检查该对象的原型；依此类推。</p>
-      <emu-figure id="figure-1" caption="对象与原型的关系">
-        <img alt="由许多方框和箭头组成的图像。" height="354" src="img/figure-1.svg" width="719">
-      </emu-figure>
       <p>在基于类的面向对象语言中，通常由实例承载状态，由类承载方法，继承仅涉及结构和行为。在 ECMAScript 中，状态和方法都由对象承载，而结构、行为和状态都会被继承。</p>
-      <p>如果对象自身不直接包含其原型所包含的某个特定属性，则所有这样的对象都会共享该属性及其值。图 1 对此进行了说明：</p>
+      <p>如果对象自身不直接包含其原型所包含的某个特定属性，则所有这样的对象都会共享该属性及其值。<emu-xref href="#figure-object-prototype-relationships"></emu-xref> 对此进行了说明：</p>
+      <emu-figure id="figure-object-prototype-relationships" caption="对象与原型的关系" oldids="figure-1">
+        <img alt="构造函数、由其创建的多个对象实例，以及构造函数与其实例之间的原型对象所涉及的隐式和显式关系" height="354" src="img/figure-1.svg" width="719">
+      </emu-figure>
       <p><b>CF</b> 是一个构造函数（也是一个对象）。使用 `new` 表达式创建了五个对象：<b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b> 和 <b>cf<sub>5</sub></b>。这些对象各自包含名为 *"q1"* 和 *"q2"* 的属性。虚线表示隐式原型关系；因此，例如，<b>cf<sub>3</sub></b> 的原型是 <b>CF<sub>p</sub></b>。构造函数 <b>CF</b> 自身具有两个属性，分别名为 *"P1"* 和 *"P2"*，它们对 <b>CF<sub>p</sub></b>、<b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b> 或 <b>cf<sub>5</sub></b> 不可见。<b>CF<sub>p</sub></b> 中名为 *"CFP1"* 的属性由 <b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b> 和 <b>cf<sub>5</sub></b> 共享（但不由 <b>CF</b> 共享），<b>CF<sub>p</sub></b> 的隐式原型链中所有名称不是 *"q1"*、*"q2"* 或 *"CFP1"* 的属性也是如此。注意，<b>CF</b> 与 <b>CF<sub>p</sub></b> 之间不存在隐式原型链接。</p>
       <p>与大多数基于类的对象语言不同，可以通过赋值动态地向对象添加属性。也就是说，构造函数不必为所构造对象的所有或任何属性命名或赋值。在上图中，可以通过为 <b>CF<sub>p</sub></b> 中的属性赋予一个新值，为 <b>cf<sub>1</sub></b>、<b>cf<sub>2</sub></b>、<b>cf<sub>3</sub></b>、<b>cf<sub>4</sub></b> 和 <b>cf<sub>5</sub></b> 添加一个新的共享属性。</p>
       <p>尽管 ECMAScript 对象本质上并不基于类，但基于构造函数、原型对象和方法的共同模式来定义类似类的抽象通常很方便。ECMAScript 内置对象本身也遵循这种类似类的模式。从 ECMAScript 2015 开始，ECMAScript 语言包含了类定义语法，允许程序员简洁地定义符合与内置对象相同的类式抽象模式的对象。</p>
@@ -336,278 +336,6 @@
       <p>ECMAScript 语言认识到，某些语言使用者可能希望限制自己对语言中某些可用特性的使用。他们可能出于安全考虑，为了避免他们认为容易出错的特性，为了获得增强的错误检查，或出于自行选择的其他原因而这样做。为支持这种需求，ECMAScript 定义了该语言的严格变体。该语言的严格变体排除了常规 ECMAScript 语言中的某些特定语法和语义特性，并修改了某些特性的详细语义。严格变体还规定了额外的错误条件，要求在该语言的非严格形式未规定为错误的情况下，通过抛出错误异常进行报告。</p>
       <p>ECMAScript 的严格变体通常称为该语言的<em>严格模式</em>。如 <emu-xref href="#sec-strict-mode-code"></emu-xref> 所述，严格模式的选择以及 ECMAScript 严格模式语法和语义的使用，是在单个 ECMAScript 源文本单元级别显式确定的。由于严格模式是在语法源文本单元级别选择的，因此严格模式仅施加在该源文本单元内部局部生效的限制。严格模式不会限制或修改 ECMAScript 语义中必须在多个源文本单元之间一致运作的任何方面。完整的 ECMAScript 程序可以同时由严格模式和非严格模式的 ECMAScript 源文本单元组成。在这种情况下，严格模式仅在实际执行严格模式源文本单元中定义的代码时适用。</p>
       <p>为符合本规范，ECMAScript 实现必须同时实现本规范所定义的完整、不受限制的 ECMAScript 语言及其严格变体。此外，实现必须支持将不受限制的源文本单元和严格模式源文本单元组合为单个复合程序。</p>
-    </emu-clause>
-  </emu-clause>
-
-  <emu-clause id="sec-terms-and-definitions">
-    <h1>术语和定义</h1>
-    <p>以下术语和定义适用于本文档。</p>
-
-    <emu-clause id="sec-terms-and-definitions-implementation-approximated">
-      <h1>实现近似</h1>
-      <p>实现近似的功能由外部来源全部或部分定义，但本规范为其建议了一种理想行为</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-implementation-defined">
-      <h1>实现定义</h1>
-      <p>实现定义的功能由本规范之外的来源全部或部分定义</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-host-defined">
-      <h1>宿主定义</h1>
-      <p>与实现定义相同</p>
-      <emu-note>
-        <p>有关编辑表述上的区分，请参见 <emu-xref href="#sec-hosts-and-implementations"></emu-xref> 节。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-type">
-      <h1>类型</h1>
-      <p><emu-xref href="#sec-ecmascript-data-types-and-values"></emu-xref> 节所定义的数据值的集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-primitive-value">
-      <h1>原始值</h1>
-      <p><emu-xref href="#sec-ecmascript-data-types-and-values"></emu-xref> 节所定义的 Undefined、Null、Boolean、Number、BigInt、Symbol 或 String 类型之一的成员</p>
-      <emu-note>
-        <p>原始值是在语言实现的最底层直接表示的数据项。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-object">
-      <h1>对象</h1>
-      <p>Object 类型的成员</p>
-      <emu-note>
-        <p>对象是属性的集合，并具有单个原型对象。原型可以是 *null*。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-constructor">
-      <h1>构造函数</h1>
-      <p>创建并初始化对象的函数对象</p>
-      <emu-note>
-        <p>构造函数的 *"prototype"* 属性值是一个原型对象，用于实现继承和共享属性。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-prototype">
-      <h1>原型</h1>
-      <p>为其他对象提供共享属性的对象</p>
-      <emu-note>
-        <p>当构造函数创建对象时，该对象会隐式引用构造函数的 *"prototype"* 属性，以便解析属性引用。程序表达式 <code><var>constructor</var>.prototype</code> 可以引用构造函数的 *"prototype"* 属性，而添加到对象原型上的属性会通过继承由所有共享该原型的对象共享。或者，可以使用内置函数 `Object.create` 创建一个具有显式指定原型的新对象。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-ordinary-object">
-      <h1>普通对象</h1>
-      <p>对于所有对象都必须支持的基本内部方法具有默认行为的对象</p>
-    </emu-clause>
-
-    <emu-clause id="sec-exotic-object">
-      <h1>异质对象</h1>
-      <p>对于一个或多个基本内部方法不具有默认行为的对象</p>
-      <emu-note>
-        <p>任何不是普通对象的对象都是异质对象。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-standard-object">
-      <h1>标准对象</h1>
-      <p>其语义由本规范定义的对象</p>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-object">
-      <h1>内置对象</h1>
-      <p>由 ECMAScript 实现规定并提供的对象</p>
-      <emu-note>
-        <p>标准内置对象由本规范定义。ECMAScript 实现可以规定并提供其他种类的内置对象。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-undefined-value">
-      <h1>undefined 值</h1>
-      <p>变量尚未被赋值时使用的原始值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-undefined-type">
-      <h1>Undefined 类型</h1>
-      <p>唯一值为 *undefined* 值的类型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-null-value">
-      <h1>null 值</h1>
-      <p>表示有意不存在任何对象值的原始值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-null-type">
-      <h1>Null 类型</h1>
-      <p>唯一值为 *null* 值的类型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-boolean-value">
-      <h1>Boolean 值</h1>
-      <p>Boolean 类型的成员</p>
-      <emu-note>
-        <p>Boolean 值只有两个：*true* 和 *false*。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-boolean-type">
-      <h1>Boolean 类型</h1>
-      <p>由原始值 *true* 和 *false* 组成的类型</p>
-    </emu-clause>
-
-    <emu-clause id="sec-boolean-object">
-      <h1>Boolean 对象</h1>
-      <p>Object 类型的成员，是标准内置 Boolean 构造函数的实例</p>
-      <emu-note>
-        <p>Boolean 对象通过在 `new` 表达式中使用 Boolean 构造函数并提供一个 Boolean 值作为参数来创建。生成的对象具有一个内部槽，其值为该 Boolean 值。Boolean 对象可以被强制转换为 Boolean 值。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-string-value">
-      <h1>String 值</h1>
-      <p>由零个或多个 16 位无符号整数值组成的有限有序序列形式的原始值</p>
-      <emu-note>
-        <p>String 值是 String 类型的成员。序列中的每个整数值通常表示 UTF-16 文本的单个 16 位单元。然而，除了要求这些值必须是 16 位无符号整数之外，ECMAScript 不对它们施加任何限制或要求。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-string-type">
-      <h1>String 类型</h1>
-      <p>所有可能的 String 值的集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-string-object">
-      <h1>String 对象</h1>
-      <p>Object 类型的成员，是标准内置 String 构造函数的实例</p>
-      <emu-note>
-        <p>String 对象通过在 `new` 表达式中使用 String 构造函数并提供一个 String 值作为参数来创建。生成的对象具有一个内部槽，其值为该 String 值。通过将 String 构造函数作为函数调用，可以将 String 对象强制转换为 String 值（<emu-xref href="#sec-string-constructor-string-value"></emu-xref>）。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-number-value">
-      <h1>Number 值</h1>
-      <p>对应于 IEEE 754-2019 双精度 64 位二进制格式值的原始值</p>
-      <emu-note>
-        <p>Number 值是 Number 类型的成员，是数值的直接表示。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-number-type">
-      <h1>Number 类型</h1>
-      <p>所有可能的 Number 值的集合，包括 *NaN*（“非数值”）、*+∞*<sub>𝔽</sub>（正无穷）和 *-∞*<sub>𝔽</sub>（负无穷）</p>
-    </emu-clause>
-
-    <emu-clause id="sec-number-object">
-      <h1>Number 对象</h1>
-      <p>Object 类型的成员，是标准内置 Number 构造函数的实例</p>
-      <emu-note>
-        <p>Number 对象通过在 `new` 表达式中使用 Number 构造函数并提供一个 Number 值作为参数来创建。生成的对象具有一个内部槽，其值为该 Number 值。通过将 Number 构造函数作为函数调用，可以将 Number 对象强制转换为 Number 值（<emu-xref href="#sec-number-constructor-number-value"></emu-xref>）。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-infinity">
-      <h1>Infinity</h1>
-      <p>表示正无穷的 Number 值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-nan">
-      <h1>NaN</h1>
-      <p>表示 IEEE 754-2019 NaN（“非数值”）值的 Number 值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-bigint-value">
-      <h1>BigInt 值</h1>
-      <p>对应于任意精度整数值的原始值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-bigint-type">
-      <h1>BigInt 类型</h1>
-      <p>所有可能的 BigInt 值的集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-bigint-object">
-      <h1>BigInt 对象</h1>
-      <p>Object 类型的成员，是标准内置 BigInt 构造函数的实例</p>
-    </emu-clause>
-
-    <emu-clause id="sec-symbol-value">
-      <h1>Symbol 值</h1>
-      <p>表示唯一的非 String 对象属性键的原始值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-symbol-type">
-      <h1>Symbol 类型</h1>
-      <p>所有可能的 Symbol 值的集合</p>
-    </emu-clause>
-
-    <emu-clause id="sec-symbol-object">
-      <h1>Symbol 对象</h1>
-      <p>Object 类型的成员，是标准内置 Symbol 构造函数的实例</p>
-    </emu-clause>
-
-    <emu-clause id="sec-terms-and-definitions-function">
-      <h1>函数</h1>
-      <p>可以作为子例程调用的 Object 类型成员</p>
-      <emu-note>
-        <p>除属性外，函数还包含可执行代码和状态，它们决定函数被调用时的行为。函数的代码可以用 ECMAScript 编写，也可以不用 ECMAScript 编写。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-function">
-      <h1>内置函数</h1>
-      <p>属于函数的内置对象</p>
-      <emu-note>
-        <p>内置函数的示例包括 `parseInt` 和 `Math.exp`。宿主或实现可以提供本规范未描述的其他内置函数。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-constructor">
-      <h1>内置构造函数</h1>
-      <p>属于构造函数的内置函数</p>
-      <emu-note>
-        <p>内置构造函数的示例包括 `Object` 和 `Function`。宿主或实现可以提供本规范未描述的其他内置构造函数。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-property">
-      <h1>属性</h1>
-      <p>对象中将键（String 值或 Symbol 值）与值关联起来的部分</p>
-      <emu-note>
-        <p>根据属性的形式，值可以直接表示为数据值（原始值、对象或函数对象），也可以通过一对访问器函数间接表示。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-method">
-      <h1>方法</h1>
-      <p>作为属性值的函数</p>
-      <emu-note>
-        <p>当函数作为对象的方法被调用时，该对象会作为函数的 *this* 值传递给函数。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-built-in-method">
-      <h1>内置方法</h1>
-      <p>属于内置函数的方法</p>
-      <emu-note>
-        <p>标准内置方法由本规范定义。宿主或实现可以提供本规范未描述的其他内置方法。</p>
-      </emu-note>
-    </emu-clause>
-
-    <emu-clause id="sec-attribute">
-      <h1>特性</h1>
-      <p>定义属性某项特征的内部值</p>
-    </emu-clause>
-
-    <emu-clause id="sec-own-property">
-      <h1>自有属性</h1>
-      <p>由其所属对象直接包含的属性</p>
-    </emu-clause>
-
-    <emu-clause id="sec-inherited-property">
-      <h1>继承属性</h1>
-      <p>对象的非自有属性，而是该对象原型的属性（自有或继承）</p>
     </emu-clause>
   </emu-clause>
 
@@ -1208,30 +936,30 @@
   </emu-clause>
 </emu-clause>
 
-<emu-clause id="sec-ecmascript-data-types-and-values">
+<emu-clause id="sec-ecmascript-data-types-and-values" oldids="sec-type">
   <h1>ECMAScript 数据类型和值</h1>
   <p>本规范中的算法操作各种值，每个值都有一个关联的类型。可能的值类型恰好就是本条款中定义的那些类型。类型进一步分为 ECMAScript 语言类型和规范类型。</p>
 
   <emu-clause id="sec-ecmascript-language-types">
     <h1>ECMAScript 语言类型</h1>
-    <p><dfn variants="ECMAScript language types">ECMAScript 语言类型</dfn>对应于 ECMAScript 程序员使用 ECMAScript 语言直接操作的值。ECMAScript 语言类型包括 Undefined、Null、Boolean、String、Symbol、Number、BigInt 和 Object。<dfn variants="ECMAScript language values">ECMAScript 语言值</dfn>是由 ECMAScript 语言类型表征的值。</p>
+    <p><dfn variants="ECMAScript language types">ECMAScript 语言类型</dfn>对应于 ECMAScript 程序员使用 ECMAScript 语言直接操作的值。ECMAScript 语言类型包括 Undefined、Null、Boolean、String、Symbol、Number、BigInt 和 Object。<dfn variants="ECMAScript language values">ECMAScript 语言值</dfn>是由 ECMAScript 语言类型表征的值。不是 Object 的 ECMAScript 语言值称为<dfn id="primitive-value" oldids="sec-primitive-value" variants="primitive values">原始值</dfn>。</p>
 
-    <emu-clause id="sec-ecmascript-language-types-undefined-type">
+    <emu-clause id="sec-ecmascript-language-types-undefined-type" oldids="sec-undefined-value,sec-terms-and-definitions-undefined-type">
       <h1>Undefined 类型</h1>
       <p>Undefined 类型恰好有一个值，称为 *undefined*。任何尚未赋值的变量都具有值 *undefined*。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-null-type">
+    <emu-clause id="sec-ecmascript-language-types-null-type" oldids="sec-terms-and-definitions-null-type,sec-null-value">
       <h1>Null 类型</h1>
-      <p>Null 类型恰好有一个值，称为 *null*。</p>
+      <p>Null 类型只有一个值，称为 *null*，表示有意不存在任何对象值。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-boolean-type">
+    <emu-clause id="sec-ecmascript-language-types-boolean-type" oldids="sec-terms-and-definitions-boolean-value,sec-terms-and-definitions-boolean-type">
       <h1>Boolean 类型</h1>
       <p><dfn variants="is a Boolean,is not a Boolean">Boolean 类型</dfn>表示具有两个值的逻辑实体，这两个值称为 *true* 和 *false*。</p>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-string-type">
+    <emu-clause id="sec-ecmascript-language-types-string-type" oldids="sec-terms-and-definitions-string-value,sec-terms-and-definitions-string-type">
       <h1>String 类型</h1>
       <p><dfn variants="is a String,is not a String">String 类型</dfn>是由零个或多个 16 位无符号整数值（“元素”）组成的所有有序序列的集合，最大长度为 2<sup>53</sup> - 1 个元素。String 类型通常用于表示正在运行的 ECMAScript 程序中的文本数据，在这种情况下，String 中的每个元素都被视为一个 UTF-16 码元值。每个元素都被视为占据序列中的一个位置。这些位置使用非负整数进行索引。第一个元素（如果有）位于索引 0，下一个元素（如果有）位于索引 1，依此类推。String 的长度是其中元素（即 16 位值）的数量。空 String 的长度为零，因此不包含任何元素。</p>
       <p>不解释 String 内容的 ECMAScript 操作不会施加进一步的语义。解释 String 值的操作会将每个元素视为单个 UTF-16 码元。然而，ECMAScript 不限制这些码元的值或它们之间的关系，因此，进一步将 String 内容解释为以 UTF-16 编码的 Unicode 码点序列的操作必须考虑格式错误的子序列。此类操作会按照以下规则，对数值处于从 0xD800 到 0xDBFF 的闭区间中的每个码元（Unicode 标准将其定义为<dfn id="leading-surrogate" variants="leading surrogates">前导代理项</dfn>，或更正式地称为<dfn id="high-surrogate-code-unit" variants="high-surrogate code units">高代理码元</dfn>）以及数值处于从 0xDC00 到 0xDFFF 的闭区间中的每个码元（定义为<dfn id="trailing-surrogate" variants="trailing surrogates">尾随代理项</dfn>，或更正式地称为<dfn id="low-surrogate-code-unit" variants="low-surrogate code units">低代理码元</dfn>）进行特殊处理：</p>
@@ -1310,7 +1038,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-ecmascript-language-types-symbol-type">
+    <emu-clause id="sec-ecmascript-language-types-symbol-type" oldids="sec-symbol-value,sec-terms-and-definitions-symbol-type">
       <h1>Symbol 类型</h1>
       <p><dfn variants="is a Symbol,is not a Symbol">Symbol 类型</dfn>是所有可用作 Object 属性键的非 String 值的集合（<emu-xref href="#sec-object-type"></emu-xref>）。</p>
       <p>每个 Symbol 都是唯一且不可变的。</p>
@@ -1964,9 +1692,9 @@
         <p>ECMAScript 第一版及后续版本曾为某些运算符提供可能损失精度或发生截断的隐式数值转换。为了向后兼容，这些遗留隐式转换仍然保留，但没有为 BigInt 提供，以尽量减少程序员出错的机会，并为未来版本引入通用<em>值类型</em>保留可能性。</p>
       </emu-note>
 
-      <emu-clause id="sec-ecmascript-language-types-number-type">
+      <emu-clause id="sec-ecmascript-language-types-number-type" oldids="sec-terms-and-definitions-number-value,sec-terms-and-definitions-number-type">
         <h1>Number 类型</h1>
-        <p><dfn variants="is a Number,is not a Number">Number 类型</dfn>恰好有 18,437,736,874,454,810,627 个（即 <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn>）值，表示 IEEE 浮点算术标准中规定的双精度浮点 IEEE 754-2019 binary64 值，但 IEEE 标准中 9,007,199,254,740,990 个（即 <emu-eqn>2<sup>53</sup> - 2</emu-eqn>）不同的 NaN 值在 ECMAScript 中表示为单个特殊的 *NaN* 值。（请注意，*NaN* 值由程序表达式 `NaN` 产生。）在某些实现中，外部代码或许能够检测出不同 NaN 值之间的差异，但这种行为是实现定义的；对于 ECMAScript 代码而言，所有 *NaN* 值彼此无法区分。</p>
+        <p><dfn variants="is a Number,is not a Number">Number 类型</dfn>恰好有 18,437,736,874,454,810,627 个（即 <emu-eqn>2<sup>64</sup> - 2<sup>53</sup> + 3</emu-eqn>）值，表示 IEEE 浮点算术标准中规定的双精度浮点 IEEE 754-2019 binary64 值，但 IEEE 标准中 9,007,199,254,740,990 个（即 <emu-eqn>2<sup>53</sup> - 2</emu-eqn>）不同的 NaN 值在 ECMAScript 中表示为单个特殊的 *NaN*（“非数”）值。请注意，*NaN* 值由程序表达式 `NaN` 产生。在某些实现中，外部代码或许能够检测出不同 NaN 值之间的差异，但这种行为是实现定义的；对于 ECMAScript 代码而言，所有 *NaN* 值彼此无法区分。</p>
         <emu-note>
           <p>将一个 Number 值存储到 ArrayBuffer（参见 <emu-xref href="#sec-arraybuffer-objects"></emu-xref>）或 SharedArrayBuffer（参见 <emu-xref href="#sec-sharedarraybuffer-objects"></emu-xref>）后可能观察到的位模式，不一定与 ECMAScript 实现所使用的该 Number 值的内部表示相同。</p>
         </emu-note>
@@ -2490,7 +2218,7 @@
         </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-ecmascript-language-types-bigint-type">
+      <emu-clause id="sec-ecmascript-language-types-bigint-type" oldids="sec-terms-and-definitions-bigint-value,sec-terms-and-definitions-bigint-type">
         <h1>BigInt 类型</h1>
         <p><dfn variants="is a BigInt,is not a BigInt">BigInt 类型</dfn>表示整数值。该值可以具有任意大小，不受特定位宽限制。一般而言，除非另有说明，各项操作都被设计为返回数学上精确的结果。对于二元操作，BigInt 的行为类似二进制补码字符串，负数被视为其左侧无限多个位均已置位。</p>
 
@@ -2796,7 +2524,7 @@
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-object-type">
+    <emu-clause id="sec-object-type" oldids="sec-terms-and-definitions-object,sec-property">
       <h1>Object 类型</h1>
       <p><dfn variants="is an Object,is not an Object">Object 类型</dfn>的每个实例（也简称为“Object”）都表示属性的集合。每个属性要么是数据属性，要么是访问器属性：</p>
       <ul>
@@ -2812,13 +2540,19 @@
       <emu-note>
         <p>每个非负安全整数都有一个对应的整数索引。除了 <emu-eqn>2<sup>32</sup> - 1</emu-eqn> 之外，每个 32 位无符号整数都有一个对应的数组索引。*"-0"* 既不是整数索引，也不是数组索引。</p>
       </emu-note>
-      <p>属性键用于访问属性及其值。属性访问有两种：<em>get</em> 和 <em>set</em>，分别对应于值检索和赋值。可通过 get 和 set 访问的属性既包括作为对象直接组成部分的<em>自有属性</em>，也包括通过属性继承关系由另一个关联对象提供的<em>继承属性</em>。继承属性可以是该关联对象的自有属性或继承属性。对象的每个自有属性都必须具有与该对象其他自有属性的键值不同的键值。</p>
+      <p>属性键用于访问属性及其值。属性有两种访问方式：<em>get</em> 和 <em>set</em>，分别对应值的获取和赋值。</p>
+      <p><dfn id="own-property" oldids="sec-own-property" variants="own properties">自有属性</dfn>是直接包含在对象中的属性。对象的每个自有属性都必须具有与该对象其他自有属性的键不同的键。</p>
+      <p>对象的<dfn id="prototype" oldids="sec-terms-and-definitions-prototype" variants="prototypes">原型</dfn>要么是为其提供共享属性的对象，要么是 *null*，表示不存在这样的对象。对象的<dfn id="inherited-property" oldids="sec-inherited-property" variants="inherited properties">继承属性</dfn>不是其自有属性，而是其原型的自有属性或继承属性。通过 get 和 set 访问可访问的属性包括自有属性和继承属性。</p>
+      <emu-note>
+        <p>许多构造函数使用其 *"prototype"* 属性作为新建对象的原型。添加到对象原型的属性会通过继承由共享该原型的所有对象共享。也可以使用 `Object.create` 内置函数（<emu-xref href="#sec-object.create"></emu-xref>）创建具有显式指定原型的对象。</p>
+      </emu-note>
       <p>在逻辑上，所有对象都是属性的集合，但存在多种形式的对象，它们在访问和操作自身属性的语义上有所不同。有关多种对象形式的定义，请参见 <emu-xref href="#sec-object-internal-methods-and-internal-slots"></emu-xref>。</p>
-      <p>此外，某些对象是可调用的；它们称为函数或函数对象，并将在下文进一步描述。ECMAScript 中的所有函数都是 Object 类型的成员。</p>
+      <p>此外，某些对象是可调用的；它们称为函数或函数对象，并将在下文进一步描述。ECMAScript 中的所有函数都是 Object 类型的成员。除属性外，函数还包含决定其调用行为的可执行代码和状态。函数的代码可以用 ECMAScript 编写，也可以不用 ECMAScript 编写。</p>
+      <p>作为属性值的函数称为<dfn id="method" oldids="sec-method" variants="methods">方法</dfn>。对于 <code><var>object</var>.<var>method</var>()</code> 这样的调用，对象会作为 *this* 值传递给函数（参见 <emu-xref href="#sec-evaluatecall"></emu-xref>）。</p>
 
       <emu-clause id="sec-property-attributes">
         <h1>属性特性</h1>
-        <p>本规范使用特性来定义和说明 Object 属性的状态，如 <emu-xref href="#table-object-property-attributes"></emu-xref> 所述。除非明确规定，否则每个特性的初始值都是其默认值。</p>
+        <p>Object 属性的状态由一组<dfn id="attribute" oldids="sec-attribute" variants="attribute">特性</dfn>描述，即定义其特征的内部值，如 <emu-xref href="#table-object-property-attributes"></emu-xref> 所示。除非明确指定，否则每个特性的初始值为其默认值。</p>
         <emu-table id="table-object-property-attributes" caption="Object 属性的特性" oldids="table-2,table-3,table-4,table-data-property-attributes,table-accessor-property-attributes,table-default-attribute-values">
           <table>
             <thead>
@@ -2944,7 +2678,7 @@
         <p>所有对象都有一个名为 [[PrivateElements]] 的内部槽，它是 PrivateElements 的 List。此 List 表示对象的私有字段、方法和访问器的值。最初，它是空 List。</p>
         <p>本规范使用双重方括号 [[ ]] 括起来的名称来标识内部方法和内部槽。</p>
         <p><emu-xref href="#table-essential-internal-methods"></emu-xref> 汇总了本规范使用的、适用于由 ECMAScript 代码创建或操作的所有对象的<em>基本内部方法</em>。每个对象都必须为所有基本内部方法提供算法。不过，并非所有对象都必须为这些方法使用相同的算法。</p>
-        <p><dfn id="ordinary-object" variants="ordinary objects">普通对象</dfn>是满足以下所有条件的对象：</p>
+        <p><dfn id="ordinary-object" oldids="sec-ordinary-object" variants="ordinary objects">普通对象</dfn>是满足以下所有条件的对象：</p>
         <ul>
           <li>
             对于 <emu-xref href="#table-essential-internal-methods"></emu-xref> 中列出的内部方法，对象使用 <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> 中定义的方法。
@@ -2956,7 +2690,7 @@
             如果对象具有 [[Construct]] 内部方法，则使用 <emu-xref href="#sec-ecmascript-function-objects-construct-argumentslist-newtarget"></emu-xref> 中定义的方法或 <emu-xref href="#sec-built-in-function-objects-construct-argumentslist-newtarget"></emu-xref> 中定义的方法。
           </li>
         </ul>
-        <p><dfn id="exotic-object" variants="exotic objects">异质对象</dfn>是任何非普通对象的对象。</p>
+        <p><dfn id="exotic-object" oldids="sec-exotic-object" variants="exotic objects">异质对象</dfn>是任何非普通对象的对象。</p>
         <p>本规范根据对象的内部方法识别不同种类的异质对象。一个对象即使在行为上等同于某种特定的异质对象（例如 Array 异质对象或绑定函数异质对象），但如果它不具有为该种类规定的同一组内部方法，就不会被识别为该种类的异质对象。</p>
         <p><emu-xref href="#table-essential-internal-methods"></emu-xref> 和其他类似表格描述每个内部方法的调用模式。调用模式始终包含一个带括号的描述性参数名称列表。</p>
         <p>除了其参数之外，内部方法始终可以访问作为方法调用目标的对象。</p>
@@ -3120,7 +2854,7 @@
             </tr>
           </table>
         </emu-table>
-        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref> 汇总了可作为函数调用的对象所支持的其他基本内部方法。<dfn id="function-object" variants="function objects">函数对象</dfn>是支持 [[Call]] 内部方法的对象。<dfn id="constructor" variants="constructors">构造函数</dfn>是支持 [[Construct]] 内部方法的对象。每个支持 [[Construct]] 的对象都必须支持 [[Call]]；也就是说，每个构造函数都必须是函数对象。因此，构造函数也可以称为<em>构造函数函数</em>或<em>构造函数函数对象</em>。</p>
+        <p><emu-xref href="#table-additional-essential-internal-methods-of-function-objects"></emu-xref> 汇总了可作为函数调用的对象所支持的其他基本内部方法。<dfn id="function-object" oldids="sec-terms-and-definitions-function" variants="function objects,function,functions">函数对象</dfn>是支持 [[Call]] 内部方法的对象。<dfn id="constructor" oldids="sec-constructor" variants="constructors">构造函数</dfn>是支持 [[Construct]] 内部方法的对象。每个支持 [[Construct]] 的对象都必须支持 [[Call]]；也就是说，每个构造函数都必须是函数对象。因此，构造函数也可以称为<em>构造函数函数</em>或<em>构造函数函数对象</em>。</p>
         <emu-table id="table-additional-essential-internal-methods-of-function-objects" caption="函数对象的附加基本内部方法" oldids="table-6" type="internal methods" of="function objects">
           <table>
             <thead>
@@ -14728,7 +14462,7 @@
       <h1>String 异质对象</h1>
       <p>String 对象是一种封装 String 值并暴露与该 String 值的各个码元元素对应的虚拟整数索引数据属性的异质对象。String 异质对象始终具有名为 *"length"* 的数据属性，其值是所封装 String 值的长度。码元数据属性和 *"length"* 属性均不可写且不可配置。</p>
 
-      <p>如果一个对象的 [[GetOwnProperty]]、[[DefineOwnProperty]] 和 [[OwnPropertyKeys]] 内部方法使用以下实现，并且其其他基本内部方法使用 <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> 中的定义，则该对象是 <dfn id="string-exotic-object" variants="String exotic objects">String 异质对象</dfn>（或简称 String 对象）。这些方法在 StringCreate 中安装。</p>
+      <p>如果一个对象的 [[GetOwnProperty]]、[[DefineOwnProperty]] 和 [[OwnPropertyKeys]] 内部方法使用以下实现，并且其其他基本内部方法使用 <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> 中的定义，则该对象是 <dfn id="string-exotic-object" oldids="sec-string-object" variants="String exotic objects,String object,String objects">String 异质对象</dfn>（或简称 String 对象）。这些方法在 StringCreate 中安装。</p>
 
       <p>String 异质对象具有与普通对象相同的内部槽。它们还具有 [[StringData]] 内部槽。</p>
 
@@ -30296,9 +30030,13 @@
 
 <emu-clause id="sec-ecmascript-standard-built-in-objects">
   <h1>ECMAScript 标准内置对象</h1>
-  <p>每当 ECMAScript |Script| 或 |Module| 开始执行时，都有某些内置对象可用。其中一个是全局对象，它是正在执行程序的全局环境的一部分。其他对象可作为全局对象的初始属性直接访问，或者作为可访问内置对象的属性间接访问。</p>
+  <p><dfn id="built-in-object" oldids="sec-built-in-object" variants="built-in objects">内置对象</dfn>是由 ECMAScript 实现提供的对象。<dfn id="standard-object" oldids="sec-standard-object" variants="standard objects">标准对象</dfn>是其语义由本规范定义的对象。标准内置对象在本规范中定义；实现可以规定并提供其他种类的内置对象。</p>
+  <p>每当 ECMAScript |Script| 或 |Module| 开始执行时，都有某些标准内置对象可用。其中一个是全局对象，它是正在执行程序的全局环境的一部分。其他对象可作为全局对象的初始属性直接访问，或者作为可访问内置对象的属性间接访问。</p>
   <p>除非另有规定，可作为函数调用的内置对象都是具有 <emu-xref href="#sec-built-in-function-objects"></emu-xref> 中所述特征的内置函数对象。除非另有规定，内置对象的 [[Extensible]] 内部槽初始值为 *true*。每个内置函数对象都具有 [[Realm]] 内部槽，其值是最初创建该对象的 realm 的 Realm Record。</p>
-  <p>许多内置对象都是函数：可以使用参数调用它们。其中一些还是构造函数：它们是旨在与 `new` 运算符一起使用的函数。对于每个内置函数，本规范描述该函数所需的参数以及该函数对象的属性。对于每个内置构造函数，本规范还描述该构造函数的原型对象的属性，以及调用该构造函数的 `new` 表达式所返回的特定对象实例的属性。</p>
+  <p>属于函数的内置对象是<dfn id="built-in-function" oldids="sec-built-in-function" variants="built-in functions">内置函数</dfn>。属于构造函数的内置函数是<dfn id="built-in-constructor" oldids="sec-built-in-constructor" variants="built-in constructors">内置构造函数</dfn>。属于内置函数的方法是<dfn id="built-in-method" oldids="sec-built-in-method" variants="built-in methods">内置方法</dfn>。对于每个标准内置函数，本规范描述其所需的参数和该函数对象的属性。对于每个标准内置构造函数，本规范还描述其原型对象的属性，以及调用该构造函数的 `new` 表达式所返回的特定对象实例的属性。</p>
+  <emu-note>
+    <p>内置函数的示例包括 `parseInt` 和 `Math.exp`。内置构造函数的示例包括 `Object` 和 `Function`。宿主和实现可以提供本规范未描述的其他内置函数、构造函数和方法。</p>
+  </emu-note>
   <p>除非特定函数的描述中另有规定，如果为内置函数或构造函数提供的参数少于规定所需数量，则该函数或构造函数的行为应与为其提供了足够的额外参数完全相同，并且每个此类参数的值都是 *undefined*。这些缺失的参数被视为“不存在”，规范算法可以按这种方式识别它们。在特定函数的描述中，术语“*this* value”和“NewTarget”具有 <emu-xref href="#sec-built-in-function-objects"></emu-xref> 中给出的含义。</p>
   <p>除非特定函数的描述中另有规定，如果向所描述的内置函数或构造函数提供的参数多于规定允许的数量，则调用会对额外参数求值，然后函数会忽略它们。不过，实现可以定义与这些参数相关的实现特定行为，只要该行为不是仅仅因为存在额外参数而抛出 *TypeError* 异常。</p>
   <emu-note>
@@ -30342,13 +30080,13 @@
       <p>此属性具有特性 { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
     </emu-clause>
 
-    <emu-clause id="sec-value-properties-of-the-global-object-infinity">
+    <emu-clause id="sec-value-properties-of-the-global-object-infinity" oldids="sec-terms-and-definitions-infinity">
       <h1>Infinity</h1>
       <p>全局对象的 *"Infinity"* 属性的初始值是 *+∞*<sub>𝔽</sub>（参见 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>）。</p>
       <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
     </emu-clause>
 
-    <emu-clause id="sec-value-properties-of-the-global-object-nan">
+    <emu-clause id="sec-value-properties-of-the-global-object-nan" oldids="sec-terms-and-definitions-nan">
       <h1>NaN</h1>
       <p>全局对象的 *"NaN"* 属性的初始值是 *NaN*（参见 <emu-xref href="#sec-ecmascript-language-types-number-type"></emu-xref>）。</p>
       <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }。</p>
@@ -32123,7 +31861,10 @@
 
     <emu-clause id="sec-properties-of-boolean-instances">
       <h1>Boolean 实例的属性</h1>
-      <p>Boolean 实例是从 Boolean 原型对象继承属性的普通对象。Boolean 实例具有 [[BooleanData]] 内部槽。[[BooleanData]] 内部槽是此 Boolean 对象表示的 Boolean 值。</p>
+      <p><dfn id="boolean-object" oldids="sec-boolean-object" variants="Boolean objects">Boolean 对象</dfn>是具有 [[BooleanData]] 内部槽的 Object，该内部槽包含其表示的 Boolean 值。Boolean 实例是从 Boolean 原型对象继承属性的普通对象。</p>
+      <emu-note>
+        <p>可以在 `new` 表达式中使用 Boolean 构造函数并提供 Boolean 值作为参数来创建 Boolean 对象。通过调用 `Boolean.prototype.valueOf`（<emu-xref href="#sec-boolean.prototype.valueof"></emu-xref>），可以将 Boolean 对象转换为其表示的 Boolean 值。在需要 Boolean 值的上下文中，所有 Boolean 对象都会转换为 *true*。</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
@@ -32382,7 +32123,7 @@
 
     <emu-clause id="sec-properties-of-symbol-instances">
       <h1>Symbol 实例的属性</h1>
-      <p>Symbol 实例是从 Symbol 原型对象继承属性的普通对象。Symbol 实例具有 [[SymbolData]] 内部槽。[[SymbolData]] 内部槽是此 Symbol 对象表示的 Symbol 值。</p>
+      <p><dfn id="symbol-object" oldids="sec-symbol-object" variants="Symbol objects">Symbol 对象</dfn>是具有 [[SymbolData]] 内部槽的 Object，该内部槽包含其表示的 Symbol 值。Symbol 实例是从 Symbol 原型对象继承属性的普通对象。</p>
     </emu-clause>
 
     <emu-clause id="sec-abstract-operations-for-symbols">
@@ -33201,7 +32942,10 @@
 
     <emu-clause id="sec-properties-of-number-instances">
       <h1>Number 实例的属性</h1>
-      <p>Number 实例是从 Number 原型对象继承属性的普通对象。Number 实例还具有 [[NumberData]] 内部槽。[[NumberData]] 内部槽是此 Number 对象所表示的 Number 值。</p>
+      <p><dfn id="number-object" oldids="sec-number-object" variants="Number objects">Number 对象</dfn>是具有 [[NumberData]] 内部槽的 Object，该内部槽包含其表示的 Number 值。Number 实例是从 Number 原型对象继承属性的普通对象。</p>
+      <emu-note>
+        <p>可以在 `new` 表达式中使用 Number 构造函数并提供 Number 值作为参数来创建 Number 对象。通过将 Number 构造函数作为函数调用（<emu-xref href="#sec-number-constructor-number-value"></emu-xref>），可以将 Number 对象强制转换为 Number 值。</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 
@@ -33352,7 +33096,7 @@
 
     <emu-clause id="sec-properties-of-bigint-instances">
       <h1>BigInt 实例的属性</h1>
-      <p>BigInt 实例是从 BigInt 原型对象继承属性的普通对象。BigInt 实例还具有 [[BigIntData]] 内部槽。[[BigIntData]] 内部槽是此 BigInt 对象所表示的 BigInt 值。</p>
+      <p><dfn id="bigint-object" oldids="sec-bigint-object" variants="BigInt objects">BigInt 对象</dfn>是具有 [[BigIntData]] 内部槽的 Object，该内部槽包含其表示的 BigInt 值。BigInt 实例是从 BigInt 原型对象继承属性的普通对象。</p>
     </emu-clause>
   </emu-clause>
 
@@ -37107,6 +36851,9 @@ THH:mm:ss.sss
     <emu-clause id="sec-properties-of-string-instances">
       <h1>String 实例的属性</h1>
       <p>String 实例是 String 异质对象，并具有为此类对象规定的内部方法。String 实例从 String 原型对象继承属性。String 实例还具有 [[StringData]] 内部槽。[[StringData]] 内部槽是此 String 对象表示的 String 值。</p>
+      <emu-note>
+        <p>可以在 `new` 表达式中使用 String 构造函数并提供 String 值作为参数来创建 String 对象。通过将 String 构造函数作为函数调用（<emu-xref href="#sec-string-constructor-string-value"></emu-xref>），可以将 String 对象强制转换为 String 值。</p>
+      </emu-note>
       <p>String 实例具有 *"length"* 属性，以及一组名称为整数索引的可枚举属性。</p>
 
       <emu-clause id="sec-properties-of-string-instances-length">
@@ -50318,7 +50065,7 @@ THH:mm:ss.sss
           1. 令 _disposableStack_ 为 *this* value。
           1. 执行 ? RequireInternalSlot(_disposableStack_, [[DisposableState]])。
           1. 如果 _disposableStack_.[[DisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
-          1. 令 _newDisposableStack_ 为 ? OrdinaryCreateFromConstructor(%DisposableStack%, *"%DisposableStack.prototype%"*, « [[DisposableState]], [[DisposableResourceStack]] »)。
+          1. 令 _newDisposableStack_ 为 OrdinaryObjectCreate(%DisposableStack.prototype%, « [[DisposableState]], [[DisposableResourceStack]] »)。
           1. 将 _newDisposableStack_.[[DisposableState]] 设置为 ~pending~。
           1. 将 _newDisposableStack_.[[DisposableResourceStack]] 设置为 _disposableStack_.[[DisposableResourceStack]]。
           1. 将 _disposableStack_.[[DisposableResourceStack]] 设置为新的空 List。
@@ -50512,7 +50259,7 @@ THH:mm:ss.sss
           1. 令 _asyncDisposableStack_ 为 *this* value。
           1. 执行 ? RequireInternalSlot(_asyncDisposableStack_, [[AsyncDisposableState]])。
           1. 如果 _asyncDisposableStack_.[[AsyncDisposableState]] 是 ~disposed~，则抛出 *ReferenceError* 异常。
-          1. 令 _newAsyncDisposableStack_ 为 ? OrdinaryCreateFromConstructor(%AsyncDisposableStack%, *"%AsyncDisposableStack.prototype%"*, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)。
+          1. 令 _newAsyncDisposableStack_ 为 OrdinaryObjectCreate(%AsyncDisposableStack.prototype%, « [[AsyncDisposableState]], [[DisposableResourceStack]] »)。
           1. 将 _newAsyncDisposableStack_.[[AsyncDisposableState]] 设置为 ~pending~。
           1. 将 _newAsyncDisposableStack_.[[DisposableResourceStack]] 设置为 _asyncDisposableStack_.[[DisposableResourceStack]]。
           1. 将 _asyncDisposableStack_.[[DisposableResourceStack]] 设置为新的空 List。
@@ -51628,8 +51375,9 @@ THH:mm:ss.sss
   <emu-clause id="sec-generatorfunction-objects">
     <h1>GeneratorFunction 对象</h1>
     <p>GeneratorFunction 是通常通过对 |GeneratorDeclaration|、|GeneratorExpression| 和 |GeneratorMethod| 求值创建的函数。也可以通过调用 %GeneratorFunction% 固有对象来创建它们。</p>
-    <emu-figure id="figure-2" caption="Generator 对象关系" informative>
-      <img alt="数量惊人的各种方框和箭头。" height="700" src="img/figure-2.svg" width="900">
+    <p><emu-xref href="#figure-generator-relationships"></emu-xref> 描述了用于表示生成器函数的不同对象之间的关系：</p>
+    <emu-figure id="figure-generator-relationships" caption="Generator 对象关系" informative oldids="figure-2">
+      <img alt="生成器函数、由其创建的生成器实例、两者之间的原型对象，以及若干内置对象所涉及的隐式和显式关系" height="700" src="img/figure-2.svg" width="900">
     </emu-figure>
 
     <emu-clause id="sec-generatorfunction-constructor">
@@ -51679,7 +51427,7 @@ THH:mm:ss.sss
       <h1>GeneratorFunction 原型对象的属性</h1>
       <p><dfn>GeneratorFunction 原型对象</dfn>：</p>
       <ul>
-        <li>是 <dfn>%GeneratorFunction.prototype%</dfn>（参见 <emu-xref href="#figure-2"></emu-xref>）。</li>
+        <li>是 <dfn>%GeneratorFunction.prototype%</dfn>（参见 <emu-xref href="#figure-generator-relationships"></emu-xref>）。</li>
         <li>是普通对象。</li>
         <li>不是函数对象，并且不具有 [[ECMAScriptCode]] 内部槽，也不具有 <emu-xref href="#table-internal-slots-of-ecmascript-function-objects"></emu-xref> 或 <emu-xref href="#table-internal-slots-of-generator-instances"></emu-xref> 中列出的任何其他内部槽。</li>
         <li>具有 [[Prototype]] 内部槽，其值是 %Function.prototype%。</li>
