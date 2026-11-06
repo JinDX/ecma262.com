@@ -170,8 +170,8 @@
   <p>Focused development of the sixth edition started in 2009, as the fifth edition was being prepared for publication. However, this was preceded by significant experimentation and language enhancement design efforts dating to the publication of the third edition in 1999. In a very real sense, the completion of the sixth edition is the culmination of a fifteen year effort. The goals for this edition included providing better support for large applications, library creation, and for use of ECMAScript as a compilation target for other languages. Some of its major enhancements included modules, class declarations, lexical block scoping, iterators and generators, promises for asynchronous programming, destructuring patterns, and proper tail calls. The ECMAScript library of built-ins was expanded to support additional data abstractions including maps, sets, and arrays of binary numeric values as well as additional support for Unicode supplementary characters in strings and regular expressions. The built-ins were also made extensible via subclassing. The sixth edition provides the foundation for regular, incremental language and library enhancements. The sixth edition was adopted by the General Assembly of June 2015.</p>
   <p>ECMAScript 2016 was the first ECMAScript edition released under Ecma TC39's new yearly release cadence and open development process. A plain-text source document was built from the ECMAScript 2015 source document to serve as the base for further development entirely on GitHub. Over the year of this standard's development, hundreds of pull requests and issues were filed representing thousands of bug fixes, editorial fixes and other improvements. Additionally, numerous software tools were developed to aid in this effort including Ecmarkup, Ecmarkdown, and Grammarkdown. ES2016 also included support for a new exponentiation operator and adds a new method to `Array.prototype` called `includes`.</p>
   <p>ECMAScript 2017 introduced Async Functions, Shared Memory, and Atomics along with smaller language and library enhancements, bug fixes, and editorial updates. Async functions improve the asynchronous programming experience by providing syntax for promise-returning functions. Shared Memory and Atomics introduce a new memory model that allows multi-agent programs to communicate using atomic operations that ensure a well-defined execution order even on parallel CPUs. It also included new static methods on Object: `Object.values`, `Object.entries`, and `Object.getOwnPropertyDescriptors`.</p>
-  <p>ECMAScript 2018 introduced support for asynchronous iteration via the async iterator protocol and async generators. It also included four new regular expression features: the `dotAll` flag, named capture groups, Unicode property escapes, and look-behind assertions. Lastly it included object rest and spread properties.</p>
-  <p>ECMAScript 2019 introduced a few new built-in functions: `flat` and `flatMap` on `Array.prototype` for flattening arrays, `Object.fromEntries` for directly turning the return value of `Object.entries` into a new Object, and `trimStart` and `trimEnd` on `String.prototype` as better-named alternatives to the widely implemented but non-standard `String.prototype.trimLeft` and `trimRight` built-ins. In addition, it included a few minor updates to syntax and semantics. Updated syntax included optional catch binding parameters and allowing U+2028 (LINE SEPARATOR) and U+2029 (PARAGRAPH SEPARATOR) in string literals to align with JSON. Other updates included requiring that `Array.prototype.sort` be a stable sort, requiring that `JSON.stringify` return well-formed UTF-8 regardless of input, and clarifying `Function.prototype.toString` by requiring that it either return the corresponding original source text or a standard placeholder.</p>
+  <p>ECMAScript 2018 introduced support for asynchronous iteration via the async iterator protocol and async generators. It also included four new regular expression features: the `dotAll` flag, named capture groups, Unicode property escapes, and look-behind assertions. Lastly, it included object rest and spread properties, and `Promise.prototype.finally`.</p>
+  <p>ECMAScript 2019 introduced a few new built-in functions: `flat` and `flatMap` on `Array.prototype` for flattening arrays, `Object.fromEntries` for directly turning the return value of `Object.entries` into a new Object, `trimStart` and `trimEnd` on `String.prototype` as better-named alternatives to the widely implemented but non-standard `String.prototype.trimLeft` and `trimRight` built-ins, and `Symbol.prototype.description`. In addition, it included a few minor updates to syntax and semantics. Updated syntax included optional catch binding parameters and allowing U+2028 (LINE SEPARATOR) and U+2029 (PARAGRAPH SEPARATOR) in string literals to align with JSON. Other updates included requiring that `Array.prototype.sort` be a stable sort, requiring that `JSON.stringify` return well-formed UTF-8 regardless of input, and clarifying `Function.prototype.toString` by requiring that it either return the corresponding original source text or a standard placeholder.</p>
   <p>ECMAScript 2020, the 11<sup>th</sup> edition, introduced the `matchAll` method for Strings, to produce an iterator for all match objects generated by a global regular expression; `import()`, a syntax to asynchronously import Modules with a dynamic specifier; `BigInt`, a new number primitive for working with arbitrary precision integers; `Promise.allSettled`, a new Promise combinator that does not short-circuit; `globalThis`, a universal way to access the global `this` value; dedicated `export * as ns from 'module'` syntax for use within modules; increased standardization of `for-in` enumeration order; `import.meta`, a host-populated object available in Modules that may contain contextual information about the Module; as well as adding two new syntax features to improve working with “nullish” values (*undefined* or *null*): nullish coalescing, a value selection operator; and optional chaining, a property access and function invocation operator that short-circuits if the value to access/invoke is nullish.</p>
   <p>ECMAScript 2021, the 12<sup>th</sup> edition, introduced the `replaceAll` method for Strings; `Promise.any`, a Promise combinator that short-circuits when an input value is fulfilled; `AggregateError`, a new Error type to represent multiple errors at once; logical assignment operators (`??=`, `&&=`, `||=`); `WeakRef`, for referring to a target object without preserving it from garbage collection, and `FinalizationRegistry`, to manage registration and unregistration of cleanup operations performed when target objects are garbage collected; separators for numeric literals (`1_000`); and `Array.prototype.sort` was made more precise, reducing the amount of cases that result in an implementation-defined sort order.</p>
   <p>ECMAScript 2022, the 13<sup>th</sup> edition, introduced top-level `await`, allowing the keyword to be used at the top level of modules; new class elements: public and private instance fields, public and private static fields, private instance methods and accessors, and private static methods and accessors; static blocks inside classes, to perform per-class evaluation initialization; the `#x in obj` syntax, to test for presence of private fields on objects; regular expression match indices via the `/d` flag, which provides start and end indices for matched substrings; the `cause` property on `Error` objects, which can be used to record a causation chain in errors; the `at` method for Strings, Arrays, and TypedArrays, which allows relative indexing; and `Object.hasOwn`, a convenient alternative to `Object.prototype.hasOwnProperty`.</p>
@@ -9682,9 +9682,9 @@
     <h1>Miscellaneous</h1>
     <p>These operations are used in multiple places throughout the specification.</p>
 
-    <emu-clause id="sec-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiatefunctiondeclaration" oldids="sec-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateFunctionObject (
+        Runtime Semantics: InstantiateFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -9697,7 +9697,7 @@
           `function` `(` FormalParameters `)` `{` FunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. Return InstantiateOrdinaryFunctionObject of |FunctionDeclaration| with arguments _envRecord_ and _privateEnv_.
+        1. Return InstantiateOrdinaryFunctionDeclaration of |FunctionDeclaration| with arguments _envRecord_ and _privateEnv_.
       </emu-alg>
       <emu-grammar>
         GeneratorDeclaration :
@@ -9705,7 +9705,7 @@
           `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. Return InstantiateGeneratorFunctionObject of |GeneratorDeclaration| with arguments _envRecord_ and _privateEnv_.
+        1. Return InstantiateGeneratorDeclaration of |GeneratorDeclaration| with arguments _envRecord_ and _privateEnv_.
       </emu-alg>
       <emu-grammar>
         AsyncGeneratorDeclaration :
@@ -9713,7 +9713,7 @@
           `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. Return InstantiateAsyncGeneratorFunctionObject of |AsyncGeneratorDeclaration| with arguments _envRecord_ and _privateEnv_.
+        1. Return InstantiateAsyncGeneratorDeclaration of |AsyncGeneratorDeclaration| with arguments _envRecord_ and _privateEnv_.
       </emu-alg>
       <emu-grammar>
         AsyncFunctionDeclaration :
@@ -9721,7 +9721,7 @@
           `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. Return InstantiateAsyncFunctionObject of |AsyncFunctionDeclaration| with arguments _envRecord_ and _privateEnv_.
+        1. Return InstantiateAsyncFunctionDeclaration of |AsyncFunctionDeclaration| with arguments _envRecord_ and _privateEnv_.
       </emu-alg>
     </emu-clause>
 
@@ -11020,8 +11020,8 @@
       <emu-clause id="sec-global-environment-records" oldids="global-environment">
         <h1>Global Environment Records</h1>
         <p>A <dfn variants="Global Environment Records">Global Environment Record</dfn> is used to represent the outer most scope that is shared by all of the ECMAScript |Script| elements that are processed in a common realm. A Global Environment Record provides the bindings for built-in globals (clause <emu-xref href="#sec-global-object"></emu-xref>), properties of the global object, and for all top-level declarations (<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>, <emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>) that occur within a |Script|.</p>
-        <p>A Global Environment Record is logically a single record but it is specified as a composite encapsulating an Object Environment Record and a Declarative Environment Record. The Object Environment Record has as its base object the global object of the associated Realm Record. This global object is the value returned by the Global Environment Record's GetThisBinding concrete method. The Object Environment Record component of a Global Environment Record contains the bindings for all built-in globals (clause <emu-xref href="#sec-global-object"></emu-xref>) and all bindings introduced by a |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableStatement| contained in global code. The bindings for all other ECMAScript declarations in global code are contained in the Declarative Environment Record component of the Global Environment Record.</p>
-        <p>Properties may be created directly on a global object. Hence, the Object Environment Record component of a Global Environment Record may contain both bindings created explicitly by |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableDeclaration| declarations and bindings created implicitly as properties of the global object.</p>
+        <p>A Global Environment Record is a record encapsulating an Object Environment Record and a Declarative Environment Record. The Object Environment Record has as its base object the global object of the associated Realm Record. This global object is the value returned by the Global Environment Record's GetThisBinding concrete method. The [[ObjectRecord]] of a Global Environment Record contains the bindings for all built-in globals (clause <emu-xref href="#sec-global-object"></emu-xref>) and all bindings introduced by a |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableStatement| contained in global code. The bindings for all other ECMAScript declarations in global code are contained in the [[DeclarativeRecord]] of the Global Environment Record.</p>
+        <p>Properties may be created directly on a global object. Hence, the [[ObjectRecord]] of a Global Environment Record may contain both bindings created explicitly by |FunctionDeclaration|, |GeneratorDeclaration|, |AsyncFunctionDeclaration|, |AsyncGeneratorDeclaration|, or |VariableDeclaration| declarations and bindings created implicitly as properties of the global object.</p>
         <p>Global Environment Records have the additional fields listed in <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref>.</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="Additional Fields of Global Environment Records" oldids="table-18">
           <table>
@@ -14047,7 +14047,7 @@
         1. Let _privateEnv_ be the PrivateEnvironment of _calleeContext_.
         1. For each Parse Node _funcDecl_ of _funcsToInitialize_, do
           1. Let _funcName_ be the sole element of the BoundNames of _funcDecl_.
-          1. Let _funcObj_ be InstantiateFunctionObject of _funcDecl_ with arguments _lexicalEnv_ and _privateEnv_.
+          1. Let _funcObj_ be InstantiateFunctionDeclaration of _funcDecl_ with arguments _lexicalEnv_ and _privateEnv_.
           1. Perform ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*).
         1. Return ~unused~.
       </emu-alg>
@@ -21626,7 +21626,7 @@
                 1. Perform ! _envRecord_.CreateMutableBinding(_name_, *false*).
           1. If _decl_ is either a |FunctionDeclaration|, a |GeneratorDeclaration|, an |AsyncFunctionDeclaration|, or an |AsyncGeneratorDeclaration|, then
             1. Let _funcName_ be the sole element of the BoundNames of _decl_.
-            1. Let _funcObj_ be InstantiateFunctionObject of _decl_ with arguments _envRecord_ and _privateEnv_.
+            1. Let _funcObj_ be InstantiateFunctionDeclaration of _decl_ with arguments _envRecord_ and _privateEnv_.
             1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] If the host is a web browser or otherwise supports <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>, then
               1. If the binding for _funcName_ in _envRecord_ is an uninitialized binding, then
                 1. Perform ! _envRecord_.InitializeBinding(_funcName_, _funcObj_).
@@ -23948,9 +23948,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateordinaryfunctionobject" oldids="sec-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateordinaryfunctiondeclaration" oldids="sec-runtime-semantics-instantiateordinaryfunctionobject,sec-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateOrdinaryFunctionObject (
+        Runtime Semantics: InstantiateOrdinaryFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -24495,9 +24495,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiategeneratorfunctionobject" oldids="sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiategeneratordeclaration" oldids="sec-runtime-semantics-instantiategeneratorfunctionobject,sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateGeneratorFunctionObject (
+        Runtime Semantics: InstantiateGeneratorDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -24724,9 +24724,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateasyncgeneratorfunctionobject" oldids="sec-asyncgenerator-definitions-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateasyncgeneratordeclaration" oldids="sec-runtime-semantics-instantiateasyncgeneratorfunctionobject,sec-asyncgenerator-definitions-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateAsyncGeneratorFunctionObject (
+        Runtime Semantics: InstantiateAsyncGeneratorDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -25651,9 +25651,9 @@
       </ul>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateasyncfunctionobject" oldids="sec-async-function-definitions-InstantiateFunctionObject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateasyncfunctiondeclaration" oldids="sec-runtime-semantics-instantiateasyncfunctionobject,sec-async-function-definitions-InstantiateFunctionObject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateAsyncFunctionObject (
+        Runtime Semantics: InstantiateAsyncFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -26564,7 +26564,7 @@
               1. Perform ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_name_, *false*)</emu-meta>.
         1. For each Parse Node _funcDecl_ of _funcsToInitialize_, do
           1. Let _funcName_ be the sole element of the BoundNames of _funcDecl_.
-          1. Let _funcObj_ be InstantiateFunctionObject of _funcDecl_ with arguments _envRecord_ and _privateEnv_.
+          1. Let _funcObj_ be InstantiateFunctionDeclaration of _funcDecl_ with arguments _envRecord_ and _privateEnv_.
           1. Perform ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _funcName_, _funcObj_, *false*)</emu-meta>.
         1. For each String _variableName_ of _declaredVariableNames_, do
           1. Perform ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _variableName_, *false*)</emu-meta>.
@@ -28944,7 +28944,7 @@
                   1. Else,
                     1. Perform ! _envRecord_.CreateMutableBinding(_name_, *false*).
                   1. If _lexicalDecl_ is either a |FunctionDeclaration|, a |GeneratorDeclaration|, an |AsyncFunctionDeclaration|, or an |AsyncGeneratorDeclaration|, then
-                    1. Let _funcObj_ be InstantiateFunctionObject of _lexicalDecl_ with arguments _envRecord_ and _privateEnv_.
+                    1. Let _funcObj_ be InstantiateFunctionDeclaration of _lexicalDecl_ with arguments _envRecord_ and _privateEnv_.
                     1. Perform ! _envRecord_.InitializeBinding(_name_, _funcObj_).
               1. Remove _moduleContext_ from the execution context stack.
               1. Return ~unused~.
@@ -30337,7 +30337,7 @@
                 1. Perform ! _lexicalEnv_.CreateMutableBinding(_name_, *false*).
           1. For each Parse Node _funcDecl_ of _funcsToInitialize_, do
             1. Let _funcName_ be the sole element of the BoundNames of _funcDecl_.
-            1. Let _funcObj_ be InstantiateFunctionObject of _funcDecl_ with arguments _lexicalEnv_ and _privateEnv_.
+            1. Let _funcObj_ be InstantiateFunctionDeclaration of _funcDecl_ with arguments _lexicalEnv_ and _privateEnv_.
             1. If _variableEnv_ is a Global Environment Record, then
               1. Perform ? CreateGlobalFunctionBinding(_variableEnv_, _funcName_, _funcObj_, *true*).
             1. Else,

@@ -171,8 +171,8 @@
   <p>第六版的集中开发始于 2009 年，当时第五版正准备发布。然而，在此之前，自 1999 年第三版发布以来，已经进行了大量实验和语言增强设计工作。从切实的意义上说，第六版的完成是十五年努力的结晶。本版的目标包括为大型应用、库的创建，以及将 ECMAScript 用作其他语言的编译目标提供更好的支持。其主要增强包括模块、类声明、词法块作用域、迭代器和生成器、用于异步编程的 promise、解构模式，以及正确的尾调用。ECMAScript 内置库得到扩展，以支持更多数据抽象，包括映射、集合和二进制数值数组，并增强了对字符串和正则表达式中 Unicode 补充字符的支持。内置对象也可以通过子类化进行扩展。第六版为语言和库的定期增量增强奠定了基础。第六版于 2015 年 6 月获大会通过。</p>
   <p>ECMAScript 2016 是按照 Ecma TC39 新的年度发布节奏和开放开发流程发布的首个 ECMAScript 版本。基于 ECMAScript 2015 源文档构建了纯文本源文档，作为完全在 GitHub 上进行后续开发的基础。在本标准开发的一年中，提交了数百个拉取请求和议题，涵盖数千项错误修复、编辑性修正和其他改进。此外，还开发了许多软件工具来协助这项工作，包括 Ecmarkup、Ecmarkdown 和 Grammarkdown。ES2016 还支持了新的求幂运算符，并为 `Array.prototype` 添加了名为 `includes` 的新方法。</p>
   <p>ECMAScript 2017 引入了异步函数、共享内存和原子操作，同时包含较小的语言和库增强、错误修复以及编辑性更新。异步函数通过为返回 promise 的函数提供语法来改善异步编程体验。共享内存和原子操作引入了新的内存模型，使多代理程序能够使用原子操作进行通信，即使在并行 CPU 上也能确保明确定义的执行顺序。它还为 Object 添加了新的静态方法：`Object.values`、`Object.entries` 和 `Object.getOwnPropertyDescriptors`。</p>
-  <p>ECMAScript 2018 通过异步迭代器协议和异步生成器引入了对异步迭代的支持。它还包含四项新的正则表达式特性：`dotAll` 标志、具名捕获组、Unicode 属性转义和后行断言。最后，它还包含对象的剩余属性和展开属性。</p>
-  <p>ECMAScript 2019 引入了几个新的内置函数：`Array.prototype` 上用于展平数组的 `flat` 和 `flatMap`；用于将 `Object.entries` 的返回值直接转换为新 Object 的 `Object.fromEntries`；以及 `String.prototype` 上的 `trimStart` 和 `trimEnd`，作为已广泛实现但非标准的内置方法 `String.prototype.trimLeft` 和 `trimRight` 的命名更恰当的替代方法。此外，它还包含一些语法和语义方面的小幅更新。语法更新包括可选的 catch 绑定参数，以及允许在字符串字面量中使用 U+2028（行分隔符）和 U+2029（段落分隔符），以与 JSON 保持一致。其他更新包括要求 `Array.prototype.sort` 使用稳定排序，要求 `JSON.stringify` 无论输入如何都返回格式良好的 UTF-8，以及通过要求 `Function.prototype.toString` 返回相应的原始源文本或标准占位符来明确其行为。</p>
+  <p>ECMAScript 2018 通过异步迭代器协议和异步生成器引入了对异步迭代的支持。它还包含四项新的正则表达式特性：`dotAll` 标志、具名捕获组、Unicode 属性转义和后行断言。最后，它还包含对象的剩余属性和展开属性，以及 `Promise.prototype.finally`。</p>
+  <p>ECMAScript 2019 引入了几个新的内置函数：`Array.prototype` 上用于展平数组的 `flat` 和 `flatMap`；用于将 `Object.entries` 的返回值直接转换为新 Object 的 `Object.fromEntries`；`String.prototype` 上的 `trimStart` 和 `trimEnd`，作为已广泛实现但非标准的内置方法 `String.prototype.trimLeft` 和 `trimRight` 的命名更恰当的替代方法；以及 `Symbol.prototype.description`。此外，它还包含一些语法和语义方面的小幅更新。语法更新包括可选的 catch 绑定参数，以及允许在字符串字面量中使用 U+2028（行分隔符）和 U+2029（段落分隔符），以与 JSON 保持一致。其他更新包括要求 `Array.prototype.sort` 使用稳定排序，要求 `JSON.stringify` 无论输入如何都返回格式良好的 UTF-8，以及通过要求 `Function.prototype.toString` 返回相应的原始源文本或标准占位符来明确其行为。</p>
   <p>ECMAScript 2020，即第 11<sup>版</sup>，为 String 引入了 `matchAll` 方法，用于生成遍历全局正则表达式产生的所有匹配对象的迭代器；引入了 `import()`，这是一种使用动态说明符异步导入模块的语法；引入了 `BigInt`，这是一种用于处理任意精度整数的新数值原始类型；引入了 `Promise.allSettled`，这是一个不会短路的 Promise 组合方法；引入了 `globalThis`，这是一种访问全局 `this` 值的通用方式；引入了在模块内使用的专用语法 `export * as ns from 'module'`；进一步标准化了 `for-in` 的枚举顺序；引入了 `import.meta`，这是模块中可用的由宿主填充的对象，可以包含有关模块的上下文信息；并添加了两项新语法特性，以改进对“空值”（*undefined* 或 *null*）的处理：空值合并，这是一种值选择运算符；以及可选链，这是一种属性访问和函数调用运算符，当要访问或调用的值为空值时会短路。</p>
   <p>ECMAScript 2021，即第 12<sup>版</sup>，为 String 引入了 `replaceAll` 方法；引入了 `Promise.any`，这是一个在某个输入值兑现时短路的 Promise 组合方法；引入了 `AggregateError`，这是一种用于同时表示多个错误的新 Error 类型；引入了逻辑赋值运算符（`??=`、`&&=`、`||=`）；引入了 `WeakRef`，用于引用目标对象而不阻止其被垃圾回收，以及 `FinalizationRegistry`，用于管理在目标对象被垃圾回收时执行的清理操作的注册和注销；引入了数值字面量分隔符（`1_000`）；并进一步明确了 `Array.prototype.sort` 的行为，减少了导致实现定义排序顺序的情况。</p>
   <p>ECMAScript 2022，即第 13<sup>版</sup>，引入了顶层 `await`，允许在模块顶层使用该关键字；引入了新的类元素：公共和私有实例字段、公共和私有静态字段、私有实例方法和访问器，以及私有静态方法和访问器；引入了类内静态块，用于在每次类求值时执行初始化；引入了 `#x in obj` 语法，用于检查对象上是否存在私有字段；通过 `/d` 标志引入了正则表达式匹配索引，为匹配的子字符串提供起始和结束索引；为 `Error` 对象引入了 `cause` 属性，可用于记录错误的因果链；为 String、Array 和 TypedArray 引入了 `at` 方法，允许使用相对索引；并引入了 `Object.hasOwn`，作为 `Object.prototype.hasOwnProperty` 的便捷替代方法。</p>
@@ -9683,9 +9683,9 @@
     <h1>其他操作</h1>
     <p>这些操作在本规范中的多个位置使用。</p>
 
-    <emu-clause id="sec-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiatefunctiondeclaration" oldids="sec-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateFunctionObject (
+        Runtime Semantics: InstantiateFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -9698,7 +9698,7 @@
           `function` `(` FormalParameters `)` `{` FunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |FunctionDeclaration| 执行 InstantiateOrdinaryFunctionObject 的结果。
+        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |FunctionDeclaration| 执行 InstantiateOrdinaryFunctionDeclaration 的结果。
       </emu-alg>
       <emu-grammar>
         GeneratorDeclaration :
@@ -9706,7 +9706,7 @@
           `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |GeneratorDeclaration| 执行 InstantiateGeneratorFunctionObject 的结果。
+        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |GeneratorDeclaration| 执行 InstantiateGeneratorDeclaration 的结果。
       </emu-alg>
       <emu-grammar>
         AsyncGeneratorDeclaration :
@@ -9714,7 +9714,7 @@
           `async` `function` `*` `(` FormalParameters `)` `{` AsyncGeneratorBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |AsyncGeneratorDeclaration| 执行 InstantiateAsyncGeneratorFunctionObject 的结果。
+        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |AsyncGeneratorDeclaration| 执行 InstantiateAsyncGeneratorDeclaration 的结果。
       </emu-alg>
       <emu-grammar>
         AsyncFunctionDeclaration :
@@ -9722,7 +9722,7 @@
           `async` `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
       </emu-grammar>
       <emu-alg>
-        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |AsyncFunctionDeclaration| 执行 InstantiateAsyncFunctionObject 的结果。
+        1. 返回以 _envRecord_ 和 _privateEnv_ 为参数对 |AsyncFunctionDeclaration| 执行 InstantiateAsyncFunctionDeclaration 的结果。
       </emu-alg>
     </emu-clause>
 
@@ -11021,8 +11021,8 @@
       <emu-clause id="sec-global-environment-records" oldids="global-environment">
         <h1>Global Environment Record</h1>
         <p><dfn variants="Global Environment Records">Global Environment Record</dfn> 用于表示由在同一 Realm 中处理的所有 ECMAScript |Script| 元素共享的最外层作用域。Global Environment Record 为内置全局项（条款 <emu-xref href="#sec-global-object"></emu-xref>）、全局对象的属性，以及 |Script| 中出现的所有顶层声明（<emu-xref href="#sec-static-semantics-toplevellexicallyscopeddeclarations"></emu-xref>、<emu-xref href="#sec-static-semantics-toplevelvarscopeddeclarations"></emu-xref>）提供绑定。</p>
-        <p>Global Environment Record 在逻辑上是单一 Record，但规范将其定义为封装 Object Environment Record 和 Declarative Environment Record 的组合体。Object Environment Record 以关联 Realm Record 的全局对象作为其基对象。此全局对象就是 Global Environment Record 的 GetThisBinding 具体方法所返回的值。Global Environment Record 的 Object Environment Record 组成部分包含所有内置全局项（条款 <emu-xref href="#sec-global-object"></emu-xref>）的绑定，以及全局代码中包含的 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableStatement| 所引入的所有绑定。全局代码中所有其他 ECMAScript 声明的绑定都包含在 Global Environment Record 的 Declarative Environment Record 组成部分中。</p>
-        <p>可以直接在全局对象上创建属性。因此，Global Environment Record 的 Object Environment Record 组成部分可能同时包含由 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableDeclaration| 声明显式创建的绑定，以及作为全局对象属性隐式创建的绑定。</p>
+        <p>Global Environment Record 是封装 Object Environment Record 和 Declarative Environment Record 的 Record。Object Environment Record 以关联 Realm Record 的全局对象作为其基对象。此全局对象就是 Global Environment Record 的 GetThisBinding 具体方法所返回的值。Global Environment Record 的 [[ObjectRecord]]包含所有内置全局项（条款 <emu-xref href="#sec-global-object"></emu-xref>）的绑定，以及全局代码中包含的 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableStatement| 所引入的所有绑定。全局代码中所有其他 ECMAScript 声明的绑定都包含在 Global Environment Record 的 [[DeclarativeRecord]]中。</p>
+        <p>可以直接在全局对象上创建属性。因此，Global Environment Record 的 [[ObjectRecord]]可能同时包含由 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration|、|AsyncGeneratorDeclaration| 或 |VariableDeclaration| 声明显式创建的绑定，以及作为全局对象属性隐式创建的绑定。</p>
         <p>Global Environment Record 具有 <emu-xref href="#table-additional-fields-of-global-environment-records"></emu-xref> 中列出的附加字段。</p>
         <emu-table id="table-additional-fields-of-global-environment-records" caption="Global Environment Record 的附加字段" oldids="table-18">
           <table>
@@ -14048,7 +14048,7 @@
         1. 令 _privateEnv_ 为 _calleeContext_ 的 PrivateEnvironment。
         1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行
           1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
-          1. 令 _funcObj_ 为以 _lexicalEnv_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
+          1. 令 _funcObj_ 为以 _lexicalEnv_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionDeclaration 的结果。
           1. 执行 ! _variableEnv_.SetMutableBinding(_funcName_, _funcObj_, *false*)。
         1. 返回 ~unused~。
       </emu-alg>
@@ -21629,7 +21629,7 @@
                 1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
           1. 如果 _decl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一，则
             1. 令 _funcName_ 为 _decl_ 的 BoundNames 的唯一元素。
-            1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _decl_ 执行 InstantiateFunctionObject 的结果。
+            1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _decl_ 执行 InstantiateFunctionDeclaration 的结果。
             1. [id="step-blockdeclarationinstantiation-initializebinding", normative-optional] 如果宿主是 Web 浏览器或以其他方式支持 <emu-xref href="#sec-block-level-function-declarations-web-legacy-compatibility-semantics" title></emu-xref>，则
               1. 如果 _envRecord_ 中 _funcName_ 的绑定是尚未初始化的绑定，则
                 1. 执行 ! _envRecord_.InitializeBinding(_funcName_, _funcObj_)。
@@ -23951,9 +23951,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateordinaryfunctionobject" oldids="sec-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateordinaryfunctiondeclaration" oldids="sec-runtime-semantics-instantiateordinaryfunctionobject,sec-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateOrdinaryFunctionObject (
+        Runtime Semantics: InstantiateOrdinaryFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -24498,9 +24498,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiategeneratorfunctionobject" oldids="sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiategeneratordeclaration" oldids="sec-runtime-semantics-instantiategeneratorfunctionobject,sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateGeneratorFunctionObject (
+        Runtime Semantics: InstantiateGeneratorDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -24727,9 +24727,9 @@
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateasyncgeneratorfunctionobject" oldids="sec-asyncgenerator-definitions-instantiatefunctionobject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateasyncgeneratordeclaration" oldids="sec-runtime-semantics-instantiateasyncgeneratorfunctionobject,sec-asyncgenerator-definitions-instantiatefunctionobject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateAsyncGeneratorFunctionObject (
+        Runtime Semantics: InstantiateAsyncGeneratorDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -25655,9 +25655,9 @@
       </ul>
     </emu-clause>
 
-    <emu-clause id="sec-runtime-semantics-instantiateasyncfunctionobject" oldids="sec-async-function-definitions-InstantiateFunctionObject" type="sdo">
+    <emu-clause id="sec-runtime-semantics-instantiateasyncfunctiondeclaration" oldids="sec-runtime-semantics-instantiateasyncfunctionobject,sec-async-function-definitions-InstantiateFunctionObject" type="sdo">
       <h1>
-        Runtime Semantics: InstantiateAsyncFunctionObject (
+        Runtime Semantics: InstantiateAsyncFunctionDeclaration (
           _envRecord_: an Environment Record,
           _privateEnv_: a PrivateEnvironment Record or *null*,
         ): an ECMAScript function object
@@ -26568,7 +26568,7 @@
               1. 执行 ? <emu-meta effects="user-code">_envRecord_.CreateMutableBinding(_name_, *false*)</emu-meta>。
         1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行
           1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
-          1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
+          1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionDeclaration 的结果。
           1. 执行 ? <emu-meta effects="user-code">CreateGlobalFunctionBinding(_envRecord_, _funcName_, _funcObj_, *false*)</emu-meta>。
         1. 对 _declaredVariableNames_ 的每个 String _variableName_，执行
           1. 执行 ? <emu-meta effects="user-code">CreateGlobalVarBinding(_envRecord_, _variableName_, *false*)</emu-meta>。
@@ -28951,7 +28951,7 @@
                   1. 否则，
                     1. 执行 ! _envRecord_.CreateMutableBinding(_name_, *false*)。
                   1. 如果 _lexicalDecl_ 是 |FunctionDeclaration|、|GeneratorDeclaration|、|AsyncFunctionDeclaration| 或 |AsyncGeneratorDeclaration| 之一，则
-                    1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _lexicalDecl_ 执行 InstantiateFunctionObject 的结果。
+                    1. 令 _funcObj_ 为以 _envRecord_ 和 _privateEnv_ 为参数对 _lexicalDecl_ 执行 InstantiateFunctionDeclaration 的结果。
                     1. 执行 ! _envRecord_.InitializeBinding(_name_, _funcObj_)。
               1. 从执行上下文栈中移除 _moduleContext_。
               1. 返回 ~unused~。
@@ -30344,7 +30344,7 @@
                 1. 执行 ! _lexicalEnv_.CreateMutableBinding(_name_, *false*)。
           1. 对 _funcsToInitialize_ 的每个 Parse Node _funcDecl_，执行
             1. 令 _funcName_ 为 _funcDecl_ 的 BoundNames 的唯一元素。
-            1. 令 _funcObj_ 为以 _lexicalEnv_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionObject 的结果。
+            1. 令 _funcObj_ 为以 _lexicalEnv_ 和 _privateEnv_ 为参数对 _funcDecl_ 执行 InstantiateFunctionDeclaration 的结果。
             1. 如果 _variableEnv_ 是 Global Environment Record，则
               1. 执行 ? CreateGlobalFunctionBinding(_variableEnv_, _funcName_, _funcObj_, *true*)。
             1. 否则，
