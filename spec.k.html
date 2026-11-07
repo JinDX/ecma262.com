@@ -11198,7 +11198,7 @@
             <dd>a Global Environment Record _envRecord_</dd>
 
             <dt>description</dt>
-            <dd>이름이 _name_인 바인딩된 식별자의 값을 반환합니다. 바인딩이 초기화되지 않은 바인딩이면 *ReferenceError* 예외를 던집니다. 일반적으로 _name_이라는 바인딩이 이미 존재하지만, 존재하지 않거나 현재 쓰기 가능하지 않은 경우 오류 처리는 _strict_에 따라 결정됩니다.</dd>
+            <dd>이름이 _name_인 바인딩된 식별자의 값을 반환합니다. 바인딩이 초기화되지 않은 바인딩이면 *ReferenceError* 예외를 던집니다. 일반적으로 _name_이라는 바인딩이 이미 존재하지만, 존재하지 않는 경우 오류 처리는 _strict_에 따라 결정됩니다.</dd>
           </dl>
           <emu-alg>
             1. _declRecord_를 _envRecord_.[[DeclarativeRecord]]로 둡니다.
@@ -42838,7 +42838,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.sort" oldids="sec-typedarraysortcompare" type="built-in function">
         <h1>%TypedArray%.prototype.sort ( _comparator_ )</h1>
-        <p>이 메서드는 별개의 메서드이지만 아래에 설명된 사항을 제외하면 <emu-xref href="#sec-array.prototype.sort"></emu-xref>에 정의된 `Array.prototype.sort`와 동일한 요구 사항을 구현합니다. *this* 값이 고정된 길이를 가지며 정수 인덱스 프로퍼티가 희소하지 않은 객체라는 사실을 이용하여 이 메서드의 구현을 최적화할 수 있습니다.</p>
+        <p>이 메서드는 별개의 메서드이지만 아래에 설명된 사항을 제외하면 <emu-xref href="#sec-array.prototype.sort"></emu-xref>에 정의된 `Array.prototype.sort`와 동일한 요구 사항을 구현합니다. *this* 값이 정수 인덱스 프로퍼티가 희소하지 않은 객체라는 사실을 이용하여 이 메서드의 구현을 최적화할 수 있습니다. _comparator_가 *undefined*이면 이 알고리즘은 사용자 코드를 실행하지 않으며, 해당 TypedArray의 길이는 줄어들 수 없습니다.</p>
         <p>이 메서드는 일반적이지 않습니다. *this* 값은 [[TypedArrayName]] 내부 슬롯을 갖는 객체여야 합니다.</p>
         <p>호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>

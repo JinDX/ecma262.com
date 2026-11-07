@@ -11198,7 +11198,7 @@
             <dd>a Global Environment Record _envRecord_</dd>
 
             <dt>description</dt>
-            <dd>它返回名称为 _name_ 的已绑定标识符的值。如果绑定是尚未初始化的绑定，则会抛出 *ReferenceError* 异常。通常名为 _name_ 的绑定已经存在，但如果不存在或当前不可写，则错误处理方式由 _strict_ 决定。</dd>
+            <dd>它返回名称为 _name_ 的已绑定标识符的值。如果绑定是尚未初始化的绑定，则会抛出 *ReferenceError* 异常。通常名为 _name_ 的绑定已经存在，但如果不存在，则错误处理方式由 _strict_ 决定。</dd>
           </dl>
           <emu-alg>
             1. 令 _declRecord_ 为 _envRecord_.[[DeclarativeRecord]]。
@@ -42843,7 +42843,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.sort" oldids="sec-typedarraysortcompare" type="built-in function">
         <h1>%TypedArray%.prototype.sort ( _comparator_ )</h1>
-        <p>这是一个独立的方法，除下述内容外，它实现与 <emu-xref href="#sec-array.prototype.sort"></emu-xref> 中定义的 `Array.prototype.sort` 相同的要求。实现可以利用 *this* value 是具有固定长度且整数索引属性不稀疏的对象这一事实来优化此方法。</p>
+        <p>这是一个独立的方法，除下述内容外，它实现与 <emu-xref href="#sec-array.prototype.sort"></emu-xref> 中定义的 `Array.prototype.sort` 相同的要求。实现可以利用 *this* value 是整数索引属性不稀疏的对象这一事实来优化此方法。如果 _comparator_ 是 *undefined*，则此算法不会执行用户代码，并且该 TypedArray 的长度不会减少。</p>
         <p>此方法不是通用方法。*this* value 必须是具有 [[TypedArrayName]] 内部槽的对象。</p>
         <p>调用时，它执行以下步骤：</p>
         <emu-alg>

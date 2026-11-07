@@ -11198,7 +11198,7 @@
             <dd>a Global Environment Record _envRecord_</dd>
 
             <dt>description</dt>
-            <dd>名前が _name_ である束縛された識別子の値を返します。その束縛が初期化されていない束縛である場合、*ReferenceError* 例外をスローします。通常、_name_ という名前の束縛はすでに存在しますが、存在しない場合または現在書込み可能でない場合、エラー処理は _strict_ によって決定されます。</dd>
+            <dd>名前が _name_ である束縛された識別子の値を返します。その束縛が初期化されていない束縛である場合、*ReferenceError* 例外をスローします。通常、_name_ という名前の束縛はすでに存在しますが、存在しない場合、エラー処理は _strict_ によって決定されます。</dd>
           </dl>
           <emu-alg>
             1. _declRecord_ を _envRecord_.[[DeclarativeRecord]] とする。
@@ -42837,7 +42837,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.sort" oldids="sec-typedarraysortcompare" type="built-in function">
         <h1>%TypedArray%.prototype.sort ( _comparator_ )</h1>
-        <p>これは個別のメソッドであり、以下で説明する点を除き、<emu-xref href="#sec-array.prototype.sort"></emu-xref> で定義される `Array.prototype.sort` と同じ要件を実装します。このメソッドの実装は、*this* 値が固定長を持ち、整数インデックス付きプロパティが疎でないオブジェクトであることを利用して最適化してもかまいません。</p>
+        <p>これは個別のメソッドであり、以下で説明する点を除き、<emu-xref href="#sec-array.prototype.sort"></emu-xref> で定義される `Array.prototype.sort` と同じ要件を実装します。このメソッドの実装は、*this* 値が整数インデックス付きプロパティが疎でないオブジェクトであることを利用して最適化してもかまいません。_comparator_ が *undefined* の場合、このアルゴリズムによってユーザーコードが実行されることはなく、その TypedArray の長さが減少することもありません。</p>
         <p>このメソッドは汎用ではありません。*this* 値は [[TypedArrayName]] 内部スロットを持つオブジェクトでなければなりません。</p>
         <p>呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
