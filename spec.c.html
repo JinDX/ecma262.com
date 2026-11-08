@@ -2926,7 +2926,7 @@
           </li>
         </ul>
         <h2>返回值：</h2>
-        <p>内部方法返回的值必须是正常完成（包含下方为该内部方法显示的“正常返回类型”的值），或抛出完成（其 [[Value]] 是 ECMAScript 语言值）。无论哪种情况，其 [[Target]] 字段都必须是 ~empty~。</p>
+        <p>内部方法返回的值必须是正常完成（包含下方为该内部方法显示的“正常返回类型”的值），或抛出完成（其 [[Value]] 是 ECMAScript 语言值）。</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -4027,7 +4027,7 @@
               String 或 ~empty~
             </td>
             <td>
-              定向控制转移的目标标签。
+              定向控制转移的目标标签。当 [[Type]] 既不是 ~break~ 也不是 ~continue~ 时，该字段必须为 ~empty~。
             </td>
           </tr>
         </table>
@@ -5847,8 +5847,8 @@
           1. 如果 _n_ 是 *undefined*，返回 *false*。
           1. 返回 ! IsLooselyEqual(_x_, _n_)。
         1. 如果 _x_ 是 String 且 _y_ 是 BigInt，返回 ! IsLooselyEqual(_y_, _x_)。
-        1. 如果 _x_ 是 Boolean，返回 ! IsLooselyEqual(! ToNumber(_x_), _y_)。
-        1. 如果 _y_ 是 Boolean，返回 ! IsLooselyEqual(_x_, ! ToNumber(_y_))。
+        1. 如果 _x_ 是 Boolean，返回 ? IsLooselyEqual(! ToNumber(_x_), _y_)。
+        1. 如果 _y_ 是 Boolean，返回 ? IsLooselyEqual(_x_, ! ToNumber(_y_))。
         1. 如果 _x_ 是 String、Number、BigInt 或 Symbol，且 _y_ 是 Object，返回 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))。
         1. 如果 _x_ 是 Object，且 _y_ 是 String、Number、BigInt 或 Symbol，返回 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)。
         1. 如果 _x_ 是 BigInt 且 _y_ 是有限 Number，或者 _x_ 是有限 Number 且 _y_ 是 BigInt，那么
@@ -23338,19 +23338,17 @@
       <emu-grammar>BreakableStatement : IterationStatement</emu-grammar>
       <emu-alg>
         1. 令 _stmtResult_ 为 Completion(以 _labelSet_ 为参数对 |IterationStatement| 执行 LoopEvaluation 的结果)。
-        1. 如果 _stmtResult_ 是 break 完成，则
-          1. 如果 _stmtResult_.[[Target]] 是 ~empty~，则
-            1. 如果 _stmtResult_.[[Value]] 是 ~empty~，则将 _stmtResult_ 设置为 NormalCompletion(*undefined*)。
-            1. 否则，将 _stmtResult_ 设置为 NormalCompletion(_stmtResult_.[[Value]])。
+        1. 如果 _stmtResult_ 是 break 完成且 _stmtResult_.[[Target]] 是 ~empty~，则
+          1. 如果 _stmtResult_.[[Value]] 不是 ~empty~，则返回 _stmtResult_.[[Value]]。
+          1. 返回 *undefined*。
         1. 返回 ? _stmtResult_。
       </emu-alg>
       <emu-grammar>BreakableStatement : SwitchStatement</emu-grammar>
       <emu-alg>
         1. 令 _stmtResult_ 为 Completion(|SwitchStatement| 的 Evaluation)。
-        1. 如果 _stmtResult_ 是 break 完成，则
-          1. 如果 _stmtResult_.[[Target]] 是 ~empty~，则
-            1. 如果 _stmtResult_.[[Value]] 是 ~empty~，则将 _stmtResult_ 设置为 NormalCompletion(*undefined*)。
-            1. 否则，将 _stmtResult_ 设置为 NormalCompletion(_stmtResult_.[[Value]])。
+        1. 如果 _stmtResult_ 是 break 完成且 _stmtResult_.[[Target]] 是 ~empty~，则
+          1. 如果 _stmtResult_.[[Value]] 不是 ~empty~，则返回 _stmtResult_.[[Value]]。
+          1. 返回 *undefined*。
         1. 返回 ? _stmtResult_。
       </emu-alg>
       <emu-note>
@@ -23361,8 +23359,7 @@
         1. 令 _label_ 为 |LabelIdentifier| 的 StringValue。
         1. 令 _newLabelSet_ 为 _labelSet_ 与 « _label_ » 的列表连接。
         1. 令 _stmtResult_ 为 Completion(以 _newLabelSet_ 为参数对 |LabelledItem| 执行 LabelledEvaluation 的结果)。
-        1. 如果 _stmtResult_ 是 break 完成且 _stmtResult_.[[Target]] 是 _label_，则
-          1. 将 _stmtResult_ 设置为 NormalCompletion(_stmtResult_.[[Value]])。
+        1. 如果 _stmtResult_ 是 break 完成且 _stmtResult_.[[Target]] 是 _label_，则返回 _stmtResult_.[[Value]]。
         1. 返回 ? _stmtResult_。
       </emu-alg>
       <emu-grammar>LabelledItem : FunctionDeclaration</emu-grammar>

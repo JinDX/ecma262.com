@@ -2926,7 +2926,7 @@
           </li>
         </ul>
         <h2>반환값:</h2>
-        <p>내부 메서드가 반환하는 값은 해당 내부 메서드에 대해 아래에 표시된 “정상 반환 타입”의 값을 포함하는 정상 완료 또는 [[Value]]가 ECMAScript 언어 값인 throw 완료여야 합니다. 어느 경우든 [[Target]] 필드는 ~empty~여야 합니다.</p>
+        <p>내부 메서드가 반환하는 값은 해당 내부 메서드에 대해 아래에 표시된 “정상 반환 타입”의 값을 포함하는 정상 완료 또는 [[Value]]가 ECMAScript 언어 값인 throw 완료여야 합니다.</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -4027,7 +4027,7 @@
               String 또는 ~empty~
             </td>
             <td>
-              지시된 제어 이전의 대상 레이블입니다.
+              지시된 제어 이전의 대상 레이블입니다. [[Type]]이 ~break~도 ~continue~도 아니면 이 필드는 ~empty~여야 합니다.
             </td>
           </tr>
         </table>
@@ -5847,8 +5847,8 @@
           1. _n_이 *undefined*이면 *false*를 반환합니다.
           1. ! IsLooselyEqual(_x_, _n_)을 반환합니다.
         1. _x_가 String이고 _y_가 BigInt이면 ! IsLooselyEqual(_y_, _x_)를 반환합니다.
-        1. _x_가 Boolean이면 ! IsLooselyEqual(! ToNumber(_x_), _y_)를 반환합니다.
-        1. _y_가 Boolean이면 ! IsLooselyEqual(_x_, ! ToNumber(_y_))을 반환합니다.
+        1. _x_가 Boolean이면 ? IsLooselyEqual(! ToNumber(_x_), _y_)를 반환합니다.
+        1. _y_가 Boolean이면 ? IsLooselyEqual(_x_, ! ToNumber(_y_))을 반환합니다.
         1. _x_가 String, Number, BigInt 또는 Symbol 중 하나이고 _y_가 Object이면 ! IsLooselyEqual(_x_, ? ToPrimitive(_y_))을 반환합니다.
         1. _x_가 Object이고 _y_가 String, Number, BigInt 또는 Symbol 중 하나이면 ! IsLooselyEqual(? ToPrimitive(_x_), _y_)를 반환합니다.
         1. _x_가 BigInt이고 _y_가 유한 Number이거나, _x_가 유한 Number이고 _y_가 BigInt이면 다음을 수행합니다.
@@ -23336,19 +23336,17 @@
       <emu-grammar>BreakableStatement : IterationStatement</emu-grammar>
       <emu-alg>
         1. _stmtResult_를 Completion(인수 _labelSet_을 사용한 |IterationStatement|의 LoopEvaluation)으로 둡니다.
-        1. _stmtResult_가 break 완료이면, 다음을 수행합니다.
-          1. _stmtResult_.[[Target]]이 ~empty~이면, 다음을 수행합니다.
-            1. _stmtResult_.[[Value]]가 ~empty~이면 _stmtResult_를 NormalCompletion(*undefined*)으로 설정합니다.
-            1. 그렇지 않으면 _stmtResult_를 NormalCompletion(_stmtResult_.[[Value]])으로 설정합니다.
+        1. _stmtResult_가 break 완료이고 _stmtResult_.[[Target]]이 ~empty~이면, 다음을 수행합니다.
+          1. _stmtResult_.[[Value]]가 ~empty~가 아니면 _stmtResult_.[[Value]]를 반환합니다.
+          1. *undefined*를 반환합니다.
         1. ? _stmtResult_를 반환합니다.
       </emu-alg>
       <emu-grammar>BreakableStatement : SwitchStatement</emu-grammar>
       <emu-alg>
         1. _stmtResult_를 Completion(|SwitchStatement|의 Evaluation)으로 둡니다.
-        1. _stmtResult_가 break 완료이면, 다음을 수행합니다.
-          1. _stmtResult_.[[Target]]이 ~empty~이면, 다음을 수행합니다.
-            1. _stmtResult_.[[Value]]가 ~empty~이면 _stmtResult_를 NormalCompletion(*undefined*)으로 설정합니다.
-            1. 그렇지 않으면 _stmtResult_를 NormalCompletion(_stmtResult_.[[Value]])으로 설정합니다.
+        1. _stmtResult_가 break 완료이고 _stmtResult_.[[Target]]이 ~empty~이면, 다음을 수행합니다.
+          1. _stmtResult_.[[Value]]가 ~empty~가 아니면 _stmtResult_.[[Value]]를 반환합니다.
+          1. *undefined*를 반환합니다.
         1. ? _stmtResult_를 반환합니다.
       </emu-alg>
       <emu-note>
@@ -23359,8 +23357,7 @@
         1. _label_을 |LabelIdentifier|의 StringValue로 둡니다.
         1. _newLabelSet_을 _labelSet_과 « _label_ »의 목록 연결로 둡니다.
         1. _stmtResult_를 Completion(인수 _newLabelSet_을 사용한 |LabelledItem|의 LabelledEvaluation)으로 둡니다.
-        1. _stmtResult_가 break 완료이고 _stmtResult_.[[Target]]이 _label_이면, 다음을 수행합니다.
-          1. _stmtResult_를 NormalCompletion(_stmtResult_.[[Value]])으로 설정합니다.
+        1. _stmtResult_가 break 완료이고 _stmtResult_.[[Target]]이 _label_이면 _stmtResult_.[[Value]]를 반환합니다.
         1. ? _stmtResult_를 반환합니다.
       </emu-alg>
       <emu-grammar>LabelledItem : FunctionDeclaration</emu-grammar>

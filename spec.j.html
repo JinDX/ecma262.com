@@ -2926,7 +2926,7 @@
           </li>
         </ul>
         <h2>戻り値:</h2>
-        <p>内部メソッドによって返される値は、その内部メソッドについて以下に示される「正常戻り値型」の値を含む正常完了、または [[Value]] が ECMAScript 言語値である throw 完了のいずれかでなければなりません。どちらの場合も、その [[Target]] フィールドは ~empty~ でなければなりません。</p>
+        <p>内部メソッドによって返される値は、その内部メソッドについて以下に示される「正常戻り値型」の値を含む正常完了、または [[Value]] が ECMAScript 言語値である throw 完了のいずれかでなければなりません。</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -4027,7 +4027,7 @@
               String または ~empty~
             </td>
             <td>
-              指向性のある制御移動の対象ラベルです。
+              指向性のある制御移動の対象ラベルです。[[Type]] が ~break~ でも ~continue~ でもない場合、このフィールドは ~empty~ でなければなりません。
             </td>
           </tr>
         </table>
@@ -5847,8 +5847,8 @@
           1. _n_ が *undefined* である場合、*false* を返す。
           1. ! IsLooselyEqual(_x_, _n_) を返す。
         1. _x_ が String であり、_y_ が BigInt である場合、! IsLooselyEqual(_y_, _x_) を返す。
-        1. _x_ が Boolean である場合、! IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
-        1. _y_ が Boolean である場合、! IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
+        1. _x_ が Boolean である場合、? IsLooselyEqual(! ToNumber(_x_), _y_) を返す。
+        1. _y_ が Boolean である場合、? IsLooselyEqual(_x_, ! ToNumber(_y_)) を返す。
         1. _x_ が String、Number、BigInt、または Symbol のいずれかであり、_y_ が Object である場合、! IsLooselyEqual(_x_, ? ToPrimitive(_y_)) を返す。
         1. _x_ が Object であり、_y_ が String、Number、BigInt、または Symbol のいずれかである場合、! IsLooselyEqual(? ToPrimitive(_x_), _y_) を返す。
         1. _x_ が BigInt であり、_y_ が有限 Number である場合、または _x_ が有限 Number であり、_y_ が BigInt である場合、
@@ -23336,19 +23336,17 @@
       <emu-grammar>BreakableStatement : IterationStatement</emu-grammar>
       <emu-alg>
         1. _stmtResult_ を Completion(引数 _labelSet_ を指定した |IterationStatement| の LoopEvaluation) とする。
-        1. _stmtResult_ が break 完了である場合、
-          1. _stmtResult_.[[Target]] が ~empty~ である場合、
-            1. _stmtResult_.[[Value]] が ~empty~ である場合、_stmtResult_ を NormalCompletion(*undefined*) に設定する。
-            1. そうでない場合、_stmtResult_ を NormalCompletion(_stmtResult_.[[Value]]) に設定する。
+        1. _stmtResult_ が break 完了であり、_stmtResult_.[[Target]] が ~empty~ である場合、
+          1. _stmtResult_.[[Value]] が ~empty~ でない場合、_stmtResult_.[[Value]] を返す。
+          1. *undefined* を返す。
         1. ? _stmtResult_ を返す。
       </emu-alg>
       <emu-grammar>BreakableStatement : SwitchStatement</emu-grammar>
       <emu-alg>
         1. _stmtResult_ を Completion(|SwitchStatement| の Evaluation) とする。
-        1. _stmtResult_ が break 完了である場合、
-          1. _stmtResult_.[[Target]] が ~empty~ である場合、
-            1. _stmtResult_.[[Value]] が ~empty~ である場合、_stmtResult_ を NormalCompletion(*undefined*) に設定する。
-            1. そうでない場合、_stmtResult_ を NormalCompletion(_stmtResult_.[[Value]]) に設定する。
+        1. _stmtResult_ が break 完了であり、_stmtResult_.[[Target]] が ~empty~ である場合、
+          1. _stmtResult_.[[Value]] が ~empty~ でない場合、_stmtResult_.[[Value]] を返す。
+          1. *undefined* を返す。
         1. ? _stmtResult_ を返す。
       </emu-alg>
       <emu-note>
@@ -23359,8 +23357,7 @@
         1. _label_ を |LabelIdentifier| の StringValue とする。
         1. _newLabelSet_ を _labelSet_ と « _label_ » のリスト連結とする。
         1. _stmtResult_ を Completion(引数 _newLabelSet_ を指定した |LabelledItem| の LabelledEvaluation) とする。
-        1. _stmtResult_ が break 完了であり、_stmtResult_.[[Target]] が _label_ である場合、
-          1. _stmtResult_ を NormalCompletion(_stmtResult_.[[Value]]) に設定する。
+        1. _stmtResult_ が break 完了であり、_stmtResult_.[[Target]] が _label_ である場合、_stmtResult_.[[Value]] を返す。
         1. ? _stmtResult_ を返す。
       </emu-alg>
       <emu-grammar>LabelledItem : FunctionDeclaration</emu-grammar>
