@@ -33891,22 +33891,21 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
+      <emu-clause id="sec-isleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear,sec-inleapyear">
         <h1>
-          InLeapYear (
-            _tv_: a finite time value,
-          ): 0 or 1
+          IsLeapYear (
+            _y_: an integer,
+          ): a Boolean
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>如果 _tv_ 位于闰年中，则返回 1，否则返回 0。</dd>
+          <dd>它返回 _y_ 是否为闰年。</dd>
         </dl>
         <emu-alg>
-          1. 令 _y_ 为 YearFromTime(_tv_)。
-          1. 如果 (_y_ modulo 400) = 0，则返回 1。
-          1. 如果 (_y_ modulo 100) = 0，则返回 0。
-          1. 如果 (_y_ modulo 4) = 0，则返回 1。
-          1. 返回 0。
+          1. 如果 (_y_ modulo 400) = 0，则返回 *true*。
+          1. 如果 (_y_ modulo 100) = 0，则返回 *false*。
+          1. 如果 (_y_ modulo 4) = 0，则返回 *true*。
+          1. 返回 *false*。
         </emu-alg>
       </emu-clause>
 
@@ -33921,20 +33920,21 @@
           <dd>它返回一个整数，用于标识 _tv_ 所在的月份。月份值 0 表示一月；1 表示二月；2 表示三月；3 表示四月；4 表示五月；5 表示六月；6 表示七月；7 表示八月；8 表示九月；9 表示十月；10 表示十一月；11 表示十二月。注意，<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn>，对应 1970 年 1 月 1 日星期四。</dd>
         </dl>
         <emu-alg>
-          1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
+          1. 令 _y_ 为 YearFromTime(_tv_)。
+          1. 如果 IsLeapYear(_y_) 为 *true*，则令 _leapYearOffset_ 为 1；否则令 _leapYearOffset_ 为 0。
           1. 令 _dayWithinYear_ 为 DayWithinYear(_tv_)。
           1. 如果 _dayWithinYear_ &lt; 31，则返回 0。
-          1. 如果 _dayWithinYear_ &lt; 59 + _inLeapYear_，则返回 1。
-          1. 如果 _dayWithinYear_ &lt; 90 + _inLeapYear_，则返回 2。
-          1. 如果 _dayWithinYear_ &lt; 120 + _inLeapYear_，则返回 3。
-          1. 如果 _dayWithinYear_ &lt; 151 + _inLeapYear_，则返回 4。
-          1. 如果 _dayWithinYear_ &lt; 181 + _inLeapYear_，则返回 5。
-          1. 如果 _dayWithinYear_ &lt; 212 + _inLeapYear_，则返回 6。
-          1. 如果 _dayWithinYear_ &lt; 243 + _inLeapYear_，则返回 7。
-          1. 如果 _dayWithinYear_ &lt; 273 + _inLeapYear_，则返回 8。
-          1. 如果 _dayWithinYear_ &lt; 304 + _inLeapYear_，则返回 9。
-          1. 如果 _dayWithinYear_ &lt; 334 + _inLeapYear_，则返回 10。
-          1. 断言：_dayWithinYear_ &lt; 365 + _inLeapYear_。
+          1. 如果 _dayWithinYear_ &lt; 59 + _leapYearOffset_，则返回 1。
+          1. 如果 _dayWithinYear_ &lt; 90 + _leapYearOffset_，则返回 2。
+          1. 如果 _dayWithinYear_ &lt; 120 + _leapYearOffset_，则返回 3。
+          1. 如果 _dayWithinYear_ &lt; 151 + _leapYearOffset_，则返回 4。
+          1. 如果 _dayWithinYear_ &lt; 181 + _leapYearOffset_，则返回 5。
+          1. 如果 _dayWithinYear_ &lt; 212 + _leapYearOffset_，则返回 6。
+          1. 如果 _dayWithinYear_ &lt; 243 + _leapYearOffset_，则返回 7。
+          1. 如果 _dayWithinYear_ &lt; 273 + _leapYearOffset_，则返回 8。
+          1. 如果 _dayWithinYear_ &lt; 304 + _leapYearOffset_，则返回 9。
+          1. 如果 _dayWithinYear_ &lt; 334 + _leapYearOffset_，则返回 10。
+          1. 断言：_dayWithinYear_ &lt; 365 + _leapYearOffset_。
           1. 返回 11。
         </emu-alg>
       </emu-clause>
@@ -33950,22 +33950,23 @@
           <dd>它返回 _tv_ 所在月份中的日期。</dd>
         </dl>
         <emu-alg>
-          1. 令 _inLeapYear_ 为 InLeapYear(_tv_)。
+          1. 令 _y_ 为 YearFromTime(_tv_)。
+          1. 如果 IsLeapYear(_y_) 为 *true*，则令 _leapYearOffset_ 为 1；否则令 _leapYearOffset_ 为 0。
           1. 令 _dayWithinYear_ 为 DayWithinYear(_tv_)。
           1. 令 _month_ 为 MonthFromTime(_tv_)。
           1. 如果 _month_ = 0，则返回 _dayWithinYear_ + 1。
           1. 如果 _month_ = 1，则返回 _dayWithinYear_ - 30。
-          1. 如果 _month_ = 2，则返回 _dayWithinYear_ - 58 - _inLeapYear_。
-          1. 如果 _month_ = 3，则返回 _dayWithinYear_ - 89 - _inLeapYear_。
-          1. 如果 _month_ = 4，则返回 _dayWithinYear_ - 119 - _inLeapYear_。
-          1. 如果 _month_ = 5，则返回 _dayWithinYear_ - 150 - _inLeapYear_。
-          1. 如果 _month_ = 6，则返回 _dayWithinYear_ - 180 - _inLeapYear_。
-          1. 如果 _month_ = 7，则返回 _dayWithinYear_ - 211 - _inLeapYear_。
-          1. 如果 _month_ = 8，则返回 _dayWithinYear_ - 242 - _inLeapYear_。
-          1. 如果 _month_ = 9，则返回 _dayWithinYear_ - 272 - _inLeapYear_。
-          1. 如果 _month_ = 10，则返回 _dayWithinYear_ - 303 - _inLeapYear_。
+          1. 如果 _month_ = 2，则返回 _dayWithinYear_ - 58 - _leapYearOffset_。
+          1. 如果 _month_ = 3，则返回 _dayWithinYear_ - 89 - _leapYearOffset_。
+          1. 如果 _month_ = 4，则返回 _dayWithinYear_ - 119 - _leapYearOffset_。
+          1. 如果 _month_ = 5，则返回 _dayWithinYear_ - 150 - _leapYearOffset_。
+          1. 如果 _month_ = 6，则返回 _dayWithinYear_ - 180 - _leapYearOffset_。
+          1. 如果 _month_ = 7，则返回 _dayWithinYear_ - 211 - _leapYearOffset_。
+          1. 如果 _month_ = 8，则返回 _dayWithinYear_ - 242 - _leapYearOffset_。
+          1. 如果 _month_ = 9，则返回 _dayWithinYear_ - 272 - _leapYearOffset_。
+          1. 如果 _month_ = 10，则返回 _dayWithinYear_ - 303 - _leapYearOffset_。
           1. 断言：_month_ = 11。
-          1. 返回 _dayWithinYear_ - 333 - _inLeapYear_。
+          1. 返回 _dayWithinYear_ - 333 - _leapYearOffset_。
         </emu-alg>
       </emu-clause>
 

@@ -33885,22 +33885,21 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
+      <emu-clause id="sec-isleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear,sec-inleapyear">
         <h1>
-          InLeapYear (
-            _tv_: a finite time value,
-          ): 0 or 1
+          IsLeapYear (
+            _y_: an integer,
+          ): a Boolean
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_가 윤년에 속하면 1을 반환하고 그렇지 않으면 0을 반환합니다.</dd>
+          <dd>_y_가 윤년인지 여부를 반환합니다.</dd>
         </dl>
         <emu-alg>
-          1. _y_를 YearFromTime(_tv_)로 둡니다.
-          1. (_y_ modulo 400) = 0이면 1을 반환합니다.
-          1. (_y_ modulo 100) = 0이면 0을 반환합니다.
-          1. (_y_ modulo 4) = 0이면 1을 반환합니다.
-          1. 0을 반환합니다.
+          1. (_y_ modulo 400) = 0이면 *true*를 반환합니다.
+          1. (_y_ modulo 100) = 0이면 *false*를 반환합니다.
+          1. (_y_ modulo 4) = 0이면 *true*를 반환합니다.
+          1. *false*를 반환합니다.
         </emu-alg>
       </emu-clause>
 
@@ -33915,20 +33914,21 @@
           <dd>_tv_가 속하는 월을 식별하는 정수를 반환합니다. 월 값 0은 1월, 1은 2월, 2는 3월, 3은 4월, 4는 5월, 5는 6월, 6은 7월, 7은 8월, 8은 9월, 9는 10월, 10은 11월, 11은 12월을 지정합니다. <emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn>이며 이는 1970년 1월 1일 목요일에 대응한다는 점에 유의하시기 바랍니다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 둡니다.
+          1. _y_를 YearFromTime(_tv_)로 둡니다.
+          1. IsLeapYear(_y_)가 *true*이면 _leapYearOffset_을 1로 두고, 그렇지 않으면 _leapYearOffset_을 0으로 둡니다.
           1. _dayWithinYear_를 DayWithinYear(_tv_)로 둡니다.
           1. _dayWithinYear_ &lt; 31이면 0을 반환합니다.
-          1. _dayWithinYear_ &lt; 59 + _inLeapYear_이면 1을 반환합니다.
-          1. _dayWithinYear_ &lt; 90 + _inLeapYear_이면 2를 반환합니다.
-          1. _dayWithinYear_ &lt; 120 + _inLeapYear_이면 3을 반환합니다.
-          1. _dayWithinYear_ &lt; 151 + _inLeapYear_이면 4를 반환합니다.
-          1. _dayWithinYear_ &lt; 181 + _inLeapYear_이면 5를 반환합니다.
-          1. _dayWithinYear_ &lt; 212 + _inLeapYear_이면 6을 반환합니다.
-          1. _dayWithinYear_ &lt; 243 + _inLeapYear_이면 7을 반환합니다.
-          1. _dayWithinYear_ &lt; 273 + _inLeapYear_이면 8을 반환합니다.
-          1. _dayWithinYear_ &lt; 304 + _inLeapYear_이면 9를 반환합니다.
-          1. _dayWithinYear_ &lt; 334 + _inLeapYear_이면 10을 반환합니다.
-          1. 단언: _dayWithinYear_ &lt; 365 + _inLeapYear_입니다.
+          1. _dayWithinYear_ &lt; 59 + _leapYearOffset_이면 1을 반환합니다.
+          1. _dayWithinYear_ &lt; 90 + _leapYearOffset_이면 2를 반환합니다.
+          1. _dayWithinYear_ &lt; 120 + _leapYearOffset_이면 3을 반환합니다.
+          1. _dayWithinYear_ &lt; 151 + _leapYearOffset_이면 4를 반환합니다.
+          1. _dayWithinYear_ &lt; 181 + _leapYearOffset_이면 5를 반환합니다.
+          1. _dayWithinYear_ &lt; 212 + _leapYearOffset_이면 6을 반환합니다.
+          1. _dayWithinYear_ &lt; 243 + _leapYearOffset_이면 7을 반환합니다.
+          1. _dayWithinYear_ &lt; 273 + _leapYearOffset_이면 8을 반환합니다.
+          1. _dayWithinYear_ &lt; 304 + _leapYearOffset_이면 9를 반환합니다.
+          1. _dayWithinYear_ &lt; 334 + _leapYearOffset_이면 10을 반환합니다.
+          1. 단언: _dayWithinYear_ &lt; 365 + _leapYearOffset_입니다.
           1. 11을 반환합니다.
         </emu-alg>
       </emu-clause>
@@ -33944,22 +33944,23 @@
           <dd>_tv_가 속하는 월의 날짜를 반환합니다.</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_를 InLeapYear(_tv_)로 둡니다.
+          1. _y_를 YearFromTime(_tv_)로 둡니다.
+          1. IsLeapYear(_y_)가 *true*이면 _leapYearOffset_을 1로 두고, 그렇지 않으면 _leapYearOffset_을 0으로 둡니다.
           1. _dayWithinYear_를 DayWithinYear(_tv_)로 둡니다.
           1. _month_를 MonthFromTime(_tv_)로 둡니다.
           1. _month_ = 0이면 _dayWithinYear_ + 1을 반환합니다.
           1. _month_ = 1이면 _dayWithinYear_ - 30을 반환합니다.
-          1. _month_ = 2이면 _dayWithinYear_ - 58 - _inLeapYear_를 반환합니다.
-          1. _month_ = 3이면 _dayWithinYear_ - 89 - _inLeapYear_를 반환합니다.
-          1. _month_ = 4이면 _dayWithinYear_ - 119 - _inLeapYear_를 반환합니다.
-          1. _month_ = 5이면 _dayWithinYear_ - 150 - _inLeapYear_를 반환합니다.
-          1. _month_ = 6이면 _dayWithinYear_ - 180 - _inLeapYear_를 반환합니다.
-          1. _month_ = 7이면 _dayWithinYear_ - 211 - _inLeapYear_를 반환합니다.
-          1. _month_ = 8이면 _dayWithinYear_ - 242 - _inLeapYear_를 반환합니다.
-          1. _month_ = 9이면 _dayWithinYear_ - 272 - _inLeapYear_를 반환합니다.
-          1. _month_ = 10이면 _dayWithinYear_ - 303 - _inLeapYear_를 반환합니다.
+          1. _month_ = 2이면 _dayWithinYear_ - 58 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 3이면 _dayWithinYear_ - 89 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 4이면 _dayWithinYear_ - 119 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 5이면 _dayWithinYear_ - 150 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 6이면 _dayWithinYear_ - 180 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 7이면 _dayWithinYear_ - 211 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 8이면 _dayWithinYear_ - 242 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 9이면 _dayWithinYear_ - 272 - _leapYearOffset_를 반환합니다.
+          1. _month_ = 10이면 _dayWithinYear_ - 303 - _leapYearOffset_를 반환합니다.
           1. 단언: _month_ = 11입니다.
-          1. _dayWithinYear_ - 333 - _inLeapYear_를 반환합니다.
+          1. _dayWithinYear_ - 333 - _leapYearOffset_를 반환합니다.
         </emu-alg>
       </emu-clause>
 

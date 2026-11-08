@@ -33885,22 +33885,21 @@
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-inleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear">
+      <emu-clause id="sec-isleapyear" type="abstract operation" oldids="eqn-InLeapYear,sec-daysinyear,eqn-DaysInYear,sec-inleapyear">
         <h1>
-          InLeapYear (
-            _tv_: a finite time value,
-          ): 0 or 1
+          IsLeapYear (
+            _y_: an integer,
+          ): a Boolean
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>_tv_ がうるう年内にある場合は 1 を、それ以外の場合は 0 を返します。</dd>
+          <dd>_y_ がうるう年かどうかを返します。</dd>
         </dl>
         <emu-alg>
-          1. _y_ を YearFromTime(_tv_) とする。
-          1. (_y_ modulo 400) = 0 である場合、1 を返す。
-          1. (_y_ modulo 100) = 0 である場合、0 を返す。
-          1. (_y_ modulo 4) = 0 である場合、1 を返す。
-          1. 0 を返す。
+          1. (_y_ modulo 400) = 0 である場合、*true* を返す。
+          1. (_y_ modulo 100) = 0 である場合、*false* を返す。
+          1. (_y_ modulo 4) = 0 である場合、*true* を返す。
+          1. *false* を返す。
         </emu-alg>
       </emu-clause>
 
@@ -33915,20 +33914,21 @@
           <dd>_tv_ が属する月を識別する整数を返します。月の値 0 は1月、1 は2月、2 は3月、3 は4月、4 は5月、5 は6月、6 は7月、7 は8月、8 は9月、9 は10月、10 は11月、11 は12月を指定します。<emu-eqn>MonthFromTime(*+0*<sub>𝔽</sub>) = 0</emu-eqn> であり、1970年1月1日木曜日に対応することに注意してください。</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_ を InLeapYear(_tv_) とする。
+          1. _y_ を YearFromTime(_tv_) とする。
+          1. IsLeapYear(_y_) が *true* である場合、_leapYearOffset_ を 1 とする。それ以外の場合、_leapYearOffset_ を 0 とする。
           1. _dayWithinYear_ を DayWithinYear(_tv_) とする。
           1. _dayWithinYear_ &lt; 31 である場合、0 を返す。
-          1. _dayWithinYear_ &lt; 59 + _inLeapYear_ である場合、1 を返す。
-          1. _dayWithinYear_ &lt; 90 + _inLeapYear_ である場合、2 を返す。
-          1. _dayWithinYear_ &lt; 120 + _inLeapYear_ である場合、3 を返す。
-          1. _dayWithinYear_ &lt; 151 + _inLeapYear_ である場合、4 を返す。
-          1. _dayWithinYear_ &lt; 181 + _inLeapYear_ である場合、5 を返す。
-          1. _dayWithinYear_ &lt; 212 + _inLeapYear_ である場合、6 を返す。
-          1. _dayWithinYear_ &lt; 243 + _inLeapYear_ である場合、7 を返す。
-          1. _dayWithinYear_ &lt; 273 + _inLeapYear_ である場合、8 を返す。
-          1. _dayWithinYear_ &lt; 304 + _inLeapYear_ である場合、9 を返す。
-          1. _dayWithinYear_ &lt; 334 + _inLeapYear_ である場合、10 を返す。
-          1. 表明: _dayWithinYear_ &lt; 365 + _inLeapYear_。
+          1. _dayWithinYear_ &lt; 59 + _leapYearOffset_ である場合、1 を返す。
+          1. _dayWithinYear_ &lt; 90 + _leapYearOffset_ である場合、2 を返す。
+          1. _dayWithinYear_ &lt; 120 + _leapYearOffset_ である場合、3 を返す。
+          1. _dayWithinYear_ &lt; 151 + _leapYearOffset_ である場合、4 を返す。
+          1. _dayWithinYear_ &lt; 181 + _leapYearOffset_ である場合、5 を返す。
+          1. _dayWithinYear_ &lt; 212 + _leapYearOffset_ である場合、6 を返す。
+          1. _dayWithinYear_ &lt; 243 + _leapYearOffset_ である場合、7 を返す。
+          1. _dayWithinYear_ &lt; 273 + _leapYearOffset_ である場合、8 を返す。
+          1. _dayWithinYear_ &lt; 304 + _leapYearOffset_ である場合、9 を返す。
+          1. _dayWithinYear_ &lt; 334 + _leapYearOffset_ である場合、10 を返す。
+          1. 表明: _dayWithinYear_ &lt; 365 + _leapYearOffset_。
           1. 11 を返す。
         </emu-alg>
       </emu-clause>
@@ -33944,22 +33944,23 @@
           <dd>_tv_ が属する月の日を返します。</dd>
         </dl>
         <emu-alg>
-          1. _inLeapYear_ を InLeapYear(_tv_) とする。
+          1. _y_ を YearFromTime(_tv_) とする。
+          1. IsLeapYear(_y_) が *true* である場合、_leapYearOffset_ を 1 とする。それ以外の場合、_leapYearOffset_ を 0 とする。
           1. _dayWithinYear_ を DayWithinYear(_tv_) とする。
           1. _month_ を MonthFromTime(_tv_) とする。
           1. _month_ = 0 である場合、_dayWithinYear_ + 1 を返す。
           1. _month_ = 1 である場合、_dayWithinYear_ - 30 を返す。
-          1. _month_ = 2 である場合、_dayWithinYear_ - 58 - _inLeapYear_ を返す。
-          1. _month_ = 3 である場合、_dayWithinYear_ - 89 - _inLeapYear_ を返す。
-          1. _month_ = 4 である場合、_dayWithinYear_ - 119 - _inLeapYear_ を返す。
-          1. _month_ = 5 である場合、_dayWithinYear_ - 150 - _inLeapYear_ を返す。
-          1. _month_ = 6 である場合、_dayWithinYear_ - 180 - _inLeapYear_ を返す。
-          1. _month_ = 7 である場合、_dayWithinYear_ - 211 - _inLeapYear_ を返す。
-          1. _month_ = 8 である場合、_dayWithinYear_ - 242 - _inLeapYear_ を返す。
-          1. _month_ = 9 である場合、_dayWithinYear_ - 272 - _inLeapYear_ を返す。
-          1. _month_ = 10 である場合、_dayWithinYear_ - 303 - _inLeapYear_ を返す。
+          1. _month_ = 2 である場合、_dayWithinYear_ - 58 - _leapYearOffset_ を返す。
+          1. _month_ = 3 である場合、_dayWithinYear_ - 89 - _leapYearOffset_ を返す。
+          1. _month_ = 4 である場合、_dayWithinYear_ - 119 - _leapYearOffset_ を返す。
+          1. _month_ = 5 である場合、_dayWithinYear_ - 150 - _leapYearOffset_ を返す。
+          1. _month_ = 6 である場合、_dayWithinYear_ - 180 - _leapYearOffset_ を返す。
+          1. _month_ = 7 である場合、_dayWithinYear_ - 211 - _leapYearOffset_ を返す。
+          1. _month_ = 8 である場合、_dayWithinYear_ - 242 - _leapYearOffset_ を返す。
+          1. _month_ = 9 である場合、_dayWithinYear_ - 272 - _leapYearOffset_ を返す。
+          1. _month_ = 10 である場合、_dayWithinYear_ - 303 - _leapYearOffset_ を返す。
           1. 表明: _month_ = 11。
-          1. _dayWithinYear_ - 333 - _inLeapYear_ を返す。
+          1. _dayWithinYear_ - 333 - _leapYearOffset_ を返す。
         </emu-alg>
       </emu-clause>
 
