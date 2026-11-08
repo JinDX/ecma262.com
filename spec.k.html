@@ -30453,7 +30453,7 @@
 
       <emu-clause id="sec-decodeuri-encodeduri" type="built-in function">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>이 함수는 `encodeURI` 함수가 도입할 수 있는 종류의 각 이스케이프 시퀀스 및 UTF-8 인코딩을 해당 코드 포인트의 UTF-16 인코딩으로 바꾼 새로운 URI 버전을 계산합니다. `encodeURI`가 도입할 수 없었던 이스케이프 시퀀스는 바꾸지 않습니다.</p>
+        <p>이 함수는 `encodeURI` 함수가 도입할 수 있는 종류의 각 이스케이프 시퀀스 및 UTF-8 인코딩을 해당 코드 포인트의 UTF-16 인코딩으로 바꾼 새로운 URI 버전을 계산합니다. *";/?:@&=+$,#"*에 있는 문자를 나타내는 이스케이프 시퀀스는 바꾸지 않습니다.</p>
         <p>이 함수는 <dfn>%decodeURI%</dfn> 내재 객체입니다.</p>
         <p>호출되면 다음 단계를 수행합니다:</p>
         <emu-alg>
@@ -31643,7 +31643,7 @@
           <p>`Function.prototype.bind`를 사용하여 생성된 Function 객체는 특수 객체입니다. 또한 *"prototype"* 프로퍼티를 갖지 않습니다.</p>
         </emu-note>
         <emu-note>
-          <p>_target_이 화살표 함수 또는 바인드된 함수 특수 객체 중 하나이면 이 메서드에 전달된 _thisArg_는 이후 _func_ 호출에서 사용되지 않습니다.</p>
+          <p>_target_이 화살표 함수 또는 바인드된 함수 특수 객체 중 하나이면 이 메서드에 전달된 _thisArg_는 이후 _boundFunc_ 호출에서 사용되지 않습니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -33379,7 +33379,7 @@
           1. ℝ(_n_)의 쌍곡코사인을 나타내는 구현에서 근사한 Number 값을 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>`Math.cosh(x)`의 값은 `(Math.exp(x) + Math.exp(-x)) / 2`의 값과 같습니다.</p>
+          <p>실수 _x_의 쌍곡코사인은 (e<sup>_x_</sup> + e<sup>-_x_</sup>) / 2입니다. `Math.exp`를 사용하여 이 식을 계산하면 반올림 또는 오버플로로 인해 `Math.cosh`와 다른 결과가 나올 수 있습니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -33659,7 +33659,7 @@
           1. ℝ(_n_)의 쌍곡사인을 나타내는 구현에서 근사한 Number 값을 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>`Math.sinh(x)`의 값은 `(Math.exp(x) - Math.exp(-x)) / 2`의 값과 같습니다.</p>
+          <p>실수 _x_의 쌍곡사인은 (e<sup>_x_</sup> - e<sup>-_x_</sup>) / 2입니다. `Math.exp`를 사용하여 이 식을 계산하면 반올림 또는 오버플로로 인해 `Math.sinh`와 다른 결과가 나올 수 있습니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -33745,7 +33745,7 @@
           1. ℝ(_n_)의 쌍곡탄젠트를 나타내는 구현에서 근사한 Number 값을 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>`Math.tanh(x)`의 값은 `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))`의 값과 같습니다.</p>
+          <p>실수 _x_의 쌍곡탄젠트는 (e<sup>_x_</sup> - e<sup>-_x_</sup>) / (e<sup>_x_</sup> + e<sup>-_x_</sup>)입니다. `Math.exp`를 사용하여 이 식을 계산하면 반올림 또는 오버플로로 인해 `Math.tanh`와 다른 결과가 나올 수 있습니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -34813,7 +34813,7 @@ THH:mm:ss.sss
         <pre><code class="javascript">
           Date.parse(x.toLocaleString())
         </code></pre>
-        <p>앞의 세 표현식과 동일한 Number 값을 생성해야 할 필요가 없으며, 일반적으로 <emu-xref href="#sec-date-time-string-format">날짜 시간 문자열 형식</emu-xref>을 준수하지 않고 해당 구현체의 `toString` 또는 `toUTCString` 메서드가 생성할 수도 없는 임의의 String 값이 주어지면 이 함수가 생성하는 값은 구현체 정의입니다.</p>
+        <p>앞의 표현식과 동일한 Number 값을 생성해야 할 필요가 없으며, 일반적으로 <emu-xref href="#sec-date-time-string-format">날짜 시간 문자열 형식</emu-xref>을 준수하지 않고 해당 구현체의 `toString` 또는 `toUTCString` 메서드가 생성할 수도 없는 임의의 String 값이 주어지면 이 함수가 생성하는 값은 구현체 정의입니다.</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype">
@@ -45968,7 +45968,7 @@ THH:mm:ss.sss
         <p>HostGrowSharedArrayBuffer의 구현은 다음 요구 사항을 준수해야 합니다:</p>
         <ul>
           <li>추상 연산이 ~unhandled~로 정상 완료되지 않고 _newByteLength_ &lt; _buffer_의 현재 바이트 길이이거나 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]]이면 *RangeError* 예외를 던집니다.</li>
-          <li>_agentRecord_를 주변 에이전트의 Agent Record로 둡니다. _isLittleEndian_을 _agentRecord_.[[LittleEndian]]으로 둡니다. 추상 연산이 ~handled~로 정상 완료되면 [[Order]]가 ~seq-cst~, [[Payload]]가 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]]이 _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]]가 0, [[ElementSize]]가 8인 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 주변 에이전트의 후보 실행에 추가되어, <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref>에 대한 경합 호출이 “유실”되지 않도록 해야 합니다. 즉, 아무 일도 하지 않고 조용히 끝나서는 안 됩니다.</li>
+          <li>_agentRecord_를 주변 에이전트의 Agent Record로 둡니다. _isLittleEndian_을 _agentRecord_.[[LittleEndian]]으로 둡니다. 추상 연산이 ~handled~로 정상 완료되면 [[Order]]가 ~seq-cst~, [[Payload]]가 NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_), [[Block]]이 _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]]가 0, [[ElementSize]]가 8인 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트가 주변 에이전트의 후보 실행에 추가되어, <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref>에 대한 경합 호출이 “유실”되지 않도록 해야 합니다. 즉, 아무 일도 하지 않고 조용히 끝나서는 안 됩니다.</li>
         </ul>
 
         <emu-note>
@@ -48504,7 +48504,7 @@ THH:mm:ss.sss
         </emu-alg>
 
         <emu-note>
-          <p>이 명세의 알고리즘과 정의에 따르면 _finalizationRegistry_.[[Cells]]에 _cell_이 포함되어 있을 때 _cell_.[[HeldValue]]는 생존합니다. 그러나 이것이 반드시 _cell_.[[UnregisterToken]] 또는 _cell_.[[Target]]도 생존한다는 의미는 아닙니다. 예를 들어 객체 자체를 unregister token으로 사용하여 등록해도 그 객체가 영원히 생존하도록 유지되지는 않습니다.</p>
+          <p>이 명세의 알고리즘과 정의에 따르면 _finalizationRegistry_.[[Cells]]에 _cell_이 포함되어 있을 때 _cell_.[[HeldValue]]는 생존합니다. 그러나 이것이 반드시 _cell_.[[UnregisterToken]] 또는 _cell_.[[WeakRefTarget]]도 생존한다는 의미는 아닙니다. 예를 들어 객체 자체를 unregister token으로 사용하여 등록해도 그 객체가 영원히 생존하도록 유지되지는 않습니다.</p>
         </emu-note>
       </emu-clause>
 
@@ -54047,8 +54047,8 @@ THH:mm:ss.sss
       <emu-annex id="sec-compileassertion-annexb">
         <h1>Runtime Semantics: CompileAssertion</h1>
         <p>인수 _regexpRecord_를 사용하는 CompileAssertion의 의미론은 다음과 같이 확장됩니다:</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar>에 대한 규칙은 |Atom|을 |QuantifiableAssertion|로 대체한 <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar>에 대한 규칙과 같습니다.</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar>에 대한 규칙은 |Atom|을 |QuantifiableAssertion|로 대체한 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar>에 대한 규칙과 같습니다.</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar>에 대한 규칙은 |Assertion|을 |QuantifiableAssertion|로 대체한 <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar>에 대한 규칙과 같습니다.</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar>에 대한 규칙은 |Assertion|을 |QuantifiableAssertion|로 대체한 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar>에 대한 규칙과 같습니다.</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">

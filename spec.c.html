@@ -30459,7 +30459,7 @@
 
       <emu-clause id="sec-decodeuri-encodeduri" type="built-in function">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>此函数计算 URI 的新版本，其中每个可能由 `encodeURI` 函数引入的转义序列和 UTF-8 编码都被替换为它所表示码点的 UTF-16 编码。无法由 `encodeURI` 引入的转义序列不会被替换。</p>
+        <p>此函数计算 URI 的新版本，其中每个可能由 `encodeURI` 函数引入的转义序列和 UTF-8 编码都被替换为它所表示码点的 UTF-16 编码。表示 *";/?:@&=+$,#"* 中字符的转义序列不会被替换。</p>
         <p>它是 <dfn>%decodeURI%</dfn> 内在对象。</p>
         <p>调用时，它执行以下步骤：</p>
         <emu-alg>
@@ -31649,7 +31649,7 @@
           <p>使用 `Function.prototype.bind` 创建的函数对象是异质对象。它们也没有 *"prototype"* 属性。</p>
         </emu-note>
         <emu-note>
-          <p>如果 _target_ 是箭头函数或绑定函数异质对象，则传递给此方法的 _thisArg_ 不会被随后对 _func_ 的调用使用。</p>
+          <p>如果 _target_ 是箭头函数或绑定函数异质对象，则传递给此方法的 _thisArg_ 不会被随后对 _boundFunc_ 的调用使用。</p>
         </emu-note>
       </emu-clause>
 
@@ -33385,7 +33385,7 @@
           1. 返回一个由实现近似得到的 Number 值，该值表示 ℝ(_n_) 的双曲余弦。
         </emu-alg>
         <emu-note>
-          <p>`Math.cosh(x)` 的值与 `(Math.exp(x) + Math.exp(-x)) / 2` 的值相同。</p>
+          <p>对于实数 _x_，其双曲余弦为 (e<sup>_x_</sup> + e<sup>-_x_</sup>) / 2。使用 `Math.exp` 计算此表达式可能会因舍入或溢出而产生与 `Math.cosh` 不同的结果。</p>
         </emu-note>
       </emu-clause>
 
@@ -33665,7 +33665,7 @@
           1. 返回一个由实现近似得到的 Number 值，该值表示 ℝ(_n_) 的双曲正弦。
         </emu-alg>
         <emu-note>
-          <p>`Math.sinh(x)` 的值与 `(Math.exp(x) - Math.exp(-x)) / 2` 的值相同。</p>
+          <p>对于实数 _x_，其双曲正弦为 (e<sup>_x_</sup> - e<sup>-_x_</sup>) / 2。使用 `Math.exp` 计算此表达式可能会因舍入或溢出而产生与 `Math.sinh` 不同的结果。</p>
         </emu-note>
       </emu-clause>
 
@@ -33751,7 +33751,7 @@
           1. 返回一个由实现近似得到的 Number 值，该值表示 ℝ(_n_) 的双曲正切。
         </emu-alg>
         <emu-note>
-          <p>`Math.tanh(x)` 的值与 `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))` 的值相同。</p>
+          <p>对于实数 _x_，其双曲正切为 (e<sup>_x_</sup> - e<sup>-_x_</sup>) / (e<sup>_x_</sup> + e<sup>-_x_</sup>)。使用 `Math.exp` 计算此表达式可能会因舍入或溢出而产生与 `Math.tanh` 不同的结果。</p>
         </emu-note>
       </emu-clause>
 
@@ -34818,7 +34818,7 @@ THH:mm:ss.sss
         <pre><code class="javascript">
           Date.parse(x.toLocaleString())
         </code></pre>
-        <p>不要求产生与前述三个表达式相同的 Number 值；一般而言，当为此函数提供任何不符合日期时间字符串格式（<emu-xref href="#sec-date-time-string-format"></emu-xref>）、并且无法由该实现中的 `toString` 或 `toUTCString` 方法产生的 String 值时，其产生的值由实现定义。</p>
+        <p>不要求产生与前述表达式相同的 Number 值；一般而言，当为此函数提供任何不符合日期时间字符串格式（<emu-xref href="#sec-date-time-string-format"></emu-xref>）、并且无法由该实现中的 `toString` 或 `toUTCString` 方法产生的 String 值时，其产生的值由实现定义。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype">
@@ -45974,7 +45974,7 @@ THH:mm:ss.sss
         <p>HostGrowSharedArrayBuffer 的实现必须符合以下要求：</p>
         <ul>
           <li>如果该抽象操作没有以 ~unhandled~ 正常完成，并且 _newByteLength_ &lt; _buffer_ 的当前字节长度或 _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]]，则抛出 *RangeError* 异常。</li>
-          <li>令 _agentRecord_ 为周围代理的 Agent Record。令 _isLittleEndian_ 为 _agentRecord_.[[LittleEndian]]。如果该抽象操作以 ~handled~ 正常完成，则会向周围代理的候选执行中添加一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，其 [[Order]] 是 ~seq-cst~、[[Payload]] 是 NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] 是 _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] 是 0，并且 [[ElementSize]] 是 8，从而确保对 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 的竞争调用不会“丢失”，即悄无声息地不执行任何操作。</li>
+          <li>令 _agentRecord_ 为周围代理的 Agent Record。令 _isLittleEndian_ 为 _agentRecord_.[[LittleEndian]]。如果该抽象操作以 ~handled~ 正常完成，则会向周围代理的候选执行中添加一个 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件，其 [[Order]] 是 ~seq-cst~、[[Payload]] 是 NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_)、[[Block]] 是 _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] 是 0，并且 [[ElementSize]] 是 8，从而确保对 <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> 的竞争调用不会“丢失”，即悄无声息地不执行任何操作。</li>
         </ul>
 
         <emu-note>
@@ -48510,7 +48510,7 @@ THH:mm:ss.sss
         </emu-alg>
 
         <emu-note>
-          <p>根据本规范中的算法和定义，当 _finalizationRegistry_.[[Cells]] 包含 _cell_ 时，_cell_.[[HeldValue]] 是存活的；不过，这并不一定意味着 _cell_.[[UnregisterToken]] 或 _cell_.[[Target]] 是存活的。例如，将对象自身注册为其取消注册 token 并不会使该对象永远保持存活。</p>
+          <p>根据本规范中的算法和定义，当 _finalizationRegistry_.[[Cells]] 包含 _cell_ 时，_cell_.[[HeldValue]] 是存活的；不过，这并不一定意味着 _cell_.[[UnregisterToken]] 或 _cell_.[[WeakRefTarget]] 是存活的。例如，将对象自身注册为其取消注册 token 并不会使该对象永远保持存活。</p>
         </emu-note>
       </emu-clause>
 
@@ -54053,8 +54053,8 @@ THH:mm:ss.sss
       <emu-annex id="sec-compileassertion-annexb">
         <h1>Runtime Semantics: CompileAssertion</h1>
         <p>带参数 _regexpRecord_ 的 CompileAssertion 语义扩展如下：</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> 相同，但用 |QuantifiableAssertion| 替换 |Atom|。</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> 相同，但用 |QuantifiableAssertion| 替换 |Atom|。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> 相同，但用 |QuantifiableAssertion| 替换 |Assertion|。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> 的规则与 <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> 相同，但用 |QuantifiableAssertion| 替换 |Assertion|。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">

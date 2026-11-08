@@ -30452,7 +30452,7 @@
 
       <emu-clause id="sec-decodeuri-encodeduri" type="built-in function">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>This function computes a new version of a URI in which each escape sequence and UTF-8 encoding of the sort that might be introduced by the `encodeURI` function is replaced with the UTF-16 encoding of the code point that it represents. Escape sequences that could not have been introduced by `encodeURI` are not replaced.</p>
+        <p>This function computes a new version of a URI in which each escape sequence and UTF-8 encoding of the sort that might be introduced by the `encodeURI` function is replaced with the UTF-16 encoding of the code point that it represents. Escape sequences that represent characters in *";/?:@&=+$,#"* are not replaced.</p>
         <p>It is the <dfn>%decodeURI%</dfn> intrinsic object.</p>
         <p>It performs the following steps when called:</p>
         <emu-alg>
@@ -31642,7 +31642,7 @@
           <p>Function objects created using `Function.prototype.bind` are exotic objects. They also do not have a *"prototype"* property.</p>
         </emu-note>
         <emu-note>
-          <p>If _target_ is either an arrow function or a bound function exotic object, then the _thisArg_ passed to this method will not be used by subsequent calls to _func_.</p>
+          <p>If _target_ is either an arrow function or a bound function exotic object, then the _thisArg_ passed to this method will not be used by subsequent calls to _boundFunc_.</p>
         </emu-note>
       </emu-clause>
 
@@ -33378,7 +33378,7 @@
           1. Return an implementation-approximated Number value representing the hyperbolic cosine of ℝ(_n_).
         </emu-alg>
         <emu-note>
-          <p>The value of `Math.cosh(x)` is the same as the value of `(Math.exp(x) + Math.exp(-x)) / 2`.</p>
+          <p>For a real number _x_, the hyperbolic cosine is (e<sup>_x_</sup> + e<sup>-_x_</sup>) / 2. Computing this expression using `Math.exp` may produce a different result from `Math.cosh` because of rounding or overflow.</p>
         </emu-note>
       </emu-clause>
 
@@ -33658,7 +33658,7 @@
           1. Return an implementation-approximated Number value representing the hyperbolic sine of ℝ(_n_).
         </emu-alg>
         <emu-note>
-          <p>The value of `Math.sinh(x)` is the same as the value of `(Math.exp(x) - Math.exp(-x)) / 2`.</p>
+          <p>For a real number _x_, the hyperbolic sine is (e<sup>_x_</sup> - e<sup>-_x_</sup>) / 2. Computing this expression using `Math.exp` may produce a different result from `Math.sinh` because of rounding or overflow.</p>
         </emu-note>
       </emu-clause>
 
@@ -33744,7 +33744,7 @@
           1. Return an implementation-approximated Number value representing the hyperbolic tangent of ℝ(_n_).
         </emu-alg>
         <emu-note>
-          <p>The value of `Math.tanh(x)` is the same as the value of `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))`.</p>
+          <p>For a real number _x_, the hyperbolic tangent is (e<sup>_x_</sup> - e<sup>-_x_</sup>) / (e<sup>_x_</sup> + e<sup>-_x_</sup>). Computing this expression using `Math.exp` may produce a different result from `Math.tanh` because of rounding or overflow.</p>
         </emu-note>
       </emu-clause>
 
@@ -34811,7 +34811,7 @@ THH:mm:ss.sss
         <pre><code class="javascript">
           Date.parse(x.toLocaleString())
         </code></pre>
-        <p>is not required to produce the same Number value as the preceding three expressions and, in general, the value produced by this function is implementation-defined when given any String value that does not conform to the Date Time String Format (<emu-xref href="#sec-date-time-string-format"></emu-xref>) and that could not be produced in that implementation by the `toString` or `toUTCString` method.</p>
+        <p>is not required to produce the same Number value as the preceding expressions and, in general, the value produced by this function is implementation-defined when given any String value that does not conform to the Date Time String Format (<emu-xref href="#sec-date-time-string-format"></emu-xref>) and that could not be produced in that implementation by the `toString` or `toUTCString` method.</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype">
@@ -45966,7 +45966,7 @@ THH:mm:ss.sss
         <p>The implementation of HostGrowSharedArrayBuffer must conform to the following requirements:</p>
         <ul>
           <li>If the abstract operation does not complete normally with ~unhandled~, and _newByteLength_ &lt; the current byte length of the _buffer_ or _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]], throw a *RangeError* exception.</li>
-          <li>Let _agentRecord_ be the Agent Record of the surrounding agent. Let _isLittleEndian_ be _agentRecord_.[[LittleEndian]]. If the abstract operation completes normally with ~handled~, a WriteSharedMemory or ReadModifyWriteSharedMemory event whose [[Order]] is ~seq-cst~, [[Payload]] is NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_), [[Block]] is _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]] is 0, and [[ElementSize]] is 8 is added to the surrounding agent's candidate execution such that racing calls to <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> are not “lost”, i.e. silently do nothing.</li>
+          <li>Let _agentRecord_ be the Agent Record of the surrounding agent. Let _isLittleEndian_ be _agentRecord_.[[LittleEndian]]. If the abstract operation completes normally with ~handled~, a WriteSharedMemory or ReadModifyWriteSharedMemory event whose [[Order]] is ~seq-cst~, [[Payload]] is NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_), [[Block]] is _buffer_.[[ArrayBufferByteLengthData]], [[ByteIndex]] is 0, and [[ElementSize]] is 8 is added to the surrounding agent's candidate execution such that racing calls to <emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> are not “lost”, i.e. silently do nothing.</li>
         </ul>
 
         <emu-note>
@@ -48502,7 +48502,7 @@ THH:mm:ss.sss
         </emu-alg>
 
         <emu-note>
-          <p>Based on the algorithms and definitions in this specification, _cell_.[[HeldValue]] is live when _finalizationRegistry_.[[Cells]] contains _cell_; however, this does not necessarily mean that _cell_.[[UnregisterToken]] or _cell_.[[Target]] are live. For example, registering an object with itself as its unregister token would not keep the object alive forever.</p>
+          <p>Based on the algorithms and definitions in this specification, _cell_.[[HeldValue]] is live when _finalizationRegistry_.[[Cells]] contains _cell_; however, this does not necessarily mean that _cell_.[[UnregisterToken]] or _cell_.[[WeakRefTarget]] are live. For example, registering an object with itself as its unregister token would not keep the object alive forever.</p>
         </emu-note>
       </emu-clause>
 
@@ -54045,8 +54045,8 @@ THH:mm:ss.sss
       <emu-annex id="sec-compileassertion-annexb">
         <h1>Runtime Semantics: CompileAssertion</h1>
         <p>The semantics of CompileAssertion with argument _regexpRecord_ is extended as follows:</p>
-        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Atom|.</p>
-        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Atom|.</p>
+        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Assertion|.</p>
+        <p>The rule for <emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> is the same as for <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> but with |QuantifiableAssertion| substituted for |Assertion|.</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">

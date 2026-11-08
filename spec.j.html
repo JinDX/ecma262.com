@@ -30453,7 +30453,7 @@
 
       <emu-clause id="sec-decodeuri-encodeduri" type="built-in function">
         <h1>decodeURI ( _encodedURI_ )</h1>
-        <p>この関数は、`encodeURI` 関数によって導入される可能性がある種類の各エスケープシーケンスおよび UTF-8 エンコーディングを、それが表すコードポイントの UTF-16 エンコーディングで置き換えた URI の新しい版を計算します。`encodeURI` によって導入され得ないエスケープシーケンスは置き換えられません。</p>
+        <p>この関数は、`encodeURI` 関数によって導入される可能性がある種類の各エスケープシーケンスおよび UTF-8 エンコーディングを、それが表すコードポイントの UTF-16 エンコーディングで置き換えた URI の新しい版を計算します。*";/?:@&=+$,#"* に含まれる文字を表すエスケープシーケンスは置き換えられません。</p>
         <p>これは <dfn>%decodeURI%</dfn> イントリンシックオブジェクトです。</p>
         <p>呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
@@ -31643,7 +31643,7 @@
           <p>`Function.prototype.bind` を使用して作成された Function オブジェクトは特殊オブジェクトです。また、*"prototype"* プロパティを持ちません。</p>
         </emu-note>
         <emu-note>
-          <p>_target_ がアロー関数または bound function 特殊オブジェクトのいずれかである場合、このメソッドに渡された _thisArg_ は、以後の _func_ の呼出しでは使用されません。</p>
+          <p>_target_ がアロー関数または bound function 特殊オブジェクトのいずれかである場合、このメソッドに渡された _thisArg_ は、以後の _boundFunc_ の呼出しでは使用されません。</p>
         </emu-note>
       </emu-clause>
 
@@ -33379,7 +33379,7 @@
           1. ℝ(_n_) の双曲線余弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.cosh(x)` の値は `(Math.exp(x) + Math.exp(-x)) / 2` の値と同じである。</p>
+          <p>実数 _x_ の双曲線余弦は (e<sup>_x_</sup> + e<sup>-_x_</sup>) / 2 である。`Math.exp` を使用してこの式を計算すると、丸めやオーバーフローにより `Math.cosh` とは異なる結果になる場合がある。</p>
         </emu-note>
       </emu-clause>
 
@@ -33659,7 +33659,7 @@
           1. ℝ(_n_) の双曲線正弦を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.sinh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / 2` の値と同じである。</p>
+          <p>実数 _x_ の双曲線正弦は (e<sup>_x_</sup> - e<sup>-_x_</sup>) / 2 である。`Math.exp` を使用してこの式を計算すると、丸めやオーバーフローにより `Math.sinh` とは異なる結果になる場合がある。</p>
         </emu-note>
       </emu-clause>
 
@@ -33745,7 +33745,7 @@
           1. ℝ(_n_) の双曲線正接を表す、実装によって近似された Number 値を返す。
         </emu-alg>
         <emu-note>
-          <p>`Math.tanh(x)` の値は `(Math.exp(x) - Math.exp(-x)) / (Math.exp(x) + Math.exp(-x))` の値と同じである。</p>
+          <p>実数 _x_ の双曲線正接は (e<sup>_x_</sup> - e<sup>-_x_</sup>) / (e<sup>_x_</sup> + e<sup>-_x_</sup>) である。`Math.exp` を使用してこの式を計算すると、丸めやオーバーフローにより `Math.tanh` とは異なる結果になる場合がある。</p>
         </emu-note>
       </emu-clause>
 
@@ -34812,7 +34812,7 @@ THH:mm:ss.sss
         <pre><code class="javascript">
           Date.parse(x.toLocaleString())
         </code></pre>
-        <p>は、前の3つの式と同じ Number 値を生成する必要はありません。一般に、この関数に、日付時刻文字列形式（<emu-xref href="#sec-date-time-string-format"></emu-xref>）に適合せず、その実装の `toString` または `toUTCString` メソッドによって生成することもできない任意の String 値が渡された場合、この関数によって生成される値は実装定義です。</p>
+        <p>は、前の式と同じ Number 値を生成する必要はありません。一般に、この関数に、日付時刻文字列形式（<emu-xref href="#sec-date-time-string-format"></emu-xref>）に適合せず、その実装の `toString` または `toUTCString` メソッドによって生成することもできない任意の String 値が渡された場合、この関数によって生成される値は実装定義です。</p>
       </emu-clause>
 
       <emu-clause id="sec-date.prototype">
@@ -45967,7 +45967,7 @@ THH:mm:ss.sss
         <p>HostGrowSharedArrayBuffer の実装は次の要件に適合しなければなりません。</p>
         <ul>
           <li>この抽象操作が ~unhandled~ で正常に完了しない場合で、_newByteLength_ &lt; _buffer_ の現在の byte length または _newByteLength_ > _buffer_.[[ArrayBufferMaxByteLength]] である場合、*RangeError* 例外をスローします。</li>
-          <li>_agentRecord_ を周囲の agent の Agent Record とする。_isLittleEndian_ を _agentRecord_.[[LittleEndian]] とする。この抽象操作が ~handled~ で正常に完了した場合、[[Order]] が ~seq-cst~、[[Payload]] が NumericToRawBytes(~biguint64~, _newByteLength_, _isLittleEndian_)、[[Block]] が _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] が 0、[[ElementSize]] が 8 である WriteSharedMemory または ReadModifyWriteSharedMemory イベントが周囲の agent の candidate execution に追加され、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> の競合する呼出しが「失われる」、すなわち黙って何もしないことがないようにします。</li>
+          <li>_agentRecord_ を周囲の agent の Agent Record とする。_isLittleEndian_ を _agentRecord_.[[LittleEndian]] とする。この抽象操作が ~handled~ で正常に完了した場合、[[Order]] が ~seq-cst~、[[Payload]] が NumericToRawBytes(~biguint64~, ℤ(_newByteLength_), _isLittleEndian_)、[[Block]] が _buffer_.[[ArrayBufferByteLengthData]]、[[ByteIndex]] が 0、[[ElementSize]] が 8 である WriteSharedMemory または ReadModifyWriteSharedMemory イベントが周囲の agent の candidate execution に追加され、<emu-xref href="#sec-sharedarraybuffer.prototype.grow" title></emu-xref> の競合する呼出しが「失われる」、すなわち黙って何もしないことがないようにします。</li>
         </ul>
 
         <emu-note>
@@ -48503,7 +48503,7 @@ THH:mm:ss.sss
         </emu-alg>
 
         <emu-note>
-          <p>この仕様のアルゴリズムおよび定義に基づけば、_finalizationRegistry_.[[Cells]] が _cell_ を含むとき _cell_.[[HeldValue]] は生存しています。ただし、これは必ずしも _cell_.[[UnregisterToken]] または _cell_.[[Target]] が生存していることを意味しません。たとえば、オブジェクト自身を unregister token として登録しても、そのオブジェクトが永久に生存し続けることにはなりません。</p>
+          <p>この仕様のアルゴリズムおよび定義に基づけば、_finalizationRegistry_.[[Cells]] が _cell_ を含むとき _cell_.[[HeldValue]] は生存しています。ただし、これは必ずしも _cell_.[[UnregisterToken]] または _cell_.[[WeakRefTarget]] が生存していることを意味しません。たとえば、オブジェクト自身を unregister token として登録しても、そのオブジェクトが永久に生存し続けることにはなりません。</p>
         </emu-note>
       </emu-clause>
 
@@ -54046,8 +54046,8 @@ THH:mm:ss.sss
       <emu-annex id="sec-compileassertion-annexb">
         <h1>Runtime Semantics: CompileAssertion</h1>
         <p>引数 _regexpRecord_ を持つ CompileAssertion の意味論は、次のように拡張されます。</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> のルールは、|Atom| の代わりに |QuantifiableAssertion| を使用することを除き、<emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> と同じです。</p>
-        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> のルールは、|Atom| の代わりに |QuantifiableAssertion| を使用することを除き、<emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> と同じです。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?=` Disjunction `)`</emu-grammar> のルールは、|Assertion| の代わりに |QuantifiableAssertion| を使用することを除き、<emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar> と同じです。</p>
+        <p><emu-grammar>QuantifiableAssertion :: `(?!` Disjunction `)`</emu-grammar> のルールは、|Assertion| の代わりに |QuantifiableAssertion| を使用することを除き、<emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar> と同じです。</p>
       </emu-annex>
 
       <emu-annex id="sec-compileatom-annexb">
