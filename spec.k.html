@@ -2926,14 +2926,7 @@
           </li>
         </ul>
         <h2>반환값:</h2>
-        <p>모든 내부 메서드가 반환하는 값은 다음 중 하나인 Completion Record여야 합니다:</p>
-        <ul>
-          <li>[[Type]] = ~normal~, [[Target]] = ~empty~, 그리고 [[Value]] = 해당 내부 메서드에 대해 아래에 표시된 “정상 반환 타입”의 값, 또는</li>
-          <li>[[Type]] = ~throw~, [[Target]] = ~empty~, 그리고 [[Value]] = 임의의 ECMAScript 언어 값.</li>
-        </ul>
-        <emu-note>
-          <p>내부 메서드는 continue 완료, break 완료 또는 return 완료를 반환해서는 안 됩니다.</p>
-        </emu-note>
+        <p>내부 메서드가 반환하는 값은 해당 내부 메서드에 대해 아래에 표시된 “정상 반환 타입”의 값을 포함하는 정상 완료 또는 [[Value]]가 ECMAScript 언어 값인 throw 완료여야 합니다. 어느 경우든 [[Target]] 필드는 ~empty~여야 합니다.</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -47519,7 +47512,7 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>이 함수는 호출 에이전트가 알림을 받거나 타임아웃에 도달하면 이행되는 Promise를 반환합니다.</p>
+      <p>이 함수는 `async`와 `value` 프로퍼티를 가진 Object를 반환합니다. `async`가 *true*이면 `value`는 Promise이며, 호출 에이전트가 알림을 받으면 *"ok"*로 이행되고 타임아웃에 도달하면 *"timed-out"*으로 이행됩니다. 그렇지 않으면 `async`는 *false*이고 `value`는 *"not-equal"* 또는 *"timed-out"*입니다.</p>
       <p>호출되면 다음 단계를 수행합니다:</p>
       <emu-alg>
         1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)를 반환합니다.
@@ -51108,7 +51101,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>_resolution_으로 resolve된 새로운 promise를 반환합니다.</dd>
+            <dd>_resolution_으로 resolve된 새로운 promise를 반환하거나, _resolution_이 *"constructor"* 프로퍼티가 _ctor_인 promise이면 _resolution_ 자체를 반환합니다.</dd>
           </dl>
           <emu-alg>
             1. IsPromise(_resolution_)이 *true*이면, 다음을 수행합니다.
@@ -53054,7 +53047,7 @@ THH:mm:ss.sss
           <p>SharedDataBlockEventSet(_execution_)의 각 ReadSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _readEvent_에 대해, _execution_에서 reads-bytes-from(_readEvent_)은 길이가 _readEvent_.[[ElementSize]]인 List이며 그 요소는 다음이 모두 참인 WriteSharedMemory 또는 ReadModifyWriteSharedMemory 이벤트 _writes_입니다.</p>
           <ul>
             <li>_writes_에서 인덱스 _i_인 각 이벤트 _writeEvent_는 자신의 메모리 범위에 _readEvent_.[[ByteIndex]] + _i_를 포함합니다.</li>
-            <li>_result_는 _writes_에 포함되지 않습니다.</li>
+            <li>_readEvent_는 _writes_에 포함되지 않습니다.</li>
           </ul>
         </li>
       </ul>

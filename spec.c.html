@@ -2926,14 +2926,7 @@
           </li>
         </ul>
         <h2>返回值：</h2>
-        <p>任何内部方法返回的值都必须是 Completion Record，并且满足以下两种情况之一：</p>
-        <ul>
-          <li>[[Type]] = ~normal~、[[Target]] = ~empty~，且 [[Value]] = 下方为该内部方法显示的“正常返回类型”的值，或</li>
-          <li>[[Type]] = ~throw~、[[Target]] = ~empty~，且 [[Value]] = 任意 ECMAScript 语言值。</li>
-        </ul>
-        <emu-note>
-          <p>内部方法不得返回 continue 完成、break 完成或 return 完成。</p>
-        </emu-note>
+        <p>内部方法返回的值必须是正常完成（包含下方为该内部方法显示的“正常返回类型”的值），或抛出完成（其 [[Value]] 是 ECMAScript 语言值）。无论哪种情况，其 [[Target]] 字段都必须是 ~empty~。</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -47525,7 +47518,7 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>此函数返回一个 Promise，该 Promise 在调用代理收到通知或达到超时时间时被解决。</p>
+      <p>此函数返回一个具有 `async` 和 `value` 属性的 Object。如果 `async` 为 *true*，则 `value` 是一个 Promise，该 Promise 在调用代理收到通知时以 *"ok"* 兑现，或在达到超时时间时以 *"timed-out"* 兑现。否则，`async` 为 *false*，而 `value` 为 *"not-equal"* 或 *"timed-out"*。</p>
       <p>调用时，它执行以下步骤：</p>
       <emu-alg>
         1. 返回 ? DoWait(~async~, _ta_, _index_, _value_, _timeout_)。
@@ -51114,7 +51107,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>它返回一个以 _resolution_ 解决的新 promise。</dd>
+            <dd>它返回一个以 _resolution_ 解决的新 promise；或者，如果 _resolution_ 是一个 *"constructor"* 属性为 _ctor_ 的 promise，则返回 _resolution_ 本身。</dd>
           </dl>
           <emu-alg>
             1. 如果 IsPromise(_resolution_) 是 *true*，则
@@ -53060,7 +53053,7 @@ THH:mm:ss.sss
           <p>对于 SharedDataBlockEventSet(_execution_) 中的每个 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件 _readEvent_，reads-bytes-from(_readEvent_) in _execution_ 是长度为 _readEvent_.[[ElementSize]] 的 List，其元素是 WriteSharedMemory 或 ReadModifyWriteSharedMemory 事件 _writes_，并满足以下所有条件。</p>
           <ul>
             <li>_writes_ 中索引为 _i_ 的每个事件 _writeEvent_，其内存范围都包含 _readEvent_.[[ByteIndex]] + _i_。</li>
-            <li>_result_ 不在 _writes_ 中。</li>
+            <li>_readEvent_ 不在 _writes_ 中。</li>
           </ul>
         </li>
       </ul>

@@ -2926,14 +2926,7 @@
           </li>
         </ul>
         <h2>戻り値:</h2>
-        <p>任意の内部メソッドによって返される値は、次のいずれかを持つ Completion Record でなければなりません。</p>
-        <ul>
-          <li>[[Type]] = ~normal~、[[Target]] = ~empty~、および [[Value]] = その内部メソッドについて以下に示される「正常戻り値型」の値、または</li>
-          <li>[[Type]] = ~throw~、[[Target]] = ~empty~、および [[Value]] = 任意の ECMAScript 言語値。</li>
-        </ul>
-        <emu-note>
-          <p>内部メソッドは、continue 完了、break 完了、または return 完了を返してはなりません。</p>
-        </emu-note>
+        <p>内部メソッドによって返される値は、その内部メソッドについて以下に示される「正常戻り値型」の値を含む正常完了、または [[Value]] が ECMAScript 言語値である throw 完了のいずれかでなければなりません。どちらの場合も、その [[Target]] フィールドは ~empty~ でなければなりません。</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -47518,7 +47511,7 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>この関数は、呼出し元の agent が通知されるか timeout に達したときに解決される Promise を返します。</p>
+      <p>この関数は、`async` プロパティと `value` プロパティを持つ Object を返します。`async` が *true* である場合、`value` は Promise であり、呼出し元の agent が通知されたときに *"ok"* で、または timeout に達したときに *"timed-out"* で履行されます。それ以外の場合、`async` は *false* であり、`value` は *"not-equal"* または *"timed-out"* です。</p>
       <p>呼び出されたとき、次の手順を実行します。</p>
       <emu-alg>
         1. ? DoWait(~async~, _ta_, _index_, _value_, _timeout_) を返す。
@@ -51107,7 +51100,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>_resolution_ で resolve された新しい promise を返します。</dd>
+            <dd>_resolution_ で resolve された新しい promise、または _resolution_ が *"constructor"* プロパティが _ctor_ である promise の場合には _resolution_ 自体を返します。</dd>
           </dl>
           <emu-alg>
             1. IsPromise(_resolution_) が *true* である場合、
@@ -53053,7 +53046,7 @@ THH:mm:ss.sss
           <p>SharedDataBlockEventSet(_execution_) 内の各 ReadSharedMemory または ReadModifyWriteSharedMemory イベント _readEvent_ について、_execution_ における reads-bytes-from(_readEvent_) は長さ _readEvent_.[[ElementSize]] の List であり、その要素は次のすべてを満たす WriteSharedMemory または ReadModifyWriteSharedMemory イベント _writes_ です。</p>
           <ul>
             <li>_writes_ 内のインデックス _i_ を持つ各イベント _writeEvent_ は、そのメモリ範囲に _readEvent_.[[ByteIndex]] + _i_ を含みます。</li>
-            <li>_result_ は _writes_ に含まれません。</li>
+            <li>_readEvent_ は _writes_ に含まれません。</li>
           </ul>
         </li>
       </ul>

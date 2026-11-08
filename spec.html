@@ -2925,14 +2925,7 @@
           </li>
         </ul>
         <h2>Return value:</h2>
-        <p>The value returned by any internal method must be a Completion Record with either:</p>
-        <ul>
-          <li>[[Type]] = ~normal~, [[Target]] = ~empty~, and [[Value]] = a value of the “normal return type” shown below for that internal method, or</li>
-          <li>[[Type]] = ~throw~, [[Target]] = ~empty~, and [[Value]] = any ECMAScript language value.</li>
-        </ul>
-        <emu-note>
-          <p>An internal method must not return a continue completion, a break completion, or a return completion.</p>
-        </emu-note>
+        <p>The value returned by an internal method must be either a normal completion containing a value of the “normal return type” shown below for that internal method or a throw completion whose [[Value]] is an ECMAScript language value. In either case, its [[Target]] field must be ~empty~.</p>
         <h2>[[GetPrototypeOf]] ( )</h2>
         <ul>
           <li>
@@ -47517,7 +47510,7 @@ THH:mm:ss.sss
 
     <emu-clause id="sec-atomics.waitasync" type="built-in function">
       <h1>Atomics.waitAsync ( _ta_, _index_, _value_, _timeout_ )</h1>
-      <p>This function returns a Promise that is resolved when the calling agent is notified or the timeout is reached.</p>
+      <p>This function returns an Object with `async` and `value` properties. If `async` is *true*, `value` is a Promise that is fulfilled with either *"ok"* when the calling agent is notified or with *"timed-out"* when the timeout is reached. Otherwise, `async` is *false* and `value` is either *"not-equal"* or *"timed-out"*.</p>
       <p>It performs the following steps when called:</p>
       <emu-alg>
         1. Return ? DoWait(~async~, _ta_, _index_, _value_, _timeout_).
@@ -51106,7 +51099,7 @@ THH:mm:ss.sss
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>It returns a new promise resolved with _resolution_.</dd>
+            <dd>It returns either a new promise resolved with _resolution_, or _resolution_ itself if it is a promise whose *"constructor"* property is _ctor_.</dd>
           </dl>
           <emu-alg>
             1. If IsPromise(_resolution_) is *true*, then
@@ -53052,7 +53045,7 @@ THH:mm:ss.sss
           <p>For each ReadSharedMemory or ReadModifyWriteSharedMemory event _readEvent_ in SharedDataBlockEventSet(_execution_), reads-bytes-from(_readEvent_) in _execution_ is a List of length _readEvent_.[[ElementSize]] whose elements are WriteSharedMemory or ReadModifyWriteSharedMemory events _writes_ such that all of the following are true.</p>
           <ul>
             <li>Each event _writeEvent_ with index _i_ in _writes_ has _readEvent_.[[ByteIndex]] + _i_ in its memory range.</li>
-            <li>_result_ is not in _writes_.</li>
+            <li>_readEvent_ is not in _writes_.</li>
           </ul>
         </li>
       </ul>
