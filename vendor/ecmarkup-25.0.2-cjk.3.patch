@@ -1,0 +1,33 @@
+--- a/lib/type-display.js
++++ b/lib/type-display.js
+@@ -239,6 +239,8 @@
+     'non-negative integer': ['非负整数', '非負整数', '음이 아닌 정수'],
+     'positive integer': ['正整数', '正の整数', '양의 정수'],
+     integer: ['整数', '整数', '정수'],
++    'time value': ['时间值', '時刻値', '시간 값'],
++    'finite time value': ['有限时间值', '有限時刻値', '유한 시간 값'],
+     'integral Number': ['整数 Number', '整数の Number', '정수인 Number'],
+     'non-negative integral Number': [
+         '非负整数 Number',
+@@ -300,6 +302,21 @@
+     if (/[<>]/.test(input))
+         return input;
+     const bare = input.replace(/^an? /, '');
++    // Translate only explicit decimal bounds; never widen interval endpoints.
++    const closed = bare.match(/^integer in the inclusive interval from (\d+) to (\d+)$/);
++    if (closed) {
++        const [, lower, upper] = closed;
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `${lower} 到 ${upper} 的闭区间内的整数`,
++            `${lower} 以上 ${upper} 以下の整数`,
++            `${lower} 이상 ${upper} 이하인 정수`));
++    }
++    if (bare === 'integer in the interval from 0 (inclusive) to MillisecondsPerDay (exclusive)') {
++        return term(input, (0, i18n_1.pick)(spec, input,
++            '大于等于 0 且小于 MillisecondsPerDay 的整数',
++            '0 以上 MillisecondsPerDay 未満の整数',
++            '0 이상 MillisecondsPerDay 미만인 정수'));
++    }
+     const forms = [bare, bare.replace(/s$/, ''), bare.replace(/ies$/, 'y')];
+     for (const form of forms) {
+         const values = Object.prototype.hasOwnProperty.call(nouns, form) ? nouns[form] : undefined;
