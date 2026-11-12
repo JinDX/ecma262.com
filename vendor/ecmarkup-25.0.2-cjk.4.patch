@@ -1,0 +1,22 @@
+--- a/lib/term-display.js
++++ b/lib/term-display.js
+@@ -61,6 +61,19 @@
+             namespaces.set(namespace, lookup);
+         }
+         const { replacer, autolinkmap } = lookup;
++        // This interval contains a named equation, not one translated term.
++        // Link only the unchanged identifier, never the whole interval or other
++        // substrings in generated labels. Missing definitions stay plain text.
++        if (original.replace(/^an? /, '') ===
++            'integer in the interval from 0 (inclusive) to MillisecondsPerDay (exclusive)' &&
++            node.childNodes.length === 1 && node.firstChild.nodeType === 3) {
++            const dayConstant = autolinkmap.MillisecondsPerDay;
++            if ((dayConstant === null || dayConstant === void 0 ? void 0 : dayConstant.type) === 'op') {
++                (0, autolinker_1.autolink)(node.firstChild, /\bMillisecondsPerDay\b/g, autolinkmap, clause !== null && clause !== void 0 ? clause : spec, currentId, false);
++            }
++            node.replaceWith(...node.childNodes);
++            continue;
++        }
+         const entries = new Map();
+         for (const match of original.matchAll(replacer)) {
+             const entry = autolinkmap[match[0].replace(/\s+/g, ' ')];
