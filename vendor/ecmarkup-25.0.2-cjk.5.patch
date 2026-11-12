@@ -1,0 +1,27 @@
+--- a/lib/Algorithm.js
++++ b/lib/Algorithm.js
+@@ -68,11 +68,14 @@
+         // these are macros in ECMA-262 that expand to steps that include a return/throw/?
+         const earlyExitMacro = /\bIfAbrupt(?:CloseIterators?|CloseAsyncIterator|RejectPromise)\(/;
+         const note = /^(?:NOTE|Assert): /;
++        const localizedExit = /返回(?!的)|抛出|(?<!繰り)返[すし]|返却|スロー|投げ|반환(?!한\s)|던[집지져진]|(?:^|[^\w])\?\s/;
++        const localizedNote = /^(?:注|断言|注記|注意|表明|단언|주|참고|참고 사항|주의)\s*[:：]/;
++        const localizedClosure = /(?:被)?调用时(?:以原子方式)?执行以下步骤[：:]$|呼び出されたときに.*(?:手順|ステップ)を.*実行|호출될 때 다음 단계를 (?:원자적으로 )?수행/;
+         for (const ol of node.querySelectorAll('ol')) {
+             const items = ol.children;
+             for (let i = 0; i < items.length; i++) {
+                 const text = (0, utils_1.ownTextContent)(items[i]);
+-                if ((earlyExitIndicator.test(text) || earlyExitMacro.test(text)) && !note.test(text)) {
++                if ((earlyExitIndicator.test(text) || earlyExitMacro.test(text) || localizedExit.test(text)) && !note.test(text) && !localizedNote.test(text)) {
+                     items[i].classList.add('exit');
+                 }
+             }
+@@ -115,7 +118,7 @@
+             }
+         }
+         for (const step of node.querySelectorAll('li')) {
+-            if ((0, utils_1.isAbstractClosureHeader)((0, utils_1.ownTextContent)(step))) {
++            if ((0, utils_1.isAbstractClosureHeader)((0, utils_1.ownTextContent)(step)) || localizedClosure.test((0, utils_1.ownTextContent)(step))) {
+                 for (const ol of step.children) {
+                     if (ol.tagName === 'OL') {
+                         ol.classList.add('ac-body');

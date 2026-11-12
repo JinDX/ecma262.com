@@ -584,9 +584,9 @@
     <emu-clause id=sec-evaluation-order>
       <h1><span class=secnum>5.2.1</span> 評価順序</h1>
       <p>アルゴリズムの手順に複雑な式が現れる場合、それらは左から右、内側から外側の順に評価されるものとして解釈されます。たとえば、次の手順:</p>
-      <emu-alg example=""><ol><li>A(B(), C.<var class=field>[[D]]</var>) + E(F()) を返す。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit>A(B(), C.<var class=field>[[D]]</var>) + E(F()) を返す。</li></ol></emu-alg>
       <p>は、次と同等です。</p>
-      <emu-alg example=""><ol><li><var>tmp1</var> を B() とする。</li><li><var>tmp2</var> を C.<var class=field>[[D]]</var> とする。</li><li><var>tmp3</var> を A(<var>tmp1</var>, <var>tmp2</var>) とする。</li><li><var>tmp4</var> を F() とする。</li><li><var>tmp5</var> を E(<var>tmp4</var>) とする。</li><li><var>tmp6</var> を <var>tmp3</var> + <var>tmp5</var> とする。</li><li><var>tmp6</var> を返す。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li><var>tmp1</var> を B() とする。</li><li><var>tmp2</var> を C.<var class=field>[[D]]</var> とする。</li><li><var>tmp3</var> を A(<var>tmp1</var>, <var>tmp2</var>) とする。</li><li><var>tmp4</var> を F() とする。</li><li><var>tmp5</var> を E(<var>tmp4</var>) とする。</li><li><var>tmp6</var> を <var>tmp3</var> + <var>tmp5</var> とする。</li><li class=exit><var>tmp6</var> を返す。</li></ol></emu-alg>
       <p>ここで、各 <var>tmpN</var> の別名は一時的なものであり、これらの手順内でのみ参照できます。</p>
     </emu-clause>
 
@@ -620,7 +620,7 @@
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <emu-alg example=""><ol><li><emu-nt id=_ref_19879><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt> の <emu-xref id=_ref_1173 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref> を返す。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit><emu-nt id=_ref_19879><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt> の <emu-xref id=_ref_1173 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref> を返す。</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id=sec-runtime-semantics>
@@ -630,19 +630,19 @@
       <emu-clause id=sec-completion-ao aoid=Completion type="abstract operation">
         <h1><span class=secnum>5.2.4.1</span> Completion ( <var>completionRecord</var> )</h1>
         <p><emu-xref id=_ref_16917 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref> Completion。引数 <var>completionRecord</var> (<emu-xref id=_ref_16915 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>完了レコード</a></emu-xref>)。戻り値：<emu-xref id=_ref_16916 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>完了レコード</a></emu-xref>。 <emu-xref id=_ref_1176 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> が返されることを強調するために使用されます。 呼び出されると、次の手順を実行する。</p>
-        <emu-alg><ol><li><emu-xref id=_ref_1177 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>completionRecord</var> は <emu-xref id=_ref_1178 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li><var>completionRecord</var> を返す。</li></ol></emu-alg>
+        <emu-alg><ol><li><emu-xref id=_ref_1177 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>completionRecord</var> は <emu-xref id=_ref_1178 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li class=exit><var>completionRecord</var> を返す。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-throw-an-exception>
         <h1><span class=secnum>5.2.4.2</span> スロー</h1>
         <p>アルゴリズムの手順における“スローする”という語は、<emu-xref id=_ref_1179 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref> を呼び出した結果を返すことの短縮表記です。たとえば:</p>
-        <emu-alg example=""><ol><li>もし <var>result</var>.<var class=field>[[Error]]</var> が <emu-const>none</emu-const> でなければ、<var>result</var>.<var class=field>[[Error]]</var> をスローする。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>もし <var>result</var>.<var class=field>[[Error]]</var> が <emu-const>none</emu-const> でなければ、<var>result</var>.<var class=field>[[Error]]</var> をスローする。</li></ol></emu-alg>
         <p>は、次と同等です。</p>
-        <emu-alg example=""><ol><li>もし <var>result</var>.<var class=field>[[Error]]</var> が <emu-const>none</emu-const> でなければ、<emu-xref id=_ref_1180 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>) を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>もし <var>result</var>.<var class=field>[[Error]]</var> が <emu-const>none</emu-const> でなければ、<emu-xref id=_ref_1180 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>) を返す。</li></ol></emu-alg>
         <p>特定の型の例外をスローすると記述されたアルゴリズムの手順は、スローするために、その型の例外を構築します。たとえば:</p>
-        <emu-alg example=""><ol><li><emu-val>TypeError</emu-val> 例外をスローする。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-val>TypeError</emu-val> 例外をスローする。</li></ol></emu-alg>
         <p>は、次と同等です。</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1181 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(新しく作成された <emu-val>TypeError</emu-val> オブジェクト) を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1181 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(新しく作成された <emu-val>TypeError</emu-val> オブジェクト) を返す。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-shorthands-for-unwrapping-completion-records oldids=sec-returnifabrupt,sec-returnifabrupt-shorthands><span id=sec-returnifabrupt-shorthands></span><span id=sec-returnifabrupt></span>
@@ -650,7 +650,7 @@
         <p>接頭記号“?”と“!”は、<emu-xref id=_ref_1182 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> をアンラップする短縮記法として使用されます。“?”は、<emu-xref id=_ref_1183 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>中断完了</a></emu-xref>を呼出し元へ伝播させるため、または、そうでない場合に<emu-xref id=_ref_1184 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>正常完了</a></emu-xref>をアンラップするために使用されます。“!”は、<emu-xref id=_ref_1185 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> が正常であることを<emu-xref id=_ref_1186 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>し、それをアンラップするために使用されます。形式的には、次の手順:</p>
         <emu-alg example=""><ol><li class=exit><var>result</var> を ? <var>record</var> とする。</li></ol></emu-alg>
         <p>は、次と同等です。</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1187 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>record</var> は <emu-xref id=_ref_1188 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li>もし <var>record</var> が<emu-xref id=_ref_1189 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>中断完了</a></emu-xref>であれば、<var>record</var> を返す。</li><li><var>result</var> を <var>record</var>.<var class=field>[[Value]]</var> とする。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><emu-xref id=_ref_1187 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>record</var> は <emu-xref id=_ref_1188 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li class=exit>もし <var>record</var> が<emu-xref id=_ref_1189 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>中断完了</a></emu-xref>であれば、<var>record</var> を返す。</li><li><var>result</var> を <var>record</var>.<var class=field>[[Value]]</var> とする。</li></ol></emu-alg>
         <p>同様に、次の手順:</p>
         <emu-alg example=""><ol><li><var>result</var> を ! <var>record</var> とする。</li></ol></emu-alg>
         <p>は、次と同等です。</p>
@@ -660,7 +660,7 @@
         <p>は、次のように書き換えられます。</p>
         <emu-alg example=""><ol><li><var>tmp1</var> を Other() とする。</li><li class=exit><var>tmp2</var> を ? <var>tmp1</var> とする。</li><li>AO(<var>tmp2</var>) を実行する。</li></ol></emu-alg>
         <p>これは、さらに次のように展開されます。</p>
-        <emu-alg example=""><ol><li><var>tmp1</var> を Other() とする。</li><li><emu-xref id=_ref_1192 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>tmp1</var> は <emu-xref id=_ref_1193 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li>もし <var>tmp1</var> が<emu-xref id=_ref_1194 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>中断完了</a></emu-xref>であれば、<var>tmp1</var> を返す。</li><li><var>tmp2</var> を <var>tmp1</var>.<var class=field>[[Value]]</var> とする。</li><li>AO(<var>tmp2</var>) を実行する。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>tmp1</var> を Other() とする。</li><li><emu-xref id=_ref_1192 href=#assert><a href=notational-conventions.html#assert>表明</a></emu-xref>: <var>tmp1</var> は <emu-xref id=_ref_1193 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> である。</li><li class=exit>もし <var>tmp1</var> が<emu-xref id=_ref_1194 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>中断完了</a></emu-xref>であれば、<var>tmp1</var> を返す。</li><li><var>tmp2</var> を <var>tmp1</var>.<var class=field>[[Value]]</var> とする。</li><li>AO(<var>tmp2</var>) を実行する。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-implicit-normal-completion oldids=sec-implicit-completion-values><span id=sec-implicit-completion-values></span>
@@ -671,17 +671,17 @@
           <li><emu-xref id=_ref_1205 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> を構築した結果を直接返す場合</li>
         </ul>
         <p>このような<emu-xref id=_ref_1206 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref>から、その他の手段で <emu-xref id=_ref_1207 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> が返される場合、それは編集上の誤りです。たとえば、これらの<emu-xref id=_ref_1208 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref>内では:</p>
-        <emu-alg example=""><ol><li><emu-val>true</emu-val> を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-val>true</emu-val> を返す。</li></ol></emu-alg>
         <p>は、以下のいずれとも同じ意味です。</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1209 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1209 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) を返す。</li></ol></emu-alg>
         <p>または:</p>
-        <emu-alg example=""><ol><li><var>completion</var> を <emu-xref id=_ref_1210 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) とする。</li><li><emu-xref id=_ref_1211 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>) を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>completion</var> を <emu-xref id=_ref_1210 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) とする。</li><li class=exit><emu-xref id=_ref_1211 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>) を返す。</li></ol></emu-alg>
         <p>または:</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1212 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> } を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1212 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> } を返す。</li></ol></emu-alg>
         <p><emu-xref id=_ref_39 href=#sec-shorthands-for-unwrapping-completion-records><a href=notational-conventions.html#sec-shorthands-for-unwrapping-completion-records>? 短縮記法の展開</a></emu-xref>により、次の例は許可されることに注意してください。展開後の手順では、中断の場合には <emu-xref id=_ref_1213 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref> を適用した結果が直接返され、正常の場合にはアンラップの後に暗黙の <emu-xref id=_ref_1214 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref> の適用が行われるためです。</p>
-        <emu-alg example=""><ol><li>? <var>completion</var> を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>? <var>completion</var> を返す。</li></ol></emu-alg>
         <p>次の例は、<emu-xref id=_ref_1215 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> が、その手順で<emu-xref id=_ref_1216 href=#note-step><a href=notational-conventions.html#note-step>注記</a></emu-xref>されることなく返されているため、編集上の誤りとなります。</p>
-        <emu-alg example=""><ol><li><var>completion</var> を <emu-xref id=_ref_1217 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) とする。</li><li><var>completion</var> を返す。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>completion</var> を <emu-xref id=_ref_1217 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>) とする。</li><li class=exit><var>completion</var> を返す。</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 

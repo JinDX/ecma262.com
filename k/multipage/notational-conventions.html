@@ -584,9 +584,9 @@
     <emu-clause id=sec-evaluation-order>
       <h1><span class=secnum>5.2.1</span> 평가 순서</h1>
       <p>알고리즘 단계에 복합 표현식이 나타나면, 왼쪽에서 오른쪽으로, 안쪽에서 바깥쪽으로 평가되는 것으로 이해해야 합니다. 예를 들어 다음 단계는</p>
-      <emu-alg example=""><ol><li>A(B(), C.<var class=field>[[D]]</var>) + E(F())를 반환합니다.</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit>A(B(), C.<var class=field>[[D]]</var>) + E(F())를 반환합니다.</li></ol></emu-alg>
       <p>다음과 같습니다</p>
-      <emu-alg example=""><ol><li><var>tmp1</var>을 B()로 둡니다.</li><li><var>tmp2</var>를 C.<var class=field>[[D]]</var>로 둡니다.</li><li><var>tmp3</var>을 A(<var>tmp1</var>, <var>tmp2</var>)로 둡니다.</li><li><var>tmp4</var>를 F()로 둡니다.</li><li><var>tmp5</var>를 E(<var>tmp4</var>)로 둡니다.</li><li><var>tmp6</var>을 <var>tmp3</var> + <var>tmp5</var>로 둡니다.</li><li><var>tmp6</var>을 반환합니다.</li></ol></emu-alg>
+      <emu-alg example=""><ol><li><var>tmp1</var>을 B()로 둡니다.</li><li><var>tmp2</var>를 C.<var class=field>[[D]]</var>로 둡니다.</li><li><var>tmp3</var>을 A(<var>tmp1</var>, <var>tmp2</var>)로 둡니다.</li><li><var>tmp4</var>를 F()로 둡니다.</li><li><var>tmp5</var>를 E(<var>tmp4</var>)로 둡니다.</li><li><var>tmp6</var>을 <var>tmp3</var> + <var>tmp5</var>로 둡니다.</li><li class=exit><var>tmp6</var>을 반환합니다.</li></ol></emu-alg>
       <p>여기에서 각 <var>tmpN</var> 별칭은 일시적이며 이 단계들에서만 보입니다.</p>
     </emu-clause>
 
@@ -620,7 +620,7 @@
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <emu-alg example=""><ol><li><emu-nt id=_ref_19753><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt>의 <emu-xref id=_ref_1171 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref>을 반환합니다.</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit><emu-nt id=_ref_19753><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt>의 <emu-xref id=_ref_1171 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref>을 반환합니다.</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id=sec-runtime-semantics>
@@ -630,19 +630,19 @@
       <emu-clause id=sec-completion-ao aoid=Completion type="abstract operation">
         <h1><span class=secnum>5.2.4.1</span> Completion ( <var>completionRecord</var> )</h1>
         <p><emu-xref id=_ref_17009 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>추상 연산</a></emu-xref> Completion. 인수 <var>completionRecord</var> (<emu-xref id=_ref_17007 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>완료 레코드</a></emu-xref>). 반환값: <emu-xref id=_ref_17008 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>완료 레코드</a></emu-xref>. <emu-xref id=_ref_1174 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>가 반환된다는 점을 강조하는 데 사용됩니다. 호출되면 다음 단계를 수행한다.</p>
-        <emu-alg><ol><li><emu-xref id=_ref_1175 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>completionRecord</var>는 <emu-xref id=_ref_1176 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li><var>completionRecord</var>를 반환합니다.</li></ol></emu-alg>
+        <emu-alg><ol><li><emu-xref id=_ref_1175 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>completionRecord</var>는 <emu-xref id=_ref_1176 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li class=exit><var>completionRecord</var>를 반환합니다.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-throw-an-exception>
         <h1><span class=secnum>5.2.4.2</span> 예외 던지기</h1>
         <p>알고리즘 단계에서 “던집니다”라는 말은 <emu-xref id=_ref_1177 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>을 호출한 결과를 반환하는 것의 축약 표현입니다. 예를 들어,</p>
-        <emu-alg example=""><ol><li>만약 <var>result</var>.<var class=field>[[Error]]</var>가 <emu-const>none</emu-const>이 아니면, <var>result</var>.<var class=field>[[Error]]</var>를 던집니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>만약 <var>result</var>.<var class=field>[[Error]]</var>가 <emu-const>none</emu-const>이 아니면, <var>result</var>.<var class=field>[[Error]]</var>를 던집니다.</li></ol></emu-alg>
         <p>다음과 같습니다</p>
-        <emu-alg example=""><ol><li>만약 <var>result</var>.<var class=field>[[Error]]</var>가 <emu-const>none</emu-const>이 아니면, <emu-xref id=_ref_1178 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>)을 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>만약 <var>result</var>.<var class=field>[[Error]]</var>가 <emu-const>none</emu-const>이 아니면, <emu-xref id=_ref_1178 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>)을 반환합니다.</li></ol></emu-alg>
         <p>특정 타입의 예외를 던지도록 명시하는 알고리즘 단계는 던질 해당 타입의 예외를 구성합니다. 예를 들어,</p>
-        <emu-alg example=""><ol><li><emu-val>TypeError</emu-val> 예외를 던집니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-val>TypeError</emu-val> 예외를 던집니다.</li></ol></emu-alg>
         <p>다음과 같습니다</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1179 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(새로 생성한 <emu-val>TypeError</emu-val> 객체)을 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1179 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(새로 생성한 <emu-val>TypeError</emu-val> 객체)을 반환합니다.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-shorthands-for-unwrapping-completion-records oldids=sec-returnifabrupt,sec-returnifabrupt-shorthands><span id=sec-returnifabrupt-shorthands></span><span id=sec-returnifabrupt></span>
@@ -650,7 +650,7 @@
         <p>접두사 “?”와 “!”는 <emu-xref id=_ref_1180 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>의 래핑을 해제하는 축약 표현으로 사용됩니다. “?”는 <emu-xref id=_ref_1181 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>비정상 완료</a></emu-xref>를 호출자에게 전파하거나, 그렇지 않으면 <emu-xref id=_ref_1182 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>정상 완료</a></emu-xref>의 래핑을 해제하는 데 사용됩니다. “!”는 <emu-xref id=_ref_1183 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>가 정상임을 <emu-xref id=_ref_1184 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>하고 래핑을 해제하는 데 사용됩니다. 형식적으로 다음 단계는</p>
         <emu-alg example=""><ol><li class=exit><var>result</var>를 ? <var>record</var>로 둡니다.</li></ol></emu-alg>
         <p>다음과 같습니다</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1185 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>record</var>는 <emu-xref id=_ref_1186 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li>만약 <var>record</var>가 <emu-xref id=_ref_1187 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>비정상 완료</a></emu-xref>이면, <var>record</var>를 반환합니다.</li><li><var>result</var>를 <var>record</var>.<var class=field>[[Value]]</var>로 둡니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><emu-xref id=_ref_1185 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>record</var>는 <emu-xref id=_ref_1186 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li class=exit>만약 <var>record</var>가 <emu-xref id=_ref_1187 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>비정상 완료</a></emu-xref>이면, <var>record</var>를 반환합니다.</li><li><var>result</var>를 <var>record</var>.<var class=field>[[Value]]</var>로 둡니다.</li></ol></emu-alg>
         <p>마찬가지로 다음 단계는</p>
         <emu-alg example=""><ol><li><var>result</var>를 ! <var>record</var>로 둡니다.</li></ol></emu-alg>
         <p>다음과 같습니다</p>
@@ -660,7 +660,7 @@
         <p>다음과 같이 재작성할 수 있습니다</p>
         <emu-alg example=""><ol><li><var>tmp1</var>을 Other()로 둡니다.</li><li class=exit><var>tmp2</var>를 ? <var>tmp1</var>으로 둡니다.</li><li>AO(<var>tmp2</var>)를 수행합니다.</li></ol></emu-alg>
         <p>이를 다시 전개하면 다음과 같습니다</p>
-        <emu-alg example=""><ol><li><var>tmp1</var>을 Other()로 둡니다.</li><li><emu-xref id=_ref_1190 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>tmp1</var>은 <emu-xref id=_ref_1191 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li>만약 <var>tmp1</var>이 <emu-xref id=_ref_1192 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>비정상 완료</a></emu-xref>이면, <var>tmp1</var>을 반환합니다.</li><li><var>tmp2</var>를 <var>tmp1</var>.<var class=field>[[Value]]</var>로 둡니다.</li><li>AO(<var>tmp2</var>)를 수행합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>tmp1</var>을 Other()로 둡니다.</li><li><emu-xref id=_ref_1190 href=#assert><a href=notational-conventions.html#assert>단언</a></emu-xref>: <var>tmp1</var>은 <emu-xref id=_ref_1191 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>입니다.</li><li class=exit>만약 <var>tmp1</var>이 <emu-xref id=_ref_1192 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>비정상 완료</a></emu-xref>이면, <var>tmp1</var>을 반환합니다.</li><li><var>tmp2</var>를 <var>tmp1</var>.<var class=field>[[Value]]</var>로 둡니다.</li><li>AO(<var>tmp2</var>)를 수행합니다.</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-implicit-normal-completion oldids=sec-implicit-completion-values><span id=sec-implicit-completion-values></span>
@@ -671,17 +671,17 @@
           <li><emu-xref id=_ref_1203 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>를 구성한 결과를 직접 반환하는 경우</li>
         </ul>
         <p>이러한 <emu-xref id=_ref_1204 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>추상 연산</a></emu-xref>에서 다른 방법으로 <emu-xref id=_ref_1205 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>를 반환하면 편집 오류입니다. 예를 들어 이러한 <emu-xref id=_ref_1206 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>추상 연산</a></emu-xref> 내에서,</p>
-        <emu-alg example=""><ol><li><emu-val>true</emu-val>를 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-val>true</emu-val>를 반환합니다.</li></ol></emu-alg>
         <p>다음 중 어느 것과도 같은 의미입니다</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1207 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)를 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1207 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)를 반환합니다.</li></ol></emu-alg>
         <p>또는</p>
-        <emu-alg example=""><ol><li><var>completion</var>을 <emu-xref id=_ref_1208 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)로 둡니다.</li><li><emu-xref id=_ref_1209 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>)을 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>completion</var>을 <emu-xref id=_ref_1208 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)로 둡니다.</li><li class=exit><emu-xref id=_ref_1209 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>)을 반환합니다.</li></ol></emu-alg>
         <p>또는</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1210 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> }를 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit><emu-xref id=_ref_1210 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref> { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> }를 반환합니다.</li></ol></emu-alg>
         <p><emu-xref id=_ref_39 href=#sec-shorthands-for-unwrapping-completion-records><a href=notational-conventions.html#sec-shorthands-for-unwrapping-completion-records>? 축약 표현의 전개</a></emu-xref>를 통해 다음 예가 허용된다는 점에 유의하시기 바랍니다. 전개된 단계에서 비정상인 경우에는 <emu-xref id=_ref_1211 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>을 적용한 결과를 직접 반환하고, 정상인 경우에는 래핑을 해제한 후 암묵적인 <emu-xref id=_ref_1212 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref> 적용이 이루어지기 때문입니다.</p>
-        <emu-alg example=""><ol><li>? <var>completion</var>을 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>? <var>completion</var>을 반환합니다.</li></ol></emu-alg>
         <p>다음 예는 해당 단계에 표시하지 않은 채 <emu-xref id=_ref_1213 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>Completion Record</a></emu-xref>를 반환하므로 편집 오류입니다.</p>
-        <emu-alg example=""><ol><li><var>completion</var>을 <emu-xref id=_ref_1214 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)로 둡니다.</li><li><var>completion</var>을 반환합니다.</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><var>completion</var>을 <emu-xref id=_ref_1214 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)로 둡니다.</li><li class=exit><var>completion</var>을 반환합니다.</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 

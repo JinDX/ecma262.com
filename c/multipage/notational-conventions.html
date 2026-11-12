@@ -585,9 +585,9 @@
     <emu-clause id=sec-evaluation-order>
       <h1><span class=secnum>5.2.1</span> 求值顺序</h1>
       <p>当算法步骤中出现复杂表达式时，应理解为按从左到右、从内到外的顺序求值。例如，步骤</p>
-      <emu-alg example=""><ol><li>返回 A(B(), C.<var class=field>[[D]]</var>) + E(F())。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit>返回 A(B(), C.<var class=field>[[D]]</var>) + E(F())。</li></ol></emu-alg>
       <p>等价于</p>
-      <emu-alg example=""><ol><li>令 <var>tmp1</var> 为 B()。</li><li>令 <var>tmp2</var> 为 C.<var class=field>[[D]]</var>。</li><li>令 <var>tmp3</var> 为 A(<var>tmp1</var>, <var>tmp2</var>)。</li><li>令 <var>tmp4</var> 为 F()。</li><li>令 <var>tmp5</var> 为 E(<var>tmp4</var>)。</li><li>令 <var>tmp6</var> 为 <var>tmp3</var> + <var>tmp5</var>。</li><li>返回 <var>tmp6</var>。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li>令 <var>tmp1</var> 为 B()。</li><li>令 <var>tmp2</var> 为 C.<var class=field>[[D]]</var>。</li><li>令 <var>tmp3</var> 为 A(<var>tmp1</var>, <var>tmp2</var>)。</li><li>令 <var>tmp4</var> 为 F()。</li><li>令 <var>tmp5</var> 为 E(<var>tmp4</var>)。</li><li>令 <var>tmp6</var> 为 <var>tmp3</var> + <var>tmp5</var>。</li><li class=exit>返回 <var>tmp6</var>。</li></ol></emu-alg>
       <p>其中，各个 <var>tmpN</var> 别名都是临时的，仅在这些步骤中可见。</p>
     </emu-clause>
 
@@ -621,7 +621,7 @@
     </emu-rhs>
 </emu-production>
 </emu-grammar>
-      <emu-alg example=""><ol><li>返回 <emu-nt id=_ref_20608><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt> 的 <emu-xref id=_ref_1239 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref>。</li></ol></emu-alg>
+      <emu-alg example=""><ol><li class=exit>返回 <emu-nt id=_ref_20608><a href=ecmascript-language-statements-and-declarations.html#prod-StatementList>StatementList</a></emu-nt> 的 <emu-xref id=_ref_1239 aoid=Evaluation><a href=syntax-directed-operations.html#sec-evaluation>Evaluation</a></emu-xref>。</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id=sec-runtime-semantics>
@@ -631,19 +631,19 @@
       <emu-clause id=sec-completion-ao aoid=Completion type="abstract operation">
         <h1><span class=secnum>5.2.4.1</span> Completion ( <var>completionRecord</var> )</h1>
         <p><emu-xref id=_ref_17949 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref> Completion，接收参数 <var>completionRecord</var> (<emu-xref id=_ref_17947 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>完成记录</a></emu-xref>)；返回值：<emu-xref id=_ref_17948 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>完成记录</a></emu-xref>。 它用于强调正在返回一个完成记录。 调用时执行以下步骤：</p>
-        <emu-alg><ol><li><emu-xref id=_ref_1242 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>completionRecord</var> 是一个完成记录。</li><li>返回 <var>completionRecord</var>。</li></ol></emu-alg>
+        <emu-alg><ol><li><emu-xref id=_ref_1242 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>completionRecord</var> 是一个完成记录。</li><li class=exit>返回 <var>completionRecord</var>。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-throw-an-exception>
         <h1><span class=secnum>5.2.4.2</span> 抛出</h1>
         <p>在算法步骤中，“抛出”是返回调用 <emu-xref id=_ref_1243 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref> 所得结果的简写。例如，</p>
-        <emu-alg example=""><ol><li>如果 <var>result</var>.<var class=field>[[Error]]</var> 不是 <emu-const>none</emu-const>，则抛出 <var>result</var>.<var class=field>[[Error]]</var>。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>如果 <var>result</var>.<var class=field>[[Error]]</var> 不是 <emu-const>none</emu-const>，则抛出 <var>result</var>.<var class=field>[[Error]]</var>。</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li>如果 <var>result</var>.<var class=field>[[Error]]</var> 不是 <emu-const>none</emu-const>，则返回 <emu-xref id=_ref_1244 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>)。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>如果 <var>result</var>.<var class=field>[[Error]]</var> 不是 <emu-const>none</emu-const>，则返回 <emu-xref id=_ref_1244 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(<var>result</var>.<var class=field>[[Error]]</var>)。</li></ol></emu-alg>
         <p>要求抛出特定类型异常的算法步骤会构造该类型的异常以供抛出。例如，</p>
-        <emu-alg example=""><ol><li>抛出一个 <emu-val>TypeError</emu-val> 异常。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>抛出一个 <emu-val>TypeError</emu-val> 异常。</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li>返回 <emu-xref id=_ref_1245 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(一个新创建的 <emu-val>TypeError</emu-val> 对象)。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>返回 <emu-xref id=_ref_1245 aoid=ThrowCompletion><a href=ecmascript-data-types-and-values.html#sec-throwcompletion>ThrowCompletion</a></emu-xref>(一个新创建的 <emu-val>TypeError</emu-val> 对象)。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-shorthands-for-unwrapping-completion-records oldids=sec-returnifabrupt,sec-returnifabrupt-shorthands><span id=sec-returnifabrupt-shorthands></span><span id=sec-returnifabrupt></span>
@@ -651,7 +651,7 @@
         <p>前缀“?”和“!”用作解包完成记录的简写。“?”用于将<emu-xref id=_ref_1246 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>传播给调用者，或者在其他情况下解包<emu-xref id=_ref_1247 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>正常完成</a></emu-xref>。“!”用于<emu-xref id=_ref_1248 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>完成记录是<emu-xref id=_ref_1249 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>正常完成</a></emu-xref>并将其解包。形式上，步骤</p>
         <emu-alg example=""><ol><li class=exit>令 <var>result</var> 为 ? <var>record</var>。</li></ol></emu-alg>
         <p>等价于</p>
-        <emu-alg example=""><ol><li><emu-xref id=_ref_1250 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>record</var> 是一个完成记录。</li><li>如果 <var>record</var> 是<emu-xref id=_ref_1251 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>，则返回 <var>record</var>。</li><li>令 <var>result</var> 为 <var>record</var>.<var class=field>[[Value]]</var>。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li><emu-xref id=_ref_1250 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>record</var> 是一个完成记录。</li><li class=exit>如果 <var>record</var> 是<emu-xref id=_ref_1251 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>，则返回 <var>record</var>。</li><li>令 <var>result</var> 为 <var>record</var>.<var class=field>[[Value]]</var>。</li></ol></emu-alg>
         <p>类似地，步骤</p>
         <emu-alg example=""><ol><li>令 <var>result</var> 为 ! <var>record</var>。</li></ol></emu-alg>
         <p>等价于</p>
@@ -661,7 +661,7 @@
         <p>可以改写为</p>
         <emu-alg example=""><ol><li>令 <var>tmp1</var> 为 Other()。</li><li class=exit>令 <var>tmp2</var> 为 ? <var>tmp1</var>。</li><li>执行 AO(<var>tmp2</var>)。</li></ol></emu-alg>
         <p>随后又可展开为</p>
-        <emu-alg example=""><ol><li>令 <var>tmp1</var> 为 Other()。</li><li><emu-xref id=_ref_1254 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>tmp1</var> 是一个完成记录。</li><li>如果 <var>tmp1</var> 是<emu-xref id=_ref_1255 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>，则返回 <var>tmp1</var>。</li><li>令 <var>tmp2</var> 为 <var>tmp1</var>.<var class=field>[[Value]]</var>。</li><li>执行 AO(<var>tmp2</var>)。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>令 <var>tmp1</var> 为 Other()。</li><li><emu-xref id=_ref_1254 href=#assert><a href=notational-conventions.html#assert>断言</a></emu-xref>：<var>tmp1</var> 是一个完成记录。</li><li class=exit>如果 <var>tmp1</var> 是<emu-xref id=_ref_1255 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>，则返回 <var>tmp1</var>。</li><li>令 <var>tmp2</var> 为 <var>tmp1</var>.<var class=field>[[Value]]</var>。</li><li>执行 AO(<var>tmp2</var>)。</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id=sec-implicit-normal-completion oldids=sec-implicit-completion-values><span id=sec-implicit-completion-values></span>
@@ -672,17 +672,17 @@
           <li>直接返回构造完成记录所得的结果时</li>
         </ul>
         <p>如果通过任何其他方式从此类<emu-xref id=_ref_1264 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref>返回完成记录，则属于编辑错误。例如，在这些<emu-xref id=_ref_1265 href=#sec-algorithm-conventions-abstract-operations><a href=notational-conventions.html#sec-algorithm-conventions-abstract-operations>抽象操作</a></emu-xref>中，</p>
-        <emu-alg example=""><ol><li>返回 <emu-val>true</emu-val>。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>返回 <emu-val>true</emu-val>。</li></ol></emu-alg>
         <p>与以下任一种形式具有相同含义</p>
-        <emu-alg example=""><ol><li>返回 <emu-xref id=_ref_1266 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>返回 <emu-xref id=_ref_1266 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li></ol></emu-alg>
         <p>或</p>
-        <emu-alg example=""><ol><li>令 <var>completion</var> 为 <emu-xref id=_ref_1267 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li><li>返回 <emu-xref id=_ref_1268 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>)。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>令 <var>completion</var> 为 <emu-xref id=_ref_1267 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li><li class=exit>返回 <emu-xref id=_ref_1268 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref>(<var>completion</var>)。</li></ol></emu-alg>
         <p>或</p>
-        <emu-alg example=""><ol><li>返回完成记录 { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> }。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li class=exit>返回完成记录 { <var class=field>[[Type]]</var>: <emu-const>normal</emu-const>, <var class=field>[[Value]]</var>: <emu-val>true</emu-val>, <var class=field>[[Target]]</var>: <emu-const>empty</emu-const> }。</li></ol></emu-alg>
         <p><emu-xref id=_ref_1269 href=#note-step><a href=notational-conventions.html#note-step>注</a></emu-xref>意，通过<emu-xref id=_ref_39 href=#sec-shorthands-for-unwrapping-completion-records><a href=notational-conventions.html#sec-shorthands-for-unwrapping-completion-records>展开 ? 简写</a></emu-xref>，以下示例是允许的，因为在展开后的步骤中，<emu-xref id=_ref_1270 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>突然完成</a></emu-xref>的情况下会直接返回应用 <emu-xref id=_ref_1271 aoid=Completion><a href=notational-conventions.html#sec-completion-ao>Completion</a></emu-xref> 所得的结果，而<emu-xref id=_ref_1272 href=#sec-completion-record-specification-type><a href=ecmascript-data-types-and-values.html#sec-completion-record-specification-type>正常完成</a></emu-xref>的情况下会在解包之后隐式应用 <emu-xref id=_ref_1273 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>。</p>
         <emu-alg example=""><ol><li class=exit>返回 ? <var>completion</var>。</li></ol></emu-alg>
         <p>以下示例属于编辑错误，因为该步骤返回了完成记录，却没有在该步骤中标明这一点。</p>
-        <emu-alg example=""><ol><li>令 <var>completion</var> 为 <emu-xref id=_ref_1274 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li><li>返回 <var>completion</var>。</li></ol></emu-alg>
+        <emu-alg example=""><ol><li>令 <var>completion</var> 为 <emu-xref id=_ref_1274 aoid=NormalCompletion><a href=ecmascript-data-types-and-values.html#sec-normalcompletion>NormalCompletion</a></emu-xref>(<emu-val>true</emu-val>)。</li><li class=exit>返回 <var>completion</var>。</li></ol></emu-alg>
       </emu-clause>
     </emu-clause>
 
