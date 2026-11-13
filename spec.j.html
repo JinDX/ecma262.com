@@ -11823,6 +11823,7 @@
         1. CreateIntrinsics(_realm_) を実行する。
         1. _realm_.[[AgentSignifier]] を AgentSignifier() に設定する。
         1. _realm_.[[TemplateMap]] を新しい空の List に設定する。
+        1. _realm_.[[LoadedModules]] を新しい空の List に設定する。
         1. _newContext_ を新しい実行コンテキストとする。
         1. _newContext_ の Function を *null* に設定する。
         1. _newContext_ の Realm を _realm_ に設定する。
@@ -42853,7 +42854,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.subarray" type="built-in function">
         <h1>%TypedArray%.prototype.subarray ( _start_, _end_ )</h1>
-        <p>このメソッドは、要素型がこの _TypedArray_ の要素型であり、ArrayBuffer がこの _TypedArray_ の ArrayBuffer であり、_start_（含む）から _end_（含まない）までの区間の要素を参照する新しい _TypedArray_ を返します。_start_ または _end_ のいずれかが負である場合、配列の先頭からではなく、末尾からのインデックスを参照します。</p>
+        <p>デフォルトでは、このメソッドは、要素型がこの _TypedArray_ の要素型であり、ArrayBuffer がこの _TypedArray_ の ArrayBuffer であり、_start_（含む）から _end_（含まない）までの区間の要素を参照する新しい _TypedArray_ を返します。_start_ または _end_ のいずれかが負である場合、配列の先頭からではなく、末尾からのインデックスを参照します。この _TypedArray_ の *"constructor"* プロパティ、またはそのコンストラクターの %Symbol.species% プロパティを上書きすると、このメソッドの動作を変更できます。</p>
         <p>呼び出されたとき、次の手順を実行します。</p>
         <emu-alg>
           1. _obj_ を *this* 値とする。

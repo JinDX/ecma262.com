@@ -11823,6 +11823,7 @@
         1. 执行 CreateIntrinsics(_realm_)。
         1. 将 _realm_.[[AgentSignifier]] 设置为 AgentSignifier()。
         1. 将 _realm_.[[TemplateMap]] 设置为新的空 List。
+        1. 将 _realm_.[[LoadedModules]] 设置为新的空 List。
         1. 令 _newContext_ 为新的执行上下文。
         1. 将 _newContext_ 的 Function 设置为 *null*。
         1. 将 _newContext_ 的 Realm 设置为 _realm_。
@@ -42859,7 +42860,7 @@ THH:mm:ss.sss
 
       <emu-clause id="sec-%typedarray%.prototype.subarray" type="built-in function">
         <h1>%TypedArray%.prototype.subarray ( _start_, _end_ )</h1>
-        <p>此方法返回新的 _TypedArray_，其元素类型与此 _TypedArray_ 的元素类型相同，其 ArrayBuffer 是此 _TypedArray_ 的 ArrayBuffer，并引用从 _start_（包含）到 _end_（不包含）区间内的元素。如果 _start_ 或 _end_ 为负，则它表示从数组末尾而不是开头起算的索引。</p>
+        <p>默认情况下，此方法返回新的 _TypedArray_，其元素类型与此 _TypedArray_ 的元素类型相同，其 ArrayBuffer 是此 _TypedArray_ 的 ArrayBuffer，并引用从 _start_（包含）到 _end_（不包含）区间内的元素。如果 _start_ 或 _end_ 为负，则它表示从数组末尾而不是开头起算的索引。覆写此 _TypedArray_ 的 *"constructor"* 属性或该构造函数的 %Symbol.species% 属性，可以改变此方法的行为。</p>
         <p>调用时，它执行以下步骤：</p>
         <emu-alg>
           1. 令 _obj_ 为 *this* value。
