@@ -182,8 +182,20 @@
   <p>第17<sup>版</sup>である ECMAScript 2026 では、精度の損失を最小限に抑えながら、大きさの異なる Number の反復可能オブジェクトを合計する `Math.sumPrecise`、イテレーターを順につなぐ `Iterator.concat`、非同期反復可能オブジェクトやその他の非同期ソースから Array を構築する `Array.fromAsync`、エラーオブジェクトを識別する `Error.isError`、取得時にキーが存在しない場合に使用する既定値を提供するための `Map.prototype` と `WeakMap.prototype` のメソッド、16進数および base64 で符号化されたバイナリデータの String との相互変換を行う `Uint8Array` のメソッド、一致した JSON ソースの部分にアクセスするための `JSON.parse` の reviver のパラメーター、およびプリミティブ値に対する `JSON.stringify` の出力を細かく制御するための `JSON.rawJSON` が追加されました。</p>
   <p>多くの組織を代表する数十人の人々が、Ecma TC39 において、この版および以前の各版の開発に非常に大きな貢献をしました。さらに、TC39 の ECMAScript に関する取り組みを支援する活発なコミュニティが生まれました。このコミュニティは、多数の草案をレビューし、数千件のバグ報告を提出し、実装実験を行い、テストスイートを提供し、世界中の開発者コミュニティに ECMAScript についての知識を広めてきました。残念ながら、この取り組みに貢献したすべての個人と組織を特定し、謝意を表すことはできません。</p>
   <p>
+    Guy Steele<br>
+    ECMA-262, プロジェクト編集者, 第1<sup>版</sup>
+  </p>
+  <p>
+    Mike Cowlishaw<br>
+    ECMA-262, プロジェクト編集者, 第2<sup>版</sup>および第3<sup>版</sup>
+  </p>
+  <p>
+    Pratap Lakshman<br>
+    ECMA-262, プロジェクト編集者, 第5<sup>版</sup>
+  </p>
+  <p>
     Allen Wirfs-Brock<br>
-    ECMA-262, プロジェクト編集者, 第6<sup>版</sup>
+    ECMA-262, プロジェクト編集者, 第5<sup>版</sup>および第6<sup>版</sup>
   </p>
   <p>
     Brian Terlson<br>
@@ -6686,6 +6698,69 @@
         1. _options_ が Object である場合、
           1. _options_ を返す。
         1. *TypeError* 例外をスローする。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getbooleanoption" type="abstract operation">
+      <h1>
+        GetBooleanOption (
+          _options_: an Object,
+          _propertyKey_: a property key,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _defaultValue_: a Boolean, *undefined*, or ~required~,
+        ): either a normal completion containing either a Boolean or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _value_ を ? Get(_options_, _propertyKey_) とする。
+        1. _value_ が *undefined* である場合、
+          1. _defaultValue_ が ~required~ である場合、*TypeError* 例外をスローする。
+          1. _defaultValue_ を返す。
+        1. _typeMismatchHandling_ が ~reject~ であり、_value_ が Boolean でない場合、*TypeError* 例外をスローする。
+        1. ToBoolean(_value_) を返す。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getstringoption" type="abstract operation">
+      <h1>
+        GetStringOption (
+          _options_: an Object,
+          _propertyKey_: a property key,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _allowedValues_: ~any~ or a List of Strings,
+          _defaultValue_: a String, *undefined*, or ~required~,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _value_ を ? Get(_options_, _propertyKey_) とする。
+        1. ? ValidateStringOption(_value_, _typeMismatchHandling_, _allowedValues_, _defaultValue_) を返す。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-validatestringoption" type="abstract operation">
+      <h1>
+        ValidateStringOption (
+          _value_: an ECMAScript language value,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _allowedValues_: ~any~ or a List of Strings,
+          _defaultValue_: a String, *undefined*, or ~required~,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. _value_ が *undefined* である場合、
+          1. _defaultValue_ が ~required~ である場合、*TypeError* 例外をスローする。
+          1. _defaultValue_ を返す。
+        1. _typeMismatchHandling_ が ~reject~ であり、_value_ が String でない場合、*TypeError* 例外をスローする。
+        1. _value_ を ? ToString(_value_) に設定する。
+        1. _allowedValues_ が ~any~ でなく、_allowedValues_ が _value_ を含まない場合、
+          1. _typeMismatchHandling_ が ~reject~ である場合、*TypeError* 例外をスローする。
+          1. そうでない場合、*RangeError* 例外をスローする。
+        1. _value_ を返す。
       </emu-alg>
     </emu-clause>
 
@@ -17810,22 +17885,22 @@
       </emu-note>
 
       <emu-clause id="sec-static-semantics-bodytext" type="sdo">
-        <h1>Static Semantics: BodyText ( ): source text</h1>
+        <h1>Static Semantics: BodyText ( ): ECMAScript source text</h1>
         <dl class="header">
         </dl>
         <emu-grammar>RegularExpressionLiteral :: `/` RegularExpressionBody `/` RegularExpressionFlags</emu-grammar>
         <emu-alg>
-          1. |RegularExpressionBody| として認識されたソーステキストを返す。
+          1. |RegularExpressionBody| に一致したソーステキストを返す。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-static-semantics-flagtext" type="sdo">
-        <h1>Static Semantics: FlagText ( ): source text</h1>
+        <h1>Static Semantics: FlagText ( ): ECMAScript source text</h1>
         <dl class="header">
         </dl>
         <emu-grammar>RegularExpressionLiteral :: `/` RegularExpressionBody `/` RegularExpressionFlags</emu-grammar>
         <emu-alg>
-          1. |RegularExpressionFlags| として認識されたソーステキストを返す。
+          1. |RegularExpressionFlags| に一致したソーステキストを返す。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -19097,7 +19172,7 @@
           1. _templateToken_ の TV を返す。
         </emu-alg>
         <emu-note>
-          <p>この操作は、_escapes_ が ~raw~ であり、_templateToken_ が |NotEscapeSequence| を含む場合、*undefined* を返します。それ以外のすべての場合では String を返します。</p>
+          <p>この操作は、_escapes_ が ~cooked~ であり、_templateToken_ が |NotEscapeSequence| を含む場合、*undefined* を返します。それ以外のすべての場合では String を返します。</p>
         </emu-note>
       </emu-clause>
 
@@ -29160,6 +29235,7 @@
               1. _moduleContext_ の ScriptOrModule を _module_ に設定する。
               1. _moduleContext_ の VariableEnvironment を _module_.[[Environment]] に設定する。
               1. _moduleContext_ の LexicalEnvironment を _module_.[[Environment]] に設定する。
+              1. _moduleContext_ の PrivateEnvironment を *null* に設定する。
               1. 実行中の実行コンテキストを一時停止する。
               1. _moduleContext_ を実行コンテキストスタックにプッシュする。これで _moduleContext_ が実行中の実行コンテキストになる。
               1. _steps_ を _module_.[[EvaluationSteps]] とする。
@@ -35769,12 +35845,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. _obj_ を *this* 値とする。
           1. _obj_ が Object でない場合、*TypeError* 例外をスローする。
-          1. _hint_ が *"string"* または *"default"* のいずれかである場合、
-            1. _tryFirst_ を ~string~ とする。
-          1. そうでなく、_hint_ が *"number"* である場合、
-            1. _tryFirst_ を ~number~ とする。
-          1. そうでない場合、
-            1. *TypeError* 例外をスローする。
+          1. _hint_ を ? ValidateStringOption(_hint_, ~reject~, « *"string"*, *"number"*, *"default"* », ~required~) に設定する。
+          1. _hint_ が *"number"* である場合、_tryFirst_ を ~number~ とする。そうでない場合、_tryFirst_ を ~string~ とする。
           1. ? OrdinaryToPrimitive(_obj_, _tryFirst_) を返す。
         </emu-alg>
         <p>このプロパティは属性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* } を持ちます。</p>
@@ -36224,9 +36296,7 @@ THH:mm:ss.sss
           1. _thisValue_ を *this* 値とする。
           1. ? RequireObjectCoercible(_thisValue_) を実行する。
           1. _string_ を ? ToString(_thisValue_) とする。
-          1. _form_ が *undefined* である場合、_form_ を *"NFC"* に設定する。
-          1. そうでない場合、_form_ を ? ToString(_form_) に設定する。
-          1. _form_ が *"NFC"*、*"NFD"*、*"NFKC"*、または *"NFKD"* のいずれでもない場合、*RangeError* 例外をスローする。
+          1. _form_ を ? ValidateStringOption(_form_, ~coerce~, « *"NFC"*, *"NFD"*, *"NFKC"*, *"NFKD"* », *"NFC"*) に設定する。
           1. _normal_ を、<a href="https://www.unicode.org/versions/latest/ch03.pdf">最新の Unicode 標準の Normalization Forms</a> で規定されるとおり、_string_ を _form_ で指定された正規化形式へ正規化した結果である String 値とする。
           1. _normal_ を返す。
         </emu-alg>
@@ -43414,12 +43484,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. _string_ が String でない場合、*TypeError* 例外をスローする。
           1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
-          1. _alphabet_ が *undefined* である場合、_alphabet_ を *"base64"* に設定する。
-          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外をスローする。
-          1. _lastChunkHandling_ を ? Get(_optionsObj_, *"lastChunkHandling"*) とする。
-          1. _lastChunkHandling_ が *undefined* である場合、_lastChunkHandling_ を *"loose"* に設定する。
-          1. _lastChunkHandling_ が *"loose"*、*"strict"*、または *"stop-before-partial"* のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _alphabet_ を ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*) とする。
+          1. _lastChunkHandling_ を ? GetStringOption(_optionsObj_, *"lastChunkHandling"*, ~reject~, « *"loose"*, *"strict"*, *"stop-before-partial"* », *"loose"*) とする。
           1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_) とする。
           1. _result_.[[Error]] が ~none~ でない場合、
             1. _result_.[[Error]] をスローする。
@@ -43457,12 +43523,8 @@ THH:mm:ss.sss
           1. ? ValidateUint8Array(_into_) を実行する。
           1. _string_ が String でない場合、*TypeError* 例外をスローする。
           1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
-          1. _alphabet_ が *undefined* である場合、_alphabet_ を *"base64"* に設定する。
-          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外をスローする。
-          1. _lastChunkHandling_ を ? Get(_optionsObj_, *"lastChunkHandling"*) とする。
-          1. _lastChunkHandling_ が *undefined* である場合、_lastChunkHandling_ を *"loose"* に設定する。
-          1. _lastChunkHandling_ が *"loose"*、*"strict"*、または *"stop-before-partial"* のいずれでもない場合、*TypeError* 例外をスローする。
+          1. _alphabet_ を ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*) とする。
+          1. _lastChunkHandling_ を ? GetStringOption(_optionsObj_, *"lastChunkHandling"*, ~reject~, « *"loose"*, *"strict"*, *"stop-before-partial"* », *"loose"*) とする。
           1. _taRecord_ を ? ValidateTypedArrayBounds(_into_, ~seq-cst~) とする。
           1. _byteLength_ を TypedArrayLength(_taRecord_) とする。
           1. _result_ を FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_) とする。
@@ -43509,10 +43571,8 @@ THH:mm:ss.sss
           1. _obj_ を *this* 値とする。
           1. ? ValidateUint8Array(_obj_) を実行する。
           1. _optionsObj_ を ? GetOptionsObject(_options_) とする。
-          1. _alphabet_ を ? Get(_optionsObj_, *"alphabet"*) とする。
-          1. _alphabet_ が *undefined* である場合、_alphabet_ を *"base64"* に設定する。
-          1. _alphabet_ が *"base64"* でも *"base64url"* でもない場合、*TypeError* 例外をスローする。
-          1. _omitPadding_ を ToBoolean(? Get(_optionsObj_, *"omitPadding"*)) とする。
+          1. _alphabet_ を ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*) とする。
+          1. _omitPadding_ を ? GetBooleanOption(_optionsObj_, *"omitPadding"*, ~coerce~, *false*) とする。
           1. _toEncode_ を ? GetUint8ArrayBytes(_obj_) とする。
           1. _alphabet_ が *"base64"* である場合、
             1. _outAscii_ を、<a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> の4節で規定される base64 エンコーディングに従って _toEncode_ をエンコードした結果のコードポイント列とする。_omitPadding_ が *false* である場合に限り、padding を含める。
@@ -48939,9 +48999,7 @@ THH:mm:ss.sss
           <emu-alg>
             1. _iterables_ が Object でない場合、*TypeError* 例外をスローする。
             1. _options_ を ? GetOptionsObject(_options_) に設定する。
-            1. _mode_ を ? Get(_options_, *"mode"*) とする。
-            1. _mode_ が *undefined* である場合、_mode_ を *"shortest"* に設定する。
-            1. _mode_ が *"shortest"*、*"longest"*、または *"strict"* のいずれでもない場合、*TypeError* 例外をスローする。
+            1. _mode_ を ? GetStringOption(_options_, *"mode"*, ~reject~, « *"shortest"*, *"longest"*, *"strict"* », *"shortest"*) とする。
             1. _paddingOption_ を *undefined* とする。
             1. _mode_ が *"longest"* である場合、
               1. _paddingOption_ を ? Get(_options_, *"padding"*) に設定する。
@@ -48991,9 +49049,7 @@ THH:mm:ss.sss
           <emu-alg>
             1. _iterables_ が Object でない場合、*TypeError* 例外をスローする。
             1. _options_ を ? GetOptionsObject(_options_) に設定する。
-            1. _mode_ を ? Get(_options_, *"mode"*) とする。
-            1. _mode_ が *undefined* である場合、_mode_ を *"shortest"* に設定する。
-            1. _mode_ が *"shortest"*、*"longest"*、または *"strict"* のいずれでもない場合、*TypeError* 例外をスローする。
+            1. _mode_ を ? GetStringOption(_options_, *"mode"*, ~reject~, « *"shortest"*, *"longest"*, *"strict"* », *"shortest"*) とする。
             1. _paddingOption_ を *undefined* とする。
             1. _mode_ が *"longest"* である場合、
               1. _paddingOption_ を ? Get(_options_, *"padding"*) に設定する。

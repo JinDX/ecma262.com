@@ -182,8 +182,20 @@
   <p>ECMAScript 2026，即第 17<sup>版</sup>，添加了 `Math.sumPrecise`，用于对由不同数量级的 Number 值组成的可迭代对象求和，同时尽量减少精度损失；添加了 `Iterator.concat`，用于按顺序连接迭代器；添加了 `Array.fromAsync`，用于从异步可迭代对象和其他异步来源构造 Array；添加了 `Error.isError`，用于识别错误对象；为 `Map.prototype` 和 `WeakMap.prototype` 添加了方法，用于在键尚不存在时提供检索所用的默认值；为 `Uint8Array` 添加了方法，用于在二进制数据与其十六进制和 base64 编码的 String 值之间进行转换；为 `JSON.parse` 的 reviver 添加了一个参数，用于访问匹配的 JSON 源文本片段；并添加了 `JSON.rawJSON`，用于精细控制 `JSON.stringify` 对原始值的输出。</p>
   <p>代表许多组织的数十位成员在 Ecma TC39 内为本版及先前各版的开发做出了非常重要的贡献。此外，一个充满活力的社区已经形成，为 TC39 的 ECMAScript 工作提供支持。该社区审阅了众多草案，提交了数千份错误报告，进行了实现实验，贡献了测试套件，并向全球开发者社区普及 ECMAScript。遗憾的是，无法一一列出并感谢为这项工作做出贡献的每个人和组织。</p>
   <p>
+    Guy Steele<br>
+    ECMA-262，项目编辑，第 1<sup>版</sup>
+  </p>
+  <p>
+    Mike Cowlishaw<br>
+    ECMA-262，项目编辑，第 2<sup>版</sup>和第 3<sup>版</sup>
+  </p>
+  <p>
+    Pratap Lakshman<br>
+    ECMA-262，项目编辑，第5<sup>版</sup>
+  </p>
+  <p>
     Allen Wirfs-Brock<br>
-    ECMA-262，项目编辑，第 6<sup>版</sup>
+    ECMA-262，项目编辑，第 5<sup>版</sup>和第 6<sup>版</sup>
   </p>
   <p>
     Brian Terlson<br>
@@ -6686,6 +6698,69 @@
         1. 如果 _options_ 是 Object，则
           1. 返回 _options_。
         1. 抛出 *TypeError* 异常。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getbooleanoption" type="abstract operation">
+      <h1>
+        GetBooleanOption (
+          _options_: an Object,
+          _propertyKey_: a property key,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _defaultValue_: a Boolean, *undefined*, or ~required~,
+        ): either a normal completion containing either a Boolean or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 令 _value_ 为 ? Get(_options_, _propertyKey_)。
+        1. 如果 _value_ 是 *undefined*，则
+          1. 如果 _defaultValue_ 是 ~required~，则抛出 *TypeError* 异常。
+          1. 返回 _defaultValue_。
+        1. 如果 _typeMismatchHandling_ 是 ~reject~ 且 _value_ 不是 Boolean，则抛出 *TypeError* 异常。
+        1. 返回 ToBoolean(_value_)。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-getstringoption" type="abstract operation">
+      <h1>
+        GetStringOption (
+          _options_: an Object,
+          _propertyKey_: a property key,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _allowedValues_: ~any~ or a List of Strings,
+          _defaultValue_: a String, *undefined*, or ~required~,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 令 _value_ 为 ? Get(_options_, _propertyKey_)。
+        1. 返回 ? ValidateStringOption(_value_, _typeMismatchHandling_, _allowedValues_, _defaultValue_)。
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-validatestringoption" type="abstract operation">
+      <h1>
+        ValidateStringOption (
+          _value_: an ECMAScript language value,
+          _typeMismatchHandling_: ~coerce~ or ~reject~,
+          _allowedValues_: ~any~ or a List of Strings,
+          _defaultValue_: a String, *undefined*, or ~required~,
+        ): either a normal completion containing either a String or *undefined*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. 如果 _value_ 是 *undefined*，则
+          1. 如果 _defaultValue_ 是 ~required~，则抛出 *TypeError* 异常。
+          1. 返回 _defaultValue_。
+        1. 如果 _typeMismatchHandling_ 是 ~reject~ 且 _value_ 不是 String，则抛出 *TypeError* 异常。
+        1. 将 _value_ 设置为 ? ToString(_value_)。
+        1. 如果 _allowedValues_ 不是 ~any~ 且 _allowedValues_ 不包含 _value_，则
+          1. 如果 _typeMismatchHandling_ 是 ~reject~，则抛出 *TypeError* 异常。
+          1. 否则，抛出 *RangeError* 异常。
+        1. 返回 _value_。
       </emu-alg>
     </emu-clause>
 
@@ -17812,22 +17887,22 @@
       </emu-note>
 
       <emu-clause id="sec-static-semantics-bodytext" type="sdo">
-        <h1>Static Semantics: BodyText ( ): source text</h1>
+        <h1>Static Semantics: BodyText ( ): ECMAScript source text</h1>
         <dl class="header">
         </dl>
         <emu-grammar>RegularExpressionLiteral :: `/` RegularExpressionBody `/` RegularExpressionFlags</emu-grammar>
         <emu-alg>
-          1. 返回被识别为 |RegularExpressionBody| 的源文本。
+          1. 返回与 |RegularExpressionBody| 匹配的源文本。
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-static-semantics-flagtext" type="sdo">
-        <h1>Static Semantics: FlagText ( ): source text</h1>
+        <h1>Static Semantics: FlagText ( ): ECMAScript source text</h1>
         <dl class="header">
         </dl>
         <emu-grammar>RegularExpressionLiteral :: `/` RegularExpressionBody `/` RegularExpressionFlags</emu-grammar>
         <emu-alg>
-          1. 返回被识别为 |RegularExpressionFlags| 的源文本。
+          1. 返回与 |RegularExpressionFlags| 匹配的源文本。
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -19099,7 +19174,7 @@
           1. 返回 _templateToken_ 的 TV。
         </emu-alg>
         <emu-note>
-          <p>如果 _escapes_ 是 ~raw~ 且 _templateToken_ 包含 |NotEscapeSequence|，此操作返回 *undefined*。在所有其他情况下，它返回 String。</p>
+          <p>如果 _escapes_ 是 ~cooked~ 且 _templateToken_ 包含 |NotEscapeSequence|，此操作返回 *undefined*。在所有其他情况下，它返回 String。</p>
         </emu-note>
       </emu-clause>
 
@@ -29166,6 +29241,7 @@
               1. 将 _moduleContext_ 的 ScriptOrModule 设置为 _module_。
               1. 将 _moduleContext_ 的 VariableEnvironment 设置为 _module_.[[Environment]]。
               1. 将 _moduleContext_ 的 LexicalEnvironment 设置为 _module_.[[Environment]]。
+              1. 将 _moduleContext_ 的 PrivateEnvironment 设置为 *null*。
               1. 挂起正在运行的执行上下文。
               1. 将 _moduleContext_ 压入执行上下文栈；_moduleContext_ 现在成为正在运行的执行上下文。
               1. 令 _steps_ 为 _module_.[[EvaluationSteps]]。
@@ -35775,12 +35851,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _obj_ 为 *this* value。
           1. 如果 _obj_ 不是 Object，则抛出 *TypeError* 异常。
-          1. 如果 _hint_ 是 *"string"* 或 *"default"*，则
-            1. 令 _tryFirst_ 为 ~string~。
-          1. 否则如果 _hint_ 是 *"number"*，则
-            1. 令 _tryFirst_ 为 ~number~。
-          1. 否则，
-            1. 抛出 *TypeError* 异常。
+          1. 将 _hint_ 设置为 ? ValidateStringOption(_hint_, ~reject~, « *"string"*, *"number"*, *"default"* », ~required~)。
+          1. 如果 _hint_ 是 *"number"*，则令 _tryFirst_ 为 ~number~。否则，令 _tryFirst_ 为 ~string~。
           1. 返回 ? OrdinaryToPrimitive(_obj_, _tryFirst_)。
         </emu-alg>
         <p>此属性具有特性 { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }。</p>
@@ -36230,9 +36302,7 @@ THH:mm:ss.sss
           1. 令 _thisValue_ 为 *this* value。
           1. 执行 ? RequireObjectCoercible(_thisValue_)。
           1. 令 _string_ 为 ? ToString(_thisValue_)。
-          1. 如果 _form_ 是 *undefined*，则将 _form_ 设置为 *"NFC"*。
-          1. 否则，将 _form_ 设置为 ? ToString(_form_)。
-          1. 如果 _form_ 不是 *"NFC"*、*"NFD"*、*"NFKC"* 或 *"NFKD"* 之一，则抛出 *RangeError* 异常。
+          1. 将 _form_ 设置为 ? ValidateStringOption(_form_, ~coerce~, « *"NFC"*, *"NFD"*, *"NFKC"*, *"NFKD"* », *"NFC"*)。
           1. 令 _normal_ 为按照<a href="https://www.unicode.org/versions/latest/ch03.pdf">最新 Unicode 标准，Normalization Forms</a> 中的规定，将 _string_ 规范化为由 _form_ 命名的规范化形式所得的 String 值。
           1. 返回 _normal_。
         </emu-alg>
@@ -43420,12 +43490,8 @@ THH:mm:ss.sss
         <emu-alg>
           1. 如果 _string_ 不是 String，则抛出 *TypeError* 异常。
           1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _lastChunkHandling_ 为 ? Get(_optionsObj_, *"lastChunkHandling"*)。
-          1. 如果 _lastChunkHandling_ 是 *undefined*，则将 _lastChunkHandling_ 设置为 *"loose"*。
-          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 令 _alphabet_ 为 ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*)。
+          1. 令 _lastChunkHandling_ 为 ? GetStringOption(_optionsObj_, *"lastChunkHandling"*, ~reject~, « *"loose"*, *"strict"*, *"stop-before-partial"* », *"loose"*)。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_)。
           1. 如果 _result_.[[Error]] 不是 ~none~，则
             1. 抛出 _result_.[[Error]]。
@@ -43463,12 +43529,8 @@ THH:mm:ss.sss
           1. 执行 ? ValidateUint8Array(_into_)。
           1. 如果 _string_ 不是 String，则抛出 *TypeError* 异常。
           1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _lastChunkHandling_ 为 ? Get(_optionsObj_, *"lastChunkHandling"*)。
-          1. 如果 _lastChunkHandling_ 是 *undefined*，则将 _lastChunkHandling_ 设置为 *"loose"*。
-          1. 如果 _lastChunkHandling_ 不是 *"loose"*、*"strict"* 或 *"stop-before-partial"* 之一，则抛出 *TypeError* 异常。
+          1. 令 _alphabet_ 为 ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*)。
+          1. 令 _lastChunkHandling_ 为 ? GetStringOption(_optionsObj_, *"lastChunkHandling"*, ~reject~, « *"loose"*, *"strict"*, *"stop-before-partial"* », *"loose"*)。
           1. 令 _taRecord_ 为 ? ValidateTypedArrayBounds(_into_, ~seq-cst~)。
           1. 令 _byteLength_ 为 TypedArrayLength(_taRecord_)。
           1. 令 _result_ 为 FromBase64(_string_, _alphabet_, _lastChunkHandling_, _byteLength_)。
@@ -43515,10 +43577,8 @@ THH:mm:ss.sss
           1. 令 _obj_ 为 *this* value。
           1. 执行 ? ValidateUint8Array(_obj_)。
           1. 令 _optionsObj_ 为 ? GetOptionsObject(_options_)。
-          1. 令 _alphabet_ 为 ? Get(_optionsObj_, *"alphabet"*)。
-          1. 如果 _alphabet_ 是 *undefined*，则将 _alphabet_ 设置为 *"base64"*。
-          1. 如果 _alphabet_ 既不是 *"base64"* 也不是 *"base64url"*，则抛出 *TypeError* 异常。
-          1. 令 _omitPadding_ 为 ToBoolean(? Get(_optionsObj_, *"omitPadding"*)).
+          1. 令 _alphabet_ 为 ? GetStringOption(_optionsObj_, *"alphabet"*, ~reject~, « *"base64"*, *"base64url"* », *"base64"*)。
+          1. 令 _omitPadding_ 为 ? GetBooleanOption(_optionsObj_, *"omitPadding"*, ~coerce~, *false*)。
           1. 令 _toEncode_ 为 ? GetUint8ArrayBytes(_obj_)。
           1. 如果 _alphabet_ 是 *"base64"*，则
             1. 令 _outAscii_ 为根据 <a href="https://rfc-editor.org/info/rfc4648">RFC 4648</a> 第 4 节规定的 base64 编码对 _toEncode_ 进行编码所得的码点序列。当且仅当 _omitPadding_ 是 *false* 时包含填充。
@@ -48946,9 +49006,7 @@ THH:mm:ss.sss
           <emu-alg>
             1. 如果 _iterables_ 不是 Object，则抛出 *TypeError* 异常。
             1. 将 _options_ 设置为 ? GetOptionsObject(_options_)。
-            1. 令 _mode_ 为 ? Get(_options_, *"mode"*)。
-            1. 如果 _mode_ 是 *undefined*，则将 _mode_ 设置为 *"shortest"*。
-            1. 如果 _mode_ 不是 *"shortest"*、*"longest"* 或 *"strict"* 之一，则抛出 *TypeError* 异常。
+            1. 令 _mode_ 为 ? GetStringOption(_options_, *"mode"*, ~reject~, « *"shortest"*, *"longest"*, *"strict"* », *"shortest"*)。
             1. 令 _paddingOption_ 为 *undefined*。
             1. 如果 _mode_ 是 *"longest"*，则
               1. 将 _paddingOption_ 设置为 ? Get(_options_, *"padding"*)。
@@ -48998,9 +49056,7 @@ THH:mm:ss.sss
           <emu-alg>
             1. 如果 _iterables_ 不是 Object，则抛出 *TypeError* 异常。
             1. 将 _options_ 设置为 ? GetOptionsObject(_options_)。
-            1. 令 _mode_ 为 ? Get(_options_, *"mode"*)。
-            1. 如果 _mode_ 是 *undefined*，则将 _mode_ 设置为 *"shortest"*。
-            1. 如果 _mode_ 不是 *"shortest"*、*"longest"* 或 *"strict"* 之一，则抛出 *TypeError* 异常。
+            1. 令 _mode_ 为 ? GetStringOption(_options_, *"mode"*, ~reject~, « *"shortest"*, *"longest"*, *"strict"* », *"shortest"*)。
             1. 令 _paddingOption_ 为 *undefined*。
             1. 如果 _mode_ 是 *"longest"*，则
               1. 将 _paddingOption_ 设置为 ? Get(_options_, *"padding"*)。
