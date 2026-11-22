@@ -4,6 +4,10 @@ const { displayType } = require('ecmarkup/lib/type-display');
 const spec = lang => ({ doc: { documentElement: { lang } } });
 let checks = 0;
 const examples = [
+  ['an Object that conforms to the IteratorResult interface', '符合 IteratorResult 接口的 Object', 'IteratorResult インターフェースに適合する Object', 'IteratorResult 인터페이스를 준수하는 Object'],
+  ['a sequence of Unicode code points', 'Unicode 码点序列', 'Unicode コードポイントの列', '유니코드 코드 포인트 시퀀스'],
+  ['a nonterminal in one of the ECMAScript grammars', '某个 ECMAScript 文法中的非终结符', 'いずれかの ECMAScript 文法の非終端記号', 'ECMAScript 문법 중 하나의 비단말 기호'],
+  ['any value except a Completion Record', '除 Completion Record 之外的任意值', 'Completion Record を除く任意の値', 'Completion Record를 제외한 임의의 값'],
   ['a time value', '时间值', '時刻値', '시간 값'],
   ['a finite time value', '有限时间值', '有限時刻値', '유한 시간 값'],
   ['an integer in the interval from 0 (inclusive) to MillisecondsPerDay (exclusive)', '大于等于 0 且小于 MillisecondsPerDay 的整数', '0 以上 MillisecondsPerDay 未満の整数', '0 이상 MillisecondsPerDay 미만인 정수'],
@@ -30,4 +34,10 @@ for (const input of [
   for (const lang of ['en','zh','ja','ko']) { assert.equal(displayType(spec(lang), input), input); checks++; }
 }
 assert.equal(displayType(spec('zh'), 'either a finite time value or ~NaN~'), '(有限时间值 或 ~NaN~)'); checks++;
+assert.equal(displayType(spec('zh'), 'an abrupt completion'), '突然完成'); checks++;
+assert.equal(displayType(spec('ja'), 'an abrupt completion'), '中途完了'); checks++;
+assert.equal(displayType(spec('ko'), 'an abrupt completion'), '비정상 완료'); checks++;
+assert.equal(displayType(spec('zh'), 'a Completion Record'), 'Completion Record'); checks++;
+assert.equal(displayType(spec('zh'), 'a String or a sequence of Unicode code points'), '(String 或 Unicode 码点序列)'); checks++;
+assert.equal(displayType(spec('zh'), 'a Parse Node or a non-empty List of *SyntaxError* objects'), '(解析节点 或 由 *SyntaxError* 对象组成的非空 List)'); checks++;
 console.log(JSON.stringify({ passed: checks }));

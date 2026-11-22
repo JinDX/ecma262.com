@@ -4014,7 +4014,7 @@
               [[Type]]
             </td>
             <td>
-              ~normal~, ~break~, ~continue~, ~return~, or ~throw~
+              ~normal~、~break~、~continue~、~return~ または ~throw~
             </td>
             <td>
               発生した完了の種類です。
@@ -5913,8 +5913,8 @@
         1. 注記: <emu-xref href="#sec-object-internal-methods-and-internal-slots" title></emu-xref> で説明されているように、特に指定されていない限り、このような各内部スロットの初期値は *undefined* である。
         1. _obj_.[[PrivateElements]] を新しい空の List に設定する。
         1. _obj_ の必須内部メソッドを、<emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref> で規定される通常オブジェクトの既定の定義に設定する。
-        1. 表明: 呼出し元が _obj_ の [[GetPrototypeOf]] および [[SetPrototypeOf]] の両方の必須内部メソッドを上書きしない場合、_internalSlotsList_ は [[Prototype]] を含む。
-        1. 表明: 呼出し元が _obj_ の [[SetPrototypeOf]]、[[IsExtensible]]、および [[PreventExtensions]] のすべての必須内部メソッドを上書きしない場合、_internalSlotsList_ は [[Extensible]] を含む。
+        1. 表明: 呼出し元が _obj_ の [[GetPrototypeOf]] および [[SetPrototypeOf]] の両方の必須内部メソッドを上書きするわけではない場合、_internalSlotsList_ は [[Prototype]] を含む。
+        1. 表明: 呼出し元が _obj_ の [[SetPrototypeOf]]、[[IsExtensible]]、および [[PreventExtensions]] の必須内部メソッドのすべてを上書きするわけではない場合、_internalSlotsList_ は [[Extensible]] を含む。
         1. _internalSlotsList_ が [[Extensible]] を含む場合、_obj_.[[Extensible]] を *true* に設定する。
         1. _obj_ を返す。
       </emu-alg>
@@ -11810,7 +11810,7 @@
             [[AgentSignifier]]
           </td>
           <td>
-            agent signifier
+            エージェント識別子
           </td>
           <td>
             この realm を所有する agent
@@ -12434,7 +12434,7 @@
         </tr>
         <tr>
           <td>[[Signifier]]</td>
-          <td>an agent signifier</td>
+          <td>エージェント識別子</td>
           <td>エージェントクラスタ内でエージェントを一意に識別します。</td>
         </tr>
         <tr>
@@ -12580,7 +12580,7 @@
       <li>WaiterList Record</li>
     </ul>
 
-    <p>クラスタ内の任意のエージェントによって ECMAScript コードが評価される前に、クラスタ内のすべてのエージェントの Agent Record の [[CandidateExecution]] フィールドが initial candidate execution に設定されます。initial candidate execution は空の candidate execution であり、その [[EventsRecords]] フィールドは、各エージェントについて、そのエージェントの agent signifier を [[AgentSignifier]] フィールドに持ち、[[EventList]] および [[AgentSynchronizesWith]] フィールドが空の List である Agent Events Record を含む List です。</p>
+    <p>クラスタ内の任意のエージェントによって ECMAScript コードが評価される前に、クラスタ内のすべてのエージェントの Agent Record の [[CandidateExecution]] フィールドが initial candidate execution に設定されます。initial candidate execution は空の candidate execution であり、その [[EventsRecords]] フィールドは、各エージェントについて、そのエージェントのエージェント識別子 を [[AgentSignifier]] フィールドに持ち、[[EventList]] および [[AgentSynchronizesWith]] フィールドが空の List である Agent Events Record を含む List です。</p>
 
     <emu-note>
       <p>エージェントクラスタ内のすべてのエージェントは、その Agent Record の [[CandidateExecution]] フィールドで同じ candidate execution を共有します。candidate execution は、メモリモデルで使用される仕様上の仕組みです。</p>
@@ -13505,7 +13505,7 @@
             [[SourceText]]
           </td>
           <td>
-            a sequence of Unicode code points
+            Unicode コードポイントの列
           </td>
           <td>
             関数を定義する<emu-xref href="#sec-source-text">ソーステキスト</emu-xref>です。
@@ -39090,7 +39090,7 @@ THH:mm:ss.sss
             UnicodeMatchProperty (
               _regexpRecord_: a RegExp Record,
               _p_: ECMAScript source text,
-            ): a <emu-not-ref>Unicode property name</emu-not-ref>
+            ): a <emu-not-ref>Unicode プロパティ名</emu-not-ref>
           </h1>
           <dl class="header">
           </dl>
@@ -46892,7 +46892,7 @@ THH:mm:ss.sss
           </tr>
         </table>
       </emu-table>
-      <p>同じ agent signifier を持つ複数の Waiter Record が WaiterList 内に存在する場合があります。</p>
+      <p>同じエージェント識別子 を持つ複数の Waiter Record が WaiterList 内に存在する場合があります。</p>
       <p>agent cluster は WaiterList Record の保存領域を持ちます。この保存領域は (_block_, _i_) によって索引付けされます。ここで _block_ は Shared Data Block、_i_ は _block_ のメモリ内の byte offset です。WaiterList Record は agent 非依存です。(_block_, _i_) によって WaiterList Record の保存領域を検索すると、agent cluster 内のどの agent でも同じ WaiterList Record が得られます。</p>
       <p>各 WaiterList Record は、評価中にその WaiterList Record への排他的アクセスを制御する<dfn variants="critical sections">critical section</dfn>を持ちます。一度に1つの agent だけが WaiterList Record の critical section に入ることができます。WaiterList Record の critical section への進入および退出は、抽象操作 EnterCriticalSection および LeaveCriticalSection によって制御されます。WaiterList Record に対する操作、すなわち待機中 agent の追加と削除、agent リストの走査、リスト上の agent の一時停止と通知、Synchronize イベントの設定と取得は、WaiterList Record の critical section に入った agent のみが実行できます。</p>
     </emu-clause>
@@ -50393,7 +50393,7 @@ THH:mm:ss.sss
     </ul>
     <p>promise は pending でない場合、すなわち fulfilled または rejected のいずれかである場合、<em>settled</em> であるといいます。</p>
     <p>promise は、settled であるか、別の promise の状態と一致するように「固定」されている場合、<em>resolved</em> です。resolved promise を resolve または reject しようとしても効果はありません。promise は resolved でない場合、<em>unresolved</em> です。unresolved promise は常に pending 状態です。resolved promise は pending、fulfilled、または rejected のいずれかである可能性があります。</p>
-    <p><dfn variants="thenables">thenable</dfn> とは、Get(_obj_, *"then"*) が function object を返すオブジェクト _obj_ です。</p>
+    <p><dfn variants="thenables">thenable</dfn> とは、Get(_obj_, *"then"*) が関数オブジェクトを返すオブジェクト _obj_ です。</p>
 
     <emu-clause id="sec-promise-abstract-operations">
       <h1>Promise の抽象操作</h1>
@@ -50814,7 +50814,7 @@ THH:mm:ss.sss
           1. _promise_ を返す。
         </emu-alg>
         <emu-note>
-          <p>_executor_ 引数は function object でなければなりません。この Promise によって表される、場合によっては遅延される処理の開始および完了の報告のために呼び出されます。executor は2つの引数、_resolve_ と _reject_ で呼び出されます。これらは、遅延計算の最終的な完了または失敗を報告するために _executor_ 関数が使用できる関数です。executor 関数から戻ることは、遅延処理が完了したことを意味するのではなく、遅延処理を最終的に実行する要求が受け付けられたことだけを意味します。</p>
+          <p>_executor_ 引数は関数オブジェクトでなければなりません。この Promise によって表される、場合によっては遅延される処理の開始および完了の報告のために呼び出されます。executor は2つの引数、_resolve_ と _reject_ で呼び出されます。これらは、遅延計算の最終的な完了または失敗を報告するために _executor_ 関数が使用できる関数です。executor 関数から戻ることは、遅延処理が完了したことを意味するのではなく、遅延処理を最終的に実行する要求が受け付けられたことだけを意味します。</p>
           <p>_executor_ 関数へ渡される _resolve_ 関数は単一の引数を受け取ります。_executor_ コードは最終的に _resolve_ 関数を呼び出して、関連付けられた Promise を resolve したいことを示すことができます。_resolve_ 関数へ渡される引数は遅延処理の最終的な値を表し、実際の fulfillment 値でも、fulfilled された場合に値を提供する別の promise でもかまいません。</p>
           <p>_executor_ 関数へ渡される _reject_ 関数は単一の引数を受け取ります。_executor_ コードは最終的に _reject_ 関数を呼び出して、関連付けられた Promise が reject され、決して fulfill されないことを示すことができます。_reject_ 関数へ渡される引数は promise の rejection 値として使用されます。通常は Error オブジェクトです。</p>
           <p>Promise コンストラクターによって _executor_ 関数へ渡される resolve および reject 関数は、関連付けられた promise を実際に resolve および reject する能力を持ちます。サブクラスは、resolve および reject にカスタマイズされた値を渡す異なるコンストラクター動作を持つ場合があります。</p>
@@ -52904,7 +52904,7 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[AgentSignifier]]</td>
-          <td>an agent signifier</td>
+          <td>エージェント識別子</td>
           <td>その評価によってこの順序付けが生じた agent。</td>
         </tr>
         <tr>

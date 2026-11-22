@@ -1,0 +1,410 @@
+--- /tmp/ecmarkup-orig/package/lib/type-display.js	1985-10-26 08:15:00.000000000 +0000
++++ /tmp/ecmarkup-pkg/package/lib/type-display.js	2026-11-22 08:10:51.089619087 +0000
+@@ -100,11 +100,15 @@
+                 }
+             }
+         }
+-        if (this.eat(/^(a List|Lists) of\b/i) != null) {
+-            return {
+-                kind: 'list',
+-                elements: this.parseType(),
+-            };
++        {
++            const listMatch = this.eat(/^(a non-empty List|a List|Lists) of\b/i);
++            if (listMatch != null) {
++                return {
++                    kind: 'list',
++                    elements: this.parseType(),
++                    nonEmpty: listMatch[1].toLowerCase().startsWith('a non-empty'),
++                };
++            }
+         }
+         if (this.eat(/^(a List|Lists)\b/i) != null) {
+             return {
+@@ -173,15 +177,20 @@
+             kind: 'opaque',
+             type: this.eatUntil(eater).trim(),
+         };
+-        const start = this.offset;
+         if (this.eat(/^, but not\b/)) {
+-            // we don't actually care to represent the type
+-            this.parseTypePossiblyWithUnmarkedUnion();
+-            opaqueThing.type += this.input.slice(start, this.offset).trim();
++            const excluded = this.parseTypePossiblyWithUnmarkedUnion();
+             this.eatWs();
+             if (!(this.remainder === '' || this.remainder[0] === ')' || this.eat(/^,/) != null)) {
+                 throw new DisplayParseError(`expecting a parenthesis after a "but not" clause`, this.offset);
+             }
++            if (opaqueThing.type === '') {
++                throw new DisplayParseError(`expected to find a type, got empty string`, opaqueStart);
++            }
++            return {
++                kind: 'exclusion',
++                base: opaqueThing,
++                excluded,
++            };
+         }
+         if (opaqueThing.type === '~unused~') {
+             return {
+@@ -296,12 +305,160 @@
+         '매개변수가 두 개인 추상 클로저',
+     ],
+     anything: ['任意值', '任意の値', '임의의 값'],
++    'agent signifier': ['代理标识符', 'エージェント識別子', '에이전트 식별자'],
++    'candidate execution': ['候选执行', '候補実行', '후보 실행'],
++    'finite Number': ['有限 Number', '有限の Number', '유한한 Number'],
++    'Job Abstract Closure': ['Job 抽象闭包', 'Job 抽象クロージャ', 'Job 추상 클로저'],
++    'For-In Iterator': ['For-In Iterator', 'For-In Iterator', 'For-In Iterator'],
++    'Module Namespace Object': ['Module Namespace Object', 'Module Namespace Object', 'Module Namespace Object'],
++    'Unicode property name': ['Unicode 属性名', 'Unicode プロパティ名', '유니코드 프로퍼티 이름'],
++    'Unicode property value': ['Unicode 属性值', 'Unicode プロパティ値', '유니코드 프로퍼티 값'],
++    'sequence of Unicode code points': ['Unicode 码点序列', 'Unicode コードポイントの列', '유니코드 코드 포인트 시퀀스'],
++    'sequence of characters': ['字符序列', '文字の列', '문자 시퀀스'],
++    'nonterminal in one of the ECMAScript grammars': [
++        '某个 ECMAScript 文法中的非终结符',
++        'いずれかの ECMAScript 文法の非終端記号',
++        'ECMAScript 문법 중 하나의 비단말 기호',
++    ],
++    'Object that conforms to the IteratorResult interface': [
++        '符合 IteratorResult 接口的 Object',
++        'IteratorResult インターフェースに適合する Object',
++        'IteratorResult 인터페이스를 준수하는 Object',
++    ],
++    'read-modify-write modification function': [
++        '读-修改-写修改函数',
++        'read-modify-write modification function',
++        'read-modify-write 수정 함수',
++    ],
++    'initialized RegExp instance': [
++        '已初始化的 RegExp 实例',
++        '初期化済みの RegExp インスタンス',
++        '초기화된 RegExp 인스턴스',
++    ],
++    'instance of a concrete subclass of Module Record': [
++        'Module Record 的某个具体子类的实例',
++        'Module Record の具象サブクラスのインスタンス',
++        'Module Record의 구체 하위 클래스의 인스턴스',
++    ],
++    'epoch nanoseconds count': ['纪元纳秒计数', 'エポックナノ秒カウント', 'epoch 나노초 수'],
++    'epoch nanoseconds counts': ['纪元纳秒计数', 'エポックナノ秒カウント', 'epoch 나노초 수'],
++    'immutable prototype exotic object': [
++        '不可变原型特异对象',
++        '不変プロトタイプエキゾチックオブジェクト',
++        '불변 프로토타입 특수 객체',
++    ],
++    'module namespace exotic object': [
++        '模块命名空间特异对象',
++        'モジュール名前空間エキゾチックオブジェクト',
++        '모듈 네임스페이스 특수 객체',
++    ],
++    'bound function exotic object': [
++        '绑定函数特异对象',
++        '束縛関数エキゾチックオブジェクト',
++        '바인딩된 함수 특수 객체',
++    ],
++    'Abstract Closure that takes a List of ECMAScript language values and returns an ECMAScript language value': [
++        '接受 ECMAScript 语言值 List 并返回 ECMAScript 语言值的抽象闭包',
++        'ECMAScript 言語値の List を受け取り、ECMAScript 言語値を返す抽象クロージャ',
++        'ECMAScript 언어 값의 List를 받아 ECMAScript 언어 값을 반환하는 추상 클로저',
++    ],
+ };
++const recordPrefixes = {
++    'candidate execution': ['候选执行', '候補実行', '후보 실행'],
++    'Time Zone Identifier': ['时区标识符', 'タイムゾーン識別子', '시간대 식별자'],
++};
++function phrase(spec, input, bare, term) {
++    const values = Object.prototype.hasOwnProperty.call(nouns, bare) ? nouns[bare] : undefined;
++    if (values)
++        return term(input, (0, i18n_1.pick)(spec, input, ...values));
++    return null;
++}
++function knownPhrase(spec, input, bare, term) {
++    const direct = phrase(spec, input, bare, term);
++    if (direct)
++        return direct;
++    if (bare === 'any value except a Completion Record') {
++        return term(input, (0, i18n_1.pick)(spec, input,
++            '除 Completion Record 之外的任意值',
++            'Completion Record を除く任意の値',
++            'Completion Record를 제외한 임의의 값'));
++    }
++    const length = bare.match(/^String of length (\d+)$/);
++    if (length) {
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `长度为 ${length[1]} 的 String`,
++            `長さが ${length[1]} の String`,
++            `길이가 ${length[1]}인 String`));
++    }
++    const bytes = bare.match(/^byte values of length (\d+)$/);
++    if (bytes) {
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `长度为 ${bytes[1]} 的字节值`,
++            `長さが ${bytes[1]} のバイト値`,
++            `길이가 ${bytes[1]}인 바이트 값`));
++    }
++    const divisible = bare.match(/^non-negative integer that is evenly divisible by (\d+)$/);
++    if (divisible) {
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `能被 ${divisible[1]} 整除的非负整数`,
++            `${divisible[1]} で割り切れる非負整数`,
++            `${divisible[1]}로 나누어떨어지는 음이 아닌 정수`));
++    }
++    const ctor = bare.match(/^String which is the name of a TypedArray constructor in (\S+)$/);
++    if (ctor) {
++        const table = ctor[1];
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `${table} 中某个 TypedArray 构造函数的名称所对应的 String`,
++            `${table} にある TypedArray コンストラクターの名前である String`,
++            `${table}에 있는 TypedArray 생성자의 이름인 String`));
++    }
++    const capability = bare.match(/^PromiseCapability Record for an intrinsic (\S+)$/);
++    if (capability) {
++        const intrinsic = capability[1];
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `内置 ${intrinsic} 的 PromiseCapability 记录`,
++            `組み込み ${intrinsic} の PromiseCapability レコード`,
++            `내장 ${intrinsic}의 PromiseCapability 레코드`));
++    }
++    const events = bare.match(/^(.+?) events?$/);
++    if (events && !/\bof\b/.test(bare)) {
++        return term(input, events[1] + (0, i18n_1.pick)(spec, bare.endsWith('s') ? ' events' : ' event', ' 事件', ' イベント', ' 이벤트'));
++    }
++    const setOf = bare.match(/^Set of (.+)$/);
++    if (setOf) {
++        const inner = knownPhrase(spec, setOf[1], setOf[1], (_original, translated) => translated) || setOf[1];
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `${inner}的 Set`,
++            `${inner}の Set`,
++            `${inner}의 Set`));
++    }
++    return null;
++}
++function translateUnparsed(spec, masked, term) {
++    if (masked === 'a String of length 2 or 3') {
++        return term(masked, (0, i18n_1.pick)(spec, masked,
++            '长度为 2 或 3 的 String',
++            '長さが 2 または 3 の String',
++            '길이가 2 또는 3인 String'));
++    }
++    const closure = masked.match(/^an Abstract Closure that takes a List of characters and a non-negative integer and returns either a MatchState or (\S+)$/);
++    if (closure) {
++        const failure = closure[1];
++        return term(masked, (0, i18n_1.pick)(spec, masked,
++            `接受字符 List 和非负整数并返回 MatchState 或 ${failure} 的抽象闭包`,
++            `文字の List と非負整数を受け取り、MatchState または ${failure} を返す抽象クロージャ`,
++            `문자의 List와 음이 아닌 정수를 받아 MatchState 또는 ${failure}를 반환하는 추상 클로저`));
++    }
++    return null;
++}
+ function opaque(spec, input, term) {
+     // Leave custom markup, literal strings, variables and grammar names intact.
+     if (/[<>]/.test(input))
+         return input;
+     const bare = input.replace(/^an? /, '');
++    const known = knownPhrase(spec, input, bare, term);
++    if (known)
++        return known;
+     // Translate only explicit decimal bounds; never widen interval endpoints.
+     const closed = bare.match(/^integer in the inclusive interval from (\d+) to (\d+)$/);
+     if (closed) {
+@@ -325,9 +482,13 @@
+     }
+     const record = bare.match(/^(.*) Records?$/);
+     if (record) {
+-        return term(input, record[1] + (0, i18n_1.pick)(spec, ' Record', ' 记录', 'レコード', ' 레코드'));
++        const prefix = Object.prototype.hasOwnProperty.call(recordPrefixes, record[1])
++            ? recordPrefixes[record[1]]
++            : null;
++        const head = prefix ? (0, i18n_1.pick)(spec, record[1], ...prefix) : record[1];
++        return term(input, head + (0, i18n_1.pick)(spec, ' Record', ' 记录', 'レコード', ' 레코드'));
+     }
+-    const parsed = bare.match(/^(\|[^|]+\|) Parse Nodes?$/);
++    const parsed = bare.match(/^(\|[^|]+\||\S*_END) Parse Nodes?$/);
+     if (parsed) {
+         return term(input, parsed[1] + (0, i18n_1.pick)(spec, ' Parse Node', ' 解析节点', 'の構文解析ノード', ' 구문 분석 노드'));
+     }
+@@ -362,6 +523,9 @@
+     ];
+     if (namedTypes.includes(bare))
+         return term(input, bare);
++    // Drop the English article only when nothing but one specifier remains.
++    if (/^[A-Z][A-Za-z0-9]*$/.test(bare) || /^ECMARKUP_LITERAL_+\d+_END$/.test(bare))
++        return term(input, bare);
+     return input;
+ }
+ function render(spec, type, term) {
+@@ -374,14 +538,37 @@
+             return ('(' +
+                 (0, i18n_1.joinList)(spec, type.types.map(t => render(spec, t, term)), 'or') +
+                 ')');
+-        case 'list':
+-            return (term('List', (0, i18n_1.pick)(spec, 'List', '列表', 'リスト', '리스트')) +
++        case 'list': {
++            if (type.nonEmpty &&
++                type.elements &&
++                type.elements.kind === 'opaque' &&
++                /(?:_END|\*SyntaxError\*) objects$/.test(type.elements.type)) {
++                const name = type.elements.type.replace(/\s+objects$/, '');
++                return term('non-empty List of SyntaxError objects', (0, i18n_1.pick)(spec, 'a non-empty List of SyntaxError objects',
++                    `由 ${name} 对象组成的非空 List`,
++                    `${name} オブジェクトから成る空でない List`,
++                    `${name} 객체로 구성된 비어 있지 않은 List`));
++            }
++            const listLabel = type.nonEmpty ? 'non-empty List' : 'List';
++            const listWord = type.nonEmpty
++                ? (0, i18n_1.pick)(spec, 'non-empty List', '非空列表', '空でないリスト', '비어 있지 않은 리스트')
++                : (0, i18n_1.pick)(spec, 'List', '列表', 'リスト', '리스트');
++            return (term(listLabel, listWord) +
+                 (type.elements
+                     ? ' (' +
+                         (0, i18n_1.pick)(spec, 'elements: ', '元素：', '要素：', '요소: ') +
+                         render(spec, type.elements, term) +
+                         ')'
+                     : ''));
++        }
++        case 'exclusion': {
++            const base = render(spec, type.base, term);
++            const excluded = render(spec, type.excluded, term);
++            return (0, i18n_1.pick)(spec, `${base}, but not ${excluded}`,
++                `不是 ${excluded} 的 ${base}`,
++                `${excluded} ではない ${base}`,
++                `${base}(단, ${excluded} 제외)`);
++        }
+         case 'record':
+             return (term('Record', (0, i18n_1.pick)(spec, 'Record', '记录', 'レコード', '레코드')) +
+                 ' (' +
+@@ -393,12 +580,12 @@
+         case 'completion': {
+             const labels = {
+                 normal: ['正常完成', '正常完了', '정상 완료'],
+-                abrupt: ['突兀完成', '中途完了', '중도 완료'],
++                abrupt: ['突然完成', '中途完了', '비정상 완료'],
+                 throw: ['抛出完成', 'throw 完了', 'throw 완료'],
+                 return: ['返回完成', 'return 完了', 'return 완료'],
+                 break: ['break 完成', 'break 完了', 'break 완료'],
+                 continue: ['continue 完成', 'continue 完了', 'continue 완료'],
+-                mixed: ['完成记录', '完了レコード', '완료 레코드'],
++                mixed: ['Completion Record', 'Completion Record', 'Completion Record'],
+             };
+             const label = (0, i18n_1.pick)(spec, type.completionType + ' completion', ...labels[type.completionType]);
+             return (term(type.completionType === 'mixed'
+@@ -416,23 +603,33 @@
+     }
+ }
+ function displayType(spec, input, term = (_original, translated) => translated) {
+-    if ((0, i18n_1.locale)(spec) === 'en' || /[<>]/.test(input))
++    if ((0, i18n_1.locale)(spec) === 'en')
+         return input;
+     let prefix = 'ECMARKUP_LITERAL_';
+     while (input.includes(prefix))
+         prefix += '_';
+     const protectedTokens = [];
+-    const masked = input.replace(/~[^~\n]+~|\*[^*\n]+\*|`[^`\n]+`|_[A-Za-z0-9]+_|%[^%\n]+%|\|[^|\n]+\|/g, token => {
++    const maskToken = (token) => {
+         protectedTokens.push(token);
+         return prefix + (protectedTokens.length - 1) + '_END';
+-    });
+-    // Relative clauses can contain their own unions and argument lists. Until
+-    // that grammar is supported, preserve the entire description and its scope.
++    };
++    // One pass: replacements are not rescanned, so placeholders stay intact.
++    // Tags are part of the type text (cross-references and values).
++    const masked = input.replace(/<[^>]*>|~[^~\n]+~|\*[^*\n]+\*|`[^`\n]+`|_[A-Za-z0-9]+_|%[^%\n]+%|\|[^|\n]+\|/g, maskToken);
++    const restore = (text) => text.replace(new RegExp(prefix + '(\\d+)_END', 'g'), (_match, index) => protectedTokens[Number(index)]);
++    const wrappedTerm = (original, translated) => term(restore(original), translated);
++    const whole = knownPhrase(spec, masked, masked.replace(/^an? /, ''), wrappedTerm);
++    if (whole != null)
++        return restore(whole);
++    const unparsed = translateUnparsed(spec, masked, wrappedTerm);
++    if (unparsed != null)
++        return restore(unparsed);
++    // Relative clauses can contain their own unions. Known phrases are handled
++    // above; anything else stays unchanged instead of being split on "or".
+     if (/\b(?:that|which)\b/.test(masked))
+         return input;
+-    const restore = (text) => text.replace(new RegExp(prefix + '(\\d+)_END', 'g'), (_match, index) => protectedTokens[Number(index)]);
+     try {
+-        const rendered = render(spec, DisplayTypeParser.parse(masked), (original, translated) => term(restore(original), translated));
++        const rendered = render(spec, DisplayTypeParser.parse(masked), wrappedTerm);
+         return restore(rendered);
+     }
+     catch (error) {
+--- /tmp/ecmarkup-orig/package/lib/header-parser.js	1985-10-26 08:15:00.000000000 +0000
++++ /tmp/ecmarkup-pkg/package/lib/header-parser.js	2026-11-22 08:06:25.261381230 +0000
+@@ -271,10 +271,29 @@
+         };
+     }
+ }
++// Union display already wraps its alternatives. A second pair is redundant.
++function fullyParenthesized(type) {
++    if (!type.startsWith('(') || !type.endsWith(')'))
++        return false;
++    let depth = 0;
++    for (let i = 0; i < type.length; i++) {
++        if (type[i] === '(')
++            depth++;
++        else if (type[i] === ')') {
++            depth--;
++            if (depth === 0)
++                return i === type.length - 1;
++            if (depth < 0)
++                return false;
++        }
++    }
++    return false;
++}
+ const printParamWithType = (p) => {
+     let result = p.name;
+     if (p.type !== null) {
+-        result += ` (${p.type})`;
++        const type = p.type.trim();
++        result += fullyParenthesized(type) ? ` ${type}` : ` (${type})`;
+     }
+     if (p.wrappingTag !== null) {
+         result = `<${p.wrappingTag}>${result}</${p.wrappingTag}>`;
+@@ -544,6 +563,21 @@
+         skipReturnChecks: skipReturnChecks !== null && skipReturnChecks !== void 0 ? skipReturnChecks : false,
+     };
+ }
++function translateForClause(spec, text, term) {
++    const match = text.match(/^(\s*)(.*?)(?:\s+(_[A-Za-z0-9]+_))?(?:\s+\(([^)]*)\))?(\s*)$/);
++    if (match == null)
++        return text;
++    const type = match[2].trim();
++    if (!/^an?\s/i.test(type))
++        return text;
++    const translated = (0, type_display_1.displayType)(spec, type, term);
++    const variable = match[3] ? ` ${match[3]}` : '';
++    const notes = {
++        'when the method is present': (0, i18n_1.pick)(spec, 'when the method is present', '存在该方法时', 'メソッドが存在する場合', '메서드가 있는 경우'),
++    };
++    const note = match[4] ? ` (${notes[match[4]] || match[4]})` : '';
++    return translated + variable + note;
++}
+ function formatPreamble(spec, clause, dl, type, name, formattedParams, formattedReturnType, _for, description) {
+     var _a;
+     const para = spec.doc.createElement('p');
+@@ -587,7 +621,9 @@
+                 para.append(`The ${name} ${type} of `, ..._for.childNodes);
+             }
+             else {
+-                para.append(..._for.childNodes, (0, i18n_1.pick)(spec, ' ', '的', 'の', '의 '));
++                const holder = spec.doc.createElement('span');
++                holder.innerHTML = translateForClause(spec, _for.textContent || '', term);
++                para.append(...holder.childNodes, (0, i18n_1.pick)(spec, ' ', '的', 'の', '의 '));
+                 const label = spec.doc.createElement('span');
+                 label.innerHTML = term(type, (0, i18n_1.t)(spec, type));
+                 para.append(...label.childNodes, ' ' + name);
+--- /tmp/ecmarkup-orig/package/lib/Spec.js	1985-10-26 08:15:00.000000000 +0000
++++ /tmp/ecmarkup-pkg/package/lib/Spec.js	2026-11-22 08:14:48.773440569 +0000
+@@ -630,6 +630,10 @@
+             const entry = prod.entry;
+             if (!entry || entry.namespace === 'external')
+                 return;
++            // A generated label can be rewritten after its nonterminal was linked.
++            // Drop the detached duplicate; the replacement remains in the document.
++            if (prod.node.parentNode == null)
++                return;
+             // if this is the defining nt of an emu-production, don't create a ref
+             if (prod.node.parentNode.nodeName === 'EMU-PRODUCTION')
+                 return;

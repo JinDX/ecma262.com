@@ -782,12 +782,12 @@
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>它用于强调正在返回一个完成记录。</dd>
+          <dd>它用于强调正在返回一个 Completion Record。</dd>
           <dt>skip return checks</dt>
           <dd>true</dd>
         </dl>
         <emu-alg>
-          1. 断言：_completionRecord_ 是一个完成记录。
+          1. 断言：_completionRecord_ 是一个 Completion Record。
           1. 返回 _completionRecord_。
         </emu-alg>
       </emu-clause>
@@ -813,14 +813,14 @@
       </emu-clause>
 
       <emu-clause id="sec-shorthands-for-unwrapping-completion-records" oldids="sec-returnifabrupt,sec-returnifabrupt-shorthands">
-        <h1>解包完成记录的简写</h1>
-        <p>前缀“?”和“!”用作解包完成记录的简写。“?”用于将突然完成传播给调用者，或者在其他情况下解包正常完成。“!”用于断言完成记录是正常完成并将其解包。形式上，步骤</p>
+        <h1>解包 Completion Record 的简写</h1>
+        <p>前缀“?”和“!”用作解包 Completion Record 的简写。“?”用于将突然完成传播给调用者，或者在其他情况下解包正常完成。“!”用于断言 Completion Record 是正常完成并将其解包。形式上，步骤</p>
         <emu-alg example>
           1. 令 _result_ 为 ? _record_。
         </emu-alg>
         <p>等价于</p>
         <emu-alg example>
-          1. 断言：_record_ 是一个完成记录。
+          1. 断言：_record_ 是一个 Completion Record。
           1. 如果 _record_ 是突然完成，则返回 _record_。
           1. 令 _result_ 为 _record_.[[Value]]。
         </emu-alg>
@@ -846,7 +846,7 @@
         <p>随后又可展开为</p>
         <emu-alg example>
           1. 令 _tmp1_ 为 Other()。
-          1. 断言：_tmp1_ 是一个完成记录。
+          1. 断言：_tmp1_ 是一个 Completion Record。
           1. 如果 _tmp1_ 是突然完成，则返回 _tmp1_。
           1. 令 _tmp2_ 为 _tmp1_.[[Value]]。
           1. 执行 AO(_tmp2_)。
@@ -855,12 +855,12 @@
 
       <emu-clause id="sec-implicit-normal-completion" oldids="sec-implicit-completion-values">
         <h1>隐式正常完成</h1>
-        <p>在声明返回完成记录的抽象操作的算法中，以及所有内置函数中，返回的值会先传递给 NormalCompletion，然后改用所得结果。此规则不适用于 Completion 算法内部，也不适用于在该步骤中明确将所返回的值标记为完成记录的情况；这些情况包括：</p>
+        <p>在声明返回 Completion Record 的抽象操作的算法中，以及所有内置函数中，返回的值会先传递给 NormalCompletion，然后改用所得结果。此规则不适用于 Completion 算法内部，也不适用于在该步骤中明确将所返回的值标记为 Completion Record 的情况；这些情况包括：</p>
         <ul>
           <li>直接返回应用 Completion、NormalCompletion、ThrowCompletion 或 ReturnCompletion 所得的结果时</li>
-          <li>直接返回构造完成记录所得的结果时</li>
+          <li>直接返回构造 Completion Record 所得的结果时</li>
         </ul>
-        <p>如果通过任何其他方式从此类抽象操作返回完成记录，则属于编辑错误。例如，在这些抽象操作中，</p>
+        <p>如果通过任何其他方式从此类抽象操作返回 Completion Record，则属于编辑错误。例如，在这些抽象操作中，</p>
         <emu-alg example>
           1. 返回 *true*。
         </emu-alg>
@@ -875,13 +875,13 @@
         </emu-alg>
         <p>或</p>
         <emu-alg example>
-          1. 返回完成记录 { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ }。
+          1. 返回 Completion Record { [[Type]]: ~normal~, [[Value]]: *true*, [[Target]]: ~empty~ }。
         </emu-alg>
         <p>注意，通过<emu-xref href="#sec-shorthands-for-unwrapping-completion-records">展开 ? 简写</emu-xref>，以下示例是允许的，因为在展开后的步骤中，突然完成的情况下会直接返回应用 Completion 所得的结果，而正常完成的情况下会在解包之后隐式应用 NormalCompletion。</p>
         <emu-alg example>
           1. 返回 ? _completion_。
         </emu-alg>
-        <p>以下示例属于编辑错误，因为该步骤返回了完成记录，却没有在该步骤中标明这一点。</p>
+        <p>以下示例属于编辑错误，因为该步骤返回了 Completion Record，却没有在该步骤中标明这一点。</p>
         <emu-alg example>
           1. 令 _completion_ 为 NormalCompletion(*true*)。
           1. 返回 _completion_。
@@ -37300,10 +37300,10 @@ THH:mm:ss.sss
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <ul>
           <li>
-            如果 IsCharacterClass of the first |ClassAtom| 是 *true*，或者 IsCharacterClass of the second |ClassAtom| 是 *true*，则为语法错误。
+            如果第一个 |ClassAtom| 的 IsCharacterClass 是 *true*，或者第二个 |ClassAtom| 的 IsCharacterClass 是 *true*，则为语法错误。
           </li>
           <li>
-            如果 IsCharacterClass of the first |ClassAtom| 是 *false*、IsCharacterClass of the second |ClassAtom| 是 *false*，并且 CharacterValue of the first |ClassAtom| 严格大于 CharacterValue of the second |ClassAtom|，则为语法错误。
+            如果第一个 |ClassAtom| 的 IsCharacterClass 是 *false*、第二个 |ClassAtom| 的 IsCharacterClass 是 *false*，并且第一个 |ClassAtom| 的 CharacterValue 严格大于第二个 |ClassAtom| 的 CharacterValue，则为语法错误。
           </li>
         </ul>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
@@ -37378,7 +37378,7 @@ THH:mm:ss.sss
         <emu-grammar>ClassSetRange :: ClassSetCharacter `-` ClassSetCharacter</emu-grammar>
         <ul>
           <li>
-            如果 CharacterValue of the first |ClassSetCharacter| 严格大于 CharacterValue of the second |ClassSetCharacter|，则为语法错误。
+            如果第一个 |ClassSetCharacter| 的 CharacterValue 严格大于第二个 |ClassSetCharacter| 的 CharacterValue，则为语法错误。
           </li>
         </ul>
       </emu-clause>
@@ -37740,8 +37740,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassSetOperand `&amp;&amp;` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 如果 MayContainStrings of the first |ClassSetOperand| 是 *false*，则返回 *false*。
-          1. 如果 MayContainStrings of the second |ClassSetOperand| 是 *false*，则返回 *false*。
+          1. 如果第一个 |ClassSetOperand| 的 MayContainStrings 是 *false*，则返回 *false*。
+          1. 如果第二个 |ClassSetOperand| 的 MayContainStrings 是 *false*，则返回 *false*。
           1. 返回 *true*。
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassIntersection `&amp;&amp;` ClassSetOperand</emu-grammar>
@@ -37752,7 +37752,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSetOperand `--` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 返回 MayContainStrings of the first |ClassSetOperand|。
+          1. 返回 第一个 |ClassSetOperand| 的 MayContainStrings。
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSubtraction `--` ClassSetOperand</emu-grammar>
         <emu-alg>
@@ -38738,8 +38738,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the first |ClassAtom| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the second |ClassAtom| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassAtom| 执行 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassAtom| 执行 CompileToCharSet。
           1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
           1. 令 _rangeSet_ 为 CharacterRange(_charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
@@ -38878,8 +38878,8 @@ THH:mm:ss.sss
         <!-- ClassIntersection -->
         <emu-grammar>ClassIntersection :: ClassSetOperand `&amp;&amp;` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the first |ClassSetOperand| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the second |ClassSetOperand| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassSetOperand| 执行 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassSetOperand| 执行 CompileToCharSet。
           1. 返回 CharSet _charSet_ 和 _otherSet_ 的交集。
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassIntersection `&amp;&amp;` ClassSetOperand</emu-grammar>
@@ -38892,8 +38892,8 @@ THH:mm:ss.sss
         <!-- ClassSubtraction -->
         <emu-grammar>ClassSubtraction :: ClassSetOperand `--` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the first |ClassSetOperand| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the second |ClassSetOperand| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassSetOperand| 执行 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassSetOperand| 执行 CompileToCharSet。
           1. 返回包含 _charSet_ 中不同时也是 _otherSet_ 的 CharSetElement 的所有 CharSetElement 的 CharSet。
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSubtraction `--` ClassSetOperand</emu-grammar>
@@ -38906,8 +38906,8 @@ THH:mm:ss.sss
         <!-- ClassSetRange -->
         <emu-grammar>ClassSetRange :: ClassSetCharacter `-` ClassSetCharacter</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the first |ClassSetCharacter| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the second |ClassSetCharacter| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassSetCharacter| 执行 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassSetCharacter| 执行 CompileToCharSet。
           1. 返回 MaybeSimpleCaseFolding(_regexpRecord_, CharacterRange(_charSet_, _otherSet_))。
         </emu-alg>
         <emu-note>
@@ -39096,7 +39096,7 @@ THH:mm:ss.sss
             UnicodeMatchProperty (
               _regexpRecord_: a RegExp Record,
               _p_: ECMAScript source text,
-            ): a <emu-not-ref>Unicode property name</emu-not-ref>
+            ): a <emu-not-ref>Unicode 属性名</emu-not-ref>
           </h1>
           <dl class="header">
           </dl>
@@ -41005,13 +41005,13 @@ THH:mm:ss.sss
             1. 令 _k_ 为 0。
             1. 当 _k_ &lt; _length_ 时，重复执行：
               1. 如果 _k_ > 0，则将 _result_ 设为 _result_ 与 _separator_ 连接所得的字符串。
-              1. 注意：如果 _obj_ 是 TypedArray，则以下对 Get 的调用将返回正常完成记录。
+              1. 注意：如果 _obj_ 是 TypedArray，则以下对 Get 的调用将返回正常完成。
               1. 令 _element_ 为 ? Get(_obj_, ! ToString(𝔽(_k_)))。
               1. 如果 _element_ 既不是 *undefined* 也不是 *null*，则
                 1. 如果存在 _methodName_，则
                   1. 令 _elementString_ 为 ? ToString(? Invoke(_element_, _methodName_, _methodArgs_))。
                 1. 否则，
-                  1. 注意：如果 _obj_ 是 TypedArray，则以下对 ToString 的调用将返回正常完成记录。
+                  1. 注意：如果 _obj_ 是 TypedArray，则以下对 ToString 的调用将返回正常完成。
                   1. 令 _elementString_ 为 ? ToString(_element_)。
                 1. 将 _result_ 设为 _result_ 与 _elementString_ 连接所得的字符串。
               1. 将 _k_ 设为 _k_ + 1。
@@ -54036,10 +54036,10 @@ THH:mm:ss.sss
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <ul>
           <li>
-            如果 IsCharacterClass of the first |ClassAtom| 是 *true*，或者 IsCharacterClass of the second |ClassAtom| 是 *true* <ins>且此产生式具有 <sub>[UnicodeMode]</sub> 参数</ins>，则为 Syntax Error。
+            如果第一个 |ClassAtom| 的 IsCharacterClass 是 *true*，或者第二个 |ClassAtom| 的 IsCharacterClass 是 *true* <ins>且此产生式具有 <sub>[UnicodeMode]</sub> 参数</ins>，则为 Syntax Error。
           </li>
           <li>
-            如果 IsCharacterClass of the first |ClassAtom| 是 *false*、IsCharacterClass of the second |ClassAtom| 是 *false*，并且 the CharacterValue of the first |ClassAtom| 严格大于 the CharacterValue of the second |ClassAtom|，则为 Syntax Error。
+            如果第一个 |ClassAtom| 的 IsCharacterClass 是 *false*、第二个 |ClassAtom| 的 IsCharacterClass 是 *false*，并且第一个 |ClassAtom| 的 CharacterValue 严格大于第二个 |ClassAtom| 的 CharacterValue，则为 Syntax Error。
           </li>
         </ul>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
@@ -54129,8 +54129,8 @@ THH:mm:ss.sss
         <p>替换以下两个规则：</p>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the first |ClassAtom| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the second |ClassAtom| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassAtom| 执行 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassAtom| 执行 CompileToCharSet。
           1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
           1. 令 _rangeSet_ 为 CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。

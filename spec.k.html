@@ -5913,8 +5913,8 @@
         1. 참고: <emu-xref href="#sec-object-internal-methods-and-internal-slots" title></emu-xref>에 설명된 대로 달리 명시되지 않는 한 이러한 각 내부 슬롯의 초기값은 *undefined*입니다.
         1. _obj_.[[PrivateElements]]를 새로운 빈 List로 설정합니다.
         1. _obj_의 필수 내부 메서드를 <emu-xref href="#sec-ordinary-object-internal-methods-and-internal-slots"></emu-xref>에 명시된 기본 일반 객체 정의로 설정합니다.
-        1. 단언: 호출자가 _obj_의 [[GetPrototypeOf]] 및 [[SetPrototypeOf]] 필수 내부 메서드를 모두 재정의하지 않을 예정이면, _internalSlotsList_에는 [[Prototype]]이 포함됩니다.
-        1. 단언: 호출자가 _obj_의 [[SetPrototypeOf]], [[IsExtensible]] 및 [[PreventExtensions]] 필수 내부 메서드를 모두 재정의하지 않을 예정이면, _internalSlotsList_에는 [[Extensible]]이 포함됩니다.
+        1. 단언: 호출자가 _obj_의 [[GetPrototypeOf]] 및 [[SetPrototypeOf]] 필수 내부 메서드를 모두 재정의하지는 않을 예정이면, _internalSlotsList_에는 [[Prototype]]이 포함됩니다.
+        1. 단언: 호출자가 _obj_의 [[SetPrototypeOf]], [[IsExtensible]] 및 [[PreventExtensions]] 필수 내부 메서드를 전부 재정의하지는 않을 예정이면, _internalSlotsList_에는 [[Extensible]]이 포함됩니다.
         1. _internalSlotsList_에 [[Extensible]]이 포함되어 있으면, _obj_.[[Extensible]]을 *true*로 설정합니다.
         1. _obj_를 반환합니다.
       </emu-alg>
@@ -25541,7 +25541,7 @@
             1. _element_를 Completion(ClassElementEvaluation of _classElement_ with argument _proto_)로 둡니다.
           1. 그렇지 않으면,
             1. _element_를 Completion(ClassElementEvaluation of _classElement_ with argument _ctorFunc_)로 둡니다.
-          1. _element_가 abrupt completion이면, 다음을 수행합니다.
+          1. _element_가 비정상 완료이면, 다음을 수행합니다.
             1. 실행 중인 실행 컨텍스트의 LexicalEnvironment를 _envRecord_로 설정합니다.
             1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정합니다.
             1. ? _element_를 반환합니다.
@@ -25579,7 +25579,7 @@
           1. 그렇지 않으면,
             1. 단언: _elementRecord_는 ClassStaticBlockDefinition Record입니다.
             1. _result_를 Completion(Call(_elementRecord_.[[BodyFunction]], _ctorFunc_))로 둡니다.
-          1. _result_가 abrupt completion이면, 다음을 수행합니다.
+          1. _result_가 비정상 완료이면, 다음을 수행합니다.
             1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정합니다.
             1. ? _result_를 반환합니다.
         1. 실행 중인 실행 컨텍스트의 PrivateEnvironment를 _outerPrivateEnv_로 설정합니다.
@@ -37337,7 +37337,7 @@ THH:mm:ss.sss
         <emu-grammar>UnicodePropertyValueExpression :: UnicodePropertyName `=` UnicodePropertyValue</emu-grammar>
         <ul>
           <li>
-            |UnicodePropertyName|과 일치하는 소스 텍스트가 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref> 또는 프로퍼티 별칭이 아니면 Syntax Error입니다.
+            |UnicodePropertyName|과 일치하는 소스 텍스트가 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref> 또는 프로퍼티 별칭이 아니면 Syntax Error입니다.
           </li>
           <li>
             |UnicodePropertyValue|와 일치하는 소스 텍스트가 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열된 |UnicodePropertyName|과 일치하는 소스 텍스트가 지정하는 유니코드 프로퍼티 또는 프로퍼티 별칭에 대한 프로퍼티 값 또는 프로퍼티 값 별칭이 아니면 Syntax Error입니다.
@@ -38835,7 +38835,7 @@ THH:mm:ss.sss
         <emu-alg>
           1. _ps_를 |UnicodePropertyName|과 일치하는 소스 텍스트로 둡니다.
           1. _p_를 UnicodeMatchProperty(_regexpRecord_, _ps_)로 둡니다.
-          1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref> 또는 프로퍼티 별칭입니다.
+          1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref> 또는 프로퍼티 별칭입니다.
           1. _vs_를 |UnicodePropertyValue|와 일치하는 소스 텍스트로 둡니다.
           1. _v_를 UnicodeMatchPropertyValue(_p_, _vs_)로 둡니다.
           1. _charSet_을 문자 데이터베이스 정의에 값 _v_를 갖는 프로퍼티 _p_가 포함된 모든 유니코드 코드 포인트를 포함하는 CharSet으로 둡니다.
@@ -39091,20 +39091,20 @@ THH:mm:ss.sss
             UnicodeMatchProperty (
               _regexpRecord_: a RegExp Record,
               _p_: ECMAScript source text,
-            ): a <emu-not-ref>Unicode property name</emu-not-ref>
+            ): a <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref>
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. _regexpRecord_.[[UnicodeSets]]가 *true*이고 _p_가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>의 “<emu-not-ref>Property name</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref>이면, 다음을 수행합니다.
+            1. _regexpRecord_.[[UnicodeSets]]가 *true*이고 _p_가 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>의 “<emu-not-ref>Property name</emu-not-ref>” 열에 나열된 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref>이면, 다음을 수행합니다.
               1. 유니코드 코드 포인트의 List _p_를 반환합니다.
-            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 또는 <emu-xref href="#table-binary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>Unicode property name</emu-not-ref> 또는 프로퍼티 별칭입니다.
-            1. _c_를 해당 행의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 제시된 _p_의 정규 <emu-not-ref>property name</emu-not-ref>으로 둡니다.
+            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref> 또는 <emu-xref href="#table-binary-unicode-properties"></emu-xref>의 “<emu-not-ref>Property name and aliases</emu-not-ref>” 열에 나열된 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref> 또는 프로퍼티 별칭입니다.
+            1. _c_를 해당 행의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 제시된 _p_의 정규 <emu-not-ref>프로퍼티 이름</emu-not-ref>으로 둡니다.
             1. 유니코드 코드 포인트의 List _c_를 반환합니다.
           </emu-alg>
-          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties"></emu-xref> 및 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>에 나열된 <emu-not-ref>Unicode property name</emu-not-ref>과 별칭을 지원해야 합니다. 상호 운용성을 보장하기 위해 구현체는 다른 어떤 <emu-not-ref>property name</emu-not-ref>이나 별칭도 지원해서는 안 됩니다.</p>
+          <p>구현체는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>, <emu-xref href="#table-binary-unicode-properties"></emu-xref> 및 <emu-xref href="#table-binary-unicode-properties-of-strings"></emu-xref>에 나열된 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref>과 별칭을 지원해야 합니다. 상호 운용성을 보장하기 위해 구현체는 다른 어떤 <emu-not-ref>프로퍼티 이름</emu-not-ref>이나 별칭도 지원해서는 안 됩니다.</p>
           <emu-note>
-            <p>예를 들어 `Script_Extensions`(<emu-not-ref>property name</emu-not-ref>)와 `scx`(프로퍼티 별칭)는 유효하지만 `script_extensions` 또는 `Scx`는 유효하지 않습니다.</p>
+            <p>예를 들어 `Script_Extensions`(<emu-not-ref>프로퍼티 이름</emu-not-ref>)와 `scx`(프로퍼티 별칭)는 유효하지만 `script_extensions` 또는 `Scx`는 유효하지 않습니다.</p>
           </emu-note>
           <emu-note>
             <p>나열된 프로퍼티는 <a href="https://unicode.org/reports/tr18/#RL1.2">UTS18 RL1.2</a>가 요구하는 것의 상위 집합을 구성합니다.</p>
@@ -39127,7 +39127,7 @@ THH:mm:ss.sss
           <dl class="header">
           </dl>
           <emu-alg>
-            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 나열된 정규이며 별칭이 아닌 <emu-not-ref>Unicode property name</emu-not-ref>입니다.
+            1. 단언: _p_는 <emu-xref href="#table-nonbinary-unicode-properties"></emu-xref>의 “<emu-not-ref>Canonical property name</emu-not-ref>” 열에 나열된 정규이며 별칭이 아닌 <emu-not-ref>유니코드 프로퍼티 이름</emu-not-ref>입니다.
             1. 단언: _v_는 <a href="https://unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt"><code>PropertyValueAliases.txt</code></a>에 나열된 유니코드 프로퍼티 _p_의 프로퍼티 값 또는 프로퍼티 값 별칭입니다.
             1. _value_를 해당 행의 “Canonical property value” 열에 제시된 _v_의 정규 프로퍼티 값으로 둡니다.
             1. 유니코드 코드 포인트의 List _value_를 반환합니다.
@@ -41405,7 +41405,7 @@ THH:mm:ss.sss
                 1. _kValue_를 ? Get(_obj_, _propertyKey_)로 둡니다.
                 1. _kValue_를 _items_에 추가합니다.
               1. _k_를 _k_ + 1로 설정합니다.
-            1. [id="step-array-sort"] 구현체 정의 순서의 <emu-meta effects="user-code">_sortCompare_ 호출</emu-meta>을 사용하여 _items_를 정렬합니다. 그러한 호출 중 하나가 갑작스러운 완료를 반환하면 _sortCompare_에 대한 추가 호출을 수행하기 전에 중단하고 해당 Completion Record를 반환합니다.
+            1. [id="step-array-sort"] 구현체 정의 순서의 <emu-meta effects="user-code">_sortCompare_ 호출</emu-meta>을 사용하여 _items_를 정렬합니다. 그러한 호출 중 하나가 비정상 완료를 반환하면 _sortCompare_에 대한 추가 호출을 수행하기 전에 중단하고 해당 Completion Record를 반환합니다.
             1. _items_를 반환합니다.
           </emu-alg>
           <p><dfn id="sort-order">정렬 순서</dfn>는 위 알고리즘의 <emu-xref href="#step-array-sort"></emu-xref> 단계가 완료된 후의 _items_ 순서입니다. _sortCompare_가 _items_ 요소에 대해 일관된 비교기가 아니면 정렬 순서는 구현체 정의입니다. SortIndexedProperties가 <emu-xref href="#sec-array.prototype.sort">Array.prototype.sort</emu-xref> 또는 <emu-xref href="#sec-array.prototype.tosorted">Array.prototype.toSorted</emu-xref>에 의해 호출될 때, _comparator_가 *undefined*이고 _sortCompare_에 인수로 전달된 특정 값에 대한 모든 ToString 적용이 동일한 결과를 생성하지 않는 경우에도 정렬 순서는 구현체 정의입니다.</p>
@@ -43782,7 +43782,7 @@ THH:mm:ss.sss
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환합니다.
               1. _lastChunkHandling_이 *"strict"*이면 _throwOnExtraBits_를 *true*로 둡니다. 그렇지 않으면 _throwOnExtraBits_를 *false*로 둡니다.
               1. _decodeResult_를 Completion(DecodeFinalBase64Chunk(_chunk_, _throwOnExtraBits_))로 둡니다.
-              1. _decodeResult_가 갑작스러운 완료이면, 다음을 수행합니다.
+              1. _decodeResult_가 비정상 완료이면, 다음을 수행합니다.
                 1. _error_를 _decodeResult_.[[Value]]로 둡니다.
                 1. Record { [[Read]]: _read_, [[Bytes]]: _bytes_, [[Error]]: _error_ }를 반환합니다.
               1. _bytes_를 _bytes_와 ! _decodeResult_의 목록 연결로 설정합니다.
@@ -46893,7 +46893,7 @@ THH:mm:ss.sss
           </tr>
         </table>
       </emu-table>
-      <p>동일한 agent signifier를 갖는 여러 Waiter Record가 하나의 WaiterList에 있을 수 있습니다.</p>
+      <p>동일한 에이전트 식별자를 갖는 여러 Waiter Record가 하나의 WaiterList에 있을 수 있습니다.</p>
       <p>에이전트 클러스터에는 WaiterList Records 저장소가 있습니다. 이 저장소는 (_block_, _i_)로 인덱싱되며, 여기서 _block_은 Shared Data Block이고 _i_는 _block_ 메모리 안의 바이트 오프셋입니다. WaiterList Records는 에이전트와 독립적입니다. WaiterList Records 저장소에서 (_block_, _i_)로 조회하면 에이전트 클러스터의 어떤 에이전트에서도 동일한 WaiterList Record가 결과로 나옵니다.</p>
       <p>각 WaiterList Record에는 평가 중 해당 WaiterList Record에 대한 배타적 접근을 제어하는 <dfn variants="critical sections">임계 구역</dfn>이 있습니다. 한 번에 하나의 에이전트만 WaiterList Record의 임계 구역에 들어갈 수 있습니다. WaiterList Record의 임계 구역에 들어가고 나가는 것은 추상 연산 EnterCriticalSection 및 LeaveCriticalSection이 제어합니다. WaiterList Record에 대한 연산—대기 중인 에이전트 추가 및 제거, 에이전트 목록 순회, 목록의 에이전트 일시 중단 및 알림, Synchronize 이벤트 설정 및 가져오기—은 WaiterList Record의 임계 구역에 들어간 에이전트만 수행할 수 있습니다.</p>
     </emu-clause>
@@ -48933,7 +48933,7 @@ THH:mm:ss.sss
                     1. _innerAlive_를 *false*로 설정합니다.
                   1. 그렇지 않으면,
                     1. _completion_을 Completion(Yield(_innerValue_))으로 둡니다.
-                    1. _completion_이 abrupt completion이면, 다음을 수행합니다.
+                    1. _completion_이 비정상 완료이면, 다음을 수행합니다.
                       1. ? IteratorClose(_iteratorRecord_, _completion_)을 반환합니다.
               1. ReturnCompletion(*undefined*)을 반환합니다.
             1. _gen_을 CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterators]] »)로 둡니다.
@@ -49303,7 +49303,7 @@ THH:mm:ss.sss
                     1. _innerAlive_를 *false*로 설정합니다.
                   1. 그렇지 않으면,
                     1. _completion_을 Completion(Yield(_innerValue_))으로 둡니다.
-                    1. _completion_이 abrupt completion이면, 다음을 수행합니다.
+                    1. _completion_이 비정상 완료이면, 다음을 수행합니다.
                       1. _backupCompletion_을 Completion(IteratorClose(_innerIterator_, _completion_))으로 둡니다.
                       1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                       1. ? IteratorClose(_iterated_, _completion_)을 반환합니다.
@@ -49646,7 +49646,7 @@ THH:mm:ss.sss
                     1. _result_를 _padding_[_i_]로 둡니다.
                   1. 그렇지 않으면,
                     1. _result_를 Completion(IteratorStepValue(_iter_))으로 둡니다.
-                    1. _result_가 abrupt completion이면, 다음을 수행합니다.
+                    1. _result_가 비정상 완료이면, 다음을 수행합니다.
                       1. _iter_를 _openIters_에서 제거합니다.
                       1. ? IteratorCloseAll(_openIters_, _result_)을 반환합니다.
                     1. _result_를 ! _result_로 설정합니다.
@@ -49660,7 +49660,7 @@ THH:mm:ss.sss
                         1. 1 ≤ _k_ &lt; _iterCount_를 만족하는 각 정수 _k_에 대해 오름차순으로 다음을 수행합니다.
                           1. 단언: _iters_[_k_]는 *null*이 아닙니다.
                           1. _open_을 Completion(IteratorStep(_iters_[_k_]))으로 둡니다.
-                          1. _open_이 abrupt completion이면, 다음을 수행합니다.
+                          1. _open_이 비정상 완료이면, 다음을 수행합니다.
                             1. _iters_[_k_]를 _openIters_에서 제거합니다.
                             1. ? IteratorCloseAll(_openIters_, _open_)을 반환합니다.
                           1. _open_을 ! _open_으로 설정합니다.
@@ -49894,7 +49894,7 @@ THH:mm:ss.sss
           1. _value_를 Completion(IteratorValue(_result_))으로 둡니다.
           1. IfAbruptRejectPromise(_value_, _promiseCapability_).
           1. _valueWrapper_를 Completion(PromiseResolve(%Promise%, _value_))으로 둡니다.
-          1. _valueWrapper_가 abrupt completion이고 _done_이 *false*이며 _closeOnRejection_이 *true*이면, 다음을 수행합니다.
+          1. _valueWrapper_가 비정상 완료이고 _done_이 *false*이며 _closeOnRejection_이 *true*이면, 다음을 수행합니다.
             1. _valueWrapper_를 Completion(IteratorClose(_syncIteratorRecord_, _valueWrapper_))으로 설정합니다.
           1. IfAbruptRejectPromise(_valueWrapper_, _promiseCapability_).
           1. _unwrap_을 매개변수 (_value_)를 가지며 _done_을 캡처하고 호출될 때 다음 단계를 수행하는 새로운 Abstract Closure로 둡니다:
@@ -50394,7 +50394,7 @@ THH:mm:ss.sss
     </ul>
     <p>promise가 pending이 아니면, 즉 fulfilled 또는 rejected이면 <em>settled</em>되었다고 합니다.</p>
     <p>promise가 settled되었거나 다른 promise의 상태와 일치하도록 “고정”된 경우 <em>resolved</em>되었다고 합니다. resolved promise를 다시 resolve하거나 reject하려고 해도 아무 효과가 없습니다. promise가 resolved되지 않았다면 <em>unresolved</em>입니다. unresolved promise는 항상 pending 상태입니다. resolved promise는 pending, fulfilled 또는 rejected일 수 있습니다.</p>
-    <p><dfn variants="thenables">thenable</dfn>은 Get(_obj_, *"then"*)이 function object를 반환하는 객체 _obj_입니다.</p>
+    <p><dfn variants="thenables">thenable</dfn>은 Get(_obj_, *"then"*)이 함수 객체를 반환하는 객체 _obj_입니다.</p>
 
     <emu-clause id="sec-promise-abstract-operations">
       <h1>Promise 추상 연산</h1>
@@ -50463,7 +50463,7 @@ THH:mm:ss.sss
           <p>는 다음과 같은 의미입니다:</p>
           <emu-alg>
             1. 단언: _value_는 Completion Record입니다.
-            1. _value_가 abrupt completion이면, 다음을 수행합니다.
+            1. _value_가 비정상 완료이면, 다음을 수행합니다.
               1. ? Call(_capability_.[[Reject]], *undefined*, « _value_.[[Value]] »)를 수행합니다.
               1. _capability_.[[Promise]]를 반환합니다.
             1. _value_를 ! _value_로 설정합니다.
@@ -50549,7 +50549,7 @@ THH:mm:ss.sss
               1. FulfillPromise(_promise_, _resolution_)을 수행합니다.
               1. *undefined*를 반환합니다.
             1. _then_을 Completion(Get(_resolution_, *"then"*))으로 둡니다.
-            1. _then_이 abrupt completion이면, 다음을 수행합니다.
+            1. _then_이 비정상 완료이면, 다음을 수행합니다.
               1. RejectPromise(_promise_, _then_.[[Value]])를 수행합니다.
               1. *undefined*를 반환합니다.
             1. _thenAction_을 _then_.[[Value]]로 둡니다.
@@ -50740,10 +50740,10 @@ THH:mm:ss.sss
             1. 그렇지 않으면,
               1. _handlerResult_를 Completion(HostCallJobCallback(_handler_, *undefined*, « _arg_ »))으로 둡니다.
             1. _promiseCapability_이 *undefined*이면, 다음을 수행합니다.
-              1. 단언: _handlerResult_는 abrupt completion이 아닙니다.
+              1. 단언: _handlerResult_는 비정상 완료가 아닙니다.
               1. ~empty~를 반환합니다.
             1. 단언: _promiseCapability_은 PromiseCapability Record입니다.
-            1. _handlerResult_가 abrupt completion이면, 다음을 수행합니다.
+            1. _handlerResult_가 비정상 완료이면, 다음을 수행합니다.
               1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _handlerResult_.[[Value]] »)를 반환합니다.
             1. ? Call(_promiseCapability_.[[Resolve]], *undefined*, « _handlerResult_.[[Value]] »)를 반환합니다.
           1. _handlerRealm_을 *null*로 둡니다.
@@ -50770,7 +50770,7 @@ THH:mm:ss.sss
           1. _job_을 매개변수가 없고 _promiseToResolve_, _thenable_, _then_을 캡처하며 호출될 때 다음 단계를 수행하는 새로운 Job Abstract Closure로 둡니다:
             1. _resolvingFuncs_를 CreateResolvingFunctions(_promiseToResolve_)로 둡니다.
             1. _thenCallResult_를 Completion(HostCallJobCallback(_then_, _thenable_, « _resolvingFuncs_.[[Resolve]], _resolvingFuncs_.[[Reject]] »))으로 둡니다.
-            1. _thenCallResult_가 abrupt completion이면, 다음을 수행합니다.
+            1. _thenCallResult_가 비정상 완료이면, 다음을 수행합니다.
               1. ! Call(_resolvingFuncs_.[[Reject]], *undefined*, « _thenCallResult_.[[Value]] »)를 반환합니다.
             1. ! _thenCallResult_를 반환합니다.
           1. _getThenRealmResult_를 Completion(GetFunctionRealm(_then_.[[Callback]]))으로 둡니다.
@@ -50810,12 +50810,12 @@ THH:mm:ss.sss
           1. _promise_.[[PromiseIsHandled]]를 *false*로 설정합니다.
           1. _resolvingFuncs_를 CreateResolvingFunctions(_promise_)로 둡니다.
           1. _completion_을 Completion(Call(_executor_, *undefined*, « _resolvingFuncs_.[[Resolve]], _resolvingFuncs_.[[Reject]] »))으로 둡니다.
-          1. _completion_이 abrupt completion이면, 다음을 수행합니다.
+          1. _completion_이 비정상 완료이면, 다음을 수행합니다.
             1. ! Call(_resolvingFuncs_.[[Reject]], *undefined*, « _completion_.[[Value]] »)를 수행합니다.
           1. _promise_를 반환합니다.
         </emu-alg>
         <emu-note>
-          <p>_executor_ 인수는 function object여야 합니다. 이 Promise가 나타내는 지연될 수 있는 동작의 시작과 완료를 보고하기 위해 호출됩니다. executor는 두 인수 _resolve_와 _reject_로 호출됩니다. 이 함수들은 _executor_ 함수가 지연된 계산의 최종 완료 또는 실패를 보고하는 데 사용할 수 있습니다. executor 함수에서 반환한다고 해서 지연된 동작이 완료되었다는 의미는 아니며, 단지 지연된 동작을 최종적으로 수행하라는 요청이 수락되었다는 의미입니다.</p>
+          <p>_executor_ 인수는 함수 객체여야 합니다. 이 Promise가 나타내는 지연될 수 있는 동작의 시작과 완료를 보고하기 위해 호출됩니다. executor는 두 인수 _resolve_와 _reject_로 호출됩니다. 이 함수들은 _executor_ 함수가 지연된 계산의 최종 완료 또는 실패를 보고하는 데 사용할 수 있습니다. executor 함수에서 반환한다고 해서 지연된 동작이 완료되었다는 의미는 아니며, 단지 지연된 동작을 최종적으로 수행하라는 요청이 수락되었다는 의미입니다.</p>
           <p>_executor_ 함수에 전달되는 _resolve_ 함수는 하나의 인수를 받습니다. _executor_ 코드는 연결된 Promise를 resolve하려 함을 나타내기 위해 최종적으로 _resolve_ 함수를 호출할 수 있습니다. _resolve_ 함수에 전달되는 인수는 지연된 동작의 최종 값을 나타내며 실제 이행 값이거나, 이행되면 값을 제공할 다른 promise일 수 있습니다.</p>
           <p>_executor_ 함수에 전달되는 _reject_ 함수는 하나의 인수를 받습니다. _executor_ 코드는 연결된 Promise가 reject되었고 절대 fulfilled되지 않을 것임을 나타내기 위해 최종적으로 _reject_ 함수를 호출할 수 있습니다. _reject_ 함수에 전달되는 인수는 promise의 rejection 값으로 사용됩니다. 일반적으로 Error 객체입니다.</p>
           <p>Promise 생성자가 _executor_ 함수에 전달하는 resolve 및 reject 함수는 연결된 promise를 실제로 resolve하고 reject할 수 있습니다. 하위 클래스는 resolve 및 reject에 사용자 정의 값을 전달하는 다른 생성자 동작을 가질 수 있습니다.</p>
@@ -50842,7 +50842,7 @@ THH:mm:ss.sss
           1. _iteratorRecord_를 Completion(GetIterator(_iterable_, ~sync~))으로 둡니다.
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_).
           1. _result_를 Completion(PerformPromiseAll(_iteratorRecord_, _ctor_, _promiseCapability_, _promiseResolve_))으로 둡니다.
-          1. _result_가 abrupt completion이면, 다음을 수행합니다.
+          1. _result_가 비정상 완료이면, 다음을 수행합니다.
             1. _iteratorRecord_.[[Done]]이 *false*이면 _result_를 Completion(IteratorClose(_iteratorRecord_, _result_))으로 설정합니다.
             1. IfAbruptRejectPromise(_result_, _promiseCapability_).
           1. ! _result_를 반환합니다.
@@ -50924,7 +50924,7 @@ THH:mm:ss.sss
           1. _iteratorRecord_를 Completion(GetIterator(_iterable_, ~sync~))으로 둡니다.
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_).
           1. _result_를 Completion(PerformPromiseAllSettled(_iteratorRecord_, _ctor_, _promiseCapability_, _promiseResolve_))으로 둡니다.
-          1. _result_가 abrupt completion이면, 다음을 수행합니다.
+          1. _result_가 비정상 완료이면, 다음을 수행합니다.
             1. _iteratorRecord_.[[Done]]이 *false*이면 _result_를 Completion(IteratorClose(_iteratorRecord_, _result_))으로 설정합니다.
             1. IfAbruptRejectPromise(_result_, _promiseCapability_).
           1. ! _result_를 반환합니다.
@@ -51012,7 +51012,7 @@ THH:mm:ss.sss
           1. _iteratorRecord_를 Completion(GetIterator(_iterable_, ~sync~))으로 둡니다.
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_).
           1. _result_를 Completion(PerformPromiseAny(_iteratorRecord_, _ctor_, _promiseCapability_, _promiseResolve_))으로 둡니다.
-          1. _result_가 abrupt completion이면, 다음을 수행합니다.
+          1. _result_가 비정상 완료이면, 다음을 수행합니다.
             1. _iteratorRecord_.[[Done]]이 *false*이면 _result_를 Completion(IteratorClose(_iteratorRecord_, _result_))으로 설정합니다.
             1. IfAbruptRejectPromise(_result_, _promiseCapability_).
           1. ! _result_를 반환합니다.
@@ -51087,7 +51087,7 @@ THH:mm:ss.sss
           1. _iteratorRecord_를 Completion(GetIterator(_iterable_, ~sync~))으로 둡니다.
           1. IfAbruptRejectPromise(_iteratorRecord_, _promiseCapability_).
           1. _result_를 Completion(PerformPromiseRace(_iteratorRecord_, _ctor_, _promiseCapability_, _promiseResolve_))으로 둡니다.
-          1. _result_가 abrupt completion이면, 다음을 수행합니다.
+          1. _result_가 비정상 완료이면, 다음을 수행합니다.
             1. _iteratorRecord_.[[Done]]이 *false*이면 _result_를 Completion(IteratorClose(_iteratorRecord_, _result_))으로 설정합니다.
             1. IfAbruptRejectPromise(_result_, _promiseCapability_).
           1. ! _result_를 반환합니다.
@@ -51176,7 +51176,7 @@ THH:mm:ss.sss
           1. _ctor_를 *this* 값으로 둡니다.
           1. _ctor_가 Object가 아니면 *TypeError* 예외를 던집니다.
           1. _status_를 Completion(Call(_callback_, *undefined*, _args_))으로 둡니다.
-          1. _status_가 abrupt completion이면, 다음을 수행합니다.
+          1. _status_가 비정상 완료이면, 다음을 수행합니다.
             1. _promiseCapability_을 ? NewPromiseCapability(_ctor_)로 둡니다.
             1. ? Call(_promiseCapability_.[[Reject]], *undefined*, « _status_.[[Value]] »)를 수행합니다.
             1. _promiseCapability_.[[Promise]]를 반환합니다.
@@ -52275,7 +52275,7 @@ THH:mm:ss.sss
           1. _completion_을 Completion(_next_.[[Completion]])으로 둡니다.
           1. 단언: _completion_은 return completion입니다.
           1. _promiseCompletion_을 Completion(PromiseResolve(%Promise%, _completion_.[[Value]]))으로 둡니다.
-          1. _promiseCompletion_이 abrupt completion이면, 다음을 수행합니다.
+          1. _promiseCompletion_이 비정상 완료이면, 다음을 수행합니다.
             1. AsyncGeneratorCompleteStep(_gen_, _promiseCompletion_, *true*)를 수행합니다.
             1. AsyncGeneratorDrainQueue(_gen_)를 수행합니다.
             1. ~unused~를 반환합니다.
