@@ -31,13 +31,18 @@ for (const input of [
   '<emu-xref href="#sec-time-values-and-time-range">a time value</emu-xref>',
   '*"a finite time value"*',
 ]) {
-  for (const lang of ['en','zh','ja','ko']) { assert.equal(displayType(spec(lang), input), input); checks++; }
+  assert.equal(displayType(spec('en'), input), input); checks++;
+  const localized = input === '*"a finite time value"*'
+    ? '<emu-val>"a finite time value"</emu-val>'
+    : input;
+  for (const lang of ['zh','ja','ko']) { assert.equal(displayType(spec(lang), input), localized); checks++; }
 }
-assert.equal(displayType(spec('zh'), 'either a finite time value or ~NaN~'), '(有限时间值 或 ~NaN~)'); checks++;
+assert.equal(displayType(spec('zh'), 'either a finite time value or ~NaN~'), '(有限时间值 或 <emu-const>NaN</emu-const>)'); checks++;
+assert.equal(displayType(spec('ko'), 'an integer within the closed interval from 2 to 36'), '2 이상 36 이하인 정수'); checks++;
+assert.equal(displayType(spec('ja'), 'an abrupt completion'), '中断完了'); checks++;
 assert.equal(displayType(spec('zh'), 'an abrupt completion'), '突然完成'); checks++;
-assert.equal(displayType(spec('ja'), 'an abrupt completion'), '中途完了'); checks++;
 assert.equal(displayType(spec('ko'), 'an abrupt completion'), '비정상 완료'); checks++;
 assert.equal(displayType(spec('zh'), 'a Completion Record'), 'Completion Record'); checks++;
 assert.equal(displayType(spec('zh'), 'a String or a sequence of Unicode code points'), '(String 或 Unicode 码点序列)'); checks++;
-assert.equal(displayType(spec('zh'), 'a Parse Node or a non-empty List of *SyntaxError* objects'), '(解析节点 或 由 *SyntaxError* 对象组成的非空 List)'); checks++;
+assert.equal(displayType(spec('zh'), 'a Parse Node or a non-empty List of *SyntaxError* objects'), '(解析节点 或 由 <emu-val>SyntaxError</emu-val> 对象组成的非空 List)'); checks++;
 console.log(JSON.stringify({ passed: checks }));

@@ -1,0 +1,236 @@
+--- /tmp/emu6/package/lib/type-display.js	2026-11-22 08:10:51.000000000 +0000
++++ /tmp/emu7/package/lib/type-display.js	2026-11-22 09:43:03.095357451 +0000
+@@ -358,9 +358,59 @@
+         '바인딩된 함수 특수 객체',
+     ],
+     'Abstract Closure that takes a List of ECMAScript language values and returns an ECMAScript language value': [
+-        '接受 ECMAScript 语言值 List 并返回 ECMAScript 语言值的抽象闭包',
+-        'ECMAScript 言語値の List を受け取り、ECMAScript 言語値を返す抽象クロージャ',
+-        'ECMAScript 언어 값의 List를 받아 ECMAScript 언어 값을 반환하는 추상 클로저',
++        '抽象闭包，接收 ECMAScript 语言值的 List，返回 ECMAScript 语言值',
++        '抽象クロージャ。ECMAScript 言語値の List を受け取り、ECMAScript 言語値を返す',
++        '추상 클로저. ECMAScript 언어 값의 List를 받아 ECMAScript 언어 값을 반환',
++    ],
++    'set of algorithm steps': [
++        '一组算法步骤',
++        '一連のアルゴリズム手順',
++        '일련의 알고리즘 단계',
++    ],
++    "some other definition of a function's behaviour provided in this specification": [
++        '本规范提供的其他函数行为定义',
++        'この仕様が提供する関数の動作の他の定義',
++        '이 명세가 제공하는 함수 동작의 다른 정의',
++    ],
++    'ECMAScript code execution context': [
++        'ECMAScript 代码执行上下文',
++        'ECMAScript コード実行コンテキスト',
++        'ECMAScript 코드 실행 컨텍스트',
++    ],
++    'function that returns an IteratorResult object': [
++        '返回 IteratorResult 对象的函数',
++        'IteratorResult オブジェクトを返す関数',
++        'IteratorResult 객체를 반환하는 함수',
++    ],
++    'function that returns a promise for an IteratorResult object': [
++        '返回 IteratorResult 对象的 promise 的函数',
++        'IteratorResult オブジェクトの promise を返す関数',
++        'IteratorResult 객체에 대한 promise를 반환하는 함수',
++    ],
++    'function that returns an iterator object': [
++        '返回迭代器对象的函数',
++        'イテレーターオブジェクトを返す関数',
++        '반복자 객체를 반환하는 함수',
++    ],
++    'function that returns an async iterator object': [
++        '返回异步迭代器对象的函数',
++        '非同期イテレーターオブジェクトを返す関数',
++        '비동기 반복자 객체를 반환하는 함수',
++    ],
++    'non-negative extended mathematical value': [
++        '非负扩展数学值',
++        '非負の拡張数学的値',
++        '음이 아닌 확장 수학적 값',
++    ],
++    'pairs of Synchronize events': [
++        'Synchronize 事件对',
++        'Synchronize イベントの組',
++        'Synchronize 이벤트 쌍',
++    ],
++    'integer ≥ [[StartIndex]]': [
++        '大于等于 [[StartIndex]] 的整数',
++        '[[StartIndex]] 以上の整数',
++        '[[StartIndex]] 이상인 정수',
+     ],
+ };
+ const recordPrefixes = {
+@@ -377,6 +427,14 @@
+     const direct = phrase(spec, input, bare, term);
+     if (direct)
+         return direct;
++    const fallback = bare.match(/^anything \(default value is (\S+)\)$/);
++    if (fallback) {
++        const value = fallback[1];
++        return term(input, (0, i18n_1.pick)(spec, input,
++            `任意值（默认值为 ${value}）`,
++            `任意の値（既定値は ${value}）`,
++            `임의의 값(기본값은 ${value})`));
++    }
+     if (bare === 'any value except a Completion Record') {
+         return term(input, (0, i18n_1.pick)(spec, input,
+             '除 Completion Record 之外的任意值',
+@@ -408,9 +466,9 @@
+     if (ctor) {
+         const table = ctor[1];
+         return term(input, (0, i18n_1.pick)(spec, input,
+-            `${table} 中某个 TypedArray 构造函数的名称所对应的 String`,
+-            `${table} にある TypedArray コンストラクターの名前である String`,
+-            `${table}에 있는 TypedArray 생성자의 이름인 String`));
++            `String，为 ${table} 中某个 TypedArray 构造函数的名称`,
++            `String。${table} にある TypedArray コンストラクターの名前`,
++            `String. ${table}에 있는 TypedArray 생성자의 이름`));
+     }
+     const capability = bare.match(/^PromiseCapability Record for an intrinsic (\S+)$/);
+     if (capability) {
+@@ -445,9 +503,9 @@
+     if (closure) {
+         const failure = closure[1];
+         return term(masked, (0, i18n_1.pick)(spec, masked,
+-            `接受字符 List 和非负整数并返回 MatchState 或 ${failure} 的抽象闭包`,
+-            `文字の List と非負整数を受け取り、MatchState または ${failure} を返す抽象クロージャ`,
+-            `문자의 List와 음이 아닌 정수를 받아 MatchState 또는 ${failure}를 반환하는 추상 클로저`));
++            `抽象闭包，接收字符 List 和非负整数，返回 MatchState 或 ${failure}`,
++            `抽象クロージャ。文字の List と非負整数を受け取り、MatchState または ${failure} を返す`,
++            `추상 클로저. 문자의 List와 음이 아닌 정수를 받아 MatchState 또는 ${failure}를 반환`));
+     }
+     return null;
+ }
+@@ -460,7 +518,7 @@
+     if (known)
+         return known;
+     // Translate only explicit decimal bounds; never widen interval endpoints.
+-    const closed = bare.match(/^integer in the inclusive interval from (\d+) to (\d+)$/);
++    const closed = bare.match(/^integer (?:in the inclusive interval|within the closed interval) from (\d+) to (\d+)$/);
+     if (closed) {
+         const [, lower, upper] = closed;
+         return term(input, (0, i18n_1.pick)(spec, input,
+@@ -551,8 +609,8 @@
+             }
+             const listLabel = type.nonEmpty ? 'non-empty List' : 'List';
+             const listWord = type.nonEmpty
+-                ? (0, i18n_1.pick)(spec, 'non-empty List', '非空列表', '空でないリスト', '비어 있지 않은 리스트')
+-                : (0, i18n_1.pick)(spec, 'List', '列表', 'リスト', '리스트');
++                ? (0, i18n_1.pick)(spec, 'non-empty List', '非空 List', '空でない List', '비어 있지 않은 List')
++                : 'List';
+             return (term(listLabel, listWord) +
+                 (type.elements
+                     ? ' (' +
+@@ -580,7 +638,7 @@
+         case 'completion': {
+             const labels = {
+                 normal: ['正常完成', '正常完了', '정상 완료'],
+-                abrupt: ['突然完成', '中途完了', '비정상 완료'],
++                abrupt: ['突然完成', '中断完了', '비정상 완료'],
+                 throw: ['抛出完成', 'throw 完了', 'throw 완료'],
+                 return: ['返回完成', 'return 完了', 'return 완료'],
+                 break: ['break 完成', 'break 完了', 'break 완료'],
+@@ -602,6 +660,16 @@
+         }
+     }
+ }
++function renderLiterals(html) {
++    // ~enum~ and *value* are ecmarkdown, but generated signatures are inserted as HTML.
++    return html.replace(/(<[^>]*>)|~([^~<>\n]+)~|\*([^*<>\n]+)\*/g, (match, tag, tilde, star) => {
++        if (tag)
++            return tag;
++        if (tilde != null)
++            return `<emu-const>${tilde}</emu-const>`;
++        return `<emu-val>${star}</emu-val>`;
++    });
++}
+ function displayType(spec, input, term = (_original, translated) => translated) {
+     if ((0, i18n_1.locale)(spec) === 'en')
+         return input;
+@@ -618,25 +686,26 @@
+     const masked = input.replace(/<[^>]*>|~[^~\n]+~|\*[^*\n]+\*|`[^`\n]+`|_[A-Za-z0-9]+_|%[^%\n]+%|\|[^|\n]+\|/g, maskToken);
+     const restore = (text) => text.replace(new RegExp(prefix + '(\\d+)_END', 'g'), (_match, index) => protectedTokens[Number(index)]);
+     const wrappedTerm = (original, translated) => term(restore(original), translated);
++    const finish = (html) => renderLiterals(html.replace(/^an?\s+(?=<)/, ''));
+     const whole = knownPhrase(spec, masked, masked.replace(/^an? /, ''), wrappedTerm);
+     if (whole != null)
+-        return restore(whole);
++        return finish(restore(whole));
+     const unparsed = translateUnparsed(spec, masked, wrappedTerm);
+     if (unparsed != null)
+-        return restore(unparsed);
++        return finish(restore(unparsed));
+     // Relative clauses can contain their own unions. Known phrases are handled
+     // above; anything else stays unchanged instead of being split on "or".
+     if (/\b(?:that|which)\b/.test(masked))
+-        return input;
++        return finish(input);
+     try {
+         const rendered = render(spec, DisplayTypeParser.parse(masked), wrappedTerm);
+-        return restore(rendered);
++        return finish(restore(rendered));
+     }
+     catch (error) {
+         if (!(error instanceof DisplayParseError))
+             throw error;
+         // Custom prose and previously translated input have no mandatory grammar.
+-        return input;
++        return finish(input);
+     }
+ }
+ //# sourceMappingURL=type-display.js.map
+\ No newline at end of file
+--- /tmp/emu6/package/lib/term-display.js	1985-10-26 08:15:00.000000000 +0000
++++ /tmp/emu7/package/lib/term-display.js	2026-11-22 09:46:32.734769739 +0000
+@@ -75,19 +75,31 @@
+             continue;
+         }
+         const entries = new Map();
++        let longest = 0;
+         for (const match of original.matchAll(replacer)) {
+             const entry = autolinkmap[match[0].replace(/\s+/g, ' ')];
+             if ((entry === null || entry === void 0 ? void 0 : entry.type) !== 'term')
+                 continue;
+             const id = entry.id || entry.refId;
+-            if (id)
++            if (id) {
+                 entries.set(id, entry);
++                if (match[0].length > longest)
++                    longest = match[0].length;
++            }
+         }
+-        if (entries.size > 1) {
+-            // A single translated atom cannot safely represent several different
+-            // definitions. Preserve the original atom and all its original links.
+-            node.textContent = original;
+-            (0, autolinker_1.autolink)(node.firstChild, replacer, autolinkmap, clause !== null && clause !== void 0 ? clause : spec, currentId, false);
++        const bareLength = original.replace(/^an?\s+/, '').length;
++        // A short term inside a longer description must not swallow the whole phrase.
++        if (entries.size > 1 || (entries.size === 1 && longest < bareLength * 0.6)) {
++            // A long type names several terms. Keep the translation and link each
++            // identifier that remains in it. Restoring the English source escapes
++            // cross-references and drops the translation.
++            const texts = [];
++            const walker = spec.doc.createTreeWalker(node, 4 /* TEXT_NODE */);
++            while (walker.nextNode())
++                texts.push(walker.currentNode);
++            for (const text of texts) {
++                (0, autolinker_1.autolink)(text, replacer, autolinkmap, clause !== null && clause !== void 0 ? clause : spec, currentId, false);
++            }
+             node.replaceWith(...node.childNodes);
+             continue;
+         }
+--- /tmp/emu6/package/lib/i18n.js	1985-10-26 08:15:00.000000000 +0000
++++ /tmp/emu7/package/lib/i18n.js	2026-11-22 09:43:03.095357451 +0000
+@@ -163,6 +163,8 @@
+     const ret = returns == null
+         ? ''
+         : pick(spec, ` and returns ${returns}`, `；返回值：${returns}`, `。戻り値：${returns}`, `. 반환값: ${returns}`);
++    if (locale(spec) === 'zh' && params === t(spec, 'no arguments'))
++        return `，不接收参数${ret}。`;
+     return pick(spec, ` takes ${params}${ret}.`, `，接收${params}${ret}。`, `。${params}${ret}。`, `. ${params}${ret}.`);
+ }
+ // Inject before the browser scripts. JSON encoding keeps script delimiters safe.

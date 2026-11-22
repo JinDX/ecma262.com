@@ -26456,7 +26456,7 @@
               [[Realm]]
             </td>
             <td>
-              a Realm Record
+              Realm 记录
             </td>
             <td>
               创建此脚本的 realm。
@@ -26467,7 +26467,7 @@
               [[ECMAScriptCode]]
             </td>
             <td>
-              a |Script| Parse Node
+              |Script| 解析节点
             </td>
             <td>
               解析此脚本源文本的结果。
@@ -26478,7 +26478,7 @@
               [[LoadedModules]]
             </td>
             <td>
-              a List of LoadedModuleRequest Records
+              List (元素：LoadedModuleRequest 记录)
             </td>
             <td>
               从此脚本导入的说明符字符串到已解析 Module Record 的映射。此列表不包含两个不同的 Record _r1_ 和 _r2_，使得 ModuleRequestsEqual(_r1_, _r2_) 是 *true*。
@@ -26489,7 +26489,7 @@
               [[HostDefined]]
             </td>
             <td>
-              anything (default value is ~empty~)
+              任意值（默认值为 <emu-const>empty</emu-const>）
             </td>
             <td>
               保留给需要将附加信息与脚本关联的宿主环境使用的字段。
@@ -26994,7 +26994,7 @@
                 [[Realm]]
               </td>
               <td>
-                a Realm Record
+                Realm 记录
               </td>
               <td>
                 创建此模块的 Realm。
@@ -27005,7 +27005,7 @@
                 [[Environment]]
               </td>
               <td>
-                a Module Environment Record or ~empty~
+                Module Environment 记录 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 包含此模块顶层绑定的 Environment Record。此字段在模块链接时设置。
@@ -27016,7 +27016,7 @@
                 [[Namespace]]
               </td>
               <td>
-                an Object or ~empty~
+                Object 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 如果已为此模块创建 Module Namespace Object（<emu-xref href="#sec-module-namespace-objects"></emu-xref>），则为该对象。
@@ -27027,7 +27027,7 @@
                 [[HostDefined]]
               </td>
               <td>
-                anything (default value is *undefined*)
+                任意值（默认值为 <emu-val>undefined</emu-val>）
               </td>
               <td>
                 保留给需要将附加信息与模块关联的宿主环境使用的字段。
@@ -27169,7 +27169,7 @@
                 [[Status]]
               </td>
               <td>
-                ~new~, ~unlinked~, ~linking~, ~linked~, ~evaluating~, ~evaluating-async~, or ~evaluated~
+                <emu-const>new</emu-const>、<emu-const>unlinked</emu-const>、<emu-const>linking</emu-const>、<emu-const>linked</emu-const>、<emu-const>evaluating</emu-const>、<emu-const>evaluating-async</emu-const> 或 <emu-const>evaluated</emu-const>
               </td>
               <td>
                 初始为 ~new~。随着模块在其生命周期中推进，依次转换为 ~unlinked~、~linking~、~linked~、~evaluating~、可能的 ~evaluating-async~、~evaluated~。~evaluating-async~ 表示此模块已排队等待其异步依赖项完成后执行，或者它是 [[HasTLA]] 字段为 *true*、已经执行且正在等待顶层完成的模块。
@@ -27180,7 +27180,7 @@
                 [[EvaluationError]]
               </td>
               <td>
-                a throw completion or ~empty~
+                抛出完成 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 表示求值期间发生异常的抛出完成。如果未发生异常，或者 [[Status]] 不是 ~evaluated~，则为 ~empty~。
@@ -27191,7 +27191,7 @@
                 [[DFSAncestorIndex]]
               </td>
               <td>
-                an integer or ~empty~
+                整数 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 仅在 Link 和 Evaluate 期间使用的辅助字段。如果 [[Status]] 是 ~linking~ 或 ~evaluating~，则它是该模块的深度优先遍历索引，或者同一个强连通分量中某个“更早”模块的深度优先遍历索引。
@@ -27202,7 +27202,7 @@
                 [[RequestedModules]]
               </td>
               <td>
-                a List of ModuleRequest Records
+                List (元素：ModuleRequest 记录)
               </td>
               <td>
                 与此模块中的导入关联的 ModuleRequest Record 的 List。该 List 按导入在源文本中的出现顺序排列。
@@ -27213,7 +27213,7 @@
                 [[LoadedModules]]
               </td>
               <td>
-                a List of LoadedModuleRequest Records
+                List (元素：LoadedModuleRequest 记录)
               </td>
               <td>
                 从此 record 所表示模块用于请求导入模块的说明符字符串及相应导入属性，到已解析 Module Record 的映射。此列表不包含两个不同的 Record _r1_ 和 _r2_，使得 ModuleRequestsEqual(_r1_, _r2_) 是 *true*。
@@ -27224,7 +27224,7 @@
                 [[CycleRoot]]
               </td>
               <td>
-                a Cyclic Module Record or ~empty~
+                Cyclic Module 记录 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 循环中第一个被访问的模块，即强连通分量的根 DFS 祖先。对于不在循环中的模块，这就是模块自身。Evaluate 完成后，模块的 [[DFSAncestorIndex]] 是其 [[CycleRoot]] 的深度优先遍历索引。
@@ -27235,7 +27235,7 @@
                 [[HasTLA]]
               </td>
               <td>
-                a Boolean
+                Boolean
               </td>
               <td>
                 此模块自身是否为异步模块（例如，它是包含顶层 await 的 Source Text Module Record）。具有异步依赖项并不意味着此字段为 *true*。模块解析后，此字段不得改变。
@@ -27246,7 +27246,7 @@
                 [[AsyncEvaluationOrder]]
               </td>
               <td>
-                ~unset~, an integer, or ~done~
+                <emu-const>unset</emu-const>、整数 或 <emu-const>done</emu-const>
               </td>
               <td>
                 此字段最初设置为 ~unset~，对于完全同步的模块始终保持 ~unset~。对于自身异步或具有异步依赖项的模块，它会设置为一个整数，用于确定 <emu-xref href="#sec-async-module-execution-fulfilled"></emu-xref> 对待执行模块进行排队的顺序。一旦待执行模块成功执行，该字段就设置为 ~done~。
@@ -27257,7 +27257,7 @@
                 [[TopLevelCapability]]
               </td>
               <td>
-                a PromiseCapability Record or ~empty~
+                PromiseCapability 记录 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 如果此模块是某个循环的 [[CycleRoot]]，并且对该循环中的某个模块调用了 Evaluate()，则此字段包含整个求值的 PromiseCapability Record。它用于 settle 从 Evaluate() 抽象方法返回的 Promise 对象。对于该模块的任何依赖项，此字段都将为 ~empty~，除非已经为其中某些依赖项启动了顶层 Evaluate()。
@@ -27268,7 +27268,7 @@
                 [[AsyncParentModules]]
               </td>
               <td>
-                a List of Cyclic Module Records
+                List (元素：Cyclic Module 记录)
               </td>
               <td>
                 如果此模块或某个依赖项的 [[HasTLA]] 为 *true*，并且正在执行，则此字段跟踪此模块在顶层执行作业中的父级导入方。这些父模块不会在此模块成功完成执行之前开始执行。
@@ -27279,7 +27279,7 @@
                 [[PendingAsyncDependencies]]
               </td>
               <td>
-                an integer or ~empty~
+                整数 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 如果此模块具有任何异步依赖项，则此字段跟踪该模块尚待执行的异步依赖模块数量。当该字段达到 0 且不存在执行错误时，具有异步依赖项的模块将被执行。
@@ -27351,7 +27351,7 @@
                 [[PromiseCapability]]
               </td>
               <td>
-                a PromiseCapability Record
+                PromiseCapability 记录
               </td>
               <td>
                 加载过程完成时要兑现的 promise。
@@ -27362,7 +27362,7 @@
                 [[IsLoading]]
               </td>
               <td>
-                a Boolean
+                Boolean
               </td>
               <td>
                 如果加载过程尚未完成，无论是成功还是出错，则为 true。
@@ -27373,7 +27373,7 @@
                 [[PendingModulesCount]]
               </td>
               <td>
-                a non-negative integer
+                非负整数
               </td>
               <td>
                 它跟踪待处理的 HostLoadImportedModule 调用数量。
@@ -27384,7 +27384,7 @@
                 [[Visited]]
               </td>
               <td>
-                a List of Cyclic Module Records
+                List (元素：Cyclic Module 记录)
               </td>
               <td>
                 它是当前加载过程中已经加载的 Cyclic Module Record 列表，用于避免循环依赖造成无限循环。
@@ -27395,7 +27395,7 @@
                 [[HostDefined]]
               </td>
               <td>
-                anything (default value is ~empty~)
+                任意值（默认值为 <emu-const>empty</emu-const>）
               </td>
               <td>
                 它包含要从 LoadRequestedModules 调用方传递给 HostLoadImportedModule 的宿主定义数据。
@@ -28326,7 +28326,7 @@
                 [[ECMAScriptCode]]
               </td>
               <td>
-                a Parse Node
+                解析节点
               </td>
               <td>
                 使用 |Module| 作为目标符号解析此模块源文本的结果。
@@ -28337,7 +28337,7 @@
                 [[Context]]
               </td>
               <td>
-                an ECMAScript code execution context or ~empty~
+                ECMAScript 代码执行上下文 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 与此模块关联的执行上下文。在模块环境初始化之前，它为 ~empty~。
@@ -28348,7 +28348,7 @@
                 [[ImportMeta]]
               </td>
               <td>
-                an Object or ~empty~
+                Object 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 通过 `import.meta` 元属性暴露的对象。在 ECMAScript 代码访问它之前，它为 ~empty~。
@@ -28359,7 +28359,7 @@
                 [[ImportEntries]]
               </td>
               <td>
-                a List of ImportEntry Records
+                List (元素：ImportEntry 记录)
               </td>
               <td>
                 从此模块代码派生的 ImportEntry record 的 List。
@@ -28370,7 +28370,7 @@
                 [[LocalExportEntries]]
               </td>
               <td>
-                a List of ExportEntry Records
+                List (元素：ExportEntry 记录)
               </td>
               <td>
                 从此模块代码派生的 ExportEntry record 的 List，这些 record 对应于模块内部出现的声明。
@@ -28381,7 +28381,7 @@
                 [[IndirectExportEntries]]
               </td>
               <td>
-                a List of ExportEntry Records
+                List (元素：ExportEntry 记录)
               </td>
               <td>
                 从此模块代码派生的 ExportEntry record 的 List，这些 record 对应于模块内部出现的重新导出的导入，或者来自 `export * as namespace` 声明的导出。
@@ -28392,7 +28392,7 @@
                 [[StarExportEntries]]
               </td>
               <td>
-                a List of ExportEntry Records
+                List (元素：ExportEntry 记录)
               </td>
               <td>
                 从此模块代码派生的 ExportEntry record 的 List，这些 record 对应于模块内部出现的 `export *` 声明，但不包括 `export * as namespace` 声明。
@@ -28421,7 +28421,7 @@
                 [[ModuleRequest]]
               </td>
               <td>
-                a ModuleRequest Record
+                ModuleRequest 记录
               </td>
               <td>
                 表示 |ImportDeclaration| 的 |ModuleSpecifier| 和导入属性的 ModuleRequest Record。
@@ -28432,7 +28432,7 @@
                 [[ImportName]]
               </td>
               <td>
-                a String or ~namespace~
+                String 或 <emu-const>namespace</emu-const>
               </td>
               <td>
                 由 [[ModuleRequest]] 标识的模块导出所需绑定时使用的名称。值 ~namespace~ 表示导入请求针对目标模块的命名空间对象。
@@ -28443,7 +28443,7 @@
                 [[LocalName]]
               </td>
               <td>
-                a String
+                String
               </td>
               <td>
                 在导入模块内部用于局部访问所导入值的名称。
@@ -28559,7 +28559,7 @@
                 [[ExportName]]
               </td>
               <td>
-                a String or *null*
+                String 或 <emu-val>null</emu-val>
               </td>
               <td>
                 此模块用于导出该绑定的名称。
@@ -28570,7 +28570,7 @@
                 [[ModuleRequest]]
               </td>
               <td>
-                a ModuleRequest Record or *null*
+                ModuleRequest 记录 或 <emu-val>null</emu-val>
               </td>
               <td>
                 表示 |ExportDeclaration| 的 |ModuleSpecifier| 和导入属性的 ModuleRequest Record。如果 |ExportDeclaration| 没有 |ModuleSpecifier|，则为 *null*。
@@ -28581,7 +28581,7 @@
                 [[ImportName]]
               </td>
               <td>
-                a String, *null*, ~namespace~, or ~all-but-default~
+                String、<emu-val>null</emu-val>、<emu-const>namespace</emu-const> 或 <emu-const>all-but-default</emu-const>
               </td>
               <td>
                 由 [[ModuleRequest]] 标识的模块导出所需绑定时使用的名称。如果 |ExportDeclaration| 没有 |ModuleSpecifier|，则为 *null*。~namespace~ 用于 `export * as ns from "mod"` 声明。~all-but-default~ 用于 `export * from "mod"` 声明。
@@ -28592,7 +28592,7 @@
                 [[LocalName]]
               </td>
               <td>
-                a String or *null*
+                String 或 <emu-val>null</emu-val>
               </td>
               <td>
                 在导入模块内部用于局部访问所导出值的名称。如果无法从模块内部局部访问导出的值，则为 *null*。
@@ -29078,12 +29078,12 @@
             </thead>
             <tr>
               <td>[[ExportNames]]</td>
-              <td>a List of Strings</td>
+              <td>List (元素：String)</td>
               <td>模块的导出名称。此列表不包含重复项。</td>
             </tr>
             <tr>
               <td>[[EvaluationSteps]]</td>
-              <td>an Abstract Closure</td>
+              <td>抽象闭包</td>
               <td>对模块求值时要执行的初始化逻辑，以 Synthetic Module Record 作为其唯一参数。它不得修改 [[ExportNames]]。它可以返回突然完成。</td>
             </tr>
           </table>
@@ -32211,12 +32211,12 @@
             </thead>
             <tr>
               <td>[[Key]]</td>
-              <td>a String</td>
+              <td>String</td>
               <td>用于全局标识 Symbol 的字符串键。</td>
             </tr>
             <tr>
               <td>[[Symbol]]</td>
-              <td>a Symbol</td>
+              <td>Symbol</td>
               <td>可以从任意 realm 获取的 symbol。</td>
             </tr>
           </table>
@@ -34257,12 +34257,12 @@
             </thead>
             <tr>
               <td>[[Identifier]]</td>
-              <td>a String</td>
+              <td>String</td>
               <td>实现支持的可用命名时区标识符。</td>
             </tr>
             <tr>
               <td>[[PrimaryIdentifier]]</td>
-              <td>a String</td>
+              <td>String</td>
               <td>[[Identifier]] 解析到的主时区标识符。</td>
             </tr>
           </table>
@@ -37360,19 +37360,19 @@ THH:mm:ss.sss
         <emu-grammar>CharacterClassEscape :: `P{` UnicodePropertyValueExpression `}`</emu-grammar>
         <ul>
           <li>
-            如果 MayContainStrings of the |UnicodePropertyValueExpression| 是 *true*，则为语法错误。
+            如果 |UnicodePropertyValueExpression| 的 MayContainStrings 是 *true*，则为语法错误。
           </li>
         </ul>
         <emu-grammar>CharacterClass :: `[^` ClassContents `]`</emu-grammar>
         <ul>
           <li>
-            如果 MayContainStrings of the |ClassContents| 是 *true*，则为语法错误。
+            如果 |ClassContents| 的 MayContainStrings 是 *true*，则为语法错误。
           </li>
         </ul>
         <emu-grammar>NestedClass :: `[^` ClassContents `]`</emu-grammar>
         <ul>
           <li>
-            如果 MayContainStrings of the |ClassContents| 是 *true*，则为语法错误。
+            如果 |ClassContents| 的 MayContainStrings 是 *true*，则为语法错误。
           </li>
         </ul>
         <emu-grammar>ClassSetRange :: ClassSetCharacter `-` ClassSetCharacter</emu-grammar>
@@ -37729,13 +37729,13 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassUnion :: ClassSetRange ClassUnion?</emu-grammar>
         <emu-alg>
-          1. 如果存在 |ClassUnion|，则返回 MayContainStrings of the |ClassUnion|。
+          1. 如果存在 |ClassUnion|，则返回 |ClassUnion| 的 MayContainStrings。
           1. 返回 *false*。
         </emu-alg>
         <emu-grammar>ClassUnion :: ClassSetOperand ClassUnion?</emu-grammar>
         <emu-alg>
-          1. 如果 MayContainStrings of the |ClassSetOperand| 是 *true*，则返回 *true*。
-          1. 如果存在 |ClassUnion|，则返回 MayContainStrings of the |ClassUnion|。
+          1. 如果 |ClassSetOperand| 的 MayContainStrings 是 *true*，则返回 *true*。
+          1. 如果存在 |ClassUnion|，则返回 |ClassUnion| 的 MayContainStrings。
           1. 返回 *false*。
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassSetOperand `&amp;&amp;` ClassSetOperand</emu-grammar>
@@ -37746,8 +37746,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassIntersection `&amp;&amp;` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 如果 MayContainStrings of the |ClassIntersection| 是 *false*，则返回 *false*。
-          1. 如果 MayContainStrings of the |ClassSetOperand| 是 *false*，则返回 *false*。
+          1. 如果 |ClassIntersection| 的 MayContainStrings 是 *false*，则返回 *false*。
+          1. 如果 |ClassSetOperand| 的 MayContainStrings 是 *false*，则返回 *false*。
           1. 返回 *true*。
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSetOperand `--` ClassSetOperand</emu-grammar>
@@ -37756,12 +37756,12 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSubtraction `--` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 返回 MayContainStrings of the |ClassSubtraction|。
+          1. 返回 |ClassSubtraction| 的 MayContainStrings。
         </emu-alg>
         <emu-grammar>ClassStringDisjunctionContents :: ClassString `|` ClassStringDisjunctionContents</emu-grammar>
         <emu-alg>
-          1. 如果 MayContainStrings of the |ClassString| 是 *true*，则返回 *true*。
-          1. 返回 MayContainStrings of the |ClassStringDisjunctionContents|。
+          1. 如果 |ClassString| 的 MayContainStrings 是 *true*，则返回 *true*。
+          1. 返回 |ClassStringDisjunctionContents| 的 MayContainStrings。
         </emu-alg>
         <emu-grammar>ClassString :: [empty]</emu-grammar>
         <emu-alg>
@@ -37769,7 +37769,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassString :: NonEmptyClassString</emu-grammar>
         <emu-alg>
-          1. 返回 MayContainStrings of the |NonEmptyClassString|。
+          1. 返回 |NonEmptyClassString| 的 MayContainStrings。
         </emu-alg>
         <emu-grammar>NonEmptyClassString :: ClassSetCharacter NonEmptyClassString?</emu-grammar>
         <emu-alg>
@@ -37918,32 +37918,32 @@ THH:mm:ss.sss
               </thead>
               <tr>
                 <td>[[IgnoreCase]]</td>
-                <td>a Boolean</td>
+                <td>Boolean</td>
                 <td>表示 *"i"* 是否出现在 RegExp 的标志中</td>
               </tr>
               <tr>
                 <td>[[Multiline]]</td>
-                <td>a Boolean</td>
+                <td>Boolean</td>
                 <td>表示 *"m"* 是否出现在 RegExp 的标志中</td>
               </tr>
               <tr>
                 <td>[[DotAll]]</td>
-                <td>a Boolean</td>
+                <td>Boolean</td>
                 <td>表示 *"s"* 是否出现在 RegExp 的标志中</td>
               </tr>
               <tr>
                 <td>[[Unicode]]</td>
-                <td>a Boolean</td>
+                <td>Boolean</td>
                 <td>表示 *"u"* 是否出现在 RegExp 的标志中</td>
               </tr>
               <tr>
                 <td>[[UnicodeSets]]</td>
-                <td>a Boolean</td>
+                <td>Boolean</td>
                 <td>表示 *"v"* 是否出现在 RegExp 的标志中</td>
               </tr>
               <tr>
                 <td>[[CapturingGroupsCount]]</td>
-                <td>a non-negative integer</td>
+                <td>非负整数</td>
                 <td>RegExp 模式中左捕获括号的数量</td>
               </tr>
             </table>
@@ -37961,7 +37961,7 @@ THH:mm:ss.sss
         </dl>
         <emu-grammar>Pattern :: Disjunction</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and ~forward~。
+          1. 令 _m_ 为以 _regexpRecord_ 和 ~forward~ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回一个参数为 (_input_, _index_) 的新 Abstract Closure，它捕获 _regexpRecord_ 和 _m_，并在被调用时执行以下步骤：
             1. 断言：_input_ 是字符 List。
             1. 断言：0 ≤ _index_ ≤ _input_ 中的元素数量。
@@ -37993,8 +37993,8 @@ THH:mm:ss.sss
         <!-- Disjunction -->
         <emu-grammar>Disjunction :: Alternative `|` Disjunction</emu-grammar>
         <emu-alg>
-          1. 令 _m1_ 为 CompileSubpattern of |Alternative| with arguments _regexpRecord_ and _direction_。
-          1. 令 _m2_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and _direction_。
+          1. 令 _m1_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Alternative| 的 CompileSubpattern。
+          1. 令 _m2_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回 MatchTwoAlternatives(_m1_, _m2_)。
         </emu-alg>
         <emu-note>
@@ -38016,8 +38016,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Alternative :: Alternative Term</emu-grammar>
         <emu-alg>
-          1. 令 _m1_ 为 CompileSubpattern of |Alternative| with arguments _regexpRecord_ and _direction_。
-          1. 令 _m2_ 为 CompileSubpattern of |Term| with arguments _regexpRecord_ and _direction_。
+          1. 令 _m1_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Alternative| 的 CompileSubpattern。
+          1. 令 _m2_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Term| 的 CompileSubpattern。
           1. 返回 MatchSequence(_m1_, _m2_, _direction_)。
         </emu-alg>
         <emu-note>
@@ -38027,18 +38027,18 @@ THH:mm:ss.sss
         <!-- Term -->
         <emu-grammar>Term :: Assertion</emu-grammar>
         <emu-alg>
-          1. 返回 CompileAssertion of |Assertion| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |Assertion| 的 CompileAssertion。
         </emu-alg>
         <emu-note>
           <p>所得 Matcher 与 _direction_ 无关。</p>
         </emu-note>
         <emu-grammar>Term :: Atom</emu-grammar>
         <emu-alg>
-          1. 返回 CompileAtom of |Atom| with arguments _regexpRecord_ and _direction_。
+          1. 返回以 _regexpRecord_ 和 _direction_ 为参数的 |Atom| 的 CompileAtom。
         </emu-alg>
         <emu-grammar>Term :: Atom Quantifier</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileAtom of |Atom| with arguments _regexpRecord_ and _direction_。
+          1. 令 _m_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Atom| 的 CompileAtom。
           1. 令 _q_ 为 CompileQuantifier of |Quantifier|。
           1. 断言：_q_.[[Min]] ≤ _q_.[[Max]]。
           1. 令 _parenIndex_ 为 CountLeftCapturingParensBefore(|Term|)。
@@ -38253,7 +38253,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Assertion :: `(?=` Disjunction `)`</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and ~forward~。
+          1. 令 _m_ 为以 _regexpRecord_ 和 ~forward~ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回一个参数为 (_matchState_, _continue_) 的新 Matcher，它捕获 _m_，并在被调用时执行以下步骤：
             1. 断言：_matchState_ 是 MatchState。
             1. 断言：_continue_ 是 MatcherContinuation。
@@ -38284,7 +38284,7 @@ THH:mm:ss.sss
         </emu-note>
         <emu-grammar>Assertion :: `(?!` Disjunction `)`</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and ~forward~。
+          1. 令 _m_ 为以 _regexpRecord_ 和 ~forward~ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回一个参数为 (_matchState_, _continue_) 的新 Matcher，它捕获 _m_，并在被调用时执行以下步骤：
             1. 断言：_matchState_ 是 MatchState。
             1. 断言：_continue_ 是 MatcherContinuation。
@@ -38303,7 +38303,7 @@ THH:mm:ss.sss
         </emu-note>
         <emu-grammar>Assertion :: `(?&lt;=` Disjunction `)`</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and ~backward~。
+          1. 令 _m_ 为以 _regexpRecord_ 和 ~backward~ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回一个参数为 (_matchState_, _continue_) 的新 Matcher，它捕获 _m_，并在被调用时执行以下步骤：
             1. 断言：_matchState_ 是 MatchState。
             1. 断言：_continue_ 是 MatcherContinuation。
@@ -38321,7 +38321,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Assertion :: `(?&lt;!` Disjunction `)`</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and ~backward~。
+          1. 令 _m_ 为以 _regexpRecord_ 和 ~backward~ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 返回一个参数为 (_matchState_, _continue_) 的新 Matcher，它捕获 _m_，并在被调用时执行以下步骤：
             1. 断言：_matchState_ 是 MatchState。
             1. 断言：_continue_ 是 MatcherContinuation。
@@ -38432,7 +38432,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Atom :: CharacterClass</emu-grammar>
         <emu-alg>
-          1. 令 _cc_ 为 CompileCharacterClass of |CharacterClass| with argument _regexpRecord_。
+          1. 令 _cc_ 为以 _regexpRecord_ 为参数的 |CharacterClass| 的 CompileCharacterClass。
           1. 令 _cs_ 为 _cc_.[[CharSet]]。
           1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *false*，或者 _cs_ 的每个 CharSetElement 都由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, _cc_.[[Invert]], _direction_)。
           1. 断言：_cc_.[[Invert]] 是 *false*。
@@ -38462,7 +38462,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>Atom :: `(` GroupSpecifier? Disjunction `)`</emu-grammar>
         <emu-alg>
-          1. 令 _m_ 为 CompileSubpattern of |Disjunction| with arguments _regexpRecord_ and _direction_。
+          1. 令 _m_ 为以 _regexpRecord_ 和 _direction_ 为参数的 |Disjunction| 的 CompileSubpattern。
           1. 令 _parenIndex_ 为 CountLeftCapturingParensBefore(|Atom|)。
           1. 返回一个参数为 (_x_, _c_) 的新 Matcher，它捕获 _direction_、_m_ 和 _parenIndex_，并在被调用时执行以下步骤：
             1. 断言：_x_ 是 MatchState。
@@ -38493,14 +38493,14 @@ THH:mm:ss.sss
           1. 令 _addModifiers_ 为 |RegularExpressionModifiers| 所匹配的源文本。
           1. 令 _removeModifiers_ 为空 String。
           1. 令 _modifiedRer_ 为 UpdateModifiers(_regexpRecord_, CodePointsToString(_addModifiers_), _removeModifiers_)。
-          1. 返回 CompileSubpattern of |Disjunction| with arguments _modifiedRer_ and _direction_。
+          1. 返回以 _modifiedRer_ 和 _direction_ 为参数的 |Disjunction| 的 CompileSubpattern。
         </emu-alg>
         <emu-grammar>Atom :: `(?` RegularExpressionModifiers `-` RegularExpressionModifiers `:` Disjunction `)`</emu-grammar>
         <emu-alg>
           1. 令 _addModifiers_ 为第一个 |RegularExpressionModifiers| 所匹配的源文本。
           1. 令 _removeModifiers_ 为第二个 |RegularExpressionModifiers| 所匹配的源文本。
           1. 令 _modifiedRer_ 为 UpdateModifiers(_regexpRecord_, CodePointsToString(_addModifiers_), CodePointsToString(_removeModifiers_))。
-          1. 返回 CompileSubpattern of |Disjunction| with arguments _modifiedRer_ and _direction_。
+          1. 返回以 _modifiedRer_ 和 _direction_ 为参数的 |Disjunction| 的 CompileSubpattern。
         </emu-alg>
 
         <!-- AtomEscape -->
@@ -38522,7 +38522,7 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>AtomEscape :: CharacterClassEscape</emu-grammar>
         <emu-alg>
-          1. 令 _cs_ 为 CompileToCharSet of |CharacterClassEscape| with argument _regexpRecord_。
+          1. 令 _cs_ 为以 _regexpRecord_ 为参数的 |CharacterClassEscape| 的 CompileToCharSet。
           1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *false*，或者 _cs_ 的每个 CharSetElement 都由单个字符组成（包括 _cs_ 为空的情况），则返回 CharacterSetMatcher(_regexpRecord_, _cs_, *false*, _direction_)。
           1. 令 _listOfMatchers_ 为空的 Matcher List。
           1. 令 _csSequences_ 为新的空 List。
@@ -38699,12 +38699,12 @@ THH:mm:ss.sss
         </dl>
         <emu-grammar>CharacterClass :: `[` ClassContents `]`</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 返回 Record { [[CharSet]]: _charSet_, [[Invert]]: *false* }。
         </emu-alg>
         <emu-grammar>CharacterClass :: `[^` ClassContents `]`</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 如果 _regexpRecord_.[[UnicodeSets]] 是 *true*，则
             1. 返回 Record { [[CharSet]]: CharacterComplement(_regexpRecord_, _charSet_), [[Invert]]: *false* }。
           1. 返回 Record { [[CharSet]]: _charSet_, [[Invert]]: *true* }。
@@ -38732,15 +38732,15 @@ THH:mm:ss.sss
         <!-- NonemptyClassRanges -->
         <emu-grammar>NonemptyClassRanges :: ClassAtom NonemptyClassRangesNoDash</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassAtom| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of |NonemptyClassRangesNoDash| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassAtom| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |NonemptyClassRangesNoDash| 的 CompileToCharSet。
           1. 返回 CharSet _charSet_ 和 _otherSet_ 的并集。
         </emu-alg>
         <emu-grammar>NonemptyClassRanges :: ClassAtom `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
           1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassAtom| 执行 CompileToCharSet。
           1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassAtom| 执行 CompileToCharSet。
-          1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 令 _rangeSet_ 为 CharacterRange(_charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
@@ -38748,15 +38748,15 @@ THH:mm:ss.sss
         <!-- NonemptyClassRangesNoDash -->
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash NonemptyClassRangesNoDash</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassAtomNoDash| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of |NonemptyClassRangesNoDash| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassAtomNoDash| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |NonemptyClassRangesNoDash| 的 CompileToCharSet。
           1. 返回 CharSet _charSet_ 和 _otherSet_ 的并集。
         </emu-alg>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassAtomNoDash| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of |ClassAtom| with argument _regexpRecord_。
-          1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassAtomNoDash| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassAtom| 的 CompileToCharSet。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 令 _rangeSet_ 为 CharacterRange(_charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
@@ -38828,11 +38828,11 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>CharacterClassEscape :: `p{` UnicodePropertyValueExpression `}`</emu-grammar>
         <emu-alg>
-          1. 返回 CompileToCharSet of |UnicodePropertyValueExpression| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |UnicodePropertyValueExpression| 的 CompileToCharSet。
         </emu-alg>
         <emu-grammar>CharacterClassEscape :: `P{` UnicodePropertyValueExpression `}`</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |UnicodePropertyValueExpression| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |UnicodePropertyValueExpression| 的 CompileToCharSet。
           1. 断言：_charSet_ 只包含单个码点。
           1. 返回 CharacterComplement(_regexpRecord_, _charSet_)。
         </emu-alg>
@@ -38860,17 +38860,17 @@ THH:mm:ss.sss
         <!-- ClassUnion -->
         <emu-grammar>ClassUnion :: ClassSetRange ClassUnion?</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassSetRange| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassSetRange| 的 CompileToCharSet。
           1. 如果存在 |ClassUnion|，则
-            1. 令 _otherSet_ 为 CompileToCharSet of |ClassUnion| with argument _regexpRecord_。
+            1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassUnion| 的 CompileToCharSet。
             1. 返回 CharSet _charSet_ 和 _otherSet_ 的并集。
           1. 返回 _charSet_。
         </emu-alg>
         <emu-grammar>ClassUnion :: ClassSetOperand ClassUnion?</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassSetOperand| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassSetOperand| 的 CompileToCharSet。
           1. 如果存在 |ClassUnion|，则
-            1. 令 _otherSet_ 为 CompileToCharSet of |ClassUnion| with argument _regexpRecord_。
+            1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassUnion| 的 CompileToCharSet。
             1. 返回 CharSet _charSet_ 和 _otherSet_ 的并集。
           1. 返回 _charSet_。
         </emu-alg>
@@ -38884,8 +38884,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassIntersection :: ClassIntersection `&amp;&amp;` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the |ClassIntersection| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the |ClassSetOperand| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassIntersection| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassSetOperand| 的 CompileToCharSet。
           1. 返回 CharSet _charSet_ 和 _otherSet_ 的交集。
         </emu-alg>
 
@@ -38898,8 +38898,8 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassSubtraction :: ClassSubtraction `--` ClassSetOperand</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of the |ClassSubtraction| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of the |ClassSetOperand| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassSubtraction| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassSetOperand| 的 CompileToCharSet。
           1. 返回包含 _charSet_ 中不同时也是 _otherSet_ 的 CharSetElement 的所有 CharSetElement 的 CharSet。
         </emu-alg>
 
@@ -38917,51 +38917,51 @@ THH:mm:ss.sss
         <!-- ClassSetOperand -->
         <emu-grammar>ClassSetOperand :: ClassSetCharacter</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassSetCharacter| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassSetCharacter| 的 CompileToCharSet。
           1. 返回 MaybeSimpleCaseFolding(_regexpRecord_, _charSet_)。
         </emu-alg>
         <emu-grammar>ClassSetOperand :: ClassStringDisjunction</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassStringDisjunction| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassStringDisjunction| 的 CompileToCharSet。
           1. 返回 MaybeSimpleCaseFolding(_regexpRecord_, _charSet_)。
         </emu-alg>
         <emu-grammar>ClassSetOperand :: NestedClass</emu-grammar>
         <emu-alg>
-          1. 返回 CompileToCharSet of |NestedClass| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |NestedClass| 的 CompileToCharSet。
         </emu-alg>
 
         <!-- NestedClass -->
         <emu-grammar>NestedClass :: `[` ClassContents `]`</emu-grammar>
         <emu-alg>
-          1. 返回 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
         </emu-alg>
         <emu-grammar>NestedClass :: `[^` ClassContents `]`</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 返回 CharacterComplement(_regexpRecord_, _charSet_)。
         </emu-alg>
         <emu-grammar>NestedClass :: `\` CharacterClassEscape</emu-grammar>
         <emu-alg>
-          1. 返回 CompileToCharSet of |CharacterClassEscape| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |CharacterClassEscape| 的 CompileToCharSet。
         </emu-alg>
 
         <!-- ClassStringDisjunction -->
         <emu-grammar>ClassStringDisjunction :: `\q{` ClassStringDisjunctionContents `}`</emu-grammar>
         <emu-alg>
-          1. 返回 CompileToCharSet of |ClassStringDisjunctionContents| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |ClassStringDisjunctionContents| 的 CompileToCharSet。
         </emu-alg>
 
         <!-- ClassStringDisjunctionContents -->
         <emu-grammar>ClassStringDisjunctionContents :: ClassString</emu-grammar>
         <emu-alg>
-          1. 令 _s_ 为 CompileClassSetString of |ClassString| with argument _regexpRecord_。
+          1. 令 _s_ 为以 _regexpRecord_ 为参数的 |ClassString| 的 CompileClassSetString。
           1. 返回包含唯一字符串 _s_ 的 CharSet。
         </emu-alg>
         <emu-grammar>ClassStringDisjunctionContents :: ClassString `|` ClassStringDisjunctionContents</emu-grammar>
         <emu-alg>
-          1. 令 _s_ 为 CompileClassSetString of |ClassString| with argument _regexpRecord_。
+          1. 令 _s_ 为以 _regexpRecord_ 为参数的 |ClassString| 的 CompileClassSetString。
           1. 令 _charSet_ 为包含唯一字符串 _s_ 的 CharSet。
-          1. 令 _otherSet_ 为 CompileToCharSet of |ClassStringDisjunctionContents| with argument _regexpRecord_。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassStringDisjunctionContents| 的 CompileToCharSet。
           1. 返回 CharSet _charSet_ 和 _otherSet_ 的并集。
         </emu-alg>
 
@@ -39162,14 +39162,14 @@ THH:mm:ss.sss
         </emu-alg>
         <emu-grammar>ClassString :: NonEmptyClassString</emu-grammar>
         <emu-alg>
-          1. 返回 CompileClassSetString of |NonEmptyClassString| with argument _regexpRecord_。
+          1. 返回以 _regexpRecord_ 为参数的 |NonEmptyClassString| 的 CompileClassSetString。
         </emu-alg>
         <emu-grammar>NonEmptyClassString :: ClassSetCharacter NonEmptyClassString?</emu-grammar>
         <emu-alg>
-          1. 令 _cs_ 为 CompileToCharSet of |ClassSetCharacter| with argument _regexpRecord_。
+          1. 令 _cs_ 为以 _regexpRecord_ 为参数的 |ClassSetCharacter| 的 CompileToCharSet。
           1. 令 _s1_ 为 _cs_ 中唯一 CharSetElement 所组成的字符序列。
           1. 如果存在 |NonEmptyClassString|，则
-            1. 令 _s2_ 为 CompileClassSetString of |NonEmptyClassString| with argument _regexpRecord_。
+            1. 令 _s2_ 为以 _regexpRecord_ 为参数的 |NonEmptyClassString| 的 CompileClassSetString。
             1. 返回 _s1_ 和 _s2_ 的连接。
           1. 返回 _s1_。
         </emu-alg>
@@ -39243,7 +39243,7 @@ THH:mm:ss.sss
           1. 令 _capturingGroupsCount_ 为 CountLeftCapturingParensWithin(_parseResult_)。
           1. 令 _regexpRecord_ 为 RegExp Record { [[IgnoreCase]]: _i_, [[Multiline]]: _m_, [[DotAll]]: _s_, [[Unicode]]: _u_, [[UnicodeSets]]: _v_, [[CapturingGroupsCount]]: _capturingGroupsCount_ }。
           1. 将 _obj_.[[RegExpRecord]] 设置为 _regexpRecord_。
-          1. 将 _obj_.[[RegExpMatcher]] 设置为 CompilePattern of _parseResult_ with argument _regexpRecord_。
+          1. 将 _obj_.[[RegExpMatcher]] 设置为以 _regexpRecord_ 为参数的 _parseResult_ 的 CompilePattern。
           1. 执行 ? <emu-meta suppress-effects="user-code">Set(_obj_, *"lastIndex"*, *+0*<sub>𝔽</sub>, *true*)</emu-meta>。
           1. 返回 _obj_。
         </emu-alg>
@@ -40028,12 +40028,12 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>[[StartIndex]]</td>
-              <td>a non-negative integer</td>
+              <td>非负整数</td>
               <td>从字符串开头到匹配开始位置（包含）的码元数量。</td>
             </tr>
             <tr>
               <td>[[EndIndex]]</td>
-              <td>an integer ≥ [[StartIndex]]</td>
+              <td>大于等于 [[StartIndex]] 的整数</td>
               <td>从字符串开头到匹配结束位置（不包含）的码元数量。</td>
             </tr>
           </table>
@@ -46269,7 +46269,7 @@ THH:mm:ss.sss
                 [[Object]]
               </td>
               <td>
-                a DataView
+                DataView
               </td>
               <td>
                 其缓冲区字节长度被加载的 DataView 对象。
@@ -46280,7 +46280,7 @@ THH:mm:ss.sss
                 [[CachedBufferByteLength]]
               </td>
               <td>
-                a non-negative integer or ~detached~
+                非负整数 或 <emu-const>detached</emu-const>
               </td>
               <td>
                 创建 Record 时对象的 [[ViewedArrayBuffer]] 的字节长度。
@@ -46813,7 +46813,7 @@ THH:mm:ss.sss
               [[AgentSignifier]]
             </td>
             <td>
-              an agent signifier
+              代理标识符
             </td>
             <td>
               调用 `Atomics.wait` 或 `Atomics.waitAsync` 的代理。
@@ -46824,7 +46824,7 @@ THH:mm:ss.sss
               [[PromiseCapability]]
             </td>
             <td>
-              a PromiseCapability Record or ~blocking~
+              PromiseCapability 记录 或 <emu-const>blocking</emu-const>
             </td>
             <td>
               如果表示对 `Atomics.waitAsync` 的调用，则为产生的 promise，否则为 ~blocking~。
@@ -46835,7 +46835,7 @@ THH:mm:ss.sss
               [[TimeoutTime]]
             </td>
             <td>
-              a non-negative extended mathematical value
+              非负扩展数学值
             </td>
             <td>
               可能触发超时的最早时间；使用时间值计算。
@@ -46880,7 +46880,7 @@ THH:mm:ss.sss
               [[Waiters]]
             </td>
             <td>
-              a List of Waiter Records
+              List (元素：Waiter 记录)
             </td>
             <td>
               正在与此 WaiterList 关联的位置上等待的 `Atomics.wait` 或 `Atomics.waitAsync` 调用。
@@ -46891,7 +46891,7 @@ THH:mm:ss.sss
               [[MostRecentLeaveEvent]]
             </td>
             <td>
-              a Synchronize event or ~empty~
+              Synchronize 事件 或 <emu-const>empty</emu-const>
             </td>
             <td>
               最近一次离开其临界区的事件；如果其临界区从未被进入，则为 ~empty~。
@@ -48019,27 +48019,27 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>[[ReplacerFunction]]</td>
-              <td>a function object or *undefined*</td>
+              <td>函数对象 或 <emu-val>undefined</emu-val></td>
               <td>可以为对象属性提供替换值的函数（来自 JSON.stringify 的 _replacer_ 参数）。</td>
             </tr>
             <tr>
               <td>[[PropertyList]]</td>
-              <td>either a List of Strings or *undefined*</td>
+              <td>List (元素：String) 或 <emu-val>undefined</emu-val></td>
               <td>序列化非数组对象时要包含的属性名称（来自 JSON.stringify 的 _replacer_ 参数）。</td>
             </tr>
             <tr>
               <td>[[Gap]]</td>
-              <td>a String</td>
+              <td>String</td>
               <td>缩进单位（来自 JSON.stringify 的 _space_ 参数）。</td>
             </tr>
             <tr>
               <td>[[Stack]]</td>
-              <td>a List of Objects</td>
+              <td>List (元素：Object)</td>
               <td>正在序列化的嵌套对象集合。用于检测循环结构。</td>
             </tr>
             <tr>
               <td>[[Indent]]</td>
-              <td>a String</td>
+              <td>String</td>
               <td>当前缩进。</td>
             </tr>
           </table>
@@ -48629,7 +48629,7 @@ THH:mm:ss.sss
                 `%Symbol.iterator%`
               </td>
               <td>
-                a function that returns an iterator object
+                返回迭代器对象的函数
               </td>
               <td>
                 返回的对象必须符合 iterator 接口。
@@ -48662,7 +48662,7 @@ THH:mm:ss.sss
                 *"next"*
               </td>
               <td>
-                a function that returns an IteratorResult object
+                返回 IteratorResult 对象的函数
               </td>
               <td>
                 返回的对象必须符合 IteratorResult 接口。如果先前对某个 iterator 的 `next` 方法的调用已经返回了一个 *"done"* 属性为 *true* 的 IteratorResult 对象，那么对该对象的所有后续 `next` 方法调用也应返回 *"done"* 属性为 *true* 的 IteratorResult 对象。不过，此要求不会被强制执行。
@@ -48693,7 +48693,7 @@ THH:mm:ss.sss
                 *"return"*
               </td>
               <td>
-                a function that returns an IteratorResult object
+                返回 IteratorResult 对象的函数
               </td>
               <td>
                 返回的对象必须符合 IteratorResult 接口。调用此方法会通知 iterator 对象，调用者不打算再对该 iterator 进行任何 `next` 方法调用。返回的 IteratorResult 对象通常具有值为 *true* 的 *"done"* 属性，以及一个 *"value"* 属性，其值为作为 `return` 方法参数传入的值。不过，此要求不会被强制执行。
@@ -48704,7 +48704,7 @@ THH:mm:ss.sss
                 *"throw"*
               </td>
               <td>
-                a function that returns an IteratorResult object
+                返回 IteratorResult 对象的函数
               </td>
               <td>
                 返回的对象必须符合 IteratorResult 接口。调用此方法会通知 iterator 对象，调用者检测到了错误条件。参数可以用于标识错误条件，通常会是异常对象。典型响应是 `throw` 作为参数传入的值。如果该方法没有 `throw`，则返回的 IteratorResult 对象通常具有值为 *true* 的 *"done"* 属性。
@@ -48731,7 +48731,7 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>`%Symbol.asyncIterator%`</td>
-              <td>a function that returns an async iterator object</td>
+              <td>返回异步迭代器对象的函数</td>
               <td>返回的对象必须符合 async iterator 接口。</td>
             </tr>
           </table>
@@ -48752,7 +48752,7 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>*"next"*</td>
-              <td>a function that returns a promise for an IteratorResult object</td>
+              <td>返回 IteratorResult 对象的 promise 的函数</td>
               <td>
                 <p>返回的 promise 在兑现时，必须以符合 IteratorResult 接口的对象作为兑现值。如果先前对 async iterator 的 `next` 方法的调用已经返回了一个 promise，该 promise 对应的 IteratorResult 对象的 *"done"* 属性为 *true*，那么对该对象的所有后续 `next` 方法调用也应返回一个 promise，该 promise 对应的 IteratorResult 对象的 *"done"* 属性为 *true*。不过，此要求不会被强制执行。</p>
 
@@ -48775,7 +48775,7 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>*"return"*</td>
-              <td>a function that returns a promise for an IteratorResult object</td>
+              <td>返回 IteratorResult 对象的 promise 的函数</td>
               <td>
                 <p>返回的 promise 在兑现时，必须以符合 IteratorResult 接口的对象作为兑现值。调用此方法会通知 async iterator 对象，调用者不打算再对该 async iterator 进行任何 `next` 方法调用。返回的 promise 会以 IteratorResult 对象兑现，该对象通常具有值为 *true* 的 *"done"* 属性，以及一个 *"value"* 属性，其值为作为 `return` 方法参数传入的值。不过，此要求不会被强制执行。</p>
 
@@ -48784,7 +48784,7 @@ THH:mm:ss.sss
             </tr>
             <tr>
               <td>*"throw"*</td>
-              <td>a function that returns a promise for an IteratorResult object</td>
+              <td>返回 IteratorResult 对象的 promise 的函数</td>
               <td>
                 <p>返回的 promise 在兑现时，必须以符合 IteratorResult 接口的对象作为兑现值。调用此方法会通知 async iterator 对象，调用者检测到了错误条件。参数可以用于标识错误条件，通常会是异常对象。典型响应是返回一个以作为参数传入的值作为拒绝原因的被拒绝 promise。</p>
 
@@ -48821,7 +48821,7 @@ THH:mm:ss.sss
                 *"done"*
               </td>
               <td>
-                a Boolean
+                Boolean
               </td>
               <td>
                 这是 iterator 的 `next` 方法调用的结果状态。如果已经到达 iterator 的末尾，则 *"done"* 为 *true*。如果尚未到达末尾，则 *"done"* 为 *false*，并且存在可用值。如果不存在 *"done"* 属性（无论是自有属性还是继承属性），则认为其值为 *false*。
@@ -48832,7 +48832,7 @@ THH:mm:ss.sss
                 *"value"*
               </td>
               <td>
-                an ECMAScript language value
+                ECMAScript 语言值
               </td>
               <td>
                 如果 done 为 *false*，则这是当前迭代元素的值。如果 done 为 *true*，则这是 iterator 的返回值（如果它提供了返回值）。如果 iterator 没有返回值，则 *"value"* 为 *undefined*。在这种情况下，如果符合要求的对象没有继承显式的 *"value"* 属性，则可以不存在 *"value"* 属性。
@@ -50429,7 +50429,7 @@ THH:mm:ss.sss
                 [[Promise]]
               </td>
               <td>
-                an Object
+                Object
               </td>
               <td>
                 可作为 promise 使用的对象。
@@ -50440,7 +50440,7 @@ THH:mm:ss.sss
                 [[Resolve]]
               </td>
               <td>
-                a function object
+                函数对象
               </td>
               <td>
                 用于解决给定 promise 的函数。
@@ -50451,7 +50451,7 @@ THH:mm:ss.sss
                 [[Reject]]
               </td>
               <td>
-                a function object
+                函数对象
               </td>
               <td>
                 用于拒绝给定 promise 的函数。
@@ -50501,7 +50501,7 @@ THH:mm:ss.sss
                 [[Capability]]
               </td>
               <td>
-                a PromiseCapability Record or *undefined*
+                PromiseCapability 记录 或 <emu-val>undefined</emu-val>
               </td>
               <td>
                 此 Record 为其提供反应处理器的 promise 的 capability。
@@ -50523,7 +50523,7 @@ THH:mm:ss.sss
                 [[Handler]]
               </td>
               <td>
-                a JobCallback Record or ~empty~
+                JobCallback 记录 或 <emu-const>empty</emu-const>
               </td>
               <td>
                 应应用于传入值的函数，其返回值将决定派生 promise 随后发生什么。如果 [[Handler]] 是 ~empty~，则改用一个依赖 [[Type]] 值的函数。
@@ -52082,12 +52082,12 @@ THH:mm:ss.sss
             </thead>
             <tr>
               <td>[[Completion]]</td>
-              <td>a Completion Record</td>
+              <td>Completion Record</td>
               <td>应当用于恢复 async generator 的 Completion Record。</td>
             </tr>
             <tr>
               <td>[[Capability]]</td>
-              <td>a PromiseCapability Record</td>
+              <td>PromiseCapability 记录</td>
               <td>与此请求关联的 promise capability。</td>
             </tr>
           </table>
@@ -52779,22 +52779,22 @@ THH:mm:ss.sss
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>a Boolean</td>
+          <td>Boolean</td>
           <td>是否允许此事件从与此事件具有相同内存范围的多个写入事件中读取。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
-          <td>a Shared Data Block</td>
+          <td>共享数据块</td>
           <td>事件所操作的数据块。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>[[Block]] 中读取操作的字节地址。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>读取操作的大小。</td>
         </tr>
       </table>
@@ -52811,32 +52811,32 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[Order]]</td>
-          <td>~seq-cst~, ~unordered~, or ~init~</td>
+          <td><emu-const>seq-cst</emu-const>、<emu-const>unordered</emu-const> 或 <emu-const>init</emu-const></td>
           <td>内存模型为该事件保证的最弱排序。</td>
         </tr>
         <tr>
           <td>[[NoTear]]</td>
-          <td>a Boolean</td>
+          <td>Boolean</td>
           <td>是否允许多个与此事件具有相同内存范围的读取事件从该事件中读取。</td>
         </tr>
         <tr>
           <td>[[Block]]</td>
-          <td>a Shared Data Block</td>
+          <td>共享数据块</td>
           <td>事件所操作的数据块。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>[[Block]] 中写入操作的字节地址。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>写入操作的大小。</td>
         </tr>
         <tr>
           <td>[[Payload]]</td>
-          <td>a List of byte values</td>
+          <td>List (元素：字节值)</td>
           <td>供其他事件读取的字节值 List。</td>
         </tr>
       </table>
@@ -52863,27 +52863,27 @@ THH:mm:ss.sss
         </tr>
         <tr>
           <td>[[Block]]</td>
-          <td>a Shared Data Block</td>
+          <td>共享数据块</td>
           <td>事件所操作的数据块。</td>
         </tr>
         <tr>
           <td>[[ByteIndex]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>[[Block]] 中读-修改-写操作的字节地址。</td>
         </tr>
         <tr>
           <td>[[ElementSize]]</td>
-          <td>a non-negative integer</td>
+          <td>非负整数</td>
           <td>读-修改-写操作的大小。</td>
         </tr>
         <tr>
           <td>[[Payload]]</td>
-          <td>a List of byte values</td>
+          <td>List (元素：字节值)</td>
           <td>要传递给 [[ModifyOp]] 的字节值 List。</td>
         </tr>
         <tr>
           <td>[[ModifyOp]]</td>
-          <td>a read-modify-write modification function</td>
+          <td>读-修改-写修改函数</td>
           <td>从读取到的字节值 List 和 [[Payload]] 返回修改后字节值 List 的 Abstract Closure。</td>
         </tr>
       </table>
@@ -52911,17 +52911,17 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[AgentSignifier]]</td>
-          <td>an agent signifier</td>
+          <td>代理标识符</td>
           <td>其求值产生此排序的代理。</td>
         </tr>
         <tr>
           <td>[[EventList]]</td>
-          <td>a List of Memory events</td>
+          <td>List (元素：Memory 事件)</td>
           <td>事件在求值期间追加到该 List。</td>
         </tr>
         <tr>
           <td>[[AgentSynchronizesWith]]</td>
-          <td>a List of pairs of Synchronize events</td>
+          <td>List (元素：Synchronize 事件对)</td>
           <td>由操作语义引入的 Synchronize 关系。</td>
         </tr>
       </table>
@@ -52942,12 +52942,12 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[Event]]</td>
-          <td>a Shared Data Block event</td>
+          <td>Shared Data Block 事件</td>
           <td>为此选定值引入的 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件。</td>
         </tr>
         <tr>
           <td>[[ChosenValue]]</td>
-          <td>a List of byte values</td>
+          <td>List (元素：字节值)</td>
           <td>求值期间非确定性选择的字节。</td>
         </tr>
       </table>
@@ -52968,12 +52968,12 @@ THH:mm:ss.sss
         </thead>
         <tr>
           <td>[[EventsRecords]]</td>
-          <td>a List of Agent Events Records</td>
+          <td>List (元素：Agent Events 记录)</td>
           <td>将代理映射到求值期间追加的 Memory 事件 List。</td>
         </tr>
         <tr>
           <td>[[ChosenValues]]</td>
-          <td>a List of Chosen Value Records</td>
+          <td>List (元素：Chosen Value 记录)</td>
           <td>将 ReadSharedMemory 或 ReadModifyWriteSharedMemory 事件映射到求值期间选择的字节值 List。</td>
         </tr>
       </table>
@@ -54131,15 +54131,15 @@ THH:mm:ss.sss
         <emu-alg>
           1. 令 _charSet_ 为以 _regexpRecord_ 为参数对第一个 |ClassAtom| 执行 CompileToCharSet。
           1. 令 _otherSet_ 为以 _regexpRecord_ 为参数对第二个 |ClassAtom| 执行 CompileToCharSet。
-          1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 令 _rangeSet_ 为 CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
         <emu-grammar>NonemptyClassRangesNoDash :: ClassAtomNoDash `-` ClassAtom ClassContents</emu-grammar>
         <emu-alg>
-          1. 令 _charSet_ 为 CompileToCharSet of |ClassAtomNoDash| with argument _regexpRecord_。
-          1. 令 _otherSet_ 为 CompileToCharSet of |ClassAtom| with argument _regexpRecord_。
-          1. 令 _remainingSet_ 为 CompileToCharSet of |ClassContents| with argument _regexpRecord_。
+          1. 令 _charSet_ 为以 _regexpRecord_ 为参数的 |ClassAtomNoDash| 的 CompileToCharSet。
+          1. 令 _otherSet_ 为以 _regexpRecord_ 为参数的 |ClassAtom| 的 CompileToCharSet。
+          1. 令 _remainingSet_ 为以 _regexpRecord_ 为参数的 |ClassContents| 的 CompileToCharSet。
           1. 令 _rangeSet_ 为 CharacterRangeOrUnion(_regexpRecord_, _charSet_, _otherSet_)。
           1. 返回 _rangeSet_ 和 _remainingSet_ 的并集。
         </emu-alg>
@@ -54684,19 +54684,19 @@ THH:mm:ss.sss
       <p>带参数 _labelSet_ 的 ContainsDuplicateLabels 静态语义扩充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回 ContainsDuplicateLabels of |Statement| with argument _labelSet_。
+        1. 返回以 _labelSet_ 为参数的 |Statement| 的 ContainsDuplicateLabels。
       </emu-alg>
 
       <p>带参数 _labelSet_ 的 ContainsUndefinedBreakTarget 静态语义扩充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回 ContainsUndefinedBreakTarget of |Statement| with argument _labelSet_。
+        1. 返回以 _labelSet_ 为参数的 |Statement| 的 ContainsUndefinedBreakTarget。
       </emu-alg>
 
       <p>带参数 _iterationSet_ 和 _labelSet_ 的 ContainsUndefinedContinueTarget 静态语义扩充如下：</p>
       <emu-grammar>ForInOfStatement : `for` `(` `var` BindingIdentifier Initializer `in` Expression `)` Statement</emu-grammar>
       <emu-alg>
-        1. 返回 ContainsUndefinedContinueTarget of |Statement| with arguments _iterationSet_ and « »。
+        1. 返回以 _iterationSet_ 和 « » 为参数的 |Statement| 的 ContainsUndefinedContinueTarget。
       </emu-alg>
 
       <p>IsDestructuring 静态语义扩充如下：</p>
@@ -54732,7 +54732,7 @@ THH:mm:ss.sss
         1. 令 _name_ 为 the StringValue of |BindingIdentifier|。
         1. 令 _lhs_ 为 ? ResolveBinding(_name_)。
         1. 如果 IsAnonymousFunctionDefinition(|Initializer|) 是 *true*，则
-          1. 令 _value_ 为 ? NamedEvaluation of |Initializer| with argument _name_。
+          1. 令 _value_ 为 ? 以 _name_ 为参数的 |Initializer| 的 NamedEvaluation。
         1. 否则，
           1. 令 _rhs_ 为 ? Evaluation of |Initializer|。
           1. 令 _value_ 为 ? GetValue(_rhs_)。
