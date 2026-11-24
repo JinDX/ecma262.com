@@ -14198,6 +14198,7 @@
           1. 令 _resultsClosure_ 为一个没有参数的新 Abstract Closure，它捕获 _func_、_thisArg_、_argList_ 和 _newTarget_，并在被调用时执行以下步骤：
             1. 令 _result_ 为按照符合 _func_ 规范的方式<emu-meta effects="user-code">对 _func_ 求值的结果</emu-meta>所得的 Completion Record。如果 _thisArg_ 是 ~uninitialized~，则 *this* 值未初始化；否则 _thisArg_ 提供 *this* 值。_argList_ 提供具名参数。_newTarget_ 提供 NewTarget 值。
             1. 注：如果 _func_ 在本文档中定义，则“_func_ 的规范”是通过算法步骤或其他方式为它规定的行为。
+            1. 如果 _result_ 是正常完成，则返回 ReturnCompletion(_result_.[[Value]])。
             1. 返回 Completion(_result_)。
           1. 执行 AsyncFunctionStart(_promiseCapability_, _resultsClosure_)。
           1. 从执行上下文栈中移除 _calleeContext_，并恢复 _callerContext_ 作为正在运行的执行上下文。
@@ -32248,7 +32249,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error 对象</h1>
     <p>发生运行时错误时，会将 Error 对象的实例作为异常抛出。Error 对象也可以作为用户定义异常类的基对象。</p>
-    <p>当 ECMAScript 实现检测到运行时错误时，它会抛出 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> 中定义的某个 _NativeError_ 对象的新实例，或者 <emu-xref href="#sec-aggregate-error-objects"></emu-xref> 中定义的 AggregateError 对象或 <emu-xref href="#sec-suppressederror-objects"></emu-xref> 中定义的 SuppressedError 对象的新实例。这些对象都具有下述结构，区别仅在于用作构造函数名称而不是 _NativeError_ 的名称、原型对象的 *"name"* 属性、原型对象的实现定义 *"message"* 属性，以及是否存在 %AggregateError% 特有的 *"errors"* 属性或 %SuppressedError% 特有的 *"error"* 和 *"suppressed"* 属性。</p>
+    <p>当 ECMAScript 实现检测到运行时错误时，它会抛出 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> 中定义的某个 _NativeError_ 对象的新实例，或者 <emu-xref href="#sec-aggregate-error-objects"></emu-xref> 中定义的 AggregateError 对象或 <emu-xref href="#sec-suppressederror-objects"></emu-xref> 中定义的 SuppressedError 对象的新实例。</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>Error 构造函数</h1>

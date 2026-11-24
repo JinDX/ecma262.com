@@ -14198,6 +14198,7 @@
           1. _resultsClosure_ を、パラメーターを持たず、_func_、_thisArg_、_argList_、および _newTarget_ を捕捉し、呼び出されたときに次の手順を実行する新しい Abstract Closure とする。
             1. _result_ を、_func_ の仕様に適合する方法で _func_ を<emu-meta effects="user-code">評価した結果</emu-meta>である Completion Record とする。_thisArg_ が ~uninitialized~ である場合、*this* 値は初期化されていない。そうでない場合、_thisArg_ が *this* 値を提供する。_argList_ が名前付きパラメーターを提供する。_newTarget_ が NewTarget 値を提供する。
             1. 注記: _func_ がこの文書で定義されている場合、「_func_ の仕様」とは、アルゴリズム手順またはその他の手段によって規定されたその動作である。
+            1. _result_ が正常完了である場合、ReturnCompletion(_result_.[[Value]]) を返す。
             1. Completion(_result_) を返す。
           1. AsyncFunctionStart(_promiseCapability_, _resultsClosure_) を実行する。
           1. _calleeContext_ を実行コンテキストスタックから削除し、_callerContext_ を実行中の実行コンテキストとして復元する。
@@ -32242,7 +32243,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error オブジェクト</h1>
     <p>実行時エラーが発生すると、Error オブジェクトのインスタンスが例外としてスローされます。Error オブジェクトは、ユーザー定義の例外クラスの基底オブジェクトとしても使用できます。</p>
-    <p>ECMAScript 実装が実行時エラーを検出すると、<emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> で定義される _NativeError_ オブジェクトのいずれかの新しいインスタンス、<emu-xref href="#sec-aggregate-error-objects"></emu-xref> で定義される AggregateError オブジェクトの新しいインスタンス、または <emu-xref href="#sec-suppressederror-objects"></emu-xref> で定義される SuppressedError オブジェクトの新しいインスタンスをスローします。これらの各オブジェクトは、以下で説明される構造を持ち、_NativeError_ の代わりにコンストラクター名として使用される名前、prototype オブジェクトの *"name"* プロパティ、prototype オブジェクトの実装定義の *"message"* プロパティ、および %AggregateError% 固有の *"errors"* プロパティまたは %SuppressedError% 固有の *"error"* および *"suppressed"* プロパティの有無だけが異なります。</p>
+    <p>ECMAScript 実装が実行時エラーを検出すると、<emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref> で定義される _NativeError_ オブジェクトのいずれかの新しいインスタンス、<emu-xref href="#sec-aggregate-error-objects"></emu-xref> で定義される AggregateError オブジェクトの新しいインスタンス、または <emu-xref href="#sec-suppressederror-objects"></emu-xref> で定義される SuppressedError オブジェクトの新しいインスタンスをスローします。</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>Error コンストラクター</h1>
@@ -32343,7 +32344,7 @@
 
     <emu-clause id="sec-native-error-types-used-in-this-standard">
       <h1>この標準で使用されるネイティブエラー型</h1>
-      <p>実行時エラーが検出されると、以下の _NativeError_ オブジェクトのいずれかの新しいインスタンス、または AggregateError オブジェクトもしくは SuppressedError オブジェクトのいずれかの新しいインスタンスがスローされます。すべての _NativeError_ オブジェクトは、<emu-xref href="#sec-nativeerror-object-structure"></emu-xref> で説明される同じ構造を共有します。</p>
+      <p>実行時エラーが検出されると、以下の _NativeError_ オブジェクトのいずれか、AggregateError オブジェクト、または SuppressedError オブジェクトの新しいインスタンスがスローされます。すべての _NativeError_ オブジェクトは、<emu-xref href="#sec-nativeerror-object-structure"></emu-xref> で説明される同じ構造を共有します。</p>
 
       <emu-clause id="sec-native-error-types-used-in-this-standard-evalerror">
         <h1>EvalError</h1>

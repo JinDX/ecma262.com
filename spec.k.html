@@ -14198,6 +14198,7 @@
           1. _resultsClosure_를 매개변수가 없고 _func_, _thisArg_, _argList_ 및 _newTarget_을 캡처하며 호출될 때 다음 단계를 수행하는 새로운 Abstract Closure로 둡니다:
             1. _result_를 _func_의 명세에 부합하는 방식으로 _func_를 <emu-meta effects="user-code">평가한 결과</emu-meta>인 Completion Record로 둡니다. _thisArg_가 ~uninitialized~이면 *this* 값은 초기화되지 않습니다. 그렇지 않으면 _thisArg_가 *this* 값을 제공합니다. _argList_는 이름 있는 매개변수를 제공합니다. _newTarget_은 NewTarget 값을 제공합니다.
             1. 참고: _func_가 이 문서에 정의되어 있으면 “_func_의 명세”는 알고리즘 단계 또는 다른 수단으로 해당 함수에 대해 명시된 동작입니다.
+            1. _result_가 정상 완료이면 ReturnCompletion(_result_.[[Value]])를 반환합니다.
             1. Completion(_result_)를 반환합니다.
           1. AsyncFunctionStart(_promiseCapability_, _resultsClosure_)를 수행합니다.
           1. 실행 컨텍스트 스택에서 _calleeContext_를 제거하고 _callerContext_를 실행 중인 실행 컨텍스트로 복원합니다.
@@ -32242,7 +32243,7 @@
   <emu-clause id="sec-error-objects">
     <h1>Error 객체</h1>
     <p>런타임 오류가 발생하면 Error 객체의 인스턴스가 예외로 던져집니다. Error 객체는 사용자 정의 예외 클래스의 기본 객체 역할도 할 수 있습니다.</p>
-    <p>ECMAScript 구현체가 런타임 오류를 검출하면 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref>에 정의된 _NativeError_ 객체 중 하나의 새로운 인스턴스 또는 <emu-xref href="#sec-aggregate-error-objects"></emu-xref>에 정의된 AggregateError 객체나 <emu-xref href="#sec-suppressederror-objects"></emu-xref>에 정의된 SuppressedError 객체 중 하나의 새로운 인스턴스를 던집니다. 이러한 각 객체는 아래에 설명된 구조를 가지며, 생성자 이름으로 _NativeError_ 대신 사용하는 이름, 프로토타입 객체의 *"name"* 프로퍼티, 프로토타입 객체의 구현체 정의 *"message"* 프로퍼티, 그리고 %AggregateError% 고유의 *"errors"* 프로퍼티 또는 %SuppressedError% 고유의 *"error"* 및 *"suppressed"* 프로퍼티의 존재 여부만 다릅니다.</p>
+    <p>ECMAScript 구현체가 런타임 오류를 검출하면 <emu-xref href="#sec-native-error-types-used-in-this-standard"></emu-xref>에 정의된 _NativeError_ 객체 중 하나의 새로운 인스턴스 또는 <emu-xref href="#sec-aggregate-error-objects"></emu-xref>에 정의된 AggregateError 객체나 <emu-xref href="#sec-suppressederror-objects"></emu-xref>에 정의된 SuppressedError 객체 중 하나의 새로운 인스턴스를 던집니다.</p>
 
     <emu-clause id="sec-error-constructor">
       <h1>Error 생성자</h1>
